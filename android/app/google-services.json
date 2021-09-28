@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "269420857313",
+    "project_id": "in-the-loop-306520",
+    "storage_bucket": "in-the-loop-306520.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:269420857313:android:48c1ec29913d8073f7f4a0",
+        "android_client_info": {
+          "package_name": "com.intheloopstudio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "269420857313-9k720efafsn1p8j96ddc3khu40tj8o4f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBh3y9V9FhKJDbJOhqJTj14JoUQiewmkgI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "269420857313-9k720efafsn1p8j96ddc3khu40tj8o4f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "269420857313-3eku1pig1svbojpqgknaj79hm3kjrqgk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.intheloopstudio"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

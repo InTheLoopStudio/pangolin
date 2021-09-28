@@ -1,0 +1,123 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
+import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
+import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container.dart';
+
+class AllLoopsList extends StatefulWidget {
+  const AllLoopsList({Key? key, required this.scrollController})
+      : super(key: key);
+
+  final ScrollController scrollController;
+
+  @override
+  _AllLoopsListState createState() => _AllLoopsListState();
+}
+
+class _AllLoopsListState extends State<AllLoopsList> {
+  late ProfileCubit _profileCubit;
+
+  Timer? _debounce;
+  ScrollController get _scrollController => widget.scrollController;
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.offset;
+    return currentScroll >= (maxScroll * 0.9);
+  }
+
+  void _onScroll() {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 200), () {
+      if (_isBottom) _profileCubit.fetchMoreLoops();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+    _profileCubit = context.read<ProfileCubit>();
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      builder: (context, state) {
+        switch (state.status) {
+          case ProfileStatus.failure:
+            return const Center(child: Text('failed to fetch posts'));
+
+          case ProfileStatus.success:
+            if (state.userLoops.isEmpty || state.visitedUser.deleted == true) {
+              return EasterEggPlaceholder(text: 'No Posts');
+            }
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Text(
+                    'All Loops',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15.0),
+                Column(
+                  children: [
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (BuildContext context, int index) {
+                        return index >= state.userLoops.length
+                            ? Center(
+                                child: SizedBox(
+                                  height: 24,
+                                  width: 24,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 1.5,
+                                  ),
+                                ),
+                              )
+                            : Column(
+                                children: [
+                                  LoopContainer(
+                                    loop: state.userLoops[index],
+                                  ),
+                                  Container(
+                                    color: Colors.black,
+                                    height: 1,
+                                  )
+                                ],
+                              );
+                      },
+                      itemCount: state.hasReachedMax
+                          ? state.userLoops.length
+                          : state.userLoops.length + 1,
+                    ),
+                  ],
+                ),
+              ],
+            );
+
+          default:
+            return EasterEggPlaceholder(text: 'Waiting for New Loops...');
+        }
+      },
+    );
+  }
+}

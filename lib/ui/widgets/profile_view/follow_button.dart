@@ -1,0 +1,68 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
+import 'package:intheloopapp/ui/themes.dart';
+import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
+import 'package:intheloopapp/ui/views/settings/settings_view.dart';
+
+class FollowButton extends StatelessWidget {
+  const FollowButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      builder: (context, state) {
+        return state.currentUser.id != state.visitedUser.id
+            ? GestureDetector(
+                onTap: () => context.read<ProfileCubit>()
+                  ..toggleFollow(state.currentUser.id, state.visitedUser.id),
+                child: Container(
+                  width: 110,
+                  height: 35,
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: state.isFollowing
+                        ? Theme.of(context).backgroundColor
+                        : itlAccent,
+                    border: Border.all(color: itlAccent),
+                  ),
+                  child: Center(
+                    child: Text(
+                      state.isFollowing ? 'Following' : 'Follow',
+                      style: TextStyle(
+                        fontSize: 17,
+                        color: state.isFollowing ? itlAccent : Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            : OutlinedButton.icon(
+                onPressed: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SettingsView(),
+                    ),
+                  );
+                },
+                icon: Icon(
+                  CupertinoIcons.gear,
+                  color: itlAccent,
+                ),
+                label: Text(
+                  'Edit',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: itlAccent,
+                    // fontWeight: FontWeight.bold,
+                  ),
+                ),
+              );
+      },
+    );
+  }
+}

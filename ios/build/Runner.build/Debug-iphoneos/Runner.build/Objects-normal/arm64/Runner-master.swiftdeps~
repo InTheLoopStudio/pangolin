@@ -1,0 +1,5 @@
+version: "Apple Swift version 5.4.2 (swiftlang-1205.0.28.2 clang-1205.0.19.57)"
+options: "de314071062d56eca5679ade47b8bff1"
+build_time: [1626973637, 472723000]
+inputs:
+  "/Users/johannes/Repos/intheloopapp/ios/Runner/AppDelegate.swift": !dirty [1620498025, 785292407]

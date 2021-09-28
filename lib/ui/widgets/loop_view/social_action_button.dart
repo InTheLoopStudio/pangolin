@@ -1,0 +1,53 @@
+import 'package:flutter/material.dart';
+
+class SocialActionButton extends StatelessWidget {
+  const SocialActionButton({
+    Key? key,
+    this.title,
+    this.icon,
+    this.onTap,
+    this.color = Colors.grey,
+    this.width = 60,
+    this.height = 60,
+    this.iconSize = 35,
+  }) : super(key: key);
+
+  final String? title;
+  final IconData? icon;
+  final Color? color;
+  final void Function()? onTap;
+  final double width;
+  final double height;
+  final double iconSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: width,
+        height: height,
+        margin: EdgeInsets.only(top: 10.0),
+        child: Column(
+          children: [
+            Icon(
+              icon,
+              size: iconSize,
+              color: color,
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 2.0),
+              child: Text(
+                title ?? '',
+                style: TextStyle(
+                  fontSize: 12.0,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
