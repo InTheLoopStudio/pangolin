@@ -102,32 +102,14 @@ class LoopViewCubit extends Cubit<LoopViewState> {
     }
   }
 
-  void unfollowUser() {
+  void unfollowUser() async {
     emit(state.copyWith(isFollowing: false));
-
-    // Debounce
-    Duration duration = Duration(milliseconds: 500);
-    Timer(duration, () async {
-      if (state.isFollowing) {
-        await databaseRepository.unfollowUser(currentUser.id, user.id);
-      } else {
-        print('Never mind');
-      }
-    });
+    await databaseRepository.unfollowUser(currentUser.id, user.id);
   }
 
-  void followUser() {
+  void followUser() async {
     emit(state.copyWith(isFollowing: true));
-
-    // Debounce
-    Duration duration = Duration(milliseconds: 500);
-    Timer(duration, () async {
-      if (state.isFollowing) {
-        await databaseRepository.followUser(currentUser.id, user.id);
-      } else {
-        print('Never mind');
-      }
-    });
+    await databaseRepository.followUser(currentUser.id, user.id);
   }
 
   void initIsFollowing() async {
@@ -152,37 +134,21 @@ class LoopViewCubit extends Cubit<LoopViewState> {
     emit(state.copyWith(commentsCount: loop.comments ?? 0));
   }
 
-  toggleLikeLoop() {
+  toggleLikeLoop() async {
     if (state.isLiked) {
       emit(state.copyWith(
         isLiked: false,
         likesCount: state.likesCount - 1,
       ));
 
-      // Debounce
-      Duration duration = Duration(milliseconds: 500);
-      Timer(duration, () async {
-        if (state.isFollowing) {
-          await databaseRepository.unlikeLoop(currentUser.id, loop);
-        } else {
-          print('Never mind');
-        }
-      });
+      await databaseRepository.unlikeLoop(currentUser.id, loop);
     } else {
       emit(state.copyWith(
         isLiked: true,
         likesCount: state.likesCount + 1,
       ));
 
-      // Debounce
-      Duration duration = Duration(milliseconds: 500);
-      Timer(duration, () async {
-        if (state.isFollowing) {
-          await databaseRepository.likeLoop(currentUser.id, loop);
-        } else {
-          print('Never mind');
-        }
-      });
+      await databaseRepository.likeLoop(currentUser.id, loop);
     }
   }
 }

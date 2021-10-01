@@ -123,42 +123,24 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
     }
   }
 
-  void follow(String currentUserId, String visitedUserId) {
+  void follow(String currentUserId, String visitedUserId) async {
     emit(
       state.copyWith(
         followerCount: state.followerCount + 1,
         isFollowing: true,
       ),
     );
-
-    // Debounce
-    Duration duration = Duration(milliseconds: 500);
-    Timer(duration, () async {
-      if (state.isFollowing) {
-        await databaseRepository.followUser(currentUserId, visitedUserId);
-      } else {
-        print('Never mind');
-      }
-    });
+    await databaseRepository.followUser(currentUserId, visitedUserId);
   }
 
-  void unfollow(String currentUserId, String visitedUserId) {
+  void unfollow(String currentUserId, String visitedUserId) async {
     emit(
       state.copyWith(
         followerCount: state.followerCount - 1,
         isFollowing: false,
       ),
     );
-
-    // Debounce
-    Duration duration = Duration(milliseconds: 500);
-    Timer(duration, () async {
-      if (state.isFollowing) {
-        await databaseRepository.unfollowUser(currentUserId, visitedUserId);
-      } else {
-        print('Never mind');
-      }
-    });
+    await databaseRepository.unfollowUser(currentUserId, visitedUserId);
   }
 
   void loadFollowing(String visitedUserId) async {
