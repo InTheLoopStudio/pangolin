@@ -8,6 +8,7 @@ import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/follow_button.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/follower_count.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/following_count.dart';
+import 'package:intheloopapp/ui/widgets/profile_view/notification_icon_button.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/social_media_icons.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -48,11 +49,7 @@ class ProfileHeader extends StatelessWidget {
                           onTap: () => context
                               .read<NavigationBloc>()
                               .add(PushActivity()),
-                          child: Icon(
-                            Icons.notifications,
-                            color: Colors.white,
-                            size: 30,
-                          ),
+                          child: NotificationIconButton(),
                         ),
                       ),
                     ],
