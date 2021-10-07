@@ -78,6 +78,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   json_serializable: ^5.0.0
+  mockito: ^5.0.16
 
 flutter_icons:
   android: true

@@ -1,6 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:mockito/mockito.dart';
+import 'package:mockito/annotations.dart';
 
+import 'user_model_test.mocks.dart';
+
+@GenerateMocks([DocumentSnapshot])
 void main() {
   test('UserModel.empty provides a UserModel with default fields', () {
     final emptyUser = UserModel.empty;
@@ -94,6 +100,54 @@ void main() {
         'instagramHandle': '',
         'twitterHandle': '',
       },
+    );
+  });
+
+  test('UserModels should be able to be created from DocumentSnapshots', () {
+    final DocumentSnapshot<Map<String, dynamic>> mockDocumentSnapshot =
+        MockDocumentSnapshot<Map<String, dynamic>>();
+
+    when(mockDocumentSnapshot.data()).thenReturn(
+      {
+        'email': '',
+        'username': 'anonymous',
+        'profilePicture': '',
+        'bio': '',
+        'location': 'Global',
+        'onboarded': false,
+        'loopsCount': 0,
+        'deleted': false,
+        'shadowBanned': false,
+        'youtubeChannelId': '',
+        'soundcloudHandle': '',
+        'tiktokHandle': '',
+        'instagramHandle': '',
+        'twitterHandle': '',
+      },
+    );
+
+    when(mockDocumentSnapshot.id).thenReturn('');
+
+    final userModel = UserModel.fromDoc(mockDocumentSnapshot);
+    expect(
+      userModel,
+      UserModel(
+        id: '',
+        email: '',
+        username: 'anonymous',
+        profilePicture: '',
+        bio: '',
+        location: 'Global',
+        onboarded: false,
+        loopsCount: 0,
+        deleted: false,
+        shadowBanned: false,
+        youtubeChannelId: '',
+        soundcloudHandle: '',
+        tiktokHandle: '',
+        instagramHandle: '',
+        twitterHandle: '',
+      ),
     );
   });
 }
