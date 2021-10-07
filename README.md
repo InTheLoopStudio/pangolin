@@ -1,16 +1,52 @@
-# intheloopapp
 
-A new Flutter project.
+[![Youtube Demo](https://img.youtube.com/vi/7YWRxSDwAi8/0.jpg)](https://youtu.be/7YWRxSDwAi8)
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+# Pangolin 
 
-A few resources to get you started if this is your first Flutter project:
+![Discord](https://img.shields.io/discord/828041609018343434?style=for-the-badge)
+![GitHub Repo stars](https://img.shields.io/github/stars/InTheLoopStudio/pangolin?style=social)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Mobile app for In The Loop
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+In The Loop is a platform and community that allows artists and music producers to share samples and collaborate with others.
+
+----
+# Prerequisites
+
+Before you begin, ensure you have met the following requirements:
+
+    A passion for music
+    An OS that is supported for flutter 2.0 or above
+    You have installed the latest version of Flutter
+
+----
+# Contributing to Pangolin
+
+To contribute to Pangolin, follow these steps:
+
+    Fork this repository.
+    Create a branch: git checkout -b <branch_name>.
+    Make your changes and commit them: git commit -m '<commit_message>'
+    Push to the original branch: git push origin <project_name>/<location>
+    Squash your commits
+    Create the pull request.
+
+Alternatively see the GitHub documentation on creating a pull request.
+
+----
+# Contributors
+
+Thanks to the following people who have contributed to this project:
+
+    @jonaylor89
+    @thomasl0433 
+
+# Contact
+
+If you want to contact us you can reach us at intheloopstudio2021@gmail.com 
+
+----
+# License
+
+This project uses the following license: MIT
