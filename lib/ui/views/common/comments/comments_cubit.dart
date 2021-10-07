@@ -35,7 +35,7 @@ class CommentsCubit extends Cubit<CommentsState> {
     if (clearComments) {
       emit(state.copyWith(
         comments: [],
-        commentsCount: loop.comments ?? 0,
+        commentsCount: loop.comments,
       ));
     }
 
@@ -75,7 +75,7 @@ class CommentsCubit extends Cubit<CommentsState> {
 
       databaseRepository.addComment(
         comment,
-        state.loop.userId!,
+        state.loop.userId,
       );
 
       loopViewCubit.addComment();

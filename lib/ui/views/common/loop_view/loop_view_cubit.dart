@@ -79,7 +79,7 @@ class LoopViewCubit extends Cubit<LoopViewState> {
 
   void initAudio() {
     // _player.setLoopMode(LoopMode.one);
-    state.audioController.setURL(loop.audio!);
+    state.audioController.setURL(loop.audio);
     if (autoPlay == true) {
       state.audioController.play(audioLockId);
     }
@@ -127,11 +127,11 @@ class LoopViewCubit extends Cubit<LoopViewState> {
 
   void initLoopLikes() async {
     bool isLiked = await databaseRepository.isLikeLoop(currentUser.id, loop);
-    emit(state.copyWith(isLiked: isLiked, likesCount: loop.likes ?? 0));
+    emit(state.copyWith(isLiked: isLiked, likesCount: loop.likes));
   }
 
   void initLoopComments() async {
-    emit(state.copyWith(commentsCount: loop.comments ?? 0));
+    emit(state.copyWith(commentsCount: loop.comments));
   }
 
   toggleLikeLoop() async {
