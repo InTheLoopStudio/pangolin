@@ -12,7 +12,7 @@ class Timestamp extends StatelessWidget {
       builder: (context, state) {
         return Text(
           timeago.format(
-            state.loop.timestamp!.toDate(),
+            state.loop.timestamp,
             locale: 'en_short',
           ),
           style: TextStyle(
