@@ -1,26 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/utils.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user_model.g.dart';
 
 @JsonSerializable()
-class UserModel {
-  String id;
-  String email;
-  String username;
-  String profilePicture;
-  String bio;
-  String location;
-  bool onboarded;
-  int loopsCount;
-  bool deleted;
-  bool shadowBanned;
-  String youtubeChannelId;
-  String soundcloudHandle;
-  String tiktokHandle;
-  String instagramHandle;
-  String twitterHandle;
+class UserModel extends Equatable {
+  final String id;
+  final String email;
+  final String username;
+  final String profilePicture;
+  final String bio;
+  final String location;
+  final bool onboarded;
+  final int loopsCount;
+  final bool deleted;
+  final bool shadowBanned;
+  final String youtubeChannelId;
+  final String soundcloudHandle;
+  final String tiktokHandle;
+  final String instagramHandle;
+  final String twitterHandle;
 
   UserModel({
     required this.id,
@@ -40,7 +41,25 @@ class UserModel {
     required this.twitterHandle,
   });
 
-  static UserModel empty = UserModel(
+  List<Object> get props => [
+    this.id,
+    this.email,
+    this.username,
+    this.profilePicture,
+    this.bio,
+    this.location,
+    this.onboarded,
+    this.loopsCount,
+    this.deleted,
+    this.shadowBanned,
+    this.youtubeChannelId,
+    this.soundcloudHandle,
+    this.tiktokHandle,
+    this.instagramHandle,
+    this.twitterHandle,
+  ];
+
+  static UserModel get empty => UserModel(
     id: '',
     email: '',
     username: 'anonymous',
