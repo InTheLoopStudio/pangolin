@@ -72,4 +72,28 @@ void main() {
     expect(emptyUser.isEmpty, false);
     expect(emptyUser.isNotEmpty, true);
   });
+
+  test('UserModels should be able to convert to Maps', () {
+    final userMap = UserModel.empty.toMap();
+    expect(
+      userMap,
+      {
+        'id': '',
+        'email': '',
+        'username': 'anonymous',
+        'profilePicture': '',
+        'bio': '',
+        'location': 'Global',
+        'onboarded': false,
+        'loopsCount': 0,
+        'deleted': false,
+        'shadowBanned': false,
+        'youtubeChannelId': '',
+        'soundcloudHandle': '',
+        'tiktokHandle': '',
+        'instagramHandle': '',
+        'twitterHandle': '',
+      },
+    );
+  });
 }
