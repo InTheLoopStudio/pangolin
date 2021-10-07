@@ -57,6 +57,32 @@ class Loop extends Equatable {
         deleted: false,
       );
 
+  Loop copyWith({
+    String? id,
+    String? userId,
+    String? title,
+    String? audio,
+    DateTime? timestamp,
+    int? likes,
+    int? downloads,
+    int? comments,
+    List<String>? tags,
+    bool? deleted,
+  }) {
+    return Loop(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      title: title ?? this.title,
+      audio: audio ?? this.audio,
+      timestamp: timestamp ?? this.timestamp,
+      likes: likes ?? this.likes,
+      downloads: downloads ?? this.downloads,
+      comments: comments ?? this.comments,
+      tags: tags ?? this.tags,
+      deleted: deleted ?? this.deleted,
+    );
+  }
+
   factory Loop.fromJson(Map<String, dynamic> json) => _$LoopFromJson(json);
   Map<String, dynamic> toJson() => _$LoopToJson(this);
 

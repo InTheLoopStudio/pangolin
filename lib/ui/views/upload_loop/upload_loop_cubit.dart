@@ -133,16 +133,11 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
           state.pickedAudio!,
         );
 
-        Loop loop = Loop(
+        Loop loop = Loop.empty.copyWith(
           title: state.loopTitle.value,
           audio: audio,
           userId: currentUser.id,
-          likes: 0,
-          downloads: 0,
-          comments: 0,
-          timestamp: Timestamp.fromDate(DateTime.now()),
           // tags: state.selectedTags.map((tag) => tag.value).toList(),
-          tags: [],
         );
 
         await databaseRepository.uploadLoop(loop);
