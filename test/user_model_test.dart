@@ -102,7 +102,7 @@ void main() {
       },
     );
   });
-
+  
   test('UserModels should be able to be created from DocumentSnapshots', () {
     final DocumentSnapshot<Map<String, dynamic>> mockDocumentSnapshot =
         MockDocumentSnapshot<Map<String, dynamic>>();
