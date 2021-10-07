@@ -7,18 +7,16 @@ part of 'loop.dart';
 // **************************************************************************
 
 Loop _$LoopFromJson(Map<String, dynamic> json) => Loop(
-      id: json['id'] as String? ?? '',
-      userId: json['userId'] as String? ?? '',
-      title: json['title'] as String? ?? '',
-      audio: json['audio'] as String? ?? '',
-      timestamp: firestoreTimestampFromJson(json['timestamp']),
-      likes: json['likes'] as int? ?? 0,
-      downloads: json['downloads'] as int? ?? 0,
-      comments: json['comments'] as int? ?? 0,
-      tags:
-          (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ??
-              const [],
-      deleted: json['deleted'] as bool? ?? false,
+      id: json['id'] as String,
+      userId: json['userId'] as String,
+      title: json['title'] as String,
+      audio: json['audio'] as String,
+      timestamp: DateTime.parse(json['timestamp'] as String),
+      likes: json['likes'] as int,
+      downloads: json['downloads'] as int,
+      comments: json['comments'] as int,
+      tags: (json['tags'] as List<dynamic>).map((e) => e as String).toList(),
+      deleted: json['deleted'] as bool,
     );
 
 Map<String, dynamic> _$LoopToJson(Loop instance) => <String, dynamic>{
@@ -26,7 +24,7 @@ Map<String, dynamic> _$LoopToJson(Loop instance) => <String, dynamic>{
       'userId': instance.userId,
       'title': instance.title,
       'audio': instance.audio,
-      'timestamp': firestoreTimestampToJson(instance.timestamp),
+      'timestamp': instance.timestamp.toIso8601String(),
       'likes': instance.likes,
       'downloads': instance.downloads,
       'comments': instance.comments,
