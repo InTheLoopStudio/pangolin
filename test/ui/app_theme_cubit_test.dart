@@ -7,35 +7,32 @@ import 'package:path_provider/path_provider.dart';
 
 void main() {
   setUp(() async {
-  HydratedBloc.storage = await HydratedStorage.build(
-    storageDirectory: kIsWeb
-        ? HydratedStorage.webStorageDirectory
-        : await getTemporaryDirectory(),
-  );
-
-
+    HydratedBloc.storage = await HydratedStorage.build(
+      storageDirectory: kIsWeb
+          ? HydratedStorage.webStorageDirectory
+          : await getTemporaryDirectory(),
+    );
   });
 
   group('AppThemeCubit', () {
-
     blocTest(
       'emit `true` when theme updated to dark',
       build: () => AppThemeCubit(),
-      expect: () => [], 
+      expect: () => [],
     );
 
     blocTest(
       'emit `true` when theme updated to dark',
       build: () => AppThemeCubit(),
       act: (AppThemeCubit bloc) => bloc.updateTheme(true),
-      expect: () => [true], 
+      expect: () => [true],
     );
 
     blocTest(
       'emit `false` when theme updated to light',
       build: () => AppThemeCubit(),
       act: (AppThemeCubit bloc) => bloc.updateTheme(false),
-      expect: () => [false], 
+      expect: () => [false],
     );
   });
 }
