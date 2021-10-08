@@ -12,7 +12,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:intheloopapp/data/notification_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/dependencies.dart';
-import 'package:intheloopapp/domains/activity_bloc/bloc/activity_bloc.dart';
+import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/down_for_maintenance_bloc/down_for_maintenance_bloc.dart';
 import 'package:intheloopapp/domains/dynamic_link_bloc/dynamic_link_bloc.dart';

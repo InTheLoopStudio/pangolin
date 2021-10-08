@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/domains/activity_bloc/bloc/activity_bloc.dart';
+import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 
 class NotificationIconButton extends StatelessWidget {
   const NotificationIconButton({Key? key}) : super(key: key);
@@ -21,7 +21,7 @@ class NotificationIconButton extends StatelessWidget {
                   size: 30,
                 ),
               ),
-              state.activities.any((elem) => elem.markedRead != false)
+              state.activities.any((elem) => elem.markedRead == false)
                   ? Positioned(
                       right: 0,
                       child: Container(
