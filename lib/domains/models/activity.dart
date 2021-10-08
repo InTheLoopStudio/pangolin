@@ -1,33 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/utils.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'activity.g.dart';
 
-/// Deserialize Firebase Timestamp data type from Firestore
-Timestamp firestoreTimestampFromJson(dynamic value) {
-  return value != null ? Timestamp.fromMicrosecondsSinceEpoch(value) : value;
-}
-
-/// This method only stores the "timestamp" data type back in the Firestore
-dynamic firestoreTimestampToJson(Timestamp? value) =>
-    value != null ? value.microsecondsSinceEpoch : null;
-
 @JsonSerializable()
-class Activity {
-  String id;
-  String fromUserId;
-  String toUserId;
-
-  @JsonKey(
-    fromJson: firestoreTimestampFromJson,
-    toJson: firestoreTimestampToJson,
-  )
-  Timestamp timestamp;
-
-  ActivityType type;
-  bool markedRead;
+class Activity extends Equatable {
+  final String id;
+  final String fromUserId;
+  final String toUserId;
+  final DateTime timestamp;
+  final ActivityType type;
+  final bool markedRead;
 
   Activity({
     required this.id,
@@ -38,25 +24,56 @@ class Activity {
     required this.markedRead,
   });
 
-  // Activity empty = Activity(
-  //   id: '',
-  //   fromUserId: '',
-  //   toUserId: '',
-  //   timestamp: Timestamp.fromMicrosecondsSinceEpoch(0),
-  //   type: ActivityType.like,
-  //   markedRead: false,
-  // );
+  @override
+  List<Object> get props => [
+        id,
+        fromUserId,
+        toUserId,
+        type,
+        markedRead,
+      ];
+
+  static Activity get empty => Activity(
+        id: '',
+        fromUserId: '',
+        toUserId: '',
+        timestamp: DateTime.now(),
+        type: ActivityType.like,
+        markedRead: false,
+      );
+
+  bool get isEmpty => this == Activity.empty;
+  bool get isNotEmpty => this != Activity.empty;
 
   factory Activity.fromJson(Map<String, dynamic> json) =>
       _$ActivityFromJson(json);
   Map<String, dynamic> toJson() => _$ActivityToJson(this);
 
+  Activity copyWith({
+    String? id,
+    String? fromUserId,
+    String? toUserId,
+    DateTime? timestamp,
+    ActivityType? type,
+    bool? markedRead,
+  }) {
+    return Activity(
+      id: id ?? this.id,
+      fromUserId: fromUserId ?? this.fromUserId,
+      toUserId: toUserId ?? this.toUserId,
+      timestamp: timestamp ?? this.timestamp,
+      type: type ?? this.type,
+      markedRead: markedRead ?? this.markedRead,
+    );
+  }
+
   factory Activity.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
+    final Timestamp tmpTimestamp = doc.getOrElse('timestamp', Timestamp.now());
     return Activity(
       id: doc.id,
       fromUserId: doc.getOrElse('fromUserId', ''),
       toUserId: doc.getOrElse('toUserId', ''),
-      timestamp: doc['timestamp'],
+      timestamp: tmpTimestamp.toDate(),
       type: EnumToString.fromString(ActivityType.values, doc['type']) ??
           ActivityType.like,
       markedRead: doc.getOrElse('markedRead', true),
