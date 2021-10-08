@@ -59,7 +59,7 @@ class Activity {
       timestamp: doc['timestamp'],
       type: EnumToString.fromString(ActivityType.values, doc['type']) ??
           ActivityType.like,
-      markedRead: doc.getOrElse('markedRead', false),
+      markedRead: doc.getOrElse('markedRead', true),
     );
   }
 }
