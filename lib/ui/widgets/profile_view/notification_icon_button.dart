@@ -25,8 +25,7 @@ class NotificationIconButton extends StatelessWidget {
                   ? Positioned(
                       right: 0,
                       child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 1, vertical: 1),
+                        padding: EdgeInsets.symmetric(horizontal: 1, vertical: 1),
                         decoration: BoxDecoration(
                           color: Colors.red,
                           borderRadius: BorderRadius.circular(6),
