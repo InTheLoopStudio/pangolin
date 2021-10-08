@@ -21,7 +21,7 @@ class NotificationIconButton extends StatelessWidget {
                   size: 30,
                 ),
               ),
-              state.activities.any((elem) => elem.markedRead != false)
+              state.activities.any((elem) => elem.markedRead == false)
                   ? Positioned(
                       right: 0,
                       child: Container(
