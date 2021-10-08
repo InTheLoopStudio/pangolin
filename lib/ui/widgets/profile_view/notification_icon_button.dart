@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/domains/activity_bloc/bloc/activity_bloc.dart';
+import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 
 class NotificationIconButton extends StatelessWidget {
   const NotificationIconButton({Key? key}) : super(key: key);
