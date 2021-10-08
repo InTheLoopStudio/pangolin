@@ -70,6 +70,7 @@ dependencies:
   flutter_native_splash: ^1.2.1
   flutter_svg: ^0.22.0
   flutter_slidable: ^0.6.0
+  bloc_test: ^8.2.0
   # firebase_performance: ^0.7.0+2
 
 dev_dependencies:
