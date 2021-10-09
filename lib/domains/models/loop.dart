@@ -57,6 +57,9 @@ class Loop extends Equatable {
         deleted: false,
       );
 
+  bool get isEmpty => this == Loop.empty;
+  bool get isNotEmpty => this != Loop.empty;
+
   Loop copyWith({
     String? id,
     String? userId,

@@ -89,15 +89,15 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
     Activity activity,
   ) async {
     int idx = state.activities.indexOf(activity);
-    activity.markedRead = true;
+    Activity updatedActivity = activity.copyWith(markedRead: true);
 
     if (idx != -1) {
       emit(ActivitySuccess(
-        activities: state.activities..[idx] = activity,
+        activities: state.activities..[idx] = updatedActivity,
       ));
     }
 
-    await databaseRepository.markActivityAsRead(activity);
+    await databaseRepository.markActivityAsRead(updatedActivity);
 
     return;
   }

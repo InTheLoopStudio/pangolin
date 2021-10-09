@@ -58,7 +58,7 @@ class ActivityTile extends StatelessWidget {
                       ),
                       trailing: Text(
                         timeago.format(
-                          activity.timestamp.toDate(),
+                          activity.timestamp,
                           locale: 'en_short',
                         ),
                         style: TextStyle(
