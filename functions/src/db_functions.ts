@@ -832,6 +832,17 @@ const _createStreamChatToken = (data: { userId: string }) => {
   return token;
 };
 
+const _shareLoop = (data: {
+  loopId: string,
+  userId: string,
+}) => {
+  const results = loopsRef.doc(data.loopId).update({
+    shares: admin.firestore.FieldValue.increment(1),
+  });
+
+  return results;
+};
+
 // --------------------------------------------------------
 
 export const onUserCreated = functions.auth
@@ -904,4 +915,9 @@ export const createStreamChatToken = functions.https.onCall((data, context) => {
   _authenticated(context);
   _authorized(context, data.userId);
   return _createStreamChatToken(data);
+});
+
+export const shareLoop = functions.https.onCall((data, context) => {
+  _authenticated(context);
+  return _shareLoop(data);
 });

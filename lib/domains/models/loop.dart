@@ -15,6 +15,7 @@ class Loop extends Equatable {
   final int likes;
   final int downloads;
   final int comments;
+  final int shares;
   final List<String> tags;
   final bool deleted;
 
@@ -27,6 +28,7 @@ class Loop extends Equatable {
     required this.likes,
     required this.downloads,
     required this.comments,
+    required this.shares,
     required this.tags,
     required this.deleted,
   });
@@ -40,6 +42,7 @@ class Loop extends Equatable {
         likes,
         downloads,
         comments,
+        shares,
         tags,
         deleted,
       ];
@@ -53,6 +56,7 @@ class Loop extends Equatable {
         likes: 0,
         downloads: 0,
         comments: 0,
+        shares: 0,
         tags: const [],
         deleted: false,
       );
@@ -69,6 +73,7 @@ class Loop extends Equatable {
     int? likes,
     int? downloads,
     int? comments,
+    int? shares,
     List<String>? tags,
     bool? deleted,
   }) {
@@ -81,6 +86,7 @@ class Loop extends Equatable {
       likes: likes ?? this.likes,
       downloads: downloads ?? this.downloads,
       comments: comments ?? this.comments,
+      shares: shares ?? this.shares,
       tags: tags ?? this.tags,
       deleted: deleted ?? this.deleted,
     );
@@ -101,6 +107,7 @@ class Loop extends Equatable {
       likes: doc.getOrElse('likes', 0),
       downloads: doc.getOrElse('downloads', 0),
       comments: doc.getOrElse('comments', 0),
+      shares: doc.getOrElse('shares', 0),
       tags: List.from(
         doc.getOrElse('tags', []),
       ),

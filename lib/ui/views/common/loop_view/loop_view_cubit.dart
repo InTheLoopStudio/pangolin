@@ -151,4 +151,8 @@ class LoopViewCubit extends Cubit<LoopViewState> {
       await databaseRepository.likeLoop(currentUser.id, loop);
     }
   }
+
+  incrementShares() async {
+    await databaseRepository.shareLoop(loop);
+  }
 }
