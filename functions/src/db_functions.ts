@@ -832,12 +832,12 @@ const _createStreamChatToken = (data: { userId: string }) => {
   return token;
 };
 
-const _shareLoop = (data: { 
-  loopId: string, 
-  userId: string, 
+const _shareLoop = (data: {
+  loopId: string,
+  userId: string,
 }) => {
   const results = loopsRef.doc(data.loopId).update({
-    shares: admin.firestore.FieldValue.increment(),
+    shares: admin.firestore.FieldValue.increment(1),
   });
 
   console.log(results);
