@@ -201,4 +201,9 @@ class LocalDatabaseImpl extends DatabaseRepository {
   //   await Future.delayed(Duration(seconds: 2));
   //   return [];
   // }
+
+  Future<void> shareLoop(Loop loop) async {
+    await Future.delayed(Duration(seconds: 2));
+    return;
+  }
 }
