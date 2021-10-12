@@ -840,7 +840,7 @@ const _shareLoop = (data: {
     shares: admin.firestore.FieldValue.increment(1),
   });
 
-  console.log(results);
+  return results;
 };
 
 // --------------------------------------------------------
@@ -919,6 +919,5 @@ export const createStreamChatToken = functions.https.onCall((data, context) => {
 
 export const shareLoop = functions.https.onCall((data, context) => {
   _authenticated(context);
-  _authorized(context, data.userId);
   return _shareLoop(data);
 });
