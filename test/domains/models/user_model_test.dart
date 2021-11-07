@@ -28,6 +28,13 @@ void main() {
         tiktokHandle: '',
         instagramHandle: '',
         twitterHandle: '',
+        pushNotificationsLikes: false,
+        pushNotificationsComments: false,
+        pushNotificationsFollows: false,
+        pushNotificationsDirectMessages: false,
+        pushNotificationsITLUpdates: false,
+        emailNotificationsAppReleases: false,
+        emailNotificationsITLUpdates: false,
       ),
     );
   });
@@ -49,6 +56,13 @@ void main() {
       tiktokHandle: '',
       instagramHandle: '',
       twitterHandle: '',
+      pushNotificationsLikes: false,
+      pushNotificationsComments: false,
+      pushNotificationsFollows: false,
+      pushNotificationsDirectMessages: false,
+      pushNotificationsITLUpdates: false,
+      emailNotificationsAppReleases: false,
+      emailNotificationsITLUpdates: false,
     );
 
     expect(emptyUser.isEmpty, true);
@@ -73,6 +87,13 @@ void main() {
       tiktokHandle: '',
       instagramHandle: '',
       twitterHandle: '',
+      pushNotificationsLikes: false,
+      pushNotificationsComments: false,
+      pushNotificationsFollows: false,
+      pushNotificationsDirectMessages: false,
+      pushNotificationsITLUpdates: false,
+      emailNotificationsAppReleases: false,
+      emailNotificationsITLUpdates: false,
     );
 
     expect(emptyUser.isEmpty, false);
@@ -99,10 +120,17 @@ void main() {
         'tiktokHandle': '',
         'instagramHandle': '',
         'twitterHandle': '',
+        'pushNotificationsLikes': false,
+        'pushNotificationsComments': false,
+        'pushNotificationsFollows': false,
+        'pushNotificationsDirectMessages': false,
+        'pushNotificationsITLUpdates': false,
+        'emailNotificationsAppReleases': false,
+        'emailNotificationsITLUpdates': false
       },
     );
   });
-  
+
   test('UserModels should be able to be created from DocumentSnapshots', () {
     final DocumentSnapshot<Map<String, dynamic>> mockDocumentSnapshot =
         MockDocumentSnapshot<Map<String, dynamic>>();
@@ -123,6 +151,13 @@ void main() {
         'tiktokHandle': '',
         'instagramHandle': '',
         'twitterHandle': '',
+        'pushNotificationsLikes': false,
+        'pushNotificationsComments': false,
+        'pushNotificationsFollows': false,
+        'pushNotificationsDirectMessages': false,
+        'pushNotificationsITLUpdates': false,
+        'emailNotificationsAppReleases': false,
+        'emailNotificationsITLUpdates': false,
       },
     );
 
@@ -147,8 +182,14 @@ void main() {
         tiktokHandle: '',
         instagramHandle: '',
         twitterHandle: '',
+        pushNotificationsLikes: false,
+        pushNotificationsComments: false,
+        pushNotificationsFollows: false,
+        pushNotificationsDirectMessages: false,
+        pushNotificationsITLUpdates: false,
+        emailNotificationsAppReleases: false,
+        emailNotificationsITLUpdates: false,
       ),
     );
   });
-
 }

@@ -72,8 +72,9 @@ class _ActivityListState extends State<ActivityList> {
                 slivers: state.activities.isEmpty
                     ? <Widget>[
                         CupertinoSliverNavigationBar(
+                          backgroundColor: Theme.of(context).backgroundColor,
                           largeTitle: Text(
-                            "Activities",
+                            "Activity",
                             style: TextStyle(
                               color:
                                   Theme.of(context).appBarTheme.foregroundColor,
@@ -91,8 +92,9 @@ class _ActivityListState extends State<ActivityList> {
                       ]
                     : <Widget>[
                         CupertinoSliverNavigationBar(
+                          backgroundColor: Theme.of(context).backgroundColor,
                           largeTitle: Text(
-                            "Activities",
+                            "Activity",
                             style: TextStyle(
                               color:
                                   Theme.of(context).appBarTheme.foregroundColor,

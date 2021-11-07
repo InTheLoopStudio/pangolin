@@ -232,5 +232,10 @@ class MockDatabaseRepository extends _i1.Mock
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
   @override
+  _i6.Future<void> shareLoop(_i3.Loop? loop) =>
+      (super.noSuchMethod(Invocation.method(#shareLoop, [loop]),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+  @override
   String toString() => super.toString();
 }

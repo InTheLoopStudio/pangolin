@@ -66,6 +66,10 @@ export const sendToDevice = functions.firestore
   .onCreate(async (snapshot) => {
     const activity = snapshot.data();
 
+    const userDoc = await usersRef.doc(activity["toUserId"]).get();
+    const user = userDoc.data();
+    if (user !== null) return;
+
     const activityType = activity["type"];
 
     let payload: admin.messaging.MessagingPayload = {
@@ -78,6 +82,8 @@ export const sendToDevice = functions.firestore
 
     switch (activityType) {
     case "comment":
+      if (!user["pushNotificationsComments"]) return;
+
       payload = {
         notification: {
           title: "New Comment",
@@ -87,6 +93,7 @@ export const sendToDevice = functions.firestore
       };
       break;
     case "like":
+      if (!user["pushNotificationsLikes"]) return;
       payload = {
         notification: {
           title: "New Like",
@@ -96,6 +103,7 @@ export const sendToDevice = functions.firestore
       };
       break;
     case "follow":
+      if (!user["pushNotificationsFollows"]) return;
       payload = {
         notification: {
           title: "New Follower",
@@ -105,14 +113,7 @@ export const sendToDevice = functions.firestore
       };
       break;
     default:
-      payload = {
-        notification: {
-          title: "New Activity",
-          body: "You have new activity on your profile",
-          clickAction: "FLUTTER_NOTIFICATION_CLICK",
-        },
-      };
-      break;
+      return;
     }
 
     const querySnapshot = await usersRef
@@ -143,6 +144,13 @@ const _createUser = async (data: {
   tiktokHandle?: string | undefined;
   soundcloudHandle?: string | undefined;
   youtubeChannelId?: string | undefined;
+  pushNotificationsLikes?: boolean;
+  pushNotificationsComments?: boolean;
+  pushNotificationsFollows?: boolean;
+  pushNotificationsDirectMessages?: boolean;
+  pushNotificationsITLUpdates?: boolean;
+  emailNotificationsAppReleases?: boolean;
+  emailNotificationsITLUpdates?: boolean;
 }) => {
   console.log(data);
 
@@ -167,6 +175,20 @@ const _createUser = async (data: {
     tiktokHandle: data.tiktokHandle || "",
     soundcloudHandle: data.soundcloudHandle || "",
     youtubeChannelId: data.youtubeChannelId || "",
+    pushNotificationsLikes:
+      data.pushNotificationsLikes || true,
+    pushNotificationsComments:
+      data.pushNotificationsComments || true,
+    pushNotificationsFollows:
+      data.pushNotificationsFollows || true,
+    pushNotificaionsDirectMessages:
+      data.pushNotificationsDirectMessages || true,
+    pushNotificationsITLUpdates:
+      data.pushNotificationsITLUpdates || true,
+    emailNotificationsAppReleases:
+      data.emailNotificationsAppReleases || true,
+    emailNotificationsITLUpdates:
+      data.emailNotificationsITLUpdates || true,
   });
 
   streamChatClient.upsertUser({
@@ -242,6 +264,13 @@ const _updateUserData = async (data: {
   tiktokHandle?: string;
   soundcloudHandle?: string;
   youtubeChannelId?: string;
+  pushNotificationsLikes?: boolean;
+  pushNotificationsComments?: boolean;
+  pushNotificationsFollows?: boolean;
+  pushNotificationsDirectMessages?: boolean;
+  pushNotificationsITLUpdates?: boolean;
+  emailNotificationsAppReleases?: boolean;
+  emailNotificationsITLUpdates?: boolean;
 }) => {
   // Checking attribute.
   if (data.username?.length === 0) {
@@ -296,6 +325,20 @@ const _updateUserData = async (data: {
     tiktokHandle: data.tiktokHandle || "",
     soundcloudHandle: data.soundcloudHandle || "",
     youtubeChannelId: data.youtubeChannelId || "",
+    pushNotificationsLikes:
+      data.pushNotificationsLikes || true,
+    pushNotificationsComments:
+      data.pushNotificationsComments || true,
+    pushNotificationsFollows:
+      data.pushNotificationsFollows || true,
+    pushNotificaionsDirectMessages:
+      data.pushNotificationsDirectMessages || true,
+    pushNotificationsITLUpdates:
+      data.pushNotificationsITLUpdates || true,
+    emailNotificationsAppReleases:
+      data.emailNotificationsAppReleases || true,
+    emailNotificationsITLUpdates:
+      data.emailNotificationsITLUpdates || true,
   });
 
   return {id: data.id};
@@ -326,7 +369,7 @@ const _addActivity = async (data: {
     throw new functions.https.HttpsError(
       "invalid-argument",
       "The function argument 'type' must be either " +
-        "'follow', 'like', or 'comment'"
+      "'follow', 'like', or 'comment'"
     );
   }
 

@@ -16,6 +16,7 @@ import 'package:intheloopapp/ui/widgets/settings_view/change_profile_image.dart'
 import 'package:intheloopapp/ui/widgets/settings_view/connectivity_status.dart';
 import 'package:intheloopapp/ui/widgets/settings_view/delete_account_button.dart';
 import 'package:intheloopapp/ui/widgets/settings_view/dev_information.dart';
+import 'package:intheloopapp/ui/widgets/settings_view/notification_settings_form.dart';
 import 'package:intheloopapp/ui/widgets/settings_view/save_button.dart';
 import 'package:intheloopapp/ui/widgets/settings_view/settings_form.dart';
 
@@ -86,6 +87,16 @@ class SettingsView extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       SettingsForm(),
+                      const SizedBox(height: 30),
+                      Text(
+                        "Notifications",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      NotificationSettingsForm(),
                       const SizedBox(height: 30),
                       Text(
                         "More Options",
