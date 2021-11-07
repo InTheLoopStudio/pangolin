@@ -17,11 +17,21 @@ class UserModel extends Equatable {
   final int loopsCount;
   final bool deleted;
   final bool shadowBanned;
+
   final String youtubeChannelId;
   final String soundcloudHandle;
   final String tiktokHandle;
   final String instagramHandle;
   final String twitterHandle;
+
+  final bool pushNotificationsLikes;
+  final bool pushNotificationsComments;
+  final bool pushNotificationsFollows;
+  final bool pushNotificationsDirectMessages;
+  final bool pushNotificationsITLUpdates;
+  
+  final bool emailNotificationsAppReleases;
+  final bool emailNotificationsITLUpdates;
 
   UserModel({
     required this.id,
@@ -39,6 +49,13 @@ class UserModel extends Equatable {
     required this.tiktokHandle,
     required this.instagramHandle,
     required this.twitterHandle,
+    required this.pushNotificationsLikes,
+    required this.pushNotificationsComments,
+    required this.pushNotificationsFollows,
+    required this.pushNotificationsDirectMessages,
+    required this.pushNotificationsITLUpdates,
+    required this.emailNotificationsAppReleases,
+    required this.emailNotificationsITLUpdates,
   });
 
   List<Object> get props => [
@@ -57,6 +74,13 @@ class UserModel extends Equatable {
         this.tiktokHandle,
         this.instagramHandle,
         this.twitterHandle,
+        this.pushNotificationsLikes,
+        this.pushNotificationsComments,
+        this.pushNotificationsFollows,
+        this.pushNotificationsDirectMessages,
+        this.pushNotificationsITLUpdates,
+        this.emailNotificationsAppReleases,
+        this.emailNotificationsITLUpdates,
       ];
 
   static UserModel get empty => UserModel(
@@ -75,6 +99,13 @@ class UserModel extends Equatable {
         tiktokHandle: '',
         instagramHandle: '',
         twitterHandle: '',
+        pushNotificationsLikes: false,
+        pushNotificationsComments: false,
+        pushNotificationsFollows: false,
+        pushNotificationsDirectMessages: false,
+        pushNotificationsITLUpdates: false,
+        emailNotificationsAppReleases: false,
+        emailNotificationsITLUpdates: false,
       );
   bool get isEmpty => this == UserModel.empty;
   bool get isNotEmpty => this != UserModel.empty;
@@ -99,6 +130,13 @@ class UserModel extends Equatable {
     String? tiktokHandle,
     String? instagramHandle,
     String? twitterHandle,
+    bool? pushNotificationsLikes,
+    bool? pushNotificationsComments,
+    bool? pushNotificationsFollows,
+    bool? pushNotificationsDirectMessages,
+    bool? pushNotificationsITLUpdates,
+    bool? emailNotificationsAppReleases,
+    bool? emailNotificationsITLUpdates
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -116,6 +154,20 @@ class UserModel extends Equatable {
       tiktokHandle: tiktokHandle ?? this.tiktokHandle,
       instagramHandle: instagramHandle ?? this.instagramHandle,
       twitterHandle: twitterHandle ?? this.twitterHandle,
+      pushNotificationsLikes:
+          pushNotificationsLikes ?? this.pushNotificationsLikes,
+      pushNotificationsComments:
+          pushNotificationsComments ?? this.pushNotificationsComments,
+      pushNotificationsFollows:
+          pushNotificationsFollows ?? this.pushNotificationsFollows,
+      pushNotificationsDirectMessages: pushNotificationsDirectMessages ??
+          this.pushNotificationsDirectMessages,
+      pushNotificationsITLUpdates:
+          pushNotificationsITLUpdates ?? this.pushNotificationsITLUpdates,
+      emailNotificationsAppReleases:
+          emailNotificationsAppReleases ?? this.emailNotificationsAppReleases,
+      emailNotificationsITLUpdates:
+          emailNotificationsITLUpdates ?? this.emailNotificationsITLUpdates,
     );
   }
 
@@ -136,6 +188,13 @@ class UserModel extends Equatable {
       tiktokHandle: doc.getOrElse('tiktokHandle', ""),
       instagramHandle: doc.getOrElse('instagramHandle', ""),
       twitterHandle: doc.getOrElse('twitterHandle', ""),
+      pushNotificationsLikes: doc.getOrElse('pushNotificationsLikes', true),
+      pushNotificationsComments: doc.getOrElse('pushNotificationsComments', true),
+      pushNotificationsFollows: doc.getOrElse('pushNotificationsFollows', true),
+      pushNotificationsDirectMessages: doc.getOrElse('pushNotificationsDirectMessages', true),
+      pushNotificationsITLUpdates: doc.getOrElse('pushNotificationsITLUpdates', true),
+      emailNotificationsAppReleases: doc.getOrElse('emailNotificationsAppReleases', true),
+      emailNotificationsITLUpdates: doc.getOrElse('emailNotificationsITLUpdates', true),
     );
   }
 
@@ -155,7 +214,14 @@ class UserModel extends Equatable {
       'soundcloudHandle': this.soundcloudHandle,
       'tiktokHandle': this.tiktokHandle,
       'instagramHandle': this.instagramHandle,
-      'twitterHandle': this.twitterHandle
+      'twitterHandle': this.twitterHandle,
+      'pushNotificationsLikes': this.pushNotificationsLikes,
+      'pushNotificationsComments': this.pushNotificationsComments,
+      'pushNotificationsFollows': this.pushNotificationsFollows,
+      'pushNotificationsDirectMessages': this.pushNotificationsDirectMessages,
+      'pushNotificationsITLUpdates': this.pushNotificationsITLUpdates,
+      'emailNotificationsAppReleases': this.emailNotificationsAppReleases,
+      'emailNotificationsITLUpdates': this.emailNotificationsITLUpdates,
     };
   }
 }
