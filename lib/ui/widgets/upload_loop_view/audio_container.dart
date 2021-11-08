@@ -23,7 +23,7 @@ class AudioContainer extends StatelessWidget {
                   Text(state.pickedAudio!.path.split('/').last),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    decoration: new BoxDecoration(
+                    decoration: BoxDecoration(
                       color: theme.backgroundColor,
                     ),
                     child: Column(

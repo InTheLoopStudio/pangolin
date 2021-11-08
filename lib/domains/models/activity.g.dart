@@ -10,7 +10,7 @@ Activity _$ActivityFromJson(Map<String, dynamic> json) => Activity(
       id: json['id'] as String,
       fromUserId: json['fromUserId'] as String,
       toUserId: json['toUserId'] as String,
-      timestamp: firestoreTimestampFromJson(json['timestamp']),
+      timestamp: DateTime.parse(json['timestamp'] as String),
       type: _$enumDecode(_$ActivityTypeEnumMap, json['type']),
       markedRead: json['markedRead'] as bool,
     );
@@ -19,7 +19,7 @@ Map<String, dynamic> _$ActivityToJson(Activity instance) => <String, dynamic>{
       'id': instance.id,
       'fromUserId': instance.fromUserId,
       'toUserId': instance.toUserId,
-      'timestamp': firestoreTimestampToJson(instance.timestamp),
+      'timestamp': instance.timestamp.toIso8601String(),
       'type': _$ActivityTypeEnumMap[instance.type],
       'markedRead': instance.markedRead,
     };

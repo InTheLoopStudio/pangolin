@@ -41,6 +41,13 @@ class SettingsCubit extends Cubit<SettingsState> {
       tiktokHandle: currentUser.tiktokHandle,
       soundcloudHandle: currentUser.soundcloudHandle,
       youtubeChannelId: currentUser.youtubeChannelId,
+      pushNotificationsLikes: currentUser.pushNotificationsLikes,
+      pushNotificationsComments: currentUser.pushNotificationsComments,
+      pushNotificationsFollows: currentUser.pushNotificationsComments,
+      pushNotificationsDirectMessages: currentUser.pushNotificationsDirectMessages,
+      pushNotificationsITLUpdates: currentUser.pushNotificationsITLUpdates,
+      emailNotificationsAppReleases: currentUser.emailNotificationsAppReleases,
+      emailNotificationsITLUpdates: currentUser.emailNotificationsITLUpdates,
     ));
   }
 
@@ -56,6 +63,33 @@ class SettingsCubit extends Cubit<SettingsState> {
   void changeYoutube(String value) =>
       emit(state.copyWith(youtubeChannelId: value));
   void changeLocation(String value) => emit(state.copyWith(location: value));
+
+  void changeNewLikesPush(bool selected) =>
+      emit(state.copyWith(pushNotificationsLikes: selected));
+  void changeNewCommentsPush(bool selected) =>
+      emit(state.copyWith(pushNotificationsComments: selected));
+  void changeNewFollowerPush(bool selected) =>
+      emit(state.copyWith(pushNotificationsFollows: selected));
+  void changeDirectMsgPush(bool selected) =>
+      emit(state.copyWith(pushNotificationsDirectMessages: selected));
+  void changeITLUpdatesPush(bool selected) =>
+      emit(state.copyWith(pushNotificationsITLUpdates: selected));
+  void changeAllPush(bool selected) => emit(state.copyWith(
+        pushNotificationsLikes: selected,
+        pushNotificationsComments: selected,
+        pushNotificationsFollows: selected,
+        pushNotificationsDirectMessages: selected,
+        pushNotificationsITLUpdates: selected,
+      ));
+
+  void changeAppReleaseEmail(bool selected) =>
+      emit(state.copyWith(emailNotificationsAppReleases: selected));
+  void changeITLUpdatesEmail(bool selected) =>
+      emit(state.copyWith(emailNotificationsITLUpdates: selected));
+  void changeAllEmail(bool selected) => emit(state.copyWith(
+        emailNotificationsAppReleases: selected,
+        emailNotificationsITLUpdates: selected,
+      ));
 
   void handleImageFromGallery() async {
     try {
@@ -101,6 +135,13 @@ class SettingsCubit extends Cubit<SettingsState> {
         soundcloudHandle: state.soundcloudHandle,
         youtubeChannelId: state.youtubeChannelId,
         profilePicture: profilePictureUrl,
+        pushNotificationsLikes: state.pushNotificationsLikes,
+        pushNotificationsComments: state.pushNotificationsComments,
+        pushNotificationsFollows: state.pushNotificationsFollows,
+        pushNotificationsDirectMessages: state.pushNotificationsDirectMessages,
+        pushNotificationsITLUpdates: state.pushNotificationsITLUpdates,
+        emailNotificationsAppReleases: state.emailNotificationsAppReleases,
+        emailNotificationsITLUpdates: state.emailNotificationsITLUpdates,
       );
 
       databaseRepository.updateUserData(user);

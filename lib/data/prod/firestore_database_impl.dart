@@ -613,4 +613,14 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   //       .where((tag) => tag.value.toLowerCase().contains(query.toLowerCase()))
   //       .toList();
   // }
+
+  Future<void> shareLoop(Loop loop) async {
+    HttpsCallable callable = _functions.httpsCallable('shareLoop');
+    final results = await callable({
+      'loopId': loop.id,
+      'userId': loop.userId,
+    });
+
+    print(results.data.toString());
+  }
 }

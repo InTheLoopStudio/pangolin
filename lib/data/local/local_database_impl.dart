@@ -27,7 +27,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
 
   Future<Loop> getLoopById(String loopId) async {
     await Future.delayed(Duration(seconds: 2));
-    return Loop(id: loopId);
+    return Loop.empty;
   }
 
   Future<int> followersNum(String userid) async {
@@ -201,4 +201,9 @@ class LocalDatabaseImpl extends DatabaseRepository {
   //   await Future.delayed(Duration(seconds: 2));
   //   return [];
   // }
+
+  Future<void> shareLoop(Loop loop) async {
+    await Future.delayed(Duration(seconds: 2));
+    return;
+  }
 }

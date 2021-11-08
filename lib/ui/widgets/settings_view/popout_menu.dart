@@ -17,7 +17,7 @@ class PopoutMenu extends StatelessWidget {
           ),
           itemBuilder: (_) {
             return <PopupMenuItem<String>>[
-              new PopupMenuItem(
+              PopupMenuItem(
                 child: Text('Logout'),
                 value: 'logout',
               ),
@@ -25,7 +25,7 @@ class PopoutMenu extends StatelessWidget {
           },
           onSelected: (selectedItem) {
             if (selectedItem == 'logout') {
-              context.read<SettingsCubit>()..logout();
+              context.read<SettingsCubit>().logout();
               Navigator.pop(context);
             }
           },

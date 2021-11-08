@@ -15,6 +15,7 @@ import {
   uploadLoop,
   deleteLoop,
   createStreamChatToken,
+  shareLoop,
 } from "./db_functions";
 
 exports.sendToDevice = sendToDevice;
@@ -33,3 +34,4 @@ exports.markActivityAsRead = markActivityAsRead;
 exports.addComment = addComment;
 exports.deleteComment = deleteComment;
 exports.createStreamChatToken = createStreamChatToken;
+exports.shareLoop = shareLoop;

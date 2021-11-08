@@ -10,7 +10,7 @@ class LoopTitle extends StatelessWidget {
     return BlocBuilder<LoopContainerCubit, LoopContainerState>(
       builder: (context, state) {
         return Text(
-          state.loop.title ?? '',
+          state.loop.title,
           style: TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.bold,

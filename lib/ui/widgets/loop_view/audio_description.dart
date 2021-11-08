@@ -50,7 +50,7 @@ class AudioDescription extends StatelessWidget {
                 color: Colors.white,
               ),
               Text(
-                this.loop.title ?? '',
+                this.loop.title,
                 style: TextStyle(
                   fontSize: 24,
                   color: Colors.white,

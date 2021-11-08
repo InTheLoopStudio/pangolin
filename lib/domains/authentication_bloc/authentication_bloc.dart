@@ -71,7 +71,8 @@ class AuthenticationBloc
     _authRepository.logout();
   }
 
-  Stream<AuthenticationState> _mapUpdateAuthenticatedUserToState(UserModel user) async* {
+  Stream<AuthenticationState> _mapUpdateAuthenticatedUserToState(
+      UserModel user) async* {
     await _authRepository.updateUserData(userData: user);
     yield Authenticated(user);
   }

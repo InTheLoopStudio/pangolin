@@ -79,8 +79,7 @@ class ChannelName extends StatelessWidget {
                   var currentChars = 0;
                   final currentMembers = <UserModel>[];
                   otherMembers.forEach((element) {
-                    final newLength =
-                        currentChars + (element.username.length);
+                    final newLength = currentChars + (element.username.length);
                     if (newLength < maxChars) {
                       currentChars = newLength;
                       currentMembers.add(element);
@@ -89,8 +88,7 @@ class ChannelName extends StatelessWidget {
 
                   final exceedingMembers =
                       otherMembers.length - currentMembers.length;
-                  title =
-                      '${currentMembers.map((e) => e.username).join(', ')} '
+                  title = '${currentMembers.map((e) => e.username).join(', ')} '
                       '${exceedingMembers > 0 ? '+ $exceedingMembers' : ''}';
                 }
               }

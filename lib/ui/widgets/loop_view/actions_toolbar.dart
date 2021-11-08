@@ -61,6 +61,7 @@ class ActionsToolbar extends StatelessWidget {
                 title: 'Share',
                 color: Colors.grey[300],
                 onTap: () async {
+                  context.read<LoopViewCubit>().incrementShares();
                   final String link =
                       await dynamicLinkRepository.getShareLoopDynamicLink(loop);
                   Share.share('Check out this loop on In The Loop $link');

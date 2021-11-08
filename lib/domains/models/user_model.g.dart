@@ -22,6 +22,16 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       tiktokHandle: json['tiktokHandle'] as String,
       instagramHandle: json['instagramHandle'] as String,
       twitterHandle: json['twitterHandle'] as String,
+      pushNotificationsLikes: json['pushNotificationsLikes'] as bool,
+      pushNotificationsComments: json['pushNotificationsComments'] as bool,
+      pushNotificationsFollows: json['pushNotificationsFollows'] as bool,
+      pushNotificationsDirectMessages:
+          json['pushNotificationsDirectMessages'] as bool,
+      pushNotificationsITLUpdates: json['pushNotificationsITLUpdates'] as bool,
+      emailNotificationsAppReleases:
+          json['emailNotificationsAppReleases'] as bool,
+      emailNotificationsITLUpdates:
+          json['emailNotificationsITLUpdates'] as bool,
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
@@ -40,4 +50,12 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'tiktokHandle': instance.tiktokHandle,
       'instagramHandle': instance.instagramHandle,
       'twitterHandle': instance.twitterHandle,
+      'pushNotificationsLikes': instance.pushNotificationsLikes,
+      'pushNotificationsComments': instance.pushNotificationsComments,
+      'pushNotificationsFollows': instance.pushNotificationsFollows,
+      'pushNotificationsDirectMessages':
+          instance.pushNotificationsDirectMessages,
+      'pushNotificationsITLUpdates': instance.pushNotificationsITLUpdates,
+      'emailNotificationsAppReleases': instance.emailNotificationsAppReleases,
+      'emailNotificationsITLUpdates': instance.emailNotificationsITLUpdates,
     };

@@ -18,7 +18,7 @@ import 'package:intheloopapp/data/remote_config_repository.dart';
 import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
-import 'package:intheloopapp/domains/activity_bloc/bloc/activity_bloc.dart';
+import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/down_for_maintenance_bloc/down_for_maintenance_bloc.dart';
 import 'package:intheloopapp/domains/dynamic_link_bloc/dynamic_link_bloc.dart';

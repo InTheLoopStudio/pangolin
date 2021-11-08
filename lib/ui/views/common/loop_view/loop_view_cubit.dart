@@ -79,7 +79,7 @@ class LoopViewCubit extends Cubit<LoopViewState> {
 
   void initAudio() {
     // _player.setLoopMode(LoopMode.one);
-    state.audioController.setURL(loop.audio!);
+    state.audioController.setURL(loop.audio);
     if (autoPlay == true) {
       state.audioController.play(audioLockId);
     }
@@ -102,32 +102,14 @@ class LoopViewCubit extends Cubit<LoopViewState> {
     }
   }
 
-  void unfollowUser() {
+  void unfollowUser() async {
     emit(state.copyWith(isFollowing: false));
-
-    // Debounce
-    Duration duration = Duration(milliseconds: 500);
-    Timer(duration, () async {
-      if (state.isFollowing) {
-        await databaseRepository.unfollowUser(currentUser.id, user.id);
-      } else {
-        print('Never mind');
-      }
-    });
+    await databaseRepository.unfollowUser(currentUser.id, user.id);
   }
 
-  void followUser() {
+  void followUser() async {
     emit(state.copyWith(isFollowing: true));
-
-    // Debounce
-    Duration duration = Duration(milliseconds: 500);
-    Timer(duration, () async {
-      if (state.isFollowing) {
-        await databaseRepository.followUser(currentUser.id, user.id);
-      } else {
-        print('Never mind');
-      }
-    });
+    await databaseRepository.followUser(currentUser.id, user.id);
   }
 
   void initIsFollowing() async {
@@ -145,44 +127,32 @@ class LoopViewCubit extends Cubit<LoopViewState> {
 
   void initLoopLikes() async {
     bool isLiked = await databaseRepository.isLikeLoop(currentUser.id, loop);
-    emit(state.copyWith(isLiked: isLiked, likesCount: loop.likes ?? 0));
+    emit(state.copyWith(isLiked: isLiked, likesCount: loop.likes));
   }
 
   void initLoopComments() async {
-    emit(state.copyWith(commentsCount: loop.comments ?? 0));
+    emit(state.copyWith(commentsCount: loop.comments));
   }
 
-  toggleLikeLoop() {
+  toggleLikeLoop() async {
     if (state.isLiked) {
       emit(state.copyWith(
         isLiked: false,
         likesCount: state.likesCount - 1,
       ));
 
-      // Debounce
-      Duration duration = Duration(milliseconds: 500);
-      Timer(duration, () async {
-        if (state.isFollowing) {
-          await databaseRepository.unlikeLoop(currentUser.id, loop);
-        } else {
-          print('Never mind');
-        }
-      });
+      await databaseRepository.unlikeLoop(currentUser.id, loop);
     } else {
       emit(state.copyWith(
         isLiked: true,
         likesCount: state.likesCount + 1,
       ));
 
-      // Debounce
-      Duration duration = Duration(milliseconds: 500);
-      Timer(duration, () async {
-        if (state.isFollowing) {
-          await databaseRepository.likeLoop(currentUser.id, loop);
-        } else {
-          print('Never mind');
-        }
-      });
+      await databaseRepository.likeLoop(currentUser.id, loop);
     }
+  }
+
+  incrementShares() async {
+    await databaseRepository.shareLoop(loop);
   }
 }

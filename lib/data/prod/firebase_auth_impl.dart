@@ -41,9 +41,8 @@ String _sha256ofString(String input) {
 
 class FirebaseAuthImpl extends AuthRepository {
   FirebaseAuth _auth = FirebaseAuth.instance;
-  Stream<UserModel> get authUserChanges => _auth
-          .authStateChanges()
-          .asyncMap((firebaseUser) async {
+  Stream<UserModel> get authUserChanges =>
+      _auth.authStateChanges().asyncMap((firebaseUser) async {
         final UserModel user = firebaseUser == null
             ? UserModel.empty
             : await firebaseUser.toUserModel;

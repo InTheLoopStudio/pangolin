@@ -12,6 +12,13 @@ class SettingsState extends Equatable {
     this.youtubeChannelId = '',
     this.profileImage,
     this.status = FormzStatus.pure,
+    this.pushNotificationsLikes = true,
+    this.pushNotificationsComments = true,
+    this.pushNotificationsFollows = true,
+    this.pushNotificationsDirectMessages = true,
+    this.pushNotificationsITLUpdates = true,
+    this.emailNotificationsAppReleases = true,
+    this.emailNotificationsITLUpdates = true,
     ImagePicker? picker,
     GlobalKey<FormState>? formKey,
   }) {
@@ -32,6 +39,14 @@ class SettingsState extends Equatable {
   late final ImagePicker picker;
   late final formKey;
 
+  final bool pushNotificationsLikes;
+  final bool pushNotificationsComments;
+  final bool pushNotificationsFollows;
+  final bool pushNotificationsDirectMessages;
+  final bool pushNotificationsITLUpdates;
+  final bool emailNotificationsAppReleases;
+  final bool emailNotificationsITLUpdates;
+
   List<Object?> get props => [
         username,
         bio,
@@ -43,6 +58,13 @@ class SettingsState extends Equatable {
         youtubeChannelId,
         profileImage,
         status,
+        pushNotificationsLikes,
+        pushNotificationsComments,
+        pushNotificationsFollows,
+        pushNotificationsDirectMessages,
+        pushNotificationsITLUpdates,
+        emailNotificationsAppReleases,
+        emailNotificationsITLUpdates,
       ];
 
   SettingsState copyWith({
@@ -56,6 +78,13 @@ class SettingsState extends Equatable {
     String? youtubeChannelId,
     File? profileImage,
     FormzStatus? status,
+    bool? pushNotificationsLikes,
+    bool? pushNotificationsComments,
+    bool? pushNotificationsFollows,
+    bool? pushNotificationsDirectMessages,
+    bool? pushNotificationsITLUpdates,
+    bool? emailNotificationsAppReleases,
+    bool? emailNotificationsITLUpdates,
   }) {
     return SettingsState(
       username: username ?? this.username,
@@ -68,6 +97,20 @@ class SettingsState extends Equatable {
       youtubeChannelId: youtubeChannelId ?? this.youtubeChannelId,
       profileImage: profileImage ?? this.profileImage,
       status: status ?? this.status,
+      pushNotificationsLikes:
+          pushNotificationsLikes ?? this.pushNotificationsLikes,
+      pushNotificationsComments:
+          pushNotificationsComments ?? this.pushNotificationsComments,
+      pushNotificationsFollows:
+          pushNotificationsFollows ?? this.pushNotificationsFollows,
+      pushNotificationsDirectMessages: pushNotificationsDirectMessages ??
+          this.pushNotificationsDirectMessages,
+      pushNotificationsITLUpdates:
+          pushNotificationsITLUpdates ?? this.pushNotificationsITLUpdates,
+      emailNotificationsAppReleases:
+          emailNotificationsAppReleases ?? this.emailNotificationsAppReleases,
+      emailNotificationsITLUpdates:
+          emailNotificationsITLUpdates ?? this.emailNotificationsITLUpdates,
       picker: this.picker,
       formKey: this.formKey,
     );

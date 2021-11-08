@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
-import 'package:intheloopapp/domains/activity_bloc/bloc/activity_bloc.dart';
+import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
@@ -18,12 +18,13 @@ class ActivityTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ActivityBloc, ActivityState>(
       builder: (context, state) {
-
         DatabaseRepository databaseRepository =
             context.read<DatabaseRepository>();
 
         if (!activity.markedRead) {
-          context.read<ActivityBloc>().add(MarkActivityAsReadEvent(activity: activity));
+          context
+              .read<ActivityBloc>()
+              .add(MarkActivityAsReadEvent(activity: activity));
         }
 
         return FutureBuilder(
@@ -57,7 +58,7 @@ class ActivityTile extends StatelessWidget {
                       ),
                       trailing: Text(
                         timeago.format(
-                          activity.timestamp.toDate(),
+                          activity.timestamp,
                           locale: 'en_short',
                         ),
                         style: TextStyle(

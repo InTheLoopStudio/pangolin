@@ -25,7 +25,7 @@ class LikesView extends StatelessWidget {
       child: Scaffold(
         backgroundColor: theme.backgroundColor,
         appBar: AppBar(
-          title: Text(loop.title ?? ''),
+          title: Text(loop.title),
         ),
         body: BlocBuilder<LikesCubit, LikesState>(
           builder: (context, state) {
