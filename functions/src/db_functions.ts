@@ -1,8 +1,8 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import { firestore } from "firebase-admin";
-import { StreamChat } from "stream-chat";
-import { secrets } from "./secrets";
+import {firestore} from "firebase-admin";
+import {StreamChat} from "stream-chat";
+import {secrets} from "./secrets";
 
 if (!admin.apps.length) {
   admin.initializeApp();
@@ -81,39 +81,39 @@ export const sendToDevice = functions.firestore
     };
 
     switch (activityType) {
-      case "comment":
-        if (!user["pushNotificationsComments"]) return;
+    case "comment":
+      if (!user["pushNotificationsComments"]) return;
 
-        payload = {
-          notification: {
-            title: "New Comment",
-            body: "Someone commented on your loop 👀",
-            clickAction: "FLUTTER_NOTIFICATION_CLICK",
-          },
-        };
-        break;
-      case "like":
-        if (!user["pushNotificationsLikes"]) return;
-        payload = {
-          notification: {
-            title: "New Like",
-            body: "Someone liked your loops 👍",
-            clickAction: "FLUTTER_NOTIFICATION_CLICK",
-          },
-        };
-        break;
-      case "follow":
-        if (!user["pushNotificationsFollows"]) return;
-        payload = {
-          notification: {
-            title: "New Follower",
-            body: "You just got a new follower 🔥",
-            clickAction: "FLUTTER_NOTIFICATION_CLICK",
-          },
-        };
-        break;
-      default:
-        return;
+      payload = {
+        notification: {
+          title: "New Comment",
+          body: "Someone commented on your loop 👀",
+          clickAction: "FLUTTER_NOTIFICATION_CLICK",
+        },
+      };
+      break;
+    case "like":
+      if (!user["pushNotificationsLikes"]) return;
+      payload = {
+        notification: {
+          title: "New Like",
+          body: "Someone liked your loops 👍",
+          clickAction: "FLUTTER_NOTIFICATION_CLICK",
+        },
+      };
+      break;
+    case "follow":
+      if (!user["pushNotificationsFollows"]) return;
+      payload = {
+        notification: {
+          title: "New Follower",
+          body: "You just got a new follower 🔥",
+          clickAction: "FLUTTER_NOTIFICATION_CLICK",
+        },
+      };
+      break;
+    default:
+      return;
     }
 
     const querySnapshot = await usersRef
@@ -155,7 +155,7 @@ const _createUser = async (data: {
   console.log(data);
 
   if ((await usersRef.doc(data.id).get()).exists) {
-    return { id: data.id };
+    return {id: data.id};
   }
 
   const filteredUsername = data.username?.trim().toLowerCase() || "anonymous";
@@ -196,7 +196,7 @@ const _createUser = async (data: {
     role: "user",
   });
 
-  return { id: data.id };
+  return {id: data.id};
 };
 
 const _deleteUser = async (data: { id: string }) => {
@@ -217,7 +217,7 @@ const _deleteUser = async (data: { id: string }) => {
   // *delete loop protocol*
   const userLoops = await loopsRef.where("userId", "==", data.id).get();
   userLoops.docs.forEach((snapshot) =>
-    _deleteLoop({ id: snapshot.id, userId: data.id })
+    _deleteLoop({id: snapshot.id, userId: data.id})
   );
 
   // *delete comment procotol*
@@ -237,12 +237,12 @@ const _deleteUser = async (data: { id: string }) => {
   // *delete all loops keyed at 'audio/loops/{UID}/{LOOPURL}'*
   storage
     .bucket("in-the-loop-306520.appspot.com")
-    .deleteFiles({ prefix: `audio/loops/${data.id}` });
+    .deleteFiles({prefix: `audio/loops/${data.id}`});
 
   // *delete all images keyed at 'images/users/{UID}/{IMAGEURL}'*
   storage
     .bucket("in-the-loop-306520.appspot.com")
-    .deleteFiles({ prefix: `images/users/${data.id}` });
+    .deleteFiles({prefix: `images/users/${data.id}`});
 
   // TODO : delete follower table stuff?
   // TODO : delete following table stuff?
@@ -297,15 +297,15 @@ const _updateUserData = async (data: {
 
   const filteredUsername = data.username?.trim().toLowerCase() || "anonymous";
   if (
-    filteredUsername !== null
-    && filteredUsername !== undefined
-    && !_checkUsernameAvailability({ username: filteredUsername, userId: data.id })
+    filteredUsername !== null &&
+    filteredUsername !== undefined &&
+    !_checkUsernameAvailability({username: filteredUsername, userId: data.id})
   ) {
     // Throwing an HttpsError so that the client gets the error details.
     throw new functions.https.HttpsError(
       "invalid-argument",
       "The function argument 'username' cannot already be in use"
-    )
+    );
   }
 
 
@@ -340,7 +340,7 @@ const _updateUserData = async (data: {
       data.emailNotificationsITLUpdates || true,
   });
 
-  return { id: data.id };
+  return {id: data.id};
 };
 
 const _addActivity = async (data: {
@@ -379,7 +379,7 @@ const _addActivity = async (data: {
     type: data.type,
   });
 
-  return { id: docRef.id };
+  return {id: docRef.id};
 };
 
 const _markActivityAsRead = async (data: { id: string }) => {
@@ -532,7 +532,7 @@ const _likeLoop = async (data: {
 
         loopsRef
           .doc(data.loopId)
-          .update({ likes: admin.firestore.FieldValue.increment(1) });
+          .update({likes: admin.firestore.FieldValue.increment(1)});
 
         if (data.currentUserId != data.loopUserId) {
           _addActivity({
@@ -544,7 +544,7 @@ const _likeLoop = async (data: {
       }
     });
 
-  return { loopId: data.loopId };
+  return {loopId: data.loopId};
 };
 
 const _unlikeLoop = async (data: { currentUserId: string; loopId: string }) => {
@@ -575,7 +575,7 @@ const _unlikeLoop = async (data: { currentUserId: string; loopId: string }) => {
 
         loopsRef
           .doc(data.loopId)
-          .update({ likes: admin.firestore.FieldValue.increment(-1) });
+          .update({likes: admin.firestore.FieldValue.increment(-1)});
       }
     });
 };
@@ -630,7 +630,7 @@ const _addComment = async (data: {
 
   loopsRef
     .doc(data.rootLoopId)
-    .update({ comments: admin.firestore.FieldValue.increment(1) });
+    .update({comments: admin.firestore.FieldValue.increment(1)});
 
   if (data.visitedUserId != data.userId) {
     _addActivity({
@@ -678,7 +678,7 @@ const _deleteComment = async (data: {
   const rootLoopId = commentSnapshot.data()?.["rootLoopId"];
   loopsRef
     .doc(rootLoopId)
-    .update({ comments: admin.firestore.FieldValue.increment(-1) });
+    .update({comments: admin.firestore.FieldValue.increment(-1)});
 
   commentSnapshot.ref.update({
     content: "*deleted*",
@@ -741,7 +741,7 @@ const _uploadLoop = async (data: {
 
   usersRef
     .doc(data.loopUserId)
-    .update({ loopsCount: admin.firestore.FieldValue.increment(1) });
+    .update({loopsCount: admin.firestore.FieldValue.increment(1)});
 
   loopsRef
     .add({
@@ -889,7 +889,6 @@ const _checkUsernameAvailability = async (data: {
   userId: string,
   username: string,
 }) => {
-
   const blacklist = [
     "anonymous",
     "*deleted*",
@@ -907,7 +906,7 @@ const _checkUsernameAvailability = async (data: {
   }
 
   return true;
-}
+};
 
 // --------------------------------------------------------
 
@@ -922,7 +921,7 @@ export const onUserCreated = functions.auth
   );
 export const onUserDeleted = functions.auth
   .user()
-  .onDelete((user: admin.auth.UserRecord) => _deleteUser({ id: user.uid }));
+  .onDelete((user: admin.auth.UserRecord) => _deleteUser({id: user.uid}));
 export const createUser = functions.https.onCall((data) => _createUser(data));
 export const updateUserData = functions.https.onCall((data, context) => {
   _authenticated(context);
@@ -987,7 +986,8 @@ export const shareLoop = functions.https.onCall((data, context) => {
   _authenticated(context);
   return _shareLoop(data);
 });
-export const checkUsernameAvailability = functions.https.onCall((data, context) => {
-  _authenticated(context);
-  return _checkUsernameAvailability(data);
-})
+export const checkUsernameAvailability =
+  functions.https.onCall((data, context) => {
+    _authenticated(context);
+    return _checkUsernameAvailability(data);
+  });
