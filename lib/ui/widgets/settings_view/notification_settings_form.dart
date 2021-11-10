@@ -85,7 +85,7 @@ class NotificationSettingsForm extends StatelessWidget {
                   context.read<SettingsCubit>().changeAppReleaseEmail(selected),
             ),
             SettingsSwitch(
-              label: "ITL Updates",
+              label: "In The Loop Updates",
               activated: state.emailNotificationsITLUpdates,
               onChanged: (selected) =>
                   context.read<SettingsCubit>().changeITLUpdatesEmail(selected),

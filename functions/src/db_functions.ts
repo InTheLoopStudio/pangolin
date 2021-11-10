@@ -295,20 +295,19 @@ const _updateUserData = async (data: {
     );
   }
 
-  if (data.username != "anonymous" && data.username != "*deleted*") {
-    const userQuery = await usersRef
-      .where("username", "==", data.username)
-      .get();
-    if (userQuery.docs.length > 0 && userQuery.docs[0].id != data.id) {
-      // Throwing an HttpsError so that the client gets the error details.
-      throw new functions.https.HttpsError(
-        "invalid-argument",
-        "The function argument 'username' cannot already be in use"
-      );
-    }
+  const filteredUsername = data.username?.trim().toLowerCase() || "anonymous";
+  if (
+    filteredUsername !== null &&
+    filteredUsername !== undefined &&
+    !_checkUsernameAvailability({username: filteredUsername, userId: data.id})
+  ) {
+    // Throwing an HttpsError so that the client gets the error details.
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function argument 'username' cannot already be in use"
+    );
   }
 
-  const filteredUsername = data.username?.trim().toLowerCase() || "anonymous";
 
   usersRef.doc(data.id).update({
     email: data.email || "",
@@ -886,6 +885,29 @@ const _shareLoop = (data: {
   return results;
 };
 
+const _checkUsernameAvailability = async (data: {
+  userId: string,
+  username: string,
+}) => {
+  const blacklist = [
+    "anonymous",
+    "*deleted*",
+  ];
+
+  if (blacklist.includes(data.username)) {
+    return false;
+  }
+
+  const userQuery = await usersRef
+    .where("username", "==", data.username)
+    .get();
+  if (userQuery.docs.length > 0 && userQuery.docs[0].id != data.userId) {
+    return false;
+  }
+
+  return true;
+};
+
 // --------------------------------------------------------
 
 export const onUserCreated = functions.auth
@@ -964,3 +986,8 @@ export const shareLoop = functions.https.onCall((data, context) => {
   _authenticated(context);
   return _shareLoop(data);
 });
+export const checkUsernameAvailability =
+  functions.https.onCall((data, context) => {
+    _authenticated(context);
+    return _checkUsernameAvailability(data);
+  });
