@@ -16,6 +16,7 @@ import {
   deleteLoop,
   createStreamChatToken,
   shareLoop,
+  checkUsernameAvailability,
 } from "./db_functions";
 
 exports.sendToDevice = sendToDevice;
@@ -35,3 +36,4 @@ exports.addComment = addComment;
 exports.deleteComment = deleteComment;
 exports.createStreamChatToken = createStreamChatToken;
 exports.shareLoop = shareLoop;
+exports.checkUsernameAvailability = checkUsernameAvailability;
