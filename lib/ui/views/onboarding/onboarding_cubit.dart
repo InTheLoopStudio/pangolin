@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/data/prod/stream_impl.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -98,6 +99,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
     );
   }
 
+  void usernameChange(String input) => emit(state.copyWith(username: input));
   void locationChange(String input) => emit(state.copyWith(location: input));
   void bioChange(String input) => emit(state.copyWith(bio: input));
 

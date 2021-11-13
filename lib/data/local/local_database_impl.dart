@@ -206,4 +206,10 @@ class LocalDatabaseImpl extends DatabaseRepository {
     await Future.delayed(Duration(seconds: 2));
     return;
   }
+
+  Future<bool> checkUsernameAvailability(
+      String username, String userid) async {
+    await Future.delayed(Duration(seconds: 2));
+    return true;
+  }
 }

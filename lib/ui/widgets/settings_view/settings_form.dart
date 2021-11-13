@@ -22,77 +22,76 @@ class SettingsForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<UserModel>(
-        stream: RepositoryProvider.of<AuthRepository>(context).user,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) return CircularProgressIndicator();
+      stream: RepositoryProvider.of<AuthRepository>(context).user,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return CircularProgressIndicator();
 
-          UserModel currentUser = snapshot.data!;
+        UserModel currentUser = snapshot.data!;
 
-          return BlocBuilder<SettingsCubit, SettingsState>(
-            builder: (context, state) {
-              return Form(
-                key: state.formKey,
-                child: Column(
-                  children: [
-                    UsernameTextField(
-                      initialValue: state.username,
-                      onSaved: (input) {
-                        if (input != null) {
-                          context.read<SettingsCubit>().changeUsername(input);
-                        }
-                      },
-                      onCheckUsername:
-                          context.read<DatabaseRepository>().getUserByUsername,
-                      currentUserId: currentUser.id,
-                    ),
-                    BioTextField(
-                      onSaved: (value) =>
-                          context.read<SettingsCubit>().changeBio(value ?? ''),
-                      initialValue: state.bio,
-                    ),
-                    LocationTextField(
-                      onSaved: (value) => context
-                          .read<SettingsCubit>()
-                          .changeLocation(value ?? ''),
-                      initialValue: state.location,
-                    ),
-                    TwitterTextField(
-                      initialValue: state.twitterHandle,
-                      onSaved: (value) =>
-                          context.read<SettingsCubit>().changeTwitter(value),
-                    ),
-                    InstagramTextField(
-                      initialValue: state.instagramHandle,
-                      onSaved: (value) =>
-                          context.read<SettingsCubit>().changeInstagram(value),
-                    ),
-                    TikTokTextField(
-                      initialValue: state.tiktokHandle,
-                      onSaved: (value) =>
-                          context.read<SettingsCubit>().changeTikTik(value),
-                    ),
-                    SoundcloudTextField(
-                      initialValue: state.soundcloudHandle,
-                      onSaved: (value) =>
-                          context.read<SettingsCubit>().changeSoundcloud(value),
-                    ),
-                    YoutubeTextField(
-                      initialValue: state.youtubeChannelId,
-                      onSaved: (value) =>
-                          context.read<SettingsCubit>().changeYoutube(value),
-                    ),
-                    SizedBox(height: 15),
-                    ThemeSwitch(),
-                    state.status.isSubmissionInProgress
-                        ? CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation(itlAccent),
-                          )
-                        : SizedBox.shrink(),
-                  ],
-                ),
-              );
-            },
-          );
-        });
+        return BlocBuilder<SettingsCubit, SettingsState>(
+          builder: (context, state) {
+            return Form(
+              key: state.formKey,
+              child: Column(
+                children: [
+                  UsernameTextField(
+                    initialValue: state.username,
+                    onSaved: (input) {
+                      if (input != null) {
+                        context.read<SettingsCubit>().changeUsername(input);
+                      }
+                    },
+                    currentUserId: currentUser.id,
+                  ),
+                  BioTextField(
+                    onSaved: (value) =>
+                        context.read<SettingsCubit>().changeBio(value ?? ''),
+                    initialValue: state.bio,
+                  ),
+                  LocationTextField(
+                    onSaved: (value) => context
+                        .read<SettingsCubit>()
+                        .changeLocation(value ?? ''),
+                    initialValue: state.location,
+                  ),
+                  TwitterTextField(
+                    initialValue: state.twitterHandle,
+                    onSaved: (value) =>
+                        context.read<SettingsCubit>().changeTwitter(value),
+                  ),
+                  InstagramTextField(
+                    initialValue: state.instagramHandle,
+                    onSaved: (value) =>
+                        context.read<SettingsCubit>().changeInstagram(value),
+                  ),
+                  TikTokTextField(
+                    initialValue: state.tiktokHandle,
+                    onSaved: (value) =>
+                        context.read<SettingsCubit>().changeTikTik(value),
+                  ),
+                  SoundcloudTextField(
+                    initialValue: state.soundcloudHandle,
+                    onSaved: (value) =>
+                        context.read<SettingsCubit>().changeSoundcloud(value),
+                  ),
+                  YoutubeTextField(
+                    initialValue: state.youtubeChannelId,
+                    onSaved: (value) =>
+                        context.read<SettingsCubit>().changeYoutube(value),
+                  ),
+                  SizedBox(height: 15),
+                  ThemeSwitch(),
+                  state.status.isSubmissionInProgress
+                      ? CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation(itlAccent),
+                        )
+                      : SizedBox.shrink(),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }

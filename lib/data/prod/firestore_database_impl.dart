@@ -623,4 +623,17 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
     print(results.data.toString());
   }
+
+  Future<bool> checkUsernameAvailability(String username, String userid) async {
+    HttpsCallable callable =
+        _functions.httpsCallable('checkUsernameAvailability');
+    final results = await callable({
+      'username': username,
+      'userId': userid,
+    });
+
+    print(results.data.toString());
+
+    return results.data;
+  }
 }
