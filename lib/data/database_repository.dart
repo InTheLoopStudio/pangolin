@@ -89,4 +89,5 @@ abstract class DatabaseRepository {
   // Future<void> deleteComment(Comment comment);
   // Future<List<Tag>> getTagSuggestions(String query);
   Future<void> shareLoop(Loop loop);
+  Future<bool> checkUsernameAvailability(String username, String userid);
 }

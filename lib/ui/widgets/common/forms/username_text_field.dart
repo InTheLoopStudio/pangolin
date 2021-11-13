@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:intheloopapp/ui/themes.dart';
 
 class UsernameTextField extends StatefulWidget {
   const UsernameTextField({
@@ -9,13 +10,11 @@ class UsernameTextField extends StatefulWidget {
     this.onSaved,
     this.onChanged,
     this.initialValue,
-    required this.onCheckUsername,
     required this.currentUserId,
   }) : super(key: key);
 
   final void Function(String?)? onSaved;
   final void Function(String?)? onChanged;
-  final Future<UserModel?> Function(String?) onCheckUsername;
   final String? initialValue;
   final String currentUserId;
 
@@ -27,18 +26,8 @@ class _UsernameTextFieldState extends State<UsernameTextField> {
   bool _usernameTaken = false;
 
   String get _currentUserId => widget.currentUserId;
-  Future<UserModel?> Function(String?) get _onCheckUsername =>
-      widget.onCheckUsername;
   void Function(String?)? get _onSaved => widget.onSaved;
   void Function(String?)? get _onChanged => widget.onChanged;
-
-  Future<void> _checkUsername(String? input) async {
-    UserModel? user = await _onCheckUsername(input);
-
-    setState(() {
-      _usernameTaken = (user != null && user.id != _currentUserId);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,15 +52,33 @@ class _UsernameTextFieldState extends State<UsernameTextField> {
 
         return null;
       },
-      onSaved: (input) {
-        _checkUsername(input);
+      onSaved: (input) async {
+        if (input == null || input.isEmpty) return;
+
+        DatabaseRepository databaseRepo =
+            RepositoryProvider.of<DatabaseRepository>(context);
+        bool available =
+            await databaseRepo.checkUsernameAvailability(input, _currentUserId);
+        setState(() {
+          _usernameTaken = available;
+        });
+
         if (_onSaved != null) {
           _onSaved!(input);
         }
       },
-      onChanged: (input) {
+      onChanged: (input) async {
+        if (input.isEmpty) return;
+
         input = input.trim().toLowerCase();
-        _checkUsername(input);
+        DatabaseRepository databaseRepo =
+            RepositoryProvider.of<DatabaseRepository>(context);
+        bool available =
+            await databaseRepo.checkUsernameAvailability(input, _currentUserId);
+        setState(() {
+          _usernameTaken = available;
+        });
+
         if (_onChanged != null) {
           _onChanged!(input);
         }
