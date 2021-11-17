@@ -1,8 +1,10 @@
 import 'package:algolia/algolia.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
+final _analytics = FirebaseAnalytics();
 final _fireStore = FirebaseFirestore.instance;
 final usersRef = _fireStore.collection('users');
 final Algolia _algolia = Algolia.init(
@@ -26,6 +28,8 @@ class AlgoliaSearchImpl extends SearchRepository {
       AlgoliaQuery query = _algolia.index('prod_users').query(input);
 
       AlgoliaQuerySnapshot snap = await query.getObjects();
+
+      _analytics.logSearch(searchTerm: input);
 
       results = snap.hits;
     } on AlgoliaError catch (e) {

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
@@ -12,6 +13,7 @@ import 'package:rxdart/rxdart.dart';
 
 final _functions = FirebaseFunctions.instance;
 final _firestore = FirebaseFirestore.instance;
+final _analytics = FirebaseAnalytics();
 
 final usersRef = _firestore.collection('users');
 final followersRef = _firestore.collection('followers');
@@ -31,6 +33,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   Future<void> createUser(UserModel user) async {
+    _analytics.logEvent(name: 'sign_up');
     HttpsCallable callable = _functions.httpsCallable('createUser');
     final results = await callable(user.toMap());
 
@@ -92,6 +95,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String currentUserId,
     String visitedUserId,
   ) async {
+    _analytics.logEvent(name: 'follow_user', parameters: {
+      'follower': currentUserId,
+      'followee': visitedUserId,
+    });
     HttpsCallable callable = _functions.httpsCallable('followUser');
     final results = await callable({
       'follower': currentUserId,
@@ -105,6 +112,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String currentUserId,
     String visitedUserId,
   ) async {
+    _analytics.logEvent(name: 'unfollow_user', parameters: {
+      'follower': currentUserId,
+      'followed': visitedUserId,
+    });
     HttpsCallable callable = _functions.httpsCallable('unfollowUser');
     final results = await callable({
       'follower': currentUserId,
@@ -169,6 +180,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   Future<void> uploadLoop(Loop loop) async {
+    _analytics.logEvent(name: 'upload_loop', parameters: {
+      'user_id': loop.userId,
+      'loop_id': loop.id,
+    });
     HttpsCallable callable = _functions.httpsCallable('uploadLoop');
     final results = await callable({
       'loopTitle': loop.title,
@@ -184,6 +199,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   Future<void> deleteLoop(Loop loop) async {
+    _analytics.logEvent(name: 'delete_loop', parameters: {
+      'user_id': loop.userId,
+      'loop_id': loop.id,
+    });
     HttpsCallable callable = _functions.httpsCallable('deleteLoop');
     final results = await callable({
       'id': loop.id,
@@ -401,6 +420,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   Future<void> likeLoop(String currentUserId, Loop loop) async {
+    _analytics.logEvent(name: 'like_loop', parameters: {
+      'user_id': currentUserId,
+      'loop_id': loop.id,
+    });
     HttpsCallable callable = _functions.httpsCallable('likeLoop');
     final results = await callable({
       'currentUserId': currentUserId,
@@ -412,6 +435,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   Future<void> unlikeLoop(String currentUserId, Loop loop) async {
+    _analytics.logEvent(name: 'unlike_loop', parameters: {
+      'user_id': currentUserId,
+      'loop_id': loop.id,
+    });
     HttpsCallable callable = _functions.httpsCallable('unlikeLoop');
     final results = await callable({
       'currentUserId': currentUserId,
@@ -514,6 +541,11 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     Loop? loop,
     required String visitedUserId,
   }) async {
+    _analytics.logEvent(name: 'new_activity', parameters: {
+      'from_user_id': currentUserId,
+      'to_user_id': visitedUserId,
+      'type': EnumToString.convertToString(type),
+    });
     HttpsCallable callable = _functions.httpsCallable('addActivity');
     final results = await callable({
       'toUserId': visitedUserId,
@@ -525,6 +557,9 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   Future<void> markActivityAsRead(Activity activity) async {
+    _analytics.logEvent(name: 'activity_read', parameters: {
+      'activity': activity.id,
+    });
     HttpsCallable callable = _functions.httpsCallable('markActivityAsRead');
     final results = await callable({
       'id': activity.id,
@@ -592,6 +627,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   Future<void> addComment(Comment comment, String visitedUserId) async {
+    _analytics.logEvent(name: 'new_comment', parameters: {
+      'root_loop_id': comment.rootLoopId,
+      'user_id': comment.userId,
+    });
     HttpsCallable callable = _functions.httpsCallable('addComment');
     final results = await callable({
       'visitedUserId': visitedUserId,
@@ -615,6 +654,11 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   // }
 
   Future<void> shareLoop(Loop loop) async {
+    _analytics.logShare(
+      contentType: 'loop',
+      itemId: loop.id,
+      method: 'unknown',
+    );
     HttpsCallable callable = _functions.httpsCallable('shareLoop');
     final results = await callable({
       'loopId': loop.id,

@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -11,7 +12,9 @@ import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+final _auth = FirebaseAuth.instance;
 final _fireStore = FirebaseFirestore.instance;
+final _analytics = FirebaseAnalytics();
 final usersRef = _fireStore.collection('users');
 
 extension on User {
@@ -40,7 +43,6 @@ String _sha256ofString(String input) {
 }
 
 class FirebaseAuthImpl extends AuthRepository {
-  FirebaseAuth _auth = FirebaseAuth.instance;
   Stream<UserModel> get authUserChanges =>
       _auth.authStateChanges().asyncMap((firebaseUser) async {
         final UserModel user = firebaseUser == null
@@ -96,6 +98,8 @@ class FirebaseAuthImpl extends AuthRepository {
     User? signedInUser = authResult.user;
 
     if (signedInUser != null) {
+      _analytics.logEvent(name: 'sign_in', parameters: {'provider': 'Google'});
+      _analytics.setUserId(signedInUser.uid);
       return UserModel.empty.copyWith(
         id: signedInUser.uid,
         email: signedInUser.email ?? '',
@@ -163,6 +167,8 @@ class FirebaseAuthImpl extends AuthRepository {
     User? signedInUser = authResult.user;
 
     if (signedInUser != null) {
+      _analytics.logEvent(name: 'sign_in', parameters: {'provider': 'Apple'});
+      _analytics.setUserId(signedInUser.uid);
       return UserModel.empty.copyWith(
         id: signedInUser.uid,
         email: signedInUser.email ?? '',
@@ -224,6 +230,7 @@ class FirebaseAuthImpl extends AuthRepository {
   @override
   Future<void> deleteUser() async {
     try {
+      _analytics.logEvent(name: 'delete_user');
       _auth.currentUser?.delete();
     } catch (e) {
       print(e);
