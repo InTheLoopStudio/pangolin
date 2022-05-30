@@ -41,36 +41,38 @@ class LoopContainer extends StatelessWidget {
             ..initLoopLikes()
             ..initAudio(),
           child: Slidable(
-            actionPane: SlidableDrawerActionPane(),
-            actionExtentRatio: 0.25,
-            secondaryActions: [
-              BlocBuilder<LoopContainerCubit, LoopContainerState>(
-                builder: (context, state) {
-                  return IconSlideAction(
-                    onTap: () {
-                      context.read<LoopContainerCubit>().deleteLoop();
-                      context.read<ProfileCubit>().deleteLoop(loop);
-                    },
-                    color: Colors.red[600],
-                    foregroundColor: Colors.white,
-                    icon: Icons.delete,
-                    caption: 'Delete',
-                  );
-                },
-              ),
-              IconSlideAction(
-                onTap: () async {
-                  final String link = await context
-                      .read<DynamicLinkRepository>()
-                      .getShareLoopDynamicLink(loop);
-                  await Share.share('Check out this loop on In The Loop $link');
-                },
-                color: itlAccent,
-                foregroundColor: Colors.white,
-                icon: Icons.share,
-                caption: 'Share',
-              ),
-            ],
+            startActionPane: ActionPane(
+              motion: const ScrollMotion(),
+              children: [
+                BlocBuilder<LoopContainerCubit, LoopContainerState>(
+                  builder: (context, state) {
+                    return SlidableAction(
+                      onPressed: (context) {
+                        context.read<LoopContainerCubit>().deleteLoop();
+                        context.read<ProfileCubit>().deleteLoop(loop);
+                      },
+                      backgroundColor: Colors.red[600]!,
+                      foregroundColor: Colors.white,
+                      icon: Icons.delete,
+                      label: 'Delete',
+                    );
+                  },
+                ),
+                SlidableAction(
+                  onPressed: (context) async {
+                    final String link = await context
+                        .read<DynamicLinkRepository>()
+                        .getShareLoopDynamicLink(loop);
+                    await Share.share(
+                        'Check out this loop on In The Loop $link');
+                  },
+                  backgroundColor: itlAccent,
+                  foregroundColor: Colors.white,
+                  icon: Icons.share,
+                  label: 'Share',
+                ),
+              ],
+            ),
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Column(

@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.13+11
+version: 1.0.14+13
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -53,10 +53,10 @@ dependencies:
   quiver: ^3.0.1
   formz: ^0.4.0
   flutter_cache_manager: ^3.1.2
-  json_annotation: ^4.1.0
+  json_annotation: ^4.5.0
   hydrated_bloc: ^7.1.0
   flutter_spinkit: ^5.0.0
-  share_plus: ^3.0.4
+  share_plus: ^4.0.1
   url_launcher: ^6.0.9
   package_info_plus: ^1.0.4
   algolia: ^1.0.1
@@ -65,11 +65,11 @@ dependencies:
   skeleton_text: ^3.0.0
   cloud_functions: ^3.0.0
   firebase_remote_config: ^0.11.0
-  stream_chat_flutter: ^3.2.0
+  stream_chat_flutter: ^4.2.0
   skeleton_animation: ^0.1.4
   flutter_native_splash: ^1.2.1
-  flutter_svg: ^0.23.0+1
-  flutter_slidable: ^0.6.0
+  flutter_svg: ^1.0.1
+  flutter_slidable: ^1.2.0
   bloc_test: ^8.2.0
   # firebase_performance: ^0.7.0+2
 
@@ -78,7 +78,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.9.0
   flutter_test:
     sdk: flutter
-  json_serializable: ^5.0.0
+  # json_serializable: ^5.0.0
   mockito: ^5.0.16
 
 flutter_icons:
@@ -86,7 +86,7 @@ flutter_icons:
   ios: true
   remove_alpha_ios: true
   image_path_ios: "assets/app_icon_ios.png"
-  image_path_android: "assets/icon_1024.png"
+  image_path_android: "assets/app_icon_ios.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
