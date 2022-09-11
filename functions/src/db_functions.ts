@@ -132,7 +132,9 @@ const _createUser = async (data: {
   location?: string | undefined;
   onboarded?: boolean | undefined;
   loopsCount?: number | undefined;
+  badgesCount?: number | undefined;
   shadowBanned?: boolean | undefined;
+  accountType?: string | undefined;
   twitterHandle?: string | undefined;
   instagramHandle?: string | undefined;
   tiktokHandle?: string | undefined;
@@ -162,8 +164,10 @@ const _createUser = async (data: {
     location: data.location || "Global",
     onboarded: data.onboarded || false,
     loopsCount: data.loopsCount || 0,
+    badgesCount: data.badgesCount || 0,
     deleted: false,
     shadowBanned: data.shadowBanned || false,
+    accountType: data.accountType || "free",
     twitterHandle: data.twitterHandle || "",
     instagramHandle: data.instagramHandle || "",
     tiktokHandle: data.tiktokHandle || "",
@@ -233,8 +237,9 @@ const _deleteUser = async (data: { id: string }) => {
     .bucket("in-the-loop-306520.appspot.com")
     .deleteFiles({prefix: `images/users/${data.id}`});
 
-  // TODO : delete follower table stuff?
-  // TODO : delete following table stuff?
+  // TODO: delete follower table stuff?
+  // TODO: delete following table stuff?
+  // TODO: delete stream info?
 };
 
 const _updateUserData = async (data: {
@@ -246,8 +251,10 @@ const _updateUserData = async (data: {
   location?: string;
   onboarded?: boolean;
   loopsCount?: number;
+  badgesCount?: number;
   deleted?: boolean;
   shadowBanned?: boolean;
+  accountType?: string;
   twitterHandle?: string;
   instagramHandle?: string;
   tiktokHandle?: string;
@@ -306,8 +313,10 @@ const _updateUserData = async (data: {
     location: data.location || "Global",
     onboarded: data.onboarded || false,
     loopsCount: data.loopsCount || 0,
+    badgesCount: data.badgesCount || 0,
     deleted: data.deleted || false,
     shadowBanned: data.shadowBanned || false,
+    accountType: data.accountType || "free",
     twitterHandle: data.twitterHandle || "",
     instagramHandle: data.instagramHandle || "",
     tiktokHandle: data.tiktokHandle || "",
