@@ -280,4 +280,12 @@ class MockDatabaseRepository extends _i1.Mock
       (super.noSuchMethod(
           Invocation.method(#userBadgesObserver, [userId], {#limit: limit}),
           returnValue: _i6.Stream<_i8.Badge>.empty()) as _i6.Stream<_i8.Badge>);
+  @override
+  _i6.Future<List<_i8.Badge>> getUserBadges(String? userId,
+          {int? limit = 20, String? lastBadgeId}) =>
+      (super.noSuchMethod(
+              Invocation.method(#getUserBadges, [userId],
+                  {#limit: limit, #lastBadgeId: lastBadgeId}),
+              returnValue: _i6.Future<List<_i8.Badge>>.value(<_i8.Badge>[]))
+          as _i6.Future<List<_i8.Badge>>);
 }

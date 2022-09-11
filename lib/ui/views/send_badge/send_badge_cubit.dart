@@ -79,6 +79,7 @@ class SendBadgeCubit extends Cubit<SendBadgeState> {
         senderId: currentUser.id,
         receiverId: badgeReceiver.id,
         imageUrl: badgeImageUrl,
+        timestamp: DateTime.now(),
       );
 
       // Send badge to DB

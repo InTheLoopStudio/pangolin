@@ -11,12 +11,14 @@ class Badge extends Equatable {
   final String senderId;
   final String receiverId;
   final String imageUrl;
+  final DateTime timestamp;
 
   Badge({
     required this.id,
     required this.senderId,
     required this.receiverId,
     required this.imageUrl,
+    required this.timestamp,
   });
 
   List<Object> get props => [
@@ -24,6 +26,7 @@ class Badge extends Equatable {
         this.senderId,
         this.receiverId,
         this.imageUrl,
+        this.timestamp,
       ];
 
   factory Badge.fromJson(Map<String, dynamic> json) => _$BadgeFromJson(json);
@@ -34,21 +37,25 @@ class Badge extends Equatable {
     String? senderId,
     String? receiverId,
     String? imageUrl,
+    DateTime? timestamp,
   }) {
     return Badge(
       id: id ?? this.id,
       senderId: senderId ?? this.senderId,
       receiverId: receiverId ?? this.receiverId,
       imageUrl: imageUrl ?? this.imageUrl,
+      timestamp: timestamp ?? this.timestamp,
     );
   }
 
   factory Badge.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
+    final Timestamp tmpTimestamp = doc.getOrElse('timestamp', Timestamp.now());
     return Badge(
       id: doc.id,
       senderId: doc.getOrElse('senderId', ''),
       receiverId: doc.getOrElse('receiverId', ''),
       imageUrl: doc.getOrElse('imageUrl', ''),
+      timestamp: tmpTimestamp.toDate(),
     );
   }
 
@@ -58,6 +65,7 @@ class Badge extends Equatable {
       'senderId': this.senderId,
       'receiverId': this.receiverId,
       'imageUrl': this.imageUrl,
+      'timestamp': this.timestamp.toUtc(),
     };
   }
 }

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
 import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
-import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container.dart';
+import 'package:intheloopapp/ui/widgets/common/badge_container/badge_container.dart';
 
 class BadgesList extends StatefulWidget {
   const BadgesList({Key? key, required this.scrollController})
@@ -59,7 +59,7 @@ class _BadgesListState extends State<BadgesList> {
             return const Center(child: Text('failed to fetch badges'));
 
           case ProfileStatus.success:
-            if (state.userLoops.isEmpty || state.visitedUser.deleted == true) {
+            if (state.userBadges.isEmpty || state.visitedUser.deleted == true) {
               return EasterEggPlaceholder(text: 'No Badges Yet');
             }
 
@@ -73,7 +73,7 @@ class _BadgesListState extends State<BadgesList> {
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
-                          return index >= state.userLoops.length
+                          return index >= state.userBadges.length
                               ? Center(
                                   child: SizedBox(
                                     height: 24,
@@ -96,8 +96,8 @@ class _BadgesListState extends State<BadgesList> {
                                 );
                         },
                         itemCount: state.hasReachedMax
-                            ? state.userLoops.length
-                            : state.userLoops.length + 1,
+                            ? state.userBadges.length
+                            : state.userBadges.length + 1,
                       ),
                     ],
                   ),

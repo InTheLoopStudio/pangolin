@@ -699,7 +699,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         badgesRef
             .where('receiverId', isEqualTo: userId)
             .orderBy('timestamp', descending: true)
-            // .where('deleted', isNotEqualTo: true)
             .limit(limit)
             .snapshots();
 
@@ -709,8 +708,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
               element.type == DocumentChangeType.added)
           .map((DocumentChange<Map<String, dynamic>> element) {
         return Badge.fromDoc(element.doc);
-        // if (element.type == DocumentChangeType.modified) {}
-        // if (element.type == DocumentChangeType.removed) {}
       });
     }).flatMap((value) => Stream.fromIterable(value));
 
@@ -726,10 +723,9 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       DocumentSnapshot documentSnapshot =
           await badgesRef.doc(lastBadgeId).get();
 
-      QuerySnapshot<Map<String, dynamic>> userBadgesSnapshot = await loopsRef
+      QuerySnapshot<Map<String, dynamic>> userBadgesSnapshot = await badgesRef
           .orderBy('timestamp', descending: true)
-          .where('userId', isEqualTo: userId)
-          // .where('deleted', isNotEqualTo: true)
+          .where('receiverId', isEqualTo: userId)
           .limit(limit)
           .startAfterDocument(documentSnapshot)
           .get();
@@ -738,9 +734,9 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           userBadgesSnapshot.docs.map((doc) => Badge.fromDoc(doc)).toList();
       return userBadges;
     } else {
-      QuerySnapshot<Map<String, dynamic>> userBadgesSnapshot = await loopsRef
+      QuerySnapshot<Map<String, dynamic>> userBadgesSnapshot = await badgesRef
           .orderBy('timestamp', descending: true)
-          .where('userId', isEqualTo: userId)
+          .where('receiverId', isEqualTo: userId)
           .limit(limit)
           .get();
 

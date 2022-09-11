@@ -88,7 +88,7 @@ class _ProfileViewState extends State<OldProfileView> {
                           height: MediaQuery.of(context).size.height,
                           child: TabBarView(
                             children: [
-                              BadgesList(),
+                              BadgesList(scrollController: _scrollController,),
                               SingleChildScrollView(
                                 physics: NeverScrollableScrollPhysics(),
                                 child: AllLoopsList(

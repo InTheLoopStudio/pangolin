@@ -39,8 +39,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 }
 
 class ProfileView extends StatefulWidget {
-  const ProfileView({Key? key, required this.visitedUserId})
-      : super(key: key);
+  const ProfileView({Key? key, required this.visitedUserId}) : super(key: key);
 
   final String visitedUserId;
 
@@ -70,6 +69,7 @@ class _ProfileViewState extends State<ProfileView> {
           visitedUser: _visitedUser,
         )
           ..initLoops()
+          ..initBadges()
           ..loadFollower(_visitedUser.id)
           ..loadFollowing(_visitedUser.id)
           ..loadIsFollowing(_currentUser.id, _visitedUser.id),
@@ -85,79 +85,90 @@ class _ProfileViewState extends State<ProfileView> {
                   }
                 }
               },
-              child: DefaultTabController(
-                length: 2,
-                child: NestedScrollView(
-                  controller: _scrollController,
-                  headerSliverBuilder: ((context, innerBoxIsScrolled) {
-                    return <Widget>[
-                      SliverAppBar(
-                        expandedHeight: 250.0,
-                        floating: false,
-                        pinned: true,
-                        flexibleSpace: FlexibleSpaceBar(
-                          titlePadding: const EdgeInsets.symmetric(
-                            horizontal: 20.0,
-                            vertical: 12.0,
-                          ),
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                _visitedUser.username,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32.0,
+              child: RefreshIndicator(
+                displacement: 20.0,
+                onRefresh: () async {
+                  context.read<ProfileCubit>()
+                    ..initLoops()
+                    ..refetchVisitedUser()
+                    ..loadIsFollowing(_currentUser.id, _visitedUser.id)
+                    ..loadFollowing(_visitedUser.id)
+                    ..loadFollower(_visitedUser.id);
+                },
+                child: DefaultTabController(
+                  length: 2,
+                  child: NestedScrollView(
+                    controller: _scrollController,
+                    headerSliverBuilder: ((context, innerBoxIsScrolled) {
+                      return <Widget>[
+                        SliverAppBar(
+                          expandedHeight: 250.0,
+                          floating: false,
+                          pinned: true,
+                          flexibleSpace: FlexibleSpaceBar(
+                            titlePadding: const EdgeInsets.symmetric(
+                              horizontal: 20.0,
+                              vertical: 12.0,
+                            ),
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _visitedUser.username,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 32.0,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          background: Image.network(
-                            _visitedUser.profilePicture,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              FollowerCount(),
-                              FollowingCount(),
-                              FollowButton(),
-                            ],
+                              ],
+                            ),
+                            background: Image.network(
+                              _visitedUser.profilePicture,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-                      ),
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: SocialMediaIcons(),
-                        ),
-                      ),
-                      SliverPersistentHeader(
-                        pinned: true,
-                        delegate: _SliverAppBarDelegate(
-                          TabBar(
-                            tabs: [
-                              Tab(
-                                text: 'Badges (${_visitedUser.badgesCount})',
-                              ),
-                              Tab(
-                                text: 'Loops (${_visitedUser.loopsCount})',
-                              ),
-                            ],
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                FollowerCount(),
+                                FollowingCount(),
+                                FollowButton(),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ];
-                  }),
-                  body: TabBarView(children: [
-                    BadgesList(),
-                    AllLoopsList(scrollController: _scrollController),
-                  ]),
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: SocialMediaIcons(),
+                          ),
+                        ),
+                        SliverPersistentHeader(
+                          pinned: true,
+                          delegate: _SliverAppBarDelegate(
+                            TabBar(
+                              tabs: [
+                                Tab(
+                                  text: 'Badges (${_visitedUser.badgesCount})',
+                                ),
+                                Tab(
+                                  text: 'Loops (${_visitedUser.loopsCount})',
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ];
+                    }),
+                    body: TabBarView(children: [
+                      BadgesList(scrollController: _scrollController),
+                      AllLoopsList(scrollController: _scrollController),
+                    ]),
+                  ),
                 ),
               ),
             );
