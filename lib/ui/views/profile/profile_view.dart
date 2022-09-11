@@ -7,6 +7,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/all_loops_list.dart';
+import 'package:intheloopapp/ui/widgets/profile_view/badges_list.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/profile_header.dart';
 
 class ProfileView extends StatefulWidget {
@@ -58,7 +59,9 @@ class _ProfileViewState extends State<ProfileView> {
                   }
                 }
               },
-              child: SafeArea(
+              child: DefaultTabController(
+                length: 2,
+                initialIndex: 0,
                 child: RefreshIndicator(
                   displacement: 20.0,
                   onRefresh: () async {
@@ -77,9 +80,24 @@ class _ProfileViewState extends State<ProfileView> {
                       ),
                       children: [
                         ProfileHeader(),
-                        AllLoopsList(
-                          scrollController: _scrollController,
-                        ),
+                        TabBar(tabs: [
+                          Tab(text: 'Badges'),
+                          Tab(text: 'Loops'),
+                        ]),
+                        Container(
+                          height: MediaQuery.of(context).size.height,
+                          child: TabBarView(
+                            children: [
+                              BadgesList(),
+                              SingleChildScrollView(
+                                physics: NeverScrollableScrollPhysics(),
+                                child: AllLoopsList(
+                                  scrollController: _scrollController,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   ),

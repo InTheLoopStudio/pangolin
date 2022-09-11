@@ -17,17 +17,11 @@ class StreamImpl extends StreamRepository {
 
   @override
   Future<UserModel> connectUser(UserModel user) async {
-    final String token = await getToken(
-      user.id,
-    );
+    final String token = await getToken();
 
     Map<String, dynamic> extraData = {};
-    if (user.profilePicture != null) {
-      extraData['image'] = user.profilePicture;
-    }
-    if (user.username != null) {
-      extraData['name'] = user.username;
-    }
+    extraData['image'] = user.profilePicture;
+    extraData['name'] = user.username;
 
     if (!_connected) {
       await _client.connectUser(
@@ -62,14 +56,9 @@ class StreamImpl extends StreamRepository {
   }
 
   @override
-  Future<String> getToken(
-    String userId,
-    // String streamChatToken,
-  ) async {
-    HttpsCallable callable = _functions.httpsCallable('createStreamChatToken');
-    final results = await callable({
-      'userId': userId,
-    });
+  Future<String> getToken() async {
+    HttpsCallable callable = _functions.httpsCallable('ext-auth-chat-getStreamUserToken');
+    final results = await callable();
 
     return results.data;
 

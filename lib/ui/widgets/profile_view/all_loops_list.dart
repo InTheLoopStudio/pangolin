@@ -66,16 +66,6 @@ class _AllLoopsListState extends State<AllLoopsList> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Text(
-                    'All Loops',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
                 const SizedBox(height: 15.0),
                 Column(
                   children: [

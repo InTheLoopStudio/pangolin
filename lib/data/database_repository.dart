@@ -1,4 +1,5 @@
 import 'package:intheloopapp/domains/models/activity.dart';
+import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 // import 'package:intheloopapp/domains/models/tag.dart';
@@ -90,4 +91,8 @@ abstract class DatabaseRepository {
   // Future<List<Tag>> getTagSuggestions(String query);
   Future<void> shareLoop(Loop loop);
   Future<bool> checkUsernameAvailability(String username, String userid);
+  Future<void> createBadge(Badge badge);
+  Stream<Badge> userBadgesObserver(String userId, {
+    int limit = 20,
+  });
 }

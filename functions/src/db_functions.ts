@@ -1,17 +1,10 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import {firestore} from "firebase-admin";
-import {StreamChat} from "stream-chat";
-import {secrets} from "./secrets";
 
 if (!admin.apps.length) {
   admin.initializeApp();
 }
-
-const streamChatClient = StreamChat.getInstance(
-  secrets.streamChatApiKey,
-  secrets.streamChatApiSecret
-);
 
 const db = admin.firestore();
 const storage = admin.storage();
@@ -26,6 +19,7 @@ const likesRef = db.collection("likes");
 const commentsRef = db.collection("comments");
 const commentsGroupRef = db.collectionGroup("loopComments");
 const feedsRef = db.collection("feeds");
+const badgesRef = db.collection("badges");
 
 const _getFileFromURL = (fileURL: string): string => {
   const fSlashes = fileURL.split("/");
@@ -189,11 +183,6 @@ const _createUser = async (data: {
       data.emailNotificationsAppReleases || true,
     emailNotificationsITLUpdates:
       data.emailNotificationsITLUpdates || true,
-  });
-
-  streamChatClient.upsertUser({
-    id: data.id,
-    role: "user",
   });
 
   return {id: data.id};
@@ -864,16 +853,6 @@ const _deleteUserLoopsFromFeed = (data: {
   return data.feedOwnerId;
 };
 
-const _createStreamChatToken = (data: { userId: string }) => {
-  // Issued at should be unix timestamp
-  const issuedAt = Math.floor(Date.now() / 1000);
-
-  // Create User Token
-  const token = streamChatClient.createToken(data.userId, undefined, issuedAt);
-
-  return token;
-};
-
 const _shareLoop = (data: {
   loopId: string,
   userId: string,
@@ -906,6 +885,46 @@ const _checkUsernameAvailability = async (data: {
   }
 
   return true;
+};
+
+const _createBadge = async (data: {
+  id: string;
+  senderId: string;
+  receiverId: string;
+  imageUrl: string;
+}) => {
+  // Checking attribute.
+  if (data.senderId.length === 0) {
+    // Throwing an HttpsError so that the client gets the error details.
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function argument 'senderId' cannot be empty"
+    );
+  }
+  if (data.receiverId.length === 0) {
+    // Throwing an HttpsError so that the client gets the error details.
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function argument 'receiverId' cannot be empty"
+    );
+  }
+  if (data.imageUrl.length === 0) {
+    // Throwing an HttpsError so that the client gets the error details.
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function argument 'imageUrl' cannot be empty"
+    );
+  }
+
+  usersRef
+    .doc(data.receiverId)
+    .update({badgesCount: admin.firestore.FieldValue.increment(1)});
+
+  badgesRef.doc(data.id).set({
+    senderId: data.senderId,
+    receiverId: data.receiverId,
+    imageUrl: data.imageUrl,
+  });
 };
 
 // --------------------------------------------------------
@@ -976,12 +995,6 @@ export const deleteComment = functions.https.onCall((data, context) => {
   _authorized(context, data.userId);
   return _deleteComment(data);
 });
-export const createStreamChatToken = functions.https.onCall((data, context) => {
-  _authenticated(context);
-  _authorized(context, data.userId);
-  return _createStreamChatToken(data);
-});
-
 export const shareLoop = functions.https.onCall((data, context) => {
   _authenticated(context);
   return _shareLoop(data);
@@ -991,3 +1004,8 @@ export const checkUsernameAvailability =
     _authenticated(context);
     return _checkUsernameAvailability(data);
   });
+export const createBadge = functions.https.onCall((data, context) => {
+  _authenticated(context);
+  _authorized(context, data.senderId);
+  return _createBadge(data);
+});

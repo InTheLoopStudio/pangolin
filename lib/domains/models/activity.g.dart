@@ -11,7 +11,7 @@ Activity _$ActivityFromJson(Map<String, dynamic> json) => Activity(
       fromUserId: json['fromUserId'] as String,
       toUserId: json['toUserId'] as String,
       timestamp: DateTime.parse(json['timestamp'] as String),
-      type: _$enumDecode(_$ActivityTypeEnumMap, json['type']),
+      type: $enumDecode(_$ActivityTypeEnumMap, json['type']),
       markedRead: json['markedRead'] as bool,
     );
 
@@ -20,35 +20,9 @@ Map<String, dynamic> _$ActivityToJson(Activity instance) => <String, dynamic>{
       'fromUserId': instance.fromUserId,
       'toUserId': instance.toUserId,
       'timestamp': instance.timestamp.toIso8601String(),
-      'type': _$ActivityTypeEnumMap[instance.type],
+      'type': _$ActivityTypeEnumMap[instance.type]!,
       'markedRead': instance.markedRead,
     };
-
-K _$enumDecode<K, V>(
-  Map<K, V> enumValues,
-  Object? source, {
-  K? unknownValue,
-}) {
-  if (source == null) {
-    throw ArgumentError(
-      'A value must be provided. Supported values: '
-      '${enumValues.values.join(', ')}',
-    );
-  }
-
-  return enumValues.entries.singleWhere(
-    (e) => e.value == source,
-    orElse: () {
-      if (unknownValue == null) {
-        throw ArgumentError(
-          '`$source` is not one of the supported values: '
-          '${enumValues.values.join(', ')}',
-        );
-      }
-      return MapEntry(unknownValue, enumValues.values.first);
-    },
-  ).key;
-}
 
 const _$ActivityTypeEnumMap = {
   ActivityType.follow: 'follow',

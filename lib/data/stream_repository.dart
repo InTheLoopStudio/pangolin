@@ -3,7 +3,7 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 abstract class StreamRepository {
   Future<List<UserModel>> getChatUsers();
-  Future<String> getToken(String userId);
+  Future<String> getToken();
   // Future<bool> connectIfExist(String userId);
   Future<UserModel> connectUser(UserModel user);
   Future<Channel> createGroupChat(
