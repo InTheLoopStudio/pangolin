@@ -6,6 +6,7 @@ import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:path_provider/path_provider.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   setUp(() async {
     HydratedBloc.storage = await HydratedStorage.build(
       storageDirectory: kIsWeb
