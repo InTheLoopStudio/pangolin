@@ -42,19 +42,7 @@ class Themes {
       backgroundColor: itlAccent,
       foregroundColor: Colors.black,
     ),
-    tabBarTheme: TabBarTheme(
-      indicator: ShapeDecoration(
-        shape: UnderlineInputBorder(
-            borderSide: BorderSide(
-          color: Colors.transparent,
-          width: 0,
-          style: BorderStyle.solid,
-        )),
-        gradient: LinearGradient(
-          colors: [Color(0xff0081ff), Color(0xff01ff80)],
-        ),
-      ),
-    ),
+
     sliderTheme: SliderThemeData(
       activeTrackColor: itlAccent,
       inactiveTrackColor: itlAccent,

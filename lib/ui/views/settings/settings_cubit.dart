@@ -144,7 +144,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         emailNotificationsITLUpdates: state.emailNotificationsITLUpdates,
       );
 
-      databaseRepository.updateUserData(user);
+      await databaseRepository.updateUserData(user);
       authenticationBloc.add(UpdateAuthenticatedUser(user));
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
       navigationBloc.add(Pop());

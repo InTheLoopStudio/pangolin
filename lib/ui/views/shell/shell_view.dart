@@ -7,8 +7,8 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
 import 'package:intheloopapp/ui/views/home/feeds_list/feeds_list_view.dart';
 import 'package:intheloopapp/ui/views/messaging/channel_list_view.dart';
-import 'package:intheloopapp/ui/views/profile/new_profile_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
+// import 'package:intheloopapp/ui/views/profile/profile_view.dart';
 import 'package:intheloopapp/ui/views/search/search_view.dart';
 import 'package:intheloopapp/ui/views/upload_loop/upload_view.dart';
 import 'package:intheloopapp/ui/widgets/shell_view/bottom_toolbar.dart';
@@ -43,7 +43,7 @@ class ShellView extends StatelessWidget {
                     UploadView(),
                     // ActivityView(),
                     MessagingChannelListView(),
-                    NewProfileView(visitedUserId: currentUser.id),
+                    ProfileView(visitedUserId: currentUser.id),
                     // ProfileView(visitedUserId: currentUser.id)
                   ],
                 ),

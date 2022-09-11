@@ -60,14 +60,16 @@ class FirebaseStorageImpl extends StorageRepository {
     return downloadUrl;
   }
 
-  Future<String> uploadBadgeImage(String badgeId, File imageFile) async {
-    final String prefix = 'images/badges';
+  Future<String> uploadBadgeImage(String receiverId, File imageFile) async {
+    final String prefix =
+        receiverId.isEmpty ? 'images/badges' : 'images/badges/$receiverId';
 
     String uniqueImageId = Uuid().v4();
 
     File compressedImage = await compressImage(uniqueImageId, imageFile);
-    UploadTask uploadTask =
-        storageRef.child('$prefix/badge_$uniqueImageId.jpg').putFile(compressedImage);
+    UploadTask uploadTask = storageRef
+        .child('$prefix/badge_$uniqueImageId.jpg')
+        .putFile(compressedImage);
 
     TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
     String downloadUrl = await taskSnapshot.ref.getDownloadURL();
