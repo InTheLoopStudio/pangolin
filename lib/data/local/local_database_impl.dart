@@ -219,4 +219,12 @@ class LocalDatabaseImpl extends DatabaseRepository {
   }
 
   Stream<Badge> userBadgesObserver(String userId, {int limit = 20}) async* {}
+  Future<List<Badge>> getUserBadges(
+    String userId, {
+    String? lastBadgeId,
+    int limit = 20,
+  }) async {
+    await Future.delayed(Duration(seconds: 2));
+    return [];
+  }
 }

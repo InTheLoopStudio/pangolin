@@ -92,7 +92,13 @@ abstract class DatabaseRepository {
   Future<void> shareLoop(Loop loop);
   Future<bool> checkUsernameAvailability(String username, String userid);
   Future<void> createBadge(Badge badge);
-  Stream<Badge> userBadgesObserver(String userId, {
+  Stream<Badge> userBadgesObserver(
+    String userId, {
     int limit = 20,
+  });
+  Future<List<Badge>> getUserBadges(
+    String userId, {
+    int limit = 20,
+    String? lastBadgeId,
   });
 }

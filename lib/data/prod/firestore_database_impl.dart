@@ -712,9 +712,42 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         // if (element.type == DocumentChangeType.modified) {}
         // if (element.type == DocumentChangeType.removed) {}
       });
-    }).flatMap((value) =>
-        Stream.fromIterable(value));
+    }).flatMap((value) => Stream.fromIterable(value));
 
     yield* userBadgesObserver;
+  }
+
+  Future<List<Badge>> getUserBadges(
+    String userId, {
+    int limit = 20,
+    String? lastBadgeId,
+  }) async {
+    if (lastBadgeId != null) {
+      DocumentSnapshot documentSnapshot =
+          await badgesRef.doc(lastBadgeId).get();
+
+      QuerySnapshot<Map<String, dynamic>> userBadgesSnapshot = await loopsRef
+          .orderBy('timestamp', descending: true)
+          .where('userId', isEqualTo: userId)
+          // .where('deleted', isNotEqualTo: true)
+          .limit(limit)
+          .startAfterDocument(documentSnapshot)
+          .get();
+
+      List<Badge> userBadges =
+          userBadgesSnapshot.docs.map((doc) => Badge.fromDoc(doc)).toList();
+      return userBadges;
+    } else {
+      QuerySnapshot<Map<String, dynamic>> userBadgesSnapshot = await loopsRef
+          .orderBy('timestamp', descending: true)
+          .where('userId', isEqualTo: userId)
+          .limit(limit)
+          .get();
+
+      List<Badge> userBadges =
+          userBadgesSnapshot.docs.map((doc) => Badge.fromDoc(doc)).toList();
+
+      return userBadges;
+    }
   }
 }
