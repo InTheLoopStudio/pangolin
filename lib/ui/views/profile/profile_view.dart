@@ -165,7 +165,21 @@ class _ProfileViewState extends State<ProfileView> {
                       ];
                     }),
                     body: TabBarView(children: [
-                      BadgesList(scrollController: _scrollController),
+                      SingleChildScrollView(
+                        controller: _scrollController,
+                        physics: NeverScrollableScrollPhysics(),
+                        child: Column(
+                          children: [
+                            SizedBox(height: 10),
+                            OutlinedButton(
+                              onPressed: () => {},
+                              child: Text('Send Badge'),
+                            ),
+                            SizedBox(height: 10),
+                            BadgesList(scrollController: _scrollController),
+                          ],
+                        ),
+                      ),
                       AllLoopsList(scrollController: _scrollController),
                     ]),
                   ),
