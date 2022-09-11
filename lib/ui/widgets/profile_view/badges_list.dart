@@ -17,10 +17,12 @@ class _BadgesListState extends State<BadgesList> {
         SizedBox(
           height: 20,
         ),
-        Text('No Badges Yet',
-            style: TextStyle(
-              color: Colors.grey[600],
-            )),
+        Text(
+          'No Badges Yet',
+          style: TextStyle(
+            color: Colors.grey[600],
+          ),
+        ),
       ],
     ));
   }

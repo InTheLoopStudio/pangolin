@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
@@ -5,14 +6,57 @@ import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dar
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
+import 'package:intheloopapp/ui/widgets/profile_view/all_loops_list.dart';
+import 'package:intheloopapp/ui/widgets/profile_view/badges_list.dart';
+import 'package:intheloopapp/ui/widgets/profile_view/follow_button.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/follower_count.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/following_count.dart';
+import 'package:intheloopapp/ui/widgets/profile_view/social_media_icons.dart';
 
-class NewProfileView extends StatelessWidget {
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  _SliverAppBarDelegate(this._tabBar);
+
+  final TabBar _tabBar;
+
+  @override
+  double get minExtent => _tabBar.preferredSize.height;
+  @override
+  double get maxExtent => _tabBar.preferredSize.height;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: Colors.black,
+      child: _tabBar,
+    );
+  }
+
+  @override
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+    return false;
+  }
+}
+
+class NewProfileView extends StatefulWidget {
   const NewProfileView({Key? key, required this.visitedUserId})
       : super(key: key);
 
   final String visitedUserId;
+
+  @override
+  State<NewProfileView> createState() => _NewProfileViewState();
+}
+
+class _NewProfileViewState extends State<NewProfileView> {
+  String get visitedUserId => widget.visitedUserId;
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
 
   Widget _profilePage(
     UserModel _currentUser,
@@ -41,82 +85,80 @@ class NewProfileView extends StatelessWidget {
                   }
                 }
               },
-              child: CustomScrollView(
-                slivers: [
-                  SliverAppBar(
-                    expandedHeight: 250.0,
-                    floating: false,
-                    pinned: true,
-                    flexibleSpace: FlexibleSpaceBar(
-                      titlePadding: const EdgeInsets.symmetric(
-                        horizontal: 20.0,
-                        vertical: 12.0,
-                      ),
-                      title: Text(
-                        _visitedUser.username,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 32.0,
-                        ),
-                      ),
-                      background: Image.network(
-                        _visitedUser.profilePicture,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate(
-                      [
-                        const SizedBox(height: 20.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            FollowingCount(),
-                            FollowerCount(),
-                            ElevatedButton(
-                              onPressed: () {},
-                              child: Text('Edit'),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 50.0),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Text(
-                            "All Loops",
-                            style: TextStyle(
-                              fontSize: 18,
-                            ),
+              child: DefaultTabController(
+                length: 2,
+                child: NestedScrollView(
+                  controller: _scrollController,
+                  headerSliverBuilder: ((context, innerBoxIsScrolled) {
+                    return <Widget>[
+                      SliverAppBar(
+                        expandedHeight: 250.0,
+                        floating: false,
+                        pinned: true,
+                        flexibleSpace: FlexibleSpaceBar(
+                          titlePadding: const EdgeInsets.symmetric(
+                            horizontal: 20.0,
+                            vertical: 12.0,
                           ),
-                        ),
-                        for (int i = 0; i < 20; i++)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20.0,
-                              vertical: 10.0,
-                            ),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10.0),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    spreadRadius: 5,
-                                    blurRadius: 7,
-                                    offset: Offset(
-                                        0, 3), // changes position of shadow
-                                  ),
-                                ],
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                _visitedUser.username,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 32.0,
+                                ),
                               ),
-                              height: 100,
-                            ),
+                            ],
                           ),
-                      ],
-                    ),
-                  ),
-                ],
+                          background: Image.network(
+                            _visitedUser.profilePicture,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              FollowingCount(),
+                              FollowerCount(),
+                              FollowButton(),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: SocialMediaIcons(),
+                        ),
+                      ),
+                      SliverPersistentHeader(
+                        pinned: true,
+                        delegate: _SliverAppBarDelegate(
+                          TabBar(
+                            tabs: [
+                              Tab(
+                                text: 'Badges (${_visitedUser.badgesCount})',
+                              ),
+                              Tab(
+                                text: 'Loops (${_visitedUser.loopsCount})',
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ];
+                  }),
+                  body: TabBarView(children: [
+                    BadgesList(),
+                    AllLoopsList(scrollController: _scrollController),
+                  ]),
+                ),
               ),
             );
           },
@@ -128,6 +170,7 @@ class NewProfileView extends StatelessWidget {
     final DatabaseRepository databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       body:
           BlocSelector<AuthenticationBloc, AuthenticationState, Authenticated>(
         selector: (state) {

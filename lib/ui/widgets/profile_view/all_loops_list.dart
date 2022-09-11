@@ -63,45 +63,46 @@ class _AllLoopsListState extends State<AllLoopsList> {
               return EasterEggPlaceholder(text: 'No Posts');
             }
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 15.0),
-                Column(
-                  children: [
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (BuildContext context, int index) {
-                        return index >= state.userLoops.length
-                            ? Center(
-                                child: SizedBox(
-                                  height: 24,
-                                  width: 24,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 1.5,
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    children: [
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (BuildContext context, int index) {
+                          return index >= state.userLoops.length
+                              ? Center(
+                                  child: SizedBox(
+                                    height: 24,
+                                    width: 24,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 1.5,
+                                    ),
                                   ),
-                                ),
-                              )
-                            : Column(
-                                children: [
-                                  LoopContainer(
-                                    loop: state.userLoops[index],
-                                  ),
-                                  Container(
-                                    color: Colors.black,
-                                    height: 1,
-                                  )
-                                ],
-                              );
-                      },
-                      itemCount: state.hasReachedMax
-                          ? state.userLoops.length
-                          : state.userLoops.length + 1,
-                    ),
-                  ],
-                ),
-              ],
+                                )
+                              : Column(
+                                  children: [
+                                    LoopContainer(
+                                      loop: state.userLoops[index],
+                                    ),
+                                    Container(
+                                      color: Colors.black,
+                                      height: 1,
+                                    )
+                                  ],
+                                );
+                        },
+                        itemCount: state.hasReachedMax
+                            ? state.userLoops.length
+                            : state.userLoops.length + 1,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             );
 
           default:
