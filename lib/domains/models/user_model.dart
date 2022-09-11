@@ -5,6 +5,11 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'user_model.g.dart';
 
+enum AccountType {
+  @JsonValue("vendor") Vendor,
+  @JsonValue("free") Free,
+}
+
 @JsonSerializable()
 class UserModel extends Equatable {
   final String id;
@@ -17,6 +22,7 @@ class UserModel extends Equatable {
   final int loopsCount;
   final bool deleted;
   final bool shadowBanned;
+  final AccountType accountType;
 
   final String youtubeChannelId;
   final String soundcloudHandle;
@@ -44,6 +50,7 @@ class UserModel extends Equatable {
     required this.loopsCount,
     required this.deleted,
     required this.shadowBanned,
+    required this.accountType,
     required this.youtubeChannelId,
     required this.soundcloudHandle,
     required this.tiktokHandle,
@@ -69,6 +76,7 @@ class UserModel extends Equatable {
         this.loopsCount,
         this.deleted,
         this.shadowBanned,
+        this.accountType,
         this.youtubeChannelId,
         this.soundcloudHandle,
         this.tiktokHandle,
@@ -94,6 +102,7 @@ class UserModel extends Equatable {
         loopsCount: 0,
         deleted: false,
         shadowBanned: false,
+        accountType: AccountType.Free,
         youtubeChannelId: '',
         soundcloudHandle: '',
         tiktokHandle: '',
@@ -125,6 +134,7 @@ class UserModel extends Equatable {
     int? loopsCount,
     bool? deleted,
     bool? shadowBanned,
+    AccountType? accountType,
     String? youtubeChannelId,
     String? soundcloudHandle,
     String? tiktokHandle,
@@ -149,6 +159,7 @@ class UserModel extends Equatable {
       loopsCount: loopsCount ?? this.loopsCount,
       deleted: deleted ?? this.deleted,
       shadowBanned: shadowBanned ?? this.shadowBanned,
+      accountType: accountType ?? this.accountType,
       youtubeChannelId: youtubeChannelId ?? this.youtubeChannelId,
       soundcloudHandle: soundcloudHandle ?? this.soundcloudHandle,
       tiktokHandle: tiktokHandle ?? this.tiktokHandle,
@@ -183,6 +194,7 @@ class UserModel extends Equatable {
       loopsCount: doc.getOrElse('loopsCount', 0),
       deleted: doc.getOrElse('deleted', false),
       shadowBanned: doc.getOrElse('shadowBanned', false),
+      accountType: $enumDecode(_$AccountTypeEnumMap, doc.getOrElse('accountType', 'free')),
       youtubeChannelId: doc.getOrElse('youtubeChannelId', ""),
       soundcloudHandle: doc.getOrElse('soundcloudHandle', ""),
       tiktokHandle: doc.getOrElse('tiktokHandle', ""),
@@ -210,6 +222,7 @@ class UserModel extends Equatable {
       'loopsCount': this.loopsCount,
       'deleted': this.deleted,
       'shadowBanned': this.shadowBanned,
+      'accountType': _$AccountTypeEnumMap[this.accountType],
       'youtubeChannelId': this.youtubeChannelId,
       'soundcloudHandle': this.soundcloudHandle,
       'tiktokHandle': this.tiktokHandle,
