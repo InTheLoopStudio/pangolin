@@ -15,8 +15,10 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       location: json['location'] as String,
       onboarded: json['onboarded'] as bool,
       loopsCount: json['loopsCount'] as int,
+      badgesCount: json['badgesCount'] as int,
       deleted: json['deleted'] as bool,
       shadowBanned: json['shadowBanned'] as bool,
+      accountType: $enumDecode(_$AccountTypeEnumMap, json['accountType']),
       youtubeChannelId: json['youtubeChannelId'] as String,
       soundcloudHandle: json['soundcloudHandle'] as String,
       tiktokHandle: json['tiktokHandle'] as String,
@@ -43,8 +45,10 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'location': instance.location,
       'onboarded': instance.onboarded,
       'loopsCount': instance.loopsCount,
+      'badgesCount': instance.badgesCount,
       'deleted': instance.deleted,
       'shadowBanned': instance.shadowBanned,
+      'accountType': _$AccountTypeEnumMap[instance.accountType]!,
       'youtubeChannelId': instance.youtubeChannelId,
       'soundcloudHandle': instance.soundcloudHandle,
       'tiktokHandle': instance.tiktokHandle,
@@ -59,3 +63,8 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'emailNotificationsAppReleases': instance.emailNotificationsAppReleases,
       'emailNotificationsITLUpdates': instance.emailNotificationsITLUpdates,
     };
+
+const _$AccountTypeEnumMap = {
+  AccountType.Vendor: 'vendor',
+  AccountType.Free: 'free',
+};

@@ -1,5 +1,6 @@
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
+import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -207,9 +208,23 @@ class LocalDatabaseImpl extends DatabaseRepository {
     return;
   }
 
-  Future<bool> checkUsernameAvailability(
-      String username, String userid) async {
+  Future<bool> checkUsernameAvailability(String username, String userid) async {
     await Future.delayed(Duration(seconds: 2));
     return true;
+  }
+
+  Future<void> createBadge(Badge badge) async {
+    await Future.delayed(Duration(seconds: 2));
+    return;
+  }
+
+  Stream<Badge> userBadgesObserver(String userId, {int limit = 20}) async* {}
+  Future<List<Badge>> getUserBadges(
+    String userId, {
+    String? lastBadgeId,
+    int limit = 20,
+  }) async {
+    await Future.delayed(Duration(seconds: 2));
+    return [];
   }
 }

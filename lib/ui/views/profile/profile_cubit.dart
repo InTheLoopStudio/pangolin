@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
@@ -13,6 +14,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
   final UserModel currentUser;
   final UserModel visitedUser;
   StreamSubscription? loopListener;
+  StreamSubscription? badgeListener;
 
   ProfileCubit({
     required this.databaseRepository,
@@ -88,6 +90,35 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
     });
   }
 
+  void initBadges({bool clearBadges = true}) async {
+    badgeListener?.cancel();
+    if (clearBadges) {
+      emit(state.copyWith(
+        status: ProfileStatus.initial,
+        userBadges: [],
+        hasReachedMax: false,
+      ));
+    }
+
+    bool badgesAvailable =
+        (await databaseRepository.getUserBadges(visitedUser.id, limit: 1))
+                .length !=
+            0;
+    if (!badgesAvailable) {
+      emit(state.copyWith(status: ProfileStatus.success));
+    }
+
+    badgeListener = databaseRepository
+        .userBadgesObserver(visitedUser.id, limit: 20)
+        .listen((Badge event) {
+      // print('loop { ${event.id} : ${event.title} }');
+      emit(state.copyWith(
+        status: ProfileStatus.success,
+        userBadges: List.of(state.userBadges)..add(event),
+      ));
+    });
+  }
+
   void fetchMoreLoops() async {
     if (state.hasReachedMax) return;
 
@@ -107,6 +138,33 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
               state.copyWith(
                 status: ProfileStatus.success,
                 userLoops: List.of(state.userLoops)..addAll(loops),
+                hasReachedMax: false,
+              ),
+            );
+    } on Exception {
+      emit(state.copyWith(status: ProfileStatus.failure));
+    }
+  }
+
+  void fetchMoreBadges() async {
+    if (state.hasReachedMax) return;
+
+    try {
+      if (state.status == ProfileStatus.initial) {
+        initBadges();
+      }
+
+      final List<Badge> badges = await databaseRepository.getUserBadges(
+        visitedUser.id,
+        limit: 10,
+        lastBadgeId: state.userBadges.last.id,
+      );
+      badges.isEmpty
+          ? emit(state.copyWith(hasReachedMax: true))
+          : emit(
+              state.copyWith(
+                status: ProfileStatus.success,
+                userBadges: List.of(state.userBadges)..addAll(badges),
                 hasReachedMax: false,
               ),
             );

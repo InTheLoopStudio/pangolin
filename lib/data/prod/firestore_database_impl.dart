@@ -6,6 +6,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
+import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -23,6 +24,7 @@ final feedRefs = _firestore.collection('feeds');
 final likesRef = _firestore.collection('likes');
 final activitiesRef = _firestore.collection('activities');
 final commentsRef = _firestore.collection('comments');
+final badgesRef = _firestore.collection('badges');
 
 class FirestoreDatabaseImpl extends DatabaseRepository {
   Future<bool> userEmailExists(String email) async {
@@ -679,5 +681,69 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     print(results.data.toString());
 
     return results.data;
+  }
+
+  Future<void> createBadge(Badge badge) async {
+    _analytics.logEvent(name: 'create_badge');
+    HttpsCallable callable = _functions.httpsCallable('createBadge');
+    final results = await callable(badge.toMap());
+
+    print(results.data.toString());
+  }
+
+  Stream<Badge> userBadgesObserver(
+    String userId, {
+    limit: 20,
+  }) async* {
+    Stream<QuerySnapshot<Map<String, dynamic>>> userBadgesSnapshotObserver =
+        badgesRef
+            .where('receiverId', isEqualTo: userId)
+            .orderBy('timestamp', descending: true)
+            .limit(limit)
+            .snapshots();
+
+    Stream<Badge> userBadgesObserver = userBadgesSnapshotObserver.map((event) {
+      return event.docChanges
+          .where((DocumentChange<Map<String, dynamic>> element) =>
+              element.type == DocumentChangeType.added)
+          .map((DocumentChange<Map<String, dynamic>> element) {
+        return Badge.fromDoc(element.doc);
+      });
+    }).flatMap((value) => Stream.fromIterable(value));
+
+    yield* userBadgesObserver;
+  }
+
+  Future<List<Badge>> getUserBadges(
+    String userId, {
+    int limit = 20,
+    String? lastBadgeId,
+  }) async {
+    if (lastBadgeId != null) {
+      DocumentSnapshot documentSnapshot =
+          await badgesRef.doc(lastBadgeId).get();
+
+      QuerySnapshot<Map<String, dynamic>> userBadgesSnapshot = await badgesRef
+          .orderBy('timestamp', descending: true)
+          .where('receiverId', isEqualTo: userId)
+          .limit(limit)
+          .startAfterDocument(documentSnapshot)
+          .get();
+
+      List<Badge> userBadges =
+          userBadgesSnapshot.docs.map((doc) => Badge.fromDoc(doc)).toList();
+      return userBadges;
+    } else {
+      QuerySnapshot<Map<String, dynamic>> userBadgesSnapshot = await badgesRef
+          .orderBy('timestamp', descending: true)
+          .where('receiverId', isEqualTo: userId)
+          .limit(limit)
+          .get();
+
+      List<Badge> userBadges =
+          userBadgesSnapshot.docs.map((doc) => Badge.fromDoc(doc)).toList();
+
+      return userBadges;
+    }
   }
 }

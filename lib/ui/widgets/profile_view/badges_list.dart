@@ -4,19 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
 import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
-import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container.dart';
+import 'package:intheloopapp/ui/widgets/common/badge_container/badge_container.dart';
 
-class AllLoopsList extends StatefulWidget {
-  const AllLoopsList({Key? key, required this.scrollController})
+class BadgesList extends StatefulWidget {
+  const BadgesList({Key? key, required this.scrollController})
       : super(key: key);
 
   final ScrollController scrollController;
 
   @override
-  _AllLoopsListState createState() => _AllLoopsListState();
+  _BadgesListState createState() => _BadgesListState();
 }
 
-class _AllLoopsListState extends State<AllLoopsList> {
+class _BadgesListState extends State<BadgesList> {
   late ProfileCubit _profileCubit;
 
   Timer? _debounce;
@@ -33,7 +33,7 @@ class _AllLoopsListState extends State<AllLoopsList> {
   void _onScroll() {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 200), () {
-      if (_isBottom) _profileCubit.fetchMoreLoops();
+      if (_isBottom) _profileCubit.fetchMoreBadges();
     });
   }
 
@@ -56,11 +56,11 @@ class _AllLoopsListState extends State<AllLoopsList> {
       builder: (context, state) {
         switch (state.status) {
           case ProfileStatus.failure:
-            return const Center(child: Text('failed to fetch posts'));
+            return const Center(child: Text('failed to fetch badges'));
 
           case ProfileStatus.success:
-            if (state.userLoops.isEmpty || state.visitedUser.deleted == true) {
-              return EasterEggPlaceholder(text: 'No Posts');
+            if (state.userBadges.isEmpty || state.visitedUser.deleted == true) {
+              return EasterEggPlaceholder(text: 'No Badges Yet');
             }
 
             return SingleChildScrollView(
@@ -73,7 +73,7 @@ class _AllLoopsListState extends State<AllLoopsList> {
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
-                          return index >= state.userLoops.length
+                          return index >= state.userBadges.length
                               ? Center(
                                   child: SizedBox(
                                     height: 24,
@@ -85,8 +85,8 @@ class _AllLoopsListState extends State<AllLoopsList> {
                                 )
                               : Column(
                                   children: [
-                                    LoopContainer(
-                                      loop: state.userLoops[index],
+                                    BadgeContainer(
+                                      badge: state.userBadges[index],
                                     ),
                                     Container(
                                       color: Colors.black,
@@ -96,8 +96,8 @@ class _AllLoopsListState extends State<AllLoopsList> {
                                 );
                         },
                         itemCount: state.hasReachedMax
-                            ? state.userLoops.length
-                            : state.userLoops.length + 1,
+                            ? state.userBadges.length
+                            : state.userBadges.length + 1,
                       ),
                     ],
                   ),
@@ -106,7 +106,7 @@ class _AllLoopsListState extends State<AllLoopsList> {
             );
 
           default:
-            return EasterEggPlaceholder(text: 'Waiting for New Loops...');
+            return EasterEggPlaceholder(text: 'Waiting for new badges...');
         }
       },
     );

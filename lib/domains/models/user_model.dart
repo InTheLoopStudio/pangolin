@@ -5,6 +5,13 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'user_model.g.dart';
 
+enum AccountType {
+  @JsonValue("vendor")
+  Vendor,
+  @JsonValue("free")
+  Free,
+}
+
 @JsonSerializable()
 class UserModel extends Equatable {
   final String id;
@@ -15,8 +22,10 @@ class UserModel extends Equatable {
   final String location;
   final bool onboarded;
   final int loopsCount;
+  final int badgesCount;
   final bool deleted;
   final bool shadowBanned;
+  final AccountType accountType;
 
   final String youtubeChannelId;
   final String soundcloudHandle;
@@ -29,7 +38,7 @@ class UserModel extends Equatable {
   final bool pushNotificationsFollows;
   final bool pushNotificationsDirectMessages;
   final bool pushNotificationsITLUpdates;
-  
+
   final bool emailNotificationsAppReleases;
   final bool emailNotificationsITLUpdates;
 
@@ -42,8 +51,10 @@ class UserModel extends Equatable {
     required this.location,
     required this.onboarded,
     required this.loopsCount,
+    required this.badgesCount,
     required this.deleted,
     required this.shadowBanned,
+    required this.accountType,
     required this.youtubeChannelId,
     required this.soundcloudHandle,
     required this.tiktokHandle,
@@ -67,8 +78,10 @@ class UserModel extends Equatable {
         this.location,
         this.onboarded,
         this.loopsCount,
+        this.badgesCount,
         this.deleted,
         this.shadowBanned,
+        this.accountType,
         this.youtubeChannelId,
         this.soundcloudHandle,
         this.tiktokHandle,
@@ -92,8 +105,10 @@ class UserModel extends Equatable {
         location: 'Global',
         onboarded: false,
         loopsCount: 0,
+        badgesCount: 0,
         deleted: false,
         shadowBanned: false,
+        accountType: AccountType.Free,
         youtubeChannelId: '',
         soundcloudHandle: '',
         tiktokHandle: '',
@@ -114,30 +129,31 @@ class UserModel extends Equatable {
       _$UserModelFromJson(json);
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
-  UserModel copyWith({
-    String? id,
-    String? email,
-    String? username,
-    String? profilePicture,
-    String? bio,
-    String? location,
-    bool? onboarded,
-    int? loopsCount,
-    bool? deleted,
-    bool? shadowBanned,
-    String? youtubeChannelId,
-    String? soundcloudHandle,
-    String? tiktokHandle,
-    String? instagramHandle,
-    String? twitterHandle,
-    bool? pushNotificationsLikes,
-    bool? pushNotificationsComments,
-    bool? pushNotificationsFollows,
-    bool? pushNotificationsDirectMessages,
-    bool? pushNotificationsITLUpdates,
-    bool? emailNotificationsAppReleases,
-    bool? emailNotificationsITLUpdates
-  }) {
+  UserModel copyWith(
+      {String? id,
+      String? email,
+      String? username,
+      String? profilePicture,
+      String? bio,
+      String? location,
+      bool? onboarded,
+      int? loopsCount,
+      int? badgesCount,
+      bool? deleted,
+      bool? shadowBanned,
+      AccountType? accountType,
+      String? youtubeChannelId,
+      String? soundcloudHandle,
+      String? tiktokHandle,
+      String? instagramHandle,
+      String? twitterHandle,
+      bool? pushNotificationsLikes,
+      bool? pushNotificationsComments,
+      bool? pushNotificationsFollows,
+      bool? pushNotificationsDirectMessages,
+      bool? pushNotificationsITLUpdates,
+      bool? emailNotificationsAppReleases,
+      bool? emailNotificationsITLUpdates}) {
     return UserModel(
       id: id ?? this.id,
       email: email ?? this.email,
@@ -147,8 +163,10 @@ class UserModel extends Equatable {
       location: location ?? this.location,
       onboarded: onboarded ?? this.onboarded,
       loopsCount: loopsCount ?? this.loopsCount,
+      badgesCount: badgesCount ?? this.badgesCount,
       deleted: deleted ?? this.deleted,
       shadowBanned: shadowBanned ?? this.shadowBanned,
+      accountType: accountType ?? this.accountType,
       youtubeChannelId: youtubeChannelId ?? this.youtubeChannelId,
       soundcloudHandle: soundcloudHandle ?? this.soundcloudHandle,
       tiktokHandle: tiktokHandle ?? this.tiktokHandle,
@@ -181,20 +199,28 @@ class UserModel extends Equatable {
       location: doc.getOrElse('location', 'Global'),
       onboarded: doc.getOrElse('onboarded', false),
       loopsCount: doc.getOrElse('loopsCount', 0),
+      badgesCount: doc.getOrElse('badgesCount', 0),
       deleted: doc.getOrElse('deleted', false),
       shadowBanned: doc.getOrElse('shadowBanned', false),
+      accountType: $enumDecode(
+          _$AccountTypeEnumMap, doc.getOrElse('accountType', 'free')),
       youtubeChannelId: doc.getOrElse('youtubeChannelId', ""),
       soundcloudHandle: doc.getOrElse('soundcloudHandle', ""),
       tiktokHandle: doc.getOrElse('tiktokHandle', ""),
       instagramHandle: doc.getOrElse('instagramHandle', ""),
       twitterHandle: doc.getOrElse('twitterHandle', ""),
       pushNotificationsLikes: doc.getOrElse('pushNotificationsLikes', true),
-      pushNotificationsComments: doc.getOrElse('pushNotificationsComments', true),
+      pushNotificationsComments:
+          doc.getOrElse('pushNotificationsComments', true),
       pushNotificationsFollows: doc.getOrElse('pushNotificationsFollows', true),
-      pushNotificationsDirectMessages: doc.getOrElse('pushNotificationsDirectMessages', true),
-      pushNotificationsITLUpdates: doc.getOrElse('pushNotificationsITLUpdates', true),
-      emailNotificationsAppReleases: doc.getOrElse('emailNotificationsAppReleases', true),
-      emailNotificationsITLUpdates: doc.getOrElse('emailNotificationsITLUpdates', true),
+      pushNotificationsDirectMessages:
+          doc.getOrElse('pushNotificationsDirectMessages', true),
+      pushNotificationsITLUpdates:
+          doc.getOrElse('pushNotificationsITLUpdates', true),
+      emailNotificationsAppReleases:
+          doc.getOrElse('emailNotificationsAppReleases', true),
+      emailNotificationsITLUpdates:
+          doc.getOrElse('emailNotificationsITLUpdates', true),
     );
   }
 
@@ -208,8 +234,10 @@ class UserModel extends Equatable {
       'location': this.location,
       'onboarded': this.onboarded,
       'loopsCount': this.loopsCount,
+      'badgesCount': this.badgesCount,
       'deleted': this.deleted,
       'shadowBanned': this.shadowBanned,
+      'accountType': _$AccountTypeEnumMap[this.accountType],
       'youtubeChannelId': this.youtubeChannelId,
       'soundcloudHandle': this.soundcloudHandle,
       'tiktokHandle': this.tiktokHandle,

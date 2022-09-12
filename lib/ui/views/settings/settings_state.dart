@@ -23,7 +23,7 @@ class SettingsState extends Equatable {
     GlobalKey<FormState>? formKey,
   }) {
     this.picker = picker ?? ImagePicker();
-    this.formKey = formKey ?? GlobalKey<FormState>();
+    this.formKey = formKey ?? GlobalKey<FormState>(debugLabel: 'settings');
   }
 
   final String username;

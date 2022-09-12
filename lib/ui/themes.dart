@@ -56,7 +56,6 @@ class Themes {
     backgroundColor: backgroundDarkColor,
     // selected color
     primaryColor: primaryColor,
-
     colorScheme: ColorScheme.dark().copyWith(
       primary: primaryColor,
       secondary: secondaryColor,
@@ -78,8 +77,8 @@ class Themes {
     canvasColor: backgroundDarkColor,
     appBarTheme: AppBarTheme(
       backgroundColor: navigationBarDarkColor,
-      foregroundColor: Colors.white,
     ),
+
     sliderTheme: SliderThemeData(
       activeTrackColor: itlAccent,
       inactiveTrackColor: itlAccent,
