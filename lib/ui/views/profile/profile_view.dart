@@ -75,6 +75,8 @@ class _ProfileViewState extends State<ProfileView> {
           ..loadIsFollowing(_currentUser.id, _visitedUser.id),
         child: BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, state) {
+            bool showBadgeButton = _currentUser.id == _visitedUser.id &&
+                _currentUser.accountType == AccountType.Vendor;
             return BlocListener<AuthenticationBloc, AuthenticationState>(
               listener: (context, authState) {
                 if (authState is Authenticated) {
@@ -170,12 +172,19 @@ class _ProfileViewState extends State<ProfileView> {
                         physics: NeverScrollableScrollPhysics(),
                         child: Column(
                           children: [
-                            SizedBox(height: 10),
-                            OutlinedButton(
-                              onPressed: () => {},
-                              child: Text('Send Badge'),
+                            showBadgeButton
+                                ? Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16.0),
+                                    child: OutlinedButton(
+                                      onPressed: () => {},
+                                      child: Text('Send Badge'),
+                                    ),
+                                  )
+                                : SizedBox.shrink(),
+                            SizedBox(
+                              height: 20,
                             ),
-                            SizedBox(height: 10),
                             BadgesList(scrollController: _scrollController),
                           ],
                         ),
