@@ -6,6 +6,7 @@ import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dar
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
+import 'package:intheloopapp/ui/views/send_badge/send_badge_view.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/all_loops_list.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/badges_list.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/follow_button.dart';
@@ -177,7 +178,12 @@ class _ProfileViewState extends State<ProfileView> {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 16.0),
                                     child: OutlinedButton(
-                                      onPressed: () => {},
+                                      onPressed: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => SendBadgeView(),
+                                        ),
+                                      ),
                                       child: Text('Send Badge'),
                                     ),
                                   )
