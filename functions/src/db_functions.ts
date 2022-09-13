@@ -933,6 +933,7 @@ const _createBadge = async (data: {
     senderId: data.senderId,
     receiverId: data.receiverId,
     imageUrl: data.imageUrl,
+    timestamp: admin.firestore.Timestamp.now(),
   });
 };
 

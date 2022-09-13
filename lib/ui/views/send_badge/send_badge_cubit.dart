@@ -55,37 +55,43 @@ class SendBadgeCubit extends Cubit<SendBadgeState> {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
       // Send badgeImage to storage
-      if (state.badgeImage == null) {
-        emit(state.copyWith(status: FormzStatus.invalid));
-        return;
+      try {
+        if (state.badgeImage == null) {
+          emit(state.copyWith(status: FormzStatus.invalid));
+          return;
+        }
+
+        UserModel? badgeReceiver =
+            await databaseRepository.getUserByUsername(state.receiverUsername);
+
+        if (badgeReceiver == null) {
+          emit(state.copyWith(status: FormzStatus.invalid));
+          return;
+        }
+
+        String badgeImageUrl = await storageRepository.uploadBadgeImage(
+          badgeReceiver.id,
+          state.badgeImage!,
+        );
+
+        // create badge object
+        Badge badge = Badge(
+          id: Uuid().v4(),
+          senderId: currentUser.id,
+          receiverId: badgeReceiver.id,
+          imageUrl: badgeImageUrl,
+          timestamp: DateTime.now(),
+        );
+
+        // Send badge to DB
+        await databaseRepository.createBadge(badge);
+        emit(state.copyWith(status: FormzStatus.submissionSuccess));
+      } on Exception {
+        print('Error creating badge');
+        emit(state.copyWith(status: FormzStatus.submissionFailure));
+      } finally {
+        navigationBloc.add(Pop());
       }
-
-      UserModel? badgeReceiver =
-          await databaseRepository.getUserByUsername(state.receiverUsername);
-
-      if (badgeReceiver == null) {
-        emit(state.copyWith(status: FormzStatus.invalid));
-        return;
-      }
-
-      String badgeImageUrl = await storageRepository.uploadBadgeImage(
-        badgeReceiver.id,
-        state.badgeImage!,
-      );
-
-      // create badge object
-      Badge badge = Badge(
-        id: Uuid().v4(),
-        senderId: currentUser.id,
-        receiverId: badgeReceiver.id,
-        imageUrl: badgeImageUrl,
-        timestamp: DateTime.now(),
-      );
-
-      // Send badge to DB
-      await databaseRepository.createBadge(badge);
-      emit(state.copyWith(status: FormzStatus.submissionSuccess));
-      navigationBloc.add(Pop());
     }
   }
 }
