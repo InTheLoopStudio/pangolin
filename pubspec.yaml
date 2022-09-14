@@ -29,53 +29,53 @@ dependencies:
   cupertino_icons: ^1.0.3
 
   firebase_core: ^1.4.0
-  firebase_analytics: ^8.2.0
+  firebase_analytics: ^9.3.4
   firebase_auth: ^3.0.1
-  font_awesome_flutter: ^9.1.0
+  font_awesome_flutter: ^10.2.1
   cloud_firestore: ^3.0.0
   google_sign_in: ^5.0.4
-  sign_in_with_apple: ^3.0.0
+  sign_in_with_apple: ^4.1.0
   crypto: ^3.0.1
   firebase_storage: ^10.0.1
-  firebase_dynamic_links: ^3.0.0
+  firebase_dynamic_links: ^4.3.7
   image_picker: ^0.8.2
   flutter_image_compress: ^1.0.0
   uuid: ^3.0.4
   path_provider: ^2.0.2
-  file_picker: ^4.2.0
+  file_picker: ^5.0.1
   just_audio: ^0.9.2
   timeago: ^3.1.0
   cached_network_image: ^3.1.0
   enum_to_string: ^2.0.1
   animations: ^2.0.1
   equatable: ^2.0.3
-  flutter_bloc: ^7.1.0
+  flutter_bloc: ^8.1.1
   quiver: ^3.0.1
   formz: ^0.4.0
   flutter_cache_manager: ^3.1.2
   json_annotation: ^4.5.0
-  hydrated_bloc: ^7.1.0
+  hydrated_bloc: ^8.1.0
   flutter_spinkit: ^5.0.0
   share_plus: ^4.0.1
   url_launcher: ^6.0.9
   package_info_plus: ^1.0.4
   algolia: ^1.0.1
-  firebase_messaging: ^11.0.0
+  firebase_messaging: ^13.0.1
   firebase_crashlytics: ^2.1.1
   skeleton_text: ^3.0.0
   cloud_functions: ^3.0.0
-  firebase_remote_config: ^0.11.0
+  firebase_remote_config: ^2.0.17
   stream_chat_flutter: ^4.2.0
   skeleton_animation: ^0.1.4
-  flutter_native_splash: ^1.2.1
+  flutter_native_splash: ^2.2.9
   flutter_svg: ^1.0.1
-  flutter_slidable: ^1.2.0
-  bloc_test: ^8.2.0
+  flutter_slidable: ^2.0.0
+  bloc_test: ^9.1.0
   # firebase_performance: ^0.7.0+2
 
 dev_dependencies:
   build_runner: ^2.0.6
-  flutter_launcher_icons: ^0.9.0
+  flutter_launcher_icons: ^0.10.0
   flutter_test:
     sdk: flutter
   json_serializable: ^6.3.1

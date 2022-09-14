@@ -14,7 +14,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 final _auth = FirebaseAuth.instance;
 final _fireStore = FirebaseFirestore.instance;
-final _analytics = FirebaseAnalytics();
+final _analytics = FirebaseAnalytics.instance;
 final usersRef = _fireStore.collection('users');
 
 extension on User {
@@ -99,7 +99,7 @@ class FirebaseAuthImpl extends AuthRepository {
 
     if (signedInUser != null) {
       _analytics.logEvent(name: 'sign_in', parameters: {'provider': 'Google'});
-      _analytics.setUserId(signedInUser.uid);
+      _analytics.setUserId(id: signedInUser.uid);
       return UserModel.empty.copyWith(
         id: signedInUser.uid,
         email: signedInUser.email ?? '',
@@ -168,7 +168,7 @@ class FirebaseAuthImpl extends AuthRepository {
 
     if (signedInUser != null) {
       _analytics.logEvent(name: 'sign_in', parameters: {'provider': 'Apple'});
-      _analytics.setUserId(signedInUser.uid);
+      _analytics.setUserId(id: signedInUser.uid);
       return UserModel.empty.copyWith(
         id: signedInUser.uid,
         email: signedInUser.email ?? '',

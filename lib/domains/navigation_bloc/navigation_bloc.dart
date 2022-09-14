@@ -14,94 +14,62 @@ part 'navigation_event.dart';
 part 'navigation_state.dart';
 
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
-  NavigationBloc({required this.navigationKey}) : super(NavigationState());
+  NavigationBloc({required this.navigationKey}) : super(NavigationState()) {
+    on<ChangeTab>((event, emit) {
+      emit(state.copyWith(selectedTab: event.selectedTab));
+    });
+    on<PushLoop>((event, emit) {
+      this.navigationKey.currentState?.push(
+            MaterialPageRoute(
+              builder: (context) => Material(
+                child: LoopView(
+                  loop: event.loop,
+                  showComments: event.showComments,
+                  autoPlay: event.autoPlay,
+                ),
+              ),
+            ),
+          );
+      emit(state);
+    });
+    on<PushProfile>((event, emit) {
+      this.navigationKey.currentState?.push(
+            MaterialPageRoute(
+              builder: (context) => ProfileView(visitedUserId: event.userId),
+            ),
+          );
+      emit(state);
+    });
+    on<PushActivity>((event, emit) {
+      this.navigationKey.currentState?.push(
+            MaterialPageRoute(
+              builder: (context) => Material(
+                child: ActivityView(),
+              ),
+            ),
+          );
+      emit(state);
+    });
+    on<PushOnboarding>((event, emit) {
+      navigationKey.currentState?.push(
+        MaterialPageRoute(builder: (context) => OnboardingView()),
+      );
+
+      emit(state);
+    });
+    on<PushLikes>((event, emit) {
+      navigationKey.currentState?.push(
+        MaterialPageRoute(builder: (context) => LikesView(loop: event.loop)),
+      );
+
+      emit(state);
+    });
+    on<Pop>((event, emit) {
+      navigationKey.currentState?.pop();
+
+      emit(state);
+    });
+  }
 
   final GlobalKey<NavigatorState> navigationKey;
-
-  @override
-  Stream<NavigationState> mapEventToState(
-    NavigationEvent event,
-  ) async* {
-    if (event is ChangeTab) {
-      yield* _mapChangeTabToState(event.selectedTab);
-    } else if (event is PushLoop) {
-      yield* _mapPushLoopToState(
-          event.loop, event.showComments, event.autoPlay);
-    } else if (event is PushProfile) {
-      yield* _mapPushProfileToState(event.userId);
-    } else if (event is PushActivity) {
-      yield* _mapPushActivityToState();
-    } else if (event is PushOnboarding) {
-      yield* _mapPushOnboardingToState();
-    } else if (event is PushLikes) {
-      yield* _mapPushLikesToState(event.loop);
-    } else if (event is Pop) {
-      yield* _mapPopToState();
-    }
-  }
-
-  Stream<NavigationState> _mapChangeTabToState(int selectedTab) async* {
-    yield state.copyWith(selectedTab: selectedTab);
-  }
-
-  Stream<NavigationState> _mapPushActivityToState() async* {
-    navigationKey.currentState?.push(
-      MaterialPageRoute(
-        builder: (context) => Material(
-          child: ActivityView(),
-        ),
-      ),
-    );
-    yield state;
-  }
-
-  Stream<NavigationState> _mapPushLoopToState(
-    Loop loop,
-    bool showComments,
-    bool autoPlay,
-  ) async* {
-    navigationKey.currentState?.push(
-      MaterialPageRoute(
-        builder: (context) => Material(
-          child: LoopView(
-            loop: loop,
-            showComments: showComments,
-            autoPlay: autoPlay,
-          ),
-        ),
-      ),
-    );
-    yield state;
-  }
-
-  Stream<NavigationState> _mapPushProfileToState(String userId) async* {
-    navigationKey.currentState?.push(
-      MaterialPageRoute(
-        builder: (context) => ProfileView(visitedUserId: userId),
-      ),
-    );
-    yield state;
-  }
-
-  Stream<NavigationState> _mapPushOnboardingToState() async* {
-    navigationKey.currentState?.push(
-      MaterialPageRoute(builder: (context) => OnboardingView()),
-    );
-
-    yield state;
-  }
-
-  Stream<NavigationState> _mapPushLikesToState(Loop loop) async* {
-    navigationKey.currentState?.push(
-      MaterialPageRoute(builder: (context) => LikesView(loop: loop)),
-    );
-
-    yield state;
-  }
-
-  Stream<NavigationState> _mapPopToState() async* {
-    navigationKey.currentState?.pop();
-
-    yield state;
-  }
 }

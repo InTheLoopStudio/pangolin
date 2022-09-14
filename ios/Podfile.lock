@@ -686,7 +686,7 @@ PODS:
   - Firebase/Storage (9.5.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 9.5.0)
-  - firebase_analytics (8.3.4):
+  - firebase_analytics (9.3.4):
     - Firebase/Analytics (= 9.5.0)
     - firebase_core
     - Flutter
@@ -701,15 +701,15 @@ PODS:
     - Firebase/Crashlytics (= 9.5.0)
     - firebase_core
     - Flutter
-  - firebase_dynamic_links (3.0.2):
+  - firebase_dynamic_links (4.3.7):
     - Firebase/DynamicLinks (= 9.5.0)
     - firebase_core
     - Flutter
-  - firebase_messaging (11.4.4):
+  - firebase_messaging (13.0.1):
     - Firebase/Messaging (= 9.5.0)
     - firebase_core
     - Flutter
-  - firebase_remote_config (0.11.0-2):
+  - firebase_remote_config (2.0.17):
     - Firebase/RemoteConfig (= 9.5.0)
     - firebase_core
     - Flutter
@@ -825,6 +825,8 @@ PODS:
     - Mantle
     - SDWebImage
     - SDWebImageWebPCoder
+  - flutter_native_splash (0.0.1):
+    - Flutter
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
@@ -1012,6 +1014,7 @@ DEPENDENCIES:
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
   - flutter_image_compress (from `.symlinks/plugins/flutter_image_compress/ios`)
+  - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/ios`)
   - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
@@ -1106,6 +1109,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_image_compress:
     :path: ".symlinks/plugins/flutter_image_compress/ios"
+  flutter_native_splash:
+    :path: ".symlinks/plugins/flutter_native_splash/ios"
   google_sign_in_ios:
     :path: ".symlinks/plugins/google_sign_in_ios/ios"
   image_gallery_saver:
@@ -1147,13 +1152,13 @@ SPEC CHECKSUMS:
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
   file_picker: 817ab1d8cd2da9d2da412a417162deee3500fc95
   Firebase: 800f16f07af493d98d017446a315c27af0552f41
-  firebase_analytics: b5b3be895769b7ea0ba050dacc74350e523b126f
+  firebase_analytics: 350f8b25c613a64e64b90d1207f41cb7c529a62c
   firebase_auth: 1d54a31ac7ff6585fe50fd26f679e934e1a471a1
   firebase_core: 31872a49ffe0bf6f834e7044c7334e433536735a
   firebase_crashlytics: 1d9af2a9b4c0a3d4ed3ee61c7b4d053484d1a476
-  firebase_dynamic_links: 975e64655283ed36535d5ebbcee8c1d2249cb9c4
-  firebase_messaging: 5180a2b828b1997ea70b7e7d14c0bcefa14938b7
-  firebase_remote_config: fbbe78ccfb7a5eb9a808585861208698e80d8d47
+  firebase_dynamic_links: 0004551f927f87dc7dadbdc2b843cfab0f3067c7
+  firebase_messaging: 194c716231cf57b4c4c0712cc6775205e7152fa2
+  firebase_remote_config: ccbe467d2113e874ac9da2b1cb2c59afe8bb6e71
   firebase_storage: e81dc988f10c31c4ec1b1c79719ad679795b531d
   FirebaseABTesting: 8122e553ba229b557acc4659f3c3615538fd9448
   FirebaseAnalytics: 1b60984a408320dda637306f3f733699ef8473d7
@@ -1177,6 +1182,7 @@ SPEC CHECKSUMS:
   FirebaseStorageInternal: 4f8a9e27391a99ac0692adbbd072fe0e5c4125fe
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_image_compress: 5a5e9aee05b6553048b8df1c3bc456d0afaac433
+  flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   google_sign_in_ios: 4f85eb9f937450765c8573bb85fd8cd6a5af675c
   GoogleAppMeasurement: 6ee231473fbd75c11221dfce489894334024eead
@@ -1211,6 +1217,6 @@ SPEC CHECKSUMS:
   video_thumbnail: c4e2a3c539e247d4de13cd545344fd2d26ffafd1
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
 
-PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d
+PODFILE CHECKSUM: dc34fec874016e1b888a5936297a38e59772451d
 
 COCOAPODS: 1.11.3

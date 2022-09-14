@@ -8,11 +8,12 @@ import 'package:path_provider/path_provider.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUp(() async {
-    HydratedBloc.storage = await HydratedStorage.build(
+    final storage = await HydratedStorage.build(
       storageDirectory: kIsWeb
           ? HydratedStorage.webStorageDirectory
           : await getTemporaryDirectory(),
     );
+    print(storage);
   });
 
   group('AppThemeCubit', () {

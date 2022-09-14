@@ -4,7 +4,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
-final _analytics = FirebaseAnalytics();
+final _analytics = FirebaseAnalytics.instance;
 final _fireStore = FirebaseFirestore.instance;
 final usersRef = _fireStore.collection('users');
 final Algolia _algolia = Algolia.init(

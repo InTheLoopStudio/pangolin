@@ -14,7 +14,7 @@ import 'package:rxdart/rxdart.dart';
 
 final _functions = FirebaseFunctions.instance;
 final _firestore = FirebaseFirestore.instance;
-final _analytics = FirebaseAnalytics();
+final _analytics = FirebaseAnalytics.instance;
 
 final usersRef = _firestore.collection('users');
 final followersRef = _firestore.collection('followers');

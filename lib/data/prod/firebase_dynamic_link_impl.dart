@@ -20,17 +20,15 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
       dynamicLinkStream.add(redirect);
     }
 
-    _dynamicLinks.onLink(
-      onSuccess: (PendingDynamicLinkData? dynamicLinkData) async {
+    _dynamicLinks.onLink.listen((PendingDynamicLinkData? dynamicLinkData) async {
         DynamicLinkRedirect? redirect = _handleDeepLink(dynamicLinkData);
 
         if (redirect != null) {
           dynamicLinkStream.add(redirect);
         }
-      },
-      onError: (OnLinkErrorException e) async {
+      }).onError((error) async {
         print('onLinkError');
-        print(e.message);
+        print(error.message);
       },
     );
 
@@ -81,7 +79,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
       androidParameters: AndroidParameters(
         packageName: 'com.intheloopstudio',
       ),
-      iosParameters: IosParameters(
+      iosParameters: IOSParameters(
         bundleId: 'com.intheloopstudio',
       ),
       socialMetaTagParameters: SocialMetaTagParameters(
@@ -91,7 +89,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
       ),
     );
 
-    final ShortDynamicLink shortDynamicLink = await parameters.buildShortLink();
+    final ShortDynamicLink shortDynamicLink = await _dynamicLinks.buildShortLink(parameters);
     final Uri shortUrl = shortDynamicLink.shortUrl;
 
     return shortUrl.toString();
@@ -105,7 +103,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
       androidParameters: AndroidParameters(
         packageName: 'com.intheloopstudio',
       ),
-      iosParameters: IosParameters(
+      iosParameters: IOSParameters(
         bundleId: 'com.intheloopstudio',
       ),
       socialMetaTagParameters: SocialMetaTagParameters(
@@ -115,7 +113,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
       ),
     );
 
-    final ShortDynamicLink shortDynamicLink = await parameters.buildShortLink();
+    final ShortDynamicLink shortDynamicLink = await _dynamicLinks.buildShortLink(parameters);
     final Uri shortUrl = shortDynamicLink.shortUrl;
 
     return shortUrl.toString();
