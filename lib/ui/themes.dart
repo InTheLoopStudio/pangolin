@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 const itlAccent = Color(0xff6200ee);
+const tappedAccent = Color(0xff0086CC);
 
 // const primaryColor = Colors.deepPurple;
-const primaryColor = itlAccent;
+const primaryColor = tappedAccent;
 // const secondaryColor = Colors.deepPurple;
-const secondaryColor = itlAccent;
+const secondaryColor = tappedAccent;
 const backgroundLightColor = Color(0xFFFCFCFC);
 const backgroundDarkColor = Color(0xff070a0d);
 const navigationBarLightColor = Colors.white;
@@ -39,14 +40,14 @@ class Themes {
     toggleableActiveColor: primaryColor,
     canvasColor: backgroundLightColor,
     appBarTheme: AppBarTheme(
-      backgroundColor: itlAccent,
+      backgroundColor: tappedAccent,
       foregroundColor: Colors.black,
     ),
 
     sliderTheme: SliderThemeData(
-      activeTrackColor: itlAccent,
-      inactiveTrackColor: itlAccent,
-      thumbColor: itlAccent,
+      activeTrackColor: tappedAccent,
+      inactiveTrackColor: tappedAccent,
+      thumbColor: tappedAccent,
       thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6.0),
       trackHeight: 2.0,
     ),
@@ -80,9 +81,9 @@ class Themes {
     ),
 
     sliderTheme: SliderThemeData(
-      activeTrackColor: itlAccent,
-      inactiveTrackColor: itlAccent,
-      thumbColor: itlAccent,
+      activeTrackColor: tappedAccent,
+      inactiveTrackColor: tappedAccent,
+      thumbColor: tappedAccent,
       thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6.0),
       trackHeight: 2.0,
     ),

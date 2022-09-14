@@ -58,7 +58,7 @@ class SettingsView extends StatelessWidget {
                     Container(
                       height: 75,
                       decoration: BoxDecoration(
-                        color: itlAccent,
+                        color: tappedAccent,
                         image: null,
                       ),
                     ),

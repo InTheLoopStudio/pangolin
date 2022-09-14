@@ -52,13 +52,14 @@ class SendBadgeView extends StatelessWidget {
                         ),
                         SizedBox(height: 50),
                         MaterialButton(
-                          color: itlAccent,
+                          color: tappedAccent,
                           onPressed: context.read<SendBadgeCubit>().sendBadge,
                           child: Text('Send'),
                         ),
                         state.status.isSubmissionInProgress
                             ? CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation(itlAccent),
+                                valueColor:
+                                    AlwaysStoppedAnimation(tappedAccent),
                               )
                             : SizedBox.shrink(),
                       ],

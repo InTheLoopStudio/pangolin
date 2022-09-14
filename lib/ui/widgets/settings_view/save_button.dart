@@ -21,7 +21,7 @@ class SaveButton extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: itlAccent,
+              color: tappedAccent,
             ),
             child: Center(
               child: Text(

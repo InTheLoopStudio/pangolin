@@ -22,8 +22,8 @@ class LoginView extends StatelessWidget {
               begin: Alignment.bottomCenter,
               end: Alignment.topCenter,
               colors: <Color>[
-                Color(0xff343434),
-                Color(0xff6200EE),
+                Color(0xff000000),
+                Color(0xff383838),
               ],
             ),
           ),
@@ -52,11 +52,11 @@ class LoginView extends StatelessWidget {
                     ),
                   ],
                 ),
-                onPressed: () => launch(
+                onPressed: () => launchUrl(
                   Uri(
                     scheme: 'https',
                     path: 'intheloopstudio.com/privacy',
-                  ).toString(),
+                  ),
                 ),
               ),
               TextButton(

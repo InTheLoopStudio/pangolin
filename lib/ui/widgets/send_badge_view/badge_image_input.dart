@@ -27,14 +27,14 @@ class BadgeImageInput extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               color: Theme.of(context).backgroundColor,
               border: Border.all(
-                color: itlAccent,
+                color: tappedAccent,
                 width: 2,
               ),
             ),
             child: Icon(
               FontAwesomeIcons.fileImage,
               size: 40,
-              color: itlAccent,
+              color: tappedAccent,
             ),
           ),
         ),

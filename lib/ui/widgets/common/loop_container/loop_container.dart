@@ -66,7 +66,7 @@ class LoopContainer extends StatelessWidget {
                     await Share.share(
                         'Check out this loop on In The Loop $link');
                   },
-                  backgroundColor: itlAccent,
+                  backgroundColor: tappedAccent,
                   foregroundColor: Colors.white,
                   icon: Icons.share,
                   label: 'Share',

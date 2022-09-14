@@ -19,7 +19,7 @@ class LocationTextField extends StatelessWidget {
         border: OutlineInputBorder(),
         labelText: 'Location (Optional)',
         hintText: 'e.g. RVA, NYC, LA',
-        labelStyle: TextStyle(color: itlAccent),
+        labelStyle: TextStyle(color: tappedAccent),
       ),
       onChanged: onChanged,
     );

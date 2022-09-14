@@ -28,12 +28,12 @@ class ThemeSwitch extends StatelessWidget {
                 children: [
                   Icon(
                     FontAwesomeIcons.solidSun,
-                    color: itlAccent,
+                    color: tappedAccent,
                   ),
                   Text(
                     "Light",
                     style: TextStyle(
-                      color: itlAccent,
+                      color: tappedAccent,
                       fontSize: 14,
                     ),
                   ),
@@ -48,12 +48,12 @@ class ThemeSwitch extends StatelessWidget {
                 children: [
                   Icon(
                     FontAwesomeIcons.solidMoon,
-                    color: itlAccent,
+                    color: tappedAccent,
                   ),
                   Text(
                     "Dark",
                     style: TextStyle(
-                      color: itlAccent,
+                      color: tappedAccent,
                       fontSize: 14,
                     ),
                   ),

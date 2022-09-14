@@ -45,7 +45,7 @@ class _CommentsTextFieldState extends State<CommentsTextField> {
                   context.read<CommentsCubit>().addComment();
                   _textEditingController.clear();
                 },
-                backgroundColor: itlAccent,
+                backgroundColor: tappedAccent,
                 child: state.loading
                     ? CircularProgressIndicator(color: Colors.white)
                     : Icon(Icons.comment),

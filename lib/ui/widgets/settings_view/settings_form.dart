@@ -83,7 +83,7 @@ class SettingsForm extends StatelessWidget {
                   ThemeSwitch(),
                   state.status.isSubmissionInProgress
                       ? CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation(itlAccent),
+                          valueColor: AlwaysStoppedAnimation(tappedAccent),
                         )
                       : SizedBox.shrink(),
                 ],

@@ -32,7 +32,7 @@ class ProfileHeader extends StatelessWidget {
                   bottomRight: Radius.circular(10.0),
                   bottomLeft: Radius.circular(10.0),
                 ),
-                color: itlAccent,
+                color: tappedAccent,
                 image: null,
               ),
             ),

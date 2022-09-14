@@ -5,7 +5,7 @@ import 'package:intheloopapp/ui/themes.dart';
 class AppleLoginButton extends StatelessWidget {
   AppleLoginButton({Key? key, this.onPressed}) : super(key: key);
 
-  void Function()? onPressed;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class AppleLoginButton extends StatelessWidget {
       label: const Text(
         'Sign in with Apple',
         style: TextStyle(
-          color: itlAccent,
+          color: tappedAccent,
         ),
       ),
       style: ElevatedButton.styleFrom(
@@ -21,9 +21,9 @@ class AppleLoginButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
-        primary: Colors.white,
+        backgroundColor: Colors.white,
       ),
-      icon: const Icon(FontAwesomeIcons.apple, color: itlAccent),
+      icon: const Icon(FontAwesomeIcons.apple, color: tappedAccent),
       onPressed: onPressed,
     );
   }

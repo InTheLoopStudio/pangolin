@@ -25,15 +25,15 @@ class FollowButton extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                     color: state.isFollowing
                         ? Theme.of(context).backgroundColor
-                        : itlAccent,
-                    border: Border.all(color: itlAccent),
+                        : tappedAccent,
+                    border: Border.all(color: tappedAccent),
                   ),
                   child: Center(
                     child: Text(
                       state.isFollowing ? 'Following' : 'Follow',
                       style: TextStyle(
                         fontSize: 17,
-                        color: state.isFollowing ? itlAccent : Colors.white,
+                        color: state.isFollowing ? tappedAccent : Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -51,13 +51,13 @@ class FollowButton extends StatelessWidget {
                 },
                 icon: Icon(
                   CupertinoIcons.gear,
-                  color: itlAccent,
+                  color: tappedAccent,
                 ),
                 label: Text(
                   'Edit',
                   style: TextStyle(
                     fontSize: 20,
-                    color: itlAccent,
+                    color: tappedAccent,
                     // fontWeight: FontWeight.bold,
                   ),
                 ),

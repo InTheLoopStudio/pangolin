@@ -29,7 +29,7 @@ class UploadLoopSplashView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     height: 50,
-                    color: itlAccent,
+                    color: tappedAccent,
                     textColor: Colors.white,
                     onPressed: () =>
                         context.read<UploadLoopCubit>().handleAudioFromFiles(),

@@ -13,7 +13,7 @@ class GoogleLoginButton extends StatelessWidget {
       label: const Text(
         'Sign in with Google',
         style: TextStyle(
-          color: itlAccent,
+          color: tappedAccent,
         ),
       ),
       style: ElevatedButton.styleFrom(
@@ -25,7 +25,7 @@ class GoogleLoginButton extends StatelessWidget {
       ),
       icon: const Icon(
         FontAwesomeIcons.google,
-        color: itlAccent,
+        color: tappedAccent,
       ),
       onPressed: onPressed,
     );

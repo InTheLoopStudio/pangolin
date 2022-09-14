@@ -18,7 +18,7 @@ class CommentsHeader extends StatelessWidget {
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20),
             ),
-            color: itlAccent,
+            color: tappedAccent,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

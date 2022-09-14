@@ -17,7 +17,7 @@ class UploadButton extends StatelessWidget {
             ? const CircularProgressIndicator()
             : Material(
                 elevation: 5,
-                color: itlAccent,
+                color: tappedAccent,
                 borderRadius: BorderRadius.circular(30),
                 child: MaterialButton(
                   onPressed: state.status.isValidated

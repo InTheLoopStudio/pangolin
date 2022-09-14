@@ -21,7 +21,7 @@ class LikeButton extends StatelessWidget {
                 onTap: () => context.read<LoopContainerCubit>().likeLoop(),
                 child: Icon(
                   state.isLiked ? Icons.favorite : Icons.favorite_border,
-                  color: state.isLiked ? itlAccent : Colors.black,
+                  color: state.isLiked ? tappedAccent : Colors.black,
                   size: 20,
                 ),
               ),

@@ -22,7 +22,7 @@ class FollowIcon extends StatelessWidget {
             width: PlusIconSize,
             height: PlusIconSize,
             decoration: BoxDecoration(
-              color: itlAccent,
+              color: tappedAccent,
               borderRadius: BorderRadius.circular(15.0),
             ),
             child: Icon(

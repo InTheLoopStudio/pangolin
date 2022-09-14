@@ -48,7 +48,7 @@ class BottomToolbar extends StatelessWidget {
                 width: 35.0,
                 padding: EdgeInsets.all(2.0),
                 decoration: BoxDecoration(
-                  color: itlAccent,
+                  color: tappedAccent,
                   borderRadius: BorderRadius.circular(35.0 / 2),
                 ),
                 child: UserAvatar(

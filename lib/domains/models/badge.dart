@@ -65,7 +65,7 @@ class Badge extends Equatable {
       'senderId': this.senderId,
       'receiverId': this.receiverId,
       'imageUrl': this.imageUrl,
-      'timestamp': this.timestamp.toUtc(),
+      'timestamp': this.timestamp.toIso8601String()
     };
   }
 }

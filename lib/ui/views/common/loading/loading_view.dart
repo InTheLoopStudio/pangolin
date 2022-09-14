@@ -13,8 +13,8 @@ class LoadingView extends StatelessWidget {
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
             colors: <Color>[
-              Color(0xff343434),
-              Color(0xff6200EE),
+              Color(0xff383838),
+              Color(0xff000000),
             ],
           ),
         ),
@@ -28,7 +28,7 @@ class LoadingView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
-                    'assets/logo_name_white.png',
+                    'assets/tapped_logo_reversed.png',
                     height: 60,
                   ),
                 ],

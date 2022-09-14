@@ -33,14 +33,14 @@ class UploadAudioInput extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   color: theme.backgroundColor,
                   border: Border.all(
-                    color: itlAccent,
+                    color: tappedAccent,
                     width: 2,
                   ),
                 ),
                 child: Icon(
                   FontAwesomeIcons.fileAudio,
                   size: 40,
-                  color: itlAccent,
+                  color: tappedAccent,
                 ),
               ),
             ),

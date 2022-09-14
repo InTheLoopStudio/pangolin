@@ -78,7 +78,7 @@ class ControlButtons extends StatelessWidget {
                     width: 10,
                     decoration: BoxDecoration(
                       color: state.onboardingStage == OnboardingStage.stage1
-                          ? itlAccent
+                          ? tappedAccent
                           : Color.fromARGB(255, 221, 160, 221),
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -89,7 +89,7 @@ class ControlButtons extends StatelessWidget {
                     width: 10,
                     decoration: BoxDecoration(
                       color: state.onboardingStage == OnboardingStage.stage2
-                          ? itlAccent
+                          ? tappedAccent
                           : Color.fromARGB(255, 221, 160, 221),
                       borderRadius: BorderRadius.circular(10),
                     ),

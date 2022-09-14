@@ -32,9 +32,9 @@ class _SeekBarState extends State<SeekBar> {
     super.didChangeDependencies();
 
     _sliderThemeData = SliderTheme.of(context).copyWith(
-      activeTrackColor: itlAccent,
-      inactiveTrackColor: itlAccent,
-      thumbColor: itlAccent,
+      activeTrackColor: tappedAccent,
+      inactiveTrackColor: tappedAccent,
+      thumbColor: tappedAccent,
       thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6.0),
       trackHeight: 2.0,
     );
@@ -46,7 +46,7 @@ class _SeekBarState extends State<SeekBar> {
       children: [
         SliderTheme(
           data: _sliderThemeData!.copyWith(
-            activeTrackColor: Colors.purple.shade200,
+            activeTrackColor: Colors.blue.shade100,
             inactiveTrackColor: Colors.grey.shade300,
             thumbShape: RoundSliderThumbShape(enabledThumbRadius: 0.0),
           ),

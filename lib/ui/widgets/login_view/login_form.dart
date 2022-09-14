@@ -43,7 +43,7 @@ class _LoginFormState extends State<LoginForm> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  'assets/logo_name_white.png',
+                  'assets/tapped_logo_reversed.png',
                 ),
                 const SizedBox(height: 80),
                 GoogleLoginButton(

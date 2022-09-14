@@ -41,7 +41,7 @@ class ActionsToolbar extends StatelessWidget {
                 icon: state.isLiked
                     ? CupertinoIcons.heart_fill
                     : CupertinoIcons.heart,
-                color: state.isLiked ? itlAccent : Colors.grey[300],
+                color: state.isLiked ? tappedAccent : Colors.grey[300],
                 title: state.likesCount.toString(),
                 onTap: () => context.read<LoopViewCubit>().toggleLikeLoop(),
               ),
