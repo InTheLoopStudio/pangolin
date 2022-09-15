@@ -20,7 +20,7 @@ class UploadLoopSplashView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    FontAwesomeIcons.fileUpload,
+                    FontAwesomeIcons.fileArrowUp,
                     size: 150,
                   ),
                   const SizedBox(height: 50),
