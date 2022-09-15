@@ -89,7 +89,7 @@ class MyApp extends StatelessWidget {
           builder: (context, isDarkSnapshot) {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
-              title: 'In The Loop',
+              title: 'Tapped',
               theme: isDarkSnapshot ? Themes.themeDark : Themes.themeLight,
               navigatorObservers: <NavigatorObserver>[observer],
               navigatorKey: _navigatorKey,
