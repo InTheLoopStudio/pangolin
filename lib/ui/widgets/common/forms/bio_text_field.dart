@@ -21,9 +21,17 @@ class BioTextField extends StatelessWidget {
         prefixIcon: Icon(Icons.short_text_rounded),
         labelText: 'Bio',
       ),
-      validator: (input) => input!.trim().length > 256
-          ? 'bio must be less than 256 characters'
-          : null,
+      validator: (input) {
+        if (input == null || input.trim().length < 2) {
+          return "bio can't be empty";
+        }
+
+        if (input.trim().length > 256) {
+          return "bio must be less than 256 characters";
+        }
+
+        return null;
+      },
       onSaved: onSaved,
       onChanged: onChanged,
     );

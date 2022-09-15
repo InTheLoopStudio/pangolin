@@ -38,16 +38,16 @@ class _UsernameTextFieldState extends State<UsernameTextField> {
       initialValue: widget.initialValue,
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.person),
-        labelText: 'Artist Name',
-        hintText: 'Artist Name',
+        labelText: 'Handle',
+        hintText: 'tapped_network',
       ),
       validator: (input) {
         if (input!.trim().length < 2) {
-          return "please enter a valid name";
+          return "please enter a valid handle";
         }
 
         if (_usernameTaken) {
-          return "username already in use";
+          return "handle already in use";
         }
 
         return null;
@@ -55,6 +55,7 @@ class _UsernameTextFieldState extends State<UsernameTextField> {
       onSaved: (input) async {
         if (input == null || input.isEmpty) return;
 
+        input = input.trim().toLowerCase();
         DatabaseRepository databaseRepo =
             RepositoryProvider.of<DatabaseRepository>(context);
         bool available =

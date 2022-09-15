@@ -44,7 +44,8 @@ class SettingsCubit extends Cubit<SettingsState> {
       pushNotificationsLikes: currentUser.pushNotificationsLikes,
       pushNotificationsComments: currentUser.pushNotificationsComments,
       pushNotificationsFollows: currentUser.pushNotificationsComments,
-      pushNotificationsDirectMessages: currentUser.pushNotificationsDirectMessages,
+      pushNotificationsDirectMessages:
+          currentUser.pushNotificationsDirectMessages,
       pushNotificationsITLUpdates: currentUser.pushNotificationsITLUpdates,
       emailNotificationsAppReleases: currentUser.emailNotificationsAppReleases,
       emailNotificationsITLUpdates: currentUser.emailNotificationsITLUpdates,
@@ -148,6 +149,8 @@ class SettingsCubit extends Cubit<SettingsState> {
       authenticationBloc.add(UpdateAuthenticatedUser(user));
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
       navigationBloc.add(Pop());
+    } else {
+      print('invalid');
     }
   }
 

@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/prod/stream_impl.dart';
@@ -117,8 +119,20 @@ class OnboardingCubit extends Cubit<OnboardingState> {
 
   void next() {
     if (state.onboardingStage == OnboardingStage.stage1) {
-      // Write data to db
-      emit(state.copyWith(onboardingStage: OnboardingStage.stage2));
+      print(state.formKey);
+      if (state.formKey.currentState == null) {
+        return;
+      }
+
+      state.formKey.currentState!.save();
+      if (state.formKey.currentState!.validate() &&
+          !state.status.isSubmissionInProgress) {
+        emit(state.copyWith(status: FormzStatus.submissionInProgress));
+
+        // Write data to db
+        emit(state.copyWith(status: FormzStatus.submissionSuccess));
+        emit(state.copyWith(onboardingStage: OnboardingStage.stage2));
+      }
     } else if (state.onboardingStage == OnboardingStage.stage2) {
       // Write data to db
       navigationBloc.add(Pop());

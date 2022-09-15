@@ -22,51 +22,54 @@ class Stage1 extends StatelessWidget {
 
         return BlocBuilder<OnboardingCubit, OnboardingState>(
           builder: (context, state) {
-            return Align(
-              alignment: const Alignment(0, -1 / 3),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 100),
-                        Text(
-                          'Complete Your Profile',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 25,
+            return Form(
+              key: state.formKey,
+              child: Align(
+                alignment: const Alignment(0, -1 / 3),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 100),
+                          Text(
+                            'Complete Your Profile',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 50),
-                    UsernameTextField(
-                      onChanged: (input) => context
-                          .read<OnboardingCubit>()
-                          .usernameChange(input ?? ''),
-                      initialValue: state.username,
-                      currentUserId: currentUser.id,
-                    ),
-                    const SizedBox(height: 20),
-                    LocationTextField(
-                      initialValue: state.location,
-                      onChanged: (input) => context
-                          .read<OnboardingCubit>()
-                          .locationChange(input ?? ''),
-                    ),
-                    const SizedBox(height: 20),
-                    BioTextField(
-                      initialValue: state.bio,
-                      onChanged: (input) => context
-                          .read<OnboardingCubit>()
-                          .bioChange(input ?? ''),
-                    ),
-                    const SizedBox(height: 50),
-                    ProfilePictureUploader(),
-                  ],
+                        ],
+                      ),
+                      const SizedBox(height: 50),
+                      UsernameTextField(
+                        onChanged: (input) => context
+                            .read<OnboardingCubit>()
+                            .usernameChange(input ?? ''),
+                        initialValue: state.username,
+                        currentUserId: currentUser.id,
+                      ),
+                      const SizedBox(height: 20),
+                      LocationTextField(
+                        initialValue: state.location,
+                        onChanged: (input) => context
+                            .read<OnboardingCubit>()
+                            .locationChange(input ?? ''),
+                      ),
+                      const SizedBox(height: 20),
+                      BioTextField(
+                        initialValue: state.bio,
+                        onChanged: (input) => context
+                            .read<OnboardingCubit>()
+                            .bioChange(input ?? ''),
+                      ),
+                      const SizedBox(height: 50),
+                      ProfilePictureUploader(),
+                    ],
+                  ),
                 ),
               ),
             );

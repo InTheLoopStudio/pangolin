@@ -14,14 +14,17 @@ class OnboardingState extends Equatable {
     this.bio = '',
     // this.musicianType = const [],
     this.pickedPhoto,
+    this.status = FormzStatus.pure,
     this.loading = false,
     this.followingInTheLoop = false,
     this.followingJohannes = false,
     this.followingChris = false,
     this.followingSohail = false,
     ImagePicker? picker,
+    GlobalKey<FormState>? formKey,
   }) {
     this.picker = picker ?? ImagePicker();
+    this.formKey = formKey ?? GlobalKey<FormState>(debugLabel: 'onboarding');
   }
 
   final UserModel currentUser;
@@ -32,7 +35,9 @@ class OnboardingState extends Equatable {
   final String bio;
   // final List<String> musicianType;
   final File? pickedPhoto;
+  final FormzStatus status;
   late final ImagePicker picker;
+  late final GlobalKey<FormState> formKey;
 
   final bool followingInTheLoop;
   final bool followingJohannes;
@@ -48,10 +53,12 @@ class OnboardingState extends Equatable {
         bio,
         // musicianType,
         pickedPhoto,
+        status,
         followingInTheLoop,
         followingJohannes,
         followingChris,
         followingSohail,
+        formKey
       ];
 
   OnboardingState copyWith({
@@ -62,6 +69,7 @@ class OnboardingState extends Equatable {
     String? bio,
     // List<String>? musicianType,
     File? pickedPhoto,
+    FormzStatus? status,
     bool? followingInTheLoop,
     bool? followingJohannes,
     bool? followingChris,
@@ -76,11 +84,13 @@ class OnboardingState extends Equatable {
       bio: bio ?? this.bio,
       // musicianType: musicianType ?? this.musicianType,
       pickedPhoto: pickedPhoto ?? this.pickedPhoto,
+      status: status ?? this.status,
       picker: picker,
       followingInTheLoop: followingInTheLoop ?? this.followingInTheLoop,
       followingJohannes: followingJohannes ?? this.followingJohannes,
       followingChris: followingChris ?? this.followingChris,
       followingSohail: followingSohail ?? this.followingSohail,
+      formKey: this.formKey,
     );
   }
 }

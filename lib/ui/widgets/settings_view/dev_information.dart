@@ -49,10 +49,12 @@ class _DevInformationState extends State<DevInformation> {
                 color: Colors.grey,
               ),
             ),
-            Text('Copyright © In The Loop 2021',
-                style: TextStyle(
-                  color: Colors.grey,
-                )),
+            Text(
+              'Copyright © Tapped 2022',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
           ],
         ),
       ],

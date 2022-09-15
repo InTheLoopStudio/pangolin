@@ -873,6 +873,7 @@ const _shareLoop = (data: {
   return results;
 };
 
+// true if username taken, false otherwise
 const _checkUsernameAvailability = async (data: {
   userId: string,
   username: string,
@@ -883,16 +884,19 @@ const _checkUsernameAvailability = async (data: {
   ];
 
   if (blacklist.includes(data.username)) {
+    console.log(`username check for blacklisted item: userId: ${data.userId}, username: ${data.username}`)
     return false;
   }
 
   const userQuery = await usersRef
     .where("username", "==", data.username)
     .get();
-  if (userQuery.docs.length > 0 && userQuery.docs[0].id != data.userId) {
+  if (userQuery.docs.length > 0 && userQuery.docs[0].id !== data.userId) {
+    console.log(`username check for already taken username: userId: ${data.userId}, username: ${data.username}`)
     return false;
   }
 
+  console.log(`username check for available username: userId: ${data.userId}, username: ${data.username}`)
   return true;
 };
 
