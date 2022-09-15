@@ -29,11 +29,6 @@ class Stage2 extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 20),
-                // In The Loop Studio
-                FollowRecommendation(
-                  userId: 'UXKpXrJQ9IaXHQ2nMnIXBkZAzXb2',
-                  isFollowing: state.followingInTheLoop,
-                ),
                 // Johannes
                 FollowRecommendation(
                   userId: '8yYVxpQ7cURSzNfBsaBGF7A7kkv2',
@@ -44,10 +39,15 @@ class Stage2 extends StatelessWidget {
                   userId: 'wHpU3xj2yUSuz2rLFKC6J87HTLu1',
                   isFollowing: state.followingChris,
                 ),
-                // Sohail
+                // Ilias
                 FollowRecommendation(
-                  userId: 'WnNIFXj6suZ3VqrNUHmvwi2UBBs1',
-                  isFollowing: state.followingSohail,
+                  userId: 'n4zIL6bOuPTqRC3dtsl6gyEBPQl1',
+                  isFollowing: state.followingIlias,
+                ),
+                // Infamousg
+                FollowRecommendation(
+                  userId: 'VWj4qT2JMIhjjEYYFnbvebIazfB3',
+                  isFollowing: state.followingInfamous,
                 ),
               ],
             ),

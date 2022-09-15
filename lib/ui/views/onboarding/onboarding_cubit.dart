@@ -42,10 +42,10 @@ class OnboardingCubit extends Cubit<OnboardingState> {
 
   void initFollowRecommendations() async {
     [
-      'UXKpXrJQ9IaXHQ2nMnIXBkZAzXb2',
+      'VWj4qT2JMIhjjEYYFnbvebIazfB3',
       '8yYVxpQ7cURSzNfBsaBGF7A7kkv2',
       'wHpU3xj2yUSuz2rLFKC6J87HTLu1',
-      'WnNIFXj6suZ3VqrNUHmvwi2UBBs1'
+      'n4zIL6bOuPTqRC3dtsl6gyEBPQl1'
     ].forEach((userId) async {
       bool isFollowing = false;
 
@@ -59,8 +59,8 @@ class OnboardingCubit extends Cubit<OnboardingState> {
       }
 
       switch (userId) {
-        case 'UXKpXrJQ9IaXHQ2nMnIXBkZAzXb2':
-          emit(state.copyWith(followingInTheLoop: isFollowing));
+        case 'VWj4qT2JMIhjjEYYFnbvebIazfB3':
+          emit(state.copyWith(followingInfamous: isFollowing));
           break;
         case '8yYVxpQ7cURSzNfBsaBGF7A7kkv2':
           emit(state.copyWith(followingJohannes: isFollowing));
@@ -68,8 +68,8 @@ class OnboardingCubit extends Cubit<OnboardingState> {
         case 'wHpU3xj2yUSuz2rLFKC6J87HTLu1':
           emit(state.copyWith(followingChris: isFollowing));
           break;
-        case 'WnNIFXj6suZ3VqrNUHmvwi2UBBs1':
-          emit(state.copyWith(followingSohail: isFollowing));
+        case 'n4zIL6bOuPTqRC3dtsl6gyEBPQl1':
+          emit(state.copyWith(followingIlias: isFollowing));
           break;
         default:
           break;
@@ -79,8 +79,8 @@ class OnboardingCubit extends Cubit<OnboardingState> {
 
   void followRecommendation(String userId) async {
     switch (userId) {
-      case 'UXKpXrJQ9IaXHQ2nMnIXBkZAzXb2':
-        emit(state.copyWith(followingInTheLoop: true));
+      case 'VWj4qT2JMIhjjEYYFnbvebIazfB3':
+        emit(state.copyWith(followingInfamous: true));
         break;
       case '8yYVxpQ7cURSzNfBsaBGF7A7kkv2':
         emit(state.copyWith(followingJohannes: true));
@@ -88,8 +88,8 @@ class OnboardingCubit extends Cubit<OnboardingState> {
       case 'wHpU3xj2yUSuz2rLFKC6J87HTLu1':
         emit(state.copyWith(followingChris: true));
         break;
-      case 'WnNIFXj6suZ3VqrNUHmvwi2UBBs1':
-        emit(state.copyWith(followingSohail: true));
+      case 'n4zIL6bOuPTqRC3dtsl6gyEBPQl1':
+        emit(state.copyWith(followingIlias: true));
         break;
       default:
         break;

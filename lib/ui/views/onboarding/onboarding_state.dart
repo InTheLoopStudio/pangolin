@@ -16,10 +16,10 @@ class OnboardingState extends Equatable {
     this.pickedPhoto,
     this.status = FormzStatus.pure,
     this.loading = false,
-    this.followingInTheLoop = false,
+    this.followingInfamous = false,
     this.followingJohannes = false,
     this.followingChris = false,
-    this.followingSohail = false,
+    this.followingIlias = false,
     ImagePicker? picker,
     GlobalKey<FormState>? formKey,
   }) {
@@ -39,10 +39,10 @@ class OnboardingState extends Equatable {
   late final ImagePicker picker;
   late final GlobalKey<FormState> formKey;
 
-  final bool followingInTheLoop;
+  final bool followingInfamous;
   final bool followingJohannes;
   final bool followingChris;
-  final bool followingSohail;
+  final bool followingIlias;
 
   @override
   List<Object?> get props => [
@@ -54,10 +54,10 @@ class OnboardingState extends Equatable {
         // musicianType,
         pickedPhoto,
         status,
-        followingInTheLoop,
+        followingInfamous,
         followingJohannes,
         followingChris,
-        followingSohail,
+        followingIlias,
         formKey
       ];
 
@@ -70,10 +70,10 @@ class OnboardingState extends Equatable {
     // List<String>? musicianType,
     File? pickedPhoto,
     FormzStatus? status,
-    bool? followingInTheLoop,
+    bool? followingInfamous,
     bool? followingJohannes,
     bool? followingChris,
-    bool? followingSohail,
+    bool? followingIlias,
   }) {
     return OnboardingState(
       currentUser: currentUser,
@@ -86,10 +86,10 @@ class OnboardingState extends Equatable {
       pickedPhoto: pickedPhoto ?? this.pickedPhoto,
       status: status ?? this.status,
       picker: picker,
-      followingInTheLoop: followingInTheLoop ?? this.followingInTheLoop,
+      followingInfamous: followingInfamous ?? this.followingInfamous,
       followingJohannes: followingJohannes ?? this.followingJohannes,
       followingChris: followingChris ?? this.followingChris,
-      followingSohail: followingSohail ?? this.followingSohail,
+      followingIlias: followingIlias ?? this.followingIlias,
       formKey: this.formKey,
     );
   }
