@@ -1,4 +1,5 @@
 import * as functions from "firebase-functions";
+import {logger} from "firebase-functions/lib";
 import * as admin from "firebase-admin";
 import {firestore} from "firebase-admin";
 
@@ -148,7 +149,7 @@ const _createUser = async (data: {
   emailNotificationsAppReleases?: boolean;
   emailNotificationsITLUpdates?: boolean;
 }) => {
-  console.log(data);
+  logger.info(data);
 
   if ((await usersRef.doc(data.id).get()).exists) {
     return {id: data.id};
@@ -884,7 +885,11 @@ const _checkUsernameAvailability = async (data: {
   ];
 
   if (blacklist.includes(data.username)) {
-    console.log(`username check for blacklisted item: userId: ${data.userId}, username: ${data.username}`)
+    logger.info(`
+      username check for blacklisted item: 
+        userId: ${data.userId}, 
+        username: ${data.username}
+    `);
     return false;
   }
 
@@ -892,11 +897,19 @@ const _checkUsernameAvailability = async (data: {
     .where("username", "==", data.username)
     .get();
   if (userQuery.docs.length > 0 && userQuery.docs[0].id !== data.userId) {
-    console.log(`username check for already taken username: userId: ${data.userId}, username: ${data.username}`)
+    logger.info(`
+      username check for already taken username: 
+        userId: ${data.userId}, 
+        username: ${data.username}
+    `);
     return false;
   }
 
-  console.log(`username check for available username: userId: ${data.userId}, username: ${data.username}`)
+  logger.info(`
+    username check for available username: 
+      userId: ${data.userId}, 
+      username: ${data.username}
+  `);
   return true;
 };
 
