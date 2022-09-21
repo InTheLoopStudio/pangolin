@@ -53,6 +53,7 @@ class _ActivityListState extends State<ActivityList> {
   Widget build(BuildContext context) {
     return BlocBuilder<ActivityBloc, ActivityState>(
       builder: (context, state) {
+        print('DA STATE IS' + state.toString());
         if (state is ActivityInitial) {
           return ListLoadingView();
         }

@@ -13,7 +13,6 @@ part 'activity_state.dart';
 class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
   DatabaseRepository databaseRepository;
   AuthenticationBloc authenticationBloc;
-  StreamSubscription? activityListener;
   late UserModel currentUser;
 
   ActivityBloc({
@@ -21,6 +20,13 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
     required this.authenticationBloc,
   }) : super(ActivityInitial()) {
     currentUser = (authenticationBloc.state as Authenticated).currentUser;
+    on<AddActivityEvent>(
+      (event, emit) => emit(
+        ActivitySuccess(
+          activities: List.of(state.activities)..add(event.activity),
+        ),
+      ),
+    );
     on<InitListenerEvent>(
       (event, emit) => _mapInitListenerEventToState(emit),
     );
@@ -35,7 +41,6 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
   Future<void> _mapInitListenerEventToState(
     Emitter<ActivityState> emit,
   ) async {
-    activityListener?.cancel();
     emit(ActivityInitial());
 
     bool activitiesAvailable = 0 !=
@@ -47,17 +52,18 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
 
     if (!activitiesAvailable) {
       emit(ActivitySuccess(activities: const []));
-      return;
     }
 
-    activityListener = databaseRepository
-        .activitiesObserver(currentUser.id, limit: 20)
-        .listen((Activity event) {
-      // print('Activity { ${event.id} : ${event.fromUserId} } ');
-      emit(ActivitySuccess(
-        activities: List.of(state.activities)..add(event),
-      ));
-    });
+    final activityStream =
+        databaseRepository.activitiesObserver(currentUser.id, limit: 20);
+
+    await for (final activity in activityStream) {
+      emit(
+        ActivitySuccess(
+          activities: List.of(state.activities)..add(activity),
+        ),
+      );
+    }
   }
 
   Future<void> _mapFetchActivitiesEventToState(
@@ -100,11 +106,5 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
     await databaseRepository.markActivityAsRead(updatedActivity);
 
     return;
-  }
-
-  @override
-  Future<void> close() async {
-    activityListener?.cancel();
-    super.close();
   }
 }

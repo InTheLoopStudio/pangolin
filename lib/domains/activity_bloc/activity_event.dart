@@ -11,6 +11,17 @@ class InitListenerEvent extends ActivityEvent {}
 
 class FetchActivitiesEvent extends ActivityEvent {}
 
+class AddActivityEvent extends ActivityEvent {
+  AddActivityEvent({
+    required this.activity,
+  }) : super();
+
+  final Activity activity;
+
+  @override
+  List<Object> get props => [activity];
+}
+
 class MarkActivityAsReadEvent extends ActivityEvent {
   MarkActivityAsReadEvent({
     required this.activity,
