@@ -874,7 +874,7 @@ const _shareLoop = (data: {
   return results;
 };
 
-// true if username taken, false otherwise
+// true if username available, false otherwise
 const _checkUsernameAvailability = async (data: {
   userId: string,
   username: string,

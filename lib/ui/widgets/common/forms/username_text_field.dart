@@ -56,13 +56,14 @@ class _UsernameTextFieldState extends State<UsernameTextField> {
         if (input == null || input.isEmpty) return;
 
         input = input.trim().toLowerCase();
-        DatabaseRepository databaseRepo =
-            RepositoryProvider.of<DatabaseRepository>(context);
-        bool available =
-            await databaseRepo.checkUsernameAvailability(input, _currentUserId);
-        setState(() {
-          _usernameTaken = available;
-        });
+        // DatabaseRepository databaseRepo =
+        //     RepositoryProvider.of<DatabaseRepository>(context);
+        // bool available =
+        //     await databaseRepo.checkUsernameAvailability(input, _currentUserId);
+
+        // setState(() {
+        //   _usernameTaken = !available;
+        // });
 
         if (_onSaved != null) {
           _onSaved!(input);
@@ -77,7 +78,7 @@ class _UsernameTextFieldState extends State<UsernameTextField> {
         bool available =
             await databaseRepo.checkUsernameAvailability(input, _currentUserId);
         setState(() {
-          _usernameTaken = available;
+          _usernameTaken = !available;
         });
 
         if (_onChanged != null) {

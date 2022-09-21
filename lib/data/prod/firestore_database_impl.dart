@@ -678,7 +678,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       'userId': userid,
     });
 
-    print(results.data.toString());
+    print('checkUsernameAvailability result ' + results.data.toString());
 
     return results.data;
   }
