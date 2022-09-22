@@ -5,3 +5,7 @@ type UserModel = {
 type Badge = {
     id: string;
 }
+
+type Loop = {
+    id: string;
+}
