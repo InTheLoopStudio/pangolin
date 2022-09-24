@@ -135,7 +135,7 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
             elevation: 1,
             leading: leadingWidget,
             actions: actions ??
-                <Widget>[
+                [
                   Padding(
                     padding: const EdgeInsets.only(right: 10),
                     child: Center(
@@ -154,7 +154,7 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
                 width: preferredSize.width,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
+                  children: [
                     title ?? ChannelName(),
                     const SizedBox(height: 2),
                     subtitle ??

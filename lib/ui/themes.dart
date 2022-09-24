@@ -10,7 +10,7 @@ const secondaryColor = tappedAccent;
 const backgroundLightColor = Color(0xFFFCFCFC);
 const backgroundDarkColor = Color(0xff070a0d);
 const navigationBarLightColor = Colors.white;
-const navigationBarDarkColor = Color(0xff101418);
+const navigationBarDarkColor = Color(0xff070a0d);
 
 class Themes {
   static final themeLight = ThemeData.light().copyWith(

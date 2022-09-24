@@ -190,6 +190,14 @@ class UserModel extends Equatable {
   }
 
   factory UserModel.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
+    late final accountType;
+    try {
+      accountType = $enumDecode(
+          _$AccountTypeEnumMap, doc.getOrElse('accountType', 'free'));
+    } on ArgumentError {
+      accountType = AccountType.Free;
+    }
+
     return UserModel(
       id: doc.id,
       email: doc.getOrElse('email', ''),
@@ -202,8 +210,7 @@ class UserModel extends Equatable {
       badgesCount: doc.getOrElse('badgesCount', 0),
       deleted: doc.getOrElse('deleted', false),
       shadowBanned: doc.getOrElse('shadowBanned', false),
-      accountType: $enumDecode(
-          _$AccountTypeEnumMap, doc.getOrElse('accountType', 'free')),
+      accountType: accountType,
       youtubeChannelId: doc.getOrElse('youtubeChannelId', ""),
       soundcloudHandle: doc.getOrElse('soundcloudHandle', ""),
       tiktokHandle: doc.getOrElse('tiktokHandle', ""),
