@@ -51,6 +51,7 @@ class FirebaseAuthImpl extends AuthRepository {
 
         return user;
       });
+  // ignore: close_sinks
   StreamController<UserModel> manualUserUpdates = StreamController.broadcast();
 
   Stream<UserModel> get user {

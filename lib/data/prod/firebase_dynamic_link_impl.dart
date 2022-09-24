@@ -10,6 +10,7 @@ final _dynamicLinks = FirebaseDynamicLinks.instance;
 class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
   @override
   Stream<DynamicLinkRedirect> getDynamicLinks() async* {
+    // ignore: close_sinks
     StreamController<DynamicLinkRedirect> dynamicLinkStream =
         StreamController();
 

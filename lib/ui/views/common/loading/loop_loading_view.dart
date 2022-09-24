@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 
 class LoopLoadingView extends StatelessWidget {

@@ -8,7 +8,6 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/send_badge/send_badge_cubit.dart';
-import 'package:intheloopapp/ui/widgets/common/forms/username_text_field.dart';
 import 'package:intheloopapp/ui/widgets/send_badge_view/badge_image_input.dart';
 import 'package:intheloopapp/ui/widgets/send_badge_view/badge_receiver_text_field.dart';
 

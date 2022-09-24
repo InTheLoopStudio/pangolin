@@ -26,7 +26,6 @@ class _BadgeReceiverTextFieldState extends State<BadgeReceiverTextField> {
 
   @override
   Widget build(BuildContext context) {
-    DatabaseRepository databaseRepository = context.read<DatabaseRepository>();
     return BlocSelector<AuthenticationBloc, AuthenticationState, Authenticated>(
       selector: (state) => state as Authenticated,
       builder: (context, state) {
