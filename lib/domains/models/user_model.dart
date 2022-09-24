@@ -6,8 +6,8 @@ import 'package:json_annotation/json_annotation.dart';
 part 'user_model.g.dart';
 
 enum AccountType {
-  @JsonValue("vendor")
-  Vendor,
+  @JsonValue("venue")
+  Venue,
   @JsonValue("free")
   Free,
 }

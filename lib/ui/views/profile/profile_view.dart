@@ -12,6 +12,7 @@ import 'package:intheloopapp/ui/widgets/profile_view/badges_list.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/follow_button.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/follower_count.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/following_count.dart';
+import 'package:intheloopapp/ui/widgets/profile_view/share_profile_button.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/social_media_icons.dart';
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
@@ -77,7 +78,7 @@ class _ProfileViewState extends State<ProfileView> {
         child: BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, state) {
             bool showBadgeButton = _currentUser.id == _visitedUser.id &&
-                _currentUser.accountType == AccountType.Vendor;
+                _currentUser.accountType == AccountType.Venue;
             return BlocListener<AuthenticationBloc, AuthenticationState>(
               listener: (context, authState) {
                 if (authState is Authenticated) {
@@ -139,6 +140,7 @@ class _ProfileViewState extends State<ProfileView> {
                               children: [
                                 FollowerCount(),
                                 FollowingCount(),
+                                ShareProfileButton(),
                                 FollowButton(),
                               ],
                             ),

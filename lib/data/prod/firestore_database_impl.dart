@@ -528,7 +528,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .where((DocumentChange<Map<String, dynamic>> element) =>
               element.type == DocumentChangeType.added)
           .map((DocumentChange<Map<String, dynamic>> element) {
-        print('the activity ' + Activity.fromDoc(element.doc).toString());
 
         return Activity.fromDoc(element.doc);
         // if (element.type == DocumentChangeType.modified) {}
