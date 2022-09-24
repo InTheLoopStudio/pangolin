@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/ui/widgets/activity_view/activity_list.dart';
 

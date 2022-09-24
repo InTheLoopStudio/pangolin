@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -46,7 +45,7 @@ class LoginView extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     Icon(
-                      FontAwesomeIcons.externalLinkAlt,
+                      FontAwesomeIcons.upRightFromSquare,
                       color: Colors.white,
                       size: 15,
                     ),
@@ -70,17 +69,17 @@ class LoginView extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     Icon(
-                      FontAwesomeIcons.externalLinkAlt,
+                      FontAwesomeIcons.upRightFromSquare,
                       color: Colors.white,
                       size: 15,
                     ),
                   ],
                 ),
-                onPressed: () => launch(
+                onPressed: () => launchUrl(
                   Uri(
                     scheme: 'https',
                     path: 'intheloopstudio.com/terms',
-                  ).toString(),
+                  ),
                 ),
               ),
             ],

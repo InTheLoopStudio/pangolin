@@ -1,7 +1,7 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:intheloopapp/data/remote_config_repository.dart';
 
-RemoteConfig _remoteConfig = RemoteConfig.instance;
+FirebaseRemoteConfig _remoteConfig = FirebaseRemoteConfig.instance;
 
 class RemoteConfigImpl implements RemoteConfigRepository {
   Future<bool> fetchAndActivate() async {

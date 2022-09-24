@@ -29,7 +29,7 @@ class _EasterEggPlaceholderState extends State<EasterEggPlaceholder> {
             padding: const EdgeInsets.only(bottom: 20.0),
             child: (tapCount >= 15)
                 ? Icon(
-                    FontAwesomeIcons.angry,
+                    FontAwesomeIcons.faceAngry,
                     size: 200,
                     color: widget.color,
                   )
@@ -40,7 +40,7 @@ class _EasterEggPlaceholderState extends State<EasterEggPlaceholder> {
                       });
                     },
                     child: Icon(
-                      FontAwesomeIcons.surprise,
+                      FontAwesomeIcons.faceSurprise,
                       size: 200,
                       color: widget.color,
                     ),

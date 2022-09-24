@@ -37,7 +37,6 @@ class Themes {
       unselectedItemColor: Colors.black,
     ),
     // switch active color
-    toggleableActiveColor: primaryColor,
     canvasColor: backgroundLightColor,
     appBarTheme: AppBarTheme(
       backgroundColor: tappedAccent,
@@ -74,7 +73,6 @@ class Themes {
       unselectedItemColor: Colors.white,
     ),
     // switch active color
-    toggleableActiveColor: primaryColor,
     canvasColor: backgroundDarkColor,
     appBarTheme: AppBarTheme(
       backgroundColor: navigationBarDarkColor,
