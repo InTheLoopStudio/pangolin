@@ -26,14 +26,14 @@ class ActionMenu extends StatelessWidget {
             SettingsButton(
               icon: Icon(FontAwesomeIcons.comments),
               label: 'Give us Feedback',
-              onTap: () => launch(
+              onTap: () => launchUrl(
                 Uri(
                   scheme: 'mailto',
                   path: 'intheloopstudios2021@gmail.com',
                   query: encodeQueryParameters(<String, String>{
                     'subject': 'In The Loop User Feedback',
                   }),
-                ).toString(),
+                ),
               ),
             ),
             Divider(),
@@ -43,11 +43,11 @@ class ActionMenu extends StatelessWidget {
                 size: 20,
               ),
               label: 'Join our Discord community',
-              onTap: () => launch(
+              onTap: () => launchUrl(
                 Uri(
                   scheme: 'https',
                   path: 'discord.gg/ZwpPGx98Qc',
-                ).toString(),
+                ),
               ),
             ),
             Divider(),
@@ -57,11 +57,11 @@ class ActionMenu extends StatelessWidget {
                 size: 20,
               ),
               label: 'In The Loop Podcast',
-              onTap: () => launch(
+              onTap: () => launchUrl(
                 Uri(
                   scheme: 'https',
                   path: 'https://open.spotify.com/show/6LQi6uQ5nEgIK9vo0am9PS',
-                ).toString(),
+                ),
               ),
             ),
             Divider(),
@@ -71,11 +71,11 @@ class ActionMenu extends StatelessWidget {
                 size: 20,
               ),
               label: 'Follow us on Instagram',
-              onTap: () => launch(
+              onTap: () => launchUrl(
                 Uri(
                   scheme: 'https',
                   path: 'www.instagram.com/itl_studios/',
-                ).toString(),
+                ),
               ),
             ),
             Divider(),
@@ -85,11 +85,11 @@ class ActionMenu extends StatelessWidget {
                 size: 20,
               ),
               label: 'Privacy Policy',
-              onTap: () => launch(
+              onTap: () => launchUrl(
                 Uri(
                   scheme: 'https',
                   path: 'intheloopstudio.com/privacy',
-                ).toString(),
+                ),
               ),
             ),
             Divider(),
@@ -99,17 +99,17 @@ class ActionMenu extends StatelessWidget {
                 size: 20,
               ),
               label: 'Terms of Service',
-              onTap: () => launch(
+              onTap: () => launchUrl(
                 Uri(
                   scheme: 'https',
                   path: 'intheloopstudio.com/terms',
-                ).toString(),
+                ),
               ),
             ),
             Divider(),
             SettingsButton(
               icon: Icon(
-                FontAwesomeIcons.signOutAlt,
+                FontAwesomeIcons.rightFromBracket,
                 size: 20,
               ),
               label: 'Sign Out',

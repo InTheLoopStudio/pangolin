@@ -5,7 +5,7 @@ import 'package:intheloopapp/ui/themes.dart';
 class GoogleLoginButton extends StatelessWidget {
   GoogleLoginButton({Key? key, this.onPressed}) : super(key: key);
 
-  void Function()? onPressed;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class GoogleLoginButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
-        primary: Colors.white,
+        backgroundColor: Colors.white,
       ),
       icon: const Icon(
         FontAwesomeIcons.google,

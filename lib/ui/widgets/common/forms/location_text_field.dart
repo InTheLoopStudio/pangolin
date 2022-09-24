@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intheloopapp/ui/themes.dart';
 
 class LocationTextField extends StatelessWidget {
   const LocationTextField({
