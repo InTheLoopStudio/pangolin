@@ -13,22 +13,11 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart'
 class MessagingChannelListView extends StatelessWidget {
   const MessagingChannelListView({Key? key}) : super(key: key);
 
-  Widget _channelTileBuilder(
-    BuildContext context,
-    List<Channel> channels,
-    int index,
-    StreamChannelListTile defaultChannelTile,
-  ) {
-    final channel = channels[index];
-
-    return ChannelPreview(channel: channel);
-  }
-
   @override
   Widget build(BuildContext context) {
     AuthRepository authRepo = RepositoryProvider.of<AuthRepository>(context);
     return Scaffold(
-    backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         title: Center(child: Text('Messaging')),
       ),
@@ -60,7 +49,16 @@ class MessagingChannelListView extends StatelessWidget {
               sort: const [SortOption('last_message_at')],
               limit: 20,
             ),
-            itemBuilder: _channelTileBuilder,
+            itemBuilder: (
+              BuildContext context,
+              List<Channel> channels,
+              int index,
+              StreamChannelListTile defaultChannelTile,
+            ) {
+              final channel = channels[index];
+
+              return ChannelPreview(channel: channel);
+            },
             onChannelTap: (channel) {
               Navigator.of(context).push(
                 MaterialPageRoute(

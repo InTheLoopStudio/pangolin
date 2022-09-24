@@ -2,10 +2,16 @@ import * as functions from "firebase-functions";
 import {logger} from "firebase-functions/lib";
 import * as admin from "firebase-admin";
 import {firestore} from "firebase-admin";
+import {StreamChat} from "stream-chat";
 
 if (!admin.apps.length) {
   admin.initializeApp();
 }
+
+const streamClient = StreamChat.getInstance(
+  functions.config().stream.key,
+  functions.config().stream.secret
+);
 
 const db = admin.firestore();
 const storage = admin.storage();
@@ -174,20 +180,21 @@ const _createUser = async (data: {
     tiktokHandle: data.tiktokHandle || "",
     soundcloudHandle: data.soundcloudHandle || "",
     youtubeChannelId: data.youtubeChannelId || "",
-    pushNotificationsLikes:
-      data.pushNotificationsLikes || true,
-    pushNotificationsComments:
-      data.pushNotificationsComments || true,
-    pushNotificationsFollows:
-      data.pushNotificationsFollows || true,
+    pushNotificationsLikes: data.pushNotificationsLikes || true,
+    pushNotificationsComments: data.pushNotificationsComments || true,
+    pushNotificationsFollows: data.pushNotificationsFollows || true,
     pushNotificaionsDirectMessages:
       data.pushNotificationsDirectMessages || true,
-    pushNotificationsITLUpdates:
-      data.pushNotificationsITLUpdates || true,
-    emailNotificationsAppReleases:
-      data.emailNotificationsAppReleases || true,
-    emailNotificationsITLUpdates:
-      data.emailNotificationsITLUpdates || true,
+    pushNotificationsITLUpdates: data.pushNotificationsITLUpdates || true,
+    emailNotificationsAppReleases: data.emailNotificationsAppReleases || true,
+    emailNotificationsITLUpdates: data.emailNotificationsITLUpdates || true,
+  });
+
+  streamClient.upsertUser({
+    id: data.id,
+    name: data.username,
+    email: data.email,
+    image: data.profilePicture,
   });
 
   return {id: data.id};
@@ -305,7 +312,6 @@ const _updateUserData = async (data: {
     );
   }
 
-
   usersRef.doc(data.id).update({
     email: data.email || "",
     username: filteredUsername,
@@ -323,20 +329,23 @@ const _updateUserData = async (data: {
     tiktokHandle: data.tiktokHandle || "",
     soundcloudHandle: data.soundcloudHandle || "",
     youtubeChannelId: data.youtubeChannelId || "",
-    pushNotificationsLikes:
-      data.pushNotificationsLikes || true,
-    pushNotificationsComments:
-      data.pushNotificationsComments || true,
-    pushNotificationsFollows:
-      data.pushNotificationsFollows || true,
+    pushNotificationsLikes: data.pushNotificationsLikes || true,
+    pushNotificationsComments: data.pushNotificationsComments || true,
+    pushNotificationsFollows: data.pushNotificationsFollows || true,
     pushNotificaionsDirectMessages:
       data.pushNotificationsDirectMessages || true,
-    pushNotificationsITLUpdates:
-      data.pushNotificationsITLUpdates || true,
-    emailNotificationsAppReleases:
-      data.emailNotificationsAppReleases || true,
-    emailNotificationsITLUpdates:
-      data.emailNotificationsITLUpdates || true,
+    pushNotificationsITLUpdates: data.pushNotificationsITLUpdates || true,
+    emailNotificationsAppReleases: data.emailNotificationsAppReleases || true,
+    emailNotificationsITLUpdates: data.emailNotificationsITLUpdates || true,
+  });
+
+  streamClient.partialUpdateUser({
+    id: data.id,
+    set: {
+      name: data.username,
+      email: data.email,
+      image: data.profilePicture,
+    },
   });
 
   return {id: data.id};
@@ -367,7 +376,7 @@ const _addActivity = async (data: {
     throw new functions.https.HttpsError(
       "invalid-argument",
       "The function argument 'type' must be either " +
-      "'follow', 'like', or 'comment'"
+        "'follow', 'like', or 'comment'"
     );
   }
 
@@ -863,10 +872,7 @@ const _deleteUserLoopsFromFeed = (data: {
   return data.feedOwnerId;
 };
 
-const _shareLoop = (data: {
-  loopId: string,
-  userId: string,
-}) => {
+const _shareLoop = (data: { loopId: string; userId: string }) => {
   const results = loopsRef.doc(data.loopId).update({
     shares: admin.firestore.FieldValue.increment(1),
   });
@@ -876,13 +882,10 @@ const _shareLoop = (data: {
 
 // true if username available, false otherwise
 const _checkUsernameAvailability = async (data: {
-  userId: string,
-  username: string,
+  userId: string;
+  username: string;
 }) => {
-  const blacklist = [
-    "anonymous",
-    "*deleted*",
-  ];
+  const blacklist = ["anonymous", "*deleted*"];
 
   if (blacklist.includes(data.username)) {
     logger.info(`
@@ -893,9 +896,7 @@ const _checkUsernameAvailability = async (data: {
     return false;
   }
 
-  const userQuery = await usersRef
-    .where("username", "==", data.username)
-    .get();
+  const userQuery = await usersRef.where("username", "==", data.username).get();
   if (userQuery.docs.length > 0 && userQuery.docs[0].id !== data.userId) {
     logger.info(`
       username check for already taken username: 
@@ -968,6 +969,11 @@ export const onUserCreated = functions.auth
 export const onUserDeleted = functions.auth
   .user()
   .onDelete((user: admin.auth.UserRecord) => _deleteUser({id: user.uid}));
+export const deleteStreamUser = functions.auth
+  .user()
+  .onDelete((user) => {
+    return streamClient.deleteUser(user.uid);
+  });
 export const createUser = functions.https.onCall((data) => _createUser(data));
 export const updateUserData = functions.https.onCall((data, context) => {
   _authenticated(context);
@@ -1026,11 +1032,12 @@ export const shareLoop = functions.https.onCall((data, context) => {
   _authenticated(context);
   return _shareLoop(data);
 });
-export const checkUsernameAvailability =
-  functions.https.onCall((data, context) => {
+export const checkUsernameAvailability = functions.https.onCall(
+  (data, context) => {
     _authenticated(context);
     return _checkUsernameAvailability(data);
-  });
+  }
+);
 export const createBadge = functions.https.onCall((data, context) => {
   _authenticated(context);
   _authorized(context, data.senderId);
