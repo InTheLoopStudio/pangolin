@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -87,16 +86,33 @@ class MyApp extends StatelessWidget {
         providers: buildBlocs(navigatorKey: _navigatorKey),
         child: BlocBuilder<AppThemeCubit, bool>(
           builder: (context, isDarkSnapshot) {
+            final appTheme =
+                isDarkSnapshot ? Themes.themeDark : Themes.themeLight;
+            final defaultStreamTheme = StreamChatThemeData.fromTheme(appTheme);
+            final streamTheme = defaultStreamTheme.copyWith(
+              channelPreviewTheme: StreamChannelPreviewThemeData(
+                avatarTheme: StreamAvatarThemeData(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              otherMessageTheme: StreamMessageThemeData(
+                avatarTheme: StreamAvatarThemeData(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            );
+
             return MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'Tapped',
-              theme: isDarkSnapshot ? Themes.themeDark : Themes.themeLight,
+              theme: appTheme,
               navigatorObservers: <NavigatorObserver>[observer],
               navigatorKey: _navigatorKey,
               builder: (context, widget) {
                 return StreamChat(
                   client: client,
                   child: widget,
+                  streamChatThemeData: streamTheme,
                 );
               },
               home:

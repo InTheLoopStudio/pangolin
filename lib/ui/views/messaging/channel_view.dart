@@ -15,9 +15,9 @@ class ChannelView extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: MessageListView(),
+            child: StreamMessageListView(),
           ),
-          MessageInput(),
+          StreamMessageInput(),
         ],
       ),
     );

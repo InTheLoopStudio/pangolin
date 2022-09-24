@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/ui/views/messaging/channel_name.dart';
-import 'package:stream_chat_flutter/src/back_button.dart';
 import 'package:stream_chat_flutter/src/channel_info.dart';
 import 'package:stream_chat_flutter/src/extension.dart';
-import 'package:stream_chat_flutter/src/info_tile.dart';
-import 'package:stream_chat_flutter/src/stream_chat_theme.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart' hide ChannelName;
-import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
 /// ![screenshot](https://raw.githubusercontent.com/GetStream/stream-chat-flutter/master/screenshots/channel_header.png)
 /// ![screenshot](https://raw.githubusercontent.com/GetStream/stream-chat-flutter/master/screenshots/channel_header_paint.png)
@@ -99,13 +95,12 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leading;
 
   /// AppBar actions
-  /// By default it shows the [ChannelAvatar]
+  /// By default it shows the [StreamChannelAvatar]
   final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
     final channel = StreamChannel.of(context).channel;
-    final chatThemeData = StreamChatTheme.of(context);
 
     final leadingWidget = leading ??
         (showBackButton
@@ -115,7 +110,7 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
               )
             : const SizedBox());
 
-    return ConnectionStatusBuilder(
+    return StreamConnectionStatusBuilder(
       statusBuilder: (context, status) {
         var statusString = '';
         var showStatus = true;
@@ -133,7 +128,7 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
             break;
         }
 
-        return InfoTile(
+        return StreamInfoTile(
           showMessage: showConnectionStateTile && showStatus,
           message: statusString,
           child: AppBar(
@@ -144,8 +139,9 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
                   Padding(
                     padding: const EdgeInsets.only(right: 10),
                     child: Center(
-                      child: ChannelAvatar(
+                      child: StreamChannelAvatar(
                         onTap: onImageTap,
+                        channel: channel,
                       ),
                     ),
                   ),
@@ -162,7 +158,7 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
                     title ?? ChannelName(),
                     const SizedBox(height: 2),
                     subtitle ??
-                        ChannelInfo(
+                        StreamChannelInfo(
                           showTypingIndicator: showTypingIndicator,
                           channel: channel,
                         ),

@@ -34,7 +34,7 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
   final NavigationBloc? navigationBloc;
 
   static String audioLockId = 'uploaded-loop';
-  static Duration _maxDuration = Duration(seconds: 60);
+  static Duration _maxDuration = Duration(minutes: 5);
 
   @override
   Future<void> close() async {
@@ -158,7 +158,7 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
         print('NOT VALID UPLOAD : $tooLarge + ${state.loopTitle.value}');
         if (scaffoldKey != null) {
           scaffoldKey!.currentState?.showSnackBar(SnackBar(
-            content: Text('Audio must be under 90 seconds with a title'),
+            content: Text('Audio must be under 5 minutes with a title'),
             duration: Duration(seconds: 3),
             backgroundColor: Colors.red,
             action: SnackBarAction(

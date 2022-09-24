@@ -13,6 +13,17 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart'
 class MessagingChannelListView extends StatelessWidget {
   const MessagingChannelListView({Key? key}) : super(key: key);
 
+  Widget _channelTileBuilder(
+    BuildContext context,
+    List<Channel> channels,
+    int index,
+    StreamChannelListTile defaultChannelTile,
+  ) {
+    final channel = channels[index];
+
+    return ChannelPreview(channel: channel);
+  }
+
   @override
   Widget build(BuildContext context) {
     AuthRepository authRepo = RepositoryProvider.of<AuthRepository>(context);
@@ -27,7 +38,7 @@ class MessagingChannelListView extends StatelessWidget {
             builder: (context) => NewChatView(),
           ),
         ),
-        child: Icon(FontAwesomeIcons.commentAlt),
+        child: Icon(FontAwesomeIcons.message),
       ),
       body: StreamBuilder<UserModel>(
         stream: authRepo.user,
@@ -38,20 +49,29 @@ class MessagingChannelListView extends StatelessWidget {
 
           UserModel currentUser = snapshot.data!;
 
-          return ChannelsBloc(
-            child: ChannelListView(
+          return StreamChannelListView(
+            controller: StreamChannelListController(
+              client: StreamChat.of(context).client,
               filter: Filter.in_(
                 'members',
                 [currentUser.id],
               ),
               sort: const [SortOption('last_message_at')],
-              pagination: const PaginationParams(
-                limit: 20,
-              ),
-              channelPreviewBuilder: (_, channel) =>
-                  ChannelPreview(channel: channel),
-              channelWidget: ChannelView(),
+              limit: 20,
             ),
+            itemBuilder: _channelTileBuilder,
+            onChannelTap: (channel) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return StreamChannel(
+                      channel: channel,
+                      child: ChannelView(),
+                    );
+                  },
+                ),
+              );
+            },
           );
         },
       ),

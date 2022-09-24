@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const itlAccent = Color(0xff6200ee);
+// const itlAccent = Color(0xff6200ee);
 const tappedAccent = Color(0xff0086CC);
 
 // const primaryColor = Colors.deepPurple;
@@ -21,7 +21,7 @@ class Themes {
     colorScheme: ColorScheme.light().copyWith(
       primary: primaryColor,
       secondary: secondaryColor,
-      background: Colors.white,
+      background: backgroundLightColor,
     ),
 
     // floating action button

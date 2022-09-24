@@ -1,9 +1,10 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/views/send_badge/send_badge_view.dart';
@@ -126,9 +127,18 @@ class _ProfileViewState extends State<ProfileView> {
                                 ),
                               ],
                             ),
-                            background: Image.network(
-                              _visitedUser.profilePicture,
-                              fit: BoxFit.cover,
+                            background: Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: (_visitedUser.profilePicture.isEmpty)
+                                      ? AssetImage('assets/default_avatar.png')
+                                          as ImageProvider
+                                      : CachedNetworkImageProvider(
+                                          _visitedUser.profilePicture,
+                                        ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -156,6 +166,7 @@ class _ProfileViewState extends State<ProfileView> {
                           pinned: true,
                           delegate: _SliverAppBarDelegate(
                             TabBar(
+                              indicatorColor: tappedAccent,
                               tabs: [
                                 Tab(
                                   text: 'Badges (${_visitedUser.badgesCount})',

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
 import 'package:intheloopapp/ui/views/follow_relationship/follow_relationship_cubit.dart';
 import 'package:intheloopapp/ui/widgets/follow_relationship_view/follower_tab.dart';
@@ -46,7 +47,10 @@ class FollowRelationshipView extends StatelessWidget {
             child: Scaffold(
               backgroundColor: theme.backgroundColor,
               appBar: AppBar(
+                backgroundColor: theme.backgroundColor,
                 bottom: TabBar(
+                  indicatorColor: tappedAccent,
+                  labelColor: tappedAccent,
                   tabs: [
                     Tab(
                       child: Text('Followers'),

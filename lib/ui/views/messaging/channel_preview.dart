@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intheloopapp/ui/views/messaging/channel_name.dart';
 import 'package:intheloopapp/ui/views/messaging/channel_view.dart';
-import 'package:stream_chat_flutter/stream_chat_flutter.dart' hide ChannelName;
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class ChannelPreview extends StatelessWidget {
   const ChannelPreview({Key? key, required this.channel}) : super(key: key);
@@ -14,9 +13,10 @@ class ChannelPreview extends StatelessWidget {
         .firstWhere((message) => !message.isDeleted);
 
     final subtitle = lastMessage == null ? 'nothing yet' : lastMessage.text!;
-    final opacity = (channel.state?.unreadCount ?? 0) > 0 ? 1.0 : 0.5;
+    // final opacity = (channel.state?.unreadCount ?? 0) > 0 ? 1.0 : 0.5;
 
     return ListTile(
+      tileColor: Theme.of(context).backgroundColor,
       onTap: () {
         Navigator.push(
           context,
@@ -28,8 +28,10 @@ class ChannelPreview extends StatelessWidget {
           ),
         );
       },
-      leading: ChannelAvatar(channel: channel),
-      title: ChannelName(),
+      leading: StreamChannelAvatar(channel: channel),
+      title: StreamChannelName(
+        channel: channel,
+      ),
       subtitle: Text(subtitle),
       trailing: channel.state!.unreadCount > 0
           ? CircleAvatar(
