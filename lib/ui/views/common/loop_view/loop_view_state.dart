@@ -52,12 +52,12 @@ class LoopViewState extends Equatable {
     int? likesCount,
   }) {
     return LoopViewState(
-      audioController: this.audioController,
+      audioController: audioController,
       loop: loop ?? this.loop,
       user: user ?? this.user,
       feedId: feedId ?? this.feedId,
       showComments: showComments ?? this.showComments,
-      loadingLoop: loading ?? this.loadingLoop,
+      loadingLoop: loading ?? loadingLoop,
       isFollowing: isFollowing ?? this.isFollowing,
       isLiked: isLiked ?? this.isLiked,
       commentsCount: commentsCount ?? this.commentsCount,

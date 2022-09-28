@@ -34,12 +34,12 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
   final NavigationBloc? navigationBloc;
 
   static String audioLockId = 'uploaded-loop';
-  static Duration _maxDuration = Duration(minutes: 5);
+  static const Duration _maxDuration = Duration(minutes: 5);
 
   @override
   Future<void> close() async {
     state.audioController.dispose();
-    super.close();
+    await super.close();
   }
 
   // Future<List<Tag>> getTagSuggestions(String value) async {
@@ -60,7 +60,7 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
     emit(state.copyWith(
       loopTitle: title,
       status: Formz.validate([title]),
-    ));
+    ),);
   }
 
   // void addTag(Tag value) {
@@ -71,21 +71,21 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
   //   );
   // }
 
-  void cancelUpload() async {
+  Future<void> cancelUpload() async {
     state.audioController.pause();
     emit(UploadLoopState());
   }
 
-  void handleAudioFromFiles() async {
+  Future<void> handleAudioFromFiles() async {
     try {
-      FilePickerResult? audioFileResult = await FilePicker.platform.pickFiles(
+      final audioFileResult = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['mp3'],
       );
       if (audioFileResult != null) {
-        String pickedAudioName =
+        final pickedAudioName =
             audioFileResult.files.single.path!.split('/').last;
-        File pickedAudio = File(audioFileResult.files.single.path!);
+        final pickedAudio = File(audioFileResult.files.single.path!);
 
         emit(state.copyWith(
           pickedAudio: pickedAudio,
@@ -93,9 +93,9 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
             LoopTitle.dirty(pickedAudioName),
           ]),
           loopTitle: LoopTitle.dirty(pickedAudioName),
-        ));
+        ),);
 
-        state.audioController.setAudioFile(pickedAudio);
+        await state.audioController.setAudioFile(pickedAudio);
 
         print(state.audioController);
       }
@@ -103,36 +103,36 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
       print(error);
       emit(state.copyWith(
         status: FormzStatus.submissionFailure,
-      ));
+      ),);
     }
   }
 
-  void uploadLoop() async {
-    print('PATH 1 : ' + state.pickedAudio!.path);
+  Future<void> uploadLoop() async {
+    print('PATH 1 : ${state.pickedAudio!.path}');
 
     try {
       if (!state.status.isValidated || state.pickedAudio == null) return;
 
-      Duration? tmp =
+      final tmp =
           await state.audioController.setAudioFile(state.pickedAudio);
 
-      Duration audioDuration = tmp ?? Duration();
+      final audioDuration = tmp ?? const Duration();
 
-      bool tooLarge = audioDuration.compareTo(_maxDuration) >= 0;
+      final tooLarge = audioDuration.compareTo(_maxDuration) >= 0;
 
-      print('PATH 2 : ' + state.pickedAudio!.path);
+      print('PATH 2 : ${state.pickedAudio!.path}');
 
       if (state.loopTitle.value.isNotEmpty && !tooLarge) {
         emit(state.copyWith(
           status: FormzStatus.submissionInProgress,
-        ));
+        ),);
 
-        String audio = await storageRepository.uploadLoop(
+        final audio = await storageRepository.uploadLoop(
           currentUser.id,
           state.pickedAudio!,
         );
 
-        Loop loop = Loop.empty.copyWith(
+        final loop = Loop.empty.copyWith(
           title: state.loopTitle.value,
           audio: audio,
           userId: currentUser.id,
@@ -142,48 +142,47 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
         await databaseRepository.uploadLoop(loop);
 
         emit(state.copyWith(
-          loopTitle: LoopTitle.pure(),
-          pickedAudio: null,
+          loopTitle: const LoopTitle.pure(),
           status: FormzStatus.submissionSuccess,
-        ));
+        ),);
 
-        UserModel user = currentUser.copyWith(
+        final user = currentUser.copyWith(
           loopsCount: (currentUser.loopsCount) + 1,
         );
 
         authenticationBloc.add(UpdateAuthenticatedUser(user));
         // Navigate back to the feed page
-        navigationBloc?.add(ChangeTab(selectedTab: 0));
+        navigationBloc?.add(const ChangeTab(selectedTab: 0));
       } else {
         print('NOT VALID UPLOAD : $tooLarge + ${state.loopTitle.value}');
         if (scaffoldKey != null) {
           scaffoldKey!.currentState?.showSnackBar(SnackBar(
-            content: Text('Audio must be under 5 minutes with a title'),
-            duration: Duration(seconds: 3),
+            content: const Text('Audio must be under 5 minutes with a title'),
+            duration: const Duration(seconds: 3),
             backgroundColor: Colors.red,
             action: SnackBarAction(
               label: 'Ok',
               onPressed: () {},
             ),
-          ));
+          ),);
         }
       }
     } catch (e) {
-      print('[ERROR] ' + e.toString());
+      print('[ERROR] $e');
       if (scaffoldKey != null) {
         scaffoldKey!.currentState?.showSnackBar(SnackBar(
-          content: Text('Error uploading loop'),
-          duration: Duration(seconds: 3),
+          content: const Text('Error uploading loop'),
+          duration: const Duration(seconds: 3),
           backgroundColor: Colors.red,
           action: SnackBarAction(
             label: 'Ok',
             onPressed: () {},
           ),
-        ));
+        ),);
       }
       emit(state.copyWith(
         status: FormzStatus.submissionFailure,
-      ));
+      ),);
     }
   }
 }

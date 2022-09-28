@@ -12,12 +12,12 @@ part 'navigation_event.dart';
 part 'navigation_state.dart';
 
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
-  NavigationBloc({required this.navigationKey}) : super(NavigationState()) {
+  NavigationBloc({required this.navigationKey}) : super(const NavigationState()) {
     on<ChangeTab>((event, emit) {
       emit(state.copyWith(selectedTab: event.selectedTab));
     });
     on<PushLoop>((event, emit) {
-      this.navigationKey.currentState?.push(
+      navigationKey.currentState?.push(
             MaterialPageRoute(
               builder: (context) => Material(
                 child: LoopView(
@@ -31,7 +31,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
       emit(state);
     });
     on<PushProfile>((event, emit) {
-      this.navigationKey.currentState?.push(
+      navigationKey.currentState?.push(
             MaterialPageRoute(
               builder: (context) => ProfileView(visitedUserId: event.userId),
             ),
@@ -39,9 +39,9 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
       emit(state);
     });
     on<PushActivity>((event, emit) {
-      this.navigationKey.currentState?.push(
+      navigationKey.currentState?.push(
             MaterialPageRoute(
-              builder: (context) => Material(
+              builder: (context) => const Material(
                 child: ActivityView(),
               ),
             ),
@@ -50,7 +50,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     });
     on<PushOnboarding>((event, emit) {
       navigationKey.currentState?.push(
-        MaterialPageRoute(builder: (context) => OnboardingView()),
+        MaterialPageRoute(builder: (context) => const OnboardingView()),
       );
 
       emit(state);

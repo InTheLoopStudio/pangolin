@@ -2,14 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intheloopapp/utils.dart';
 
 class Comment {
-  String id;
-  Timestamp? timestamp;
-  String? content;
-  String? userId;
-  String? parentId;
-  String? rootLoopId;
-  List<String>? children;
-  bool? deleted;
 
   Comment({
     this.id = '',
@@ -34,4 +26,12 @@ class Comment {
       deleted: doc.getOrElse('deleted', false),
     );
   }
+  String id;
+  Timestamp? timestamp;
+  String? content;
+  String? userId;
+  String? parentId;
+  String? rootLoopId;
+  List<String>? children;
+  bool? deleted;
 }

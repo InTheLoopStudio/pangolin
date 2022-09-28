@@ -16,7 +16,7 @@ class FollowingTab extends StatelessWidget {
                 context.read<FollowRelationshipCubit>().initFollowing(),
             child: state.following.isEmpty
                 // TODO : Replace with follow recommendations
-                ? Text("No Following")
+                ? const Text('No Following')
                 : ListView.builder(
                     itemCount: state.following.length,
                     itemBuilder: (BuildContext context, int index) {

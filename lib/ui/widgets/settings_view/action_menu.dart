@@ -11,7 +11,7 @@ class ActionMenu extends StatelessWidget {
   String? encodeQueryParameters(Map<String, String> params) {
     return params.entries
         .map((e) =>
-            '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+            '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}',)
         .join('&');
   }
 
@@ -20,11 +20,10 @@ class ActionMenu extends StatelessWidget {
     return BlocBuilder<SettingsCubit, SettingsState>(
       builder: (context, state) {
         return Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Divider(),
+            const Divider(),
             SettingsButton(
-              icon: Icon(FontAwesomeIcons.comments),
+              icon: const Icon(FontAwesomeIcons.comments),
               label: 'Give us Feedback',
               onTap: () => launchUrl(
                 Uri(
@@ -36,9 +35,9 @@ class ActionMenu extends StatelessWidget {
                 ),
               ),
             ),
-            Divider(),
+            const Divider(),
             SettingsButton(
-              icon: Icon(
+              icon: const Icon(
                 FontAwesomeIcons.discord,
                 size: 20,
               ),
@@ -50,9 +49,9 @@ class ActionMenu extends StatelessWidget {
                 ),
               ),
             ),
-            Divider(),
+            const Divider(),
             SettingsButton(
-              icon: Icon(
+              icon: const Icon(
                 FontAwesomeIcons.spotify,
                 size: 20,
               ),
@@ -64,9 +63,9 @@ class ActionMenu extends StatelessWidget {
                 ),
               ),
             ),
-            Divider(),
+            const Divider(),
             SettingsButton(
-              icon: Icon(
+              icon: const Icon(
                 FontAwesomeIcons.instagram,
                 size: 20,
               ),
@@ -78,9 +77,9 @@ class ActionMenu extends StatelessWidget {
                 ),
               ),
             ),
-            Divider(),
+            const Divider(),
             SettingsButton(
-              icon: Icon(
+              icon: const Icon(
                 FontAwesomeIcons.userSecret,
                 size: 20,
               ),
@@ -92,9 +91,9 @@ class ActionMenu extends StatelessWidget {
                 ),
               ),
             ),
-            Divider(),
+            const Divider(),
             SettingsButton(
-              icon: Icon(
+              icon: const Icon(
                 FontAwesomeIcons.fileContract,
                 size: 20,
               ),
@@ -106,9 +105,9 @@ class ActionMenu extends StatelessWidget {
                 ),
               ),
             ),
-            Divider(),
+            const Divider(),
             SettingsButton(
-              icon: Icon(
+              icon: const Icon(
                 FontAwesomeIcons.rightFromBracket,
                 size: 20,
               ),
@@ -118,20 +117,20 @@ class ActionMenu extends StatelessWidget {
                 context: context,
                 builder: (_) => AlertDialog(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25.0),
+                    borderRadius: BorderRadius.circular(25),
                   ),
-                  elevation: 5.0,
-                  title: Text("Sign Out"),
-                  content: Text(
+                  elevation: 5,
+                  title: const Text('Sign Out'),
+                  content: const Text(
                     "Are you sure you'd like to sign out?",
                   ),
                   actions: [
                     TextButton(
-                      child: Text("Cancel"),
                       onPressed: Navigator.of(context).pop,
+                      child: const Text('Cancel'),
                     ),
                     TextButton(
-                      child: Text("Continue"),
+                      child: const Text('Continue'),
                       onPressed: () {
                         context.read<SettingsCubit>().logout();
                         Navigator.pop(context);
@@ -142,7 +141,7 @@ class ActionMenu extends StatelessWidget {
                 ),
               ),
             ),
-            Divider(),
+            const Divider(),
           ],
         );
       },

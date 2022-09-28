@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
-import 'package:intheloopapp/domains/models/user_model.dart';
 
 class BadgeReceiverTextField extends StatefulWidget {
   const BadgeReceiverTextField({
@@ -29,28 +28,28 @@ class _BadgeReceiverTextFieldState extends State<BadgeReceiverTextField> {
     return BlocSelector<AuthenticationBloc, AuthenticationState, Authenticated>(
       selector: (state) => state as Authenticated,
       builder: (context, state) {
-        UserModel currentUser = state.currentUser;
+        final currentUser = state.currentUser;
         return TextFormField(
           inputFormatters: [
-            FilteringTextInputFormatter.allow(RegExp(r"[a-z0-9_\.\-\$]")),
+            FilteringTextInputFormatter.allow(RegExp(r'[a-z0-9_\.\-\$]')),
           ],
           initialValue: widget.initialValue,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             prefixIcon: Icon(Icons.person),
             labelText: 'Recipient',
             hintText: "who's getting the badge?",
           ),
           validator: (input) {
             if (input!.trim().length < 2) {
-              return "please enter a valid name";
+              return 'please enter a valid name';
             }
 
             if (!_usernameExists) {
-              return "user does not exist";
+              return 'user does not exist';
             }
 
             if (input == currentUser.username) {
-              return "cannot send badges to yourself";
+              return 'cannot send badges to yourself';
             }
 
             return null;
@@ -58,9 +57,9 @@ class _BadgeReceiverTextFieldState extends State<BadgeReceiverTextField> {
           onSaved: (input) async {
             if (input == null || input.isEmpty) return;
 
-            DatabaseRepository databaseRepo =
+            final databaseRepo =
                 RepositoryProvider.of<DatabaseRepository>(context);
-            UserModel? receiver = await databaseRepo.getUserByUsername(input);
+            final receiver = await databaseRepo.getUserByUsername(input);
             setState(() {
               _usernameExists = receiver == null ? false : true;
             });
@@ -74,9 +73,9 @@ class _BadgeReceiverTextFieldState extends State<BadgeReceiverTextField> {
 
             input = input.trim().toLowerCase();
 
-            DatabaseRepository databaseRepo =
+            final databaseRepo =
                 RepositoryProvider.of<DatabaseRepository>(context);
-            UserModel? receiver = await databaseRepo.getUserByUsername(input);
+            final receiver = await databaseRepo.getUserByUsername(input);
             setState(() {
               _usernameExists = receiver == null ? false : true;
             });

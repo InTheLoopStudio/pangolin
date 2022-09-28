@@ -11,7 +11,7 @@ class UserTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    NavigationBloc navigationBloc = BlocProvider.of<NavigationBloc>(context);
+    final navigationBloc = BlocProvider.of<NavigationBloc>(context);
 
     return ListTile(
       leading: UserAvatar(

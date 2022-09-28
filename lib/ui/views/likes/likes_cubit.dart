@@ -10,13 +10,13 @@ class LikesCubit extends Cubit<LikesState> {
   LikesCubit({
     required this.loop,
     required this.databaseRepository,
-  }) : super(LikesState());
+  }) : super(const LikesState());
 
   final Loop loop;
   final DatabaseRepository databaseRepository;
 
   Future<void> initLikes() async {
-    List<UserModel> userLikes = await databaseRepository.getLikes(loop);
+    final userLikes = await databaseRepository.getLikes(loop);
 
     emit(state.copyWith(likes: userLikes));
   }

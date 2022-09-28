@@ -22,7 +22,6 @@ class LoadingView extends StatelessWidget {
           alignment: const Alignment(0, -1 / 4),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -34,10 +33,9 @@ class LoadingView extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 40),
-              SpinKitWave(
+              const SpinKitWave(
                 color: Colors.white,
-                size: 25.0,
-                duration: const Duration(milliseconds: 1200),
+                size: 25,
               ),
             ],
           ),

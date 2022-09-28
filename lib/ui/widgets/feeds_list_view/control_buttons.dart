@@ -5,7 +5,7 @@ import 'package:intheloopapp/ui/views/home/feeds_list/feeds_list_cubit.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/notification_icon_button.dart';
 
 class ControlButtons extends StatelessWidget {
-  ControlButtons({Key? key}) : super(key: key);
+  const ControlButtons({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,13 +13,13 @@ class ControlButtons extends StatelessWidget {
       builder: (context, state) {
         return SafeArea(
           child: Container(
-            padding: EdgeInsets.only(top: 20),
+            padding: const EdgeInsets.only(top: 20),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 25),
                   child: SizedBox.shrink(),
                 ),
                 Container(
@@ -30,31 +30,31 @@ class ControlButtons extends StatelessWidget {
                         child: Text(
                           'Following',
                           style: state.currentIndex == 0
-                              ? TextStyle(
-                                  fontSize: 17.0,
+                              ? const TextStyle(
+                                  fontSize: 17,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 )
-                              : TextStyle(
+                              : const TextStyle(
                                   color: Colors.white,
                                 ),
                         ),
                       ),
-                      SizedBox(width: 15),
+                      const SizedBox(width: 15),
                       GestureDetector(
                           onTap: () => state.pageController.jumpToPage(1),
                           child: Text(
                             'For you',
                             style: state.currentIndex == 1
-                                ? TextStyle(
-                                    fontSize: 17.0,
+                                ? const TextStyle(
+                                    fontSize: 17,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
                                   )
-                                : TextStyle(
+                                : const TextStyle(
                                     color: Colors.white,
                                   ),
-                          ))
+                          ),)
                     ],
                   ),
                 ),
@@ -65,8 +65,8 @@ class ControlButtons extends StatelessWidget {
                   ),
                   child: GestureDetector(
                     onTap: () =>
-                        context.read<NavigationBloc>().add(PushActivity()),
-                    child: NotificationIconButton(),
+                        context.read<NavigationBloc>().add(const PushActivity()),
+                    child: const NotificationIconButton(),
                   ),
                 ),
               ],

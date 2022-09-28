@@ -17,7 +17,7 @@ class Background extends StatelessWidget {
             final playerState = snapshot.data;
 
             if (playerState == null) {
-              return SizedBox.shrink();
+              return const SizedBox.shrink();
             }
 
             final processingState = playerState.processingState;
@@ -36,7 +36,7 @@ class Background extends StatelessWidget {
                   // ),
                   image: DecorationImage(
                     image: state.user.profilePicture.isEmpty
-                        ? AssetImage('assets/default_avatar.png')
+                        ? const AssetImage('assets/default_avatar.png')
                             as ImageProvider
                         : CachedNetworkImageProvider(
                             state.user.profilePicture,

@@ -17,7 +17,7 @@ class ActivityTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ActivityBloc, ActivityState>(
       builder: (context, state) {
-        DatabaseRepository databaseRepository =
+        final databaseRepository =
             context.read<DatabaseRepository>();
 
         if (!activity.markedRead) {
@@ -30,12 +30,12 @@ class ActivityTile extends StatelessWidget {
           future: databaseRepository.getUser(activity.fromUserId),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (!snapshot.hasData) {
-              return SizedBox.shrink();
+              return const SizedBox.shrink();
             } else {
               UserModel user = snapshot.data;
 
               if (user.deleted == true) {
-                return SizedBox.shrink();
+                return const SizedBox.shrink();
               }
 
               return Column(
@@ -60,21 +60,21 @@ class ActivityTile extends StatelessWidget {
                           activity.timestamp,
                           locale: 'en_short',
                         ),
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.grey,
                         ),
                       ),
                       title: Text(
-                        '${user.username}',
+                        user.username,
                       ),
                       subtitle: () {
                         switch (activity.type) {
                           case ActivityType.follow:
-                            return Text('followed you 🤝');
+                            return const Text('followed you 🤝');
                           case ActivityType.like:
-                            return Text('liked your loop ❤️');
+                            return const Text('liked your loop ❤️');
                           case ActivityType.comment:
-                            return Text('commented on your loop 💬');
+                            return const Text('commented on your loop 💬');
                         }
                       }(),
                     ),

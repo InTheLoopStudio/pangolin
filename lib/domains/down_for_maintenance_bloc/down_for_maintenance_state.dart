@@ -5,5 +5,6 @@ class DownForMaintenanceState extends Equatable {
 
   final bool downForMaintenance;
 
+  @override
   List<Object> get props => [downForMaintenance];
 }

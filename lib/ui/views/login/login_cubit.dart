@@ -6,9 +6,9 @@ import 'package:intheloopapp/data/auth_repository.dart';
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  final AuthRepository authRepository;
 
   LoginCubit(this.authRepository) : super(const LoginState());
+  final AuthRepository authRepository;
 
   Future<void> signInWithApple() async {
     emit(

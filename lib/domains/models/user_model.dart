@@ -6,14 +6,86 @@ import 'package:json_annotation/json_annotation.dart';
 part 'user_model.g.dart';
 
 enum AccountType {
-  @JsonValue("venue")
+  @JsonValue('venue')
   Venue,
-  @JsonValue("free")
+  @JsonValue('free')
   Free,
 }
 
 @JsonSerializable()
 class UserModel extends Equatable {
+
+  const UserModel({
+    required this.id,
+    required this.email,
+    required this.username,
+    required this.profilePicture,
+    required this.bio,
+    required this.location,
+    required this.onboarded,
+    required this.loopsCount,
+    required this.badgesCount,
+    required this.deleted,
+    required this.shadowBanned,
+    required this.accountType,
+    required this.youtubeChannelId,
+    required this.soundcloudHandle,
+    required this.tiktokHandle,
+    required this.instagramHandle,
+    required this.twitterHandle,
+    required this.pushNotificationsLikes,
+    required this.pushNotificationsComments,
+    required this.pushNotificationsFollows,
+    required this.pushNotificationsDirectMessages,
+    required this.pushNotificationsITLUpdates,
+    required this.emailNotificationsAppReleases,
+    required this.emailNotificationsITLUpdates,
+  });
+
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
+
+  factory UserModel.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
+    late final AccountType accountType;
+    try {
+      accountType = $enumDecode(
+          _$AccountTypeEnumMap, doc.getOrElse('accountType', 'free'),);
+    } on ArgumentError {
+      accountType = AccountType.Free;
+    }
+
+    return UserModel(
+      id: doc.id,
+      email: doc.getOrElse('email', ''),
+      username: doc.getOrElse('username', 'anonymous'),
+      profilePicture: doc.getOrElse('profilePicture', ''),
+      bio: doc.getOrElse('bio', ''),
+      location: doc.getOrElse('location', 'Global'),
+      onboarded: doc.getOrElse('onboarded', false),
+      loopsCount: doc.getOrElse('loopsCount', 0),
+      badgesCount: doc.getOrElse('badgesCount', 0),
+      deleted: doc.getOrElse('deleted', false),
+      shadowBanned: doc.getOrElse('shadowBanned', false),
+      accountType: accountType,
+      youtubeChannelId: doc.getOrElse('youtubeChannelId', ''),
+      soundcloudHandle: doc.getOrElse('soundcloudHandle', ''),
+      tiktokHandle: doc.getOrElse('tiktokHandle', ''),
+      instagramHandle: doc.getOrElse('instagramHandle', ''),
+      twitterHandle: doc.getOrElse('twitterHandle', ''),
+      pushNotificationsLikes: doc.getOrElse('pushNotificationsLikes', true),
+      pushNotificationsComments:
+          doc.getOrElse('pushNotificationsComments', true),
+      pushNotificationsFollows: doc.getOrElse('pushNotificationsFollows', true),
+      pushNotificationsDirectMessages:
+          doc.getOrElse('pushNotificationsDirectMessages', true),
+      pushNotificationsITLUpdates:
+          doc.getOrElse('pushNotificationsITLUpdates', true),
+      emailNotificationsAppReleases:
+          doc.getOrElse('emailNotificationsAppReleases', true),
+      emailNotificationsITLUpdates:
+          doc.getOrElse('emailNotificationsITLUpdates', true),
+    );
+  }
   final String id;
   final String email;
   final String username;
@@ -42,61 +114,35 @@ class UserModel extends Equatable {
   final bool emailNotificationsAppReleases;
   final bool emailNotificationsITLUpdates;
 
-  UserModel({
-    required this.id,
-    required this.email,
-    required this.username,
-    required this.profilePicture,
-    required this.bio,
-    required this.location,
-    required this.onboarded,
-    required this.loopsCount,
-    required this.badgesCount,
-    required this.deleted,
-    required this.shadowBanned,
-    required this.accountType,
-    required this.youtubeChannelId,
-    required this.soundcloudHandle,
-    required this.tiktokHandle,
-    required this.instagramHandle,
-    required this.twitterHandle,
-    required this.pushNotificationsLikes,
-    required this.pushNotificationsComments,
-    required this.pushNotificationsFollows,
-    required this.pushNotificationsDirectMessages,
-    required this.pushNotificationsITLUpdates,
-    required this.emailNotificationsAppReleases,
-    required this.emailNotificationsITLUpdates,
-  });
-
+  @override
   List<Object> get props => [
-        this.id,
-        this.email,
-        this.username,
-        this.profilePicture,
-        this.bio,
-        this.location,
-        this.onboarded,
-        this.loopsCount,
-        this.badgesCount,
-        this.deleted,
-        this.shadowBanned,
-        this.accountType,
-        this.youtubeChannelId,
-        this.soundcloudHandle,
-        this.tiktokHandle,
-        this.instagramHandle,
-        this.twitterHandle,
-        this.pushNotificationsLikes,
-        this.pushNotificationsComments,
-        this.pushNotificationsFollows,
-        this.pushNotificationsDirectMessages,
-        this.pushNotificationsITLUpdates,
-        this.emailNotificationsAppReleases,
-        this.emailNotificationsITLUpdates,
+        id,
+        email,
+        username,
+        profilePicture,
+        bio,
+        location,
+        onboarded,
+        loopsCount,
+        badgesCount,
+        deleted,
+        shadowBanned,
+        accountType,
+        youtubeChannelId,
+        soundcloudHandle,
+        tiktokHandle,
+        instagramHandle,
+        twitterHandle,
+        pushNotificationsLikes,
+        pushNotificationsComments,
+        pushNotificationsFollows,
+        pushNotificationsDirectMessages,
+        pushNotificationsITLUpdates,
+        emailNotificationsAppReleases,
+        emailNotificationsITLUpdates,
       ];
 
-  static UserModel get empty => UserModel(
+  static UserModel get empty => const UserModel(
         id: '',
         email: '',
         username: 'anonymous',
@@ -124,9 +170,6 @@ class UserModel extends Equatable {
       );
   bool get isEmpty => this == UserModel.empty;
   bool get isNotEmpty => this != UserModel.empty;
-
-  factory UserModel.fromJson(Map<String, dynamic> json) =>
-      _$UserModelFromJson(json);
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
   UserModel copyWith(
@@ -153,7 +196,7 @@ class UserModel extends Equatable {
       bool? pushNotificationsDirectMessages,
       bool? pushNotificationsITLUpdates,
       bool? emailNotificationsAppReleases,
-      bool? emailNotificationsITLUpdates}) {
+      bool? emailNotificationsITLUpdates,}) {
     return UserModel(
       id: id ?? this.id,
       email: email ?? this.email,
@@ -189,74 +232,32 @@ class UserModel extends Equatable {
     );
   }
 
-  factory UserModel.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
-    late final accountType;
-    try {
-      accountType = $enumDecode(
-          _$AccountTypeEnumMap, doc.getOrElse('accountType', 'free'));
-    } on ArgumentError {
-      accountType = AccountType.Free;
-    }
-
-    return UserModel(
-      id: doc.id,
-      email: doc.getOrElse('email', ''),
-      username: doc.getOrElse('username', 'anonymous'),
-      profilePicture: doc.getOrElse('profilePicture', ''),
-      bio: doc.getOrElse('bio', ''),
-      location: doc.getOrElse('location', 'Global'),
-      onboarded: doc.getOrElse('onboarded', false),
-      loopsCount: doc.getOrElse('loopsCount', 0),
-      badgesCount: doc.getOrElse('badgesCount', 0),
-      deleted: doc.getOrElse('deleted', false),
-      shadowBanned: doc.getOrElse('shadowBanned', false),
-      accountType: accountType,
-      youtubeChannelId: doc.getOrElse('youtubeChannelId', ""),
-      soundcloudHandle: doc.getOrElse('soundcloudHandle', ""),
-      tiktokHandle: doc.getOrElse('tiktokHandle', ""),
-      instagramHandle: doc.getOrElse('instagramHandle', ""),
-      twitterHandle: doc.getOrElse('twitterHandle', ""),
-      pushNotificationsLikes: doc.getOrElse('pushNotificationsLikes', true),
-      pushNotificationsComments:
-          doc.getOrElse('pushNotificationsComments', true),
-      pushNotificationsFollows: doc.getOrElse('pushNotificationsFollows', true),
-      pushNotificationsDirectMessages:
-          doc.getOrElse('pushNotificationsDirectMessages', true),
-      pushNotificationsITLUpdates:
-          doc.getOrElse('pushNotificationsITLUpdates', true),
-      emailNotificationsAppReleases:
-          doc.getOrElse('emailNotificationsAppReleases', true),
-      emailNotificationsITLUpdates:
-          doc.getOrElse('emailNotificationsITLUpdates', true),
-    );
-  }
-
   Map<String, dynamic> toMap() {
     return {
-      'id': this.id,
-      'email': this.email,
-      'username': this.username,
-      'bio': this.bio,
-      'profilePicture': this.profilePicture,
-      'location': this.location,
-      'onboarded': this.onboarded,
-      'loopsCount': this.loopsCount,
-      'badgesCount': this.badgesCount,
-      'deleted': this.deleted,
-      'shadowBanned': this.shadowBanned,
-      'accountType': _$AccountTypeEnumMap[this.accountType],
-      'youtubeChannelId': this.youtubeChannelId,
-      'soundcloudHandle': this.soundcloudHandle,
-      'tiktokHandle': this.tiktokHandle,
-      'instagramHandle': this.instagramHandle,
-      'twitterHandle': this.twitterHandle,
-      'pushNotificationsLikes': this.pushNotificationsLikes,
-      'pushNotificationsComments': this.pushNotificationsComments,
-      'pushNotificationsFollows': this.pushNotificationsFollows,
-      'pushNotificationsDirectMessages': this.pushNotificationsDirectMessages,
-      'pushNotificationsITLUpdates': this.pushNotificationsITLUpdates,
-      'emailNotificationsAppReleases': this.emailNotificationsAppReleases,
-      'emailNotificationsITLUpdates': this.emailNotificationsITLUpdates,
+      'id': id,
+      'email': email,
+      'username': username,
+      'bio': bio,
+      'profilePicture': profilePicture,
+      'location': location,
+      'onboarded': onboarded,
+      'loopsCount': loopsCount,
+      'badgesCount': badgesCount,
+      'deleted': deleted,
+      'shadowBanned': shadowBanned,
+      'accountType': _$AccountTypeEnumMap[accountType],
+      'youtubeChannelId': youtubeChannelId,
+      'soundcloudHandle': soundcloudHandle,
+      'tiktokHandle': tiktokHandle,
+      'instagramHandle': instagramHandle,
+      'twitterHandle': twitterHandle,
+      'pushNotificationsLikes': pushNotificationsLikes,
+      'pushNotificationsComments': pushNotificationsComments,
+      'pushNotificationsFollows': pushNotificationsFollows,
+      'pushNotificationsDirectMessages': pushNotificationsDirectMessages,
+      'pushNotificationsITLUpdates': pushNotificationsITLUpdates,
+      'emailNotificationsAppReleases': emailNotificationsAppReleases,
+      'emailNotificationsITLUpdates': emailNotificationsITLUpdates,
     };
   }
 }

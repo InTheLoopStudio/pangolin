@@ -19,39 +19,37 @@ class DeleteAccountButton extends StatelessWidget {
             context: context,
             builder: (_) => AlertDialog(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25.0),
+                borderRadius: BorderRadius.circular(25),
               ),
-              elevation: 5.0,
-              title: Text('Reauthenticate'),
+              elevation: 5,
+              title: const Text('Reauthenticate'),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: state.status.isSubmissionInProgress
-                    ? [CircularProgressIndicator()]
+                    ? [const CircularProgressIndicator()]
                     : [
-                        Text(
+                        const Text(
                           'Warning: this cannot be undone',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(height: 20.0),
+                        const SizedBox(height: 20),
                         GoogleLoginButton(
                           onPressed:
                               context.read<SettingsCubit>().reauthWithGoogle,
                         ),
-                        const SizedBox(height: 10.0),
-                        Platform.isIOS
-                            ? AppleLoginButton(
+                        const SizedBox(height: 10),
+                        if (Platform.isIOS) AppleLoginButton(
                                 onPressed: context
                                     .read<SettingsCubit>()
                                     .reauthWithApple,
-                              )
-                            : SizedBox.shrink(),
+                              ) else const SizedBox.shrink(),
                       ],
               ),
               actions: [
                 TextButton(
-                  child: Text("Cancel"),
                   onPressed: Navigator.of(context).pop,
+                  child: const Text('Cancel'),
                 )
               ],
             ),

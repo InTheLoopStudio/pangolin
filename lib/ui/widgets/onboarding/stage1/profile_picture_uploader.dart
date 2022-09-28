@@ -16,7 +16,7 @@ class ProfilePictureUploader extends StatelessWidget {
   ) {
     if (newProfileImage == null) {
       if (currentProfileImage.isEmpty) {
-        return AssetImage('assets/default_avatar.png');
+        return const AssetImage('assets/default_avatar.png');
       } else {
         return CachedNetworkImageProvider(currentProfileImage);
       }
@@ -27,7 +27,7 @@ class ProfilePictureUploader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthRepository authRepo = RepositoryProvider.of<AuthRepository>(context);
+    final authRepo = RepositoryProvider.of<AuthRepository>(context);
 
     return StreamBuilder<UserModel>(
       stream: authRepo.user,
@@ -60,7 +60,7 @@ class ProfilePictureUploader extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
+                          children: const [
                             Icon(
                               Icons.camera_alt,
                               size: 50,

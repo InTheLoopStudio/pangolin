@@ -12,7 +12,7 @@ class LoopSeekBar extends StatelessWidget {
     return BlocBuilder<LoopViewCubit, LoopViewState>(
       builder: (context, state) {
         return Expanded(
-          child: Container(
+          child: SizedBox(
             height: 50,
             child: StreamBuilder<Duration?>(
               stream: state.audioController.player.durationStream,
@@ -23,7 +23,7 @@ class LoopSeekBar extends StatelessWidget {
                       state.audioController.player.positionStream,
                       state.audioController.player.bufferedPositionStream,
                       (position, bufferedPosition) =>
-                          PositionData(position, bufferedPosition)),
+                          PositionData(position, bufferedPosition),),
                   builder: (context, snapshot) {
                     final positionData = snapshot.data ??
                         PositionData(Duration.zero, Duration.zero);

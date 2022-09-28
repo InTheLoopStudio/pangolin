@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:stream_chat_flutter/src/extension.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
-import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
 /// It shows the current [Channel] name using a [Text] widget.
 ///
@@ -61,7 +59,7 @@ class ChannelName extends StatelessWidget {
             return const SizedBox.shrink();
           }
 
-          List<UserModel> userMembers = snapshot.data!;
+          final userMembers = snapshot.data!;
 
           return LayoutBuilder(
             builder: (context, constraints) {
@@ -78,13 +76,13 @@ class ChannelName extends StatelessWidget {
                   final maxChars = maxWidth / (textStyle?.fontSize ?? 1);
                   var currentChars = 0;
                   final currentMembers = <UserModel>[];
-                  otherMembers.forEach((element) {
+                  for (final element in otherMembers) {
                     final newLength = currentChars + (element.username.length);
                     if (newLength < maxChars) {
                       currentChars = newLength;
                       currentMembers.add(element);
                     }
-                  });
+                  }
 
                   final exceedingMembers =
                       otherMembers.length - currentMembers.length;

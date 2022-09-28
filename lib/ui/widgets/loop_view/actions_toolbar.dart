@@ -11,32 +11,32 @@ import 'package:intheloopapp/ui/widgets/loop_view/social_action_button.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ActionsToolbar extends StatelessWidget {
-  final UserModel user;
-  final Loop loop;
 
-  ActionsToolbar({
+  const ActionsToolbar({
     Key? key,
     required this.user,
     required this.loop,
   }) : super(key: key);
+  final UserModel user;
+  final Loop loop;
 
-  static const double ActionWidgetSize = 60.0;
-  static const double ActionIconSize = 35.0;
-  static const double ProfileImageSize = 50.0;
-  static const double PlusIconSize = 20.0;
+  static const double ActionWidgetSize = 60;
+  static const double ActionIconSize = 35;
+  static const double ProfileImageSize = 50;
+  static const double PlusIconSize = 20;
 
   @override
   Widget build(BuildContext context) {
-    DynamicLinkRepository dynamicLinkRepository =
+    final dynamicLinkRepository =
         RepositoryProvider.of<DynamicLinkRepository>(context);
     return BlocBuilder<LoopViewCubit, LoopViewState>(
       builder: (context, state) {
-        return Container(
+        return SizedBox(
           width: 100,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              FollowActionButton(),
+              const FollowActionButton(),
               SocialActionButton(
                 icon: state.isLiked
                     ? CupertinoIcons.heart_fill
@@ -62,9 +62,9 @@ class ActionsToolbar extends StatelessWidget {
                 color: Colors.grey[300],
                 onTap: () async {
                   context.read<LoopViewCubit>().incrementShares();
-                  final String link =
+                  final link =
                       await dynamicLinkRepository.getShareLoopDynamicLink(loop);
-                  Share.share('Check out this loop on In The Loop $link');
+                  await Share.share('Check out this loop on In The Loop $link');
                 },
               ),
             ],

@@ -17,12 +17,12 @@ class YoutubeTextField extends StatelessWidget {
     return TextFormField(
       inputFormatters: [
         // is able to enter lowercase letters
-        FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z0-9_\.\-\$]")),
+        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9_\.\-\$]')),
       ],
       initialValue: initialValue,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         prefixIcon: Icon(FontAwesomeIcons.youtube),
-        prefixText: "youtube.com/channel/",
+        prefixText: 'youtube.com/channel/',
         labelText: 'Youtube Channel',
       ),
       onSaved: (input) {

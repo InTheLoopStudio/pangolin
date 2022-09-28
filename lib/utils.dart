@@ -3,8 +3,8 @@ import 'package:intl/intl.dart';
 
 extension DefaultValue<K, V> on DocumentSnapshot<Map<String, dynamic>> {
   V getOrElse(K key, V defaultValue) {
-    if (this.data() != null && this.data()!.containsKey(key)) {
-      return this.data()![key] ?? defaultValue;
+    if (data() != null && data()!.containsKey(key)) {
+      return data()![key] ?? defaultValue;
     } else {
       return defaultValue;
     }

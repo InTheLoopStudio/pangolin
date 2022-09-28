@@ -14,9 +14,9 @@ class Uninitialized extends AuthenticationState {
 }
 
 class Authenticated extends AuthenticationState {
-  final UserModel currentUser;
 
-  Authenticated(this.currentUser) : super();
+  const Authenticated(this.currentUser) : super();
+  final UserModel currentUser;
 
   @override
   String toString() => 'Authenticated { email: ${currentUser.email} }';

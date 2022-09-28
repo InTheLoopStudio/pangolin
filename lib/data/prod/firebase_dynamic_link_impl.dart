@@ -11,18 +11,18 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
   @override
   Stream<DynamicLinkRedirect> getDynamicLinks() async* {
     // ignore: close_sinks
-    StreamController<DynamicLinkRedirect> dynamicLinkStream =
-        StreamController();
+    final dynamicLinkStream =
+        StreamController<DynamicLinkRedirect>();
 
-    final PendingDynamicLinkData? data = await _dynamicLinks.getInitialLink();
+    final data = await _dynamicLinks.getInitialLink();
 
-    DynamicLinkRedirect? redirect = _handleDeepLink(data);
+    final redirect = _handleDeepLink(data);
     if (redirect != null) {
       dynamicLinkStream.add(redirect);
     }
 
     _dynamicLinks.onLink.listen((PendingDynamicLinkData? dynamicLinkData) async {
-        DynamicLinkRedirect? redirect = _handleDeepLink(dynamicLinkData);
+        final redirect = _handleDeepLink(dynamicLinkData);
 
         if (redirect != null) {
           dynamicLinkStream.add(redirect);
@@ -39,7 +39,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
   DynamicLinkRedirect? _handleDeepLink(
     PendingDynamicLinkData? data,
   ) {
-    final Uri? deepLink = data?.link;
+    final deepLink = data?.link;
     if (deepLink == null) {
       return null;
     }
@@ -48,19 +48,19 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
 
     switch (deepLink.path) {
       case '/upload_loop':
-        return DynamicLinkRedirect(
+        return const DynamicLinkRedirect(
           type: DynamicLinkType.CreatePost,
         );
       case '/user':
-        final Map<String, String> linkParameters = deepLink.queryParameters;
-        final String userId = linkParameters['id'] ?? '';
+        final linkParameters = deepLink.queryParameters;
+        final userId = linkParameters['id'] ?? '';
         return DynamicLinkRedirect(
           type: DynamicLinkType.ShareProfile,
           id: userId,
         );
       case '/loop':
-        final Map<String, String> linkParameters = deepLink.queryParameters;
-        final String loopId = linkParameters['id'] ?? '';
+        final linkParameters = deepLink.queryParameters;
+        final loopId = linkParameters['id'] ?? '';
         return DynamicLinkRedirect(
           type: DynamicLinkType.ShareLoop,
           id: loopId,
@@ -72,15 +72,15 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
 
   @override
   Future<String> getShareLoopDynamicLink(Loop loop) async {
-    final DynamicLinkParameters parameters = DynamicLinkParameters(
+    final parameters = DynamicLinkParameters(
       uriPrefix: 'https://intheloopstudio.page.link',
       link: Uri.parse(
         'https://intheloopstudio.com/loop?id=${loop.id}',
       ),
-      androidParameters: AndroidParameters(
+      androidParameters: const AndroidParameters(
         packageName: 'com.intheloopstudio',
       ),
-      iosParameters: IOSParameters(
+      iosParameters: const IOSParameters(
         bundleId: 'com.intheloopstudio',
       ),
       socialMetaTagParameters: SocialMetaTagParameters(
@@ -90,21 +90,21 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
       ),
     );
 
-    final ShortDynamicLink shortDynamicLink = await _dynamicLinks.buildShortLink(parameters);
-    final Uri shortUrl = shortDynamicLink.shortUrl;
+    final shortDynamicLink = await _dynamicLinks.buildShortLink(parameters);
+    final shortUrl = shortDynamicLink.shortUrl;
 
     return shortUrl.toString();
   }
 
   @override
   Future<String> getShareProfileDynamicLink(UserModel user) async {
-    final DynamicLinkParameters parameters = DynamicLinkParameters(
+    final parameters = DynamicLinkParameters(
       uriPrefix: 'https://intheloopstudio.page.link',
       link: Uri.parse('https://intheloopstudio.com/user?id=${user.id}'),
-      androidParameters: AndroidParameters(
+      androidParameters: const AndroidParameters(
         packageName: 'com.intheloopstudio',
       ),
-      iosParameters: IOSParameters(
+      iosParameters: const IOSParameters(
         bundleId: 'com.intheloopstudio',
       ),
       socialMetaTagParameters: SocialMetaTagParameters(
@@ -114,8 +114,8 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
       ),
     );
 
-    final ShortDynamicLink shortDynamicLink = await _dynamicLinks.buildShortLink(parameters);
-    final Uri shortUrl = shortDynamicLink.shortUrl;
+    final shortDynamicLink = await _dynamicLinks.buildShortLink(parameters);
+    final shortUrl = shortDynamicLink.shortUrl;
 
     return shortUrl.toString();
   }

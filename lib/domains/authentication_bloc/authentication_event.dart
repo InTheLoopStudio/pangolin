@@ -14,9 +14,9 @@ class AppStarted extends AuthenticationEvent {
 }
 
 class LoggedIn extends AuthenticationEvent {
-  final UserModel? user;
 
-  LoggedIn({this.user});
+  const LoggedIn({this.user});
+  final UserModel? user;
 
   @override
   String toString() => 'LoggedIn { user: ${user?.email ?? ''} }';
@@ -26,9 +26,9 @@ class LoggedIn extends AuthenticationEvent {
 }
 
 class UpdateAuthenticatedUser extends AuthenticationEvent {
-  final UserModel user;
 
-  UpdateAuthenticatedUser(this.user);
+  const UpdateAuthenticatedUser(this.user);
+  final UserModel user;
 
   @override
   String toString() => 'UpdateAuthenticatedUser { user: ${user.email} }';

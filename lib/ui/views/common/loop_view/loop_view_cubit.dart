@@ -29,7 +29,7 @@ class LoopViewCubit extends Cubit<LoopViewState> {
           ),
         );
 
-  String get audioLockId => "${this.feedId}-${this.loop.id}";
+  String get audioLockId => '$feedId-${loop.id}';
 
   final DatabaseRepository databaseRepository;
   final UserModel currentUser;
@@ -45,7 +45,7 @@ class LoopViewCubit extends Cubit<LoopViewState> {
     state.audioController.pause();
     state.audioController.dispose();
     audioLock.removeListener(audioLockListener);
-    super.close();
+    await super.close();
   }
 
   void nextLoop() {
@@ -101,22 +101,22 @@ class LoopViewCubit extends Cubit<LoopViewState> {
     }
   }
 
-  void unfollowUser() async {
+  Future<void> unfollowUser() async {
     emit(state.copyWith(isFollowing: false));
     await databaseRepository.unfollowUser(currentUser.id, user.id);
   }
 
-  void followUser() async {
+  Future<void> followUser() async {
     emit(state.copyWith(isFollowing: true));
     await databaseRepository.followUser(currentUser.id, user.id);
   }
 
-  void initIsFollowing() async {
+  Future<void> initIsFollowing() async {
     if (currentUser.id == user.id) {
       return;
     }
 
-    bool isFollowingThisUser = await databaseRepository.isFollowingUser(
+    final isFollowingThisUser = await databaseRepository.isFollowingUser(
       currentUser.id,
       user.id,
     );
@@ -124,12 +124,12 @@ class LoopViewCubit extends Cubit<LoopViewState> {
     emit(state.copyWith(isFollowing: isFollowingThisUser));
   }
 
-  void initLoopLikes() async {
-    bool isLiked = await databaseRepository.isLikeLoop(currentUser.id, loop);
+  Future<void> initLoopLikes() async {
+    final isLiked = await databaseRepository.isLikeLoop(currentUser.id, loop);
     emit(state.copyWith(isLiked: isLiked, likesCount: loop.likes));
   }
 
-  void initLoopComments() async {
+  Future<void> initLoopComments() async {
     emit(state.copyWith(commentsCount: loop.comments));
   }
 
@@ -138,14 +138,14 @@ class LoopViewCubit extends Cubit<LoopViewState> {
       emit(state.copyWith(
         isLiked: false,
         likesCount: state.likesCount - 1,
-      ));
+      ),);
 
       await databaseRepository.unlikeLoop(currentUser.id, loop);
     } else {
       emit(state.copyWith(
         isLiked: true,
         likesCount: state.likesCount + 1,
-      ));
+      ),);
 
       await databaseRepository.likeLoop(currentUser.id, loop);
     }

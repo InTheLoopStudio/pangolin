@@ -90,7 +90,7 @@ class OnboardingState extends Equatable {
       followingJohannes: followingJohannes ?? this.followingJohannes,
       followingChris: followingChris ?? this.followingChris,
       followingIlias: followingIlias ?? this.followingIlias,
-      formKey: this.formKey,
+      formKey: formKey,
     );
   }
 }

@@ -60,7 +60,7 @@ class _AllLoopsListState extends State<AllLoopsList> {
 
           case ProfileStatus.success:
             if (state.userLoops.isEmpty || state.visitedUser.deleted == true) {
-              return EasterEggPlaceholder(text: 'No Posts');
+              return const EasterEggPlaceholder(text: 'No Posts');
             }
 
             return SingleChildScrollView(
@@ -71,10 +71,10 @@ class _AllLoopsListState extends State<AllLoopsList> {
                     children: [
                       ListView.builder(
                         shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
                           return index >= state.userLoops.length
-                              ? Center(
+                              ? const Center(
                                   child: SizedBox(
                                     height: 24,
                                     width: 24,
@@ -106,7 +106,7 @@ class _AllLoopsListState extends State<AllLoopsList> {
             );
 
           default:
-            return EasterEggPlaceholder(text: 'Waiting for New Loops...');
+            return const EasterEggPlaceholder(text: 'Waiting for New Loops...');
         }
       },
     );

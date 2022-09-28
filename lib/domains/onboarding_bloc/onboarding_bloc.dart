@@ -8,7 +8,7 @@ part 'onboarding_state.dart';
 class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
   OnboardingBloc() : super(OnboardingInitial()) {
     on<OnboardingCheck>((event, emit) {
-      UserModel user = event.user; 
+      final user = event.user; 
       if (user.onboarded == false) {
         emit(Onboarding());
       } else {

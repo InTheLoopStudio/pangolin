@@ -12,11 +12,10 @@ class ResultsList extends StatelessWidget {
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
         if (state.loading) {
-          return Center(
+          return const Center(
             child: SpinKitWave(
               color: Colors.white,
-              size: 25.0,
-              duration: const Duration(milliseconds: 1200),
+              size: 25,
             ),
           );
         }
@@ -25,7 +24,7 @@ class ResultsList extends StatelessWidget {
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: const [
                 Icon(Icons.search, size: 200),
                 Text(
                   'Search',
@@ -38,7 +37,7 @@ class ResultsList extends StatelessWidget {
             ),
           );
         } else if (state.searchResults.isEmpty) {
-          return Center(
+          return const Center(
             child: Text('No users found'),
           );
         } else {

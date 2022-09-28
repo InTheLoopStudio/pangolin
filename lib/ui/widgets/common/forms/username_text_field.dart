@@ -32,21 +32,21 @@ class _UsernameTextFieldState extends State<UsernameTextField> {
   Widget build(BuildContext context) {
     return TextFormField(
       inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(r"[a-z0-9_\.\-\$]")),
+        FilteringTextInputFormatter.allow(RegExp(r'[a-z0-9_\.\-\$]')),
       ],
       initialValue: widget.initialValue,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         prefixIcon: Icon(Icons.person),
         labelText: 'Handle',
         hintText: 'tapped_network',
       ),
       validator: (input) {
         if (input!.trim().length < 2) {
-          return "please enter a valid handle";
+          return 'please enter a valid handle';
         }
 
         if (_usernameTaken) {
-          return "handle already in use";
+          return 'handle already in use';
         }
 
         return null;
@@ -72,9 +72,9 @@ class _UsernameTextFieldState extends State<UsernameTextField> {
         if (input.isEmpty) return;
 
         input = input.trim().toLowerCase();
-        DatabaseRepository databaseRepo =
+        final databaseRepo =
             RepositoryProvider.of<DatabaseRepository>(context);
-        bool available =
+        final available =
             await databaseRepo.checkUsernameAvailability(input, _currentUserId);
         setState(() {
           _usernameTaken = !available;

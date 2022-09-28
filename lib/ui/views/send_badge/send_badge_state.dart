@@ -35,8 +35,8 @@ class SendBadgeState extends Equatable {
       badgeImage: badgeImage ?? this.badgeImage,
       receiverUsername: receiverUsername ?? this.receiverUsername,
       status: status ?? this.status,
-      formKey: this.formKey,
-      picker: this.picker,
+      formKey: formKey,
+      picker: picker,
     );
   }
 }

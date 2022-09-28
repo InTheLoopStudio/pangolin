@@ -16,9 +16,9 @@ class Stage1 extends StatelessWidget {
     return StreamBuilder<UserModel>(
       stream: RepositoryProvider.of<AuthRepository>(context).user,
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return CircularProgressIndicator();
+        if (!snapshot.hasData) return const CircularProgressIndicator();
 
-        UserModel currentUser = snapshot.data!;
+        final currentUser = snapshot.data!;
 
         return BlocBuilder<OnboardingCubit, OnboardingState>(
           builder: (context, state) {
@@ -33,8 +33,8 @@ class Stage1 extends StatelessWidget {
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SizedBox(height: 100),
+                        children: const [
+                          SizedBox(height: 100),
                           Text(
                             'Complete Your Profile',
                             style: TextStyle(
@@ -67,7 +67,7 @@ class Stage1 extends StatelessWidget {
                             .bioChange(input ?? ''),
                       ),
                       const SizedBox(height: 50),
-                      ProfilePictureUploader(),
+                      const ProfilePictureUploader(),
                     ],
                   ),
                 ),

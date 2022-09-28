@@ -11,7 +11,7 @@ class LoopTitle extends StatelessWidget {
       builder: (context, state) {
         return Text(
           state.loop.title,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.bold,
           ),

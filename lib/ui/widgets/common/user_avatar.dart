@@ -23,7 +23,7 @@ class UserAvatar extends StatelessWidget {
       maxRadius: maxRadius,
       backgroundImage:
           (backgroundImageUrl == null || backgroundImageUrl!.isEmpty)
-              ? AssetImage('assets/default_avatar.png') as ImageProvider
+              ? const AssetImage('assets/default_avatar.png') as ImageProvider
               : CachedNetworkImageProvider(
                   backgroundImageUrl!,
                 ),

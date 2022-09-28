@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/material.dart';
 
 class ConnectivityStatus extends StatelessWidget {
   const ConnectivityStatus({Key? key}) : super(key: key);
@@ -11,7 +11,7 @@ class ConnectivityStatus extends StatelessWidget {
         builder: (context, snapshot) {
           if (!snapshot.hasData) return const SizedBox.shrink();
 
-          ConnectivityResult status = snapshot.data!;
+          final status = snapshot.data!;
 
           return status == ConnectivityResult.none
               ? Container(
@@ -24,19 +24,17 @@ class ConnectivityStatus extends StatelessWidget {
                     boxShadow: const [
                       BoxShadow(
                         color: Colors.grey,
-                        offset: Offset.zero,
-                        blurRadius: 1.0,
-                        spreadRadius: 0.0,
+                        blurRadius: 1,
                       ),
                     ],
                   ),
                   child: const Text(
-                    "Offline",
+                    'Offline',
                     style: TextStyle(color: Colors.white, fontSize: 18),
                     textAlign: TextAlign.center,
                   ),
                 )
               : const SizedBox.shrink();
-        });
+        },);
   }
 }

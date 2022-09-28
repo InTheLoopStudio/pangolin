@@ -18,37 +18,37 @@ class Themes {
     // selected color
     primaryColor: primaryColor,
 
-    colorScheme: ColorScheme.light().copyWith(
+    colorScheme: const ColorScheme.light().copyWith(
       primary: primaryColor,
       secondary: secondaryColor,
       background: backgroundLightColor,
     ),
 
     // floating action button
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: primaryColor,
       foregroundColor: Colors.white,
     ),
 
     // bottom bar
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: navigationBarLightColor,
       selectedItemColor: primaryColor,
       unselectedItemColor: Colors.black,
     ),
     // switch active color
     canvasColor: backgroundLightColor,
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       backgroundColor: tappedAccent,
       foregroundColor: Colors.black,
     ),
 
-    sliderTheme: SliderThemeData(
+    sliderTheme: const SliderThemeData(
       activeTrackColor: tappedAccent,
       inactiveTrackColor: tappedAccent,
       thumbColor: tappedAccent,
-      thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6.0),
-      trackHeight: 2.0,
+      thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6),
+      trackHeight: 2,
     ),
   );
 
@@ -56,34 +56,34 @@ class Themes {
     backgroundColor: backgroundDarkColor,
     // selected color
     primaryColor: primaryColor,
-    colorScheme: ColorScheme.dark().copyWith(
+    colorScheme: const ColorScheme.dark().copyWith(
       primary: primaryColor,
       secondary: secondaryColor,
       background: backgroundDarkColor,
     ),
     // floating action button
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: primaryColor,
       foregroundColor: Colors.white,
     ),
     // bottom bar
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: navigationBarDarkColor,
       selectedItemColor: primaryColor,
       unselectedItemColor: Colors.white,
     ),
     // switch active color
     canvasColor: backgroundDarkColor,
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       backgroundColor: navigationBarDarkColor,
     ),
 
-    sliderTheme: SliderThemeData(
+    sliderTheme: const SliderThemeData(
       activeTrackColor: tappedAccent,
       inactiveTrackColor: tappedAccent,
       thumbColor: tappedAccent,
-      thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6.0),
-      trackHeight: 2.0,
+      thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6),
+      trackHeight: 2,
     ),
   );
 }

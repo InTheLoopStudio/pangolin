@@ -11,10 +11,10 @@ class ChangeProfileImage extends StatelessWidget {
   const ChangeProfileImage({Key? key}) : super(key: key);
 
   ImageProvider displayProfileImage(
-      File? newProfileImage, String currentProfileImage) {
+      File? newProfileImage, String currentProfileImage,) {
     if (newProfileImage == null) {
       if (currentProfileImage.isEmpty) {
-        return AssetImage('assets/default_avatar.png');
+        return const AssetImage('assets/default_avatar.png');
       } else {
         return CachedNetworkImageProvider(currentProfileImage);
       }
@@ -25,15 +25,15 @@ class ChangeProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthRepository authRepo = RepositoryProvider.of<AuthRepository>(context);
+    final authRepo = RepositoryProvider.of<AuthRepository>(context);
     return StreamBuilder<UserModel>(
       stream: authRepo.user,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
 
-        UserModel user = snapshot.data!;
+        final user = snapshot.data!;
 
         return BlocBuilder<SettingsCubit, SettingsState>(
           builder: (context, state) {
@@ -45,7 +45,7 @@ class ChangeProfileImage extends StatelessWidget {
                   CircleAvatar(
                     radius: 45,
                     backgroundImage: displayProfileImage(
-                        state.profileImage, user.profilePicture),
+                        state.profileImage, user.profilePicture,),
                   ),
                   CircleAvatar(
                     radius: 45,
@@ -53,7 +53,7 @@ class ChangeProfileImage extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
+                      children: const [
                         Icon(
                           Icons.camera_alt,
                           size: 50,

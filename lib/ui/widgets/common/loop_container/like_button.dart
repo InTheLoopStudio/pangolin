@@ -16,7 +16,7 @@ class LikeButton extends StatelessWidget {
               context.read<NavigationBloc>().add(PushLikes(state.loop)),
           child: Row(
             children: [
-              const SizedBox(width: 20.0),
+              const SizedBox(width: 20),
               GestureDetector(
                 onTap: () => context.read<LoopContainerCubit>().likeLoop(),
                 child: Icon(
@@ -25,10 +25,10 @@ class LikeButton extends StatelessWidget {
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 5.0),
+              const SizedBox(width: 5),
               Text(
-                state.likesCount.toString() + ' likes',
-                style: TextStyle(
+                '${state.likesCount} likes',
+                style: const TextStyle(
                   fontSize: 10,
                 ),
               )

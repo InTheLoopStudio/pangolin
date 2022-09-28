@@ -14,35 +14,35 @@ class AudioController {
   Future<Duration?> setURL(String url) async {
     try {
       File file = await DefaultCacheManager().getSingleFile(url);
-      Duration? duration = await setAudioFile(file);
+      final duration = await setAudioFile(file);
 
       return duration;
     } on PlayerException catch (e) {
       // iOS/macOS: maps to NSError.code
       // Android: maps to ExoPlayerException.type
       // Web: maps to MediaError.code
-      print("Error code: ${e.code}");
+      print('Error code: ${e.code}');
       // iOS/macOS: maps to NSError.localizedDescription
       // Android: maps to ExoPlaybackException.getMessage()
       // Web: a generic message
-      print("Error message: ${e.message}");
+      print('Error message: ${e.message}');
     } on PlayerInterruptedException catch (e) {
       // This call was interrupted since another audio source was loaded or the
       // player was stopped or disposed before this audio source could complete
       // loading.
-      print("Connection aborted: ${e.message}");
+      print('Connection aborted: ${e.message}');
     } catch (e) {
       // Fallback for all errors
       print(e);
     }
-    Duration? duration = await player.setUrl(url);
+    final duration = await player.setUrl(url);
     return duration!;
   }
 
   Future<Duration?> setAudioFile(File? audioFile) async {
     Duration? duration;
 
-    if (audioFile == null) return Duration();
+    if (audioFile == null) return const Duration();
 
     try {
       duration = await player.setFilePath(audioFile.path);
@@ -50,16 +50,16 @@ class AudioController {
       // iOS/macOS: maps to NSError.code
       // Android: maps to ExoPlayerException.type
       // Web: maps to MediaError.code
-      print("Error code: ${e.code}");
+      print('Error code: ${e.code}');
       // iOS/macOS: maps to NSError.localizedDescription
       // Android: maps to ExoPlaybackException.getMessage()
       // Web: a generic message
-      print("Error message: ${e.message}");
+      print('Error message: ${e.message}');
     } on PlayerInterruptedException catch (e) {
       // This call was interrupted since another audio source was loaded or the
       // player was stopped or disposed before this audio source could complete
       // loading.
-      print("Connection aborted: ${e.message}");
+      print('Connection aborted: ${e.message}');
     } catch (e) {
       // Fallback for all errors
       print(e);

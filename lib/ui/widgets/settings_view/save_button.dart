@@ -18,12 +18,12 @@ class SaveButton extends StatelessWidget {
           child: Container(
             width: 100,
             height: 35,
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: tappedAccent,
             ),
-            child: Center(
+            child: const Center(
               child: Text(
                 'Save',
                 style: TextStyle(

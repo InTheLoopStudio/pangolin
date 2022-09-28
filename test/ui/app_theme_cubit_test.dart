@@ -1,6 +1,6 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:bloc_test/bloc_test.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:path_provider/path_provider.dart';

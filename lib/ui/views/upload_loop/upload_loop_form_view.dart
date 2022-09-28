@@ -7,7 +7,7 @@ import 'package:intheloopapp/ui/widgets/upload_loop_view/title_input.dart';
 import 'package:intheloopapp/ui/widgets/upload_loop_view/upload_button.dart';
 
 class UploadLoopFormView extends StatelessWidget {
-  UploadLoopFormView({Key? key}) : super(key: key);
+  const UploadLoopFormView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,17 +15,17 @@ class UploadLoopFormView extends StatelessWidget {
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
+        title: const Text(
           'Upload Loop',
         ),
         actions: [
           TextButton(
             onPressed: () => context.read<UploadLoopCubit>().cancelUpload(),
-            child: Text('cancel', style: TextStyle(color: Colors.white)),
+            child: const Text('cancel', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
-      floatingActionButton: UploadButton(),
+      floatingActionButton: const UploadButton(),
       body: BlocListener<UploadLoopCubit, UploadLoopState>(
         listener: (context, state) {
           if (state.status.isSubmissionFailure == true) {
@@ -42,15 +42,15 @@ class UploadLoopFormView extends StatelessWidget {
           alignment: const Alignment(0, -1 / 3),
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50.0),
+              padding: const EdgeInsets.symmetric(horizontal: 50),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                children: const [
                   AudioContainer(),
-                  const SizedBox(height: 40),
+                  SizedBox(height: 40),
                   TitleInput(),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
                 ],
               ),
             ),

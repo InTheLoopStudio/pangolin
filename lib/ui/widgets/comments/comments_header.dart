@@ -13,7 +13,7 @@ class CommentsHeader extends StatelessWidget {
       builder: (context, state) {
         return Container(
           height: 50,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20),
@@ -26,8 +26,8 @@ class CommentsHeader extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
-                  state.commentsCount.toString() + ' comments',
-                  style: TextStyle(
+                  '${state.commentsCount} comments',
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -38,8 +38,8 @@ class CommentsHeader extends StatelessWidget {
                 child: Container(
                   height: 45,
                   width: 45,
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  child: Icon(
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  child: const Icon(
                     Icons.cancel,
                     size: 30,
                     color: Colors.white,

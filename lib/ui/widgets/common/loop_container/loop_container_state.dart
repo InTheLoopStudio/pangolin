@@ -31,7 +31,7 @@ class LoopContainerState extends Equatable {
   }) {
     return LoopContainerState(
       loop: loop ?? this.loop,
-      audioController: this.audioController,
+      audioController: audioController,
       likesCount: likesCount ?? this.likesCount,
       isLiked: isLiked ?? this.isLiked,
     );

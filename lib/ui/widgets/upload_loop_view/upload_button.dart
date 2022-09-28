@@ -26,16 +26,16 @@ class UploadButton extends StatelessWidget {
                   minWidth: 120,
                   height: 50,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: [
+                      children: const [
                         Icon(
                           FontAwesomeIcons.upload,
                           color: Colors.white,
                           size: 20,
                         ),
-                        const SizedBox(width: 20.0),
+                        SizedBox(width: 20),
                         Text(
                           'Upload',
                           style: TextStyle(

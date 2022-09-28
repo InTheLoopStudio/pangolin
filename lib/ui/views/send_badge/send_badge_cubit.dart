@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intheloopapp/data/database_repository.dart';
@@ -30,7 +30,7 @@ class SendBadgeCubit extends Cubit<SendBadgeState> {
   void changeReceiverUsername(String? value) =>
       emit(state.copyWith(receiverUsername: value));
 
-  void handleImageFromGallery() async {
+  Future<void> handleImageFromGallery() async {
     try {
       final imageFile =
           await state.picker.pickImage(source: ImageSource.gallery);
@@ -42,7 +42,7 @@ class SendBadgeCubit extends Cubit<SendBadgeState> {
     }
   }
 
-  void sendBadge() async {
+  Future<void> sendBadge() async {
     print(state.formKey);
     if (state.formKey.currentState == null) {
       return;
@@ -61,7 +61,7 @@ class SendBadgeCubit extends Cubit<SendBadgeState> {
           return;
         }
 
-        UserModel? badgeReceiver =
+        final badgeReceiver =
             await databaseRepository.getUserByUsername(state.receiverUsername);
 
         if (badgeReceiver == null) {
@@ -69,14 +69,14 @@ class SendBadgeCubit extends Cubit<SendBadgeState> {
           return;
         }
 
-        String badgeImageUrl = await storageRepository.uploadBadgeImage(
+        final badgeImageUrl = await storageRepository.uploadBadgeImage(
           badgeReceiver.id,
           state.badgeImage!,
         );
 
         // create badge object
-        Badge badge = Badge(
-          id: Uuid().v4(),
+        final badge = Badge(
+          id: const Uuid().v4(),
           senderId: currentUser.id,
           receiverId: badgeReceiver.id,
           imageUrl: badgeImageUrl,
@@ -90,7 +90,7 @@ class SendBadgeCubit extends Cubit<SendBadgeState> {
         print('Error creating badge');
         emit(state.copyWith(status: FormzStatus.submissionFailure));
       } finally {
-        navigationBloc.add(Pop());
+        navigationBloc.add(const Pop());
       }
     }
   }

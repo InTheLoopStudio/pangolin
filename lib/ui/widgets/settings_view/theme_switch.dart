@@ -16,23 +16,23 @@ class ThemeSwitch extends StatelessWidget {
           groupValue: isDark,
           // backgroundColor: Colors.grey[300]!,
           backgroundColor: Theme.of(context).backgroundColor,
-          thumbColor: Color.fromARGB(255, 197, 228, 255),
+          thumbColor: const Color.fromARGB(255, 197, 228, 255),
           onValueChanged: (value) async {
             await context.read<AppThemeCubit>().updateTheme(value! as bool);
           },
           children: {
             false: Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
+                children: const [
                   Icon(
                     FontAwesomeIcons.solidSun,
                     color: tappedAccent,
                   ),
                   Text(
-                    "Light",
+                    'Light',
                     style: TextStyle(
                       color: tappedAccent,
                       fontSize: 14,
@@ -43,16 +43,16 @@ class ThemeSwitch extends StatelessWidget {
             ),
             true: Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
+                children: const [
                   Icon(
                     FontAwesomeIcons.solidMoon,
                     color: tappedAccent,
                   ),
                   Text(
-                    "Dark",
+                    'Dark',
                     style: TextStyle(
                       color: tappedAccent,
                       fontSize: 14,

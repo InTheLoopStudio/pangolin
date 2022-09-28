@@ -12,7 +12,7 @@ class InitListenerEvent extends ActivityEvent {}
 class FetchActivitiesEvent extends ActivityEvent {}
 
 class AddActivityEvent extends ActivityEvent {
-  AddActivityEvent({
+  const AddActivityEvent({
     required this.activity,
   }) : super();
 
@@ -23,7 +23,7 @@ class AddActivityEvent extends ActivityEvent {
 }
 
 class MarkActivityAsReadEvent extends ActivityEvent {
-  MarkActivityAsReadEvent({
+  const MarkActivityAsReadEvent({
     required this.activity,
   }) : super();
 

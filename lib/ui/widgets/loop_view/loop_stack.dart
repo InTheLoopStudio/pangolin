@@ -15,11 +15,11 @@ class LoopStack extends StatelessWidget {
       builder: (context, state) {
         return Stack(
           children: state.loadingLoop
-              ? [LoopLoadingView()]
+              ? [const LoopLoadingView()]
               : [
-                  Background(),
-                  Foreground(),
-                  state.showComments ? CommentsSection() : SizedBox.shrink(),
+                  const Background(),
+                  const Foreground(),
+                  if (state.showComments) const CommentsSection() else const SizedBox.shrink(),
                 ],
         );
       },

@@ -15,29 +15,29 @@ class MessagingChannelListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthRepository authRepo = RepositoryProvider.of<AuthRepository>(context);
+    final authRepo = RepositoryProvider.of<AuthRepository>(context);
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-        title: Center(child: Text('Messaging')),
+        title: const Center(child: Text('Messaging')),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => NewChatView(),
+            builder: (context) => const NewChatView(),
           ),
         ),
-        child: Icon(FontAwesomeIcons.message),
+        child: const Icon(FontAwesomeIcons.message),
       ),
       body: StreamBuilder<UserModel>(
         stream: authRepo.user,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return LoadingView();
+            return const LoadingView();
           }
 
-          UserModel currentUser = snapshot.data!;
+          final currentUser = snapshot.data!;
 
           return StreamChannelListView(
             controller: StreamChannelListController(
@@ -65,7 +65,7 @@ class MessagingChannelListView extends StatelessWidget {
                   builder: (context) {
                     return StreamChannel(
                       channel: channel,
-                      child: ChannelView(),
+                      child: const ChannelView(),
                     );
                   },
                 ),

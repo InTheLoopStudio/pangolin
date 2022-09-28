@@ -17,8 +17,8 @@ class Stage2 extends StatelessWidget {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 100),
+                  children: const [
+                    SizedBox(height: 100),
                     Text(
                       'Follow Recommendations',
                       style: TextStyle(

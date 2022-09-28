@@ -33,7 +33,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
 
-  print("Handling a background message: ${message.messageId}");
+  print('Handling a background message: ${message.messageId}');
 }
 
 Future<void> main() async {
@@ -48,7 +48,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
   // Keep the app in portrait mode (no landscape)
-  SystemChrome.setPreferredOrientations([
+  await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
@@ -79,7 +79,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    initializeDateFormatting('en-US', null);
+    initializeDateFormatting('en-US');
     return MultiRepositoryProvider(
       providers: buildRepositories(streamChatClient: client),
       child: MultiBlocProvider(
@@ -111,21 +111,21 @@ class MyApp extends StatelessWidget {
               builder: (context, widget) {
                 return StreamChat(
                   client: client,
-                  child: widget,
                   streamChatThemeData: streamTheme,
+                  child: widget,
                 );
               },
               home:
                   BlocBuilder<DownForMaintenanceBloc, DownForMaintenanceState>(
                 builder: (context, state) {
                   if (state.downForMaintenance) {
-                    return DownForMainenanceView();
+                    return const DownForMainenanceView();
                   }
 
                   return BlocBuilder<AuthenticationBloc, AuthenticationState>(
                     builder: (BuildContext context, AuthenticationState state) {
                       if (state is Uninitialized) {
-                        return LoadingView();
+                        return const LoadingView();
                       }
                       if (state is Authenticated) {
                         context
@@ -146,23 +146,23 @@ class MyApp extends StatelessWidget {
                         return BlocBuilder<OnboardingBloc, OnboardingState>(
                           builder: (context, state) {
                             if (state is Onboarded) {
-                              return ShellView();
+                              return const ShellView();
                             } else if (state is Onboarding) {
-                              return OnboardingView();
+                              return const OnboardingView();
                             } else if (state is OnboardingInitial) {
-                              return LoadingView();
+                              return const LoadingView();
                             } else {
-                              return LoadingView();
+                              return const LoadingView();
                             }
                           },
                         );
                       }
 
                       if (state is Unauthenticated) {
-                        return LoginView();
+                        return const LoginView();
                       }
 
-                      return LoadingView();
+                      return const LoadingView();
                     },
                   );
                 },

@@ -9,35 +9,37 @@ import 'package:uuid/uuid.dart';
 final storageRef = FirebaseStorage.instance.ref();
 
 class FirebaseStorageImpl extends StorageRepository {
+  @override
   Future<String> uploadProfilePicture(
-      String userId, String url, File imageFile) async {
-    final String prefix =
+      String userId, String url, File imageFile,) async {
+    final prefix =
         userId.isEmpty ? 'images/users' : 'images/users/$userId';
 
-    String uniquePhotoId = Uuid().v4();
-    File image = await compressImage(uniquePhotoId, imageFile);
+    var uniquePhotoId = const Uuid().v4();
+    final image = await compressImage(uniquePhotoId, imageFile);
 
     if (url.isNotEmpty) {
-      RegExp exp = RegExp(r'userProfile_(.*).jpg');
+      final exp = RegExp('userProfile_(.*).jpg');
       final oldUniquePhotoId = exp.firstMatch(url);
 
       if (oldUniquePhotoId != null) {
         uniquePhotoId = oldUniquePhotoId[1]!;
       }
     }
-    UploadTask uploadTask = storageRef
+    final uploadTask = storageRef
         .child('$prefix/userProfile_$uniquePhotoId.jpg')
         .putFile(image);
-    TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
-    String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+    final taskSnapshot = await uploadTask.whenComplete(() => null);
+    final downloadUrl = await taskSnapshot.ref.getDownloadURL();
 
     return downloadUrl;
   }
 
+  @override
   Future<File> compressImage(String photoId, File image) async {
     final tempDirection = await getTemporaryDirectory();
     final path = tempDirection.path;
-    File? compressedImage = await FlutterImageCompress.compressAndGetFile(
+    final compressedImage = await FlutterImageCompress.compressAndGetFile(
       image.absolute.path,
       '$path/img_$photoId.jpg',
       quality: 70,
@@ -45,34 +47,36 @@ class FirebaseStorageImpl extends StorageRepository {
     return compressedImage!;
   }
 
+  @override
   Future<String> uploadLoop(String userId, File audioFile) async {
-    final String prefix =
+    final prefix =
         userId.isEmpty ? 'audio/loops' : 'audio/loops/$userId';
 
-    String uniqueAudioId = Uuid().v4();
+    final uniqueAudioId = const Uuid().v4();
 
-    UploadTask uploadTask =
+    final uploadTask =
         storageRef.child('$prefix/loop_$uniqueAudioId.mp3').putFile(audioFile);
 
-    TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
-    String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+    final taskSnapshot = await uploadTask.whenComplete(() => null);
+    final downloadUrl = await taskSnapshot.ref.getDownloadURL();
 
     return downloadUrl;
   }
 
+  @override
   Future<String> uploadBadgeImage(String receiverId, File imageFile) async {
-    final String prefix =
+    final prefix =
         receiverId.isEmpty ? 'images/badges' : 'images/badges/$receiverId';
 
-    String uniqueImageId = Uuid().v4();
+    final uniqueImageId = const Uuid().v4();
 
-    File compressedImage = await compressImage(uniqueImageId, imageFile);
-    UploadTask uploadTask = storageRef
+    final compressedImage = await compressImage(uniqueImageId, imageFile);
+    final uploadTask = storageRef
         .child('$prefix/badge_$uniqueImageId.jpg')
         .putFile(compressedImage);
 
-    TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
-    String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+    final taskSnapshot = await uploadTask.whenComplete(() => null);
+    final downloadUrl = await taskSnapshot.ref.getDownloadURL();
 
     return downloadUrl;
   }

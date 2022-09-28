@@ -19,7 +19,7 @@ class UploadLoopSplashView extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
+                  const Icon(
                     FontAwesomeIcons.fileArrowUp,
                     size: 150,
                   ),
@@ -33,7 +33,7 @@ class UploadLoopSplashView extends StatelessWidget {
                     textColor: Colors.white,
                     onPressed: () =>
                         context.read<UploadLoopCubit>().handleAudioFromFiles(),
-                    child: Text(
+                    child: const Text(
                       'Upload New Loop',
                       style: TextStyle(
                         fontSize: 22,

@@ -4,7 +4,6 @@ import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
-import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/settings/settings_cubit.dart';
@@ -18,7 +17,7 @@ import 'package:intheloopapp/ui/widgets/settings_view/save_button.dart';
 import 'package:intheloopapp/ui/widgets/settings_view/settings_form.dart';
 
 class SettingsView extends StatelessWidget {
-  SettingsView({Key? key}) : super(key: key);
+  const SettingsView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +26,7 @@ class SettingsView extends StatelessWidget {
     return BlocSelector<AuthenticationBloc, AuthenticationState, Authenticated>(
       selector: (state) => state as Authenticated,
       builder: (context, state) {
-        UserModel currentUser = state.currentUser;
+        final currentUser = state.currentUser;
 
         return BlocProvider(
           create: (_) => SettingsCubit(
@@ -43,71 +42,70 @@ class SettingsView extends StatelessWidget {
             appBar: AppBar(
               title: Text(currentUser.username),
               elevation: 0,
-              actions: [
+              actions: const [
                 ConnectivityStatus(),
               ],
             ),
             body: ListView(
-              physics: ClampingScrollPhysics(),
+              physics: const ClampingScrollPhysics(),
               children: [
                 Stack(
                   children: [
                     Container(
                       height: 75,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: tappedAccent,
-                        image: null,
                       ),
                     ),
                   ],
                 ),
                 Container(
                   transform: Matrix4.translationValues(0, -40, 0),
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
+                        children: const [
                           ChangeProfileImage(),
                           SaveButton(),
                         ],
                       ),
                       const SizedBox(height: 20),
-                      Text(
-                        "Preferences",
+                      const Text(
+                        'Preferences',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 22,
                         ),
                       ),
                       const SizedBox(height: 10),
-                      SettingsForm(),
+                      const SettingsForm(),
                       const SizedBox(height: 30),
-                      Text(
-                        "Notifications",
+                      const Text(
+                        'Notifications',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 22,
                         ),
                       ),
                       const SizedBox(height: 10),
-                      NotificationSettingsForm(),
+                      const NotificationSettingsForm(),
                       const SizedBox(height: 30),
-                      Text(
-                        "More Options",
+                      const Text(
+                        'More Options',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 22,
                         ),
                       ),
                       const SizedBox(height: 10),
-                      ActionMenu(),
+                      const ActionMenu(),
                       const SizedBox(height: 20),
-                      DevInformation(),
+                      const DevInformation(),
                       const SizedBox(height: 40),
-                      DeleteAccountButton(),
+                      const DeleteAccountButton(),
                     ],
                   ),
                 ),

@@ -11,7 +11,7 @@ class CommentsTextField extends StatefulWidget {
 }
 
 class _CommentsTextFieldState extends State<CommentsTextField> {
-  TextEditingController _textEditingController = TextEditingController();
+  final TextEditingController _textEditingController = TextEditingController();
 
   @override
   void dispose() {
@@ -27,7 +27,7 @@ class _CommentsTextFieldState extends State<CommentsTextField> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
+              SizedBox(
                 width: 300,
                 height: 20,
                 child: TextField(
@@ -35,7 +35,7 @@ class _CommentsTextFieldState extends State<CommentsTextField> {
                       context.read<CommentsCubit>().changeComment(value),
                   controller: _textEditingController,
                   textCapitalization: TextCapitalization.sentences,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: 'Add Comment...',
                   ),
                 ),
@@ -47,8 +47,8 @@ class _CommentsTextFieldState extends State<CommentsTextField> {
                 },
                 backgroundColor: tappedAccent,
                 child: state.loading
-                    ? CircularProgressIndicator(color: Colors.white)
-                    : Icon(Icons.comment),
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : const Icon(Icons.comment),
               ),
             ],
           ),

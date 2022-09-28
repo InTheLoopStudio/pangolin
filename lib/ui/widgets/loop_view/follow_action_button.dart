@@ -9,28 +9,28 @@ import 'package:intheloopapp/ui/widgets/loop_view/follow_icon.dart';
 class FollowActionButton extends StatelessWidget {
   const FollowActionButton({Key? key}) : super(key: key);
 
-  static const double ActionWidgetSize = 60.0;
-  static const double ActionIconSize = 35.0;
-  static const double ProfileImageSize = 50.0;
-  static const double PlusIconSize = 20.0;
+  static const double ActionWidgetSize = 60;
+  static const double ActionIconSize = 35;
+  static const double ProfileImageSize = 50;
+  static const double PlusIconSize = 20;
 
   @override
   Widget build(BuildContext context) {
-    AuthRepository authRepo = RepositoryProvider.of<AuthRepository>(context);
+    final authRepo = RepositoryProvider.of<AuthRepository>(context);
     return StreamBuilder<UserModel>(
       stream: authRepo.user,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         }
 
-        UserModel currentUser = snapshot.data!;
+        final currentUser = snapshot.data!;
 
         return BlocBuilder<LoopViewCubit, LoopViewState>(
           builder: (context, state) {
             return GestureDetector(
               onTap: context.read<LoopViewCubit>().toggleFollow,
-              child: Container(
+              child: SizedBox(
                 width: 60,
                 height: 60,
                 child: Stack(
@@ -40,7 +40,7 @@ class FollowActionButton extends StatelessWidget {
                       child: Container(
                         height: ProfileImageSize,
                         width: ProfileImageSize,
-                        padding: EdgeInsets.all(1.0),
+                        padding: const EdgeInsets.all(1),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius:
@@ -49,7 +49,7 @@ class FollowActionButton extends StatelessWidget {
                         child: CircleAvatar(
                           radius: 45,
                           backgroundImage: state.user.profilePicture.isEmpty
-                              ? AssetImage('assets/default_avatar.png')
+                              ? const AssetImage('assets/default_avatar.png')
                                   as ImageProvider
                               : CachedNetworkImageProvider(
                                   state.user.profilePicture,
@@ -57,9 +57,7 @@ class FollowActionButton extends StatelessWidget {
                         ),
                       ),
                     ),
-                    currentUser.id == state.user.id
-                        ? SizedBox.shrink()
-                        : FollowIcon(),
+                    if (currentUser.id == state.user.id) const SizedBox.shrink() else const FollowIcon(),
                   ],
                 ),
               ),

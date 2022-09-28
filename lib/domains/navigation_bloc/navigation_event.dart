@@ -15,7 +15,7 @@ class Pop extends NavigationEvent {
 }
 
 class PushProfile extends NavigationEvent {
-  PushProfile(this.userId);
+  const PushProfile(this.userId);
 
   final String userId;
 
@@ -27,7 +27,7 @@ class PushProfile extends NavigationEvent {
 }
 
 class PushActivity extends NavigationEvent {
-  PushActivity();
+  const PushActivity();
 
   @override
   String toString() => 'PushActivity { }';
@@ -37,7 +37,7 @@ class PushActivity extends NavigationEvent {
 }
 
 class PushLoop extends NavigationEvent {
-  PushLoop(this.loop, {this.showComments = false, this.autoPlay = true});
+  const PushLoop(this.loop, {this.showComments = false, this.autoPlay = true});
 
   final Loop loop;
   final bool showComments;
@@ -52,7 +52,7 @@ class PushLoop extends NavigationEvent {
 }
 
 class PushOnboarding extends NavigationEvent {
-  PushOnboarding();
+  const PushOnboarding();
 
   @override
   String toString() => 'PushOnboarding { }';
@@ -62,7 +62,7 @@ class PushOnboarding extends NavigationEvent {
 }
 
 class PushLikes extends NavigationEvent {
-  PushLikes(this.loop);
+  const PushLikes(this.loop);
 
   final Loop loop;
 
@@ -74,7 +74,7 @@ class PushLikes extends NavigationEvent {
 }
 
 class ChangeTab extends NavigationEvent {
-  ChangeTab({required this.selectedTab});
+  const ChangeTab({required this.selectedTab});
 
   final int selectedTab;
 

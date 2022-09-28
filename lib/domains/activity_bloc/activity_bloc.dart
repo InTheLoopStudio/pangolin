@@ -11,14 +11,11 @@ part 'activity_event.dart';
 part 'activity_state.dart';
 
 class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
-  DatabaseRepository databaseRepository;
-  AuthenticationBloc authenticationBloc;
-  late UserModel currentUser;
 
   ActivityBloc({
     required this.databaseRepository,
     required this.authenticationBloc,
-  }) : super(ActivityInitial()) {
+  }) : super(const ActivityInitial()) {
     currentUser = (authenticationBloc.state as Authenticated).currentUser;
     on<AddActivityEvent>(
       (event, emit) => emit(
@@ -37,25 +34,26 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
       (event, emit) => _mapMarkActivityAsReadEventToState(emit, event.activity),
     );
   }
+  DatabaseRepository databaseRepository;
+  AuthenticationBloc authenticationBloc;
+  late UserModel currentUser;
 
   Future<void> _mapInitListenerEventToState(
     Emitter<ActivityState> emit,
   ) async {
-    emit(ActivityInitial());
+    emit(const ActivityInitial());
 
-    bool activitiesAvailable = 0 !=
-        (await databaseRepository.getActivities(
+    final activitiesAvailable = (await databaseRepository.getActivities(
           currentUser.id,
           limit: 1,
-        ))
-            .length;
+        )).isNotEmpty;
 
     if (!activitiesAvailable) {
-      emit(ActivitySuccess(activities: const []));
+      emit(ActivitySuccess());
     }
 
     final activityStream =
-        databaseRepository.activitiesObserver(currentUser.id, limit: 20);
+        databaseRepository.activitiesObserver(currentUser.id);
 
     await for (final activity in activityStream) {
       emit(
@@ -74,7 +72,7 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
     try {
       if (state is ActivityInitial) return;
 
-      List<Activity> activities = await databaseRepository.getActivities(
+      final activities = await databaseRepository.getActivities(
         currentUser.id,
         limit: 10,
         lastActivityId: state.activities.last.id,
@@ -84,9 +82,9 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
           ? emit(ActivityEnd(activities: state.activities))
           : emit(ActivitySuccess(
               activities: List.of(state.activities)..addAll(activities),
-            ));
+            ),);
     } on Exception {
-      emit(ActivityFailure());
+      emit(const ActivityFailure());
     }
   }
 
@@ -94,13 +92,13 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
     Emitter<ActivityState> emit,
     Activity activity,
   ) async {
-    int idx = state.activities.indexOf(activity);
-    Activity updatedActivity = activity.copyWith(markedRead: true);
+    final idx = state.activities.indexOf(activity);
+    final updatedActivity = activity.copyWith(markedRead: true);
 
     if (idx != -1) {
       emit(ActivitySuccess(
         activities: state.activities..[idx] = updatedActivity,
-      ));
+      ),);
     }
 
     await databaseRepository.markActivityAsRead(updatedActivity);

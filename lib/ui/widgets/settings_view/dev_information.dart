@@ -13,8 +13,8 @@ class _DevInformationState extends State<DevInformation> {
   String _version = '';
   String _buildNumber = '';
 
-  void initPackageInfo() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  Future<void> initPackageInfo() async {
+    final packageInfo = await PackageInfo.fromPlatform();
     setState(() {
       _appName = packageInfo.appName;
       _version = packageInfo.version;
@@ -41,14 +41,14 @@ class _DevInformationState extends State<DevInformation> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("$_appName", style: TextStyle(fontWeight: FontWeight.bold)),
+            Text(_appName, style: const TextStyle(fontWeight: FontWeight.bold)),
             Text(
               'Version $_version+$_buildNumber',
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.grey,
               ),
             ),
-            Text(
+            const Text(
               'Copyright © Tapped 2022',
               style: TextStyle(
                 color: Colors.grey,

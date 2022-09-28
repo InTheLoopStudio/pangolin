@@ -16,13 +16,13 @@ class UploadAudioInput extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              "Pick a file",
-              style: const TextStyle(
+            const Text(
+              'Pick a file',
+              style: TextStyle(
                 fontSize: 25,
               ),
             ),
-            const SizedBox(width: 25.0),
+            const SizedBox(width: 25),
             GestureDetector(
               onTap: () =>
                   context.read<UploadLoopCubit>().handleAudioFromFiles(),
@@ -37,7 +37,7 @@ class UploadAudioInput extends StatelessWidget {
                     width: 2,
                   ),
                 ),
-                child: Icon(
+                child: const Icon(
                   FontAwesomeIcons.fileAudio,
                   size: 40,
                   color: tappedAccent,

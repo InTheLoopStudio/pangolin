@@ -28,7 +28,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+      BuildContext context, double shrinkOffset, bool overlapsContent,) {
     return Container(
       color: Colors.black,
       child: _tabBar,
@@ -61,29 +61,29 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   Widget _profilePage(
-    UserModel _currentUser,
-    UserModel _visitedUser,
+    UserModel currentUser,
+    UserModel visitedUser,
     DatabaseRepository databaseRepository,
   ) =>
       BlocProvider(
         create: (context) => ProfileCubit(
           databaseRepository: databaseRepository,
-          currentUser: _currentUser,
-          visitedUser: _visitedUser,
+          currentUser: currentUser,
+          visitedUser: visitedUser,
         )
           ..initLoops()
           ..initBadges()
-          ..loadFollower(_visitedUser.id)
-          ..loadFollowing(_visitedUser.id)
-          ..loadIsFollowing(_currentUser.id, _visitedUser.id),
+          ..loadFollower(visitedUser.id)
+          ..loadFollowing(visitedUser.id)
+          ..loadIsFollowing(currentUser.id, visitedUser.id),
         child: BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, state) {
-            bool showBadgeButton = _currentUser.id == _visitedUser.id &&
-                _currentUser.accountType == AccountType.Venue;
+            final showBadgeButton = currentUser.id == visitedUser.id &&
+                currentUser.accountType == AccountType.Venue;
             return BlocListener<AuthenticationBloc, AuthenticationState>(
               listener: (context, authState) {
                 if (authState is Authenticated) {
-                  if (authState.currentUser.id == _visitedUser.id) {
+                  if (authState.currentUser.id == visitedUser.id) {
                     context
                         .read<ProfileCubit>()
                         .refetchVisitedUser(newUserData: authState.currentUser);
@@ -91,38 +91,36 @@ class _ProfileViewState extends State<ProfileView> {
                 }
               },
               child: RefreshIndicator(
-                displacement: 20.0,
+                displacement: 20,
                 onRefresh: () async {
                   context.read<ProfileCubit>()
-                    ..initLoops()
-                    ..refetchVisitedUser()
-                    ..loadIsFollowing(_currentUser.id, _visitedUser.id)
-                    ..loadFollowing(_visitedUser.id)
-                    ..loadFollower(_visitedUser.id);
+                    await .initLoops()
+                    await .refetchVisitedUser()
+                    await .loadIsFollowing(currentUser.id, visitedUser.id)
+                    await .loadFollowing(visitedUser.id)
+                    await .loadFollower(visitedUser.id);
                 },
                 child: DefaultTabController(
                   length: 2,
                   child: NestedScrollView(
                     controller: _scrollController,
-                    headerSliverBuilder: ((context, innerBoxIsScrolled) {
+                    headerSliverBuilder: (context, innerBoxIsScrolled) {
                       return <Widget>[
                         SliverAppBar(
-                          expandedHeight: 250.0,
-                          floating: false,
+                          expandedHeight: 250,
                           pinned: true,
                           flexibleSpace: FlexibleSpaceBar(
                             titlePadding: const EdgeInsets.symmetric(
-                              horizontal: 20.0,
-                              vertical: 12.0,
+                              horizontal: 20,
+                              vertical: 12,
                             ),
                             title: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  _visitedUser.username,
-                                  style: TextStyle(
+                                  visitedUser.username,
+                                  style: const TextStyle(
                                     color: Colors.white,
-                                    fontSize: 32.0,
+                                    fontSize: 32,
                                   ),
                                 ),
                               ],
@@ -131,11 +129,11 @@ class _ProfileViewState extends State<ProfileView> {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: (_visitedUser.profilePicture.isEmpty)
-                                      ? AssetImage('assets/default_avatar.png')
+                                  image: (visitedUser.profilePicture.isEmpty)
+                                      ? const AssetImage('assets/default_avatar.png')
                                           as ImageProvider
                                       : CachedNetworkImageProvider(
-                                          _visitedUser.profilePicture,
+                                          visitedUser.profilePicture,
                                         ),
                                 ),
                               ),
@@ -144,10 +142,10 @@ class _ProfileViewState extends State<ProfileView> {
                         ),
                         SliverToBoxAdapter(
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
+                            padding: const EdgeInsets.only(top: 8),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
+                              children: const [
                                 FollowerCount(),
                                 FollowingCount(),
                                 ShareProfileButton(),
@@ -156,9 +154,9 @@ class _ProfileViewState extends State<ProfileView> {
                             ),
                           ),
                         ),
-                        SliverToBoxAdapter(
+                        const SliverToBoxAdapter(
                           child: Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
+                            padding: EdgeInsets.only(bottom: 8),
                             child: SocialMediaIcons(),
                           ),
                         ),
@@ -169,39 +167,37 @@ class _ProfileViewState extends State<ProfileView> {
                               indicatorColor: tappedAccent,
                               tabs: [
                                 Tab(
-                                  text: 'Badges (${_visitedUser.badgesCount})',
+                                  text: 'Badges (${visitedUser.badgesCount})',
                                 ),
                                 Tab(
-                                  text: 'Loops (${_visitedUser.loopsCount})',
+                                  text: 'Loops (${visitedUser.loopsCount})',
                                 ),
                               ],
                             ),
                           ),
                         ),
                       ];
-                    }),
+                    },
                     body: TabBarView(children: [
                       SingleChildScrollView(
                         controller: _scrollController,
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         child: Column(
                           children: [
-                            showBadgeButton
-                                ? Padding(
+                            if (showBadgeButton) Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        vertical: 16.0),
+                                        vertical: 16,),
                                     child: OutlinedButton(
                                       onPressed: () => Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => SendBadgeView(),
+                                          builder: (context) => const SendBadgeView(),
                                         ),
                                       ),
-                                      child: Text('Send Badge'),
+                                      child: const Text('Send Badge'),
                                     ),
-                                  )
-                                : SizedBox.shrink(),
-                            SizedBox(
+                                  ) else const SizedBox.shrink(),
+                            const SizedBox(
                               height: 20,
                             ),
                             BadgesList(scrollController: _scrollController),
@@ -209,7 +205,7 @@ class _ProfileViewState extends State<ProfileView> {
                         ),
                       ),
                       AllLoopsList(scrollController: _scrollController),
-                    ]),
+                    ],),
                   ),
                 ),
               ),
@@ -220,7 +216,7 @@ class _ProfileViewState extends State<ProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    final DatabaseRepository databaseRepository =
+    final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
@@ -230,13 +226,13 @@ class _ProfileViewState extends State<ProfileView> {
           return state as Authenticated;
         },
         builder: (context, state) {
-          UserModel currentUser = state.currentUser;
+          final currentUser = state.currentUser;
           return currentUser.id != visitedUserId
               ? FutureBuilder(
                   future: databaseRepository.getUser(visitedUserId),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (!snapshot.hasData) {
-                      return LoadingView();
+                      return const LoadingView();
                     }
 
                     UserModel visitedUser = snapshot.data!;

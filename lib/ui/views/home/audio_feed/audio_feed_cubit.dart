@@ -12,7 +12,7 @@ class AudioFeedCubit extends Cubit<AudioFeedState> {
     required this.currentUserId,
     required this.sourceFunction,
     required this.sourceStream,
-  }) : super(AudioFeedState());
+  }) : super(const AudioFeedState());
 
   final String currentUserId;
   final Future<List<Loop>> Function(
@@ -48,18 +48,18 @@ class AudioFeedCubit extends Cubit<AudioFeedState> {
   //   };
   // }
 
-  void initLoops({bool clearLoops = true}) async {
-    loopListener?.cancel();
+  Future<void> initLoops({bool clearLoops = true}) async {
+    await loopListener?.cancel();
     if (clearLoops) {
       emit(state.copyWith(
         status: AudioFeedStatus.initial,
         loops: [],
         hasReachedMax: false,
-      ));
+      ),);
     }
 
-    bool loopsAvailable =
-        (await sourceFunction(currentUserId, limit: 1)).length != 0;
+    final loopsAvailable =
+        (await sourceFunction(currentUserId, limit: 1)).isNotEmpty;
     if (!loopsAvailable) {
       emit(state.copyWith(status: AudioFeedStatus.success));
     }
@@ -69,19 +69,19 @@ class AudioFeedCubit extends Cubit<AudioFeedState> {
       emit(state.copyWith(
         status: AudioFeedStatus.success,
         loops: List.of(state.loops)..add(event),
-      ));
+      ),);
     });
   }
 
-  void fetchMoreLoops() async {
+  Future<void> fetchMoreLoops() async {
     if (state.hasReachedMax) return;
 
     try {
       if (state.status == AudioFeedStatus.initial) {
-        initLoops();
+        await initLoops();
       }
 
-      final List<Loop> loops = await sourceFunction(
+      final loops = await sourceFunction(
         currentUserId,
         limit: 20,
         lastLoopId: state.loops.last.id,
@@ -106,7 +106,7 @@ class AudioFeedCubit extends Cubit<AudioFeedState> {
 
   @override
   Future<void> close() async {
-    loopListener?.cancel();
-    super.close();
+    await loopListener?.cancel();
+    await super.close();
   }
 }

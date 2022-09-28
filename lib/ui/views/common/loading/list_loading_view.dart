@@ -7,20 +7,18 @@ class ListLoadingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      scrollDirection: Axis.vertical,
       itemCount: 15,
       itemBuilder: (BuildContext context, int index) {
         return ListTile(
-          leading: CircleAvatar(
+          leading: const CircleAvatar(
             radius: 25,
             backgroundImage: AssetImage('assets/default_avatar.png'),
           ),
-          title: Container(
+          title: SizedBox(
             height: 10,
             child: SkeletonAnimation(
               shimmerColor: Colors.grey,
               borderRadius: BorderRadius.circular(20),
-              shimmerDuration: 1000,
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.grey[300],
@@ -29,12 +27,11 @@ class ListLoadingView extends StatelessWidget {
               ),
             ),
           ),
-          subtitle: Container(
+          subtitle: SizedBox(
             height: 10,
             child: SkeletonAnimation(
               shimmerColor: Colors.grey,
               borderRadius: BorderRadius.circular(20),
-              shimmerDuration: 1000,
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.grey[300],
@@ -43,7 +40,7 @@ class ListLoadingView extends StatelessWidget {
               ),
             ),
           ),
-          trailing: Text(''),
+          trailing: const Text(''),
         );
       },
     );

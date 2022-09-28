@@ -4,20 +4,20 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
 
 class AudioDescription extends StatelessWidget {
-  final Loop loop;
-  final UserModel user;
 
   const AudioDescription({
     Key? key,
     required this.loop,
     required this.user,
   }) : super(key: key);
+  final Loop loop;
+  final UserModel user;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70.0,
-      padding: EdgeInsets.only(left: 20.0),
+      height: 70,
+      padding: const EdgeInsets.only(left: 20),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -28,14 +28,14 @@ class AudioDescription extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => ProfileView(
-                    visitedUserId: this.user.id,
+                    visitedUserId: user.id,
                   ),
                 ),
               );
             },
             child: Text(
-              this.user.username,
-              style: TextStyle(
+              user.username,
+              style: const TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
@@ -44,14 +44,14 @@ class AudioDescription extends StatelessWidget {
           ),
           Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.music_note,
-                size: 24.0,
+                size: 24,
                 color: Colors.white,
               ),
               Text(
-                this.loop.title,
-                style: TextStyle(
+                loop.title,
+                style: const TextStyle(
                   fontSize: 24,
                   color: Colors.white,
                 ),

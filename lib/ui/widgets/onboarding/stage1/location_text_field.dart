@@ -15,7 +15,7 @@ class LocationTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       initialValue: initialValue ?? '',
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         border: OutlineInputBorder(),
         labelText: 'Location (Optional)',
         hintText: 'e.g. RVA, NYC, LA',

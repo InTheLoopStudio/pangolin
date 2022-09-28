@@ -26,27 +26,27 @@ class LoopView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DatabaseRepository databaseRepository =
+    final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
-    AuthRepository authRepository =
+    final authRepository =
         RepositoryProvider.of<AuthRepository>(context);
     return StreamBuilder<UserModel>(
       stream: authRepository.user,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return LoopLoadingView();
+          return const LoopLoadingView();
         }
 
-        UserModel currentUser = snapshot.data!;
+        final currentUser = snapshot.data!;
 
         return FutureBuilder<UserModel>(
           future: databaseRepository.getUser(loop.userId),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return LoopLoadingView();
+              return const LoopLoadingView();
             }
 
-            UserModel user = snapshot.data!;
+            final user = snapshot.data!;
 
             return BlocProvider(
               create: (context) => LoopViewCubit(
@@ -63,7 +63,7 @@ class LoopView extends StatelessWidget {
                 ..initIsFollowing()
                 ..initLoopLikes()
                 ..initLoopComments(),
-              child: LoopStack(),
+              child: const LoopStack(),
             );
           },
         );

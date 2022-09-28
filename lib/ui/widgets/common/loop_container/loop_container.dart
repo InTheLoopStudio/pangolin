@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/dynamic_link_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
-import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/comments.dart';
@@ -14,7 +14,6 @@ import 'package:intheloopapp/ui/widgets/common/loop_container/loop_seek_bar.dart
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_title.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/play_pause_button.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/timestamp.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:share_plus/share_plus.dart';
 
 class LoopContainer extends StatelessWidget {
@@ -30,7 +29,7 @@ class LoopContainer extends StatelessWidget {
     return BlocSelector<AuthenticationBloc, AuthenticationState, Authenticated>(
       selector: (state) => state as Authenticated,
       builder: (context, state) {
-        UserModel currentUser = state.currentUser;
+        final currentUser = state.currentUser;
 
         return BlocProvider(
           create: (context) => LoopContainerCubit(
@@ -60,11 +59,11 @@ class LoopContainer extends StatelessWidget {
                 ),
                 SlidableAction(
                   onPressed: (context) async {
-                    final String link = await context
+                    final link = await context
                         .read<DynamicLinkRepository>()
                         .getShareLoopDynamicLink(loop);
                     await Share.share(
-                        'Check out this loop on In The Loop $link');
+                        'Check out this loop on In The Loop $link',);
                   },
                   backgroundColor: tappedAccent,
                   foregroundColor: Colors.white,
@@ -74,21 +73,20 @@ class LoopContainer extends StatelessWidget {
               ],
             ),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Column(
                 children: [
                   Row(
-                    mainAxisSize: MainAxisSize.max,
                     children: [
-                      PlayPauseButton(),
-                      SizedBox(width: 10),
+                      const PlayPauseButton(),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: const [
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 20.0),
+                                  EdgeInsets.symmetric(horizontal: 20),
                               child: LoopTitle(),
                             ),
                             SizedBox(height: 10),
@@ -98,18 +96,18 @@ class LoopContainer extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
-                        children: [
+                        children: const [
                           LikeButton(),
-                          const SizedBox(width: 20.0),
+                          SizedBox(width: 20),
                           Comments(),
                         ],
                       ),
-                      Timestamp(),
+                      const Timestamp(),
                     ],
                   ),
                 ],

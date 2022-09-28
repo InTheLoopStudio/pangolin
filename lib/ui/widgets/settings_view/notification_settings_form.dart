@@ -14,10 +14,9 @@ class NotificationSettingsForm extends StatelessWidget {
           children: [
             const SizedBox(height: 10),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
+              children: const [
                 Text(
-                  "Push Notifications",
+                  'Push Notifications',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
@@ -26,37 +25,37 @@ class NotificationSettingsForm extends StatelessWidget {
               ],
             ),
             SettingsSwitch(
-              label: "New Likes",
+              label: 'New Likes',
               activated: state.pushNotificationsLikes,
               onChanged: (selected) =>
                   context.read<SettingsCubit>().changeNewLikesPush(selected),
             ),
             SettingsSwitch(
-              label: "New Comment",
+              label: 'New Comment',
               activated: state.pushNotificationsComments,
               onChanged: (selected) =>
                   context.read<SettingsCubit>().changeNewCommentsPush(selected),
             ),
             SettingsSwitch(
-              label: "New Followers",
+              label: 'New Followers',
               activated: state.pushNotificationsFollows,
               onChanged: (selected) =>
                   context.read<SettingsCubit>().changeNewFollowerPush(selected),
             ),
             SettingsSwitch(
-              label: "New DMs",
+              label: 'New DMs',
               activated: state.pushNotificationsDirectMessages,
               onChanged: (selected) =>
                   context.read<SettingsCubit>().changeDirectMsgPush(selected),
             ),
             SettingsSwitch(
-              label: "In The Loop Updates",
+              label: 'In The Loop Updates',
               activated: state.pushNotificationsITLUpdates,
               onChanged: (selected) =>
                   context.read<SettingsCubit>().changeITLUpdatesPush(selected),
             ),
             SettingsSwitch(
-              label: "All Push Notifications",
+              label: 'All Push Notifications',
               activated: state.pushNotificationsLikes &&
                   state.pushNotificationsComments &&
                   state.pushNotificationsFollows &&
@@ -67,10 +66,9 @@ class NotificationSettingsForm extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
+              children: const [
                 Text(
-                  "Emails",
+                  'Emails',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
@@ -79,19 +77,19 @@ class NotificationSettingsForm extends StatelessWidget {
               ],
             ),
             SettingsSwitch(
-              label: "New App Releases",
+              label: 'New App Releases',
               activated: state.emailNotificationsAppReleases,
               onChanged: (selected) =>
                   context.read<SettingsCubit>().changeAppReleaseEmail(selected),
             ),
             SettingsSwitch(
-              label: "In The Loop Updates",
+              label: 'In The Loop Updates',
               activated: state.emailNotificationsITLUpdates,
               onChanged: (selected) =>
                   context.read<SettingsCubit>().changeITLUpdatesEmail(selected),
             ),
             SettingsSwitch(
-              label: "All Emails",
+              label: 'All Emails',
               activated: state.emailNotificationsAppReleases &&
                   state.emailNotificationsITLUpdates,
               onChanged: (selected) =>

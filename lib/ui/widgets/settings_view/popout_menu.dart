@@ -10,16 +10,16 @@ class PopoutMenu extends StatelessWidget {
     return BlocBuilder<SettingsCubit, SettingsState>(
       builder: (context, state) {
         return PopupMenuButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.more_horiz,
             color: Colors.white,
             size: 30,
           ),
           itemBuilder: (_) {
             return <PopupMenuItem<String>>[
-              PopupMenuItem(
-                child: Text('Logout'),
+              const PopupMenuItem(
                 value: 'logout',
+                child: Text('Logout'),
               ),
             ];
           },

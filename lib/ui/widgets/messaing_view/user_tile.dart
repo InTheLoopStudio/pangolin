@@ -13,7 +13,7 @@ class UserTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    StreamRepository streamRepository =
+    final streamRepository =
         RepositoryProvider.of<StreamRepository>(context);
 
     return ListTile(
@@ -23,17 +23,17 @@ class UserTile extends StatelessWidget {
       ),
       title: Text(user.username),
       onTap: () async {
-        final Channel channel =
+        final channel =
             await streamRepository.createSimpleChat(user.id);
         if (channel.state == null) {
           await channel.watch();
         }
-        Navigator.push(
+        await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => StreamChannel(
               channel: channel,
-              child: ChannelView(),
+              child: const ChannelView(),
             ),
           ),
         );

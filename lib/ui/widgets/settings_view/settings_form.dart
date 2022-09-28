@@ -6,13 +6,13 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/settings/settings_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/bio_text_field.dart';
-import 'package:intheloopapp/ui/widgets/common/forms/location_text_field.dart';
-import 'package:intheloopapp/ui/widgets/common/forms/tiktok_text_field.dart';
-import 'package:intheloopapp/ui/widgets/common/forms/username_text_field.dart';
-import 'package:intheloopapp/ui/widgets/common/forms/twitter_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/instagram_text_field.dart';
-import 'package:intheloopapp/ui/widgets/common/forms/youtube_text_field.dart';
+import 'package:intheloopapp/ui/widgets/common/forms/location_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/soundcloud_text_field.dart';
+import 'package:intheloopapp/ui/widgets/common/forms/tiktok_text_field.dart';
+import 'package:intheloopapp/ui/widgets/common/forms/twitter_text_field.dart';
+import 'package:intheloopapp/ui/widgets/common/forms/username_text_field.dart';
+import 'package:intheloopapp/ui/widgets/common/forms/youtube_text_field.dart';
 import 'package:intheloopapp/ui/widgets/settings_view/theme_switch.dart';
 
 class SettingsForm extends StatelessWidget {
@@ -23,9 +23,9 @@ class SettingsForm extends StatelessWidget {
     return StreamBuilder<UserModel>(
       stream: RepositoryProvider.of<AuthRepository>(context).user,
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return CircularProgressIndicator();
+        if (!snapshot.hasData) return const CircularProgressIndicator();
 
-        UserModel currentUser = snapshot.data!;
+        final currentUser = snapshot.data!;
 
         return BlocBuilder<SettingsCubit, SettingsState>(
           builder: (context, state) {
@@ -78,13 +78,11 @@ class SettingsForm extends StatelessWidget {
                     onSaved: (value) =>
                         context.read<SettingsCubit>().changeYoutube(value),
                   ),
-                  SizedBox(height: 15),
-                  ThemeSwitch(),
-                  state.status.isSubmissionInProgress
-                      ? CircularProgressIndicator(
+                  const SizedBox(height: 15),
+                  const ThemeSwitch(),
+                  if (state.status.isSubmissionInProgress) const CircularProgressIndicator(
                           valueColor: AlwaysStoppedAnimation(tappedAccent),
-                        )
-                      : SizedBox.shrink(),
+                        ) else const SizedBox.shrink(),
                 ],
               ),
             );

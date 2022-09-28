@@ -4,16 +4,16 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart'
     hide ChannelHeader;
 
 class ChannelView extends StatelessWidget {
-  ChannelView({
+  const ChannelView({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ChannelHeader(),
+      appBar: const ChannelHeader(),
       body: Column(
-        children: [
+        children: const [
           Expanded(
             child: StreamMessageListView(),
           ),

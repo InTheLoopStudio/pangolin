@@ -28,31 +28,31 @@ class CommentsCubit extends Cubit<CommentsState> {
   final bool loading;
   StreamSubscription? commentListener;
 
-  void initComments({bool clearComments = true}) async {
+  Future<void> initComments({bool clearComments = true}) async {
     emit(state.copyWith(loading: true));
 
-    commentListener?.cancel();
+    await commentListener?.cancel();
     if (clearComments) {
       emit(state.copyWith(
         comments: [],
         commentsCount: loop.comments,
-      ));
+      ),);
     }
 
-    bool commentsAvailable =
-        (await databaseRepository.getLoopComments(loop, limit: 1)).length != 0;
+    final commentsAvailable =
+        (await databaseRepository.getLoopComments(loop, limit: 1)).isNotEmpty;
     if (!commentsAvailable) {
       emit(state.copyWith(loading: false));
     }
 
     commentListener = databaseRepository
-        .loopCommentsObserver(loop, limit: 20)
+        .loopCommentsObserver(loop)
         .listen((Comment event) {
       print('Comment { ${event.id} : ${event.content} }');
       emit(state.copyWith(
         loading: false,
         comments: List.of(state.comments)..add(event),
-      ));
+      ),);
     });
   }
 
@@ -64,11 +64,10 @@ class CommentsCubit extends Cubit<CommentsState> {
     emit(state.copyWith(loading: true));
 
     if (state.comment.isNotEmpty) {
-      Comment comment = Comment(
+      final comment = Comment(
         timestamp: Timestamp.fromDate(DateTime.now()),
         userId: currentUser.id,
         content: state.comment,
-        parentId: null,
         rootLoopId: state.loop.id,
         children: [],
       );
@@ -84,13 +83,13 @@ class CommentsCubit extends Cubit<CommentsState> {
         loading: false,
         commentsCount: state.commentsCount + 1,
         comments: state.comments..add(comment),
-      ));
+      ),);
     }
   }
 
   @override
   Future<void> close() async {
-    commentListener?.cancel();
-    super.close();
+    await commentListener?.cancel();
+    await super.close();
   }
 }

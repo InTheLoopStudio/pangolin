@@ -7,19 +7,8 @@ part 'loop.g.dart';
 
 @JsonSerializable()
 class Loop extends Equatable {
-  final String id;
-  final String userId;
-  final String title;
-  final String audio;
-  final DateTime timestamp;
-  final int likes;
-  final int downloads;
-  final int comments;
-  final int shares;
-  final List<String> tags;
-  final bool deleted;
 
-  Loop({
+  const Loop({
     required this.id,
     required this.userId,
     required this.title,
@@ -32,6 +21,39 @@ class Loop extends Equatable {
     required this.tags,
     required this.deleted,
   });
+
+  factory Loop.fromJson(Map<String, dynamic> json) => _$LoopFromJson(json);
+
+  factory Loop.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
+    final Timestamp tmpTimestamp = doc.getOrElse('timestamp', Timestamp.now());
+
+    return Loop(
+      id: doc.id,
+      userId: doc.getOrElse('userId', ''),
+      title: doc.getOrElse('title', ''),
+      audio: doc.getOrElse('audio', ''),
+      timestamp: tmpTimestamp.toDate(),
+      likes: doc.getOrElse('likes', 0),
+      downloads: doc.getOrElse('downloads', 0),
+      comments: doc.getOrElse('comments', 0),
+      shares: doc.getOrElse('shares', 0),
+      tags: List.from(
+        doc.getOrElse('tags', []),
+      ),
+      deleted: doc.getOrElse('deleted', false),
+    );
+  }
+  final String id;
+  final String userId;
+  final String title;
+  final String audio;
+  final DateTime timestamp;
+  final int likes;
+  final int downloads;
+  final int comments;
+  final int shares;
+  final List<String> tags;
+  final bool deleted;
 
   @override
   List<Object> get props => [
@@ -91,27 +113,5 @@ class Loop extends Equatable {
       deleted: deleted ?? this.deleted,
     );
   }
-
-  factory Loop.fromJson(Map<String, dynamic> json) => _$LoopFromJson(json);
   Map<String, dynamic> toJson() => _$LoopToJson(this);
-
-  factory Loop.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
-    final Timestamp tmpTimestamp = doc.getOrElse('timestamp', Timestamp.now());
-
-    return Loop(
-      id: doc.id,
-      userId: doc.getOrElse('userId', ''),
-      title: doc.getOrElse('title', ''),
-      audio: doc.getOrElse('audio', ''),
-      timestamp: tmpTimestamp.toDate(),
-      likes: doc.getOrElse('likes', 0),
-      downloads: doc.getOrElse('downloads', 0),
-      comments: doc.getOrElse('comments', 0),
-      shares: doc.getOrElse('shares', 0),
-      tags: List.from(
-        doc.getOrElse('tags', []),
-      ),
-      deleted: doc.getOrElse('deleted', false),
-    );
-  }
 }

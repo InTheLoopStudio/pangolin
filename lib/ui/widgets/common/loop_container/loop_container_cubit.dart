@@ -20,13 +20,13 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
   final DatabaseRepository databaseRepository;
   final UserModel currentUser;
 
-  void initLoopLikes() async {
-    bool isLiked = await databaseRepository.isLikeLoop(currentUser.id, loop);
+  Future<void> initLoopLikes() async {
+    final isLiked = await databaseRepository.isLikeLoop(currentUser.id, loop);
 
     emit(state.copyWith(
       isLiked: isLiked,
       likesCount: state.loop.likes,
-    ));
+    ),);
   }
 
   void initAudio() {
@@ -44,13 +44,13 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
       emit(state.copyWith(
         isLiked: false,
         likesCount: state.likesCount - 1,
-      ));
+      ),);
     } else {
       databaseRepository.likeLoop(currentUser.id, state.loop);
       emit(state.copyWith(
         isLiked: true,
         likesCount: state.likesCount + 1,
-      ));
+      ),);
     }
   }
 
@@ -65,6 +65,6 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
     audioLock.removeListener(onAudioLockChange);
     state.audioController.pause();
     state.audioController.dispose();
-    super.close();
+    await super.close();
   }
 }

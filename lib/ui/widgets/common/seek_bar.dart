@@ -4,19 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:intheloopapp/ui/themes.dart';
 
 class SeekBar extends StatefulWidget {
-  final Duration duration;
-  final Duration position;
-  final Duration? bufferedPosition;
-  final ValueChanged<Duration?>? onChanged;
-  final ValueChanged<Duration?>? onChangeEnd;
 
-  SeekBar({
+  const SeekBar({
     required this.duration,
     required this.position,
     this.bufferedPosition,
     this.onChanged,
     this.onChangeEnd,
   });
+  final Duration duration;
+  final Duration position;
+  final Duration? bufferedPosition;
+  final ValueChanged<Duration?>? onChanged;
+  final ValueChanged<Duration?>? onChangeEnd;
 
   @override
   _SeekBarState createState() => _SeekBarState();
@@ -34,8 +34,8 @@ class _SeekBarState extends State<SeekBar> {
       activeTrackColor: tappedAccent,
       inactiveTrackColor: tappedAccent,
       thumbColor: tappedAccent,
-      thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6.0),
-      trackHeight: 2.0,
+      thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
+      trackHeight: 2,
     );
   }
 
@@ -47,11 +47,10 @@ class _SeekBarState extends State<SeekBar> {
           data: _sliderThemeData!.copyWith(
             activeTrackColor: Colors.blue.shade100,
             inactiveTrackColor: Colors.grey.shade300,
-            thumbShape: RoundSliderThumbShape(enabledThumbRadius: 0.0),
+            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0),
           ),
           child: ExcludeSemantics(
             child: Slider(
-              min: 0.0,
               max: widget.duration.inMilliseconds.toDouble(),
               value: widget.bufferedPosition!.inMilliseconds.toDouble(),
               onChanged: (value) {
@@ -74,15 +73,14 @@ class _SeekBarState extends State<SeekBar> {
         SliderTheme(
           data: _sliderThemeData!.copyWith(
             inactiveTrackColor: Colors.transparent,
-            valueIndicatorTextStyle: TextStyle(
+            valueIndicatorTextStyle: const TextStyle(
               color: Colors.white,
             ),
           ),
           child: Slider(
-            min: 0.0,
             max: widget.duration.inMilliseconds.toDouble(),
             value: min(_dragValue ?? widget.position.inMilliseconds.toDouble(),
-                widget.duration.inMilliseconds.toDouble()),
+                widget.duration.inMilliseconds.toDouble(),),
             onChanged: (value) {
               setState(() {
                 _dragValue = value;
@@ -100,14 +98,14 @@ class _SeekBarState extends State<SeekBar> {
           ),
         ),
         Positioned(
-          right: 16.0,
-          bottom: 0.0,
+          right: 16,
+          bottom: 0,
           child: Text(
               RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
-                      .firstMatch("$_remaining")
+                      .firstMatch('$_remaining')
                       ?.group(1) ??
                   '$_remaining',
-              style: Theme.of(context).textTheme.bodySmall),
+              style: Theme.of(context).textTheme.bodySmall,),
         ),
       ],
     );
@@ -117,8 +115,8 @@ class _SeekBarState extends State<SeekBar> {
 }
 
 class PositionData {
-  final Duration position;
-  final Duration bufferedPosition;
 
   PositionData(this.position, this.bufferedPosition);
+  final Duration position;
+  final Duration bufferedPosition;
 }

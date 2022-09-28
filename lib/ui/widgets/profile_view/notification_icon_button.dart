@@ -9,42 +9,40 @@ class NotificationIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ActivityBloc, ActivityState>(
       builder: (context, state) {
-        return Container(
+        return SizedBox(
           width: 30,
           height: 30,
           child: Stack(
             children: [
               Container(
-                child: Icon(
+                child: const Icon(
                   Icons.notifications,
                   color: Colors.white,
                   size: 30,
                 ),
               ),
-              state.activities.any((elem) => elem.markedRead == false)
-                  ? Positioned(
+              if (state.activities.any((elem) => elem.markedRead == false)) Positioned(
                       right: 0,
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 1, vertical: 1),
+                        padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
                         decoration: BoxDecoration(
                           color: Colors.red,
                           borderRadius: BorderRadius.circular(6),
                         ),
-                        constraints: BoxConstraints(
+                        constraints: const BoxConstraints(
                           minWidth: 12,
                           minHeight: 12,
                         ),
                         child: Text(
                           '${state.activities.where((elem) => elem.markedRead == false).length}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 8,
                           ),
                           textAlign: TextAlign.center,
                         ),
                       ),
-                    )
-                  : SizedBox.shrink(),
+                    ) else const SizedBox.shrink(),
             ],
           ),
         );

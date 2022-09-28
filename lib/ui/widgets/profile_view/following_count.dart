@@ -27,7 +27,7 @@ class FollowingCount extends StatelessWidget {
               decimalDigits: 0,
               symbol: '',
             ).format(state.followingCount)} Following',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
             ),

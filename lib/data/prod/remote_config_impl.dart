@@ -5,10 +5,11 @@ FirebaseRemoteConfig _remoteConfig = FirebaseRemoteConfig.instance;
 
 class RemoteConfigImpl implements RemoteConfigRepository {
   Future<bool> fetchAndActivate() async {
-    bool updated = await _remoteConfig.fetchAndActivate();
+    final updated = await _remoteConfig.fetchAndActivate();
     return updated;
   }
 
+  @override
   Future<bool> getDownForMaintenanceStatus() async {
     return _remoteConfig.getBool('down_for_maintenance');
   }

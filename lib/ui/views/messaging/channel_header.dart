@@ -155,7 +155,7 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    title ?? ChannelName(),
+                    title ?? const ChannelName(),
                     const SizedBox(height: 2),
                     subtitle ??
                         StreamChannelInfo(

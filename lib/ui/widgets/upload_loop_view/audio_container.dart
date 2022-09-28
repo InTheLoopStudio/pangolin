@@ -8,7 +8,7 @@ import 'package:rxdart/rxdart.dart';
 class AudioContainer extends StatelessWidget {
   const AudioContainer({Key? key}) : super(key: key);
 
-  static final String audioLockId = 'uploaded-loop';
+  static const String audioLockId = 'uploaded-loop';
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +17,12 @@ class AudioContainer extends StatelessWidget {
     return BlocBuilder<UploadLoopCubit, UploadLoopState>(
       builder: (context, state) {
         return state.pickedAudio == null
-            ? SizedBox.shrink()
+            ? const SizedBox.shrink()
             : Column(
                 children: [
                   Text(state.pickedAudio!.path.split('/').last),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     decoration: BoxDecoration(
                       color: theme.backgroundColor,
                     ),
@@ -37,7 +37,7 @@ class AudioContainer extends StatelessWidget {
                                 final playerState = snapshot.data;
 
                                 if (playerState == null) {
-                                  return SizedBox.shrink();
+                                  return const SizedBox.shrink();
                                 }
 
                                 final processingState =
@@ -53,15 +53,15 @@ class AudioContainer extends StatelessWidget {
                                     processingState ==
                                         ProcessingState.buffering) {
                                   return Container(
-                                    margin: EdgeInsets.all(8.0),
-                                    width: 48.0,
-                                    height: 48.0,
-                                    child: CircularProgressIndicator(),
+                                    margin: const EdgeInsets.all(8),
+                                    width: 48,
+                                    height: 48,
+                                    child: const CircularProgressIndicator(),
                                   );
                                 } else if (playing != true) {
                                   return IconButton(
-                                    icon: Icon(Icons.play_arrow),
-                                    iconSize: 48.0,
+                                    icon: const Icon(Icons.play_arrow),
+                                    iconSize: 48,
                                     onPressed: () {
                                       state.audioController.play(audioLockId);
                                     },
@@ -69,16 +69,16 @@ class AudioContainer extends StatelessWidget {
                                 } else if (processingState !=
                                     ProcessingState.completed) {
                                   return IconButton(
-                                    icon: Icon(Icons.pause),
-                                    iconSize: 48.0,
+                                    icon: const Icon(Icons.pause),
+                                    iconSize: 48,
                                     onPressed: () {
                                       state.audioController.pause();
                                     },
                                   );
                                 } else {
                                   return IconButton(
-                                    icon: Icon(Icons.replay),
-                                    iconSize: 48.0,
+                                    icon: const Icon(Icons.replay),
+                                    iconSize: 48,
                                     onPressed: () => state.audioController.seek(
                                       Duration.zero,
                                       index: state.audioController.player
@@ -88,11 +88,11 @@ class AudioContainer extends StatelessWidget {
                                 }
                               },
                             ),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 StreamBuilder<Duration?>(
                                   stream: state
                                       .audioController.player.durationStream,
@@ -108,11 +108,11 @@ class AudioContainer extends StatelessWidget {
                                               .bufferedPositionStream,
                                           (position, bufferedPosition) =>
                                               PositionData(
-                                                  position, bufferedPosition)),
+                                                  position, bufferedPosition,),),
                                       builder: (context, snapshot) {
                                         final positionData = snapshot.data ??
                                             PositionData(
-                                                Duration.zero, Duration.zero);
+                                                Duration.zero, Duration.zero,);
                                         var position = positionData.position;
                                         if (position > duration) {
                                           position = duration;
@@ -128,7 +128,7 @@ class AudioContainer extends StatelessWidget {
                                           bufferedPosition: bufferedPosition,
                                           onChangeEnd: (newPosition) {
                                             state.audioController.seek(
-                                                newPosition ?? Duration());
+                                                newPosition ?? const Duration(),);
                                           },
                                         );
                                       },
@@ -142,7 +142,7 @@ class AudioContainer extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                 ],
               );
       },

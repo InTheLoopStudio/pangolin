@@ -27,7 +27,7 @@ class SocialActionButton extends StatelessWidget {
       child: Container(
         width: width,
         height: height,
-        margin: EdgeInsets.only(top: 10.0),
+        margin: const EdgeInsets.only(top: 10),
         child: Column(
           children: [
             Icon(
@@ -36,11 +36,11 @@ class SocialActionButton extends StatelessWidget {
               color: color,
             ),
             Padding(
-              padding: EdgeInsets.only(top: 2.0),
+              padding: const EdgeInsets.only(top: 2),
               child: Text(
                 title ?? '',
-                style: TextStyle(
-                  fontSize: 12.0,
+                style: const TextStyle(
+                  fontSize: 12,
                   color: Colors.white,
                 ),
               ),

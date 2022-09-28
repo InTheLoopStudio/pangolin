@@ -2,8 +2,10 @@ import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
 class LocalAuthImpl extends AuthRepository {
-  Stream<UserModel> get user => Stream.empty();
+  @override
+  Stream<UserModel> get user => const Stream.empty();
 
+  @override
   Future<void> updateUserData({required UserModel userData}) async {
     await Future.delayed(const Duration(seconds: 2));
     return;

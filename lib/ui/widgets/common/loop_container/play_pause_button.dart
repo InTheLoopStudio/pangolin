@@ -16,7 +16,7 @@ class PlayPauseButton extends StatelessWidget {
             final playerState = snapshot.data;
 
             if (playerState == null) {
-              return SizedBox.shrink();
+              return const SizedBox.shrink();
             }
 
             final processingState = playerState.processingState;
@@ -29,31 +29,31 @@ class PlayPauseButton extends StatelessWidget {
             if (processingState == ProcessingState.loading ||
                 processingState == ProcessingState.buffering) {
               return Container(
-                margin: EdgeInsets.all(8.0),
-                width: 40.0,
-                height: 40.0,
-                child: CircularProgressIndicator(),
+                margin: const EdgeInsets.all(8),
+                width: 40,
+                height: 40,
+                child: const CircularProgressIndicator(),
               );
             } else if (playing != true) {
               return IconButton(
-                icon: Icon(Icons.play_arrow),
-                iconSize: 48.0,
+                icon: const Icon(Icons.play_arrow),
+                iconSize: 48,
                 onPressed: () {
                   state.audioController.play(state.loop.id);
                 },
               );
             } else if (processingState != ProcessingState.completed) {
               return IconButton(
-                icon: Icon(Icons.pause),
-                iconSize: 48.0,
+                icon: const Icon(Icons.pause),
+                iconSize: 48,
                 onPressed: () {
                   state.audioController.pause();
                 },
               );
             } else {
               return IconButton(
-                icon: Icon(Icons.replay),
-                iconSize: 48.0,
+                icon: const Icon(Icons.replay),
+                iconSize: 48,
                 onPressed: () => state.audioController.seek(
                   Duration.zero,
                   index: state.audioController.player.effectiveIndices!.first,

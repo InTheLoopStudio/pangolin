@@ -10,24 +10,24 @@ class Comments extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LoopContainerCubit, LoopContainerState>(
       builder: (context, state) {
-        NavigationBloc navigationBloc = context.read<NavigationBloc>();
+        final navigationBloc = context.read<NavigationBloc>();
         return GestureDetector(
           onTap: () => navigationBloc.add(PushLoop(
             state.loop,
             showComments: true,
             autoPlay: false,
-          )),
+          ),),
           child: Row(
             children: [
-              const SizedBox(width: 20.0),
-              Icon(
+              const SizedBox(width: 20),
+              const Icon(
                 Icons.comment,
                 size: 20,
               ),
-              const SizedBox(width: 5.0),
+              const SizedBox(width: 5),
               Text(
-                state.loop.comments.toString() + ' comments',
-                style: TextStyle(
+                '${state.loop.comments} comments',
+                style: const TextStyle(
                   fontSize: 10,
                 ),
               )

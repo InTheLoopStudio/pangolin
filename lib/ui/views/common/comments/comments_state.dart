@@ -2,7 +2,7 @@ part of 'comments_cubit.dart';
 
 @immutable
 class CommentsState extends Equatable {
-  CommentsState({
+  const CommentsState({
     required this.loop,
     this.comments = const [],
     this.commentsCount = 0,

@@ -11,7 +11,7 @@ class FeedsListCubit extends Cubit<FeedsListState> {
   @override
   Future<void> close() async {
     state.pageController.dispose();
-    super.close();
+    await super.close();
   }
 
   void feedChanged(int index) {

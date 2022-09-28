@@ -14,25 +14,25 @@ class ControlButtons extends StatelessWidget {
   }) {
     if (loading) {
       return ElevatedButton(
-        child: CircularProgressIndicator(),
+        child: const CircularProgressIndicator(),
         onPressed: () {},
       );
     }
 
     if (stage == OnboardingStage.stage1) {
       return ElevatedButton(
-        child: Text('Next'),
         onPressed: onNext,
+        child: const Text('Next'),
       );
     } else if (stage == OnboardingStage.stage2) {
       return ElevatedButton(
-        child: Text('Finish'),
         onPressed: onFinish,
+        child: const Text('Finish'),
       );
     } else {
       return ElevatedButton(
-        child: Text('Next'),
         onPressed: onNext,
+        child: const Text('Next'),
       );
     }
   }
@@ -44,19 +44,17 @@ class ControlButtons extends StatelessWidget {
         return Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 30.0),
+              padding: const EdgeInsets.only(left: 30),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  state.onboardingStage != OnboardingStage.stage1
-                      ? TextButton(
-                          child: Text('Back'),
+                  if (state.onboardingStage != OnboardingStage.stage1) TextButton(
                           onPressed:
                               state.onboardingStage == OnboardingStage.stage1
                                   ? null
                                   : context.read<OnboardingCubit>().previous,
-                        )
-                      : SizedBox.shrink(),
+                          child: const Text('Back'),
+                        ) else const SizedBox.shrink(),
                   _nextStepButton(
                     loading: state.loading,
                     stage: state.onboardingStage,
@@ -68,10 +66,9 @@ class ControlButtons extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 20.0, left: 20),
+              padding: const EdgeInsets.only(top: 20, left: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
                     height: 10,
@@ -79,7 +76,7 @@ class ControlButtons extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: state.onboardingStage == OnboardingStage.stage1
                           ? tappedAccent
-                          : Color.fromARGB(255, 221, 160, 221),
+                          : const Color.fromARGB(255, 221, 160, 221),
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
@@ -90,7 +87,7 @@ class ControlButtons extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: state.onboardingStage == OnboardingStage.stage2
                           ? tappedAccent
-                          : Color.fromARGB(255, 221, 160, 221),
+                          : const Color.fromARGB(255, 221, 160, 221),
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),

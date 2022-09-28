@@ -27,12 +27,10 @@ class LoopLoadingView extends StatelessWidget {
               ),
             ),
             Container(
-                padding: const EdgeInsets.all(25.0),
+                padding: const EdgeInsets.all(25),
                 alignment: FractionalOffset.bottomLeft,
                 margin: const EdgeInsets.only(bottom: 40),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     Row(
@@ -45,7 +43,7 @@ class LoopLoadingView extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10.0),
+                    const SizedBox(height: 10),
                     Row(
                       children: [
                         Skeleton(
@@ -56,7 +54,7 @@ class LoopLoadingView extends StatelessWidget {
                       ],
                     ),
                   ],
-                )),
+                ),),
             Container(
               alignment: Alignment.center,
               child: const CircularProgressIndicator(),

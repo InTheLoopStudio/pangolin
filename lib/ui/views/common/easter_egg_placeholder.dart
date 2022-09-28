@@ -20,13 +20,13 @@ class _EasterEggPlaceholderState extends State<EasterEggPlaceholder> {
 
   @override
   Widget build(BuildContext context) {
-    Color themeColor = Theme.of(context).primaryIconTheme.color ?? Colors.black;
+    final themeColor = Theme.of(context).primaryIconTheme.color ?? Colors.black;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 20.0),
+            padding: const EdgeInsets.only(bottom: 20),
             child: (tapCount >= 15)
                 ? Icon(
                     FontAwesomeIcons.faceAngry,

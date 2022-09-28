@@ -6,12 +6,12 @@ import 'package:intheloopapp/ui/widgets/search_view/results_list.dart';
 import 'package:intheloopapp/ui/widgets/search_view/search_bar.dart';
 
 class SearchView extends StatelessWidget {
-  SearchView({Key? key}) : super(key: key);
+  const SearchView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    SearchRepository searchRepository =
+    final theme = Theme.of(context);
+    final searchRepository =
         RepositoryProvider.of<SearchRepository>(context);
 
     return BlocProvider(
@@ -24,9 +24,9 @@ class SearchView extends StatelessWidget {
           centerTitle: true,
           elevation: 0.5,
           backgroundColor: theme.colorScheme.background,
-          title: SearchBar(),
+          title: const SearchBar(),
         ),
-        body: Center(
+        body: const Center(
           child: ResultsList(),
         ),
       ),

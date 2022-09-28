@@ -20,7 +20,7 @@ class FollowRelationshipView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DatabaseRepository databaseRepository =
+    final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
 
     final theme = Theme.of(context);
@@ -29,10 +29,10 @@ class FollowRelationshipView extends StatelessWidget {
       future: databaseRepository.getUser(visitedUserId),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return LoadingView();
+          return const LoadingView();
         }
 
-        UserModel user = snapshot.data!;
+        final user = snapshot.data!;
 
         return BlocProvider(
           create: (context) => FollowRelationshipCubit(
@@ -48,7 +48,7 @@ class FollowRelationshipView extends StatelessWidget {
               backgroundColor: theme.backgroundColor,
               appBar: AppBar(
                 backgroundColor: theme.backgroundColor,
-                bottom: TabBar(
+                bottom: const TabBar(
                   indicatorColor: tappedAccent,
                   labelColor: tappedAccent,
                   tabs: [
@@ -62,7 +62,7 @@ class FollowRelationshipView extends StatelessWidget {
                 ),
                 title: Text(user.username),
               ),
-              body: TabBarView(
+              body: const TabBarView(
                 children: [
                   FollowerTab(),
                   FollowingTab(),

@@ -8,9 +8,9 @@ part 'down_for_maintenance_state.dart';
 class DownForMaintenanceBloc
     extends Bloc<DownForMaintenanceEvent, DownForMaintenanceState> {
   DownForMaintenanceBloc({required this.remoteConfigRepository})
-      : super(DownForMaintenanceState()) {
+      : super(const DownForMaintenanceState()) {
     on<CheckStatus>((event, emit) async {
-      bool status = await remoteConfigRepository.getDownForMaintenanceStatus();
+      final status = await remoteConfigRepository.getDownForMaintenanceStatus();
       emit(DownForMaintenanceState(downForMaintenance: status));
     });
   }

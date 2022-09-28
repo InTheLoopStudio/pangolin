@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/dynamic_link_repository.dart';
-import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 
 part 'dynamic_link_event.dart';
@@ -16,22 +15,23 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
   }) : super(DynamicLinkInitial()) {
     on<MonitorDynamicLinks>((event, emit) {
       dynamicLinkRepository.getDynamicLinks().listen((event) async {
-        print("new dynamic link");
+        print('new dynamic link');
         switch (event.type) {
           case DynamicLinkType.CreatePost:
-            navigationBloc.add(ChangeTab(selectedTab: 2));
+            navigationBloc.add(const ChangeTab(selectedTab: 2));
             break;
           case DynamicLinkType.ShareLoop:
             if (event.id != null) {
-              Loop shareLoop = await databaseRepository.getLoopById(
+              final shareLoop = await databaseRepository.getLoopById(
                 event.id ?? '',
               );
               navigationBloc.add(PushLoop(shareLoop));
             }
             break;
           case DynamicLinkType.ShareProfile:
-            if (event.id != null)
+            if (event.id != null) {
               navigationBloc.add(PushProfile(event.id ?? ''));
+            }
             break;
         }
       });

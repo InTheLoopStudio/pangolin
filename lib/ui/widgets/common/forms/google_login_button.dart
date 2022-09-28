@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intheloopapp/ui/themes.dart';
 
 class GoogleLoginButton extends StatelessWidget {
-  GoogleLoginButton({Key? key, this.onPressed}) : super(key: key);
+  const GoogleLoginButton({Key? key, this.onPressed}) : super(key: key);
 
   final void Function()? onPressed;
 
@@ -17,9 +17,9 @@ class GoogleLoginButton extends StatelessWidget {
         ),
       ),
       style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(10),
         ),
         backgroundColor: Colors.white,
       ),

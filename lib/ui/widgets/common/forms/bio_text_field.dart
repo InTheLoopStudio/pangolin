@@ -16,7 +16,7 @@ class BioTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       initialValue: initialValue,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         prefixIcon: Icon(Icons.short_text_rounded),
         labelText: 'Bio',
       ),
@@ -26,7 +26,7 @@ class BioTextField extends StatelessWidget {
         }
 
         if (input.trim().length > 256) {
-          return "bio must be less than 256 characters";
+          return 'bio must be less than 256 characters';
         }
 
         return null;

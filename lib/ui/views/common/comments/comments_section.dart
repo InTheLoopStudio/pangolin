@@ -14,9 +14,9 @@ class CommentsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DatabaseRepository databaseRepository =
+    final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
-    AuthRepository authRepo = RepositoryProvider.of<AuthRepository>(context);
+    final authRepo = RepositoryProvider.of<AuthRepository>(context);
 
     return BlocBuilder<LoopViewCubit, LoopViewState>(
       builder: (context, state) {
@@ -24,10 +24,10 @@ class CommentsSection extends StatelessWidget {
           stream: authRepo.user,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             }
 
-            UserModel currentUser = snapshot.data!;
+            final currentUser = snapshot.data!;
 
             return BlocProvider(
               create: (context) => CommentsCubit(
@@ -42,7 +42,7 @@ class CommentsSection extends StatelessWidget {
                     (BuildContext context, ScrollController scrollController) {
                   return Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(20),
                         topRight: Radius.circular(20),
                       ),
@@ -50,10 +50,10 @@ class CommentsSection extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        CommentsHeader(),
+                        const CommentsHeader(),
                         CommentsList(scrollController: scrollController),
-                        CommentsTextField(),
-                        SizedBox(height: 20),
+                        const CommentsTextField(),
+                        const SizedBox(height: 20),
                       ],
                     ),
                   );

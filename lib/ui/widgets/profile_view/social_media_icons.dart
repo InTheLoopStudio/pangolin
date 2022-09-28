@@ -16,11 +16,11 @@ class SocialMediaIcons extends StatelessWidget {
         ? GestureDetector(
             onTap: onTap,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               child: icon,
             ),
           )
-        : SizedBox.shrink();
+        : const SizedBox.shrink();
   }
 
   @override
@@ -28,68 +28,67 @@ class SocialMediaIcons extends StatelessWidget {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return Padding(
-          padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _socialMediaIcon(
                 state.visitedUser.twitterHandle.isNotEmpty,
-                icon: Icon(FontAwesomeIcons.twitter),
+                icon: const Icon(FontAwesomeIcons.twitter),
                 onTap: () {
                   launchUrl(
                     Uri(
                       scheme: 'https',
-                      path: 'twitter.com/' + state.visitedUser.twitterHandle,
+                      path: 'twitter.com/${state.visitedUser.twitterHandle}',
                     ),
                   );
                 },
               ),
               _socialMediaIcon(
                 state.visitedUser.instagramHandle.isNotEmpty,
-                icon: Icon(FontAwesomeIcons.instagram),
+                icon: const Icon(FontAwesomeIcons.instagram),
                 onTap: () {
                   launchUrl(
                     Uri(
-                      scheme: "https",
-                      path: 'instagram.com/' + state.visitedUser.instagramHandle,
-                    )
+                      scheme: 'https',
+                      path: 'instagram.com/${state.visitedUser.instagramHandle}',
+                    ),
                   );
                 },
               ),
               _socialMediaIcon(
                 state.visitedUser.tiktokHandle.isNotEmpty,
-                icon: Icon(FontAwesomeIcons.tiktok),
+                icon: const Icon(FontAwesomeIcons.tiktok),
                 onTap: () {
                   launchUrl(
                     Uri(
-                      scheme: "https",
-                      path: 'tiktok.com/@' + state.visitedUser.tiktokHandle,
+                      scheme: 'https',
+                      path: 'tiktok.com/@${state.visitedUser.tiktokHandle}',
                     ),
                   );
                 },
               ),
               _socialMediaIcon(
                 state.visitedUser.soundcloudHandle.isNotEmpty,
-                icon: Icon(FontAwesomeIcons.soundcloud),
+                icon: const Icon(FontAwesomeIcons.soundcloud),
                 onTap: () {
                   launchUrl(
                     Uri(
-                      scheme: "https",
+                      scheme: 'https',
                       path:
-                          'soundcloud.com/' + state.visitedUser.soundcloudHandle,
+                          'soundcloud.com/${state.visitedUser.soundcloudHandle}',
                     ),
                   );
                 },
               ),
               _socialMediaIcon(
                 state.visitedUser.youtubeChannelId.isNotEmpty,
-                icon: Icon(FontAwesomeIcons.youtube),
+                icon: const Icon(FontAwesomeIcons.youtube),
                 onTap: () {
                   launchUrl(
                     Uri(
-                      scheme: "https",
-                      path: 'youtube.com/channel/' +
-                          state.visitedUser.youtubeChannelId,
+                      scheme: 'https',
+                      path: 'youtube.com/channel/${state.visitedUser.youtubeChannelId}',
                     ),
                   );
                 },

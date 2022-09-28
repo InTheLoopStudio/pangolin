@@ -38,7 +38,7 @@ class UploadLoopState extends Equatable {
       pickedAudio: pickedAudio ?? this.pickedAudio,
       // selectedTags: selectedTags ?? this.selectedTags,
       loopTitle: loopTitle ?? this.loopTitle,
-      audioController: this.audioController,
+      audioController: audioController,
       status: status ?? this.status,
     );
   }

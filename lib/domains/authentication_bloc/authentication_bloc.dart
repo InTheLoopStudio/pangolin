@@ -43,7 +43,7 @@ class AuthenticationBloc
       _authRepository.logout();
     });
     on<UpdateAuthenticatedUser>((event, emit) async {
-      UserModel user = event.user;
+      final user = event.user;
       await _authRepository.updateUserData(userData: user);
       emit(Authenticated(user));
     });
@@ -54,7 +54,7 @@ class AuthenticationBloc
   late final StreamSubscription<UserModel> _userSubscription;
 
   void _onUserChanged(UserModel user) {
-    if (user.isNotEmpty && !(state is Authenticated)) {
+    if (user.isNotEmpty && state is! Authenticated) {
       add(LoggedIn(user: user));
     }
   }

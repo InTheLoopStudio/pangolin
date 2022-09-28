@@ -17,8 +17,8 @@ class ProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    DynamicLinkRepository dynamicLinkRepository =
+    final theme = Theme.of(context);
+    final dynamicLinkRepository =
         RepositoryProvider.of<DynamicLinkRepository>(context);
 
     return BlocBuilder<ProfileCubit, ProfileState>(
@@ -27,37 +27,34 @@ class ProfileHeader extends StatelessWidget {
           children: [
             Container(
               height: 250,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 borderRadius: BorderRadius.only(
-                  bottomRight: Radius.circular(10.0),
-                  bottomLeft: Radius.circular(10.0),
+                  bottomRight: Radius.circular(10),
+                  bottomLeft: Radius.circular(10),
                 ),
                 color: tappedAccent,
-                image: null,
               ),
             ),
-            state.currentUser.id == state.visitedUser.id
-                ? Row(
+            if (state.currentUser.id == state.visitedUser.id) Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                          vertical: 15.0,
-                          horizontal: 20.0,
+                          vertical: 15,
+                          horizontal: 20,
                         ),
                         child: GestureDetector(
                           onTap: () => context
                               .read<NavigationBloc>()
-                              .add(PushActivity()),
-                          child: NotificationIconButton(),
+                              .add(const PushActivity()),
+                          child: const NotificationIconButton(),
                         ),
                       ),
                     ],
-                  )
-                : const SizedBox.shrink(),
+                  ) else const SizedBox.shrink(),
             Container(
-              transform: Matrix4.translationValues(0.0, 20.0, 0.0),
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 60),
+              transform: Matrix4.translationValues(0, 20, 0),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 60),
               child: Stack(
                 children: [
                   Card(
@@ -67,7 +64,7 @@ class ProfileHeader extends StatelessWidget {
                     ),
                     elevation: 3,
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 70.0),
+                      padding: const EdgeInsets.only(top: 70),
                       child: Column(
                         children: [
                           Row(
@@ -75,62 +72,61 @@ class ProfileHeader extends StatelessWidget {
                             children: [
                               Text(
                                 state.visitedUser.username,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(left: 3.0),
+                                padding: const EdgeInsets.only(left: 3),
                                 child: GestureDetector(
                                   onTap: () async {
-                                    final String link =
+                                    final link =
                                         await dynamicLinkRepository
                                             .getShareProfileDynamicLink(
                                       state.visitedUser,
                                     );
-                                    Share.share(
-                                        'Check out this profile on In The Loop $link');
+                                    await Share.share(
+                                        'Check out this profile on In The Loop $link',);
                                   },
-                                  child: Icon(Icons.share),
+                                  child: const Icon(Icons.share),
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           Text(
                             state.visitedUser.bio,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 14,
                             ),
                           ),
-                          SizedBox(height: 10),
-                          FollowButton(),
-                          SizedBox(height: 20),
-                          SocialMediaIcons(),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 10),
+                          const FollowButton(),
+                          const SizedBox(height: 20),
+                          const SocialMediaIcons(),
+                          const SizedBox(height: 20),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Text(
-                                (state.visitedUser.loopsCount).toString() +
-                                    ' Loops',
-                                style: TextStyle(
+                                '${state.visitedUser.loopsCount} Loops',
+                                style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              FollowerCount(),
-                              FollowingCount(),
+                              const FollowerCount(),
+                              const FollowingCount(),
                             ],
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                         ],
                       ),
                     ),
                   ),
                   Container(
-                    transform: Matrix4.translationValues(0.0, -40.0, 0.0),
+                    transform: Matrix4.translationValues(0, -40, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

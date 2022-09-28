@@ -15,21 +15,16 @@ class CloudMessagingImpl extends NotificationRepository {
 
   final StreamChatClient _client;
 
+  @override
   Future<void> saveDeviceToken({required UserModel user}) async {
-    NotificationSettings settings = await fcm.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
+    final settings = await fcm.requestPermission(
+      
     );
 
     print('User granted permission: ${settings.authorizationStatus}');
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      final String? token = await fcm.getToken();
+      final token = await fcm.getToken();
 
       // print('Device Token: ' + (token ?? ''));
 
@@ -38,13 +33,12 @@ class CloudMessagingImpl extends NotificationRepository {
 // register the device with APN (Apple only)
           await _client.addDevice(token, PushProvider.apn);
         } else if (Platform.isAndroid) {
-          print("SAVE DEVICE TOKEN HERE " +
-              (_client.state.currentUser?.id ?? 'BLAH BLAH'));
+          print("SAVE DEVICE TOKEN HERE ${_client.state.currentUser?.id ?? 'BLAH BLAH'}",);
           // register the device with Firebase (Android only)
           await _client.addDevice(token, PushProvider.firebase);
         }
 
-        usersRef.doc(user.id).collection('tokens').doc(token).set({
+        await usersRef.doc(user.id).collection('tokens').doc(token).set({
           'token': token,
           'platform': Platform.operatingSystem,
         });

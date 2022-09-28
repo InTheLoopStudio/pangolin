@@ -6,10 +6,10 @@ import 'package:intheloopapp/ui/views/common/loop_view/loop_view_cubit.dart';
 class FollowIcon extends StatelessWidget {
   const FollowIcon({Key? key}) : super(key: key);
 
-  static const double ActionWidgetSize = 60.0;
-  static const double ActionIconSize = 35.0;
-  static const double ProfileImageSize = 50.0;
-  static const double PlusIconSize = 20.0;
+  static const double ActionWidgetSize = 60;
+  static const double ActionIconSize = 35;
+  static const double ProfileImageSize = 50;
+  static const double PlusIconSize = 20;
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +23,12 @@ class FollowIcon extends StatelessWidget {
             height: PlusIconSize,
             decoration: BoxDecoration(
               color: tappedAccent,
-              borderRadius: BorderRadius.circular(15.0),
+              borderRadius: BorderRadius.circular(15),
             ),
             child: Icon(
               state.isFollowing ? Icons.check : Icons.add,
               color: Colors.white,
-              size: 20.0,
+              size: 20,
             ),
           ),
         );

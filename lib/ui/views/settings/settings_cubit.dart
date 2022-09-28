@@ -49,7 +49,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       pushNotificationsITLUpdates: currentUser.pushNotificationsITLUpdates,
       emailNotificationsAppReleases: currentUser.emailNotificationsAppReleases,
       emailNotificationsITLUpdates: currentUser.emailNotificationsITLUpdates,
-    ));
+    ),);
   }
 
   void changeBio(String value) => emit(state.copyWith(bio: value));
@@ -81,7 +81,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         pushNotificationsFollows: selected,
         pushNotificationsDirectMessages: selected,
         pushNotificationsITLUpdates: selected,
-      ));
+      ),);
 
   void changeAppReleaseEmail(bool selected) =>
       emit(state.copyWith(emailNotificationsAppReleases: selected));
@@ -90,9 +90,9 @@ class SettingsCubit extends Cubit<SettingsState> {
   void changeAllEmail(bool selected) => emit(state.copyWith(
         emailNotificationsAppReleases: selected,
         emailNotificationsITLUpdates: selected,
-      ));
+      ),);
 
-  void handleImageFromGallery() async {
+  Future<void> handleImageFromGallery() async {
     try {
       final imageFile =
           await state.picker.pickImage(source: ImageSource.gallery);
@@ -104,7 +104,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
   }
 
-  void saveProfile() async {
+  Future<void> saveProfile() async {
     print(state.formKey);
     if (state.formKey.currentState == null) {
       return;
@@ -115,7 +115,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         !state.status.isSubmissionInProgress) {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
-      String profilePictureUrl = '';
+      var profilePictureUrl = '';
       if (state.profileImage == null) {
         profilePictureUrl = currentUser.profilePicture;
       } else {
@@ -126,7 +126,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         );
       }
 
-      UserModel user = currentUser.copyWith(
+      final user = currentUser.copyWith(
         username: state.username,
         bio: state.bio,
         location: state.location,
@@ -148,7 +148,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       await databaseRepository.updateUserData(user);
       authenticationBloc.add(UpdateAuthenticatedUser(user));
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
-      navigationBloc.add(Pop());
+      navigationBloc.add(const Pop());
     } else {
       print('invalid');
     }
@@ -158,7 +158,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     authenticationBloc.add(LoggedOut());
   }
 
-  void reauthWithGoogle() async {
+  Future<void> reauthWithGoogle() async {
     emit(
       state.copyWith(status: FormzStatus.submissionInProgress),
     );
@@ -180,7 +180,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
   }
 
-  void reauthWithApple() async {
+  Future<void> reauthWithApple() async {
     emit(
       state.copyWith(status: FormzStatus.submissionInProgress),
     );
@@ -205,7 +205,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   void deleteUser() {
     authRepository.deleteUser();
     authenticationBloc.add(LoggedOut());
-    navigationBloc.add(Pop());
-    navigationBloc.add(Pop());
+    navigationBloc.add(const Pop());
+    navigationBloc.add(const Pop());
   }
 }

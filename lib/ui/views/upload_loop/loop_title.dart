@@ -12,7 +12,7 @@ class LoopTitle extends FormzInput<String, LoopTitleValidationError> {
 
   @override
   LoopTitleValidationError? validator(String? value) {
-    return (_emailRegExp.hasMatch(value ?? '') && (value ?? '').length != 0)
+    return (_emailRegExp.hasMatch(value ?? '') && (value ?? '').isNotEmpty)
         ? null
         : LoopTitleValidationError.invalid;
   }

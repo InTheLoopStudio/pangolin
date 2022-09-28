@@ -17,7 +17,7 @@ class BadgeContainer extends StatelessWidget {
       width: 200,
       decoration: BoxDecoration(
         color: Colors.blue,
-        borderRadius: BorderRadius.circular(50.0),
+        borderRadius: BorderRadius.circular(50),
         image: DecorationImage(
           fit: BoxFit.fill,
           image: CachedNetworkImageProvider(badge.imageUrl),

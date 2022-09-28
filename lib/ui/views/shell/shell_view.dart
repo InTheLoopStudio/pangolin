@@ -22,7 +22,7 @@ class ShellView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthRepository authRepo =
+    final authRepo =
         RepositoryProvider.of<AuthRepository>(context);
 
     return StreamBuilder<UserModel>(
@@ -37,11 +37,11 @@ class ShellView extends StatelessWidget {
                 body: IndexedStack(
                   index: state.selectedTab,
                   children: [
-                    FeedsListView(), // TODO: getstream.io activity feed?
-                    SearchView(),
+                    const FeedsListView(), // TODO: getstream.io activity feed?
+                    const SearchView(),
                     UploadView(),
                     // ActivityView(),
-                    MessagingChannelListView(),
+                    const MessagingChannelListView(),
                     ProfileView(visitedUserId: currentUser.id),
                     // ProfileView(visitedUserId: currentUser.id)
                   ],
@@ -54,7 +54,7 @@ class ShellView extends StatelessWidget {
           );
         }
 
-        return LoadingView();
+        return const LoadingView();
       },
     );
   }

@@ -36,17 +36,17 @@ class OnboardingCubit extends Cubit<OnboardingState> {
       username: currentUser.username,
       location: currentUser.location,
       bio: currentUser.bio,
-    ));
+    ),);
   }
 
-  void initFollowRecommendations() async {
-    [
+  Future<void> initFollowRecommendations() async {
+    for (final userId in [
       'VWj4qT2JMIhjjEYYFnbvebIazfB3',
       '8yYVxpQ7cURSzNfBsaBGF7A7kkv2',
       'wHpU3xj2yUSuz2rLFKC6J87HTLu1',
       'n4zIL6bOuPTqRC3dtsl6gyEBPQl1'
-    ].forEach((userId) async {
-      bool isFollowing = false;
+    ]) async {
+      var isFollowing = false;
 
       if (userId == currentUser.id) {
         isFollowing = true;
@@ -73,10 +73,10 @@ class OnboardingCubit extends Cubit<OnboardingState> {
         default:
           break;
       }
-    });
+    }
   }
 
-  void followRecommendation(String userId) async {
+  Future<void> followRecommendation(String userId) async {
     switch (userId) {
       case 'VWj4qT2JMIhjjEYYFnbvebIazfB3':
         emit(state.copyWith(followingInfamous: true));
@@ -104,7 +104,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
   void locationChange(String input) => emit(state.copyWith(location: input));
   void bioChange(String input) => emit(state.copyWith(bio: input));
 
-  void handleImageFromGallery() async {
+  Future<void> handleImageFromGallery() async {
     try {
       final imageFile =
           await state.picker.pickImage(source: ImageSource.gallery);
@@ -134,7 +134,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
       }
     } else if (state.onboardingStage == OnboardingStage.stage2) {
       // Write data to db
-      navigationBloc.add(Pop());
+      navigationBloc.add(const Pop());
     }
   }
 
@@ -144,11 +144,11 @@ class OnboardingCubit extends Cubit<OnboardingState> {
     }
   }
 
-  void finishOnboarding() async {
+  Future<void> finishOnboarding() async {
     if (!state.loading) {
       emit(state.copyWith(loading: true));
 
-      String profilePictureUrl = currentUser.profilePicture;
+      var profilePictureUrl = currentUser.profilePicture;
       if (state.pickedPhoto != null) {
         profilePictureUrl = await storageRepository.uploadProfilePicture(
           currentUser.id,
@@ -165,7 +165,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
         onboarded: true,
       );
 
-      databaseRepository.updateUserData(currentUser);
+      await databaseRepository.updateUserData(currentUser);
       authenticationBloc.add(UpdateAuthenticatedUser(currentUser));
       onboardingBloc.add(FinishOnboarding());
     }

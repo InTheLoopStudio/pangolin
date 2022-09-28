@@ -53,9 +53,9 @@ class _ActivityListState extends State<ActivityList> {
   Widget build(BuildContext context) {
     return BlocBuilder<ActivityBloc, ActivityState>(
       builder: (context, state) {
-        print('DA STATE IS' + state.toString());
+        print('DA STATE IS$state');
         if (state is ActivityInitial) {
-          return ListLoadingView();
+          return const ListLoadingView();
         }
         if (state is ActivityFailure) {
           return const Center(child: Text('failed to fetch activities'));
@@ -75,7 +75,7 @@ class _ActivityListState extends State<ActivityList> {
                         CupertinoSliverNavigationBar(
                           backgroundColor: Theme.of(context).backgroundColor,
                           largeTitle: Text(
-                            "Activity",
+                            'Activity',
                             style: TextStyle(
                               color:
                                   Theme.of(context).appBarTheme.foregroundColor,
@@ -84,8 +84,8 @@ class _ActivityListState extends State<ActivityList> {
                         ),
                         SliverList(
                           delegate: SliverChildListDelegate([
-                            SizedBox(height: 150),
-                            EasterEggPlaceholder(
+                            const SizedBox(height: 150),
+                            const EasterEggPlaceholder(
                               text: 'No New Activities',
                             ),
                           ]),
@@ -95,7 +95,7 @@ class _ActivityListState extends State<ActivityList> {
                         CupertinoSliverNavigationBar(
                           backgroundColor: Theme.of(context).backgroundColor,
                           largeTitle: Text(
-                            "Activity",
+                            'Activity',
                             style: TextStyle(
                               color:
                                   Theme.of(context).appBarTheme.foregroundColor,
@@ -106,7 +106,7 @@ class _ActivityListState extends State<ActivityList> {
                           delegate: SliverChildBuilderDelegate(
                             (BuildContext context, int index) {
                               return index >= state.activities.length
-                                  ? Center(
+                                  ? const Center(
                                       child: SizedBox(
                                         height: 24,
                                         width: 24,
@@ -116,7 +116,7 @@ class _ActivityListState extends State<ActivityList> {
                                       ),
                                     )
                                   : ActivityTile(
-                                      activity: state.activities[index]);
+                                      activity: state.activities[index],);
                             },
                             childCount: state is ActivityEnd
                                 ? state.activities.length
@@ -128,7 +128,7 @@ class _ActivityListState extends State<ActivityList> {
             ),
           );
         }
-        return ListLoadingView();
+        return const ListLoadingView();
       },
     );
   }

@@ -4,7 +4,6 @@ import 'package:formz/formz.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
-import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/send_badge/send_badge_cubit.dart';
@@ -19,7 +18,7 @@ class SendBadgeView extends StatelessWidget {
     return BlocSelector<AuthenticationBloc, AuthenticationState, Authenticated>(
       selector: (state) => state as Authenticated,
       builder: (context, state) {
-        UserModel currentUser = state.currentUser;
+        final currentUser = state.currentUser;
         return BlocProvider(
           create: (context) => SendBadgeCubit(
             currentUser: currentUser,
@@ -32,35 +31,33 @@ class SendBadgeView extends StatelessWidget {
               return Scaffold(
                 backgroundColor: Theme.of(context).backgroundColor,
                 appBar: AppBar(
-                  title: Text('Send Badge'),
+                  title: const Text('Send Badge'),
                 ),
                 body: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Form(
                     key: state.formKey,
                     child: ListView(
                       children: [
-                        SizedBox(height: 50),
-                        BadgeImageInput(),
-                        SizedBox(height: 50),
+                        const SizedBox(height: 50),
+                        const BadgeImageInput(),
+                        const SizedBox(height: 50),
                         BadgeReceiverTextField(
                           onChanged: (input) => context
                               .read<SendBadgeCubit>()
                               .changeReceiverUsername(input),
                           initialValue: '',
                         ),
-                        SizedBox(height: 50),
+                        const SizedBox(height: 50),
                         MaterialButton(
                           color: tappedAccent,
                           onPressed: context.read<SendBadgeCubit>().sendBadge,
-                          child: Text('Send'),
+                          child: const Text('Send'),
                         ),
-                        state.status.isSubmissionInProgress
-                            ? CircularProgressIndicator(
+                        if (state.status.isSubmissionInProgress) const CircularProgressIndicator(
                                 valueColor:
                                     AlwaysStoppedAnimation(tappedAccent),
-                              )
-                            : SizedBox.shrink(),
+                              ) else const SizedBox.shrink(),
                       ],
                     ),
                   ),

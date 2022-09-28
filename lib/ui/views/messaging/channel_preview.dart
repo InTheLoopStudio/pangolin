@@ -23,7 +23,7 @@ class ChannelPreview extends StatelessWidget {
           MaterialPageRoute(
             builder: (_) => StreamChannel(
               channel: channel,
-              child: ChannelView(),
+              child: const ChannelView(),
             ),
           ),
         );

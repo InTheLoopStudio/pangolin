@@ -31,7 +31,7 @@ class SearchState extends Equatable {
       searchResults: searchResults ?? this.searchResults,
       searchTerm: searchTerm ?? this.searchTerm,
       loading: loading ?? this.loading,
-      textController: this.textController,
+      textController: textController,
     );
   }
 }

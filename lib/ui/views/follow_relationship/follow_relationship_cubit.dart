@@ -10,20 +10,20 @@ class FollowRelationshipCubit extends Cubit<FollowRelationshipState> {
   FollowRelationshipCubit({
     required this.databaseRepository,
     required this.visitedUserId,
-  }) : super(FollowRelationshipState());
+  }) : super(const FollowRelationshipState());
 
   final DatabaseRepository databaseRepository;
   final String visitedUserId;
 
   Future<void> initFollowers() async {
-    List<UserModel> followerUser =
+    final followerUser =
         await databaseRepository.getFollowers(visitedUserId);
 
     emit(state.copyWith(followers: followerUser));
   }
 
   Future<void> initFollowing() async {
-    List<UserModel> followingUser =
+    final followingUser =
         await databaseRepository.getFollowing(visitedUserId);
 
     emit(state.copyWith(following: followingUser));

@@ -12,7 +12,7 @@ class TitleInput extends StatelessWidget {
         return TextField(
           maxLength: 15,
           decoration: InputDecoration(
-            border: OutlineInputBorder(),
+            border: const OutlineInputBorder(),
             labelText: 'Title',
             hintText: state.loopTitle.value,
             errorText: state.loopTitle.invalid ? 'invalid' : null,

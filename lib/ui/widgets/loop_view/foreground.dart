@@ -35,11 +35,11 @@ class Foreground extends StatelessWidget {
               ],
             ),
             Row(
-              children: [
+              children: const [
                 LoopSeekBar(),
               ],
             ),
-            SizedBox(height: 25)
+            const SizedBox(height: 25)
           ],
         );
       },

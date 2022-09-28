@@ -16,7 +16,7 @@ class BottomToolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
+    final theme = Theme.of(context);
     return BlocBuilder<NavigationBloc, NavigationState>(
       builder: (context, state) {
         return CupertinoTabBar(
@@ -29,24 +29,24 @@ class BottomToolbar extends StatelessWidget {
           // inactiveColor: Colors.white,
           currentIndex: state.selectedTab,
           items: [
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(Icons.headphones_outlined),
               activeIcon: Icon(Icons.headphones_rounded),
             ),
-            BottomNavigationBarItem(icon: Icon(Icons.search)),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(icon: Icon(Icons.search)),
+            const BottomNavigationBarItem(
                 icon: Icon(Icons.add_box_outlined),
-                activeIcon: Icon(Icons.add_box)),
-            BottomNavigationBarItem(
+                activeIcon: Icon(Icons.add_box),),
+            const BottomNavigationBarItem(
               icon: Icon(Icons.comment_outlined),
               activeIcon: Icon(Icons.comment),
             ),
             // BottomNavigationBarItem(icon: Icon(Icons.person)),
             BottomNavigationBarItem(
               activeIcon: Container(
-                height: 35.0,
-                width: 35.0,
-                padding: EdgeInsets.all(2.0),
+                height: 35,
+                width: 35,
+                padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
                   color: tappedAccent,
                   borderRadius: BorderRadius.circular(35.0 / 2),
@@ -57,9 +57,9 @@ class BottomToolbar extends StatelessWidget {
                 ),
               ),
               icon: Container(
-                height: 30.0,
-                width: 30.0,
-                padding: EdgeInsets.all(1.0),
+                height: 30,
+                width: 30,
+                padding: const EdgeInsets.all(1),
                 decoration: BoxDecoration(
                   color: theme.bottomNavigationBarTheme.unselectedItemColor,
                   borderRadius: BorderRadius.circular(30.0 / 2),

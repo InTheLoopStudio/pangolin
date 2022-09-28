@@ -7,25 +7,25 @@ import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class CommentContainer extends StatelessWidget {
-  final Comment comment;
 
   const CommentContainer({Key? key, required this.comment}) : super(key: key);
+  final Comment comment;
 
   @override
   Widget build(BuildContext context) {
-    DatabaseRepository databaseRepository =
+    final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
     return FutureBuilder<UserModel>(
       future: databaseRepository.getUser(comment.userId!),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
 
-        UserModel user = snapshot.data!;
+        final user = snapshot.data!;
 
         return Container(
-          margin: EdgeInsets.symmetric(
+          margin: const EdgeInsets.symmetric(
             horizontal: 10,
           ),
           child: ListTile(
@@ -38,7 +38,7 @@ class CommentContainer extends StatelessWidget {
                 comment.timestamp!.toDate(),
                 locale: 'en_short',
               ),
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.grey,
               ),
             ),

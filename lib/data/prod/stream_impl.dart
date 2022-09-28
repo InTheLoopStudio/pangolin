@@ -17,9 +17,9 @@ class StreamImpl extends StreamRepository {
 
   @override
   Future<UserModel> connectUser(UserModel user) async {
-    final String token = await getToken();
+    final token = await getToken();
 
-    Map<String, dynamic> extraData = {};
+    final extraData = <String, dynamic>{};
     extraData['image'] = user.profilePicture;
     extraData['name'] = user.username;
 
@@ -45,19 +45,19 @@ class StreamImpl extends StreamRepository {
         .where((element) => element.id != _client.state.currentUser!.id)
         .map(
       (User e) async {
-        DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+        final userSnapshot =
             await usersRef.doc(e.id).get();
-        UserModel user = UserModel.fromDoc(userSnapshot);
+        final user = UserModel.fromDoc(userSnapshot);
 
         return user;
       },
-    ));
+    ),);
     return chatUsers;
   }
 
   @override
   Future<String> getToken() async {
-    HttpsCallable callable = _functions.httpsCallable('ext-auth-chat-getStreamUserToken');
+    final callable = _functions.httpsCallable('ext-auth-chat-getStreamUserToken');
     final results = await callable();
 
     return results.data;
@@ -73,7 +73,7 @@ class StreamImpl extends StreamRepository {
     List<String?>? members, {
     String? image,
   }) async {
-    Channel channel = _client.channel('messaging');
+    var channel = _client.channel('messaging');
 
     final res = await _client.queryChannelsOnline(
       state: false,
@@ -84,15 +84,15 @@ class StreamImpl extends StreamRepository {
           _client.state.currentUser!.id,
         ],
         'distinct': true,
-      }),
+      },),
       messageLimit: 0,
-      paginationParams: PaginationParams(
+      paginationParams: const PaginationParams(
         limit: 1,
       ),
     );
 
-    final _channelExisted = res.length == 1;
-    if (_channelExisted) {
+    final channelExisted = res.length == 1;
+    if (channelExisted) {
       channel = res.first;
       await channel.watch();
     } else {
@@ -115,7 +115,7 @@ class StreamImpl extends StreamRepository {
 
   @override
   Future<Channel> createSimpleChat(String? friendId) async {
-    Channel channel = _client.channel('messaging');
+    var channel = _client.channel('messaging');
 
     final res = await _client.queryChannelsOnline(
       state: false,
@@ -127,15 +127,15 @@ class StreamImpl extends StreamRepository {
           _client.state.currentUser!.id,
         ],
         'distinct': true,
-      }),
+      },),
       messageLimit: 0,
-      paginationParams: PaginationParams(
+      paginationParams: const PaginationParams(
         limit: 1,
       ),
     );
 
-    final _channelExisted = res.length == 1;
-    if (_channelExisted) {
+    final channelExisted = res.length == 1;
+    if (channelExisted) {
       channel = res.first;
       await channel.watch();
     } else {
@@ -149,7 +149,7 @@ class StreamImpl extends StreamRepository {
           ],
         },
       );
-      channel.watch();
+      await channel.watch();
     }
 
     return channel;

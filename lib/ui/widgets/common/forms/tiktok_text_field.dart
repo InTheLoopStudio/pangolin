@@ -17,12 +17,12 @@ class TikTokTextField extends StatelessWidget {
     return TextFormField(
       inputFormatters: [
         // is able to enter lowercase letters
-        FilteringTextInputFormatter.allow(RegExp(r"[a-z0-9_\.\-\$]")),
+        FilteringTextInputFormatter.allow(RegExp(r'[a-z0-9_\.\-\$]')),
       ],
       initialValue: initialValue,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         prefixIcon: Icon(FontAwesomeIcons.tiktok),
-        prefixText: "@ ",
+        prefixText: '@ ',
         labelText: 'TikTok',
       ),
       onSaved: (input) {

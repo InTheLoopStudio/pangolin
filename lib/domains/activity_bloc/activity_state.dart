@@ -23,5 +23,5 @@ class ActivityEnd extends ActivityState {
 }
 
 class ActivityFailure extends ActivityState {
-  ActivityFailure() : super(activities: const []);
+  const ActivityFailure() : super(activities: const []);
 }

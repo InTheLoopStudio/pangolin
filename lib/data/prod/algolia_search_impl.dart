@@ -7,39 +7,40 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 final _analytics = FirebaseAnalytics.instance;
 final _fireStore = FirebaseFirestore.instance;
 final usersRef = _fireStore.collection('users');
-final Algolia _algolia = Algolia.init(
+final Algolia _algolia = const Algolia.init(
   applicationId: 'GCNFAI2WB6',
   apiKey: 'c89ebf37b46a3683405be3ed0901f217',
 ).instance;
 
 class AlgoliaSearchImpl extends SearchRepository {
   Future<UserModel> _getUser(String userId) async {
-    DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+    final userSnapshot =
         await usersRef.doc(userId).get();
-    UserModel user = UserModel.fromDoc(userSnapshot);
+    final user = UserModel.fromDoc(userSnapshot);
 
     return user;
   }
 
+  @override
   Future<List<UserModel>> queryUsers(String input) async {
-    List<AlgoliaObjectSnapshot> results = [];
+    var results = <AlgoliaObjectSnapshot>[];
 
     try {
-      AlgoliaQuery query = _algolia.index('prod_users').query(input);
+      final query = _algolia.index('prod_users').query(input);
 
-      AlgoliaQuerySnapshot snap = await query.getObjects();
+      final snap = await query.getObjects();
 
-      _analytics.logSearch(searchTerm: input);
+      await _analytics.logSearch(searchTerm: input);
 
       results = snap.hits;
     } on AlgoliaError catch (e) {
       print(e.error);
-      throw e;
+      rethrow;
     }
 
-    List<UserModel> userResults = await Future.wait(
+    final userResults = await Future.wait(
       results.map((res) async {
-        UserModel user = await _getUser(res.objectID);
+        final user = await _getUser(res.objectID);
         return user;
       }),
     );

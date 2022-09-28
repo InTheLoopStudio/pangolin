@@ -15,7 +15,7 @@ class Timestamp extends StatelessWidget {
             state.loop.timestamp,
             locale: 'en_short',
           ),
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.grey,
           ),
         );

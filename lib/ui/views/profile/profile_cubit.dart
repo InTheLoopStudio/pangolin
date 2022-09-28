@@ -10,11 +10,6 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 part 'profile_state.dart';
 
 class ProfileCubit extends HydratedCubit<ProfileState> {
-  final DatabaseRepository databaseRepository;
-  final UserModel currentUser;
-  final UserModel visitedUser;
-  StreamSubscription? loopListener;
-  StreamSubscription? badgeListener;
 
   ProfileCubit({
     required this.databaseRepository,
@@ -26,6 +21,11 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
             visitedUser: visitedUser,
           ),
         );
+  final DatabaseRepository databaseRepository;
+  final UserModel currentUser;
+  final UserModel visitedUser;
+  StreamSubscription? loopListener;
+  StreamSubscription? badgeListener;
 
   @override
   ProfileState fromJson(Map<String, dynamic> json) {
@@ -51,7 +51,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
         // 'currentUser': state.currentUser.toJson(),
       };
 
-  void refetchVisitedUser({UserModel? newUserData}) async {
+  Future<void> refetchVisitedUser({UserModel? newUserData}) async {
     if (newUserData == null) {
       final refreshedVisitedUser =
           await databaseRepository.getUser(state.visitedUser.id);
@@ -61,73 +61,69 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
     }
   }
 
-  void initLoops({bool clearLoops = true}) async {
-    loopListener?.cancel();
+  Future<void> initLoops({bool clearLoops = true}) async {
+    await loopListener?.cancel();
     if (clearLoops) {
       emit(state.copyWith(
         status: ProfileStatus.initial,
         userLoops: [],
         hasReachedMax: false,
-      ));
+      ),);
     }
 
-    bool loopsAvailable =
-        (await databaseRepository.getUserLoops(visitedUser.id, limit: 1))
-                .length !=
-            0;
+    final loopsAvailable =
+        (await databaseRepository.getUserLoops(visitedUser.id, limit: 1)).isNotEmpty;
     if (!loopsAvailable) {
       emit(state.copyWith(status: ProfileStatus.success));
     }
 
     loopListener = databaseRepository
-        .userLoopsObserver(visitedUser.id, limit: 20)
+        .userLoopsObserver(visitedUser.id)
         .listen((Loop event) {
       // print('loop { ${event.id} : ${event.title} }');
       emit(state.copyWith(
         status: ProfileStatus.success,
         userLoops: List.of(state.userLoops)..add(event),
-      ));
+      ),);
     });
   }
 
-  void initBadges({bool clearBadges = true}) async {
-    badgeListener?.cancel();
+  Future<void> initBadges({bool clearBadges = true}) async {
+    await badgeListener?.cancel();
     if (clearBadges) {
       emit(state.copyWith(
         status: ProfileStatus.initial,
         userBadges: [],
         hasReachedMax: false,
-      ));
+      ),);
     }
 
-    bool badgesAvailable =
-        (await databaseRepository.getUserBadges(visitedUser.id, limit: 1))
-                .length !=
-            0;
+    final badgesAvailable =
+        (await databaseRepository.getUserBadges(visitedUser.id, limit: 1)).isNotEmpty;
     if (!badgesAvailable) {
       emit(state.copyWith(status: ProfileStatus.success));
     }
 
     badgeListener = databaseRepository
-        .userBadgesObserver(visitedUser.id, limit: 20)
+        .userBadgesObserver(visitedUser.id)
         .listen((Badge event) {
       // print('loop { ${event.id} : ${event.title} }');
       emit(state.copyWith(
         status: ProfileStatus.success,
         userBadges: List.of(state.userBadges)..add(event),
-      ));
+      ),);
     });
   }
 
-  void fetchMoreLoops() async {
+  Future<void> fetchMoreLoops() async {
     if (state.hasReachedMax) return;
 
     try {
       if (state.status == ProfileStatus.initial) {
-        initLoops();
+        await initLoops();
       }
 
-      final List<Loop> loops = await databaseRepository.getUserLoops(
+      final loops = await databaseRepository.getUserLoops(
         visitedUser.id,
         limit: 10,
         lastLoopId: state.userLoops.last.id,
@@ -146,15 +142,15 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
     }
   }
 
-  void fetchMoreBadges() async {
+  Future<void> fetchMoreBadges() async {
     if (state.hasReachedMax) return;
 
     try {
       if (state.status == ProfileStatus.initial) {
-        initBadges();
+        await initBadges();
       }
 
-      final List<Badge> badges = await databaseRepository.getUserBadges(
+      final badges = await databaseRepository.getUserBadges(
         visitedUser.id,
         limit: 10,
         lastBadgeId: state.userBadges.last.id,
@@ -181,7 +177,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
     }
   }
 
-  void follow(String currentUserId, String visitedUserId) async {
+  Future<void> follow(String currentUserId, String visitedUserId) async {
     emit(
       state.copyWith(
         followerCount: state.followerCount + 1,
@@ -191,7 +187,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
     await databaseRepository.followUser(currentUserId, visitedUserId);
   }
 
-  void unfollow(String currentUserId, String visitedUserId) async {
+  Future<void> unfollow(String currentUserId, String visitedUserId) async {
     emit(
       state.copyWith(
         followerCount: state.followerCount - 1,
@@ -201,8 +197,8 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
     await databaseRepository.unfollowUser(currentUserId, visitedUserId);
   }
 
-  void loadFollowing(String visitedUserId) async {
-    int followingCount = await databaseRepository.followingNum(visitedUserId);
+  Future<void> loadFollowing(String visitedUserId) async {
+    final followingCount = await databaseRepository.followingNum(visitedUserId);
 
     emit(
       state.copyWith(
@@ -211,8 +207,8 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
     );
   }
 
-  void loadFollower(String visitedUserId) async {
-    int followerCount = await databaseRepository.followersNum(visitedUserId);
+  Future<void> loadFollower(String visitedUserId) async {
+    final followerCount = await databaseRepository.followersNum(visitedUserId);
 
     emit(
       state.copyWith(
@@ -221,8 +217,8 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
     );
   }
 
-  void loadIsFollowing(String currentUserId, String visitedUserId) async {
-    bool isFollowing = await databaseRepository.isFollowingUser(
+  Future<void> loadIsFollowing(String currentUserId, String visitedUserId) async {
+    final isFollowing = await databaseRepository.isFollowingUser(
       currentUserId,
       visitedUserId,
     );
@@ -235,14 +231,14 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
   }
 
   void deleteLoop(Loop loop) {
-    List<Loop> newLoops = List.of(state.userLoops)
+    final newLoops = List<Loop>.of(state.userLoops)
       ..removeWhere((element) => element.id == loop.id);
     emit(state.copyWith(userLoops: newLoops));
   }
 
   @override
   Future<void> close() async {
-    loopListener?.cancel();
-    super.close();
+    await loopListener?.cancel();
+    await super.close();
   }
 }

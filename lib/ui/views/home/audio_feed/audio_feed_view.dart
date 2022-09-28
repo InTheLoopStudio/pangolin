@@ -9,6 +9,13 @@ import 'package:intheloopapp/ui/views/common/loop_view/loop_view.dart';
 import 'package:intheloopapp/ui/views/home/audio_feed/audio_feed_cubit.dart';
 
 class AudioFeedView extends StatefulWidget {
+
+  const AudioFeedView({
+    Key? key,
+    required this.feedId,
+    required this.sourceFunction,
+    required this.sourceStream,
+  }) : super(key: key);
   final String feedId;
   final Future<List<Loop>> Function(
     String currentUserId, {
@@ -20,13 +27,6 @@ class AudioFeedView extends StatefulWidget {
     int limit,
   }) sourceStream;
 
-  AudioFeedView({
-    Key? key,
-    required this.feedId,
-    required this.sourceFunction,
-    required this.sourceStream,
-  }) : super(key: key);
-
   @override
   _AudioFeedViewState createState() => _AudioFeedViewState();
 }
@@ -34,7 +34,7 @@ class AudioFeedView extends StatefulWidget {
 class _AudioFeedViewState extends State<AudioFeedView>
     with AutomaticKeepAliveClientMixin {
   final int refetchLimit = 5;
-  PageController _pageController = PageController(initialPage: 0);
+  final PageController _pageController = PageController();
   String get _feedId => widget.feedId;
 
   Future<List<Loop>> Function(
@@ -60,24 +60,24 @@ class _AudioFeedViewState extends State<AudioFeedView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    AuthRepository authRepo = RepositoryProvider.of<AuthRepository>(context);
+    final authRepo = RepositoryProvider.of<AuthRepository>(context);
     return StreamBuilder<UserModel>(
       stream: authRepo.user,
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return LoopLoadingView();
+        if (!snapshot.hasData) return const LoopLoadingView();
 
-        UserModel currentUser = snapshot.data!;
+        final currentUser = snapshot.data!;
         return BlocProvider(
           create: (context) => AudioFeedCubit(
             currentUserId: currentUser.id,
             sourceFunction: _sourceFunction,
             sourceStream: _sourceStream,
-          )..initLoops(clearLoops: true),
+          )..initLoops(),
           child: BlocBuilder<AudioFeedCubit, AudioFeedState>(
             builder: (context, state) {
               switch (state.status) {
                 case AudioFeedStatus.initial:
-                  return LoopLoadingView();
+                  return const LoopLoadingView();
                 case AudioFeedStatus.success:
                   return state.loops.isNotEmpty
                       ? PageView.builder(
@@ -86,8 +86,9 @@ class _AudioFeedViewState extends State<AudioFeedView>
                           itemCount: state.loops.length,
                           onPageChanged: (index) {
                             // Fetch more loops when near the end
-                            if (index >= state.loops.length - refetchLimit)
+                            if (index >= state.loops.length - refetchLimit) {
                               context.read<AudioFeedCubit>().fetchMoreLoops();
+                            }
                           },
                           itemBuilder: (context, index) {
                             index = index % (state.loops.length);
@@ -109,8 +110,8 @@ class _AudioFeedViewState extends State<AudioFeedView>
                               ],
                             ),
                           ),
-                          child: EasterEggPlaceholder(
-                            text: "No New Loops",
+                          child: const EasterEggPlaceholder(
+                            text: 'No New Loops',
                             color: Colors.white,
                           ),
                         );
@@ -126,13 +127,13 @@ class _AudioFeedViewState extends State<AudioFeedView>
                         ],
                       ),
                     ),
-                    child: EasterEggPlaceholder(
+                    child: const EasterEggPlaceholder(
                       text: 'Error Fetching Loops :(',
                       color: Colors.white,
                     ),
                   );
                 default:
-                  return LoopLoadingView();
+                  return const LoopLoadingView();
               }
             },
           ),

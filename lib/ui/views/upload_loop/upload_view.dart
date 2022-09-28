@@ -8,8 +8,8 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
 import 'package:intheloopapp/ui/views/upload_loop/upload_loop_cubit.dart';
-import 'package:intheloopapp/ui/views/upload_loop/upload_loop_splash_view.dart';
 import 'package:intheloopapp/ui/views/upload_loop/upload_loop_form_view.dart';
+import 'package:intheloopapp/ui/views/upload_loop/upload_loop_splash_view.dart';
 
 class UploadView extends StatelessWidget {
   UploadView({Key? key}) : super(key: key);
@@ -19,17 +19,17 @@ class UploadView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthRepository authRepo =
+    final authRepo =
         RepositoryProvider.of<AuthRepository>(context);
     final theme = Theme.of(context);
     return StreamBuilder<UserModel>(
       stream: authRepo.user,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return LoadingView();
+          return const LoadingView();
         }
 
-        UserModel currentUser = snapshot.data!;
+        final currentUser = snapshot.data!;
 
         return BlocProvider(
           create: (_) => UploadLoopCubit(
@@ -47,8 +47,8 @@ class UploadView extends StatelessWidget {
               child: BlocBuilder<UploadLoopCubit, UploadLoopState>(
                 builder: (context, state) {
                   return state.pickedAudio == null
-                      ? UploadLoopSplashView()
-                      : UploadLoopFormView();
+                      ? const UploadLoopSplashView()
+                      : const UploadLoopFormView();
                 },
               ),
             ),

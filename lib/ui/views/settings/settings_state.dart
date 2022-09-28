@@ -47,6 +47,7 @@ class SettingsState extends Equatable {
   final bool emailNotificationsAppReleases;
   final bool emailNotificationsITLUpdates;
 
+  @override
   List<Object?> get props => [
         username,
         bio,
@@ -111,8 +112,8 @@ class SettingsState extends Equatable {
           emailNotificationsAppReleases ?? this.emailNotificationsAppReleases,
       emailNotificationsITLUpdates:
           emailNotificationsITLUpdates ?? this.emailNotificationsITLUpdates,
-      picker: this.picker,
-      formKey: this.formKey,
+      picker: picker,
+      formKey: formKey,
     );
   }
 }

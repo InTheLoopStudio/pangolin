@@ -8,7 +8,7 @@ import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 
 class FollowRecommendation extends StatelessWidget {
   const FollowRecommendation(
-      {Key? key, required this.userId, required this.isFollowing})
+      {Key? key, required this.userId, required this.isFollowing,})
       : super(key: key);
 
   final String userId;
@@ -18,21 +18,21 @@ class FollowRecommendation extends StatelessWidget {
     if (isFollowing) {
       return ElevatedButton.icon(
         onPressed: () {},
-        icon: Icon(FontAwesomeIcons.check),
-        label: Text(''),
+        icon: const Icon(FontAwesomeIcons.check),
+        label: const Text(''),
       );
     } else {
       return ElevatedButton.icon(
         onPressed: onFollow,
-        icon: Icon(FontAwesomeIcons.userPlus),
-        label: Text(''),
+        icon: const Icon(FontAwesomeIcons.userPlus),
+        label: const Text(''),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    DatabaseRepository databaseRepository =
+    final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
 
     return FutureBuilder<UserModel>(
@@ -42,27 +42,27 @@ class FollowRecommendation extends StatelessWidget {
           return Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 child: ListTile(
-                  leading: CircularProgressIndicator(),
+                  leading: const CircularProgressIndicator(),
                   trailing: ElevatedButton.icon(
                     onPressed: null,
-                    icon: Icon(FontAwesomeIcons.userPlus),
-                    label: Text(''),
+                    icon: const Icon(FontAwesomeIcons.userPlus),
+                    label: const Text(''),
                   ),
-                  title: Text(''),
+                  title: const Text(''),
                 ),
               ),
             ],
           );
         }
 
-        UserModel followUser = followUserSnapshot.data!;
+        final followUser = followUserSnapshot.data!;
 
         return Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: ListTile(
                 leading: UserAvatar(
                   radius: 20,

@@ -8,14 +8,8 @@ part 'activity.g.dart';
 
 @JsonSerializable()
 class Activity extends Equatable {
-  final String id;
-  final String fromUserId;
-  final String toUserId;
-  final DateTime timestamp;
-  final ActivityType type;
-  final bool markedRead;
 
-  Activity({
+  const Activity({
     required this.id,
     required this.fromUserId,
     required this.toUserId,
@@ -23,6 +17,28 @@ class Activity extends Equatable {
     required this.type,
     required this.markedRead,
   });
+
+  factory Activity.fromJson(Map<String, dynamic> json) =>
+      _$ActivityFromJson(json);
+
+  factory Activity.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
+    final Timestamp tmpTimestamp = doc.getOrElse('timestamp', Timestamp.now());
+    return Activity(
+      id: doc.id,
+      fromUserId: doc.getOrElse('fromUserId', ''),
+      toUserId: doc.getOrElse('toUserId', ''),
+      timestamp: tmpTimestamp.toDate(),
+      type: EnumToString.fromString(ActivityType.values, doc['type']) ??
+          ActivityType.like,
+      markedRead: doc.getOrElse('markedRead', true),
+    );
+  }
+  final String id;
+  final String fromUserId;
+  final String toUserId;
+  final DateTime timestamp;
+  final ActivityType type;
+  final bool markedRead;
 
   @override
   List<Object> get props => [
@@ -44,9 +60,6 @@ class Activity extends Equatable {
 
   bool get isEmpty => this == Activity.empty;
   bool get isNotEmpty => this != Activity.empty;
-
-  factory Activity.fromJson(Map<String, dynamic> json) =>
-      _$ActivityFromJson(json);
   Map<String, dynamic> toJson() => _$ActivityToJson(this);
 
   Activity copyWith({
@@ -64,19 +77,6 @@ class Activity extends Equatable {
       timestamp: timestamp ?? this.timestamp,
       type: type ?? this.type,
       markedRead: markedRead ?? this.markedRead,
-    );
-  }
-
-  factory Activity.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
-    final Timestamp tmpTimestamp = doc.getOrElse('timestamp', Timestamp.now());
-    return Activity(
-      id: doc.id,
-      fromUserId: doc.getOrElse('fromUserId', ''),
-      toUserId: doc.getOrElse('toUserId', ''),
-      timestamp: tmpTimestamp.toDate(),
-      type: EnumToString.fromString(ActivityType.values, doc['type']) ??
-          ActivityType.like,
-      markedRead: doc.getOrElse('markedRead', true),
     );
   }
 }

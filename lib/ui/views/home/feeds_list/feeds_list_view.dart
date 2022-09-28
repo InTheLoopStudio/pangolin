@@ -10,17 +10,17 @@ class FeedsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DatabaseRepository databaseRepository =
+    final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
 
     // TODO: Initialize feeds in initial loading screen
-    final AudioFeedView followingFeed = AudioFeedView(
-      feedId: "Following",
+    final followingFeed = AudioFeedView(
+      feedId: 'Following',
       sourceFunction: databaseRepository.getFollowingLoops,
       sourceStream: databaseRepository.followingLoopsObserver,
     );
-    final AudioFeedView forYourFeed = AudioFeedView(
-      feedId: "For-You",
+    final forYourFeed = AudioFeedView(
+      feedId: 'For-You',
       sourceFunction: databaseRepository.getAllLoops,
       sourceStream: databaseRepository.allLoopsObserver,
     );
@@ -34,7 +34,6 @@ class FeedsListView extends StatelessWidget {
             BlocBuilder<FeedsListCubit, FeedsListState>(
               builder: (context, state) {
                 return PageView(
-                  scrollDirection: Axis.horizontal,
                   controller: state.pageController,
                   onPageChanged: (index) =>
                       context.read<FeedsListCubit>().feedChanged(index),
@@ -45,7 +44,7 @@ class FeedsListView extends StatelessWidget {
                 );
               },
             ),
-            ControlButtons(),
+            const ControlButtons(),
           ],
         ),
       ),

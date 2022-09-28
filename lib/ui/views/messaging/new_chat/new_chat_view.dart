@@ -19,9 +19,9 @@ class NewChatView extends StatelessWidget {
         appBar: AppBar(
           centerTitle: true,
           elevation: 0.5,
-          title: SearchBar(),
+          title: const SearchBar(),
         ),
-        body: Center(
+        body: const Center(
           child: ResultsList(),
         ),
       ),

@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 
 import 'user_model_test.mocks.dart';
 
@@ -12,7 +12,7 @@ void main() {
     final emptyUser = UserModel.empty;
     expect(
       emptyUser,
-      UserModel(
+      const UserModel(
         id: '',
         email: '',
         username: 'anonymous',
@@ -42,7 +42,7 @@ void main() {
   });
 
   test('empty UserModels should be verified using isEmpty and isNotEmpty', () {
-    final emptyUser = UserModel(
+    const emptyUser = UserModel(
       id: '',
       email: '',
       username: 'anonymous',
@@ -75,7 +75,7 @@ void main() {
 
   test('non-empty UserModels shuold be verified using isEmpty and isNotEmpty',
       () {
-    final emptyUser = UserModel(
+    const emptyUser = UserModel(
       id: '1234',
       email: 'jane@example.com',
       username: 'blah',
@@ -176,7 +176,7 @@ void main() {
     final userModel = UserModel.fromDoc(mockDocumentSnapshot);
     expect(
       userModel,
-      UserModel(
+      const UserModel(
         id: '',
         email: '',
         username: 'anonymous',

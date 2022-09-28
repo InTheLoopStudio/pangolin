@@ -11,7 +11,7 @@ import 'likes_cubit_test.mocks.dart';
 
 @GenerateMocks([DatabaseRepository])
 void main() {
-  Loop loop = Loop.empty;
+  final loop = Loop.empty;
 
   group('there are no likers', () {
     DatabaseRepository databaseRepository = MockDatabaseRepository();
@@ -24,7 +24,7 @@ void main() {
         databaseRepository: databaseRepository,
       ),
       act: (LikesCubit bloc) => bloc.initLikes(),
-      expect: () => [LikesState(likes: [])],
+      expect: () => [const LikesState()],
     );
   });
 

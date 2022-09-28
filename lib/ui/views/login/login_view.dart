@@ -27,7 +27,6 @@ class LoginView extends StatelessWidget {
             ),
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               LoginForm(
@@ -38,12 +37,12 @@ class LoginView extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
-                  children: [
+                  children: const [
                     Text(
                       'Privacy Policy',
-                      style: const TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10),
                     Icon(
                       FontAwesomeIcons.upRightFromSquare,
                       color: Colors.white,
@@ -62,12 +61,12 @@ class LoginView extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
-                  children: [
+                  children: const [
                     Text(
                       'Terms of Service',
-                      style: const TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10),
                     Icon(
                       FontAwesomeIcons.upRightFromSquare,
                       color: Colors.white,

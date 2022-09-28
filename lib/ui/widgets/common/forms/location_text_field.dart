@@ -16,7 +16,7 @@ class LocationTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       initialValue: initialValue,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         prefixIcon: Icon(Icons.map_rounded),
         labelText: 'Location',
       ),

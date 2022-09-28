@@ -12,11 +12,11 @@ class OnboardingForm extends StatelessWidget {
 
   Widget currentStageView(OnboardingStage stage) {
     if (stage == OnboardingStage.stage1) {
-      return Stage1();
+      return const Stage1();
     } else if (stage == OnboardingStage.stage2) {
-      return Stage2();
+      return const Stage2();
     } else {
-      return Stage1();
+      return const Stage1();
     }
   }
 
@@ -43,14 +43,14 @@ class OnboardingForm extends StatelessWidget {
             Animation<double> secondaryAnimation,
           ) {
             return SharedAxisTransition(
-              child: child,
               animation: animation,
               secondaryAnimation: secondaryAnimation,
               transitionType: SharedAxisTransitionType.horizontal,
+              child: child,
             );
           },
           child: state.loading
-              ? LoadingView()
+              ? const LoadingView()
               : currentStageView(state.onboardingStage),
         );
       },

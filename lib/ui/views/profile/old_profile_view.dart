@@ -10,12 +10,12 @@ import 'package:intheloopapp/ui/widgets/profile_view/badges_list.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/profile_header.dart';
 
 class OldProfileView extends StatefulWidget {
-  final String visitedUserId;
 
   const OldProfileView({
     Key? key,
     required this.visitedUserId,
   }) : super(key: key);
+  final String visitedUserId;
 
   @override
   _ProfileViewState createState() => _ProfileViewState();
@@ -60,16 +60,15 @@ class _ProfileViewState extends State<OldProfileView> {
               },
               child: DefaultTabController(
                 length: 2,
-                initialIndex: 0,
                 child: RefreshIndicator(
-                  displacement: 20.0,
+                  displacement: 20,
                   onRefresh: () async {
                     context.read<ProfileCubit>()
-                      ..initLoops()
-                      ..refetchVisitedUser()
-                      ..loadIsFollowing(currentUser.id, visitedUser.id)
-                      ..loadFollowing(visitedUser.id)
-                      ..loadFollower(visitedUser.id);
+                      await .initLoops()
+                      await .refetchVisitedUser()
+                      await .loadIsFollowing(currentUser.id, visitedUser.id)
+                      await .loadFollowing(visitedUser.id)
+                      await .loadFollower(visitedUser.id);
                   },
                   child: Scrollbar(
                     child: ListView(
@@ -78,18 +77,18 @@ class _ProfileViewState extends State<OldProfileView> {
                         parent: AlwaysScrollableScrollPhysics(),
                       ),
                       children: [
-                        ProfileHeader(),
-                        TabBar(tabs: [
+                        const ProfileHeader(),
+                        const TabBar(tabs: [
                           Tab(text: 'Badges'),
                           Tab(text: 'Loops'),
-                        ]),
-                        Container(
+                        ],),
+                        SizedBox(
                           height: MediaQuery.of(context).size.height,
                           child: TabBarView(
                             children: [
                               BadgesList(scrollController: _scrollController,),
                               SingleChildScrollView(
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 child: AllLoopsList(
                                   scrollController: _scrollController,
                                 ),
@@ -109,7 +108,7 @@ class _ProfileViewState extends State<OldProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    final DatabaseRepository databaseRepository =
+    final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
     final theme = Theme.of(context);
     return Scaffold(
@@ -118,14 +117,14 @@ class _ProfileViewState extends State<OldProfileView> {
           BlocSelector<AuthenticationBloc, AuthenticationState, Authenticated>(
         selector: (state) => state as Authenticated,
         builder: (context, state) {
-          UserModel currentUser = state.currentUser;
+          final currentUser = state.currentUser;
 
           return currentUser.id != _visitedUserId
               ? FutureBuilder(
                   future: databaseRepository.getUser(_visitedUserId),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (!snapshot.hasData) {
-                      return LoadingView();
+                      return const LoadingView();
                     }
 
                     UserModel visitedUser = snapshot.data!;

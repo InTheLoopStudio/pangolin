@@ -7,13 +7,8 @@ part 'badge.g.dart';
 
 @JsonSerializable()
 class Badge extends Equatable {
-  final String id;
-  final String senderId;
-  final String receiverId;
-  final String imageUrl;
-  final DateTime timestamp;
 
-  Badge({
+  const Badge({
     required this.id,
     required this.senderId,
     required this.receiverId,
@@ -21,15 +16,32 @@ class Badge extends Equatable {
     required this.timestamp,
   });
 
-  List<Object> get props => [
-        this.id,
-        this.senderId,
-        this.receiverId,
-        this.imageUrl,
-        this.timestamp,
-      ];
-
   factory Badge.fromJson(Map<String, dynamic> json) => _$BadgeFromJson(json);
+
+  factory Badge.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
+    final Timestamp tmpTimestamp = doc.getOrElse('timestamp', Timestamp.now());
+    return Badge(
+      id: doc.id,
+      senderId: doc.getOrElse('senderId', ''),
+      receiverId: doc.getOrElse('receiverId', ''),
+      imageUrl: doc.getOrElse('imageUrl', ''),
+      timestamp: tmpTimestamp.toDate(),
+    );
+  }
+  final String id;
+  final String senderId;
+  final String receiverId;
+  final String imageUrl;
+  final DateTime timestamp;
+
+  @override
+  List<Object> get props => [
+        id,
+        senderId,
+        receiverId,
+        imageUrl,
+        timestamp,
+      ];
   Map<String, dynamic> toJson() => _$BadgeToJson(this);
 
   Badge copyWith({
@@ -48,24 +60,13 @@ class Badge extends Equatable {
     );
   }
 
-  factory Badge.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
-    final Timestamp tmpTimestamp = doc.getOrElse('timestamp', Timestamp.now());
-    return Badge(
-      id: doc.id,
-      senderId: doc.getOrElse('senderId', ''),
-      receiverId: doc.getOrElse('receiverId', ''),
-      imageUrl: doc.getOrElse('imageUrl', ''),
-      timestamp: tmpTimestamp.toDate(),
-    );
-  }
-
   Map<String, dynamic> toMap() {
     return {
-      'id': this.id,
-      'senderId': this.senderId,
-      'receiverId': this.receiverId,
-      'imageUrl': this.imageUrl,
-      'timestamp': this.timestamp.toIso8601String()
+      'id': id,
+      'senderId': senderId,
+      'receiverId': receiverId,
+      'imageUrl': imageUrl,
+      'timestamp': timestamp.toIso8601String()
     };
   }
 }

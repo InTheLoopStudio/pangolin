@@ -60,7 +60,7 @@ class _BadgesListState extends State<BadgesList> {
 
           case ProfileStatus.success:
             if (state.userBadges.isEmpty || state.visitedUser.deleted == true) {
-              return EasterEggPlaceholder(text: 'No Badges Yet');
+              return const EasterEggPlaceholder(text: 'No Badges Yet');
             }
 
             return SingleChildScrollView(
@@ -71,10 +71,10 @@ class _BadgesListState extends State<BadgesList> {
                     children: [
                       ListView.builder(
                         shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
                           return index >= state.userBadges.length
-                              ? Center(
+                              ? const Center(
                                   child: SizedBox(
                                     height: 24,
                                     width: 24,
@@ -106,7 +106,7 @@ class _BadgesListState extends State<BadgesList> {
             );
 
           default:
-            return EasterEggPlaceholder(text: 'Waiting for new badges...');
+            return const EasterEggPlaceholder(text: 'Waiting for new badges...');
         }
       },
     );

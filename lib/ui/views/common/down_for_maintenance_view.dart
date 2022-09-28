@@ -18,16 +18,15 @@ class DownForMainenanceView extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset("assets/icon_1024.png", scale: 5),
+              Image.asset('assets/icon_1024.png', scale: 5),
               const SizedBox(height: 20),
-              Center(
+              const Center(
                 child: Text(
-                  "In The Loop is down for maintenance \n👷‍♂️👷‍♀️",
+                  'In The Loop is down for maintenance \n👷‍♂️👷‍♀️',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,

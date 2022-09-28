@@ -19,7 +19,7 @@ class FollowButton extends StatelessWidget {
                 child: Container(
                   width: 110,
                   height: 35,
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     color: state.isFollowing
@@ -44,15 +44,15 @@ class FollowButton extends StatelessWidget {
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SettingsView(),
+                      builder: (context) => const SettingsView(),
                     ),
                   );
                 },
-                icon: Icon(
+                icon: const Icon(
                   CupertinoIcons.gear,
                   color: tappedAccent,
                 ),
-                label: Text(
+                label: const Text(
                   'Edit',
                   style: TextStyle(
                     fontSize: 20,
