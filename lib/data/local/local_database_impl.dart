@@ -33,7 +33,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
   @override
   Future<Loop> getLoopById(String loopId) async {
     await Future.delayed(const Duration(seconds: 2));
-    return Loop.empty;
+    return Loop.empty();
   }
 
   @override

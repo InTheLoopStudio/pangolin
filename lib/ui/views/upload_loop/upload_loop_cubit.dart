@@ -132,7 +132,7 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
           state.pickedAudio!,
         );
 
-        final loop = Loop.empty.copyWith(
+        final loop = Loop.empty().copyWith(
           title: state.loopTitle.value,
           audio: audio,
           userId: currentUser.id,

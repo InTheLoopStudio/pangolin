@@ -37,7 +37,7 @@ class SettingsState extends Equatable {
   final File? profileImage;
   final FormzStatus status;
   late final ImagePicker picker;
-  late final formKey;
+  late final GlobalKey<FormState> formKey;
 
   final bool pushNotificationsLikes;
   final bool pushNotificationsComments;
