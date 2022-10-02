@@ -7,9 +7,11 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 final _functions = FirebaseFunctions.instance;
 final _fireStore = FirebaseFirestore.instance;
 
-final usersRef = _fireStore.collection('users');
+final _usersRef = _fireStore.collection('users');
 
+/// Stream implementation using the stream api
 class StreamImpl extends StreamRepository {
+  /// clients must provide a stream client to create this impl
   StreamImpl(this._client);
 
   final StreamChatClient _client;
@@ -41,26 +43,30 @@ class StreamImpl extends StreamRepository {
   @override
   Future<List<UserModel>> getChatUsers() async {
     final result = await _client.queryUsers();
-    final chatUsers = await Future.wait(result.users
-        .where((element) => element.id != _client.state.currentUser!.id)
-        .map(
-      (User e) async {
-        final userSnapshot =
-            await usersRef.doc(e.id).get();
-        final user = UserModel.fromDoc(userSnapshot);
+    final chatUsers = await Future.wait(
+      result.users
+          .where((element) => element.id != _client.state.currentUser!.id)
+          .map(
+        (User e) async {
+          final userSnapshot = await _usersRef.doc(e.id).get();
+          final user = UserModel.fromDoc(userSnapshot);
 
-        return user;
-      },
-    ),);
+          return user;
+        },
+      ),
+    );
     return chatUsers;
   }
 
   @override
   Future<String> getToken() async {
-    final callable = _functions.httpsCallable('ext-auth-chat-getStreamUserToken');
-    final results = await callable();
+    final callable =
+        _functions.httpsCallable('ext-auth-chat-getStreamUserToken');
+    final results = await callable<Map<String, dynamic>>();
 
-    return results.data;
+    final token = results.data as String;
+
+    return token;
 
     // In Development mode you can just use :
     // return _client.devToken(userId).rawValue;
@@ -78,13 +84,15 @@ class StreamImpl extends StreamRepository {
     final res = await _client.queryChannelsOnline(
       state: false,
       watch: false,
-      filter: Filter.raw(value: {
-        'members': [
-          ...members!,
-          _client.state.currentUser!.id,
-        ],
-        'distinct': true,
-      },),
+      filter: Filter.raw(
+        value: {
+          'members': [
+            ...members!,
+            _client.state.currentUser!.id,
+          ],
+          'distinct': true,
+        },
+      ),
       messageLimit: 0,
       paginationParams: const PaginationParams(
         limit: 1,
@@ -99,8 +107,8 @@ class StreamImpl extends StreamRepository {
       channel = _client.channel(
         'messaging',
         extraData: {
-          'name': name!,
-          'image': image!,
+          'name': name,
+          'image': image,
           'members': [
             ...members,
             _client.state.currentUser!.id,
@@ -120,14 +128,16 @@ class StreamImpl extends StreamRepository {
     final res = await _client.queryChannelsOnline(
       state: false,
       watch: false,
-      filter: Filter.raw(value: {
-        'members': [
-          // ..._selectedUsers.map((e) => e.id),
-          friendId,
-          _client.state.currentUser!.id,
-        ],
-        'distinct': true,
-      },),
+      filter: Filter.raw(
+        value: {
+          'members': [
+            // ..._selectedUsers.map((e) => e.id),
+            friendId,
+            _client.state.currentUser!.id,
+          ],
+          'distinct': true,
+        },
+      ),
       messageLimit: 0,
       paginationParams: const PaginationParams(
         limit: 1,

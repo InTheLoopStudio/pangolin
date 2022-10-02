@@ -7,7 +7,7 @@ abstract class StreamRepository {
   // Future<bool> connectIfExist(String userId);
   Future<UserModel> connectUser(UserModel user);
   Future<Channel> createGroupChat(
-    String channelId,
+    String id,
     String? name,
     List<String?>? members, {
     String? image,

@@ -16,21 +16,21 @@ final _functions = FirebaseFunctions.instance;
 final _firestore = FirebaseFirestore.instance;
 final _analytics = FirebaseAnalytics.instance;
 
-final usersRef = _firestore.collection('users');
-final followersRef = _firestore.collection('followers');
-final followingRef = _firestore.collection('following');
-final loopsRef = _firestore.collection('loops');
-final feedRefs = _firestore.collection('feeds');
-final likesRef = _firestore.collection('likes');
-final activitiesRef = _firestore.collection('activities');
-final commentsRef = _firestore.collection('comments');
-final badgesRef = _firestore.collection('badges');
+final _usersRef = _firestore.collection('users');
+final _followersRef = _firestore.collection('followers');
+final _followingRef = _firestore.collection('following');
+final _loopsRef = _firestore.collection('loops');
+final _feedRefs = _firestore.collection('feeds');
+final _likesRef = _firestore.collection('likes');
+final _activitiesRef = _firestore.collection('activities');
+final _commentsRef = _firestore.collection('comments');
+final _badgesRef = _firestore.collection('badges');
 
+/// Database implementation using Firebase's FirestoreDB
 class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<bool> userEmailExists(String email) async {
-    QuerySnapshot userSnapshot =
-        await usersRef.where('email', isEqualTo: email).get();
+    final userSnapshot = await _usersRef.where('email', isEqualTo: email).get();
 
     return userSnapshot.docs.isNotEmpty;
   }
@@ -40,8 +40,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     await _analytics.logEvent(name: 'sign_up');
     final callable = _functions.httpsCallable('createUser');
     final results = await callable(user.toMap());
-
-    print(results.data.toString());
   }
 
   @override
@@ -49,7 +47,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     if (username == null) return null;
 
     final userSnapshots =
-        await usersRef.where('username', isEqualTo: username).get();
+        await _usersRef.where('username', isEqualTo: username).get();
 
     if (userSnapshots.docs.isNotEmpty) {
       return UserModel.fromDoc(userSnapshots.docs.first);
@@ -60,8 +58,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<UserModel> getUser(String userId) async {
-    final userSnapshot =
-        await usersRef.doc(userId).get();
+    final userSnapshot = await _usersRef.doc(userId).get();
     final user = UserModel.fromDoc(userSnapshot);
 
     return user;
@@ -69,8 +66,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<Loop> getLoopById(String loopId) async {
-    final loopSnapshot =
-        await loopsRef.doc(loopId).get();
+    final loopSnapshot = await _loopsRef.doc(loopId).get();
 
     final loop = Loop.fromDoc(loopSnapshot);
 
@@ -79,16 +75,16 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<int> followersNum(String userid) async {
-    QuerySnapshot followersSnapshot =
-        await followersRef.doc(userid).collection('Followers').get();
+    final followersSnapshot =
+        await _followersRef.doc(userid).collection('Followers').get();
 
     return followersSnapshot.docs.length;
   }
 
   @override
   Future<int> followingNum(String userid) async {
-    QuerySnapshot followingSnapshot =
-        await followingRef.doc(userid).collection('Following').get();
+    final followingSnapshot =
+        await _followingRef.doc(userid).collection('Following').get();
 
     return followingSnapshot.docs.length;
   }
@@ -96,9 +92,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<void> updateUserData(UserModel user) async {
     final callable = _functions.httpsCallable('updateUserData');
-    final results = await callable(user.toMap());
-
-    print(results.data.toString());
+    await callable<Map<String, dynamic>>(user.toMap());
   }
 
   @override
@@ -106,17 +100,18 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String currentUserId,
     String visitedUserId,
   ) async {
-    await _analytics.logEvent(name: 'follow_user', parameters: {
-      'follower': currentUserId,
-      'followee': visitedUserId,
-    },);
+    await _analytics.logEvent(
+      name: 'follow_user',
+      parameters: {
+        'follower': currentUserId,
+        'followee': visitedUserId,
+      },
+    );
     final callable = _functions.httpsCallable('followUser');
-    final results = await callable({
+    await callable<Map<String, dynamic>>({
       'follower': currentUserId,
       'followed': visitedUserId,
     });
-
-    print(results.data.toString());
   }
 
   @override
@@ -124,17 +119,18 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String currentUserId,
     String visitedUserId,
   ) async {
-    await _analytics.logEvent(name: 'unfollow_user', parameters: {
-      'follower': currentUserId,
-      'followed': visitedUserId,
-    },);
+    await _analytics.logEvent(
+      name: 'unfollow_user',
+      parameters: {
+        'follower': currentUserId,
+        'followed': visitedUserId,
+      },
+    );
     final callable = _functions.httpsCallable('unfollowUser');
-    final results = await callable({
+    await callable<Map<String, dynamic>>({
       'follower': currentUserId,
       'followed': visitedUserId,
     });
-
-    print(results.data.toString());
   }
 
   @override
@@ -143,29 +139,25 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String visitedUserId,
   ) async {
     try {
-      DocumentSnapshot followingDoc = await followersRef
+      final followingDoc = await _followersRef
           .doc(visitedUserId)
           .collection('Followers')
           .doc(currentUserId)
           .get();
       return followingDoc.exists;
-    } on Exception catch (e) {
-      print('[ERROR] isFollowingUser - canceled');
-      print(e);
-
+    } on Exception {
       return false;
     }
   }
 
   @override
   Future<List<UserModel>> getFollowing(String currentUserId) async {
-    QuerySnapshot userFollowingSnapshot =
-        await followingRef.doc(currentUserId).collection('Following').get();
+    final userFollowingSnapshot =
+        await _followingRef.doc(currentUserId).collection('Following').get();
 
     final followingFutures = userFollowingSnapshot.docs.map(
       (doc) async {
-        final userDoc =
-            await usersRef.doc(doc.id).get();
+        final userDoc = await _usersRef.doc(doc.id).get();
         return UserModel.fromDoc(userDoc);
       },
     ).toList();
@@ -177,14 +169,12 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<List<UserModel>> getFollowers(String currentUserId) async {
-    QuerySnapshot userFollowerSnapshot =
-        await followersRef.doc(currentUserId).collection('Followers').get();
+    final userFollowerSnapshot =
+        await _followersRef.doc(currentUserId).collection('Followers').get();
 
     final followerFutures = userFollowerSnapshot.docs.map(
       (doc) async {
-        print(doc);
-        final userDoc =
-            await usersRef.doc(doc.id).get();
+        final userDoc = await _usersRef.doc(doc.id).get();
         return UserModel.fromDoc(userDoc);
       },
     ).toList();
@@ -196,12 +186,15 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<void> uploadLoop(Loop loop) async {
-    await _analytics.logEvent(name: 'upload_loop', parameters: {
-      'user_id': loop.userId,
-      'loop_id': loop.id,
-    },);
+    await _analytics.logEvent(
+      name: 'upload_loop',
+      parameters: {
+        'user_id': loop.userId,
+        'loop_id': loop.id,
+      },
+    );
     final callable = _functions.httpsCallable('uploadLoop');
-    final results = await callable({
+    await callable<Map<String, dynamic>>({
       'loopTitle': loop.title,
       'loopAudio': loop.audio,
       'loopUserId': loop.userId,
@@ -210,23 +203,22 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       'loopComments': loop.comments,
       'loopTags': loop.tags,
     });
-
-    print(results.data.toString());
   }
 
   @override
   Future<void> deleteLoop(Loop loop) async {
-    await _analytics.logEvent(name: 'delete_loop', parameters: {
-      'user_id': loop.userId,
-      'loop_id': loop.id,
-    },);
+    await _analytics.logEvent(
+      name: 'delete_loop',
+      parameters: {
+        'user_id': loop.userId,
+        'loop_id': loop.id,
+      },
+    );
     final callable = _functions.httpsCallable('deleteLoop');
     final results = await callable({
       'id': loop.id,
       'userId': loop.userId,
     });
-
-    print(results.data.toString());
   }
 
   @override
@@ -236,9 +228,9 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String? lastLoopId,
   }) async {
     if (lastLoopId != null) {
-      DocumentSnapshot documentSnapshot = await loopsRef.doc(lastLoopId).get();
+      final documentSnapshot = await _loopsRef.doc(lastLoopId).get();
 
-      final userLoopsSnapshot = await loopsRef
+      final userLoopsSnapshot = await _loopsRef
           .orderBy('timestamp', descending: true)
           .where('userId', isEqualTo: userId)
           // .where('deleted', isNotEqualTo: true)
@@ -253,7 +245,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       return userLoops;
     } else {
-      final userLoopsSnapshot = await loopsRef
+      final userLoopsSnapshot = await _loopsRef
           .orderBy('timestamp', descending: true)
           .where('userId', isEqualTo: userId)
           .limit(limit)
@@ -273,25 +265,28 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String userId, {
     int limit = 20,
   }) async* {
-    final userLoopsSnapshotObserver =
-        loopsRef
-            .where('userId', isEqualTo: userId)
-            .orderBy('timestamp', descending: true)
-            // .where('deleted', isNotEqualTo: true)
-            .limit(limit)
-            .snapshots();
+    final userLoopsSnapshotObserver = _loopsRef
+        .where('userId', isEqualTo: userId)
+        .orderBy('timestamp', descending: true)
+        // .where('deleted', isNotEqualTo: true)
+        .limit(limit)
+        .snapshots();
 
     final userLoopsObserver = userLoopsSnapshotObserver.map((event) {
       return event.docChanges
-          .where((DocumentChange<Map<String, dynamic>> element) =>
-              element.type == DocumentChangeType.added,)
+          .where(
+        (DocumentChange<Map<String, dynamic>> element) =>
+            element.type == DocumentChangeType.added,
+      )
           .map((DocumentChange<Map<String, dynamic>> element) {
         return Loop.fromDoc(element.doc);
         // if (element.type == DocumentChangeType.modified) {}
         // if (element.type == DocumentChangeType.removed) {}
       });
-    }).flatMap((value) =>
-        Stream.fromIterable(value).where((loop) => loop.deleted != true),);
+    }).flatMap(
+      (value) =>
+          Stream.fromIterable(value).where((loop) => loop.deleted != true),
+    );
 
     yield* userLoopsObserver;
   }
@@ -303,9 +298,9 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String? lastLoopId,
   }) async {
     if (lastLoopId != null) {
-      DocumentSnapshot documentSnapshot = await loopsRef.doc(lastLoopId).get();
+      final documentSnapshot = await _loopsRef.doc(lastLoopId).get();
 
-      final userFeedLoops = await feedRefs
+      final userFeedLoops = await _feedRefs
           .doc(currentUserId)
           .collection('userFeed')
           .orderBy('timestamp', descending: true)
@@ -325,7 +320,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       return followingLoops;
     } else {
-      final userFeedLoops = await feedRefs
+      final userFeedLoops = await _feedRefs
           .doc(currentUserId)
           .collection('userFeed')
           .orderBy('timestamp', descending: true)
@@ -351,26 +346,28 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String currentUserId, {
     int limit = 20,
   }) async* {
-    final userFeedLoopsSnapshotObserver =
-        feedRefs
-            .doc(currentUserId)
-            .collection('userFeed')
-            .orderBy('timestamp', descending: true)
-            .limit(limit)
-            .snapshots();
+    final userFeedLoopsSnapshotObserver = _feedRefs
+        .doc(currentUserId)
+        .collection('userFeed')
+        .orderBy('timestamp', descending: true)
+        .limit(limit)
+        .snapshots();
 
-    final userFeedLoopsObserver = userFeedLoopsSnapshotObserver
-        .map((event) {
+    final userFeedLoopsObserver = userFeedLoopsSnapshotObserver.map((event) {
       return event.docChanges
-          .where((DocumentChange<Map<String, dynamic>> element) =>
-              element.type == DocumentChangeType.added,)
+          .where(
+        (DocumentChange<Map<String, dynamic>> element) =>
+            element.type == DocumentChangeType.added,
+      )
           .map((DocumentChange<Map<String, dynamic>> element) async {
         return await getLoopById(element.doc.id);
         // if (element.type == DocumentChangeType.modified) {}
         // if (element.type == DocumentChangeType.removed) {}
       });
-    }).flatMap((value) =>
-            Stream.fromFutures(value).where((loop) => loop.deleted != true),);
+    }).flatMap(
+      (value) =>
+          Stream.fromFutures(value).where((loop) => loop.deleted != true),
+    );
 
     yield* userFeedLoopsObserver;
   }
@@ -382,9 +379,9 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String? lastLoopId,
   }) async {
     if (lastLoopId != null) {
-      DocumentSnapshot documentSnapshot = await loopsRef.doc(lastLoopId).get();
+      final documentSnapshot = await _loopsRef.doc(lastLoopId).get();
 
-      final allLoopsDocs = await loopsRef
+      final allLoopsDocs = await _loopsRef
           .orderBy('timestamp', descending: true)
           // .where('deleted', isNotEqualTo: true)
           .limit(limit)
@@ -399,7 +396,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .where((e) => e.userId != currentUserId && e.deleted != true)
           .toList();
     } else {
-      final allLoopsDocs = await loopsRef
+      final allLoopsDocs = await _loopsRef
           .orderBy('timestamp', descending: true)
           // .where('deleted', isNotEqualTo: true)
           .limit(limit)
@@ -420,63 +417,69 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String currentUserId, {
     int limit = 20,
   }) async* {
-    final allLoopsSnapshotObserver =
-        loopsRef
-            .orderBy('timestamp', descending: true)
-            // .where('deleted', isNotEqualTo: true)
-            .limit(limit)
-            .snapshots();
+    final allLoopsSnapshotObserver = _loopsRef
+        .orderBy('timestamp', descending: true)
+        // .where('deleted', isNotEqualTo: true)
+        .limit(limit)
+        .snapshots();
 
     final allLoopsObserver = allLoopsSnapshotObserver.map((event) {
       return event.docChanges
-          .where((DocumentChange<Map<String, dynamic>> element) =>
-              element.type == DocumentChangeType.added,)
+          .where(
+        (DocumentChange<Map<String, dynamic>> element) =>
+            element.type == DocumentChangeType.added,
+      )
           .map((DocumentChange<Map<String, dynamic>> element) {
         return Loop.fromDoc(element.doc);
         // if (element.type == DocumentChangeType.modified) {}
         // if (element.type == DocumentChangeType.removed) {}
       });
-    }).flatMap((value) => Stream.fromIterable(value)
-        .where((loop) => loop.userId != currentUserId && loop.deleted != true),);
+    }).flatMap(
+      (value) => Stream.fromIterable(value).where(
+          (loop) => loop.userId != currentUserId && loop.deleted != true,
+        ),
+    );
 
     yield* allLoopsObserver;
   }
 
   @override
   Future<void> likeLoop(String currentUserId, Loop loop) async {
-    await _analytics.logEvent(name: 'like_loop', parameters: {
-      'user_id': currentUserId,
-      'loop_id': loop.id,
-    },);
+    await _analytics.logEvent(
+      name: 'like_loop',
+      parameters: {
+        'user_id': currentUserId,
+        'loop_id': loop.id,
+      },
+    );
     final callable = _functions.httpsCallable('likeLoop');
-    final results = await callable({
+    await callable<Map<String, dynamic>>({
       'currentUserId': currentUserId,
       'loopId': loop.id,
       'loopUserId': loop.userId,
     });
-
-    print(results.data.toString());
   }
 
   @override
   Future<void> unlikeLoop(String currentUserId, Loop loop) async {
-    await _analytics.logEvent(name: 'unlike_loop', parameters: {
-      'user_id': currentUserId,
-      'loop_id': loop.id,
-    },);
+    await _analytics.logEvent(
+      name: 'unlike_loop',
+      parameters: {
+        'user_id': currentUserId,
+        'loop_id': loop.id,
+      },
+    );
     final callable = _functions.httpsCallable('unlikeLoop');
-    final results = await callable({
+    await callable<Map<String, dynamic>>({
       'currentUserId': currentUserId,
       'loopId': loop.id,
       'loopUserId': loop.userId,
     });
-
-    print(results.data.toString());
   }
 
   @override
   Future<bool> isLikeLoop(String currentUserId, Loop loop) async {
-    DocumentSnapshot userDoc = await likesRef
+    final userDoc = await _likesRef
         .doc(loop.id)
         .collection('loopLikes')
         .doc(currentUserId)
@@ -487,15 +490,15 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<List<UserModel>> getLikes(Loop loop) async {
-    QuerySnapshot likesSnapshot =
-        await likesRef.doc(loop.id).collection('loopLikes').get();
+    final likesSnapshot =
+        await _likesRef.doc(loop.id).collection('loopLikes').get();
 
-    final usersList =
-        await Future.wait(likesSnapshot.docs.map((doc) async {
-      final userDoc =
-          await usersRef.doc(doc.id).get();
-      return UserModel.fromDoc(userDoc);
-    }).toList(),);
+    final usersList = await Future.wait(
+      likesSnapshot.docs.map((doc) async {
+        final userDoc = await _usersRef.doc(doc.id).get();
+        return UserModel.fromDoc(userDoc);
+      }).toList(),
+    );
 
     return usersList;
   }
@@ -507,28 +510,26 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String? lastActivityId,
   }) async {
     if (lastActivityId != null) {
-      DocumentSnapshot documentSnapshot =
-          await activitiesRef.doc(lastActivityId).get();
+      final documentSnapshot =
+          await _activitiesRef.doc(lastActivityId).get();
 
-      final activitiesSnapshot =
-          await activitiesRef
-              .orderBy('timestamp', descending: true)
-              .where('toUserId', isEqualTo: userId)
-              .limit(limit)
-              .startAfterDocument(documentSnapshot)
-              .get();
+      final activitiesSnapshot = await _activitiesRef
+          .orderBy('timestamp', descending: true)
+          .where('toUserId', isEqualTo: userId)
+          .limit(limit)
+          .startAfterDocument(documentSnapshot)
+          .get();
 
       final activities =
           activitiesSnapshot.docs.map((doc) => Activity.fromDoc(doc)).toList();
 
       return activities;
     } else {
-      final activitiesSnapshot =
-          await activitiesRef
-              .orderBy('timestamp', descending: true)
-              .where('toUserId', isEqualTo: userId)
-              .limit(limit)
-              .get();
+      final activitiesSnapshot = await _activitiesRef
+          .orderBy('timestamp', descending: true)
+          .where('toUserId', isEqualTo: userId)
+          .limit(limit)
+          .get();
 
       final activities =
           activitiesSnapshot.docs.map((doc) => Activity.fromDoc(doc)).toList();
@@ -542,20 +543,19 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String userId, {
     int limit = 20,
   }) async* {
-    final activitiesSnapshotObserver =
-        activitiesRef
-            .orderBy('timestamp', descending: true)
-            .where('toUserId', isEqualTo: userId)
-            .limit(limit)
-            .snapshots();
+    final activitiesSnapshotObserver = _activitiesRef
+        .orderBy('timestamp', descending: true)
+        .where('toUserId', isEqualTo: userId)
+        .limit(limit)
+        .snapshots();
 
-    final activitiesObserver =
-        activitiesSnapshotObserver.map((event) {
+    final activitiesObserver = activitiesSnapshotObserver.map((event) {
       return event.docChanges
-          .where((DocumentChange<Map<String, dynamic>> element) =>
-              element.type == DocumentChangeType.added,)
+          .where(
+        (DocumentChange<Map<String, dynamic>> element) =>
+            element.type == DocumentChangeType.added,
+      )
           .map((DocumentChange<Map<String, dynamic>> element) {
-
         return Activity.fromDoc(element.doc);
         // if (element.type == DocumentChangeType.modified) {}
         // if (element.type == DocumentChangeType.removed) {}
@@ -572,32 +572,34 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     Loop? loop,
     required String visitedUserId,
   }) async {
-    await _analytics.logEvent(name: 'new_activity', parameters: {
-      'from_user_id': currentUserId,
-      'to_user_id': visitedUserId,
-      'type': EnumToString.convertToString(type),
-    },);
+    await _analytics.logEvent(
+      name: 'new_activity',
+      parameters: {
+        'from_user_id': currentUserId,
+        'to_user_id': visitedUserId,
+        'type': EnumToString.convertToString(type),
+      },
+    );
     final callable = _functions.httpsCallable('addActivity');
-    final results = await callable({
+    await callable<Map<String, dynamic>>({
       'toUserId': visitedUserId,
       'fromUserId': currentUserId,
       'type': EnumToString.convertToString(type),
     });
-
-    print(results.data.toString());
   }
 
   @override
   Future<void> markActivityAsRead(Activity activity) async {
-    await _analytics.logEvent(name: 'activity_read', parameters: {
-      'activity': activity.id,
-    },);
+    await _analytics.logEvent(
+      name: 'activity_read',
+      parameters: {
+        'activity': activity.id,
+      },
+    );
     final callable = _functions.httpsCallable('markActivityAsRead');
     final results = await callable({
       'id': activity.id,
     });
-
-    print(results.data.toString());
   }
 
   @override
@@ -605,7 +607,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     Loop loop, {
     int limit = 20,
   }) async {
-    final loopCommentsSnapshot = await commentsRef
+    final loopCommentsSnapshot = await _commentsRef
         .doc(loop.id)
         .collection('loopComments')
         .orderBy('timestamp')
@@ -624,20 +626,20 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     Loop loop, {
     int limit = 20,
   }) async* {
-    final loopCommentsSnapshotObserver =
-        commentsRef
-            .doc(loop.id)
-            .collection('loopComments')
-            .orderBy('timestamp')
-            .limit(limit)
-            // .where('parentId', isNull: true) // Needed for threaded comments
-            .snapshots();
+    final loopCommentsSnapshotObserver = _commentsRef
+        .doc(loop.id)
+        .collection('loopComments')
+        .orderBy('timestamp')
+        .limit(limit)
+        // .where('parentId', isNull: true) // Needed for threaded comments
+        .snapshots();
 
-    final loopCommentsObserver =
-        loopCommentsSnapshotObserver.map((event) {
+    final loopCommentsObserver = loopCommentsSnapshotObserver.map((event) {
       return event.docChanges
-          .where((DocumentChange<Map<String, dynamic>> element) =>
-              element.type == DocumentChangeType.added,)
+          .where(
+        (DocumentChange<Map<String, dynamic>> element) =>
+            element.type == DocumentChangeType.added,
+      )
           .map((DocumentChange<Map<String, dynamic>> element) {
         return Comment.fromDoc(element.doc);
         // if (element.type == DocumentChangeType.modified) {}
@@ -650,7 +652,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<Comment> getComment(Loop loop, String commentId) async {
-    final commentSnapshot = await commentsRef
+    final commentSnapshot = await _commentsRef
         .doc(loop.id)
         .collection('loopComments')
         .doc(commentId)
@@ -663,12 +665,15 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<void> addComment(Comment comment, String visitedUserId) async {
-    await _analytics.logEvent(name: 'new_comment', parameters: {
-      'root_loop_id': comment.rootLoopId,
-      'user_id': comment.userId,
-    },);
+    await _analytics.logEvent(
+      name: 'new_comment',
+      parameters: {
+        'root_loop_id': comment.rootLoopId,
+        'user_id': comment.userId,
+      },
+    );
     final callable = _functions.httpsCallable('addComment');
-    final results = await callable({
+    await callable<Map<String, dynamic>>({
       'visitedUserId': visitedUserId,
       'rootLoopId': comment.rootLoopId ?? '',
       'userId': comment.userId ?? '',
@@ -676,8 +681,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       'parentId': comment.parentId ?? '',
       'children': comment.children ?? [],
     });
-
-    print(results.data.toString());
   }
 
   // Future<List<Tag>> getTagSuggestions(String query) async {
@@ -685,7 +688,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   //   await Future.delayed(Duration(milliseconds: 0), null);
 
   //   return <Tag>[]
-  //       .where((tag) => tag.value.toLowerCase().contains(query.toLowerCase()))
+  //       .where((tag) => tag
+  //                .value.toLowerCase().contains(query.toLowerCase()))
   //       .toList();
   // }
 
@@ -697,35 +701,30 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       method: 'unknown',
     );
     final callable = _functions.httpsCallable('shareLoop');
-    final results = await callable({
+    await callable<Map<String, dynamic>>({
       'loopId': loop.id,
       'userId': loop.userId,
     });
-
-    print(results.data.toString());
   }
 
   @override
   Future<bool> checkUsernameAvailability(String username, String userid) async {
-    final callable =
-        _functions.httpsCallable('checkUsernameAvailability');
+    final callable = _functions.httpsCallable('checkUsernameAvailability');
     final results = await callable({
       'username': username,
       'userId': userid,
     });
 
-    print('checkUsernameAvailability result ${results.data}');
+    final isAvailable = results.data as bool;
 
-    return results.data;
+    return isAvailable;
   }
 
   @override
   Future<void> createBadge(Badge badge) async {
     await _analytics.logEvent(name: 'create_badge');
     final callable = _functions.httpsCallable('createBadge');
-    final results = await callable(badge.toMap());
-
-    print(results.data.toString());
+    await callable<Map<String, dynamic>>(badge.toMap());
   }
 
   @override
@@ -733,17 +732,18 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String userId, {
     int limit = 20,
   }) async* {
-    final userBadgesSnapshotObserver =
-        badgesRef
-            .where('receiverId', isEqualTo: userId)
-            .orderBy('timestamp', descending: true)
-            .limit(limit)
-            .snapshots();
+    final userBadgesSnapshotObserver = _badgesRef
+        .where('receiverId', isEqualTo: userId)
+        .orderBy('timestamp', descending: true)
+        .limit(limit)
+        .snapshots();
 
     final userBadgesObserver = userBadgesSnapshotObserver.map((event) {
       return event.docChanges
-          .where((DocumentChange<Map<String, dynamic>> element) =>
-              element.type == DocumentChangeType.added,)
+          .where(
+        (DocumentChange<Map<String, dynamic>> element) =>
+            element.type == DocumentChangeType.added,
+      )
           .map((DocumentChange<Map<String, dynamic>> element) {
         return Badge.fromDoc(element.doc);
       });
@@ -759,10 +759,9 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String? lastBadgeId,
   }) async {
     if (lastBadgeId != null) {
-      DocumentSnapshot documentSnapshot =
-          await badgesRef.doc(lastBadgeId).get();
+      final documentSnapshot = await _badgesRef.doc(lastBadgeId).get();
 
-      final userBadgesSnapshot = await badgesRef
+      final userBadgesSnapshot = await _badgesRef
           .orderBy('timestamp', descending: true)
           .where('receiverId', isEqualTo: userId)
           .limit(limit)
@@ -773,7 +772,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           userBadgesSnapshot.docs.map((doc) => Badge.fromDoc(doc)).toList();
       return userBadges;
     } else {
-      final userBadgesSnapshot = await badgesRef
+      final userBadgesSnapshot = await _badgesRef
           .orderBy('timestamp', descending: true)
           .where('receiverId', isEqualTo: userId)
           .limit(limit)
