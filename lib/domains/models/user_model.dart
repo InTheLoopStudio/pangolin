@@ -7,14 +7,13 @@ part 'user_model.g.dart';
 
 enum AccountType {
   @JsonValue('venue')
-  Venue,
+  venue,
   @JsonValue('free')
-  Free,
+  free,
 }
 
 @JsonSerializable()
 class UserModel extends Equatable {
-
   const UserModel({
     required this.id,
     required this.email,
@@ -49,41 +48,45 @@ class UserModel extends Equatable {
     late final AccountType accountType;
     try {
       accountType = $enumDecode(
-          _$AccountTypeEnumMap, doc.getOrElse('accountType', 'free'),);
-    } on ArgumentError {
-      accountType = AccountType.Free;
+        _$AccountTypeEnumMap,
+        doc.getOrElse('accountType', 'free'),
+      );
+    } on Exception {
+      accountType = AccountType.free;
     }
 
     return UserModel(
       id: doc.id,
-      email: doc.getOrElse('email', ''),
-      username: doc.getOrElse('username', 'anonymous'),
-      profilePicture: doc.getOrElse('profilePicture', ''),
-      bio: doc.getOrElse('bio', ''),
-      location: doc.getOrElse('location', 'Global'),
-      onboarded: doc.getOrElse('onboarded', false),
-      loopsCount: doc.getOrElse('loopsCount', 0),
-      badgesCount: doc.getOrElse('badgesCount', 0),
-      deleted: doc.getOrElse('deleted', false),
-      shadowBanned: doc.getOrElse('shadowBanned', false),
+      email: doc.getOrElse('email', '') as String,
+      username: doc.getOrElse('username', 'anonymous') as String,
+      profilePicture: doc.getOrElse('profilePicture', '') as String,
+      bio: doc.getOrElse('bio', '') as String,
+      location: doc.getOrElse('location', 'Global') as String,
+      onboarded: doc.getOrElse('onboarded', false) as bool,
+      loopsCount: doc.getOrElse('loopsCount', 0) as int,
+      badgesCount: doc.getOrElse('badgesCount', 0) as int,
+      deleted: doc.getOrElse('deleted', false) as bool,
+      shadowBanned: doc.getOrElse('shadowBanned', false) as bool,
       accountType: accountType,
-      youtubeChannelId: doc.getOrElse('youtubeChannelId', ''),
-      soundcloudHandle: doc.getOrElse('soundcloudHandle', ''),
-      tiktokHandle: doc.getOrElse('tiktokHandle', ''),
-      instagramHandle: doc.getOrElse('instagramHandle', ''),
-      twitterHandle: doc.getOrElse('twitterHandle', ''),
-      pushNotificationsLikes: doc.getOrElse('pushNotificationsLikes', true),
+      youtubeChannelId: doc.getOrElse('youtubeChannelId', '') as String,
+      soundcloudHandle: doc.getOrElse('soundcloudHandle', '') as String,
+      tiktokHandle: doc.getOrElse('tiktokHandle', '') as String,
+      instagramHandle: doc.getOrElse('instagramHandle', '') as String,
+      twitterHandle: doc.getOrElse('twitterHandle', '') as String,
+      pushNotificationsLikes:
+          doc.getOrElse('pushNotificationsLikes', true) as bool,
       pushNotificationsComments:
-          doc.getOrElse('pushNotificationsComments', true),
-      pushNotificationsFollows: doc.getOrElse('pushNotificationsFollows', true),
+          doc.getOrElse('pushNotificationsComments', true) as bool,
+      pushNotificationsFollows:
+          doc.getOrElse('pushNotificationsFollows', true) as bool,
       pushNotificationsDirectMessages:
-          doc.getOrElse('pushNotificationsDirectMessages', true),
+          doc.getOrElse('pushNotificationsDirectMessages', true) as bool,
       pushNotificationsITLUpdates:
-          doc.getOrElse('pushNotificationsITLUpdates', true),
+          doc.getOrElse('pushNotificationsITLUpdates', true) as bool,
       emailNotificationsAppReleases:
-          doc.getOrElse('emailNotificationsAppReleases', true),
+          doc.getOrElse('emailNotificationsAppReleases', true) as bool,
       emailNotificationsITLUpdates:
-          doc.getOrElse('emailNotificationsITLUpdates', true),
+          doc.getOrElse('emailNotificationsITLUpdates', true) as bool,
     );
   }
   final String id;
@@ -154,7 +157,7 @@ class UserModel extends Equatable {
         badgesCount: 0,
         deleted: false,
         shadowBanned: false,
-        accountType: AccountType.Free,
+        accountType: AccountType.free,
         youtubeChannelId: '',
         soundcloudHandle: '',
         tiktokHandle: '',
@@ -172,31 +175,32 @@ class UserModel extends Equatable {
   bool get isNotEmpty => this != UserModel.empty;
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
-  UserModel copyWith(
-      {String? id,
-      String? email,
-      String? username,
-      String? profilePicture,
-      String? bio,
-      String? location,
-      bool? onboarded,
-      int? loopsCount,
-      int? badgesCount,
-      bool? deleted,
-      bool? shadowBanned,
-      AccountType? accountType,
-      String? youtubeChannelId,
-      String? soundcloudHandle,
-      String? tiktokHandle,
-      String? instagramHandle,
-      String? twitterHandle,
-      bool? pushNotificationsLikes,
-      bool? pushNotificationsComments,
-      bool? pushNotificationsFollows,
-      bool? pushNotificationsDirectMessages,
-      bool? pushNotificationsITLUpdates,
-      bool? emailNotificationsAppReleases,
-      bool? emailNotificationsITLUpdates,}) {
+  UserModel copyWith({
+    String? id,
+    String? email,
+    String? username,
+    String? profilePicture,
+    String? bio,
+    String? location,
+    bool? onboarded,
+    int? loopsCount,
+    int? badgesCount,
+    bool? deleted,
+    bool? shadowBanned,
+    AccountType? accountType,
+    String? youtubeChannelId,
+    String? soundcloudHandle,
+    String? tiktokHandle,
+    String? instagramHandle,
+    String? twitterHandle,
+    bool? pushNotificationsLikes,
+    bool? pushNotificationsComments,
+    bool? pushNotificationsFollows,
+    bool? pushNotificationsDirectMessages,
+    bool? pushNotificationsITLUpdates,
+    bool? emailNotificationsAppReleases,
+    bool? emailNotificationsITLUpdates,
+  }) {
     return UserModel(
       id: id ?? this.id,
       email: email ?? this.email,

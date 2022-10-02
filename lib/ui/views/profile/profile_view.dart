@@ -82,7 +82,7 @@ class _ProfileViewState extends State<ProfileView> {
         child: BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, state) {
             final showBadgeButton = currentUser.id == visitedUser.id &&
-                currentUser.accountType == AccountType.Venue;
+                currentUser.accountType == AccountType.venue;
             return BlocListener<AuthenticationBloc, AuthenticationState>(
               listener: (context, authState) {
                 if (authState is Authenticated) {

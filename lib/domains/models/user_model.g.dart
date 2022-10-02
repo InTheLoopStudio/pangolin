@@ -65,6 +65,6 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
     };
 
 const _$AccountTypeEnumMap = {
-  AccountType.Venue: 'venue',
-  AccountType.Free: 'free',
+  AccountType.venue: 'venue',
+  AccountType.free: 'free',
 };
