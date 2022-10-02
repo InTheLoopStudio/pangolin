@@ -1,18 +1,25 @@
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
+/// The Cubit responsible for changing the app's theme
 class AppThemeCubit extends HydratedCubit<bool> {
+
+  /// The default theme is dark mode
   AppThemeCubit() : super(true);
 
   @override
-  bool fromJson(Map<String, dynamic> json) => json['isDark'];
+  bool fromJson(Map<String, dynamic> json) => json['isDark'] as bool;
 
   @override
   Map<String, dynamic> toJson(bool state) => {'isDark': state};
 
-  Future<void> updateTheme(bool isDarkMode) async {
+  /// changes the app theme to be either dark mode
+  /// with [isDarkMode] being `true` or
+  /// light mode with [isDarkMode] being `false`
+  Future<void> updateTheme({required bool isDarkMode}) async {
     emit(isDarkMode);
   }
 
+  /// Whether the app is dark mode
   bool isDark() {
     return state;
   }

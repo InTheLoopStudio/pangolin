@@ -29,11 +29,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
+  // If you're going to use other Firebase services in the background, 
+  // such as Firestore, make sure you call 
+  // `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
-
-  print('Handling a background message: ${message.messageId}');
 }
 
 Future<void> main() async {
@@ -58,21 +57,24 @@ Future<void> main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   HydratedBlocOverrides.runZoned(
-    () => runApp(MyApp()),
+    () => runApp(TappedApp()),
     storage: storage,
   );
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
+/// The root widget for the app
+class TappedApp extends StatelessWidget {
 
-  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-  static FirebaseAnalyticsObserver observer =
-      FirebaseAnalyticsObserver(analytics: analytics);
+  /// create the root widget for the app
+  TappedApp({Key? key}) : super(key: key);
+
+  static final _analytics = FirebaseAnalytics.instance;
+  static final _observer =
+      FirebaseAnalyticsObserver(analytics: _analytics);
 
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey();
 
-  final StreamChatClient client = StreamChatClient(
+  final _client = StreamChatClient(
     'xyk6dwdsp422',
     logLevel: Level.INFO,
   );
@@ -81,7 +83,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     initializeDateFormatting('en-US');
     return MultiRepositoryProvider(
-      providers: buildRepositories(streamChatClient: client),
+      providers: buildRepositories(streamChatClient: _client),
       child: MultiBlocProvider(
         providers: buildBlocs(navigatorKey: _navigatorKey),
         child: BlocBuilder<AppThemeCubit, bool>(
@@ -106,11 +108,11 @@ class MyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               title: 'Tapped',
               theme: appTheme,
-              navigatorObservers: <NavigatorObserver>[observer],
+              navigatorObservers: <NavigatorObserver>[_observer],
               navigatorKey: _navigatorKey,
               builder: (context, widget) {
                 return StreamChat(
-                  client: client,
+                  client: _client,
                   streamChatThemeData: streamTheme,
                   child: widget,
                 );

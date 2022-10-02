@@ -71,6 +71,7 @@ dependencies:
   flutter_svg: ^1.0.1
   flutter_slidable: ^2.0.0
   bloc_test: ^9.1.0
+  intl: ^0.17.0
   # firebase_performance: ^0.7.0+2
 
 dev_dependencies:

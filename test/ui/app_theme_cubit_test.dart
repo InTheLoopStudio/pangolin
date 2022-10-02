@@ -26,14 +26,14 @@ void main() {
     blocTest(
       'emit `true` when theme updated to dark',
       build: () => AppThemeCubit(),
-      act: (AppThemeCubit bloc) => bloc.updateTheme(true),
+      act: (AppThemeCubit bloc) => bloc.updateTheme(isDarkMode: true),
       expect: () => [true],
     );
 
     blocTest(
       'emit `false` when theme updated to light',
       build: () => AppThemeCubit(),
-      act: (AppThemeCubit bloc) => bloc.updateTheme(false),
+      act: (AppThemeCubit bloc) => bloc.updateTheme(isDarkMode: false),
       expect: () => [false],
     );
   });
