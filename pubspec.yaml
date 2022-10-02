@@ -72,6 +72,7 @@ dependencies:
   flutter_slidable: ^2.0.0
   bloc_test: ^9.1.0
   intl: ^0.17.0
+  rxdart: ^0.27.5
   # firebase_performance: ^0.7.0+2
 
 dev_dependencies:
