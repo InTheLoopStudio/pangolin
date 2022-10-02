@@ -22,7 +22,10 @@ class AudioContainer extends StatelessWidget {
                 children: [
                   Text(state.pickedAudio!.path.split('/').last),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
                     decoration: BoxDecoration(
                       color: theme.backgroundColor,
                     ),
@@ -45,7 +48,7 @@ class AudioContainer extends StatelessWidget {
 
                                 if (processingState == ProcessingState.idle) {
                                   state.audioController
-                                      .setAudioFile(state.pickedAudio!);
+                                      .setAudioFile(state.pickedAudio);
                                 }
                                 final playing = playerState.playing;
                                 if (processingState ==
@@ -101,18 +104,23 @@ class AudioContainer extends StatelessWidget {
                                         snapshot.data ?? Duration.zero;
                                     return StreamBuilder<PositionData>(
                                       stream: Rx.combineLatest2<Duration,
-                                              Duration, PositionData>(
-                                          state.audioController.player
-                                              .positionStream,
-                                          state.audioController.player
-                                              .bufferedPositionStream,
-                                          (position, bufferedPosition) =>
-                                              PositionData(
-                                                  position, bufferedPosition,),),
+                                          Duration, PositionData>(
+                                        state.audioController.player
+                                            .positionStream,
+                                        state.audioController.player
+                                            .bufferedPositionStream,
+                                        (position, bufferedPosition) =>
+                                            PositionData(
+                                          position,
+                                          bufferedPosition,
+                                        ),
+                                      ),
                                       builder: (context, snapshot) {
                                         final positionData = snapshot.data ??
                                             PositionData(
-                                                Duration.zero, Duration.zero,);
+                                              Duration.zero,
+                                              Duration.zero,
+                                            );
                                         var position = positionData.position;
                                         if (position > duration) {
                                           position = duration;
@@ -128,7 +136,8 @@ class AudioContainer extends StatelessWidget {
                                           bufferedPosition: bufferedPosition,
                                           onChangeEnd: (newPosition) {
                                             state.audioController.seek(
-                                                newPosition ?? const Duration(),);
+                                              newPosition ?? Duration.zero,
+                                            );
                                           },
                                         );
                                       },

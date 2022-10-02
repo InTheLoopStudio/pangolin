@@ -45,7 +45,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
       '8yYVxpQ7cURSzNfBsaBGF7A7kkv2',
       'wHpU3xj2yUSuz2rLFKC6J87HTLu1',
       'n4zIL6bOuPTqRC3dtsl6gyEBPQl1'
-    ]) async {
+    ]) {
       var isFollowing = false;
 
       if (userId == currentUser.id) {
@@ -111,14 +111,13 @@ class OnboardingCubit extends Cubit<OnboardingState> {
       if (imageFile != null) {
         emit(state.copyWith(pickedPhoto: File(imageFile.path)));
       }
-    } catch (error) {
+    } on Exception catch (error) {
       print(error);
     }
   }
 
   void next() {
     if (state.onboardingStage == OnboardingStage.stage1) {
-      print(state.formKey);
       if (state.formKey.currentState == null) {
         return;
       }

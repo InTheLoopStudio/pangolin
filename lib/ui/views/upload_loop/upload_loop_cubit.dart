@@ -120,8 +120,6 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
 
       final tooLarge = audioDuration.compareTo(_maxDuration) >= 0;
 
-      print('PATH 2 : ${state.pickedAudio!.path}');
-
       if (state.loopTitle.value.isNotEmpty && !tooLarge) {
         emit(state.copyWith(
           status: FormzStatus.submissionInProgress,

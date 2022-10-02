@@ -65,7 +65,7 @@ class ChannelName extends StatelessWidget {
             builder: (context, constraints) {
               var title = context.translations.noTitleText;
               if (extraData['name'] != null) {
-                title = extraData['name'];
+                title = extraData['name'] as String;
               } else {
                 final otherMembers = userMembers
                     .where((member) => member.id != client.currentUser!.id);

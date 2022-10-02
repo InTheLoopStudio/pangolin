@@ -10,7 +10,6 @@ import 'package:intheloopapp/ui/widgets/profile_view/badges_list.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/profile_header.dart';
 
 class OldProfileView extends StatefulWidget {
-
   const OldProfileView({
     Key? key,
     required this.visitedUserId,
@@ -64,11 +63,16 @@ class _ProfileViewState extends State<OldProfileView> {
                   displacement: 20,
                   onRefresh: () async {
                     context.read<ProfileCubit>()
-                      await .initLoops()
-                      await .refetchVisitedUser()
-                      await .loadIsFollowing(currentUser.id, visitedUser.id)
-                      await .loadFollowing(visitedUser.id)
-                      await .loadFollower(visitedUser.id);
+                      // ignore: unawaited_futures
+                      ..initLoops()
+                      // ignore: unawaited_futures
+                      ..refetchVisitedUser()
+                      // ignore: unawaited_futures
+                      ..loadIsFollowing(currentUser.id, visitedUser.id)
+                      // ignore: unawaited_futures
+                      ..loadFollowing(visitedUser.id)
+                      // ignore: unawaited_futures
+                      ..loadFollower(visitedUser.id);
                   },
                   child: Scrollbar(
                     child: ListView(
@@ -78,15 +82,19 @@ class _ProfileViewState extends State<OldProfileView> {
                       ),
                       children: [
                         const ProfileHeader(),
-                        const TabBar(tabs: [
-                          Tab(text: 'Badges'),
-                          Tab(text: 'Loops'),
-                        ],),
+                        const TabBar(
+                          tabs: [
+                            Tab(text: 'Badges'),
+                            Tab(text: 'Loops'),
+                          ],
+                        ),
                         SizedBox(
                           height: MediaQuery.of(context).size.height,
                           child: TabBarView(
                             children: [
-                              BadgesList(scrollController: _scrollController,),
+                              BadgesList(
+                                scrollController: _scrollController,
+                              ),
                               SingleChildScrollView(
                                 physics: const NeverScrollableScrollPhysics(),
                                 child: AllLoopsList(
@@ -122,12 +130,15 @@ class _ProfileViewState extends State<OldProfileView> {
           return currentUser.id != _visitedUserId
               ? FutureBuilder(
                   future: databaseRepository.getUser(_visitedUserId),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  builder: (
+                    BuildContext context,
+                    AsyncSnapshot<UserModel> snapshot,
+                  ) {
                     if (!snapshot.hasData) {
                       return const LoadingView();
                     }
 
-                    UserModel visitedUser = snapshot.data!;
+                    final visitedUser = snapshot.data!;
                     return _profilePage(
                       currentUser,
                       visitedUser,

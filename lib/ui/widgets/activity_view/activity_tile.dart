@@ -28,11 +28,11 @@ class ActivityTile extends StatelessWidget {
 
         return FutureBuilder(
           future: databaseRepository.getUser(activity.fromUserId),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
+          builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
             if (!snapshot.hasData) {
               return const SizedBox.shrink();
             } else {
-              UserModel user = snapshot.data;
+              final user = snapshot.data!;
 
               if (user.deleted == true) {
                 return const SizedBox.shrink();
@@ -43,7 +43,7 @@ class ActivityTile extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(
+                        MaterialPageRoute<ProfileView>(
                           builder: (context) => ProfileView(
                             visitedUserId: user.id,
                           ),

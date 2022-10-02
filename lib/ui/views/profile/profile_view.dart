@@ -28,7 +28,10 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent,) {
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
     return Container(
       color: Colors.black,
       child: _tabBar,
@@ -94,11 +97,16 @@ class _ProfileViewState extends State<ProfileView> {
                 displacement: 20,
                 onRefresh: () async {
                   context.read<ProfileCubit>()
-                    await .initLoops()
-                    await .refetchVisitedUser()
-                    await .loadIsFollowing(currentUser.id, visitedUser.id)
-                    await .loadFollowing(visitedUser.id)
-                    await .loadFollower(visitedUser.id);
+                    // ignore: unawaited_futures
+                    ..initLoops()
+                    // ignore: unawaited_futures
+                    ..refetchVisitedUser()
+                    // ignore: unawaited_futures
+                    ..loadIsFollowing(currentUser.id, visitedUser.id)
+                    // ignore: unawaited_futures
+                    ..loadFollowing(visitedUser.id)
+                    // ignore: unawaited_futures
+                    ..loadFollower(visitedUser.id);
                 },
                 child: DefaultTabController(
                   length: 2,
@@ -130,7 +138,8 @@ class _ProfileViewState extends State<ProfileView> {
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
                                   image: (visitedUser.profilePicture.isEmpty)
-                                      ? const AssetImage('assets/default_avatar.png')
+                                      ? const AssetImage(
+                                              'assets/default_avatar.png')
                                           as ImageProvider
                                       : CachedNetworkImageProvider(
                                           visitedUser.profilePicture,
@@ -178,34 +187,41 @@ class _ProfileViewState extends State<ProfileView> {
                         ),
                       ];
                     },
-                    body: TabBarView(children: [
-                      SingleChildScrollView(
-                        controller: _scrollController,
-                        physics: const NeverScrollableScrollPhysics(),
-                        child: Column(
-                          children: [
-                            if (showBadgeButton) Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 16,),
-                                    child: OutlinedButton(
-                                      onPressed: () => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => const SendBadgeView(),
-                                        ),
+                    body: TabBarView(
+                      children: [
+                        SingleChildScrollView(
+                          controller: _scrollController,
+                          physics: const NeverScrollableScrollPhysics(),
+                          child: Column(
+                            children: [
+                              if (showBadgeButton)
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
+                                  ),
+                                  child: OutlinedButton(
+                                    onPressed: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute<SendBadgeView>(
+                                        builder: (context) =>
+                                            const SendBadgeView(),
                                       ),
-                                      child: const Text('Send Badge'),
                                     ),
-                                  ) else const SizedBox.shrink(),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            BadgesList(scrollController: _scrollController),
-                          ],
+                                    child: const Text('Send Badge'),
+                                  ),
+                                )
+                              else
+                                const SizedBox.shrink(),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              BadgesList(scrollController: _scrollController),
+                            ],
+                          ),
                         ),
-                      ),
-                      AllLoopsList(scrollController: _scrollController),
-                    ],),
+                        AllLoopsList(scrollController: _scrollController),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -230,12 +246,15 @@ class _ProfileViewState extends State<ProfileView> {
           return currentUser.id != visitedUserId
               ? FutureBuilder(
                   future: databaseRepository.getUser(visitedUserId),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  builder: (
+                    BuildContext context,
+                    AsyncSnapshot<UserModel> snapshot,
+                  ) {
                     if (!snapshot.hasData) {
                       return const LoadingView();
                     }
 
-                    UserModel visitedUser = snapshot.data!;
+                    final visitedUser = snapshot.data!;
                     return _profilePage(
                       currentUser,
                       visitedUser,
