@@ -4,12 +4,11 @@
 
 # Pangolin 
 
-![Discord](https://img.shields.io/discord/828041609018343434?style=for-the-badge)
 ![GitHub Repo stars](https://img.shields.io/github/stars/InTheLoopStudio/pangolin?style=social)
 
-Mobile app for In The Loop
+Mobile app for Tapped
 
-In The Loop is a platform and community that allows artists and music producers to share samples and collaborate with others.
+Tapped is a platform and community that allows artists and music venues to collaborate with the use of blockchain verification.
 
 ----
 # Prerequisites
@@ -44,7 +43,7 @@ Thanks to the following people who have contributed to this project:
 
 # Contact
 
-If you want to contact us you can reach us at intheloopstudio2021@gmail.com 
+If you want to contact us you can reach us at @tappednetwork on Twitter and Instagram.
 
 ----
 # License
