@@ -7,7 +7,6 @@ part 'badge.g.dart';
 
 @JsonSerializable()
 class Badge extends Equatable {
-
   const Badge({
     required this.id,
     required this.senderId,
@@ -19,12 +18,13 @@ class Badge extends Equatable {
   factory Badge.fromJson(Map<String, dynamic> json) => _$BadgeFromJson(json);
 
   factory Badge.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
-    final Timestamp tmpTimestamp = doc.getOrElse('timestamp', Timestamp.now());
+    final tmpTimestamp =
+        doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
     return Badge(
       id: doc.id,
-      senderId: doc.getOrElse('senderId', ''),
-      receiverId: doc.getOrElse('receiverId', ''),
-      imageUrl: doc.getOrElse('imageUrl', ''),
+      senderId: doc.getOrElse('senderId', '') as String,
+      receiverId: doc.getOrElse('receiverId', '') as String,
+      imageUrl: doc.getOrElse('imageUrl', '') as String,
       timestamp: tmpTimestamp.toDate(),
     );
   }

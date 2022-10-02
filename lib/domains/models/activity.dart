@@ -8,7 +8,6 @@ part 'activity.g.dart';
 
 @JsonSerializable()
 class Activity extends Equatable {
-
   const Activity({
     required this.id,
     required this.fromUserId,
@@ -22,15 +21,19 @@ class Activity extends Equatable {
       _$ActivityFromJson(json);
 
   factory Activity.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
-    final Timestamp tmpTimestamp = doc.getOrElse('timestamp', Timestamp.now());
+    final tmpTimestamp =
+        doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
     return Activity(
       id: doc.id,
-      fromUserId: doc.getOrElse('fromUserId', ''),
-      toUserId: doc.getOrElse('toUserId', ''),
+      fromUserId: doc.getOrElse('fromUserId', '') as String,
+      toUserId: doc.getOrElse('toUserId', '') as String,
       timestamp: tmpTimestamp.toDate(),
-      type: EnumToString.fromString(ActivityType.values, doc['type']) ??
+      type: EnumToString.fromString(
+            ActivityType.values,
+            doc.getOrElse('type', 'free') as String,
+          ) ??
           ActivityType.like,
-      markedRead: doc.getOrElse('markedRead', true),
+      markedRead: doc.getOrElse('markedRead', true) as bool,
     );
   }
   final String id;

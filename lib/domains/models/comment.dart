@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intheloopapp/utils.dart';
 
 class Comment {
-
   Comment({
     this.id = '',
     this.timestamp,
@@ -15,15 +14,21 @@ class Comment {
   });
 
   factory Comment.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
+    final tmpTimestamp = doc.getOrElse(
+      'timestamp',
+      Timestamp.now(),
+    ) as Timestamp;
+
     return Comment(
       id: doc.id,
-      timestamp: doc['timestamp'],
-      content: doc['content'],
-      userId: doc['userId'],
-      parentId: doc['parentId'],
-      rootLoopId: doc['rootLoopId'],
-      children: List.from(doc['children']),
-      deleted: doc.getOrElse('deleted', false),
+      timestamp: tmpTimestamp,
+      content: doc.getOrElse('content', '') as String,
+      userId: doc.getOrElse('userId', '') as String,
+      parentId: doc.getOrElse('parentId', '') as String,
+      rootLoopId: doc.getOrElse('rootLoopId', '') as String,
+      children:
+          List.from(doc.getOrElse('children', <String>[]) as List<String>),
+      deleted: doc.getOrElse('deleted', false) as bool,
     );
   }
   String id;
