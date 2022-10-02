@@ -30,9 +30,9 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
   @override
   ProfileState fromJson(Map<String, dynamic> json) {
     return ProfileState(
-      followerCount: json['followerCount'],
-      followingCount: json['followingCount'],
-      isFollowing: json['isFollowing'],
+      followerCount: json['followerCount'] as int,
+      followingCount: json['followingCount'] as int,
+      isFollowing: json['isFollowing'] as bool,
       // userLoops: json['userLoops'],
       visitedUser: visitedUser,
       currentUser: currentUser,
