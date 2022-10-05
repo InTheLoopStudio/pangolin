@@ -3,6 +3,7 @@ part of 'settings_cubit.dart';
 class SettingsState extends Equatable {
   SettingsState({
     this.username = '',
+    this.artistName = '',
     this.bio = '',
     this.location = '',
     this.twitterHandle = '',
@@ -27,6 +28,7 @@ class SettingsState extends Equatable {
   }
 
   final String username;
+  final String artistName;
   final String bio;
   final String location;
   final String twitterHandle;
@@ -50,6 +52,7 @@ class SettingsState extends Equatable {
   @override
   List<Object?> get props => [
         username,
+        artistName,
         bio,
         location,
         twitterHandle,
@@ -70,6 +73,7 @@ class SettingsState extends Equatable {
 
   SettingsState copyWith({
     String? username,
+    String? artistName,
     String? bio,
     String? location,
     String? twitterHandle,
@@ -89,6 +93,7 @@ class SettingsState extends Equatable {
   }) {
     return SettingsState(
       username: username ?? this.username,
+      artistName: artistName ?? this.artistName,
       bio: bio ?? this.bio,
       location: location ?? this.location,
       twitterHandle: twitterHandle ?? this.twitterHandle,

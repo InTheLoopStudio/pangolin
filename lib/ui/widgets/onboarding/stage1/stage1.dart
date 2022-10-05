@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/views/onboarding/onboarding_cubit.dart';
+import 'package:intheloopapp/ui/widgets/common/forms/artist_name_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/bio_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/username_text_field.dart';
 import 'package:intheloopapp/ui/widgets/onboarding/stage1/location_text_field.dart';
@@ -51,6 +52,13 @@ class Stage1 extends StatelessWidget {
                             .usernameChange(input ?? ''),
                         initialValue: state.username,
                         currentUserId: currentUser.id,
+                      ),
+                      const SizedBox(height: 20),
+                      ArtistNameTextField(
+                        onChanged: (input) => context
+                            .read<OnboardingCubit>()
+                            .aristNameChange(input ?? ''),
+                        initialValue: state.artistName,
                       ),
                       const SizedBox(height: 20),
                       LocationTextField(

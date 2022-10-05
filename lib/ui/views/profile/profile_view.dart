@@ -125,7 +125,7 @@ class _ProfileViewState extends State<ProfileView> {
                             title: Row(
                               children: [
                                 Text(
-                                  visitedUser.username,
+                                  visitedUser.artistName,
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 32,
@@ -139,8 +139,8 @@ class _ProfileViewState extends State<ProfileView> {
                                   fit: BoxFit.cover,
                                   image: (visitedUser.profilePicture.isEmpty)
                                       ? const AssetImage(
-                                              'assets/default_avatar.png')
-                                          as ImageProvider
+                                          'assets/default_avatar.png',
+                                        ) as ImageProvider
                                       : CachedNetworkImageProvider(
                                           visitedUser.profilePicture,
                                         ),

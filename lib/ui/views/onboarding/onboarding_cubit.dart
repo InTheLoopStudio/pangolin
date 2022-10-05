@@ -34,6 +34,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
   void initUserData() {
     emit(state.copyWith(
       username: currentUser.username,
+      artistName: currentUser.artistName,
       location: currentUser.location,
       bio: currentUser.bio,
     ),);
@@ -101,6 +102,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
   }
 
   void usernameChange(String input) => emit(state.copyWith(username: input));
+  void aristNameChange(String input) => emit(state.copyWith(artistName: input));
   void locationChange(String input) => emit(state.copyWith(location: input));
   void bioChange(String input) => emit(state.copyWith(bio: input));
 
@@ -158,6 +160,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
 
       currentUser = currentUser.copyWith(
         username: state.username,
+        artistName: state.artistName,
         profilePicture: profilePictureUrl,
         location: state.location,
         bio: state.bio,

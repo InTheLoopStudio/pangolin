@@ -5,6 +5,7 @@ import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/settings/settings_cubit.dart';
+import 'package:intheloopapp/ui/widgets/common/forms/artist_name_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/bio_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/instagram_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/location_text_field.dart';
@@ -42,6 +43,12 @@ class SettingsForm extends StatelessWidget {
                     },
                     currentUserId: currentUser.id,
                   ),
+                   ArtistNameTextField(
+                        onChanged: (input) => context
+                            .read<SettingsCubit>()
+                            .changeArtistName(input ?? ''),
+                        initialValue: state.artistName,
+                      ),
                   BioTextField(
                     onSaved: (value) =>
                         context.read<SettingsCubit>().changeBio(value ?? ''),

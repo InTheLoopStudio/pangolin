@@ -34,6 +34,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   void initUserData() {
     emit(state.copyWith(
       username: currentUser.username,
+      artistName: currentUser.artistName,
       bio: currentUser.bio,
       location: currentUser.location,
       twitterHandle: currentUser.twitterHandle,
@@ -54,6 +55,7 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   void changeBio(String value) => emit(state.copyWith(bio: value));
   void changeUsername(String value) => emit(state.copyWith(username: value));
+  void changeArtistName(String value) => emit(state.copyWith(artistName: value));
   void changeTwitter(String value) =>
       emit(state.copyWith(twitterHandle: value));
   void changeInstagram(String value) =>
@@ -128,6 +130,7 @@ class SettingsCubit extends Cubit<SettingsState> {
 
       final user = currentUser.copyWith(
         username: state.username,
+        artistName: state.artistName,
         bio: state.bio,
         location: state.location,
         twitterHandle: state.twitterHandle,

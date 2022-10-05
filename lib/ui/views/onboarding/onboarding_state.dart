@@ -10,6 +10,7 @@ class OnboardingState extends Equatable {
     required this.currentUser,
     this.onboardingStage = OnboardingStage.stage1,
     this.username = '',
+    this.artistName = '',
     this.location = '',
     this.bio = '',
     // this.musicianType = const [],
@@ -31,6 +32,7 @@ class OnboardingState extends Equatable {
   final bool loading;
   final OnboardingStage onboardingStage;
   final String username;
+  final String artistName;
   final String location;
   final String bio;
   // final List<String> musicianType;
@@ -49,6 +51,7 @@ class OnboardingState extends Equatable {
         loading,
         onboardingStage,
         username,
+        artistName,
         location,
         bio,
         // musicianType,
@@ -65,6 +68,7 @@ class OnboardingState extends Equatable {
     bool? loading,
     OnboardingStage? onboardingStage,
     String? username,
+    String? artistName,
     String? location,
     String? bio,
     // List<String>? musicianType,
@@ -80,6 +84,7 @@ class OnboardingState extends Equatable {
       loading: loading ?? this.loading,
       onboardingStage: onboardingStage ?? this.onboardingStage,
       username: username ?? this.username,
+      artistName: artistName ?? this.artistName,
       location: location ?? this.location,
       bio: bio ?? this.bio,
       // musicianType: musicianType ?? this.musicianType,
