@@ -29,8 +29,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services in the background, 
-  // such as Firestore, make sure you call 
+  // If you're going to use other Firebase services in the background,
+  // such as Firestore, make sure you call
   // `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
 }
@@ -64,13 +64,11 @@ Future<void> main() async {
 
 /// The root widget for the app
 class TappedApp extends StatelessWidget {
-
   /// create the root widget for the app
   TappedApp({Key? key}) : super(key: key);
 
   static final _analytics = FirebaseAnalytics.instance;
-  static final _observer =
-      FirebaseAnalyticsObserver(analytics: _analytics);
+  static final _observer = FirebaseAnalyticsObserver(analytics: _analytics);
 
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey();
 
@@ -91,19 +89,7 @@ class TappedApp extends StatelessWidget {
             final appTheme =
                 isDarkSnapshot ? Themes.themeDark : Themes.themeLight;
             final defaultStreamTheme = StreamChatThemeData.fromTheme(appTheme);
-            final streamTheme = defaultStreamTheme.copyWith(
-              channelPreviewTheme: StreamChannelPreviewThemeData(
-                avatarTheme: StreamAvatarThemeData(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              otherMessageTheme: StreamMessageThemeData(
-                avatarTheme: StreamAvatarThemeData(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-            );
-
+            final streamTheme = defaultStreamTheme;
             return MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'Tapped',

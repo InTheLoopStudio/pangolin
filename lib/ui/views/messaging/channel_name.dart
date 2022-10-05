@@ -51,7 +51,8 @@ class ChannelName extends StatelessWidget {
       FutureBuilder<List<UserModel>>(
         future: Future.wait(
           members.map((member) async {
-            return await databaseRepository.getUser(member.userId ?? '');
+            final user = await databaseRepository.getUser(member.userId ?? '');
+            return user;
           }),
         ),
         builder: (context, snapshot) {
