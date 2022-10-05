@@ -7,12 +7,14 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 
 final _dynamicLinks = FirebaseDynamicLinks.instance;
 
+/// The Firebase dynamic link implementation for Dynamic Link
+/// 
+/// aka Deep Links
 class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
   @override
   Stream<DynamicLinkRedirect> getDynamicLinks() async* {
     // ignore: close_sinks
-    final dynamicLinkStream =
-        StreamController<DynamicLinkRedirect>();
+    final dynamicLinkStream = StreamController<DynamicLinkRedirect>();
 
     final data = await _dynamicLinks.getInitialLink();
 
@@ -21,16 +23,15 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
       dynamicLinkStream.add(redirect);
     }
 
-    _dynamicLinks.onLink.listen((PendingDynamicLinkData? dynamicLinkData) async {
-        final redirect = _handleDeepLink(dynamicLinkData);
+    _dynamicLinks.onLink
+        .listen((PendingDynamicLinkData? dynamicLinkData) async {
+      final redirect = _handleDeepLink(dynamicLinkData);
 
-        if (redirect != null) {
-          dynamicLinkStream.add(redirect);
-        }
-      }).onError((error) async {
-        print('onLinkError');
-        print(error.message);
-      },
+      if (redirect != null) {
+        dynamicLinkStream.add(redirect);
+      }
+    }).onError(
+      (error) async {},
     );
 
     yield* dynamicLinkStream.stream;
@@ -44,7 +45,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
       return null;
     }
 
-    print('_handleDeepLink | deep link: $deepLink');
+    // print('_handleDeepLink | deep link: $deepLink');
 
     switch (deepLink.path) {
       case '/upload_loop':
@@ -73,7 +74,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
   @override
   Future<String> getShareLoopDynamicLink(Loop loop) async {
     final parameters = DynamicLinkParameters(
-      uriPrefix: 'https://intheloopstudio.page.link',
+      uriPrefix: 'https://tappednetwork.page.link',
       link: Uri.parse(
         'https://intheloopstudio.com/loop?id=${loop.id}',
       ),
@@ -84,9 +85,9 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
         bundleId: 'com.intheloopstudio',
       ),
       socialMetaTagParameters: SocialMetaTagParameters(
-        title: 'In The Loop | ${loop.title}',
+        title: 'Tapped Network | ${loop.title}',
         description:
-            'In The Loop - The online platform tailored for producers and creators to share their loops to the world, get feedback on their music, and join the world-wide community of artists to collaborate with',
+            'Tapped Network - The online platform tailored for producers and creators to share their loops to the world, get feedback on their music, and join the world-wide community of artists to collaborate with',
       ),
     );
 
@@ -99,8 +100,8 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
   @override
   Future<String> getShareProfileDynamicLink(UserModel user) async {
     final parameters = DynamicLinkParameters(
-      uriPrefix: 'https://intheloopstudio.page.link',
-      link: Uri.parse('https://intheloopstudio.com/user?id=${user.id}'),
+      uriPrefix: 'https://tappednetwork.page.link',
+      link: Uri.parse('https://tappednetwork.com/user?id=${user.id}'),
       androidParameters: const AndroidParameters(
         packageName: 'com.intheloopstudio',
       ),
@@ -108,9 +109,9 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
         bundleId: 'com.intheloopstudio',
       ),
       socialMetaTagParameters: SocialMetaTagParameters(
-        title: '${user.username} on In The Loop',
+        title: '${user.username} on Tapped',
         description:
-            'In The Loop - The online platform tailored for producers and creators to share their loops to the world, get feedback on their music, and join the world-wide community of artists to collaborate with',
+            'Tapped Network - The online platform tailored for producers and creators to share their loops to the world, get feedback on their music, and join the world-wide community of artists to collaborate with',
       ),
     );
 
