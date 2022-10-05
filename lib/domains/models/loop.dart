@@ -63,7 +63,7 @@ class Loop extends Equatable {
       comments: doc.getOrElse('comments', 0) as int,
       shares: doc.getOrElse('shares', 0) as int,
       tags: List.from(
-        doc.getOrElse('tags', <String>[]) as Iterable<String>,
+        doc.getOrElse('tags', <dynamic>[]) as Iterable<dynamic>,
       ),
       deleted: doc.getOrElse('deleted', false) as bool,
     );

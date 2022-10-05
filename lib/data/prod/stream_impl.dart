@@ -62,9 +62,9 @@ class StreamImpl extends StreamRepository {
   Future<String> getToken() async {
     final callable =
         _functions.httpsCallable('ext-auth-chat-getStreamUserToken');
-    final results = await callable<Map<String, dynamic>>();
+    final results = await callable<String>();
 
-    final token = results.data as String;
+    final token = results.data;
 
     return token;
 
