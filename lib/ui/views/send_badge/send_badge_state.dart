@@ -3,6 +3,8 @@ part of './send_badge_cubit.dart';
 class SendBadgeState extends Equatable {
   SendBadgeState({
     this.badgeImage,
+    this.badgeName = '',
+    this.badgeDescription = '',
     this.receiverUsername = '',
     this.status = FormzStatus.pure,
     GlobalKey<FormState>? formKey,
@@ -13,6 +15,8 @@ class SendBadgeState extends Equatable {
   }
 
   final File? badgeImage;
+  final String badgeName;
+  final String badgeDescription;
   final String receiverUsername;
 
   late final ImagePicker picker;
@@ -22,17 +26,23 @@ class SendBadgeState extends Equatable {
   @override
   List<Object?> get props => [
         badgeImage,
+        badgeName,
+        badgeDescription,
         receiverUsername,
         status,
       ];
 
   SendBadgeState copyWith({
     File? badgeImage,
+    String? badgeName,
+    String? badgeDescription,
     String? receiverUsername,
     FormzStatus? status,
   }) {
     return SendBadgeState(
       badgeImage: badgeImage ?? this.badgeImage,
+      badgeName: badgeName ?? this.badgeName,
+      badgeDescription: badgeDescription ?? this.badgeDescription,
       receiverUsername: receiverUsername ?? this.receiverUsername,
       status: status ?? this.status,
       formKey: formKey,

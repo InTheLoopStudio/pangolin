@@ -39,7 +39,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   Future<void> createUser(UserModel user) async {
     await _analytics.logEvent(name: 'sign_up');
     final callable = _functions.httpsCallable('createUser');
-    final results = await callable(user.toMap());
+    await callable<Map<String, dynamic>>(user.toMap());
   }
 
   @override

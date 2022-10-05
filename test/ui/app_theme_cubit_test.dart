@@ -1,40 +1,43 @@
+import 'dart:io';
+
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:mockito/mockito.dart';
+
+class MockStorage extends Mock implements Storage {
+  @override
+  Future<void> write(String key, dynamic value) async {}
+}
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
-  setUp(() async {
-    final storage = await HydratedStorage.build(
-      storageDirectory: kIsWeb
-          ? HydratedStorage.webStorageDirectory
-          : await getTemporaryDirectory(),
-    );
-    print(storage);
-  });
+  WidgetsFlutterBinding.ensureInitialized();
+  HydratedBlocOverrides.runZoned(
+    () {
+      group('AppThemeCubit', () {
+        blocTest(
+          'emit `true` when theme updated to dark',
+          build: () => AppThemeCubit(),
+          expect: () => <bool>[],
+        );
 
-  group('AppThemeCubit', () {
-    blocTest(
-      'emit `true` when theme updated to dark',
-      build: () => AppThemeCubit(),
-      expect: () => [],
-    );
+        blocTest(
+          'emit `true` when theme updated to dark',
+          build: () => AppThemeCubit(),
+          act: (AppThemeCubit bloc) => bloc.updateTheme(isDarkMode: true),
+          expect: () => [true],
+        );
 
-    blocTest(
-      'emit `true` when theme updated to dark',
-      build: () => AppThemeCubit(),
-      act: (AppThemeCubit bloc) => bloc.updateTheme(isDarkMode: true),
-      expect: () => [true],
-    );
-
-    blocTest(
-      'emit `false` when theme updated to light',
-      build: () => AppThemeCubit(),
-      act: (AppThemeCubit bloc) => bloc.updateTheme(isDarkMode: false),
-      expect: () => [false],
-    );
-  });
+        blocTest(
+          'emit `false` when theme updated to light',
+          build: () => AppThemeCubit(),
+          act: (AppThemeCubit bloc) => bloc.updateTheme(isDarkMode: false),
+          expect: () => [false],
+        );
+      });
+    },
+    storage: MockStorage(),
+  );
 }

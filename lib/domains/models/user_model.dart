@@ -5,9 +5,13 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'user_model.g.dart';
 
+/// The different account types for a user
 enum AccountType {
+  /// Venue users
   @JsonValue('venue')
   venue,
+
+  /// Users with free accounts
   @JsonValue('free')
   free,
 }
@@ -18,6 +22,7 @@ class UserModel extends Equatable {
     required this.id,
     required this.email,
     required this.username,
+    required this.artistName,
     required this.profilePicture,
     required this.bio,
     required this.location,
@@ -59,6 +64,7 @@ class UserModel extends Equatable {
       id: doc.id,
       email: doc.getOrElse('email', '') as String,
       username: doc.getOrElse('username', 'anonymous') as String,
+      artistName: doc.getOrElse('artistName', '') as String,
       profilePicture: doc.getOrElse('profilePicture', '') as String,
       bio: doc.getOrElse('bio', '') as String,
       location: doc.getOrElse('location', 'Global') as String,
@@ -92,6 +98,7 @@ class UserModel extends Equatable {
   final String id;
   final String email;
   final String username;
+  final String artistName;
   final String profilePicture;
   final String bio;
   final String location;
@@ -122,6 +129,7 @@ class UserModel extends Equatable {
         id,
         email,
         username,
+        artistName,
         profilePicture,
         bio,
         location,
@@ -149,6 +157,7 @@ class UserModel extends Equatable {
         id: '',
         email: '',
         username: 'anonymous',
+        artistName: '',
         profilePicture: '',
         bio: '',
         location: 'Global',
@@ -179,6 +188,7 @@ class UserModel extends Equatable {
     String? id,
     String? email,
     String? username,
+    String? artistName,
     String? profilePicture,
     String? bio,
     String? location,
@@ -205,6 +215,7 @@ class UserModel extends Equatable {
       id: id ?? this.id,
       email: email ?? this.email,
       username: username ?? this.username,
+      artistName: artistName ?? this.artistName,
       profilePicture: profilePicture ?? this.profilePicture,
       bio: bio ?? this.bio,
       location: location ?? this.location,
@@ -241,6 +252,7 @@ class UserModel extends Equatable {
       'id': id,
       'email': email,
       'username': username,
+      'artistName': artistName,
       'bio': bio,
       'profilePicture': profilePicture,
       'location': location,

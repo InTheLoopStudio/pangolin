@@ -12,6 +12,8 @@ class Badge extends Equatable {
     required this.senderId,
     required this.receiverId,
     required this.imageUrl,
+    required this.name,
+    required this.description,
     required this.timestamp,
   });
 
@@ -25,6 +27,8 @@ class Badge extends Equatable {
       senderId: doc.getOrElse('senderId', '') as String,
       receiverId: doc.getOrElse('receiverId', '') as String,
       imageUrl: doc.getOrElse('imageUrl', '') as String,
+      name: doc.getOrElse('name', '') as String,
+      description: doc.getOrElse('description', '') as String,
       timestamp: tmpTimestamp.toDate(),
     );
   }
@@ -32,6 +36,8 @@ class Badge extends Equatable {
   final String senderId;
   final String receiverId;
   final String imageUrl;
+  final String name;
+  final String description;
   final DateTime timestamp;
 
   @override
@@ -40,6 +46,8 @@ class Badge extends Equatable {
         senderId,
         receiverId,
         imageUrl,
+        name,
+        description,
         timestamp,
       ];
   Map<String, dynamic> toJson() => _$BadgeToJson(this);
@@ -49,6 +57,8 @@ class Badge extends Equatable {
     String? senderId,
     String? receiverId,
     String? imageUrl,
+    String? name,
+    String? description,
     DateTime? timestamp,
   }) {
     return Badge(
@@ -56,6 +66,8 @@ class Badge extends Equatable {
       senderId: senderId ?? this.senderId,
       receiverId: receiverId ?? this.receiverId,
       imageUrl: imageUrl ?? this.imageUrl,
+      name: name ?? this.name,
+      description: description ?? this.description,
       timestamp: timestamp ?? this.timestamp,
     );
   }
@@ -66,6 +78,8 @@ class Badge extends Equatable {
       'senderId': senderId,
       'receiverId': receiverId,
       'imageUrl': imageUrl,
+      'name': name,
+      'description': description,
       'timestamp': timestamp.toIso8601String()
     };
   }

@@ -30,6 +30,10 @@ class SendBadgeCubit extends Cubit<SendBadgeState> {
   void changeReceiverUsername(String? value) =>
       emit(state.copyWith(receiverUsername: value));
 
+  void changeBadgeName(String? value) => emit(state.copyWith(badgeName: value ?? ''));
+  void changeBadgeDescription(String? value) =>
+      emit(state.copyWith(badgeDescription: value ?? ''));
+
   Future<void> handleImageFromGallery() async {
     try {
       final imageFile =
@@ -38,7 +42,7 @@ class SendBadgeCubit extends Cubit<SendBadgeState> {
         emit(state.copyWith(badgeImage: File(imageFile.path)));
       }
     } catch (error) {
-      print(error);
+      // print(error);
     }
   }
 
@@ -80,6 +84,8 @@ class SendBadgeCubit extends Cubit<SendBadgeState> {
           senderId: currentUser.id,
           receiverId: badgeReceiver.id,
           imageUrl: badgeImageUrl,
+          name: state.badgeName,
+          description: state.badgeDescription,
           timestamp: DateTime.now(),
         );
 
@@ -87,7 +93,6 @@ class SendBadgeCubit extends Cubit<SendBadgeState> {
         await databaseRepository.createBadge(badge);
         emit(state.copyWith(status: FormzStatus.submissionSuccess));
       } on Exception {
-        print('Error creating badge');
         emit(state.copyWith(status: FormzStatus.submissionFailure));
       } finally {
         navigationBloc.add(const Pop());

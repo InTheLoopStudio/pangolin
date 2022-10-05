@@ -23,7 +23,7 @@ void main() {
         'downloads': 0,
         'comments': 0,
         'shares': 0,
-        'tags': const [],
+        'tags': const <String>[],
         'deleted': false,
       },
     );

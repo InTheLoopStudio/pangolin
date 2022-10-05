@@ -7,10 +7,14 @@ import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dar
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/send_badge/send_badge_cubit.dart';
+import 'package:intheloopapp/ui/widgets/send_badge_view/badge_description_text_field.dart';
 import 'package:intheloopapp/ui/widgets/send_badge_view/badge_image_input.dart';
+import 'package:intheloopapp/ui/widgets/send_badge_view/badge_name_text_field.dart';
 import 'package:intheloopapp/ui/widgets/send_badge_view/badge_receiver_text_field.dart';
 
+/// The screen for sending a badge
 class SendBadgeView extends StatelessWidget {
+  ///
   const SendBadgeView({Key? key}) : super(key: key);
 
   @override
@@ -46,6 +50,20 @@ class SendBadgeView extends StatelessWidget {
                           onChanged: (input) => context
                               .read<SendBadgeCubit>()
                               .changeReceiverUsername(input),
+                          initialValue: '',
+                        ),
+                        const SizedBox(height: 50),
+                        BadgeNameTextField(
+                          onChanged: (input) => context
+                              .read<SendBadgeCubit>()
+                              .changeBadgeName(input),
+                          initialValue: '',
+                        ),
+                        const SizedBox(height: 50),
+                        BadgeDescriptionTextField(
+                          onChanged: (input) => context
+                              .read<SendBadgeCubit>()
+                              .changeBadgeDescription(input),
                           initialValue: '',
                         ),
                         const SizedBox(height: 50),
