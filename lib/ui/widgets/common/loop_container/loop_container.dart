@@ -63,7 +63,7 @@ class LoopContainer extends StatelessWidget {
                         .read<DynamicLinkRepository>()
                         .getShareLoopDynamicLink(loop);
                     await Share.share(
-                        'Check out this loop on In The Loop $link',);
+                        'Check out this loop on Tapped $link',);
                   },
                   backgroundColor: tappedAccent,
                   foregroundColor: Colors.white,

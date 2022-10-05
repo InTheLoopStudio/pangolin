@@ -49,7 +49,7 @@ class NotificationSettingsForm extends StatelessWidget {
                   context.read<SettingsCubit>().changeDirectMsgPush(selected),
             ),
             SettingsSwitch(
-              label: 'In The Loop Updates',
+              label: 'Tapped Updates',
               activated: state.pushNotificationsITLUpdates,
               onChanged: (selected) =>
                   context.read<SettingsCubit>().changeITLUpdatesPush(selected),
@@ -83,7 +83,7 @@ class NotificationSettingsForm extends StatelessWidget {
                   context.read<SettingsCubit>().changeAppReleaseEmail(selected),
             ),
             SettingsSwitch(
-              label: 'In The Loop Updates',
+              label: 'Tapped Updates',
               activated: state.emailNotificationsITLUpdates,
               onChanged: (selected) =>
                   context.read<SettingsCubit>().changeITLUpdatesEmail(selected),

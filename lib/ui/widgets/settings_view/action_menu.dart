@@ -30,7 +30,7 @@ class ActionMenu extends StatelessWidget {
                   scheme: 'mailto',
                   path: 'intheloopstudios2021@gmail.com',
                   query: encodeQueryParameters(<String, String>{
-                    'subject': 'In The Loop User Feedback',
+                    'subject': 'Tapped User Feedback',
                   }),
                 ),
               ),

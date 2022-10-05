@@ -35,23 +35,26 @@ class ProfileHeader extends StatelessWidget {
                 color: tappedAccent,
               ),
             ),
-            if (state.currentUser.id == state.visitedUser.id) Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 15,
-                          horizontal: 20,
-                        ),
-                        child: GestureDetector(
-                          onTap: () => context
-                              .read<NavigationBloc>()
-                              .add(const PushActivity()),
-                          child: const NotificationIconButton(),
-                        ),
-                      ),
-                    ],
-                  ) else const SizedBox.shrink(),
+            if (state.currentUser.id == state.visitedUser.id)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 15,
+                      horizontal: 20,
+                    ),
+                    child: GestureDetector(
+                      onTap: () => context
+                          .read<NavigationBloc>()
+                          .add(const PushActivity()),
+                      child: const NotificationIconButton(),
+                    ),
+                  ),
+                ],
+              )
+            else
+              const SizedBox.shrink(),
             Container(
               transform: Matrix4.translationValues(0, 20, 0),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 60),
@@ -81,13 +84,13 @@ class ProfileHeader extends StatelessWidget {
                                 padding: const EdgeInsets.only(left: 3),
                                 child: GestureDetector(
                                   onTap: () async {
-                                    final link =
-                                        await dynamicLinkRepository
-                                            .getShareProfileDynamicLink(
+                                    final link = await dynamicLinkRepository
+                                        .getShareProfileDynamicLink(
                                       state.visitedUser,
                                     );
                                     await Share.share(
-                                        'Check out this profile on In The Loop $link',);
+                                      'Check out this profile on Tapped $link',
+                                    );
                                   },
                                   child: const Icon(Icons.share),
                                 ),

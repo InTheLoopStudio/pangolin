@@ -48,7 +48,7 @@ testing from [here](https://github.com/InTheLoopStudio/pangolin/projects/1)
 
 # Translations
 
-If you'd like to help us translate In The Loop and make it more accessible (this includes code OR documentation), reach out to one of the core members.
+If you'd like to help us translate Tapped and make it more accessible (this includes code OR documentation), reach out to one of the core members.
 
 * You can help us translate our project [here](https://github.com/InTheLoopStudio/pangolin/wiki)
 

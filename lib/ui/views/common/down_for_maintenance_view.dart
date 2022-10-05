@@ -26,7 +26,7 @@ class DownForMainenanceView extends StatelessWidget {
               const SizedBox(height: 20),
               const Center(
                 child: Text(
-                  'In The Loop is down for maintenance \n👷‍♂️👷‍♀️',
+                  'Tapped is down for maintenance \n👷‍♂️👷‍♀️',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
