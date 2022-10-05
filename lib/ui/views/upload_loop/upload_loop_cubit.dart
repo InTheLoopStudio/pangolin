@@ -16,7 +16,12 @@ import 'package:intheloopapp/ui/views/upload_loop/loop_title.dart';
 
 part 'upload_loop_state.dart';
 
+/// Functionality and instructions for uploading a loop
 class UploadLoopCubit extends Cubit<UploadLoopState> {
+
+  /// Uploading a loop requires the database, storage, authentication, 
+  /// knowledge of the current of the current user, view scaffold info, 
+  /// and navigation instructions
   UploadLoopCubit({
     required this.databaseRepository,
     required this.storageRepository,
@@ -26,15 +31,26 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
     this.navigationBloc,
   }) : super(UploadLoopState());
 
+  /// Database methods
   final DatabaseRepository databaseRepository;
+
+  /// Object storage methods
   final StorageRepository storageRepository;
+
+  /// Authentication instructions
   final AuthenticationBloc authenticationBloc;
+
+  /// The currently logged in user
   final UserModel currentUser;
+
+  /// The scaffold of the view
   final GlobalKey<ScaffoldMessengerState>? scaffoldKey;
+
+  /// Navigation instructions
   final NavigationBloc? navigationBloc;
 
-  static String audioLockId = 'uploaded-loop';
-  static const Duration _maxDuration = Duration(minutes: 5);
+  static const String _audioLockId = 'uploaded-loop';
+  static const Duration _maxDuration = Duration(minutes: 10);
 
   @override
   Future<void> close() async {
@@ -46,15 +62,18 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
   //   return databaseRepository.getTagSuggestions(value);
   // }
 
+  /// checks if the audio lock has changed
+  /// and plays or pauses music accordingly
   void listenToAudioLockChange() {
     audioLock.addListener(() {
-      if (audioLock.value != audioLockId &&
+      if (audioLock.value != _audioLockId &&
           state.audioController.player.playing == true) {
         state.audioController.pause();
       }
     });
   }
 
+  /// what to do it the title of the loop changes
   void titleChanged(String value) {
     final title = LoopTitle.dirty(value);
     emit(state.copyWith(
@@ -71,11 +90,13 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
   //   );
   // }
 
+  /// What to do if an upload is canceled
   Future<void> cancelUpload() async {
     state.audioController.pause();
     emit(UploadLoopState());
   }
 
+  /// opens a user's gallery to upload audio
   Future<void> handleAudioFromFiles() async {
     try {
       final audioFileResult = await FilePicker.platform.pickFiles(
@@ -96,19 +117,17 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
         ),);
 
         await state.audioController.setAudioFile(pickedAudio);
-
-        print(state.audioController);
       }
     } catch (error) {
-      print(error);
       emit(state.copyWith(
         status: FormzStatus.submissionFailure,
       ),);
     }
   }
 
+  /// instructions for how to upload a loop
   Future<void> uploadLoop() async {
-    print('PATH 1 : ${state.pickedAudio!.path}');
+    // print('PATH 1 : ${state.pickedAudio!.path}');
 
     try {
       if (!state.status.isValidated || state.pickedAudio == null) return;
@@ -116,7 +135,7 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
       final tmp =
           await state.audioController.setAudioFile(state.pickedAudio);
 
-      final audioDuration = tmp ?? const Duration();
+      final audioDuration = tmp ?? Duration.zero;
 
       final tooLarge = audioDuration.compareTo(_maxDuration) >= 0;
 
@@ -152,10 +171,10 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
         // Navigate back to the feed page
         navigationBloc?.add(const ChangeTab(selectedTab: 0));
       } else {
-        print('NOT VALID UPLOAD : $tooLarge + ${state.loopTitle.value}');
+        // print('NOT VALID UPLOAD : $tooLarge + ${state.loopTitle.value}');
         if (scaffoldKey != null) {
           scaffoldKey!.currentState?.showSnackBar(SnackBar(
-            content: const Text('Audio must be under 5 minutes with a title'),
+            content: const Text('Audio must be under 10 minutes with a title'),
             duration: const Duration(seconds: 3),
             backgroundColor: Colors.red,
             action: SnackBarAction(
@@ -166,7 +185,6 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
         }
       }
     } catch (e) {
-      print('[ERROR] $e');
       if (scaffoldKey != null) {
         scaffoldKey!.currentState?.showSnackBar(SnackBar(
           content: const Text('Error uploading loop'),
