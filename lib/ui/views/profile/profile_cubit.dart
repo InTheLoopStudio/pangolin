@@ -119,6 +119,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
         state.copyWith(
           badgeStatus: BadgesStatus.success,
           userBadges: List.of(state.userBadges)..add(event),
+          hasReachedMaxBadges: state.userBadges.length < 10 ? true : false,
         ),
       );
     });
