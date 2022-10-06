@@ -51,6 +51,19 @@ class PushLoop extends NavigationEvent {
   List<Object> get props => [];
 }
 
+class PushBadge extends NavigationEvent {
+  const PushBadge(this.badge);
+
+  final Badge badge;
+
+  @override
+  String toString() =>
+      'PushProfile { badge: ${badge.toString()}}';
+
+  @override
+  List<Object> get props => [];
+}
+
 class PushOnboarding extends NavigationEvent {
   const PushOnboarding();
 

@@ -67,8 +67,6 @@ class ProfileState extends Equatable {
     UserModel? currentUser,
     UserModel? visitedUser,
   }) {
-    print('hasReachedMaxBadges: ${this.hasReachedMaxBadges}');
-    print('badgeStatus: ${this.badgeStatus}');
     return ProfileState(
       followingCount: followingCount ?? this.followingCount,
       followerCount: followerCount ?? this.followerCount,

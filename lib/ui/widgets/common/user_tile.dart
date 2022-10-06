@@ -18,11 +18,11 @@ class UserTile extends StatelessWidget {
         radius: 25,
         backgroundImageUrl: user.profilePicture,
       ),
-      title: Text(user.username),
+      title: Text(user.artistName),
       subtitle: Text(user.bio),
       onTap: () {
         Navigator.of(context).push(
-          MaterialPageRoute(
+          MaterialPageRoute<ProfileView>(
             builder: (context) => ProfileView(
               visitedUserId: user.id,
             ),

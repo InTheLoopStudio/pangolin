@@ -12,11 +12,13 @@ class Comments extends StatelessWidget {
       builder: (context, state) {
         final navigationBloc = context.read<NavigationBloc>();
         return GestureDetector(
-          onTap: () => navigationBloc.add(PushLoop(
-            state.loop,
-            showComments: true,
-            autoPlay: false,
-          ),),
+          onTap: () => navigationBloc.add(
+            PushLoop(
+              state.loop,
+              showComments: true,
+              autoPlay: false,
+            ),
+          ),
           child: Row(
             children: [
               const SizedBox(width: 20),
