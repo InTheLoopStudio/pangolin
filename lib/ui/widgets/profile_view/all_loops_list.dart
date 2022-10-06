@@ -54,11 +54,11 @@ class _AllLoopsListState extends State<AllLoopsList> {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        switch (state.status) {
-          case ProfileStatus.failure:
+        switch (state.loopStatus) {
+          case LoopsStatus.failure:
             return const Center(child: Text('failed to fetch posts'));
 
-          case ProfileStatus.success:
+          case LoopsStatus.success:
             if (state.userLoops.isEmpty || state.visitedUser.deleted == true) {
               return const EasterEggPlaceholder(text: 'No Posts');
             }
@@ -95,7 +95,7 @@ class _AllLoopsListState extends State<AllLoopsList> {
                                   ],
                                 );
                         },
-                        itemCount: state.hasReachedMax
+                        itemCount: state.hasReachedMaxLoops
                             ? state.userLoops.length
                             : state.userLoops.length + 1,
                       ),

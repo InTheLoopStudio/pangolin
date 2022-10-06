@@ -213,7 +213,7 @@ class _ProfileViewState extends State<ProfileView> {
                               else
                                 const SizedBox.shrink(),
                               const SizedBox(
-                                height: 20,
+                                height: 5,
                               ),
                               BadgesList(scrollController: _scrollController),
                             ],

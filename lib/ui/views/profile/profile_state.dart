@@ -1,6 +1,16 @@
 part of 'profile_cubit.dart';
 
-enum ProfileStatus { initial, success, failure }
+enum LoopsStatus {
+  initial,
+  success,
+  failure,
+}
+
+enum BadgesStatus {
+  initial,
+  success,
+  failure,
+}
 
 class ProfileState extends Equatable {
   const ProfileState({
@@ -9,8 +19,10 @@ class ProfileState extends Equatable {
     this.isFollowing = false,
     this.userLoops = const [],
     this.userBadges = const [],
-    this.hasReachedMax = false,
-    this.status = ProfileStatus.initial,
+    this.hasReachedMaxLoops = false,
+    this.hasReachedMaxBadges = false,
+    this.loopStatus = LoopsStatus.initial,
+    this.badgeStatus = BadgesStatus.initial,
     required this.visitedUser,
     required this.currentUser,
   });
@@ -20,8 +32,10 @@ class ProfileState extends Equatable {
   final bool isFollowing;
   final List<Loop> userLoops;
   final List<Badge> userBadges;
-  final bool hasReachedMax;
-  final ProfileStatus status;
+  final bool hasReachedMaxLoops;
+  final bool hasReachedMaxBadges;
+  final LoopsStatus loopStatus;
+  final BadgesStatus badgeStatus;
   final UserModel visitedUser;
   final UserModel currentUser;
 
@@ -32,8 +46,10 @@ class ProfileState extends Equatable {
         isFollowing,
         userLoops,
         userBadges,
-        hasReachedMax,
-        status,
+        hasReachedMaxLoops,
+        hasReachedMaxBadges,
+        loopStatus,
+        badgeStatus,
         visitedUser,
         currentUser
       ];
@@ -44,8 +60,10 @@ class ProfileState extends Equatable {
     bool? isFollowing,
     List<Loop>? userLoops,
     List<Badge>? userBadges,
-    bool? hasReachedMax,
-    ProfileStatus? status,
+    bool? hasReachedMaxLoops,
+    bool? hasReachedMaxBadges,
+    LoopsStatus? loopStatus,
+    BadgesStatus? badgeStatus,
     UserModel? currentUser,
     UserModel? visitedUser,
   }) {
@@ -55,8 +73,10 @@ class ProfileState extends Equatable {
       isFollowing: isFollowing ?? this.isFollowing,
       userLoops: userLoops ?? this.userLoops,
       userBadges: userBadges ?? this.userBadges,
-      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
-      status: status ?? this.status,
+      hasReachedMaxLoops: hasReachedMaxLoops ?? this.hasReachedMaxLoops,
+      hasReachedMaxBadges: hasReachedMaxBadges ?? this.hasReachedMaxBadges,
+      loopStatus: loopStatus ?? this.loopStatus,
+      badgeStatus: badgeStatus ?? this.badgeStatus,
       currentUser: currentUser ?? this.currentUser,
       visitedUser: visitedUser ?? this.visitedUser,
     );

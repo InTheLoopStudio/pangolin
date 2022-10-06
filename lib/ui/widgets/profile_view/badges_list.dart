@@ -54,11 +54,11 @@ class _BadgesListState extends State<BadgesList> {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        switch (state.status) {
-          case ProfileStatus.failure:
+        switch (state.badgeStatus) {
+          case BadgesStatus.failure:
             return const Center(child: Text('failed to fetch badges'));
 
-          case ProfileStatus.success:
+          case BadgesStatus.success:
             if (state.userBadges.isEmpty || state.visitedUser.deleted == true) {
               return const EasterEggPlaceholder(text: 'No Badges Yet');
             }
@@ -83,19 +83,11 @@ class _BadgesListState extends State<BadgesList> {
                                     ),
                                   ),
                                 )
-                              : Column(
-                                  children: [
-                                    BadgeContainer(
-                                      badge: state.userBadges[index],
-                                    ),
-                                    Container(
-                                      color: Colors.black,
-                                      height: 1,
-                                    )
-                                  ],
+                              : BadgeContainer(
+                                  badge: state.userBadges[index],
                                 );
                         },
-                        itemCount: state.hasReachedMax
+                        itemCount: state.hasReachedMaxBadges
                             ? state.userBadges.length
                             : state.userBadges.length + 1,
                       ),
@@ -106,7 +98,9 @@ class _BadgesListState extends State<BadgesList> {
             );
 
           default:
-            return const EasterEggPlaceholder(text: 'Waiting for new badges...');
+            return const EasterEggPlaceholder(
+              text: 'Waiting for new badges...',
+            );
         }
       },
     );

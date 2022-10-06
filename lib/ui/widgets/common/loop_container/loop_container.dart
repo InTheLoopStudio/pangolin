@@ -43,27 +43,31 @@ class LoopContainer extends StatelessWidget {
             startActionPane: ActionPane(
               motion: const ScrollMotion(),
               children: [
-                BlocBuilder<LoopContainerCubit, LoopContainerState>(
-                  builder: (context, state) {
-                    return SlidableAction(
-                      onPressed: (context) {
-                        context.read<LoopContainerCubit>().deleteLoop();
-                        context.read<ProfileCubit>().deleteLoop(loop);
-                      },
-                      backgroundColor: Colors.red[600]!,
-                      foregroundColor: Colors.white,
-                      icon: Icons.delete,
-                      label: 'Delete',
-                    );
-                  },
-                ),
+                if (currentUser.id == loop.userId)
+                  BlocBuilder<LoopContainerCubit, LoopContainerState>(
+                    builder: (context, state) {
+                      return SlidableAction(
+                        onPressed: (context) {
+                          context.read<LoopContainerCubit>().deleteLoop();
+                          context.read<ProfileCubit>().deleteLoop(loop);
+                        },
+                        backgroundColor: Colors.red[600]!,
+                        foregroundColor: Colors.white,
+                        icon: Icons.delete,
+                        label: 'Delete',
+                      );
+                    },
+                  )
+                else
+                  const SizedBox.shrink(),
                 SlidableAction(
                   onPressed: (context) async {
                     final link = await context
                         .read<DynamicLinkRepository>()
                         .getShareLoopDynamicLink(loop);
                     await Share.share(
-                        'Check out this loop on Tapped $link',);
+                      'Check out this loop on Tapped $link',
+                    );
                   },
                   backgroundColor: tappedAccent,
                   foregroundColor: Colors.white,
@@ -85,8 +89,7 @@ class LoopContainer extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
                             Padding(
-                              padding:
-                                  EdgeInsets.symmetric(horizontal: 20),
+                              padding: EdgeInsets.symmetric(horizontal: 20),
                               child: LoopTitle(),
                             ),
                             SizedBox(height: 10),
