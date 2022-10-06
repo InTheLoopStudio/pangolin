@@ -26,8 +26,9 @@ class Comment {
       userId: doc.getOrElse('userId', '') as String,
       parentId: doc.getOrElse('parentId', '') as String,
       rootLoopId: doc.getOrElse('rootLoopId', '') as String,
-      children:
-          List.from(doc.getOrElse('children', <String>[]) as List<String>),
+      children: List.from(
+        doc.getOrElse('children', <dynamic>[]) as Iterable<dynamic>,
+      ),
       deleted: doc.getOrElse('deleted', false) as bool,
     );
   }
