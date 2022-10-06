@@ -7,6 +7,19 @@ class ActivityView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Row(
+          children: const [
+            Text(
+              'Activities',
+              style: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
       backgroundColor: Theme.of(context).backgroundColor,
       body: const ActivityList(),
     );

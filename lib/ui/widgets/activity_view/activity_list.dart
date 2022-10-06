@@ -53,7 +53,6 @@ class _ActivityListState extends State<ActivityList> {
   Widget build(BuildContext context) {
     return BlocBuilder<ActivityBloc, ActivityState>(
       builder: (context, state) {
-        print('DA STATE IS$state');
         if (state is ActivityInitial) {
           return const ListLoadingView();
         }
@@ -72,16 +71,6 @@ class _ActivityListState extends State<ActivityList> {
                 controller: _scrollController,
                 slivers: state.activities.isEmpty
                     ? <Widget>[
-                        CupertinoSliverNavigationBar(
-                          backgroundColor: Theme.of(context).backgroundColor,
-                          largeTitle: Text(
-                            'Activity',
-                            style: TextStyle(
-                              color:
-                                  Theme.of(context).appBarTheme.foregroundColor,
-                            ),
-                          ),
-                        ),
                         SliverList(
                           delegate: SliverChildListDelegate([
                             const SizedBox(height: 150),
@@ -92,16 +81,6 @@ class _ActivityListState extends State<ActivityList> {
                         ),
                       ]
                     : <Widget>[
-                        CupertinoSliverNavigationBar(
-                          backgroundColor: Theme.of(context).backgroundColor,
-                          largeTitle: Text(
-                            'Activity',
-                            style: TextStyle(
-                              color:
-                                  Theme.of(context).appBarTheme.foregroundColor,
-                            ),
-                          ),
-                        ),
                         SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (BuildContext context, int index) {
