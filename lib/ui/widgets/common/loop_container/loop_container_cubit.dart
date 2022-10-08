@@ -23,10 +23,12 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
   Future<void> initLoopLikes() async {
     final isLiked = await databaseRepository.isLikeLoop(currentUser.id, loop);
 
-    emit(state.copyWith(
-      isLiked: isLiked,
-      likesCount: state.loop.likes,
-    ),);
+    emit(
+      state.copyWith(
+        isLiked: isLiked,
+        likesCount: state.loop.likes,
+      ),
+    );
   }
 
   void initAudio() {
@@ -38,19 +40,23 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
     databaseRepository.deleteLoop(loop);
   }
 
-  likeLoop() {
+  void likeLoop() {
     if (state.isLiked) {
       databaseRepository.unlikeLoop(currentUser.id, state.loop);
-      emit(state.copyWith(
-        isLiked: false,
-        likesCount: state.likesCount - 1,
-      ),);
+      emit(
+        state.copyWith(
+          isLiked: false,
+          likesCount: state.likesCount - 1,
+        ),
+      );
     } else {
       databaseRepository.likeLoop(currentUser.id, state.loop);
-      emit(state.copyWith(
-        isLiked: true,
-        likesCount: state.likesCount + 1,
-      ),);
+      emit(
+        state.copyWith(
+          isLiked: true,
+          likesCount: state.likesCount + 1,
+        ),
+      );
     }
   }
 

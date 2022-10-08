@@ -18,6 +18,34 @@ enum AccountType {
 
 @JsonSerializable()
 class UserModel extends Equatable {
+
+  factory UserModel.empty() => const UserModel(
+        id: '',
+        email: '',
+        username: 'anonymous',
+        artistName: '',
+        profilePicture: '',
+        bio: '',
+        location: 'Global',
+        onboarded: false,
+        loopsCount: 0,
+        badgesCount: 0,
+        deleted: false,
+        shadowBanned: false,
+        accountType: AccountType.free,
+        youtubeChannelId: '',
+        soundcloudHandle: '',
+        tiktokHandle: '',
+        instagramHandle: '',
+        twitterHandle: '',
+        pushNotificationsLikes: false,
+        pushNotificationsComments: false,
+        pushNotificationsFollows: false,
+        pushNotificationsDirectMessages: false,
+        pushNotificationsITLUpdates: false,
+        emailNotificationsAppReleases: false,
+        emailNotificationsITLUpdates: false,
+      );
   const UserModel({
     required this.id,
     required this.email,
@@ -152,36 +180,8 @@ class UserModel extends Equatable {
         emailNotificationsAppReleases,
         emailNotificationsITLUpdates,
       ];
-
-  static UserModel get empty => const UserModel(
-        id: '',
-        email: '',
-        username: 'anonymous',
-        artistName: '',
-        profilePicture: '',
-        bio: '',
-        location: 'Global',
-        onboarded: false,
-        loopsCount: 0,
-        badgesCount: 0,
-        deleted: false,
-        shadowBanned: false,
-        accountType: AccountType.free,
-        youtubeChannelId: '',
-        soundcloudHandle: '',
-        tiktokHandle: '',
-        instagramHandle: '',
-        twitterHandle: '',
-        pushNotificationsLikes: false,
-        pushNotificationsComments: false,
-        pushNotificationsFollows: false,
-        pushNotificationsDirectMessages: false,
-        pushNotificationsITLUpdates: false,
-        emailNotificationsAppReleases: false,
-        emailNotificationsITLUpdates: false,
-      );
-  bool get isEmpty => this == UserModel.empty;
-  bool get isNotEmpty => this != UserModel.empty;
+  bool get isEmpty => this == UserModel.empty();
+  bool get isNotEmpty => this != UserModel.empty();
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
   UserModel copyWith({

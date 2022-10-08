@@ -27,7 +27,9 @@ import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
-List<RepositoryProvider> buildRepositories(
+/// link all necessary repository interfaces 
+/// with their respective implementations
+List<RepositoryProvider<dynamic>> buildRepositories(
     {required StreamChatClient streamChatClient,}) {
   return [
     RepositoryProvider<AuthRepository>(
@@ -60,6 +62,7 @@ List<RepositoryProvider> buildRepositories(
   ];
 }
 
+/// link all blocs with their respective interfaces
 List<BlocProvider> buildBlocs({
   required GlobalKey<NavigatorState> navigatorKey,
 }) {

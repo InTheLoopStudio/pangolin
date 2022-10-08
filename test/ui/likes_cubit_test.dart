@@ -14,7 +14,7 @@ void main() {
   final loop = Loop.empty();
 
   group('there are no likers', () {
-    DatabaseRepository databaseRepository = MockDatabaseRepository();
+    final databaseRepository = MockDatabaseRepository();
     when(databaseRepository.getLikes(loop)).thenAnswer((_) async => []);
 
     blocTest(
@@ -29,9 +29,9 @@ void main() {
   });
 
   group('there are likers', () {
-    DatabaseRepository databaseRepository = MockDatabaseRepository();
+    final databaseRepository = MockDatabaseRepository();
     when(databaseRepository.getLikes(loop))
-        .thenAnswer((_) async => [UserModel.empty]);
+        .thenAnswer((_) async => [UserModel.empty()]);
 
     blocTest(
       'likes should emit array of likers if db repo has likers',
@@ -41,7 +41,7 @@ void main() {
       ),
       act: (LikesCubit bloc) => bloc.initLikes(),
       expect: () => [
-        LikesState(likes: [UserModel.empty])
+        LikesState(likes: [UserModel.empty()])
       ],
     );
   });

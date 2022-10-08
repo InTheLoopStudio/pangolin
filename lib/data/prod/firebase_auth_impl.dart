@@ -46,7 +46,7 @@ class FirebaseAuthImpl extends AuthRepository {
   Stream<UserModel> get authUserChanges =>
       _auth.authStateChanges().asyncMap((firebaseUser) async {
         final user = firebaseUser == null
-            ? UserModel.empty
+            ? UserModel.empty()
             : await firebaseUser.toUserModel;
 
         return user;
@@ -104,7 +104,7 @@ class FirebaseAuthImpl extends AuthRepository {
     if (signedInUser != null) {
       await _analytics.logEvent(name: 'sign_in', parameters: {'provider': 'Google'});
       await _analytics.setUserId(id: signedInUser.uid);
-      return UserModel.empty.copyWith(
+      return UserModel.empty().copyWith(
         id: signedInUser.uid,
         email: signedInUser.email ?? '',
         username: signedInUser.displayName ?? 'anonymous',
@@ -112,7 +112,7 @@ class FirebaseAuthImpl extends AuthRepository {
       );
     }
 
-    return UserModel.empty;
+    return UserModel.empty();
   }
 
   @override
@@ -173,13 +173,13 @@ class FirebaseAuthImpl extends AuthRepository {
     if (signedInUser != null) {
       await _analytics.logEvent(name: 'sign_in', parameters: {'provider': 'Apple'});
       await _analytics.setUserId(id: signedInUser.uid);
-      return UserModel.empty.copyWith(
+      return UserModel.empty().copyWith(
         id: signedInUser.uid,
         email: signedInUser.email ?? '',
       );
     }
 
-    return UserModel.empty;
+    return UserModel.empty();
   }
 
   @override
@@ -220,7 +220,6 @@ class FirebaseAuthImpl extends AuthRepository {
       await _auth.signOut();
       return;
     } catch (e) {
-      print(e);
       return;
     }
   }

@@ -133,7 +133,7 @@ class LoopViewCubit extends Cubit<LoopViewState> {
     emit(state.copyWith(commentsCount: loop.comments));
   }
 
-  toggleLikeLoop() async {
+  void toggleLikeLoop() async {
     if (state.isLiked) {
       emit(state.copyWith(
         isLiked: false,
@@ -151,7 +151,7 @@ class LoopViewCubit extends Cubit<LoopViewState> {
     }
   }
 
-  incrementShares() async {
+  void incrementShares() async {
     await databaseRepository.shareLoop(loop);
   }
 }

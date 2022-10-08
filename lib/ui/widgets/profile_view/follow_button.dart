@@ -43,7 +43,7 @@ class FollowButton extends StatelessWidget {
                 onPressed: () async {
                   await Navigator.push(
                     context,
-                    MaterialPageRoute(
+                    MaterialPageRoute<SettingsView>(
                       builder: (context) => const SettingsView(),
                     ),
                   );

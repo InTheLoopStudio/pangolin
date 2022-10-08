@@ -26,7 +26,7 @@ class AudioDescription extends StatelessWidget {
           GestureDetector(
             onTap: () {
               Navigator.of(context).push(
-                MaterialPageRoute(
+                MaterialPageRoute<ProfileView>(
                   builder: (context) => ProfileView(
                     visitedUserId: user.id,
                   ),

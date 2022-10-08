@@ -13,7 +13,7 @@ class FeedsListView extends StatelessWidget {
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
 
-    // TODO: Initialize feeds in initial loading screen
+    // TODO(loading): Initialize feeds in initial loading screen
     final followingFeed = AudioFeedView(
       feedId: 'Following',
       sourceFunction: databaseRepository.getFollowingLoops,

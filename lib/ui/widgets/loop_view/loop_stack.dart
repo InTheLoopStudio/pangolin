@@ -19,7 +19,10 @@ class LoopStack extends StatelessWidget {
               : [
                   const Background(),
                   const Foreground(),
-                  if (state.showComments) const CommentsSection() else const SizedBox.shrink(),
+                  if (state.showComments)
+                    const CommentsSection()
+                  else
+                    const SizedBox.shrink(),
                 ],
         );
       },

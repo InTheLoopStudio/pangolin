@@ -37,7 +37,7 @@ class PushActivity extends NavigationEvent {
 }
 
 class PushLoop extends NavigationEvent {
-  const PushLoop(this.loop, {this.showComments = false, this.autoPlay = true});
+  const PushLoop(this.loop, {this.showComments = false, this.autoPlay = true,});
 
   final Loop loop;
   final bool showComments;
@@ -57,8 +57,7 @@ class PushBadge extends NavigationEvent {
   final Badge badge;
 
   @override
-  String toString() =>
-      'PushProfile { badge: ${badge.toString()}}';
+  String toString() => 'PushProfile { badge: ${badge.toString()}}';
 
   @override
   List<Object> get props => [];

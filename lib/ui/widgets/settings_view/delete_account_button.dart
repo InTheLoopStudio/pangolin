@@ -15,7 +15,7 @@ class DeleteAccountButton extends StatelessWidget {
     return BlocBuilder<SettingsCubit, SettingsState>(
       builder: (context, state) {
         return TextButton(
-          onPressed: () => showDialog(
+          onPressed: () => showDialog<AlertDialog>(
             context: context,
             builder: (_) => AlertDialog(
               shape: RoundedRectangleBorder(

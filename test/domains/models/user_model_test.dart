@@ -8,8 +8,8 @@ import 'user_model_test.mocks.dart';
 
 @GenerateMocks([DocumentSnapshot])
 void main() {
-  test('UserModel.empty provides a UserModel with default fields', () {
-    final emptyUser = UserModel.empty;
+  test('UserModel.empty() provides a UserModel with default fields', () {
+    final emptyUser = UserModel.empty();
     expect(
       emptyUser,
       const UserModel(
@@ -110,7 +110,7 @@ void main() {
   });
 
   test('UserModels should be able to convert to Maps', () {
-    final userMap = UserModel.empty.toMap();
+    final userMap = UserModel.empty().toMap();
     expect(
       userMap,
       {

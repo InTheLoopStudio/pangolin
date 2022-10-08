@@ -208,7 +208,8 @@ class SettingsCubit extends Cubit<SettingsState> {
   void deleteUser() {
     authRepository.deleteUser();
     authenticationBloc.add(LoggedOut());
-    navigationBloc.add(const Pop());
-    navigationBloc.add(const Pop());
+    navigationBloc
+      ..add(const Pop())
+      ..add(const Pop());
   }
 }

@@ -21,28 +21,34 @@ class NotificationIconButton extends StatelessWidget {
                   size: 30,
                 ),
               ),
-              if (state.activities.any((elem) => elem.markedRead == false)) Positioned(
-                      right: 0,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        constraints: const BoxConstraints(
-                          minWidth: 12,
-                          minHeight: 12,
-                        ),
-                        child: Text(
-                          '${state.activities.where((elem) => elem.markedRead == false).length}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 8,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
+              if (state.activities.any((elem) => elem.markedRead == false))
+                Positioned(
+                  right: 0,
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    constraints: const BoxConstraints(
+                      minWidth: 12,
+                      minHeight: 12,
+                    ),
+                    child: Text(
+                      '${state.activities.where(
+                            (elem) => elem.markedRead == false,
+                          ).length}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 8,
                       ),
-                    ) else const SizedBox.shrink(),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                )
+              else
+                const SizedBox.shrink(),
             ],
           ),
         );

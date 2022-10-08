@@ -30,7 +30,7 @@ class UserTile extends StatelessWidget {
         }
         await Navigator.push(
           context,
-          MaterialPageRoute(
+          MaterialPageRoute<StreamChannel>(
             builder: (context) => StreamChannel(
               channel: channel,
               child: const ChannelView(),

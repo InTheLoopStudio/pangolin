@@ -36,7 +36,7 @@ class LocalAuthImpl extends AuthRepository {
   @override
   Future<UserModel> signInWithApple() async {
     await Future.delayed(const Duration(seconds: 2));
-    return UserModel.empty;
+    return UserModel.empty();
   }
 
   @override
@@ -45,7 +45,7 @@ class LocalAuthImpl extends AuthRepository {
   @override
   Future<UserModel> signInWithGoogle() async {
     await Future.delayed(const Duration(seconds: 2));
-    return UserModel.empty;
+    return UserModel.empty();
   }
 
   @override

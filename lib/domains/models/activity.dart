@@ -8,6 +8,15 @@ part 'activity.g.dart';
 
 @JsonSerializable()
 class Activity extends Equatable {
+
+  factory Activity.empty() => Activity(
+        id: '',
+        fromUserId: '',
+        toUserId: '',
+        timestamp: DateTime.now(),
+        type: ActivityType.like,
+        markedRead: false,
+      );
   const Activity({
     required this.id,
     required this.fromUserId,
@@ -52,17 +61,8 @@ class Activity extends Equatable {
         markedRead,
       ];
 
-  static Activity get empty => Activity(
-        id: '',
-        fromUserId: '',
-        toUserId: '',
-        timestamp: DateTime.now(),
-        type: ActivityType.like,
-        markedRead: false,
-      );
-
-  bool get isEmpty => this == Activity.empty;
-  bool get isNotEmpty => this != Activity.empty;
+  bool get isEmpty => this == Activity.empty();
+  bool get isNotEmpty => this != Activity.empty();
   Map<String, dynamic> toJson() => _$ActivityToJson(this);
 
   Activity copyWith({

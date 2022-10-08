@@ -9,6 +9,7 @@ import 'package:intheloopapp/ui/widgets/profile_view/all_loops_list.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/badges_list.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/profile_header.dart';
 
+@Deprecated('deprecated in favor of `ProfileView.dart')
 class OldProfileView extends StatefulWidget {
   const OldProfileView({
     Key? key,

@@ -15,7 +15,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
   @override
   Future<UserModel> getUserByUsername(String? username) async {
     await Future.delayed(const Duration(seconds: 2));
-    return UserModel.empty;
+    return UserModel.empty();
   }
 
   @override
@@ -27,7 +27,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
   @override
   Future<UserModel> getUser(String userId) async {
     await Future.delayed(const Duration(seconds: 2));
-    return UserModel.empty;
+    return UserModel.empty();
   }
 
   @override
