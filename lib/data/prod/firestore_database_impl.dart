@@ -215,7 +215,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       },
     );
     final callable = _functions.httpsCallable('deleteLoop');
-    await callable({
+    await callable<String>({
       'id': loop.id,
       'userId': loop.userId,
     });
@@ -679,7 +679,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   // Future<List<Tag>> getTagSuggestions(String query) async {
-  //   // TODO: Add suggestions to Firestore?
   //   await Future.delayed(Duration(milliseconds: 0), null);
 
   //   return <Tag>[]
@@ -705,12 +704,12 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<bool> checkUsernameAvailability(String username, String userid) async {
     final callable = _functions.httpsCallable('checkUsernameAvailability');
-    final results = await callable({
+    final results = await callable<bool>({
       'username': username,
       'userId': userid,
     });
 
-    final isAvailable = results.data as bool;
+    final isAvailable = results.data;
 
     return isAvailable;
   }

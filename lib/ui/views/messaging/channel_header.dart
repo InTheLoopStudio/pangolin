@@ -65,6 +65,7 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
     this.subtitle,
     this.leading,
     this.actions,
+  // ignore: avoid_field_initializers_in_const_classes
   })  : preferredSize = const Size.fromHeight(kToolbarHeight),
         super(key: key);
 
