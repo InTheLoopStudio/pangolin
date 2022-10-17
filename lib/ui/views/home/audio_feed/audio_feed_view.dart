@@ -27,10 +27,10 @@ class AudioFeedView extends StatefulWidget {
   }) sourceStream;
 
   @override
-  _AudioFeedViewState createState() => _AudioFeedViewState();
+  AudioFeedViewState createState() => AudioFeedViewState();
 }
 
-class _AudioFeedViewState extends State<AudioFeedView>
+class AudioFeedViewState extends State<AudioFeedView>
     with AutomaticKeepAliveClientMixin {
   final int refetchLimit = 5;
   final PageController _pageController = PageController();
@@ -98,8 +98,8 @@ class _AudioFeedViewState extends State<AudioFeedView>
                             );
                           },
                         )
-                      : Container(
-                          decoration: const BoxDecoration(
+                      : const DecoratedBox(
+                          decoration: BoxDecoration(
                             gradient: LinearGradient(
                               begin: Alignment.bottomCenter,
                               end: Alignment.topCenter,
@@ -109,14 +109,14 @@ class _AudioFeedViewState extends State<AudioFeedView>
                               ],
                             ),
                           ),
-                          child: const EasterEggPlaceholder(
+                          child: EasterEggPlaceholder(
                             text: 'No New Loops',
                             color: Colors.white,
                           ),
                         );
                 case AudioFeedStatus.failure:
-                  return Container(
-                    decoration: const BoxDecoration(
+                  return const DecoratedBox(
+                    decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
@@ -126,13 +126,11 @@ class _AudioFeedViewState extends State<AudioFeedView>
                         ],
                       ),
                     ),
-                    child: const EasterEggPlaceholder(
+                    child: EasterEggPlaceholder(
                       text: 'Error Fetching Loops :(',
                       color: Colors.white,
                     ),
                   );
-                default:
-                  return const LoopLoadingView();
               }
             },
           ),

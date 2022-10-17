@@ -7,10 +7,10 @@ class CommentsTextField extends StatefulWidget {
   const CommentsTextField({Key? key}) : super(key: key);
 
   @override
-  _CommentsTextFieldState createState() => _CommentsTextFieldState();
+  CommentsTextFieldState createState() => CommentsTextFieldState();
 }
 
-class _CommentsTextFieldState extends State<CommentsTextField> {
+class CommentsTextFieldState extends State<CommentsTextField> {
   final TextEditingController _textEditingController = TextEditingController();
 
   @override
@@ -23,35 +23,33 @@ class _CommentsTextFieldState extends State<CommentsTextField> {
   Widget build(BuildContext context) {
     return BlocBuilder<CommentsCubit, CommentsState>(
       builder: (context, state) {
-        return Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              SizedBox(
-                width: 300,
-                height: 20,
-                child: TextField(
-                  onChanged: (value) =>
-                      context.read<CommentsCubit>().changeComment(value),
-                  controller: _textEditingController,
-                  textCapitalization: TextCapitalization.sentences,
-                  decoration: const InputDecoration(
-                    hintText: 'Add Comment...',
-                  ),
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            SizedBox(
+              width: 300,
+              height: 20,
+              child: TextField(
+                onChanged: (value) =>
+                    context.read<CommentsCubit>().changeComment(value),
+                controller: _textEditingController,
+                textCapitalization: TextCapitalization.sentences,
+                decoration: const InputDecoration(
+                  hintText: 'Add Comment...',
                 ),
               ),
-              FloatingActionButton(
-                onPressed: () {
-                  context.read<CommentsCubit>().addComment();
-                  _textEditingController.clear();
-                },
-                backgroundColor: tappedAccent,
-                child: state.loading
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Icon(Icons.comment),
-              ),
-            ],
-          ),
+            ),
+            FloatingActionButton(
+              onPressed: () {
+                context.read<CommentsCubit>().addComment();
+                _textEditingController.clear();
+              },
+              backgroundColor: tappedAccent,
+              child: state.loading
+                  ? const CircularProgressIndicator(color: Colors.white)
+                  : const Icon(Icons.comment),
+            ),
+          ],
         );
       },
     );

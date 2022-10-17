@@ -12,10 +12,10 @@ class EasterEggPlaceholder extends StatefulWidget {
   final Color? color;
 
   @override
-  _EasterEggPlaceholderState createState() => _EasterEggPlaceholderState();
+  EasterEggPlaceholderState createState() => EasterEggPlaceholderState();
 }
 
-class _EasterEggPlaceholderState extends State<EasterEggPlaceholder> {
+class EasterEggPlaceholderState extends State<EasterEggPlaceholder> {
   int tapCount = 0;
 
   @override

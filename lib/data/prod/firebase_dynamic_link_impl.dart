@@ -87,7 +87,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
       socialMetaTagParameters: SocialMetaTagParameters(
         title: 'Tapped Network | ${loop.title}',
         description:
-            'Tapped Network - The online platform tailored for producers and creators to share their loops to the world, get feedback on their music, and join the world-wide community of artists to collaborate with',
+            '''Tapped Network - The online platform tailored for producers and creators to share their loops to the world, get feedback on their music, and join the world-wide community of artists to collaborate with''',
       ),
     );
 
@@ -111,7 +111,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
       socialMetaTagParameters: SocialMetaTagParameters(
         title: '${user.username} on Tapped',
         description:
-            'Tapped Network - The online platform tailored for producers and creators to share their loops to the world, get feedback on their music, and join the world-wide community of artists to collaborate with',
+            '''Tapped Network - The online platform tailored for producers and creators to share their loops to the world, get feedback on their music, and join the world-wide community of artists to collaborate with''',
       ),
     );
 

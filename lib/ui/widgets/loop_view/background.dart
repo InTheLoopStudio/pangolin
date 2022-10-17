@@ -28,7 +28,7 @@ class Background extends StatelessWidget {
 
             return GestureDetector(
               onTap: () => context.read<LoopViewCubit>().togglePlaying(),
-              child: Container(
+              child: DecoratedBox(
                 decoration: BoxDecoration(
                   // borderRadius: const BorderRadius.only(
                   //   bottomRight: Radius.circular(15),

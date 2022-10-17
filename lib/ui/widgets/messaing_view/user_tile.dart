@@ -26,6 +26,8 @@ class UserTile extends StatelessWidget {
         if (channel.state == null) {
           await channel.watch();
         }
+
+        if (!context.mounted) return;
         await Navigator.push(
           context,
           MaterialPageRoute<StreamChannel>(

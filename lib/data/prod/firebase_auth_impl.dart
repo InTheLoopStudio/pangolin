@@ -161,7 +161,8 @@ class FirebaseAuthImpl extends AuthRepository {
     );
 
     // Sign in the user with Firebase. If the nonce we generated earlier does
-    // not match the nonce in `appleCredential.identityToken`, sign in will fail.
+    // not match the nonce in `appleCredential.identityToken`, 
+    // sign in will fail.
     final authResult = await _auth.signInWithCredential(oauthCredential);
 
     final signedInUser = authResult.user;
@@ -232,8 +233,8 @@ class FirebaseAuthImpl extends AuthRepository {
     try {
       await _analytics.logEvent(name: 'delete_user');
       await _auth.currentUser?.delete();
-    } catch (e) {
-      print(e);
+    } on Exception {
+      // print(e);
     }
   }
 }

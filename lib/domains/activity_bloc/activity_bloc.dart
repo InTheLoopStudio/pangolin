@@ -49,7 +49,7 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
         .isNotEmpty;
 
     if (!activitiesAvailable) {
-      emit(ActivitySuccess());
+      emit(const ActivitySuccess());
     }
 
     final activityStream =

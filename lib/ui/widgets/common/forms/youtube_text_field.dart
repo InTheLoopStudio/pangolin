@@ -27,7 +27,7 @@ class YoutubeTextField extends StatelessWidget {
       ),
       onSaved: (input) {
         input = input?.trim();
-        if (onSaved != null) onSaved!(input ?? '');
+        onSaved?.call(input ?? '');
       },
     );
   }

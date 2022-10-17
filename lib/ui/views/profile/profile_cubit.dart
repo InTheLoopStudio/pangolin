@@ -23,8 +23,8 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
   final DatabaseRepository databaseRepository;
   final UserModel currentUser;
   final UserModel visitedUser;
-  StreamSubscription? loopListener;
-  StreamSubscription? badgeListener;
+  StreamSubscription<Loop>? loopListener;
+  StreamSubscription<Badge>? badgeListener;
 
   @override
   ProfileState fromJson(Map<String, dynamic> json) {
@@ -119,7 +119,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
         state.copyWith(
           badgeStatus: BadgesStatus.success,
           userBadges: List.of(state.userBadges)..add(event),
-          hasReachedMaxBadges: state.userBadges.length < 10 ? true : false,
+          hasReachedMaxBadges: state.userBadges.length < 10,
         ),
       );
     });
@@ -228,7 +228,9 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
   }
 
   Future<void> loadIsFollowing(
-      String currentUserId, String visitedUserId) async {
+    String currentUserId,
+    String visitedUserId,
+  ) async {
     final isFollowing = await databaseRepository.isFollowingUser(
       currentUserId,
       visitedUserId,

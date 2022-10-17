@@ -24,7 +24,7 @@ class AudioFeedCubit extends Cubit<AudioFeedState> {
     String currentUserId, {
     int limit,
   }) sourceStream;
-  StreamSubscription? loopListener;
+  StreamSubscription<Loop>? loopListener;
 
   // @override
   // AudioFeedState? fromJson(Map<String, dynamic> json) {

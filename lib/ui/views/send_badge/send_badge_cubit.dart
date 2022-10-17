@@ -48,7 +48,7 @@ class SendBadgeCubit extends Cubit<SendBadgeState> {
   }
 
   Future<void> sendBadge() async {
-    print(state.formKey);
+    // print(state.formKey);
     if (state.formKey.currentState == null) {
       return;
     }

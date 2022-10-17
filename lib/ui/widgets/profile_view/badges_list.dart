@@ -13,10 +13,10 @@ class BadgesList extends StatefulWidget {
   final ScrollController scrollController;
 
   @override
-  _BadgesListState createState() => _BadgesListState();
+  BadgesListState createState() => BadgesListState();
 }
 
-class _BadgesListState extends State<BadgesList> {
+class BadgesListState extends State<BadgesList> {
   late ProfileCubit _profileCubit;
 
   Timer? _debounce;

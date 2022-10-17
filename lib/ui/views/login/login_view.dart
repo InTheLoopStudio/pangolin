@@ -15,7 +15,7 @@ class LoginView extends StatelessWidget {
     return Scaffold(
       body: BlocProvider(
         create: (context) => LoginCubit(context.read<AuthRepository>()),
-        child: Container(
+        child: DecoratedBox(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.bottomCenter,

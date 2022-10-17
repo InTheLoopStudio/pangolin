@@ -18,33 +18,6 @@ enum AccountType {
 
 @JsonSerializable()
 class UserModel extends Equatable {
-  factory UserModel.empty() => const UserModel(
-        id: '',
-        email: '',
-        username: 'anonymous',
-        artistName: '',
-        profilePicture: '',
-        bio: '',
-        location: 'Global',
-        onboarded: false,
-        loopsCount: 0,
-        badgesCount: 0,
-        deleted: false,
-        shadowBanned: false,
-        accountType: AccountType.free,
-        youtubeChannelId: '',
-        soundcloudHandle: '',
-        tiktokHandle: '',
-        instagramHandle: '',
-        twitterHandle: '',
-        pushNotificationsLikes: false,
-        pushNotificationsComments: false,
-        pushNotificationsFollows: false,
-        pushNotificationsDirectMessages: false,
-        pushNotificationsITLUpdates: false,
-        emailNotificationsAppReleases: false,
-        emailNotificationsITLUpdates: false,
-      );
   const UserModel({
     required this.id,
     required this.email,
@@ -72,6 +45,33 @@ class UserModel extends Equatable {
     required this.emailNotificationsAppReleases,
     required this.emailNotificationsITLUpdates,
   });
+  factory UserModel.empty() => const UserModel(
+        id: '',
+        email: '',
+        username: 'anonymous',
+        artistName: '',
+        profilePicture: '',
+        bio: '',
+        location: 'Global',
+        onboarded: false,
+        loopsCount: 0,
+        badgesCount: 0,
+        deleted: false,
+        shadowBanned: false,
+        accountType: AccountType.free,
+        youtubeChannelId: '',
+        soundcloudHandle: '',
+        tiktokHandle: '',
+        instagramHandle: '',
+        twitterHandle: '',
+        pushNotificationsLikes: false,
+        pushNotificationsComments: false,
+        pushNotificationsFollows: false,
+        pushNotificationsDirectMessages: false,
+        pushNotificationsITLUpdates: false,
+        emailNotificationsAppReleases: false,
+        emailNotificationsITLUpdates: false,
+      );
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);

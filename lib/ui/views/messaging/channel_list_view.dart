@@ -71,7 +71,7 @@ class MessagingChannelListView extends StatelessWidget {
             },
             onChannelTap: (channel) {
               Navigator.of(context).push(
-                MaterialPageRoute(
+                MaterialPageRoute<StreamChannel>(
                   builder: (context) {
                     return StreamChannel(
                       channel: channel,

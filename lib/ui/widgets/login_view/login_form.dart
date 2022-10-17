@@ -13,10 +13,10 @@ class LoginForm extends StatefulWidget {
   final AuthenticationBloc? authenticationBloc;
 
   @override
-  _LoginFormState createState() => _LoginFormState();
+  LoginFormState createState() => LoginFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginCubit, LoginState>(

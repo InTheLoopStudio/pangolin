@@ -32,17 +32,13 @@ class ArtistNameTextField extends StatelessWidget {
         if (input == null || input.isEmpty) return;
 
         input = input.trim();
-        if (onSaved != null) {
-          onSaved!(input);
-        }
+        onSaved?.call(input);
       },
       onChanged: (input) async {
         if (input.isEmpty) return;
 
         input = input.trim();
-        if (onChanged != null) {
-          onChanged!(input);
-        }
+        onChanged?.call(input);
       },
     );
   }

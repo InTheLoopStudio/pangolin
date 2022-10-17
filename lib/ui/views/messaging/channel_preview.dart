@@ -20,7 +20,7 @@ class ChannelPreview extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
+          MaterialPageRoute<StreamChannel>(
             builder: (_) => StreamChannel(
               channel: channel,
               child: const ChannelView(),

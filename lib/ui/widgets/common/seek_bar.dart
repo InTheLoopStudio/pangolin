@@ -5,12 +5,13 @@ import 'package:intheloopapp/ui/themes.dart';
 
 class SeekBar extends StatefulWidget {
   const SeekBar({
+    Key? key,
     required this.duration,
     required this.position,
     this.bufferedPosition,
     this.onChanged,
     this.onChangeEnd,
-  });
+  }) : super(key: key);
   final Duration duration;
   final Duration position;
   final Duration? bufferedPosition;
@@ -18,10 +19,10 @@ class SeekBar extends StatefulWidget {
   final ValueChanged<Duration?>? onChangeEnd;
 
   @override
-  _SeekBarState createState() => _SeekBarState();
+  SeekBarState createState() => SeekBarState();
 }
 
-class _SeekBarState extends State<SeekBar> {
+class SeekBarState extends State<SeekBar> {
   double? _dragValue;
   SliderThemeData? _sliderThemeData;
 
@@ -56,14 +57,10 @@ class _SeekBarState extends State<SeekBar> {
                 setState(() {
                   _dragValue = value;
                 });
-                if (widget.onChanged != null) {
-                  widget.onChanged!(Duration(milliseconds: value.round()));
-                }
+                widget.onChanged?.call(Duration(milliseconds: value.round()));
               },
               onChangeEnd: (value) {
-                if (widget.onChangeEnd != null) {
-                  widget.onChangeEnd!(Duration(milliseconds: value.round()));
-                }
+                widget.onChangeEnd?.call(Duration(milliseconds: value.round()));
                 _dragValue = null;
               },
             ),
@@ -86,14 +83,10 @@ class _SeekBarState extends State<SeekBar> {
               setState(() {
                 _dragValue = value;
               });
-              if (widget.onChanged != null) {
-                widget.onChanged!(Duration(milliseconds: value.round()));
-              }
+              widget.onChanged?.call(Duration(milliseconds: value.round()));
             },
             onChangeEnd: (value) {
-              if (widget.onChangeEnd != null) {
-                widget.onChangeEnd!(Duration(milliseconds: value.round()));
-              }
+              widget.onChangeEnd?.call(Duration(milliseconds: value.round()));
               _dragValue = null;
             },
           ),

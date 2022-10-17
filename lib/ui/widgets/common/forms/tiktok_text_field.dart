@@ -27,7 +27,7 @@ class TikTokTextField extends StatelessWidget {
       ),
       onSaved: (input) {
         input = input?.trim().toLowerCase();
-        if (onSaved != null) onSaved!(input ?? '');
+        onSaved?.call(input ?? '');
       },
     );
   }

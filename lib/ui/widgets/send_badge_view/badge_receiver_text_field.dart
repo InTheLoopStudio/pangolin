@@ -61,12 +61,10 @@ class _BadgeReceiverTextFieldState extends State<BadgeReceiverTextField> {
                 RepositoryProvider.of<DatabaseRepository>(context);
             final receiver = await databaseRepo.getUserByUsername(input);
             setState(() {
-              _usernameExists = receiver == null ? false : true;
+              _usernameExists = !(receiver == null);
             });
 
-            if (widget.onSaved != null) {
-              widget.onSaved!(input);
-            }
+            widget.onSaved?.call(input);
           },
           onChanged: (input) async {
             if (input.isEmpty) return;
@@ -77,12 +75,10 @@ class _BadgeReceiverTextFieldState extends State<BadgeReceiverTextField> {
                 RepositoryProvider.of<DatabaseRepository>(context);
             final receiver = await databaseRepo.getUserByUsername(input);
             setState(() {
-              _usernameExists = receiver == null ? false : true;
+              _usernameExists = !(receiver == null);
             });
 
-            if (widget.onChanged != null) {
-              widget.onChanged!(input);
-            }
+            widget.onChanged?.call(input);
           },
         );
       },

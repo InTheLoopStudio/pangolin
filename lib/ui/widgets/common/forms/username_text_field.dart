@@ -58,15 +58,12 @@ class _UsernameTextFieldState extends State<UsernameTextField> {
         // DatabaseRepository databaseRepo =
         //     RepositoryProvider.of<DatabaseRepository>(context);
         // bool available =
-        //     await databaseRepo.checkUsernameAvailability(input, _currentUserId);
-
+        // await databaseRepo.checkUsernameAvailability(input, _currentUserId);
         // setState(() {
         //   _usernameTaken = !available;
         // });
 
-        if (_onSaved != null) {
-          _onSaved!(input);
-        }
+        _onSaved?.call(input);
       },
       onChanged: (input) async {
         if (input.isEmpty) return;
@@ -79,9 +76,7 @@ class _UsernameTextFieldState extends State<UsernameTextField> {
           _usernameTaken = !available;
         });
 
-        if (_onChanged != null) {
-          _onChanged!(input);
-        }
+        _onChanged?.call(input);
       },
     );
   }

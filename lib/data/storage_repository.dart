@@ -8,5 +8,5 @@ abstract class StorageRepository {
   );
   Future<File> compressImage(String photoId, File image);
   Future<String> uploadLoop(String userId, File audioFile);
-  Future<String> uploadBadgeImage(String badgeId, File imageFile);
+  Future<String> uploadBadgeImage(String receiverId, File imageFile);
 }

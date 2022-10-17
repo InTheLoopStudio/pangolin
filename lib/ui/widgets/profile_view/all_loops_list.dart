@@ -13,10 +13,10 @@ class AllLoopsList extends StatefulWidget {
   final ScrollController scrollController;
 
   @override
-  _AllLoopsListState createState() => _AllLoopsListState();
+  AllLoopsListState createState() => AllLoopsListState();
 }
 
-class _AllLoopsListState extends State<AllLoopsList> {
+class AllLoopsListState extends State<AllLoopsList> {
   late ProfileCubit _profileCubit;
 
   Timer? _debounce;
@@ -55,6 +55,9 @@ class _AllLoopsListState extends State<AllLoopsList> {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         switch (state.loopStatus) {
+          case LoopsStatus.initial:
+            return const EasterEggPlaceholder(text: 'Waiting for New Loops...');
+
           case LoopsStatus.failure:
             return const Center(child: Text('failed to fetch posts'));
 
@@ -104,9 +107,6 @@ class _AllLoopsListState extends State<AllLoopsList> {
                 ],
               ),
             );
-
-          default:
-            return const EasterEggPlaceholder(text: 'Waiting for New Loops...');
         }
       },
     );

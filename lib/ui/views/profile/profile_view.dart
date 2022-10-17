@@ -32,7 +32,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    return Container(
+    return ColoredBox(
       color: Colors.black,
       child: _tabBar,
     );

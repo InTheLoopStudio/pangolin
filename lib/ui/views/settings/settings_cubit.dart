@@ -71,17 +71,17 @@ class SettingsCubit extends Cubit<SettingsState> {
       emit(state.copyWith(youtubeChannelId: value));
   void changeLocation(String value) => emit(state.copyWith(location: value));
 
-  void changeNewLikesPush(bool selected) =>
+  void changeNewLikesPush({required bool selected}) =>
       emit(state.copyWith(pushNotificationsLikes: selected));
-  void changeNewCommentsPush(bool selected) =>
+  void changeNewCommentsPush({required bool selected}) =>
       emit(state.copyWith(pushNotificationsComments: selected));
-  void changeNewFollowerPush(bool selected) =>
+  void changeNewFollowerPush({required bool selected}) =>
       emit(state.copyWith(pushNotificationsFollows: selected));
-  void changeDirectMsgPush(bool selected) =>
+  void changeDirectMsgPush({required bool selected}) =>
       emit(state.copyWith(pushNotificationsDirectMessages: selected));
-  void changeITLUpdatesPush(bool selected) =>
+  void changeITLUpdatesPush({required bool selected}) =>
       emit(state.copyWith(pushNotificationsITLUpdates: selected));
-  void changeAllPush(bool selected) => emit(
+  void changeAllPush({required bool selected}) => emit(
         state.copyWith(
           pushNotificationsLikes: selected,
           pushNotificationsComments: selected,
@@ -91,11 +91,11 @@ class SettingsCubit extends Cubit<SettingsState> {
         ),
       );
 
-  void changeAppReleaseEmail(bool selected) =>
+  void changeAppReleaseEmail({required bool selected}) =>
       emit(state.copyWith(emailNotificationsAppReleases: selected));
-  void changeITLUpdatesEmail(bool selected) =>
+  void changeITLUpdatesEmail({required bool selected}) =>
       emit(state.copyWith(emailNotificationsITLUpdates: selected));
-  void changeAllEmail(bool selected) => emit(
+  void changeAllEmail({required bool selected}) => emit(
         state.copyWith(
           emailNotificationsAppReleases: selected,
           emailNotificationsITLUpdates: selected,
@@ -109,13 +109,13 @@ class SettingsCubit extends Cubit<SettingsState> {
       if (imageFile != null) {
         emit(state.copyWith(profileImage: File(imageFile.path)));
       }
-    } catch (error) {
-      print(error);
+    } on Exception {
+      // print(error);
     }
   }
 
   Future<void> saveProfile() async {
-    print(state.formKey);
+    // print(state.formKey);
     if (state.formKey.currentState == null) {
       return;
     }
@@ -161,7 +161,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
       navigationBloc.add(const Pop());
     } else {
-      print('invalid');
+      // print('invalid');
     }
   }
 
@@ -179,11 +179,12 @@ class SettingsCubit extends Cubit<SettingsState> {
       emit(
         state.copyWith(status: FormzStatus.submissionSuccess),
       );
-    } on Exception catch (e) {
-      print(e);
+    } on Exception {
+      // print(e);
       emit(
         state.copyWith(status: FormzStatus.submissionFailure),
       );
+    // ignore: avoid_catching_errors
     } on NoSuchMethodError {
       emit(
         state.copyWith(status: FormzStatus.pure),
@@ -201,11 +202,12 @@ class SettingsCubit extends Cubit<SettingsState> {
       emit(
         state.copyWith(status: FormzStatus.submissionSuccess),
       );
-    } on Exception catch (e) {
-      print(e);
+    } on Exception {
+      // print(e);
       emit(
         state.copyWith(status: FormzStatus.submissionFailure),
       );
+    // ignore: avoid_catching_errors
     } on NoSuchMethodError {
       emit(
         state.copyWith(status: FormzStatus.pure),

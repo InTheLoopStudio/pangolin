@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/ui/views/messaging/channel_name.dart';
+// ignore: implementation_imports
 import 'package:stream_chat_flutter/src/channel_info.dart';
+// ignore: implementation_imports
 import 'package:stream_chat_flutter/src/extension.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart' hide ChannelName;
 

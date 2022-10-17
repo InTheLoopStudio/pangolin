@@ -15,20 +15,20 @@ void main() {
   HydratedBlocOverrides.runZoned(
     () {
       group('AppThemeCubit', () {
-        blocTest(
+        blocTest<AppThemeCubit, bool>(
           'emit `true` when theme updated to dark',
           build: () => AppThemeCubit(),
           expect: () => <bool>[],
         );
 
-        blocTest(
+        blocTest<AppThemeCubit, bool>(
           'emit `true` when theme updated to dark',
           build: () => AppThemeCubit(),
           act: (AppThemeCubit bloc) => bloc.updateTheme(isDarkMode: true),
           expect: () => [true],
         );
 
-        blocTest(
+        blocTest<AppThemeCubit, bool>(
           'emit `false` when theme updated to light',
           build: () => AppThemeCubit(),
           act: (AppThemeCubit bloc) => bloc.updateTheme(isDarkMode: false),

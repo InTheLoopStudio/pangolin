@@ -32,8 +32,8 @@ class AlgoliaSearchImpl extends SearchRepository {
       await _analytics.logSearch(searchTerm: input);
 
       results = snap.hits;
-    } on AlgoliaError catch (e) {
-      print(e.error);
+    } on AlgoliaError {
+      // print(e.error);
       rethrow;
     }
 

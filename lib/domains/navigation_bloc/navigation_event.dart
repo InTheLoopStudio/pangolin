@@ -49,7 +49,7 @@ class PushLoop extends NavigationEvent {
 
   @override
   String toString() =>
-      'PushProfile { loop: $loop, showComments: $showComments, autoPlay: $autoPlay }';
+      '''PushProfile { loop: $loop, showComments: $showComments, autoPlay: $autoPlay }''';
 
   @override
   List<Object> get props => [];

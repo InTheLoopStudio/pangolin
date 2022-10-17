@@ -40,7 +40,7 @@ class CommentsSection extends StatelessWidget {
                 initialChildSize: 0.75,
                 builder:
                     (BuildContext context, ScrollController scrollController) {
-                  return Container(
+                  return DecoratedBox(
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(20),
