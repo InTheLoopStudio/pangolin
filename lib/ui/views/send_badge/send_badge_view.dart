@@ -33,7 +33,7 @@ class SendBadgeView extends StatelessWidget {
           child: BlocBuilder<SendBadgeCubit, SendBadgeState>(
             builder: (context, state) {
               return Scaffold(
-                backgroundColor: Theme.of(context).backgroundColor,
+                backgroundColor: Theme.of(context).colorScheme.background,
                 appBar: AppBar(
                   title: const Text('Send Badge'),
                 ),

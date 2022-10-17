@@ -55,6 +55,10 @@ class BadgesListState extends State<BadgesList> {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         switch (state.badgeStatus) {
+          case BadgesStatus.initial:
+            return const EasterEggPlaceholder(
+              text: 'Waiting for new badges...',
+            );
           case BadgesStatus.failure:
             return const Center(child: Text('failed to fetch badges'));
 
@@ -95,11 +99,6 @@ class BadgesListState extends State<BadgesList> {
                   ),
                 ],
               ),
-            );
-
-          default:
-            return const EasterEggPlaceholder(
-              text: 'Waiting for new badges...',
             );
         }
       },

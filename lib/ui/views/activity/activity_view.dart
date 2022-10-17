@@ -20,7 +20,7 @@ class ActivityView extends StatelessWidget {
           ],
         ),
       ),
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: const ActivityList(),
     );
   }

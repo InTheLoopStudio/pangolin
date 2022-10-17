@@ -40,7 +40,7 @@ class UploadView extends StatelessWidget {
             scaffoldKey: _scaffoldKey,
           )..listenToAudioLockChange(),
           child: Scaffold(
-            backgroundColor: theme.backgroundColor,
+            backgroundColor: theme.colorScheme.background,
             body: ScaffoldMessenger(
               key: _scaffoldKey,
               child: BlocBuilder<UploadLoopCubit, UploadLoopState>(

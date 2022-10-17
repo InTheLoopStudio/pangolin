@@ -31,7 +31,7 @@ class OnboardingView extends StatelessWidget {
             ..initUserData()
             ..initFollowRecommendations(),
           child: Scaffold(
-            backgroundColor: Theme.of(context).backgroundColor,
+            backgroundColor: Theme.of(context).colorScheme.background,
             appBar: AppBar(
               title: const Center(child: Text('Onboarding')),
             ),

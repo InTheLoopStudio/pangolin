@@ -23,7 +23,7 @@ class FollowButton extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     color: state.isFollowing
-                        ? Theme.of(context).backgroundColor
+                        ? Theme.of(context).colorScheme.background
                         : tappedAccent,
                     border: Border.all(color: tappedAccent),
                   ),

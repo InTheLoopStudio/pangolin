@@ -13,7 +13,7 @@ class AudioController {
 
   Future<Duration?> setURL(String url) async {
     try {
-      File file = await DefaultCacheManager().getSingleFile(url);
+      final File file = await DefaultCacheManager().getSingleFile(url);
       final duration = await setAudioFile(file);
 
       return duration;

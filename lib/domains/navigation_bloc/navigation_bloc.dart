@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/ui/views/activity/activity_view.dart';
+import 'package:intheloopapp/ui/views/badge/badge_view.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view.dart';
 import 'package:intheloopapp/ui/views/likes/likes_view.dart';
 import 'package:intheloopapp/ui/views/onboarding/onboarding_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
-import 'package:intheloopapp/ui/views/badge/badge_view.dart';
 
 part 'navigation_event.dart';
 part 'navigation_state.dart';

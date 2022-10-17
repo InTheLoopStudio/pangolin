@@ -38,7 +38,7 @@ class SettingsView extends StatelessWidget {
             currentUser: currentUser,
           )..initUserData(),
           child: Scaffold(
-            backgroundColor: theme.backgroundColor,
+            backgroundColor: theme.colorScheme.background,
             appBar: AppBar(
               title: Text(currentUser.username),
               elevation: 0,

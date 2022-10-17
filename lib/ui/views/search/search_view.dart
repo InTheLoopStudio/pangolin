@@ -18,7 +18,7 @@ class SearchView extends StatelessWidget {
         searchRepository: searchRepository,
       ),
       child: Scaffold(
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.colorScheme.background,
         appBar: AppBar(
           centerTitle: true,
           elevation: 0.5,

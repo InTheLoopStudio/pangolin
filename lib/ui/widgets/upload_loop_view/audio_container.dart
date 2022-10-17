@@ -27,7 +27,7 @@ class AudioContainer extends StatelessWidget {
                       vertical: 10,
                     ),
                     decoration: BoxDecoration(
-                      color: theme.backgroundColor,
+                      color: theme.colorScheme.background,
                     ),
                     child: Column(
                       children: [

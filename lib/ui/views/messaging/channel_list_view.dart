@@ -17,7 +17,7 @@ class MessagingChannelListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final authRepo = RepositoryProvider.of<AuthRepository>(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         title: Row(
           children: const [

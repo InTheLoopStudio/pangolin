@@ -235,7 +235,7 @@ class _ProfileViewState extends State<ProfileView> {
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body:
           BlocSelector<AuthenticationBloc, AuthenticationState, Authenticated>(
         selector: (state) {

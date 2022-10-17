@@ -45,9 +45,9 @@ class FollowRelationshipView extends StatelessWidget {
             initialIndex: initialIndex ?? 0,
             length: 2,
             child: Scaffold(
-              backgroundColor: theme.backgroundColor,
+              backgroundColor: theme.colorScheme.background,
               appBar: AppBar(
-                backgroundColor: theme.backgroundColor,
+                backgroundColor: theme.colorScheme.background,
                 bottom: const TabBar(
                   indicatorColor: tappedAccent,
                   labelColor: tappedAccent,

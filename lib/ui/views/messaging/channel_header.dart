@@ -49,7 +49,7 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart' hide ChannelName;
 /// with [onBackPressed].
 ///
 /// The widget components render the ui based on the first ancestor of type
-/// [StreamChatTheme] and on its [ChannelTheme.channelHeaderTheme] property.
+/// [StreamChatTheme] and on its ChannelTheme.channelHeaderTheme property.
 /// Modify it to change the widget appearance.
 class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
   /// Creates a channel header

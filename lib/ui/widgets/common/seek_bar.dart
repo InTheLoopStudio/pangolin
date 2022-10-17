@@ -24,7 +24,7 @@ class SeekBar extends StatefulWidget {
 
 class SeekBarState extends State<SeekBar> {
   double? _dragValue;
-  SliderThemeData? _sliderThemeData;
+  late SliderThemeData _sliderThemeData;
 
   @override
   void didChangeDependencies() {
@@ -44,7 +44,7 @@ class SeekBarState extends State<SeekBar> {
     return Stack(
       children: [
         SliderTheme(
-          data: _sliderThemeData!.copyWith(
+          data: _sliderThemeData.copyWith(
             activeTrackColor: Colors.blue.shade100,
             inactiveTrackColor: Colors.grey.shade300,
             thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0),
@@ -67,7 +67,7 @@ class SeekBarState extends State<SeekBar> {
           ),
         ),
         SliderTheme(
-          data: _sliderThemeData!.copyWith(
+          data: _sliderThemeData.copyWith(
             inactiveTrackColor: Colors.transparent,
             valueIndicatorTextStyle: const TextStyle(
               color: Colors.white,

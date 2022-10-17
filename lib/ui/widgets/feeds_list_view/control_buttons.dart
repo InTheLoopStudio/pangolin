@@ -22,42 +22,40 @@ class ControlButtons extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 25),
                   child: SizedBox.shrink(),
                 ),
-                Container(
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => state.pageController.jumpToPage(0),
-                        child: Text(
-                          'Following',
-                          style: state.currentIndex == 0
-                              ? const TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                )
-                              : const TextStyle(
-                                  color: Colors.white,
-                                ),
-                        ),
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => state.pageController.jumpToPage(0),
+                      child: Text(
+                        'Following',
+                        style: state.currentIndex == 0
+                            ? const TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              )
+                            : const TextStyle(
+                                color: Colors.white,
+                              ),
                       ),
-                      const SizedBox(width: 15),
-                      GestureDetector(
-                        onTap: () => state.pageController.jumpToPage(1),
-                        child: Text(
-                          'For you',
-                          style: state.currentIndex == 1
-                              ? const TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                )
-                              : const TextStyle(
-                                  color: Colors.white,
-                                ),
-                        ),
-                      )
-                    ],
-                  ),
+                    ),
+                    const SizedBox(width: 15),
+                    GestureDetector(
+                      onTap: () => state.pageController.jumpToPage(1),
+                      child: Text(
+                        'For you',
+                        style: state.currentIndex == 1
+                            ? const TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              )
+                            : const TextStyle(
+                                color: Colors.white,
+                              ),
+                      ),
+                    )
+                  ],
                 ),
                 Padding(
                   padding: EdgeInsets.zero,

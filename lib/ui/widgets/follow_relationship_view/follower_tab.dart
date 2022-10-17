@@ -15,7 +15,8 @@ class FollowerTab extends StatelessWidget {
             onRefresh: () =>
                 context.read<FollowRelationshipCubit>().initFollowers(),
             child: state.followers.isEmpty
-                // TODO : Put in something with an action - perhaps a call to upload more loops?
+                // TODO : Put in something with an action 
+                // - perhaps a call to upload more loops?
                 ? const Text('No Followers')
                 : ListView.builder(
                     itemCount: state.followers.length,

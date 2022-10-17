@@ -23,7 +23,7 @@ class LikesView extends StatelessWidget {
         loop: loop,
       )..initLikes(),
       child: Scaffold(
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.colorScheme.background,
         appBar: AppBar(
           title: Text(loop.title),
         ),

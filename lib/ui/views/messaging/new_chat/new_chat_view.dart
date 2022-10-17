@@ -15,7 +15,7 @@ class NewChatView extends StatelessWidget {
         searchRepository: context.read<SearchRepository>(),
       ),
       child: Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
           centerTitle: true,
           elevation: 0.5,

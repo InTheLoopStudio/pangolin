@@ -12,7 +12,7 @@ class UploadLoopSplashView extends StatelessWidget {
     return BlocBuilder<UploadLoopCubit, UploadLoopState>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: Theme.of(context).backgroundColor,
+          backgroundColor: Theme.of(context).colorScheme.background,
           body: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

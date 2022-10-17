@@ -14,7 +14,6 @@ const navigationBarDarkColor = Color(0xff070a0d);
 
 class Themes {
   static final themeLight = ThemeData.light().copyWith(
-    backgroundColor: backgroundLightColor,
     // selected color
     primaryColor: primaryColor,
 
@@ -53,7 +52,6 @@ class Themes {
   );
 
   static final themeDark = ThemeData.dark().copyWith(
-    backgroundColor: backgroundDarkColor,
     // selected color
     primaryColor: primaryColor,
     colorScheme: const ColorScheme.dark().copyWith(

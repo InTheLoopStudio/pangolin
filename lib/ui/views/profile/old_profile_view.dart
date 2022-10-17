@@ -19,11 +19,11 @@ class OldProfileView extends StatefulWidget {
   final String visitedUserId;
 
   @override
-  _ProfileViewState createState() => _ProfileViewState();
+  ProfileViewState createState() => ProfileViewState();
 }
 
 @Deprecated('deprecateed in favor of `ProfileView.dart`')
-class _ProfileViewState extends State<OldProfileView> {
+class ProfileViewState extends State<OldProfileView> {
   final _scrollController = ScrollController();
   String get _visitedUserId => widget.visitedUserId;
 

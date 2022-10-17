@@ -115,7 +115,7 @@ class ActionMenu extends StatelessWidget {
               ),
               label: 'Sign Out',
               // onTap: context.read<SettingsCubit>().logout,
-              onTap: () => showDialog(
+              onTap: () => showDialog<AlertDialog>(
                 context: context,
                 builder: (_) => AlertDialog(
                   shape: RoundedRectangleBorder(

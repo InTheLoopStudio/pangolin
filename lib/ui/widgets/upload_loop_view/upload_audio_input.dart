@@ -31,7 +31,7 @@ class UploadAudioInput extends StatelessWidget {
                 width: 60,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: theme.backgroundColor,
+                  color: theme.colorScheme.background,
                   border: Border.all(
                     color: tappedAccent,
                     width: 2,

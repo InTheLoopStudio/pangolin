@@ -28,7 +28,7 @@ class FeedsListView extends StatelessWidget {
     return BlocProvider(
       create: (context) => FeedsListCubit(),
       child: Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: Stack(
           children: [
             BlocBuilder<FeedsListCubit, FeedsListState>(

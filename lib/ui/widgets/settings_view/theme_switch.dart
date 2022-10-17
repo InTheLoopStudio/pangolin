@@ -15,7 +15,7 @@ class ThemeSwitch extends StatelessWidget {
         return CupertinoSlidingSegmentedControl(
           groupValue: isDark,
           // backgroundColor: Colors.grey[300]!,
-          backgroundColor: Theme.of(context).backgroundColor,
+          backgroundColor: Theme.of(context).colorScheme.background,
           thumbColor: const Color.fromARGB(255, 197, 228, 255),
           onValueChanged: (value) async {
             await context

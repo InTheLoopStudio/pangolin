@@ -25,7 +25,7 @@ class BadgeImageInput extends StatelessWidget {
             width: 60,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Theme.of(context).backgroundColor,
+              color: Theme.of(context).colorScheme.background,
               border: Border.all(
                 color: tappedAccent,
                 width: 2,
