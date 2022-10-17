@@ -26,7 +26,7 @@ class CommentsCubit extends Cubit<CommentsState> {
   final Loop loop;
   final LoopViewCubit loopViewCubit;
   final bool loading;
-  StreamSubscription? commentListener;
+  StreamSubscription<Comment>? commentListener;
 
   Future<void> initComments({bool clearComments = true}) async {
     emit(state.copyWith(loading: true));
@@ -49,7 +49,7 @@ class CommentsCubit extends Cubit<CommentsState> {
 
     commentListener =
         databaseRepository.loopCommentsObserver(loop).listen((Comment event) {
-      print('Comment { ${event.id} : ${event.content} }');
+      // print('Comment { ${event.id} : ${event.content} }');
       emit(
         state.copyWith(
           loading: false,

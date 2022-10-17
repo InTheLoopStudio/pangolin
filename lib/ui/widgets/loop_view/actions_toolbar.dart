@@ -19,10 +19,10 @@ class ActionsToolbar extends StatelessWidget {
   final UserModel user;
   final Loop loop;
 
-  static const double ActionWidgetSize = 60;
-  static const double ActionIconSize = 35;
-  static const double ProfileImageSize = 50;
-  static const double PlusIconSize = 20;
+  static const double actionWidgetSize = 60;
+  static const double actionIconSize = 35;
+  static const double profileImageSize = 50;
+  static const double plusIconSize = 20;
 
   @override
   Widget build(BuildContext context) {

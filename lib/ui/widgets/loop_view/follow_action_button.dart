@@ -9,10 +9,10 @@ import 'package:intheloopapp/ui/widgets/loop_view/follow_icon.dart';
 class FollowActionButton extends StatelessWidget {
   const FollowActionButton({Key? key}) : super(key: key);
 
-  static const double ActionWidgetSize = 60;
-  static const double ActionIconSize = 35;
-  static const double ProfileImageSize = 50;
-  static const double PlusIconSize = 20;
+  static const double actionWidgetSize = 60;
+  static const double actionIconSize = 35;
+  static const double profileImageSize = 50;
+  static const double plusIconSize = 20;
 
   @override
   Widget build(BuildContext context) {
@@ -36,15 +36,15 @@ class FollowActionButton extends StatelessWidget {
                 child: Stack(
                   children: [
                     Positioned(
-                      left: (ActionWidgetSize / 2) - (ProfileImageSize / 2),
+                      left: (actionWidgetSize / 2) - (profileImageSize / 2),
                       child: Container(
-                        height: ProfileImageSize,
-                        width: ProfileImageSize,
+                        height: profileImageSize,
+                        width: profileImageSize,
                         padding: const EdgeInsets.all(1),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius:
-                              BorderRadius.circular(ProfileImageSize / 2),
+                              BorderRadius.circular(profileImageSize / 2),
                         ),
                         child: CircleAvatar(
                           radius: 45,

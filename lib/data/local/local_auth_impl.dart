@@ -7,19 +7,19 @@ class LocalAuthImpl extends AuthRepository {
 
   @override
   Future<void> updateUserData({required UserModel userData}) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return;
   }
 
   @override
   Future<bool> isSignedIn() async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return true;
   }
 
   @override
   Future<String> getAuthUserId() async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return '1';
   }
 
@@ -35,7 +35,7 @@ class LocalAuthImpl extends AuthRepository {
 
   @override
   Future<UserModel> signInWithApple() async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return UserModel.empty();
   }
 
@@ -44,7 +44,7 @@ class LocalAuthImpl extends AuthRepository {
 
   @override
   Future<UserModel> signInWithGoogle() async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return UserModel.empty();
   }
 

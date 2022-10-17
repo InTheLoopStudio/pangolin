@@ -8,14 +8,6 @@ part 'activity.g.dart';
 
 @JsonSerializable()
 class Activity extends Equatable {
-  factory Activity.empty() => Activity(
-        id: '',
-        fromUserId: '',
-        toUserId: '',
-        timestamp: DateTime.now(),
-        type: ActivityType.like,
-        markedRead: false,
-      );
   const Activity({
     required this.id,
     required this.fromUserId,
@@ -24,6 +16,14 @@ class Activity extends Equatable {
     required this.type,
     required this.markedRead,
   });
+  factory Activity.empty() => Activity(
+        id: '',
+        fromUserId: '',
+        toUserId: '',
+        timestamp: DateTime.now(),
+        type: ActivityType.like,
+        markedRead: false,
+      );
 
   factory Activity.fromJson(Map<String, dynamic> json) =>
       _$ActivityFromJson(json);

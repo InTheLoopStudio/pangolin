@@ -31,7 +31,6 @@ class CloudMessagingImpl extends NotificationRepository {
 // register the device with APN (Apple only)
           await _client.addDevice(token, PushProvider.apn);
         } else if (Platform.isAndroid) {
-          // print("SAVE DEVICE TOKEN HERE ${_client.state.currentUser?.id ?? 'BLAH BLAH'}",);
           // register the device with Firebase (Android only)
           await _client.addDevice(token, PushProvider.firebase);
         }

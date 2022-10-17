@@ -50,20 +50,20 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
     switch (deepLink.path) {
       case '/upload_loop':
         return const DynamicLinkRedirect(
-          type: DynamicLinkType.CreatePost,
+          type: DynamicLinkType.createPost,
         );
       case '/user':
         final linkParameters = deepLink.queryParameters;
         final userId = linkParameters['id'] ?? '';
         return DynamicLinkRedirect(
-          type: DynamicLinkType.ShareProfile,
+          type: DynamicLinkType.shareProfile,
           id: userId,
         );
       case '/loop':
         final linkParameters = deepLink.queryParameters;
         final loopId = linkParameters['id'] ?? '';
         return DynamicLinkRedirect(
-          type: DynamicLinkType.ShareLoop,
+          type: DynamicLinkType.shareLoop,
           id: loopId,
         );
       default:

@@ -2,9 +2,9 @@ import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
 enum DynamicLinkType {
-  CreatePost,
-  ShareLoop,
-  ShareProfile,
+  createPost,
+  shareLoop,
+  shareProfile,
 }
 
 class DynamicLinkRedirect {

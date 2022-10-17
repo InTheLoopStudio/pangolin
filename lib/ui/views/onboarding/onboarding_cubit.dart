@@ -115,8 +115,8 @@ class OnboardingCubit extends Cubit<OnboardingState> {
       if (imageFile != null) {
         emit(state.copyWith(pickedPhoto: File(imageFile.path)));
       }
-    } on Exception catch (error) {
-      print(error);
+    } on Exception {
+      // print(error);
     }
   }
 

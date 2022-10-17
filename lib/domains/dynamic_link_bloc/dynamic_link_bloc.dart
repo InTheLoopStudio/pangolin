@@ -15,12 +15,12 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
   }) : super(DynamicLinkInitial()) {
     on<MonitorDynamicLinks>((event, emit) {
       dynamicLinkRepository.getDynamicLinks().listen((event) async {
-        print('new dynamic link');
+        // print('new dynamic link');
         switch (event.type) {
-          case DynamicLinkType.CreatePost:
+          case DynamicLinkType.createPost:
             navigationBloc.add(const ChangeTab(selectedTab: 2));
             break;
-          case DynamicLinkType.ShareLoop:
+          case DynamicLinkType.shareLoop:
             if (event.id != null) {
               final shareLoop = await databaseRepository.getLoopById(
                 event.id ?? '',
@@ -28,7 +28,7 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
               navigationBloc.add(PushLoop(shareLoop));
             }
             break;
-          case DynamicLinkType.ShareProfile:
+          case DynamicLinkType.shareProfile:
             if (event.id != null) {
               navigationBloc.add(PushProfile(event.id ?? ''));
             }

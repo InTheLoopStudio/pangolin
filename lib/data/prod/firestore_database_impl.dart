@@ -308,17 +308,15 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .startAfterDocument(documentSnapshot)
           .get();
 
-      var followingLoops = await Future.wait(
+      final followingLoops = await Future.wait(
         userFeedLoops.docs.map((doc) async {
           final loop = await getLoopById(doc.id);
           return loop;
         }),
       );
 
-      followingLoops =
-          followingLoops.where((loop) => loop.deleted != true).toList();
+      return followingLoops.where((loop) => loop.deleted != true).toList();
 
-      return followingLoops;
     } else {
       final userFeedLoops = await _feedRefs
           .doc(currentUserId)
@@ -327,17 +325,14 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .limit(limit)
           .get();
 
-      var followingLoops = await Future.wait(
+      final followingLoops = await Future.wait(
         userFeedLoops.docs.map((doc) async {
           final loop = await getLoopById(doc.id);
           return loop;
         }),
       );
 
-      followingLoops =
-          followingLoops.where((loop) => loop.deleted != true).toList();
-
-      return followingLoops;
+      return followingLoops.where((loop) => loop.deleted != true).toList();
     }
   }
 

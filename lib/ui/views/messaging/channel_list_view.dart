@@ -34,7 +34,7 @@ class MessagingChannelListView extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.push(
           context,
-          MaterialPageRoute(
+          MaterialPageRoute<NewChatView>(
             builder: (context) => const NewChatView(),
           ),
         ),

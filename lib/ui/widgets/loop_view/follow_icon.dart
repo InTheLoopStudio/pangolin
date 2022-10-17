@@ -6,21 +6,21 @@ import 'package:intheloopapp/ui/views/common/loop_view/loop_view_cubit.dart';
 class FollowIcon extends StatelessWidget {
   const FollowIcon({Key? key}) : super(key: key);
 
-  static const double ActionWidgetSize = 60;
-  static const double ActionIconSize = 35;
-  static const double ProfileImageSize = 50;
-  static const double PlusIconSize = 20;
+  static const double actionWidgetSize = 60;
+  static const double actionIconSize = 35;
+  static const double profileImageSize = 50;
+  static const double plusIconSize = 20;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoopViewCubit, LoopViewState>(
       builder: (context, state) {
         return Positioned(
-          left: (ActionWidgetSize / 2) - (PlusIconSize / 2),
+          left: (actionWidgetSize / 2) - (plusIconSize / 2),
           bottom: 0,
           child: Container(
-            width: PlusIconSize,
-            height: PlusIconSize,
+            width: plusIconSize,
+            height: plusIconSize,
             decoration: BoxDecoration(
               color: tappedAccent,
               borderRadius: BorderRadius.circular(15),

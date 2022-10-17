@@ -11,6 +11,7 @@ import 'package:intheloopapp/ui/widgets/profile_view/profile_header.dart';
 
 @Deprecated('deprecated in favor of `ProfileView.dart')
 class OldProfileView extends StatefulWidget {
+  @Deprecated('deprecated in favor of `ProfileView()`')
   const OldProfileView({
     Key? key,
     required this.visitedUserId,

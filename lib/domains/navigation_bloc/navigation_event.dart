@@ -49,7 +49,7 @@ class PushLoop extends NavigationEvent {
 
   @override
   String toString() =>
-      'PushProfile { loop: ${loop.toString()}, showComments: $showComments, autoPlay: $autoPlay }';
+      'PushProfile { loop: $loop, showComments: $showComments, autoPlay: $autoPlay }';
 
   @override
   List<Object> get props => [];
@@ -61,7 +61,7 @@ class PushBadge extends NavigationEvent {
   final Badge badge;
 
   @override
-  String toString() => 'PushProfile { badge: ${badge.toString()}}';
+  String toString() => 'PushProfile { badge: $badge}';
 
   @override
   List<Object> get props => [];

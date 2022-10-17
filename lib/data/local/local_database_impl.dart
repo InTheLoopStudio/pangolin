@@ -8,49 +8,49 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 class LocalDatabaseImpl extends DatabaseRepository {
   @override
   Future<bool> userEmailExists(String email) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return true;
   }
 
   @override
   Future<UserModel> getUserByUsername(String? username) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return UserModel.empty();
   }
 
   @override
   Future<void> createUser(UserModel user) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return;
   }
 
   @override
   Future<UserModel> getUser(String userId) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return UserModel.empty();
   }
 
   @override
   Future<Loop> getLoopById(String loopId) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return Loop.empty();
   }
 
   @override
   Future<int> followersNum(String userid) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return 42;
   }
 
   @override
   Future<int> followingNum(String userid) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return 42;
   }
 
   @override
   Future<void> updateUserData(UserModel user) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return;
   }
 
@@ -59,7 +59,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     String currentUserId,
     String visitedUserId,
   ) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return;
   }
 
@@ -68,7 +68,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     String currentUserId,
     String visitedUserId,
   ) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return;
   }
 
@@ -77,31 +77,31 @@ class LocalDatabaseImpl extends DatabaseRepository {
     String currentUserId,
     String visitedUserId,
   ) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return false;
   }
 
   @override
   Future<List<UserModel>> getFollowing(String currentUserId) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return [];
   }
 
   @override
   Future<List<UserModel>> getFollowers(String currentUserId) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return [];
   }
 
   @override
   Future<void> uploadLoop(Loop loop) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return;
   }
 
   @override
   Future<void> deleteLoop(Loop loop) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return;
   }
 
@@ -111,7 +111,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     int limit = 0,
     String? lastLoopId,
   }) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return [];
   }
 
@@ -124,7 +124,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     int limit = 0,
     String? lastLoopId,
   }) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return [];
   }
 
@@ -140,7 +140,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     int limit = 0,
     String? lastLoopId,
   }) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return [];
   }
 
@@ -152,25 +152,25 @@ class LocalDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<void> likeLoop(String currentUserId, Loop loop) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return;
   }
 
   @override
   Future<void> unlikeLoop(String currentUserId, Loop loop) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return;
   }
 
   @override
   Future<bool> isLikeLoop(String currentUserId, Loop loop) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return false;
   }
 
   @override
   Future<List<UserModel>> getLikes(Loop loop) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return [];
   }
 
@@ -180,7 +180,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     int limit = 0,
     String? lastActivityId,
   }) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return [];
   }
 
@@ -197,13 +197,13 @@ class LocalDatabaseImpl extends DatabaseRepository {
     required ActivityType type,
     String? visitedUserId,
   }) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return;
   }
 
   @override
   Future<void> markActivityAsRead(Activity activity) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return;
   }
 
@@ -212,45 +212,45 @@ class LocalDatabaseImpl extends DatabaseRepository {
     Loop loop, {
     int limit = 20,
   }) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return [];
   }
 
   @override
-  loopCommentsObserver(Loop loop, {int limit = 20}) async* {}
+  Stream<Comment> loopCommentsObserver(Loop loop, {int limit = 20}) async* {}
 
   @override
   Future<Comment> getComment(Loop loop, String commentId) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return Comment(content: '');
   }
 
   @override
   Future<void> addComment(Comment comment, String visitedUserId) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return;
   }
 
   // Future<List<Tag>> getTagSuggestions(String query) async {
-  //   await Future.delayed(Duration(seconds: 2));
+  //   await Future<void>.delayed(Duration(seconds: 2));
   //   return [];
   // }
 
   @override
   Future<void> shareLoop(Loop loop) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return;
   }
 
   @override
   Future<bool> checkUsernameAvailability(String username, String userid) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return true;
   }
 
   @override
   Future<void> createBadge(Badge badge) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return;
   }
 
@@ -262,7 +262,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     String? lastBadgeId,
     int limit = 20,
   }) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(const Duration(seconds: 2));
     return [];
   }
 }
