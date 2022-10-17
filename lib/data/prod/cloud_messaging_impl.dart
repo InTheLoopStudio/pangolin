@@ -17,11 +17,9 @@ class CloudMessagingImpl extends NotificationRepository {
 
   @override
   Future<void> saveDeviceToken({required UserModel user}) async {
-    final settings = await fcm.requestPermission(
-      
-    );
+    final settings = await fcm.requestPermission();
 
-    print('User granted permission: ${settings.authorizationStatus}');
+    // print('User granted permission: ${settings.authorizationStatus}');
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       final token = await fcm.getToken();
@@ -33,7 +31,7 @@ class CloudMessagingImpl extends NotificationRepository {
 // register the device with APN (Apple only)
           await _client.addDevice(token, PushProvider.apn);
         } else if (Platform.isAndroid) {
-          print("SAVE DEVICE TOKEN HERE ${_client.state.currentUser?.id ?? 'BLAH BLAH'}",);
+          // print("SAVE DEVICE TOKEN HERE ${_client.state.currentUser?.id ?? 'BLAH BLAH'}",);
           // register the device with Firebase (Android only)
           await _client.addDevice(token, PushProvider.firebase);
         }

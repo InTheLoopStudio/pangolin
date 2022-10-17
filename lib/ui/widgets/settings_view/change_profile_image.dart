@@ -11,7 +11,9 @@ class ChangeProfileImage extends StatelessWidget {
   const ChangeProfileImage({Key? key}) : super(key: key);
 
   ImageProvider displayProfileImage(
-      File? newProfileImage, String currentProfileImage,) {
+    File? newProfileImage,
+    String currentProfileImage,
+  ) {
     if (newProfileImage == null) {
       if (currentProfileImage.isEmpty) {
         return const AssetImage('assets/default_avatar.png');
@@ -45,7 +47,9 @@ class ChangeProfileImage extends StatelessWidget {
                   CircleAvatar(
                     radius: 45,
                     backgroundImage: displayProfileImage(
-                        state.profileImage, user.profilePicture,),
+                      state.profileImage,
+                      user.profilePicture,
+                    ),
                   ),
                   CircleAvatar(
                     radius: 45,

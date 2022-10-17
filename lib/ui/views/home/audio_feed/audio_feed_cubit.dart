@@ -51,11 +51,13 @@ class AudioFeedCubit extends Cubit<AudioFeedState> {
   Future<void> initLoops({bool clearLoops = true}) async {
     await loopListener?.cancel();
     if (clearLoops) {
-      emit(state.copyWith(
-        status: AudioFeedStatus.initial,
-        loops: [],
-        hasReachedMax: false,
-      ),);
+      emit(
+        state.copyWith(
+          status: AudioFeedStatus.initial,
+          loops: [],
+          hasReachedMax: false,
+        ),
+      );
     }
 
     final loopsAvailable =
@@ -66,10 +68,12 @@ class AudioFeedCubit extends Cubit<AudioFeedState> {
 
     loopListener = sourceStream(currentUserId, limit: 20).listen((Loop event) {
       // print('loop { ${event.id} : ${event.title} }');
-      emit(state.copyWith(
-        status: AudioFeedStatus.success,
-        loops: List.of(state.loops)..add(event),
-      ),);
+      emit(
+        state.copyWith(
+          status: AudioFeedStatus.success,
+          loops: List.of(state.loops)..add(event),
+        ),
+      );
     });
   }
 

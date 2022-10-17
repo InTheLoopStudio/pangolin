@@ -37,7 +37,11 @@ class PushActivity extends NavigationEvent {
 }
 
 class PushLoop extends NavigationEvent {
-  const PushLoop(this.loop, {this.showComments = false, this.autoPlay = true,});
+  const PushLoop(
+    this.loop, {
+    this.showComments = false,
+    this.autoPlay = true,
+  });
 
   final Loop loop;
   final bool showComments;

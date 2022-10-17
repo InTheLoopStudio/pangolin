@@ -14,7 +14,6 @@ class Uninitialized extends AuthenticationState {
 }
 
 class Authenticated extends AuthenticationState {
-
   const Authenticated(this.currentUser) : super();
   final UserModel currentUser;
 

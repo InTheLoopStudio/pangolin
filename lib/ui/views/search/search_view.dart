@@ -11,8 +11,7 @@ class SearchView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final searchRepository =
-        RepositoryProvider.of<SearchRepository>(context);
+    final searchRepository = RepositoryProvider.of<SearchRepository>(context);
 
     return BlocProvider(
       create: (context) => SearchCubit(

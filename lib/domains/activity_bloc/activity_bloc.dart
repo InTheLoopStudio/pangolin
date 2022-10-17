@@ -11,7 +11,6 @@ part 'activity_event.dart';
 part 'activity_state.dart';
 
 class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
-
   ActivityBloc({
     required this.databaseRepository,
     required this.authenticationBloc,
@@ -44,9 +43,10 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
     emit(const ActivityInitial());
 
     final activitiesAvailable = (await databaseRepository.getActivities(
-          currentUser.id,
-          limit: 1,
-        )).isNotEmpty;
+      currentUser.id,
+      limit: 1,
+    ))
+        .isNotEmpty;
 
     if (!activitiesAvailable) {
       emit(ActivitySuccess());
@@ -80,9 +80,11 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
 
       activities.isEmpty
           ? emit(ActivityEnd(activities: state.activities))
-          : emit(ActivitySuccess(
-              activities: List.of(state.activities)..addAll(activities),
-            ),);
+          : emit(
+              ActivitySuccess(
+                activities: List.of(state.activities)..addAll(activities),
+              ),
+            );
     } on Exception {
       emit(const ActivityFailure());
     }
@@ -96,9 +98,11 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
     final updatedActivity = activity.copyWith(markedRead: true);
 
     if (idx != -1) {
-      emit(ActivitySuccess(
-        activities: state.activities..[idx] = updatedActivity,
-      ),);
+      emit(
+        ActivitySuccess(
+          activities: state.activities..[idx] = updatedActivity,
+        ),
+      );
     }
 
     await databaseRepository.markActivityAsRead(updatedActivity);

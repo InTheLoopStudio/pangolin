@@ -72,8 +72,7 @@ class _UsernameTextFieldState extends State<UsernameTextField> {
         if (input.isEmpty) return;
 
         input = input.trim().toLowerCase();
-        final databaseRepo =
-            RepositoryProvider.of<DatabaseRepository>(context);
+        final databaseRepo = RepositoryProvider.of<DatabaseRepository>(context);
         final available =
             await databaseRepo.checkUsernameAvailability(input, _currentUserId);
         setState(() {

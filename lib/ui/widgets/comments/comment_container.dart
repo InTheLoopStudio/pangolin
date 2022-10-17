@@ -7,7 +7,6 @@ import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class CommentContainer extends StatelessWidget {
-
   const CommentContainer({Key? key, required this.comment}) : super(key: key);
   final Comment comment;
 

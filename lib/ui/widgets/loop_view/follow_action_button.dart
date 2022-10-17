@@ -57,7 +57,10 @@ class FollowActionButton extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (currentUser.id == state.user.id) const SizedBox.shrink() else const FollowIcon(),
+                    if (currentUser.id == state.user.id)
+                      const SizedBox.shrink()
+                    else
+                      const FollowIcon(),
                   ],
                 ),
               ),

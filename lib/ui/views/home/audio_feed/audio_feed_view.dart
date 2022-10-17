@@ -9,7 +9,6 @@ import 'package:intheloopapp/ui/views/common/loop_view/loop_view.dart';
 import 'package:intheloopapp/ui/views/home/audio_feed/audio_feed_cubit.dart';
 
 class AudioFeedView extends StatefulWidget {
-
   const AudioFeedView({
     Key? key,
     required this.feedId,

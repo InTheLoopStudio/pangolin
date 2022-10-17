@@ -2,7 +2,6 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 /// The Cubit responsible for changing the app's theme
 class AppThemeCubit extends HydratedCubit<bool> {
-
   /// The default theme is dark mode
   AppThemeCubit() : super(true);
 

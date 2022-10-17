@@ -48,13 +48,15 @@ class ControlButtons extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  if (state.onboardingStage != OnboardingStage.stage1) TextButton(
-                          onPressed:
-                              state.onboardingStage == OnboardingStage.stage1
-                                  ? null
-                                  : context.read<OnboardingCubit>().previous,
-                          child: const Text('Back'),
-                        ) else const SizedBox.shrink(),
+                  if (state.onboardingStage != OnboardingStage.stage1)
+                    TextButton(
+                      onPressed: state.onboardingStage == OnboardingStage.stage1
+                          ? null
+                          : context.read<OnboardingCubit>().previous,
+                      child: const Text('Back'),
+                    )
+                  else
+                    const SizedBox.shrink(),
                   _nextStepButton(
                     loading: state.loading,
                     stage: state.onboardingStage,

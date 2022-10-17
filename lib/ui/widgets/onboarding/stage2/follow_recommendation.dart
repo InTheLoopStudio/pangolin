@@ -7,9 +7,11 @@ import 'package:intheloopapp/ui/views/onboarding/onboarding_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 
 class FollowRecommendation extends StatelessWidget {
-  const FollowRecommendation(
-      {Key? key, required this.userId, required this.isFollowing,})
-      : super(key: key);
+  const FollowRecommendation({
+    Key? key,
+    required this.userId,
+    required this.isFollowing,
+  }) : super(key: key);
 
   final String userId;
   final bool isFollowing;

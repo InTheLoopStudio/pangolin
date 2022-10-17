@@ -32,30 +32,34 @@ class SettingsCubit extends Cubit<SettingsState> {
   final StorageRepository storageRepository;
 
   void initUserData() {
-    emit(state.copyWith(
-      username: currentUser.username,
-      artistName: currentUser.artistName,
-      bio: currentUser.bio,
-      location: currentUser.location,
-      twitterHandle: currentUser.twitterHandle,
-      instagramHandle: currentUser.instagramHandle,
-      tiktokHandle: currentUser.tiktokHandle,
-      soundcloudHandle: currentUser.soundcloudHandle,
-      youtubeChannelId: currentUser.youtubeChannelId,
-      pushNotificationsLikes: currentUser.pushNotificationsLikes,
-      pushNotificationsComments: currentUser.pushNotificationsComments,
-      pushNotificationsFollows: currentUser.pushNotificationsComments,
-      pushNotificationsDirectMessages:
-          currentUser.pushNotificationsDirectMessages,
-      pushNotificationsITLUpdates: currentUser.pushNotificationsITLUpdates,
-      emailNotificationsAppReleases: currentUser.emailNotificationsAppReleases,
-      emailNotificationsITLUpdates: currentUser.emailNotificationsITLUpdates,
-    ),);
+    emit(
+      state.copyWith(
+        username: currentUser.username,
+        artistName: currentUser.artistName,
+        bio: currentUser.bio,
+        location: currentUser.location,
+        twitterHandle: currentUser.twitterHandle,
+        instagramHandle: currentUser.instagramHandle,
+        tiktokHandle: currentUser.tiktokHandle,
+        soundcloudHandle: currentUser.soundcloudHandle,
+        youtubeChannelId: currentUser.youtubeChannelId,
+        pushNotificationsLikes: currentUser.pushNotificationsLikes,
+        pushNotificationsComments: currentUser.pushNotificationsComments,
+        pushNotificationsFollows: currentUser.pushNotificationsComments,
+        pushNotificationsDirectMessages:
+            currentUser.pushNotificationsDirectMessages,
+        pushNotificationsITLUpdates: currentUser.pushNotificationsITLUpdates,
+        emailNotificationsAppReleases:
+            currentUser.emailNotificationsAppReleases,
+        emailNotificationsITLUpdates: currentUser.emailNotificationsITLUpdates,
+      ),
+    );
   }
 
   void changeBio(String value) => emit(state.copyWith(bio: value));
   void changeUsername(String value) => emit(state.copyWith(username: value));
-  void changeArtistName(String value) => emit(state.copyWith(artistName: value));
+  void changeArtistName(String value) =>
+      emit(state.copyWith(artistName: value));
   void changeTwitter(String value) =>
       emit(state.copyWith(twitterHandle: value));
   void changeInstagram(String value) =>
@@ -77,22 +81,26 @@ class SettingsCubit extends Cubit<SettingsState> {
       emit(state.copyWith(pushNotificationsDirectMessages: selected));
   void changeITLUpdatesPush(bool selected) =>
       emit(state.copyWith(pushNotificationsITLUpdates: selected));
-  void changeAllPush(bool selected) => emit(state.copyWith(
-        pushNotificationsLikes: selected,
-        pushNotificationsComments: selected,
-        pushNotificationsFollows: selected,
-        pushNotificationsDirectMessages: selected,
-        pushNotificationsITLUpdates: selected,
-      ),);
+  void changeAllPush(bool selected) => emit(
+        state.copyWith(
+          pushNotificationsLikes: selected,
+          pushNotificationsComments: selected,
+          pushNotificationsFollows: selected,
+          pushNotificationsDirectMessages: selected,
+          pushNotificationsITLUpdates: selected,
+        ),
+      );
 
   void changeAppReleaseEmail(bool selected) =>
       emit(state.copyWith(emailNotificationsAppReleases: selected));
   void changeITLUpdatesEmail(bool selected) =>
       emit(state.copyWith(emailNotificationsITLUpdates: selected));
-  void changeAllEmail(bool selected) => emit(state.copyWith(
-        emailNotificationsAppReleases: selected,
-        emailNotificationsITLUpdates: selected,
-      ),);
+  void changeAllEmail(bool selected) => emit(
+        state.copyWith(
+          emailNotificationsAppReleases: selected,
+          emailNotificationsITLUpdates: selected,
+        ),
+      );
 
   Future<void> handleImageFromGallery() async {
     try {

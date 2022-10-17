@@ -14,12 +14,10 @@ class NotificationIconButton extends StatelessWidget {
           height: 30,
           child: Stack(
             children: [
-              Container(
-                child: const Icon(
-                  Icons.notifications,
-                  color: Colors.white,
-                  size: 30,
-                ),
+              const Icon(
+                Icons.notifications,
+                color: Colors.white,
+                size: 30,
               ),
               if (state.activities.any((elem) => elem.markedRead == false))
                 Positioned(

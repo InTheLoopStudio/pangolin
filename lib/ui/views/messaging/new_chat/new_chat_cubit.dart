@@ -22,8 +22,7 @@ class NewChatCubit extends Cubit<NewChatState> {
           // input hasn't changed in the last 500 milliseconds..
           // you can start search
           print('Now !!! search term : ${state.searchTerm}');
-          final searchRes =
-              await searchRepository.queryUsers(state.searchTerm);
+          final searchRes = await searchRepository.queryUsers(state.searchTerm);
           print('RESULTS: $searchRes');
           emit(state.copyWith(searchResults: searchRes, loading: false));
         } else {

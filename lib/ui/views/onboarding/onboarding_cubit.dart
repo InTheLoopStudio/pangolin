@@ -32,12 +32,14 @@ class OnboardingCubit extends Cubit<OnboardingState> {
   UserModel currentUser;
 
   void initUserData() {
-    emit(state.copyWith(
-      username: currentUser.username,
-      artistName: currentUser.artistName,
-      location: currentUser.location,
-      bio: currentUser.bio,
-    ),);
+    emit(
+      state.copyWith(
+        username: currentUser.username,
+        artistName: currentUser.artistName,
+        location: currentUser.location,
+        bio: currentUser.bio,
+      ),
+    );
   }
 
   Future<void> initFollowRecommendations() async {

@@ -14,8 +14,7 @@ final Algolia _algolia = const Algolia.init(
 
 class AlgoliaSearchImpl extends SearchRepository {
   Future<UserModel> _getUser(String userId) async {
-    final userSnapshot =
-        await usersRef.doc(userId).get();
+    final userSnapshot = await usersRef.doc(userId).get();
     final user = UserModel.fromDoc(userSnapshot);
 
     return user;

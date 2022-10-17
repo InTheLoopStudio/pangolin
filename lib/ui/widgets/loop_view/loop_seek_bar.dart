@@ -20,10 +20,11 @@ class LoopSeekBar extends StatelessWidget {
                 final duration = snapshot.data ?? Duration.zero;
                 return StreamBuilder<PositionData>(
                   stream: Rx.combineLatest2<Duration, Duration, PositionData>(
-                      state.audioController.player.positionStream,
-                      state.audioController.player.bufferedPositionStream,
-                      (position, bufferedPosition) =>
-                          PositionData(position, bufferedPosition),),
+                    state.audioController.player.positionStream,
+                    state.audioController.player.bufferedPositionStream,
+                    (position, bufferedPosition) =>
+                        PositionData(position, bufferedPosition),
+                  ),
                   builder: (context, snapshot) {
                     final positionData = snapshot.data ??
                         PositionData(Duration.zero, Duration.zero);

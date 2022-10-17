@@ -11,7 +11,6 @@ import 'package:intheloopapp/ui/widgets/loop_view/social_action_button.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ActionsToolbar extends StatelessWidget {
-
   const ActionsToolbar({
     Key? key,
     required this.user,

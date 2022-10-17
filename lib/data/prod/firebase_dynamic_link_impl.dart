@@ -8,7 +8,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 final _dynamicLinks = FirebaseDynamicLinks.instance;
 
 /// The Firebase dynamic link implementation for Dynamic Link
-/// 
+///
 /// aka Deep Links
 class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
   @override

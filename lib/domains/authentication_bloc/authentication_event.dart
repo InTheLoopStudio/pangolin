@@ -14,7 +14,6 @@ class AppStarted extends AuthenticationEvent {
 }
 
 class LoggedIn extends AuthenticationEvent {
-
   const LoggedIn({this.user});
   final UserModel? user;
 
@@ -26,7 +25,6 @@ class LoggedIn extends AuthenticationEvent {
 }
 
 class UpdateAuthenticatedUser extends AuthenticationEvent {
-
   const UpdateAuthenticatedUser(this.user);
   final UserModel user;
 

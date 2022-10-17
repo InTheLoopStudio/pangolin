@@ -6,7 +6,6 @@ import 'package:intheloopapp/data/auth_repository.dart';
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-
   LoginCubit(this.authRepository) : super(const LoginState());
   final AuthRepository authRepository;
 

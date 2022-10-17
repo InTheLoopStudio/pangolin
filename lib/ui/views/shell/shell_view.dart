@@ -22,8 +22,7 @@ class ShellView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authRepo =
-        RepositoryProvider.of<AuthRepository>(context);
+    final authRepo = RepositoryProvider.of<AuthRepository>(context);
 
     return StreamBuilder<UserModel>(
       stream: authRepo.user,

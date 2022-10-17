@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:intheloopapp/ui/themes.dart';
 
 class SeekBar extends StatefulWidget {
-
   const SeekBar({
     required this.duration,
     required this.position,
@@ -79,8 +78,10 @@ class _SeekBarState extends State<SeekBar> {
           ),
           child: Slider(
             max: widget.duration.inMilliseconds.toDouble(),
-            value: min(_dragValue ?? widget.position.inMilliseconds.toDouble(),
-                widget.duration.inMilliseconds.toDouble(),),
+            value: min(
+              _dragValue ?? widget.position.inMilliseconds.toDouble(),
+              widget.duration.inMilliseconds.toDouble(),
+            ),
             onChanged: (value) {
               setState(() {
                 _dragValue = value;
@@ -101,11 +102,12 @@ class _SeekBarState extends State<SeekBar> {
           right: 16,
           bottom: 0,
           child: Text(
-              RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
-                      .firstMatch('$_remaining')
-                      ?.group(1) ??
-                  '$_remaining',
-              style: Theme.of(context).textTheme.bodySmall,),
+            RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
+                    .firstMatch('$_remaining')
+                    ?.group(1) ??
+                '$_remaining',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
         ),
       ],
     );
@@ -115,7 +117,6 @@ class _SeekBarState extends State<SeekBar> {
 }
 
 class PositionData {
-
   PositionData(this.position, this.bufferedPosition);
   final Duration position;
   final Duration bufferedPosition;

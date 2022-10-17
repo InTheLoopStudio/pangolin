@@ -18,9 +18,8 @@ part 'upload_loop_state.dart';
 
 /// Functionality and instructions for uploading a loop
 class UploadLoopCubit extends Cubit<UploadLoopState> {
-
-  /// Uploading a loop requires the database, storage, authentication, 
-  /// knowledge of the current of the current user, view scaffold info, 
+  /// Uploading a loop requires the database, storage, authentication,
+  /// knowledge of the current of the current user, view scaffold info,
   /// and navigation instructions
   UploadLoopCubit({
     required this.databaseRepository,
@@ -76,10 +75,12 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
   /// what to do it the title of the loop changes
   void titleChanged(String value) {
     final title = LoopTitle.dirty(value);
-    emit(state.copyWith(
-      loopTitle: title,
-      status: Formz.validate([title]),
-    ),);
+    emit(
+      state.copyWith(
+        loopTitle: title,
+        status: Formz.validate([title]),
+      ),
+    );
   }
 
   // void addTag(Tag value) {
@@ -108,20 +109,24 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
             audioFileResult.files.single.path!.split('/').last;
         final pickedAudio = File(audioFileResult.files.single.path!);
 
-        emit(state.copyWith(
-          pickedAudio: pickedAudio,
-          status: Formz.validate([
-            LoopTitle.dirty(pickedAudioName),
-          ]),
-          loopTitle: LoopTitle.dirty(pickedAudioName),
-        ),);
+        emit(
+          state.copyWith(
+            pickedAudio: pickedAudio,
+            status: Formz.validate([
+              LoopTitle.dirty(pickedAudioName),
+            ]),
+            loopTitle: LoopTitle.dirty(pickedAudioName),
+          ),
+        );
 
         await state.audioController.setAudioFile(pickedAudio);
       }
     } catch (error) {
-      emit(state.copyWith(
-        status: FormzStatus.submissionFailure,
-      ),);
+      emit(
+        state.copyWith(
+          status: FormzStatus.submissionFailure,
+        ),
+      );
     }
   }
 
@@ -132,17 +137,18 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
     try {
       if (!state.status.isValidated || state.pickedAudio == null) return;
 
-      final tmp =
-          await state.audioController.setAudioFile(state.pickedAudio);
+      final tmp = await state.audioController.setAudioFile(state.pickedAudio);
 
       final audioDuration = tmp ?? Duration.zero;
 
       final tooLarge = audioDuration.compareTo(_maxDuration) >= 0;
 
       if (state.loopTitle.value.isNotEmpty && !tooLarge) {
-        emit(state.copyWith(
-          status: FormzStatus.submissionInProgress,
-        ),);
+        emit(
+          state.copyWith(
+            status: FormzStatus.submissionInProgress,
+          ),
+        );
 
         final audio = await storageRepository.uploadLoop(
           currentUser.id,
@@ -158,10 +164,12 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
 
         await databaseRepository.uploadLoop(loop);
 
-        emit(state.copyWith(
-          loopTitle: const LoopTitle.pure(),
-          status: FormzStatus.submissionSuccess,
-        ),);
+        emit(
+          state.copyWith(
+            loopTitle: const LoopTitle.pure(),
+            status: FormzStatus.submissionSuccess,
+          ),
+        );
 
         final user = currentUser.copyWith(
           loopsCount: (currentUser.loopsCount) + 1,
@@ -173,32 +181,39 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
       } else {
         // print('NOT VALID UPLOAD : $tooLarge + ${state.loopTitle.value}');
         if (scaffoldKey != null) {
-          scaffoldKey!.currentState?.showSnackBar(SnackBar(
-            content: const Text('Audio must be under 10 minutes with a title'),
+          scaffoldKey!.currentState?.showSnackBar(
+            SnackBar(
+              content:
+                  const Text('Audio must be under 10 minutes with a title'),
+              duration: const Duration(seconds: 3),
+              backgroundColor: Colors.red,
+              action: SnackBarAction(
+                label: 'Ok',
+                onPressed: () {},
+              ),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (scaffoldKey != null) {
+        scaffoldKey!.currentState?.showSnackBar(
+          SnackBar(
+            content: const Text('Error uploading loop'),
             duration: const Duration(seconds: 3),
             backgroundColor: Colors.red,
             action: SnackBarAction(
               label: 'Ok',
               onPressed: () {},
             ),
-          ),);
-        }
-      }
-    } catch (e) {
-      if (scaffoldKey != null) {
-        scaffoldKey!.currentState?.showSnackBar(SnackBar(
-          content: const Text('Error uploading loop'),
-          duration: const Duration(seconds: 3),
-          backgroundColor: Colors.red,
-          action: SnackBarAction(
-            label: 'Ok',
-            onPressed: () {},
           ),
-        ),);
+        );
       }
-      emit(state.copyWith(
-        status: FormzStatus.submissionFailure,
-      ),);
+      emit(
+        state.copyWith(
+          status: FormzStatus.submissionFailure,
+        ),
+      );
     }
   }
 }

@@ -27,10 +27,11 @@ import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
-/// link all necessary repository interfaces 
+/// link all necessary repository interfaces
 /// with their respective implementations
-List<RepositoryProvider<dynamic>> buildRepositories(
-    {required StreamChatClient streamChatClient,}) {
+List<RepositoryProvider<dynamic>> buildRepositories({
+  required StreamChatClient streamChatClient,
+}) {
   return [
     RepositoryProvider<AuthRepository>(
       create: (_) => FirebaseAuthImpl(),

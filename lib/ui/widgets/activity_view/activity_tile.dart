@@ -17,8 +17,7 @@ class ActivityTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ActivityBloc, ActivityState>(
       builder: (context, state) {
-        final databaseRepository =
-            context.read<DatabaseRepository>();
+        final databaseRepository = context.read<DatabaseRepository>();
 
         if (!activity.markedRead) {
           context

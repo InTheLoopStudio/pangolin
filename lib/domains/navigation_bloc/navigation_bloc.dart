@@ -14,7 +14,6 @@ part 'navigation_event.dart';
 part 'navigation_state.dart';
 
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
-
   /// build the bloc and defines event handlers
   NavigationBloc({required this.navigationKey})
       : super(const NavigationState()) {

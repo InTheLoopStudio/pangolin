@@ -11,9 +11,11 @@ final storageRef = FirebaseStorage.instance.ref();
 class FirebaseStorageImpl extends StorageRepository {
   @override
   Future<String> uploadProfilePicture(
-      String userId, String url, File imageFile,) async {
-    final prefix =
-        userId.isEmpty ? 'images/users' : 'images/users/$userId';
+    String userId,
+    String url,
+    File imageFile,
+  ) async {
+    final prefix = userId.isEmpty ? 'images/users' : 'images/users/$userId';
 
     var uniquePhotoId = const Uuid().v4();
     final image = await compressImage(uniquePhotoId, imageFile);
@@ -49,8 +51,7 @@ class FirebaseStorageImpl extends StorageRepository {
 
   @override
   Future<String> uploadLoop(String userId, File audioFile) async {
-    final prefix =
-        userId.isEmpty ? 'audio/loops' : 'audio/loops/$userId';
+    final prefix = userId.isEmpty ? 'audio/loops' : 'audio/loops/$userId';
 
     final uniqueAudioId = const Uuid().v4();
 

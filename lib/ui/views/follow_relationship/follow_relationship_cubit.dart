@@ -16,15 +16,13 @@ class FollowRelationshipCubit extends Cubit<FollowRelationshipState> {
   final String visitedUserId;
 
   Future<void> initFollowers() async {
-    final followerUser =
-        await databaseRepository.getFollowers(visitedUserId);
+    final followerUser = await databaseRepository.getFollowers(visitedUserId);
 
     emit(state.copyWith(followers: followerUser));
   }
 
   Future<void> initFollowing() async {
-    final followingUser =
-        await databaseRepository.getFollowing(visitedUserId);
+    final followingUser = await databaseRepository.getFollowing(visitedUserId);
 
     emit(state.copyWith(following: followingUser));
   }

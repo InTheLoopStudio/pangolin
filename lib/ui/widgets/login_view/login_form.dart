@@ -9,7 +9,6 @@ import 'package:intheloopapp/ui/widgets/common/forms/apple_login_button.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/google_login_button.dart';
 
 class LoginForm extends StatefulWidget {
-
   const LoginForm({Key? key, this.authenticationBloc}) : super(key: key);
   final AuthenticationBloc? authenticationBloc;
 
@@ -49,8 +48,12 @@ class _LoginFormState extends State<LoginForm> {
                   onPressed: context.read<LoginCubit>().signInWithGoogle,
                 ),
                 const SizedBox(height: 20),
-                if (Platform.isIOS) AppleLoginButton(
-                        onPressed: context.read<LoginCubit>().signInWithApple,) else const SizedBox.shrink(),
+                if (Platform.isIOS)
+                  AppleLoginButton(
+                    onPressed: context.read<LoginCubit>().signInWithApple,
+                  )
+                else
+                  const SizedBox.shrink(),
               ],
             ),
           ),

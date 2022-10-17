@@ -19,8 +19,7 @@ class UploadView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authRepo =
-        RepositoryProvider.of<AuthRepository>(context);
+    final authRepo = RepositoryProvider.of<AuthRepository>(context);
     final theme = Theme.of(context);
     return StreamBuilder<UserModel>(
       stream: authRepo.user,

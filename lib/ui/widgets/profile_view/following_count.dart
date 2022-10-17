@@ -14,7 +14,7 @@ class FollowingCount extends StatelessWidget {
         return GestureDetector(
           onTap: () {
             Navigator.of(context).push(
-              MaterialPageRoute(
+              MaterialPageRoute<FollowRelationshipView>(
                 builder: (context) => FollowRelationshipView(
                   visitedUserId: state.visitedUser.id,
                   initialIndex: 1,

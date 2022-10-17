@@ -215,7 +215,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       },
     );
     final callable = _functions.httpsCallable('deleteLoop');
-    final results = await callable({
+    await callable({
       'id': loop.id,
       'userId': loop.userId,
     });
@@ -238,10 +238,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .startAfterDocument(documentSnapshot)
           .get();
 
-      var userLoops =
-          userLoopsSnapshot.docs.map((doc) => Loop.fromDoc(doc)).toList();
-
-      userLoops = userLoops.where((loop) => loop.deleted != true).toList();
+      final userLoops = userLoopsSnapshot.docs
+          .map((doc) => Loop.fromDoc(doc))
+          .where((loop) => loop.deleted != true)
+          .toList();
 
       return userLoops;
     } else {
@@ -251,10 +251,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .limit(limit)
           .get();
 
-      var userLoops =
-          userLoopsSnapshot.docs.map((doc) => Loop.fromDoc(doc)).toList();
-
-      userLoops = userLoops.where((loop) => loop.deleted != true).toList();
+      final userLoops = userLoopsSnapshot.docs
+          .map((doc) => Loop.fromDoc(doc))
+          .where((loop) => loop.deleted != true)
+          .toList();
 
       return userLoops;
     }
@@ -360,7 +360,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
             element.type == DocumentChangeType.added,
       )
           .map((DocumentChange<Map<String, dynamic>> element) async {
-        return await getLoopById(element.doc.id);
+        final loop = await getLoopById(element.doc.id);
+        return loop;
         // if (element.type == DocumentChangeType.modified) {}
         // if (element.type == DocumentChangeType.removed) {}
       });
@@ -436,8 +437,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       });
     }).flatMap(
       (value) => Stream.fromIterable(value).where(
-          (loop) => loop.userId != currentUserId && loop.deleted != true,
-        ),
+        (loop) => loop.userId != currentUserId && loop.deleted != true,
+      ),
     );
 
     yield* allLoopsObserver;
@@ -510,8 +511,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String? lastActivityId,
   }) async {
     if (lastActivityId != null) {
-      final documentSnapshot =
-          await _activitiesRef.doc(lastActivityId).get();
+      final documentSnapshot = await _activitiesRef.doc(lastActivityId).get();
 
       final activitiesSnapshot = await _activitiesRef
           .orderBy('timestamp', descending: true)
@@ -597,7 +597,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       },
     );
     final callable = _functions.httpsCallable('markActivityAsRead');
-    final results = await callable({
+    await callable<String>({
       'id': activity.id,
     });
   }

@@ -13,8 +13,7 @@ class UserTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final streamRepository =
-        RepositoryProvider.of<StreamRepository>(context);
+    final streamRepository = RepositoryProvider.of<StreamRepository>(context);
 
     return ListTile(
       leading: UserAvatar(
@@ -23,8 +22,7 @@ class UserTile extends StatelessWidget {
       ),
       title: Text(user.username),
       onTap: () async {
-        final channel =
-            await streamRepository.createSimpleChat(user.id);
+        final channel = await streamRepository.createSimpleChat(user.id);
         if (channel.state == null) {
           await channel.watch();
         }

@@ -18,7 +18,6 @@ enum AccountType {
 
 @JsonSerializable()
 class UserModel extends Equatable {
-
   factory UserModel.empty() => const UserModel(
         id: '',
         email: '',

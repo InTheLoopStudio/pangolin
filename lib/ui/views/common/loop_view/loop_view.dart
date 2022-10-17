@@ -28,8 +28,7 @@ class LoopView extends StatelessWidget {
   Widget build(BuildContext context) {
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
-    final authRepository =
-        RepositoryProvider.of<AuthRepository>(context);
+    final authRepository = RepositoryProvider.of<AuthRepository>(context);
     return StreamBuilder<UserModel>(
       stream: authRepository.user,
       builder: (context, snapshot) {

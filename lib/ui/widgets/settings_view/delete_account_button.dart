@@ -39,11 +39,13 @@ class DeleteAccountButton extends StatelessWidget {
                               context.read<SettingsCubit>().reauthWithGoogle,
                         ),
                         const SizedBox(height: 10),
-                        if (Platform.isIOS) AppleLoginButton(
-                                onPressed: context
-                                    .read<SettingsCubit>()
-                                    .reauthWithApple,
-                              ) else const SizedBox.shrink(),
+                        if (Platform.isIOS)
+                          AppleLoginButton(
+                            onPressed:
+                                context.read<SettingsCubit>().reauthWithApple,
+                          )
+                        else
+                          const SizedBox.shrink(),
                       ],
               ),
               actions: [

@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 extension DefaultValue<K, V> on DocumentSnapshot<Map<String, dynamic>> {
   /// helper function to try an index the `DocumentSnapshot<T>` object
   /// and return a custom default value if the desired index doesn't exist
-  /// 
+  ///
   /// This is useful for adding new fields to DB models since it means
   /// a custom migration script doesn't need to be made every time
   /// and can instead just set its default client-side
@@ -26,7 +26,7 @@ String formatDate(DateTime date) {
 }
 
 /// helper function to format `DateTime` objects into string
-/// specifically for `DateTime`s that are within 7 days of 
+/// specifically for `DateTime`s that are within 7 days of
 /// `DateTime.now()`
 String formatDateSameWeek(DateTime date) {
   DateFormat dateFormat;
@@ -47,7 +47,7 @@ String formatDateMessage(DateTime date) {
   return dateFormat.format(date);
 }
 
-/// helper function to determine if a given 
+/// helper function to determine if a given
 /// timestamp is within a week of `DateTime.now()`
 bool isSameWeek(DateTime timestamp) {
   return DateTime.now().difference(timestamp).inDays < 7;

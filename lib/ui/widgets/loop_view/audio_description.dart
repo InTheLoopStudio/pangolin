@@ -4,7 +4,6 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
 
 class AudioDescription extends StatelessWidget {
-
   const AudioDescription({
     Key? key,
     required this.loop,

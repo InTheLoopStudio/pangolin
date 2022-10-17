@@ -42,30 +42,33 @@ class ControlButtons extends StatelessWidget {
                       ),
                       const SizedBox(width: 15),
                       GestureDetector(
-                          onTap: () => state.pageController.jumpToPage(1),
-                          child: Text(
-                            'For you',
-                            style: state.currentIndex == 1
-                                ? const TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  )
-                                : const TextStyle(
-                                    color: Colors.white,
-                                  ),
-                          ),)
+                        onTap: () => state.pageController.jumpToPage(1),
+                        child: Text(
+                          'For you',
+                          style: state.currentIndex == 1
+                              ? const TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                )
+                              : const TextStyle(
+                                  color: Colors.white,
+                                ),
+                        ),
+                      )
                     ],
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(
-                    // vertical: 15.0,
-                    // horizontal: 20.0,
-                  ),
+                  padding: EdgeInsets.zero,
+                  // padding: const EdgeInsets.only(
+                  //     vertical: 15.0,
+                  //     horizontal: 20.0,
+                  //     ),
                   child: GestureDetector(
-                    onTap: () =>
-                        context.read<NavigationBloc>().add(const PushActivity()),
+                    onTap: () => context
+                        .read<NavigationBloc>()
+                        .add(const PushActivity()),
                     child: const NotificationIconButton(),
                   ),
                 ),

@@ -30,7 +30,8 @@ class SendBadgeCubit extends Cubit<SendBadgeState> {
   void changeReceiverUsername(String? value) =>
       emit(state.copyWith(receiverUsername: value));
 
-  void changeBadgeName(String? value) => emit(state.copyWith(badgeName: value ?? ''));
+  void changeBadgeName(String? value) =>
+      emit(state.copyWith(badgeName: value ?? ''));
   void changeBadgeDescription(String? value) =>
       emit(state.copyWith(badgeDescription: value ?? ''));
 

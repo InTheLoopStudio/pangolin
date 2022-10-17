@@ -33,10 +33,12 @@ class CommentsCubit extends Cubit<CommentsState> {
 
     await commentListener?.cancel();
     if (clearComments) {
-      emit(state.copyWith(
-        comments: [],
-        commentsCount: loop.comments,
-      ),);
+      emit(
+        state.copyWith(
+          comments: [],
+          commentsCount: loop.comments,
+        ),
+      );
     }
 
     final commentsAvailable =
@@ -45,14 +47,15 @@ class CommentsCubit extends Cubit<CommentsState> {
       emit(state.copyWith(loading: false));
     }
 
-    commentListener = databaseRepository
-        .loopCommentsObserver(loop)
-        .listen((Comment event) {
+    commentListener =
+        databaseRepository.loopCommentsObserver(loop).listen((Comment event) {
       print('Comment { ${event.id} : ${event.content} }');
-      emit(state.copyWith(
-        loading: false,
-        comments: List.of(state.comments)..add(event),
-      ),);
+      emit(
+        state.copyWith(
+          loading: false,
+          comments: List.of(state.comments)..add(event),
+        ),
+      );
     });
   }
 
@@ -79,11 +82,13 @@ class CommentsCubit extends Cubit<CommentsState> {
 
       loopViewCubit.addComment();
 
-      emit(state.copyWith(
-        loading: false,
-        commentsCount: state.commentsCount + 1,
-        comments: state.comments..add(comment),
-      ),);
+      emit(
+        state.copyWith(
+          loading: false,
+          commentsCount: state.commentsCount + 1,
+          comments: state.comments..add(comment),
+        ),
+      );
     }
   }
 

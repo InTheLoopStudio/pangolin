@@ -43,12 +43,12 @@ class SettingsForm extends StatelessWidget {
                     },
                     currentUserId: currentUser.id,
                   ),
-                   ArtistNameTextField(
-                        onChanged: (input) => context
-                            .read<SettingsCubit>()
-                            .changeArtistName(input ?? ''),
-                        initialValue: state.artistName,
-                      ),
+                  ArtistNameTextField(
+                    onChanged: (input) => context
+                        .read<SettingsCubit>()
+                        .changeArtistName(input ?? ''),
+                    initialValue: state.artistName,
+                  ),
                   BioTextField(
                     onSaved: (value) =>
                         context.read<SettingsCubit>().changeBio(value ?? ''),
@@ -87,9 +87,12 @@ class SettingsForm extends StatelessWidget {
                   ),
                   const SizedBox(height: 15),
                   const ThemeSwitch(),
-                  if (state.status.isSubmissionInProgress) const CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation(tappedAccent),
-                        ) else const SizedBox.shrink(),
+                  if (state.status.isSubmissionInProgress)
+                    const CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(tappedAccent),
+                    )
+                  else
+                    const SizedBox.shrink(),
                 ],
               ),
             );

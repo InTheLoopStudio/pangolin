@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
@@ -95,7 +94,8 @@ class _ActivityListState extends State<ActivityList> {
                                       ),
                                     )
                                   : ActivityTile(
-                                      activity: state.activities[index],);
+                                      activity: state.activities[index],
+                                    );
                             },
                             childCount: state is ActivityEnd
                                 ? state.activities.length

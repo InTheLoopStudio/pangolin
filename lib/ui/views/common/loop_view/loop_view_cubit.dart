@@ -135,17 +135,21 @@ class LoopViewCubit extends Cubit<LoopViewState> {
 
   void toggleLikeLoop() async {
     if (state.isLiked) {
-      emit(state.copyWith(
-        isLiked: false,
-        likesCount: state.likesCount - 1,
-      ),);
+      emit(
+        state.copyWith(
+          isLiked: false,
+          likesCount: state.likesCount - 1,
+        ),
+      );
 
       await databaseRepository.unlikeLoop(currentUser.id, loop);
     } else {
-      emit(state.copyWith(
-        isLiked: true,
-        likesCount: state.likesCount + 1,
-      ),);
+      emit(
+        state.copyWith(
+          isLiked: true,
+          likesCount: state.likesCount + 1,
+        ),
+      );
 
       await databaseRepository.likeLoop(currentUser.id, loop);
     }

@@ -51,7 +51,8 @@ class SocialMediaIcons extends StatelessWidget {
                   launchUrl(
                     Uri(
                       scheme: 'https',
-                      path: 'instagram.com/${state.visitedUser.instagramHandle}',
+                      path:
+                          'instagram.com/${state.visitedUser.instagramHandle}',
                     ),
                   );
                 },
@@ -88,7 +89,8 @@ class SocialMediaIcons extends StatelessWidget {
                   launchUrl(
                     Uri(
                       scheme: 'https',
-                      path: 'youtube.com/channel/${state.visitedUser.youtubeChannelId}',
+                      path:
+                          'youtube.com/channel/${state.visitedUser.youtubeChannelId}',
                     ),
                   );
                 },

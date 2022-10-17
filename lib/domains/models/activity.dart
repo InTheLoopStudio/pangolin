@@ -8,7 +8,6 @@ part 'activity.g.dart';
 
 @JsonSerializable()
 class Activity extends Equatable {
-
   factory Activity.empty() => Activity(
         id: '',
         fromUserId: '',

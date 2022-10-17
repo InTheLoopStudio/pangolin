@@ -18,12 +18,13 @@ class ThemeSwitch extends StatelessWidget {
           backgroundColor: Theme.of(context).backgroundColor,
           thumbColor: const Color.fromARGB(255, 197, 228, 255),
           onValueChanged: (value) async {
-            await context.read<AppThemeCubit>().updateTheme(isDarkMode: value! as bool);
+            await context
+                .read<AppThemeCubit>()
+                .updateTheme(isDarkMode: value! as bool);
           },
           children: {
             false: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: const [
@@ -42,8 +43,7 @@ class ThemeSwitch extends StatelessWidget {
               ),
             ),
             true: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: const [

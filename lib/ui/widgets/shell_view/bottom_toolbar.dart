@@ -35,8 +35,9 @@ class BottomToolbar extends StatelessWidget {
             ),
             const BottomNavigationBarItem(icon: Icon(Icons.search)),
             const BottomNavigationBarItem(
-                icon: Icon(Icons.add_box_outlined),
-                activeIcon: Icon(Icons.add_box),),
+              icon: Icon(Icons.add_box_outlined),
+              activeIcon: Icon(Icons.add_box),
+            ),
             const BottomNavigationBarItem(
               icon: Icon(Icons.comment_outlined),
               activeIcon: Icon(Icons.comment),

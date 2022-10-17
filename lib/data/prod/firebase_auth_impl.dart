@@ -19,8 +19,7 @@ final usersRef = _fireStore.collection('users');
 
 extension on User {
   Future<UserModel> get toUserModel async {
-    final userSnapshot =
-        await usersRef.doc(uid).get();
+    final userSnapshot = await usersRef.doc(uid).get();
     final user = UserModel.fromDoc(userSnapshot);
 
     return user;
@@ -86,8 +85,7 @@ class FirebaseAuthImpl extends AuthRepository {
     final googleUser = await GoogleSignIn().signIn();
 
     // Obtain the auth details from the request
-    final googleAuth =
-        await googleUser!.authentication;
+    final googleAuth = await googleUser!.authentication;
 
     // Create a new credential
     final credential = GoogleAuthProvider.credential(
@@ -96,13 +94,13 @@ class FirebaseAuthImpl extends AuthRepository {
     );
 
     // Once signed in, return the UserCredential
-    final authResult =
-        await _auth.signInWithCredential(credential);
+    final authResult = await _auth.signInWithCredential(credential);
 
     final signedInUser = authResult.user;
 
     if (signedInUser != null) {
-      await _analytics.logEvent(name: 'sign_in', parameters: {'provider': 'Google'});
+      await _analytics
+          .logEvent(name: 'sign_in', parameters: {'provider': 'Google'});
       await _analytics.setUserId(id: signedInUser.uid);
       return UserModel.empty().copyWith(
         id: signedInUser.uid,
@@ -121,8 +119,7 @@ class FirebaseAuthImpl extends AuthRepository {
     final googleUser = await GoogleSignIn().signIn();
 
     // Obtain the auth details from the request
-    final googleAuth =
-        await googleUser!.authentication;
+    final googleAuth = await googleUser!.authentication;
 
     // Create a new credential
     final credential = GoogleAuthProvider.credential(
@@ -165,13 +162,13 @@ class FirebaseAuthImpl extends AuthRepository {
 
     // Sign in the user with Firebase. If the nonce we generated earlier does
     // not match the nonce in `appleCredential.identityToken`, sign in will fail.
-    final authResult =
-        await _auth.signInWithCredential(oauthCredential);
+    final authResult = await _auth.signInWithCredential(oauthCredential);
 
     final signedInUser = authResult.user;
 
     if (signedInUser != null) {
-      await _analytics.logEvent(name: 'sign_in', parameters: {'provider': 'Apple'});
+      await _analytics
+          .logEvent(name: 'sign_in', parameters: {'provider': 'Apple'});
       await _analytics.setUserId(id: signedInUser.uid);
       return UserModel.empty().copyWith(
         id: signedInUser.uid,
