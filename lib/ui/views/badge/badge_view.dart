@@ -56,16 +56,7 @@ class BadgeView extends StatelessWidget {
                   fontSize: 32,
                 ),
               ),
-              UseridTile(userid: badge.senderId),
-              const SizedBox(height: 30),
-              const Text(
-                'Receiver',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 32,
-                ),
-              ),
-              UseridTile(userid: badge.receiverId),
+              UseridTile(userid: badge.creatorId),
             ],
           ),
         ),

@@ -255,9 +255,29 @@ class LocalDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  Future<void> sendBadge(String badgeId, String receiverId) async {
+    await Future<void>.delayed(const Duration(seconds: 2));
+    return;
+  }
+
+  @override
   Stream<Badge> userBadgesObserver(String userId, {int limit = 20}) async* {}
+
+  @override
+  Stream<Badge> userCreatedBadgesObserver(String userId, {int limit = 20}) async* {}
+
   @override
   Future<List<Badge>> getUserBadges(
+    String userId, {
+    String? lastBadgeId,
+    int limit = 20,
+  }) async {
+    await Future<void>.delayed(const Duration(seconds: 2));
+    return [];
+  }
+
+  @override
+  Future<List<Badge>> getUserCreatedBadges(
     String userId, {
     String? lastBadgeId,
     int limit = 20,

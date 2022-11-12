@@ -15,6 +15,7 @@ import 'package:intheloopapp/ui/widgets/profile_view/follower_count.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/following_count.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/share_profile_button.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/social_media_icons.dart';
+import 'package:intheloopapp/ui/widgets/profile_view/venue_dashboard.dart';
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   _SliverAppBarDelegate(this._tabBar);
@@ -63,6 +64,71 @@ class _ProfileViewState extends State<ProfileView> {
     _scrollController = ScrollController();
   }
 
+  List<Widget> _profileTabBar(
+    bool showVenueDashboard,
+    int badgesCount,
+    int loopsCount,
+  ) {
+    final tabs = [
+      Tab(
+        text: 'Badges ($badgesCount)',
+      ),
+      Tab(
+        text: 'Loops ($loopsCount)',
+      ),
+    ];
+
+    if (showVenueDashboard) {
+      tabs.insert(
+        0,
+        const Tab(
+          text: 'Venue',
+        ),
+      );
+    }
+
+    return tabs;
+  }
+
+  Widget _badgesTab() => SingleChildScrollView(
+        controller: _scrollController,
+        physics: const NeverScrollableScrollPhysics(),
+        child: Column(
+          children: [
+            const SizedBox(height: 15),
+            BadgesList(scrollController: _scrollController),
+          ],
+        ),
+      );
+
+  Widget _loopsTab() => SingleChildScrollView(
+        controller: _scrollController,
+        physics: const NeverScrollableScrollPhysics(),
+        child: Column(
+          children: [
+            AllLoopsList(scrollController: _scrollController),
+          ],
+        ),
+      );
+
+  List<Widget> _profileTabs(bool showVenueDashboard) {
+    final tabs = [
+      _badgesTab(),
+      _loopsTab(),
+    ];
+
+    if (showVenueDashboard) {
+      tabs.insert(
+        0,
+        VenueDashboard(
+          scrollController: _scrollController,
+        ),
+      );
+    }
+
+    return tabs;
+  }
+
   Widget _profilePage(
     UserModel currentUser,
     UserModel visitedUser,
@@ -76,13 +142,16 @@ class _ProfileViewState extends State<ProfileView> {
         )
           ..initLoops()
           ..initBadges()
+          ..initUserCreatedBadges()
           ..loadFollower(visitedUser.id)
           ..loadFollowing(visitedUser.id)
           ..loadIsFollowing(currentUser.id, visitedUser.id),
         child: BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, state) {
-            final showBadgeButton = currentUser.id == visitedUser.id &&
+            final showVenueDashboard = currentUser.id == visitedUser.id &&
                 currentUser.accountType == AccountType.venue;
+            final tabs = _profileTabBar(showVenueDashboard,
+                visitedUser.badgesCount, visitedUser.loopsCount);
             return BlocListener<AuthenticationBloc, AuthenticationState>(
               listener: (context, authState) {
                 if (authState is Authenticated) {
@@ -100,6 +169,10 @@ class _ProfileViewState extends State<ProfileView> {
                     // ignore: unawaited_futures
                     ..initLoops()
                     // ignore: unawaited_futures
+                    ..initBadges()
+                    // ignore: unawaited_futures
+                    ..initUserCreatedBadges()
+                    // ignore: unawaited_futures
                     ..refetchVisitedUser()
                     // ignore: unawaited_futures
                     ..loadIsFollowing(currentUser.id, visitedUser.id)
@@ -109,7 +182,7 @@ class _ProfileViewState extends State<ProfileView> {
                     ..loadFollower(visitedUser.id);
                 },
                 child: DefaultTabController(
-                  length: 2,
+                  length: tabs.length,
                   child: NestedScrollView(
                     controller: _scrollController,
                     headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -174,53 +247,14 @@ class _ProfileViewState extends State<ProfileView> {
                           delegate: _SliverAppBarDelegate(
                             TabBar(
                               indicatorColor: tappedAccent,
-                              tabs: [
-                                Tab(
-                                  text: 'Badges (${visitedUser.badgesCount})',
-                                ),
-                                Tab(
-                                  text: 'Loops (${visitedUser.loopsCount})',
-                                ),
-                              ],
+                              tabs: tabs,
                             ),
                           ),
                         ),
                       ];
                     },
                     body: TabBarView(
-                      children: [
-                        SingleChildScrollView(
-                          controller: _scrollController,
-                          physics: const NeverScrollableScrollPhysics(),
-                          child: Column(
-                            children: [
-                              if (showBadgeButton)
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 16,
-                                  ),
-                                  child: OutlinedButton(
-                                    onPressed: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute<SendBadgeView>(
-                                        builder: (context) =>
-                                            const SendBadgeView(),
-                                      ),
-                                    ),
-                                    child: const Text('Send Badge'),
-                                  ),
-                                )
-                              else
-                                const SizedBox.shrink(),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              BadgesList(scrollController: _scrollController),
-                            ],
-                          ),
-                        ),
-                        AllLoopsList(scrollController: _scrollController),
-                      ],
+                      children: _profileTabs(showVenueDashboard),
                     ),
                   ),
                 ),

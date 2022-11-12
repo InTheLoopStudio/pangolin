@@ -80,10 +80,10 @@ class SendBadgeCubit extends Cubit<SendBadgeState> {
         );
 
         // create badge object
+        final badgeId = const Uuid().v4();
         final badge = Badge(
-          id: const Uuid().v4(),
-          senderId: currentUser.id,
-          receiverId: badgeReceiver.id,
+          id: badgeId,
+          creatorId: currentUser.id,
           imageUrl: badgeImageUrl,
           name: state.badgeName,
           description: state.badgeDescription,
@@ -92,6 +92,7 @@ class SendBadgeCubit extends Cubit<SendBadgeState> {
 
         // Send badge to DB
         await databaseRepository.createBadge(badge);
+        await databaseRepository.sendBadge(badgeId, badgeReceiver.id);
         emit(state.copyWith(status: FormzStatus.submissionSuccess));
       } on Exception {
         emit(state.copyWith(status: FormzStatus.submissionFailure));

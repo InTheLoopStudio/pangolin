@@ -25,6 +25,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
   final UserModel visitedUser;
   StreamSubscription<Loop>? loopListener;
   StreamSubscription<Badge>? badgeListener;
+  StreamSubscription<Badge>? userCreatedBadgeListener;
 
   @override
   ProfileState fromJson(Map<String, dynamic> json) {
@@ -125,6 +126,41 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
     });
   }
 
+  Future<void> initUserCreatedBadges({bool clearBadges = true}) async {
+    await userCreatedBadgeListener?.cancel();
+
+    if (clearBadges) {
+      emit(
+        state.copyWith(
+          userCreatedBadgeStatus: UserCreatedBadgesStatus.initial,
+          userCreatedBadges: [],
+          hasReachedMaxUserCreatedBadges: false,
+        ),
+      );
+    }
+
+    final badgesAvailable = (await databaseRepository
+            .getUserCreatedBadges(visitedUser.id, limit: 1))
+        .isNotEmpty;
+    if (!badgesAvailable) {
+      emit(state.copyWith(
+          userCreatedBadgeStatus: UserCreatedBadgesStatus.success));
+    }
+
+    badgeListener = databaseRepository
+        .userCreatedBadgesObserver(visitedUser.id)
+        .listen((Badge event) {
+      // print('loop { ${event.id} : ${event.title} }');
+      emit(
+        state.copyWith(
+          userCreatedBadgeStatus: UserCreatedBadgesStatus.success,
+          userCreatedBadges: List.of(state.userCreatedBadges)..add(event),
+          hasReachedMaxUserCreatedBadges: state.userCreatedBadges.length < 10,
+        ),
+      );
+    });
+  }
+
   Future<void> fetchMoreLoops() async {
     if (state.hasReachedMaxLoops) return;
 
@@ -176,6 +212,38 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
             );
     } on Exception {
       emit(state.copyWith(badgeStatus: BadgesStatus.failure));
+    }
+  }
+
+  Future<void> fetchMoreUserCreatedBadges() async {
+    if (state.hasReachedMaxUserCreatedBadges) return;
+
+    try {
+      if (state.userCreatedBadgeStatus == UserCreatedBadgesStatus.initial) {
+        await initUserCreatedBadges();
+      }
+
+      final badges = await databaseRepository.getUserCreatedBadges(
+        visitedUser.id,
+        limit: 10,
+        lastBadgeId: state.userBadges.last.id,
+      );
+      badges.isEmpty
+          ? emit(state.copyWith(hasReachedMaxUserCreatedBadges: true))
+          : emit(
+              state.copyWith(
+                userCreatedBadgeStatus: UserCreatedBadgesStatus.success,
+                userCreatedBadges: List.of(state.userCreatedBadges)
+                  ..addAll(badges),
+                hasReachedMaxUserCreatedBadges: false,
+              ),
+            );
+    } on Exception {
+      emit(
+        state.copyWith(
+          userCreatedBadgeStatus: UserCreatedBadgesStatus.failure,
+        ),
+      );
     }
   }
 
@@ -252,6 +320,8 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
   @override
   Future<void> close() async {
     await loopListener?.cancel();
+    await badgeListener?.cancel();
+    await userCreatedBadgeListener?.cancel();
     await super.close();
   }
 }

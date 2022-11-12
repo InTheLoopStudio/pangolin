@@ -9,8 +9,7 @@ part 'badge.g.dart';
 class Badge extends Equatable {
   const Badge({
     required this.id,
-    required this.senderId,
-    required this.receiverId,
+    required this.creatorId,
     required this.imageUrl,
     required this.name,
     required this.description,
@@ -24,8 +23,7 @@ class Badge extends Equatable {
         doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
     return Badge(
       id: doc.id,
-      senderId: doc.getOrElse('senderId', '') as String,
-      receiverId: doc.getOrElse('receiverId', '') as String,
+      creatorId: doc.getOrElse('creatorId', '') as String,
       imageUrl: doc.getOrElse('imageUrl', '') as String,
       name: doc.getOrElse('name', '') as String,
       description: doc.getOrElse('description', '') as String,
@@ -33,8 +31,7 @@ class Badge extends Equatable {
     );
   }
   final String id;
-  final String senderId;
-  final String receiverId;
+  final String creatorId;
   final String imageUrl;
   final String name;
   final String description;
@@ -43,8 +40,7 @@ class Badge extends Equatable {
   @override
   List<Object> get props => [
         id,
-        senderId,
-        receiverId,
+        creatorId,
         imageUrl,
         name,
         description,
@@ -54,8 +50,7 @@ class Badge extends Equatable {
 
   Badge copyWith({
     String? id,
-    String? senderId,
-    String? receiverId,
+    String? creatorId,
     String? imageUrl,
     String? name,
     String? description,
@@ -63,8 +58,7 @@ class Badge extends Equatable {
   }) {
     return Badge(
       id: id ?? this.id,
-      senderId: senderId ?? this.senderId,
-      receiverId: receiverId ?? this.receiverId,
+      creatorId: creatorId ?? this.creatorId,
       imageUrl: imageUrl ?? this.imageUrl,
       name: name ?? this.name,
       description: description ?? this.description,
@@ -75,8 +69,7 @@ class Badge extends Equatable {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'senderId': senderId,
-      'receiverId': receiverId,
+      'creatorId': creatorId,
       'imageUrl': imageUrl,
       'name': name,
       'description': description,

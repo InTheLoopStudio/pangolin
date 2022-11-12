@@ -1,5 +1,4 @@
-
-type AccountType = "free" | "venue"
+type AccountType = "free" | "venue";
 
 type UserModel = {
   id: string;
