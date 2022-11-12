@@ -777,7 +777,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
             element.type == DocumentChangeType.added,
       )
           .map((DocumentChange<Map<String, dynamic>> element) async {
-        final badgeId = element.doc.getOrElse('badgeId', '') as String;
+        final badgeId = element.doc.id;
         final badgeSnapshot = await _badgesRef.doc(badgeId).get();
         return Badge.fromDoc(badgeSnapshot);
       });
