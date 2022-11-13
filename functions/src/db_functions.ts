@@ -3,6 +3,7 @@ import { logger } from "firebase-functions/lib";
 import * as admin from "firebase-admin";
 import { firestore } from "firebase-admin";
 import { StreamChat } from "stream-chat";
+import { Badge, Comment } from "./models"
 
 if (!admin.apps.length) {
   admin.initializeApp();
@@ -27,6 +28,7 @@ const commentsRef = db.collection("comments");
 const commentsGroupRef = db.collectionGroup("loopComments");
 const feedsRef = db.collection("feeds");
 const badgesRef = db.collection("badges");
+const badgesSentRef = db.collection("badgesSent");
 
 const _getFileFromURL = (fileURL: string): string => {
   const fSlashes = fileURL.split("/");
@@ -376,7 +378,7 @@ const _addActivity = async (data: {
     throw new functions.https.HttpsError(
       "invalid-argument",
       "The function argument 'type' must be either " +
-        "'follow', 'like', or 'comment'"
+      "'follow', 'like', or 'comment'"
     );
   }
 
@@ -588,14 +590,7 @@ const _unlikeLoop = async (data: { currentUserId: string; loopId: string }) => {
     });
 };
 
-const _addComment = async (data: {
-  visitedUserId: string;
-  rootLoopId: string;
-  userId: string;
-  content: string;
-  parentId: string | null;
-  children: Array<string>;
-}) => {
+const _addComment = async (data: Comment) => {
   // Checking attribute.
   if (data.visitedUserId.length === 0) {
     // Throwing an HttpsError so that the client gets the error details.
@@ -914,11 +909,40 @@ const _checkUsernameAvailability = async (data: {
   return true;
 };
 
-const _createBadge = async (data: {
-  id: string;
-  senderId: string;
-  receiverId: string;
-  imageUrl: string;
+const _createBadge = async (data: Badge) => {
+  // Checking attribute.
+  if (data.creatorId.length === 0) {
+    // Throwing an HttpsError so that the client gets the error details.
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function argument 'creatorId' cannot be empty"
+    );
+  }
+  if (data.imageUrl.length === 0) {
+    // Throwing an HttpsError so that the client gets the error details.
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function argument 'imageUrl' cannot be empty"
+    );
+  }
+
+  usersRef
+    .doc(data.creatorId)
+    .update({ badgesCount: admin.firestore.FieldValue.increment(1) });
+
+  badgesRef.doc(data.id).set({
+    name: data.name,
+    description: data.description,
+    creatorId: data.creatorId,
+    imageUrl: data.imageUrl,
+    timestamp: admin.firestore.Timestamp.now(),
+  });
+};
+
+const _sendBadge = async (data: {
+  senderId: string,
+  receiverId: string,
+  badgeId: string,
 }) => {
   // Checking attribute.
   if (data.senderId.length === 0) {
@@ -935,11 +959,10 @@ const _createBadge = async (data: {
       "The function argument 'receiverId' cannot be empty"
     );
   }
-  if (data.imageUrl.length === 0) {
-    // Throwing an HttpsError so that the client gets the error details.
+  if (data.badgeId.length === 0) {
     throw new functions.https.HttpsError(
       "invalid-argument",
-      "The function argument 'imageUrl' cannot be empty"
+      "The function argument 'badgeId' cannot be empty"
     );
   }
 
@@ -947,13 +970,12 @@ const _createBadge = async (data: {
     .doc(data.receiverId)
     .update({ badgesCount: admin.firestore.FieldValue.increment(1) });
 
-  badgesRef.doc(data.id).set({
-    senderId: data.senderId,
-    receiverId: data.receiverId,
-    imageUrl: data.imageUrl,
-    timestamp: admin.firestore.Timestamp.now(),
-  });
-};
+  badgesSentRef
+    .doc(data.receiverId)
+    .collection("badges")
+    .doc(data.badgeId)
+    .set({})
+}
 
 // --------------------------------------------------------
 
@@ -1041,3 +1063,8 @@ export const createBadge = functions.https.onCall((data, context) => {
   _authorized(context, data.senderId);
   return _createBadge(data);
 });
+export const sendBadge = functions.https.onCall((data, context) => {
+  _authenticated(context);
+  _authorized(context, data.sendId);
+  return _sendBadge(data);
+})

@@ -1,6 +1,6 @@
-type AccountType = "free" | "venue";
+export type AccountType = "free" | "venue";
 
-type UserModel = {
+export type UserModel = {
   id: string;
   email?: string;
   username?: string;
@@ -27,14 +27,15 @@ type UserModel = {
   emailNotificationsITLUpdates?: boolean;
 };
 
-type Badge = {
+export type Badge = {
   id: string;
-  senderId: string;
-  receiverId: string;
+  name: string;
+  creatorId: string;
   imageUrl: string;
+  description: string;
 };
 
-type Loop = {
+export type Loop = {
   id: string;
   userId: string;
   title: string;
@@ -45,4 +46,13 @@ type Loop = {
   shares: number;
   tags: Array<string>;
   deleted: boolean;
+};
+
+export type Comment = {
+  visitedUserId: string;
+  rootLoopId: string;
+  userId: string;
+  content: string;
+  parentId: string | null;
+  children: Array<string>;
 };
