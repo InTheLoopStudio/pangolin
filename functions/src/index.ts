@@ -18,11 +18,6 @@ const app = initializeApp();
 const streamKey = defineSecret("STREAM_KEY")
 const streamSecret = defineSecret("STREAM_SECRET")
 
-const streamClient = StreamChat.getInstance(
-  streamKey.value(),
-  streamSecret.value(),
-);
-
 const db = getFirestore(app);
 const storage = getStorage(app);
 const fcm = getMessaging(app);
@@ -409,9 +404,16 @@ export const onUserCreated = functions.auth
       profilePicture: user.photoURL,
     })
   );
-export const createStreamUserOnUserCreated = functions.firestore
+export const createStreamUserOnUserCreated = functions
+  .runWith({ secrets: [ streamKey, streamSecret ] })
+  .firestore
   .document("users/{userId}")
   .onCreate(async (snapshot) => {
+    const streamClient = StreamChat.getInstance(
+      streamKey.value(),
+      streamSecret.value(),
+    );
+
     const user = snapshot.data();
     await streamClient.upsertUser({
       id: user.id,
@@ -421,9 +423,16 @@ export const createStreamUserOnUserCreated = functions.firestore
     });
   })
 
-export const updateStreamUserOnUserUpdate = functions.firestore
+export const updateStreamUserOnUserUpdate = functions
+  .runWith({ secrets: [ streamKey, streamSecret ] })
+  .firestore
   .document("users/{userId}")
   .onUpdate(async (snapshot) => {
+    const streamClient = StreamChat.getInstance(
+      streamKey.value(),
+      streamSecret.value(),
+    );
+
     const user = snapshot.after.data();
     streamClient.partialUpdateUser({
       id: user.id,
@@ -613,9 +622,17 @@ export const incrementBadgeCountOnBadgeSent = functions.firestore
 export const onUserDeleted = functions.auth
   .user()
   .onDelete((user: auth.UserRecord) => _deleteUser({ id: user.uid }));
-export const deleteStreamUser = functions.auth.user().onDelete((user) => {
-  return streamClient.deleteUser(user.uid);
-});
+export const deleteStreamUser = functions
+  .runWith({ secrets: [ streamKey, streamSecret ] })
+  .auth
+  .user()
+  .onDelete((user) => {
+    const streamClient = StreamChat.getInstance(
+      streamKey.value(),
+      streamSecret.value(),
+    );
+    return streamClient.deleteUser(user.uid);
+  });
 export const addActivity = functions.https.onCall((data, context) => {
   _authenticated(context);
   return _addActivity(data);
