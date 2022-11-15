@@ -1,2 +1,618 @@
-export * from "./db_functions";
+/* eslint-disable import/no-unresolved */
+import type { messaging, auth } from "firebase-admin";
 
+import functions from "firebase-functions";
+import { initializeApp } from "firebase-admin/app";
+import { 
+  getFirestore, 
+  FieldValue, 
+  Timestamp,
+} from "firebase-admin/firestore";
+import { getStorage } from "firebase-admin/storage";
+import { getMessaging } from "firebase-admin/messaging";
+import { StreamChat } from "stream-chat";
+
+const app = initializeApp();
+
+const streamClient = StreamChat.getInstance(
+  functions.config().stream.key,
+  functions.config().stream.secret
+);
+
+const db = getFirestore(app);
+const storage = getStorage(app);
+const fcm = getMessaging(app);
+
+const usersRef = db.collection("users");
+const loopsRef = db.collection("loops");
+const activitiesRef = db.collection("activities");
+// const followingRef = db.collection("following");
+const followersRef = db.collection("followers");
+// const likesRef = db.collection("likes");
+const commentsRef = db.collection("comments");
+const commentsGroupRef = db.collectionGroup("loopComments");
+const feedsRef = db.collection("feeds");
+// const badgesRef = db.collection("badges");
+// const badgesSentRef = db.collection("badgesSent");
+
+const _getFileFromURL = (fileURL: string): string => {
+  const fSlashes = fileURL.split("/");
+  const fQuery = fSlashes[fSlashes.length - 1].split("?");
+  const segments = fQuery[0].split("%2F");
+  const fileName = segments.join("/");
+
+  return fileName;
+};
+
+const _authenticated = (context: functions.https.CallableContext) => {
+  // Checking that the user is authenticated.
+  if (!context.auth) {
+    // Throwing an HttpsError so that the client gets the error details.
+    throw new functions.https.HttpsError(
+      "failed-precondition",
+      "The function must be called while authenticated."
+    );
+  }
+};
+
+const _createUser = async (data: {
+  id: string;
+  email?: string;
+  username?: string;
+  bio?: string;
+  profilePicture?: string;
+  location?: string;
+  onboarded?: boolean;
+  loopsCount?: number;
+  badgesCount?: number;
+  shadowBanned?: boolean;
+  accountType?: string;
+  twitterHandle?: string; 
+  instagramHandle?: string;
+  tiktokHandle?: string;
+  soundcloudHandle?: string;
+  youtubeChannelId?: string ;
+  pushNotificationsLikes?: boolean;
+  pushNotificationsComments?: boolean;
+  pushNotificationsFollows?: boolean;
+  pushNotificationsDirectMessages?: boolean;
+  pushNotificationsITLUpdates?: boolean;
+  emailNotificationsAppReleases?: boolean;
+  emailNotificationsITLUpdates?: boolean;
+}) => {
+  if ((await usersRef.doc(data.id).get()).exists) {
+    return { id: data.id };
+  }
+
+  const filteredUsername = data.username?.trim().toLowerCase() || "anonymous";
+
+  usersRef.doc(data.id).set({
+    email: data.email || "",
+    username: filteredUsername,
+    bio: data.bio || "",
+    profilePicture: data.profilePicture || "",
+    location: data.location || "Global",
+    onboarded: data.onboarded || false,
+    loopsCount: data.loopsCount || 0,
+    badgesCount: data.badgesCount || 0,
+    deleted: false,
+    shadowBanned: data.shadowBanned || false,
+    accountType: data.accountType || "free",
+    twitterHandle: data.twitterHandle || "",
+    instagramHandle: data.instagramHandle || "",
+    tiktokHandle: data.tiktokHandle || "",
+    soundcloudHandle: data.soundcloudHandle || "",
+    youtubeChannelId: data.youtubeChannelId || "",
+    pushNotificationsLikes: data.pushNotificationsLikes || true,
+    pushNotificationsComments: data.pushNotificationsComments || true,
+    pushNotificationsFollows: data.pushNotificationsFollows || true,
+    pushNotificaionsDirectMessages:
+      data.pushNotificationsDirectMessages || true,
+    pushNotificationsITLUpdates: data.pushNotificationsITLUpdates || true,
+    emailNotificationsAppReleases: data.emailNotificationsAppReleases || true,
+    emailNotificationsITLUpdates: data.emailNotificationsITLUpdates || true,
+  });
+
+  return { id: data.id };
+};
+
+const _deleteUser = async (data: { id: string }) => {
+  // Checking attribute.
+  if (data.id.length === 0) {
+    // Throwing an HttpsError so that the client gets the error details.
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function argument 'id' cannot be empty"
+    );
+  }
+
+  usersRef.doc(data.id).set({
+    username: "*deleted*",
+    deleted: true,
+  });
+
+  // *delete loop protocol*
+  const userLoops = await loopsRef.where("userId", "==", data.id).get();
+  userLoops.docs.forEach((snapshot) =>
+    _deleteLoop({ id: snapshot.id, userId: data.id })
+  );
+
+  // *delete comment procotol*
+  const userComments = await commentsGroupRef
+    .orderBy("timestamp", "desc")
+    .where("userId", "==", data.id)
+    .get();
+  userComments.docs.forEach((snapshot) => {
+    const comment = snapshot.data();
+    _deleteComment({
+      id: snapshot.id,
+      loopId: comment.rootLoopId,
+      userId: comment.userId,
+    });
+  });
+
+  // *delete all loops keyed at 'audio/loops/{UID}/{LOOPURL}'*
+  storage
+    .bucket("in-the-loop-306520.appspot.com")
+    .deleteFiles({ prefix: `audio/loops/${data.id}` });
+
+  // *delete all images keyed at 'images/users/{UID}/{IMAGEURL}'*
+  storage
+    .bucket("in-the-loop-306520.appspot.com")
+    .deleteFiles({ prefix: `images/users/${data.id}` });
+
+  // TODO: delete follower table stuff?
+  // TODO: delete following table stuff?
+  // TODO: delete stream info?
+};
+
+const _addActivity = async (data: {
+  toUserId: string;
+  fromUserId: string;
+  type: string;
+}) => {
+  // Checking attribute.
+  if (data.toUserId.length === 0) {
+    // Throwing an HttpsError so that the client gets the error details.
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function argument 'toUserId' cannot be empty"
+    );
+  }
+  if (data.fromUserId.length === 0) {
+    // Throwing an HttpsError so that the client gets the error details.
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function argument 'fromUserId' cannot be empty"
+    );
+  }
+  if (![ "follow", "like", "comment" ].includes(data.type)) {
+    // Throwing an HttpsError so that the client gets the error details.
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function argument 'type' must be either " +
+      "'follow', 'like', or 'comment'"
+    );
+  }
+
+  const docRef = await activitiesRef.add({
+    toUserId: data.toUserId,
+    fromUserId: data.fromUserId,
+    timestamp: Timestamp.now(),
+    type: data.type,
+  });
+
+  return { id: docRef.id };
+};
+
+const _deleteComment = async (data: {
+  id: string;
+  loopId: string;
+  userId: string;
+}) => {
+  // Checking attribute.
+  if (data.id.length === 0) {
+    // Throwing an HttpsError so that the client gets the error details.
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function argument 'id' cannot be empty"
+    );
+  }
+  if (data.loopId.length === 0) {
+    // Throwing an HttpsError so that the client gets the error details.
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function argument 'loopId' cannot be empty"
+    );
+  }
+  if (data.userId.length === 0) {
+    // Throwing an HttpsError so that the client gets the error details.
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function argument 'userId' cannot be empty"
+    );
+  }
+
+  const commentSnapshot = await commentsRef
+    .doc(data.loopId)
+    .collection("loopComments")
+    .doc(data.id)
+    .get();
+
+  const rootLoopId = commentSnapshot.data()?.["rootLoopId"];
+  loopsRef
+    .doc(rootLoopId)
+    .update({ comments: FieldValue.increment(-1) });
+
+  commentSnapshot.ref.update({
+    content: "*deleted*",
+    deleted: true,
+  });
+};
+
+const _deleteLoop = async (data: { id: string; userId: string }) => {
+  // Checking attribute.
+  if (data.id.length === 0) {
+    // Throwing an HttpsError so that the client gets the error details.
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function argument 'id' cannot be empty"
+    );
+  }
+
+  const loopSnapshot = await loopsRef.doc(data.id).get();
+
+  loopsRef.doc(data.id).update({
+    audio: FieldValue.delete(),
+    comments: FieldValue.delete(),
+    downloads: FieldValue.delete(),
+    likes: FieldValue.delete(),
+    tags: FieldValue.delete(),
+    timestamp: FieldValue.delete(),
+    title: "*deleted*",
+    deleted: true,
+  });
+
+  usersRef.doc(data.userId).update({
+    loopsCount: FieldValue.increment(-1),
+  });
+
+  // *delete loops keyed at refFromURL(loop.audio)*
+  if (loopSnapshot.data()?.audio != null) {
+    storage
+      .bucket("in-the-loop-306520.appspot.com")
+      .file(_getFileFromURL(loopSnapshot.data()?.audio))
+      .delete();
+  }
+};
+
+const _copyUserLoopsToFeed = async (data: {
+  loopsOwnerId: string;
+  feedOwnerId: string;
+}) => {
+  const loopsQuerySnapshot = await loopsRef
+    .where("userId", "==", data.loopsOwnerId)
+    .limit(1000)
+    .get();
+
+  loopsQuerySnapshot.docs.forEach((doc) => {
+    feedsRef
+      .doc(data.feedOwnerId)
+      .collection("userFeed")
+      .doc(doc.id)
+      .set({
+        timestamp: doc.data()["timestamp"] || Timestamp.now(),
+        userId: data.loopsOwnerId,
+      });
+  });
+
+  return data.feedOwnerId;
+};
+
+const _deleteUserLoopsFromFeed = (data: {
+  loopsOwnerId: string;
+  feedOwnerId: string;
+}) => {
+  feedsRef
+    .doc(data.feedOwnerId)
+    .collection("userFeed")
+    .where("userId", "==", data.loopsOwnerId)
+    .limit(1000)
+    .get()
+    .then((query) => {
+      query.docs.forEach((doc) => {
+        doc.ref.delete();
+      });
+    });
+
+  return data.feedOwnerId;
+};
+
+// --------------------------------------------------------
+export const sendToDevice = functions.firestore
+  .document("activities/{activityId}")
+  .onCreate(async (snapshot) => {
+    const activity = snapshot.data();
+
+    const userDoc = await usersRef.doc(activity["toUserId"]).get();
+    const user = userDoc.data();
+    if (user !== null) return;
+
+    const activityType = activity["type"];
+
+    let payload: messaging.MessagingPayload = {
+      notification: {
+        title: "New Activity",
+        body: "You have new activity on your profile",
+        clickAction: "FLUTTER_NOTIFICATION_CLICK",
+      },
+    };
+
+    switch (activityType) {
+    case "comment":
+      if (!user["pushNotificationsComments"]) return;
+
+      payload = {
+        notification: {
+          title: "New Comment",
+          body: "Someone commented on your loop 👀",
+          clickAction: "FLUTTER_NOTIFICATION_CLICK",
+        },
+      };
+      break;
+    case "like":
+      if (!user["pushNotificationsLikes"]) return;
+      payload = {
+        notification: {
+          title: "New Like",
+          body: "Someone liked your loops 👍",
+          clickAction: "FLUTTER_NOTIFICATION_CLICK",
+        },
+      };
+      break;
+    case "follow":
+      if (!user["pushNotificationsFollows"]) return;
+      payload = {
+        notification: {
+          title: "New Follower",
+          body: "You just got a new follower 🔥",
+          clickAction: "FLUTTER_NOTIFICATION_CLICK",
+        },
+      };
+      break;
+    default:
+      return;
+    }
+
+    const querySnapshot = await usersRef
+      .doc(activity["toUserId"])
+      .collection("tokens")
+      .get();
+
+    const tokens: string[] = querySnapshot.docs.map((snap) => snap.id);
+    if (tokens.length != 0) {
+      return fcm.sendToDevice(tokens, payload);
+    }
+
+    return null;
+  });
+export const onUserCreated = functions.auth
+  .user()
+  .onCreate((user: auth.UserRecord) =>
+    _createUser({
+      id: user.uid,
+      email: user.email,
+      profilePicture: user.photoURL,
+    })
+  );
+export const createStreamUserOnUserCreated = functions.firestore
+  .document("users/{userId}")
+  .onCreate(async (snapshot) => {
+    const user = snapshot.data();
+    await streamClient.upsertUser({
+      id: user.id,
+      name: user.username,
+      email: user.email,
+      image: user.profilePicture,
+    });
+  })
+
+export const updateStreamUserOnUserUpdate = functions.firestore
+  .document("users/{userId}")
+  .onUpdate(async (snapshot) => {
+    const user = snapshot.after.data();
+    streamClient.partialUpdateUser({
+      id: user.id,
+      set: {
+        name: user.username,
+        email: user.email,
+        image: user.profilePicture,
+      },
+    });
+  })
+
+export const addFollowersEntryOnFollow = functions.firestore
+  .document("following/{followerId}/Following/{followeeId}")
+  .onCreate(async (snapshot, context) => {
+    await followersRef
+      .doc(context.params.followeeId)
+      .collection("Followers")
+      .doc(context.params.followerId)
+      .set({});
+  });
+export const copyFeedOnFollow = functions.firestore
+  .document("following/{followerId}/Following/{followeeId}")
+  .onCreate(async (snapshot, context) => {
+    _copyUserLoopsToFeed({
+      loopsOwnerId: context.params.followeeId,
+      feedOwnerId: context.params.followerId,
+    });
+  });
+export const addActivityOnFollow = functions.firestore
+  .document("followers/{followeeId}/Followers/{followerId}")
+  .onCreate(async (snapshot, context) => {
+    await _addActivity({
+      toUserId: context.params.followeeId,
+      fromUserId: context.params.followerId,
+      type: "follow",
+    });
+  })
+
+export const deleteUserLoopOnUnfollow = functions.firestore
+  .document("following/{followerId}/Following/{followeeId}")
+  .onDelete(async (snapshot, context) => {
+    _deleteUserLoopsFromFeed({
+      loopsOwnerId: context.params.followeeId,
+      feedOwnerId: context.params.followerId,
+    })
+  });
+export const deteteFollowersEntryOnUnfollow = functions.firestore
+  .document("following/{followerId}/Following/{followeeId}")
+  .onDelete(async (snapshot, context) => {
+    const doc = await followersRef
+      .doc(context.params.followeeId)
+      .collection("Followers")
+      .doc(context.params.followerId)
+      .get();
+      
+    if (!doc.exists) {
+      return;
+    }
+
+    doc.ref.delete()
+  });
+
+
+export const incrementLoopCountOnUpload = functions.firestore
+  .document("loops/{loopId}")
+  .onCreate(async (snapshot) => {
+    const loop = snapshot.data();
+    await usersRef
+      .doc(loop.userId)
+      .update({ loopsCount: FieldValue.increment(1) });
+  })
+export const sendLoopToFollowers = functions.firestore 
+  .document("loops/{loopId}")
+  .onCreate(async (snapshot) => {
+    const loop = snapshot.data();
+    const userDoc = await usersRef.doc(loop.userId).get();
+    // add loops to owner's feed
+    await feedsRef
+      .doc(loop.userId)
+      .collection("userFeed")
+      .doc(loop.id)
+      .set({
+        timestamp: Timestamp.now(),
+        userId: loop.userId,
+      });
+
+    const isShadowBanned: boolean = userDoc.data()?.["shadowBanned"] || false
+    if (isShadowBanned === true) {
+      return;
+    }
+    // get followers
+    const followerSnapshot = await followersRef
+      .doc(loop.userId)
+      .collection("Followers")
+      .get();
+
+    // add loops to followers feed
+    Promise.all(
+      followerSnapshot.docs.map(async (docSnapshot) => {
+        await feedsRef
+          .doc(docSnapshot.id)
+          .collection("userFeed")
+          .doc(loop.id).set({
+            timestamp: Timestamp.now(),
+            userId: loop.userId,
+          });
+      }),
+    );
+
+  })
+
+export const incrementLikeCountOnLike = functions.firestore 
+  .document("likes/{loopId}/loopLikes/{userId}")
+  .onCreate(async (snapshot, context) => {
+    await loopsRef
+      .doc(context.params.loopId)
+      .update({ likes: FieldValue.increment(1) });
+  });
+export const addActivityOnLike = functions.firestore 
+  .document("likes/{loopId}/loopLikes/{userId}")
+  .onCreate(async (snapshot, context) => {
+    const loopSnapshot = await loopsRef.doc(context.params.loopId).get();
+    const loop = loopSnapshot.data();
+    if (loop === undefined || !loop.exists) {
+      return;
+    }
+
+    if (loop.userId !== context.params.userId) {
+      _addActivity({
+        fromUserId: context.params.userId,
+        type: "like",
+        toUserId: loop.userId,
+      });
+    }
+  })
+
+export const decrementLikeCountOnUnlike = functions.firestore 
+  .document("likes/{loopId}/loopLikes/{userId}")
+  .onDelete(async (snapshot, context) => {
+    await loopsRef
+      .doc(context.params.loopId)
+      .update({ likes: FieldValue.increment(-1) });
+  })
+
+export const incrementCommentCountOnComment = functions.firestore 
+  .document("comments/{loopId}/loopComments/{commentId}")
+  .onCreate(async (snapshot, context) => {
+    const loopSnapshot = await loopsRef.doc(context.params.loopId).get();
+    const loop = loopSnapshot.data();
+
+    if (loop === undefined) {
+      return;
+    }
+
+    await usersRef
+      .doc(loop.userId)
+      .update({ badgesCount: FieldValue.increment(1) });
+  });
+export const addActivityOnComment = functions.firestore
+  .document("comments/{loopId}/loopComments/{commentId}")
+  .onCreate(async (snapshot, context) => {
+    const comment = snapshot.data();
+    const loopSnapshot = await loopsRef.doc(context.params.loopId).get();
+    const loop = loopSnapshot.data();
+
+    if (loop === undefined) {
+      return;
+    }
+
+    if (loop.userId !== comment.userId) {
+      _addActivity({
+        toUserId: loop.userId,
+        fromUserId: comment.userId,
+        type: "comment",
+      });
+    }
+  });
+
+export const incrementBadgeCountOnBadgeSent = functions.firestore
+  .document("badgesSent/{userId}/badges/{badgeId}")
+  .onCreate(async (snapshot, context) => {
+    await usersRef
+      .doc(context.params.userId)
+      .update({ badgesCount: FieldValue.increment(1) });
+  });
+
+export const onUserDeleted = functions.auth
+  .user()
+  .onDelete((user: auth.UserRecord) => _deleteUser({ id: user.uid }));
+export const deleteStreamUser = functions.auth.user().onDelete((user) => {
+  return streamClient.deleteUser(user.uid);
+});
+export const addActivity = functions.https.onCall((data, context) => {
+  _authenticated(context);
+  return _addActivity(data);
+});
