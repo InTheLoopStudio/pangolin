@@ -8,6 +8,7 @@ typings/
 # Node.js dependency directory
 node_modules/
 
+.env
 secrets.ts
 
 *.lock

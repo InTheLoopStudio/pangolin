@@ -10,7 +10,6 @@
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
-  "type": "module",
   "engines": {
     "node": "16"
   },

@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
 import type { messaging, auth } from "firebase-admin";
 
-import functions from "firebase-functions";
+import * as functions from "firebase-functions";
 import { initializeApp } from "firebase-admin/app";
 import { 
   getFirestore, 
@@ -11,12 +11,16 @@ import {
 import { getStorage } from "firebase-admin/storage";
 import { getMessaging } from "firebase-admin/messaging";
 import { StreamChat } from "stream-chat";
+import { defineSecret } from "firebase-functions/params";
 
 const app = initializeApp();
 
+const streamKey = defineSecret("STREAM_KEY")
+const streamSecret = defineSecret("STREAM_SECRET")
+
 const streamClient = StreamChat.getInstance(
-  functions.config().stream.key,
-  functions.config().stream.secret
+  streamKey.value(),
+  streamSecret.value(),
 );
 
 const db = getFirestore(app);
