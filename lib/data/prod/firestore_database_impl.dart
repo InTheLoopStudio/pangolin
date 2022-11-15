@@ -814,7 +814,9 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         .doc(receiverId)
         .collection('badges')
         .doc(badgeId)
-        .set({});
+        .set({
+          'timestamp': Timestamp.now(),
+        });
   }
 
   @override

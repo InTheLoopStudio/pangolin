@@ -50,7 +50,7 @@ class BadgeView extends StatelessWidget {
               Text(badge.description),
               const SizedBox(height: 30),
               const Text(
-                'Sender',
+                'Creator',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 32,
