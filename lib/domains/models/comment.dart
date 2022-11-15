@@ -40,4 +40,6 @@ class Comment {
   String? rootLoopId;
   List<String>? children;
   bool? deleted;
+
+  // TODO(nit): Add `toMap()` function
 }

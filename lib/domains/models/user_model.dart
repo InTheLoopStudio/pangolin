@@ -18,10 +18,10 @@ enum AccountType {
 
 @JsonSerializable()
 class UserModel extends Equatable {
-  const UserModel({
+  UserModel({
     required this.id,
     required this.email,
-    required this.username,
+    required String username,
     required this.artistName,
     required this.profilePicture,
     required this.bio,
@@ -44,8 +44,11 @@ class UserModel extends Equatable {
     required this.pushNotificationsITLUpdates,
     required this.emailNotificationsAppReleases,
     required this.emailNotificationsITLUpdates,
-  });
-  factory UserModel.empty() => const UserModel(
+  }) {
+    this.username = username.trim().toLowerCase();
+  }
+
+  factory UserModel.empty() => UserModel(
         id: '',
         email: '',
         username: 'anonymous',
@@ -124,7 +127,7 @@ class UserModel extends Equatable {
   }
   final String id;
   final String email;
-  final String username;
+  late final String username;
   final String artistName;
   final String profilePicture;
   final String bio;
@@ -213,7 +216,7 @@ class UserModel extends Equatable {
     return UserModel(
       id: id ?? this.id,
       email: email ?? this.email,
-      username: username ?? this.username,
+      username: username?.trim().toLowerCase() ?? this.username,
       artistName: artistName ?? this.artistName,
       profilePicture: profilePicture ?? this.profilePicture,
       bio: bio ?? this.bio,

@@ -16,7 +16,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "firebase-admin": "^11.2.0",
-    "firebase-functions": "^3.23.0",
+    "firebase-functions": "^4.0.2",
     "nodemailer": "^6.6.3",
     "spotify-web-api-node": "^5.0.2",
     "stream-chat": "^4.1.0"

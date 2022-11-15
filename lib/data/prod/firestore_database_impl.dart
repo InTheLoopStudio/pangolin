@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
@@ -13,7 +13,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils.dart';
 import 'package:rxdart/rxdart.dart';
 
-final _functions = FirebaseFunctions.instance;
+final _storage = FirebaseStorage.instance.ref();
 final _firestore = FirebaseFirestore.instance;
 final _analytics = FirebaseAnalytics.instance;
 
@@ -28,8 +28,58 @@ final _commentsRef = _firestore.collection('comments');
 final _badgesRef = _firestore.collection('badges');
 final _badgesSentRef = _firestore.collection('badgesSent');
 
+class HandleAlreadyExistsException implements Exception {
+  HandleAlreadyExistsException(this.cause);
+  String cause;
+}
+
 /// Database implementation using Firebase's FirestoreDB
 class FirestoreDatabaseImpl extends DatabaseRepository {
+  String _getFileFromURL(String fileURL) {
+    final fSlashes = fileURL.split('/');
+    final fQuery = fSlashes[fSlashes.length - 1].split('?');
+    final segments = fQuery[0].split('%2F');
+    final fileName = segments.join('/');
+
+    return fileName;
+  }
+
+  // true if username available, false otherwise
+  @override
+  Future<bool> checkUsernameAvailability(
+    String username,
+    String userid,
+  ) async {
+    final blacklist = ['anonymous', '*deleted*'];
+
+    if (blacklist.contains(username)) {
+      // print('''
+      //   username check for blacklisted item:
+      //     userId: ${data.userId},
+      //     username: ${data.username}
+      // ''');
+      return false;
+    }
+
+    final userQuery =
+        await _usersRef.where('username', isEqualTo: username).get();
+    if (userQuery.docs.isNotEmpty && userQuery.docs[0].id != userid) {
+      // print('''
+      //   username check for already taken username:
+      //     userId: ${data.userId},
+      //     username: ${data.username}
+      // ''');
+      return false;
+    }
+
+    // print('''
+    //   username check for available username:
+    //     userId: ${data.userId},
+    //     username: ${data.username}
+    // ''');
+    return true;
+  }
+
   @override
   Future<bool> userEmailExists(String email) async {
     final userSnapshot = await _usersRef.where('email', isEqualTo: email).get();
@@ -40,8 +90,17 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<void> createUser(UserModel user) async {
     await _analytics.logEvent(name: 'sign_up');
-    final callable = _functions.httpsCallable('createUser');
-    await callable<Map<String, dynamic>>(user.toMap());
+
+    final userAlreadyExists = (await _usersRef.doc(user.id).get()).exists;
+    if (userAlreadyExists) {
+      return;
+    }
+
+    if (await checkUsernameAvailability(user.username, user.id)) {
+      throw HandleAlreadyExistsException('username availability check failed');
+    }
+
+    await _usersRef.doc(user.id).set(user.toMap());
   }
 
   @override
@@ -93,8 +152,12 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<void> updateUserData(UserModel user) async {
-    final callable = _functions.httpsCallable('updateUserData');
-    await callable<Map<String, dynamic>>(user.toMap());
+    await _analytics.logEvent(name: 'user_data_update');
+    if (await checkUsernameAvailability(user.username, user.id)) {
+      throw HandleAlreadyExistsException('username availability check failed');
+    }
+
+    await _usersRef.doc(user.id).set(user.toMap());
   }
 
   @override
@@ -109,11 +172,21 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         'followee': visitedUserId,
       },
     );
-    final callable = _functions.httpsCallable('followUser');
-    await callable<Map<String, dynamic>>({
-      'follower': currentUserId,
-      'followed': visitedUserId,
-    });
+    final followingDoc = await _followingRef
+        .doc(currentUserId)
+        .collection('Following')
+        .doc(visitedUserId)
+        .get();
+
+    if (followingDoc.exists) {
+      return;
+    }
+
+    await _followingRef
+        .doc(currentUserId)
+        .collection('Following')
+        .doc(visitedUserId)
+        .set({});
   }
 
   @override
@@ -128,11 +201,17 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         'followed': visitedUserId,
       },
     );
-    final callable = _functions.httpsCallable('unfollowUser');
-    await callable<Map<String, dynamic>>({
-      'follower': currentUserId,
-      'followed': visitedUserId,
-    });
+    final doc = await _followingRef
+        .doc(currentUserId)
+        .collection('Following')
+        .doc(visitedUserId)
+        .get();
+
+    if (!doc.exists) {
+      return;
+    }
+
+    await doc.reference.delete();
   }
 
   @override
@@ -195,15 +274,16 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         'loop_id': loop.id,
       },
     );
-    final callable = _functions.httpsCallable('uploadLoop');
-    await callable<Map<String, dynamic>>({
-      'loopTitle': loop.title,
-      'loopAudio': loop.audio,
-      'loopUserId': loop.userId,
-      'loopLikes': loop.likes,
-      'loopDownloads': loop.downloads,
-      'loopComments': loop.comments,
-      'loopTags': loop.tags,
+    await _loopsRef.add({
+      'title': loop.title,
+      'audio': loop.audio,
+      'userId': loop.userId,
+      'timestamp': Timestamp.now(),
+      'likes': loop.likes,
+      'downloads': loop.downloads,
+      'comments': loop.comments,
+      'tags': loop.tags,
+      'deleted': false,
     });
   }
 
@@ -216,11 +296,24 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         'loop_id': loop.id,
       },
     );
-    final callable = _functions.httpsCallable('deleteLoop');
-    await callable<String>({
-      'id': loop.id,
-      'userId': loop.userId,
+
+    await _loopsRef.doc(loop.id).update({
+      'audio': FieldValue.delete(),
+      'comments': FieldValue.delete(),
+      'downloads': FieldValue.delete(),
+      'likes': FieldValue.delete(),
+      'tags': FieldValue.delete(),
+      'timestamp': FieldValue.delete(),
+      'title': '*deleted*',
+      'deleted': true,
     });
+
+    await _usersRef.doc(loop.userId).update({
+      'loopsCount': FieldValue.increment(-1),
+    });
+
+    // *delete loops keyed at refFromURL(loop.audio)*
+    await _storage.child(_getFileFromURL(loop.audio)).delete();
   }
 
   @override
@@ -449,12 +542,12 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         'loop_id': loop.id,
       },
     );
-    final callable = _functions.httpsCallable('likeLoop');
-    await callable<Map<String, dynamic>>({
-      'currentUserId': currentUserId,
-      'loopId': loop.id,
-      'loopUserId': loop.userId,
-    });
+
+    await _likesRef
+        .doc(loop.id)
+        .collection('loopLikes')
+        .doc(currentUserId)
+        .set({});
   }
 
   @override
@@ -466,12 +559,11 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         'loop_id': loop.id,
       },
     );
-    final callable = _functions.httpsCallable('unlikeLoop');
-    await callable<Map<String, dynamic>>({
-      'currentUserId': currentUserId,
-      'loopId': loop.id,
-      'loopUserId': loop.userId,
-    });
+    await _likesRef
+        .doc(loop.id)
+        .collection('loopLikes')
+        .doc(currentUserId)
+        .delete();
   }
 
   @override
@@ -576,10 +668,11 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         'type': EnumToString.convertToString(type),
       },
     );
-    final callable = _functions.httpsCallable('addActivity');
-    await callable<Map<String, dynamic>>({
+
+    await _activitiesRef.add({
       'toUserId': visitedUserId,
       'fromUserId': currentUserId,
+      'timestamp': Timestamp.now(),
       'type': EnumToString.convertToString(type),
     });
   }
@@ -592,9 +685,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         'activity': activity.id,
       },
     );
-    final callable = _functions.httpsCallable('markActivityAsRead');
-    await callable<String>({
-      'id': activity.id,
+    await _activitiesRef.doc(activity.id).update({
+      'markedRead': true,
     });
   }
 
@@ -668,14 +760,15 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         'user_id': comment.userId,
       },
     );
-    final callable = _functions.httpsCallable('addComment');
-    await callable<Map<String, dynamic>>({
-      'visitedUserId': visitedUserId,
-      'rootLoopId': comment.rootLoopId ?? '',
-      'userId': comment.userId ?? '',
-      'content': comment.content ?? '',
-      'parentId': comment.parentId ?? '',
-      'children': comment.children ?? [],
+
+    await _commentsRef.doc(comment.rootLoopId).collection('loopComments').add({
+      'userId': comment.userId,
+      'timestamp': Timestamp.now(),
+      'content': comment.content,
+      'parentId': comment.parentId,
+      'rootLoopId': comment.rootLoopId,
+      'children': comment.children,
+      'deleted': false,
     });
   }
 
@@ -695,41 +788,33 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       itemId: loop.id,
       method: 'unknown',
     );
-    final callable = _functions.httpsCallable('shareLoop');
-    await callable<Map<String, dynamic>>({
-      'loopId': loop.id,
-      'userId': loop.userId,
+
+    await _loopsRef.doc(loop.id).update({
+      'shares': FieldValue.increment(1),
     });
-  }
-
-  @override
-  Future<bool> checkUsernameAvailability(String username, String userid) async {
-    final callable = _functions.httpsCallable('checkUsernameAvailability');
-    final results = await callable<bool>({
-      'username': username,
-      'userId': userid,
-    });
-
-    final isAvailable = results.data;
-
-    return isAvailable;
   }
 
   @override
   Future<void> createBadge(Badge badge) async {
     await _analytics.logEvent(name: 'create_badge');
-    final callable = _functions.httpsCallable('createBadge');
-    await callable<Map<String, dynamic>>(badge.toMap());
+    await _badgesRef.doc(badge.id).set({
+      'name': badge.name,
+      'description': badge.description,
+      'creatorId': badge.creatorId,
+      'imageUrl': badge.imageUrl,
+      'timestamp': Timestamp.now(),
+    });
   }
 
   @override
   Future<void> sendBadge(String badgeId, String receiverId) async {
     await _analytics.logEvent(name: 'create_badge');
-    final callable = _functions.httpsCallable('sendbadge');
-    await callable<Map<String, String>>({
-      'badgeId': badgeId,
-      'receiverId': receiverId,
-    });
+
+    await _badgesSentRef
+        .doc(receiverId)
+        .collection('badges')
+        .doc(badgeId)
+        .set({});
   }
 
   @override
