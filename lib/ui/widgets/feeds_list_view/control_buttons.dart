@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
-import 'package:intheloopapp/ui/views/home/feeds_list/feeds_list_cubit.dart';
+import 'package:intheloopapp/ui/views/audio_feeds/audio_feeds_list/audio_feeds_list_cubit.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/notification_icon_button.dart';
 
 class ControlButtons extends StatelessWidget {
@@ -9,7 +9,7 @@ class ControlButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FeedsListCubit, FeedsListState>(
+    return BlocBuilder<AudioFeedsListCubit, AudioFeedsListState>(
       builder: (context, state) {
         return SafeArea(
           child: Container(

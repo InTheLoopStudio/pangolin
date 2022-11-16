@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/views/search/search_cubit.dart';
 
@@ -10,6 +11,9 @@ class SearchBar extends StatelessWidget {
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
         return CupertinoSearchTextField(
+          style: const TextStyle(
+            color: Colors.white,
+          ),
           controller: state.textController,
           onChanged: (input) {
             context.read<SearchCubit>().searchUsers(input);

@@ -1,8 +1,8 @@
-part of 'feeds_list_cubit.dart';
+part of 'audio_feeds_list_cubit.dart';
 
 @immutable
-class FeedsListState extends Equatable {
-  FeedsListState({PageController? pageController, this.currentIndex = 1}) {
+class AudioFeedsListState extends Equatable {
+  AudioFeedsListState({PageController? pageController, this.currentIndex = 1}) {
     this.pageController = pageController ?? PageController(initialPage: 1);
   }
 
@@ -12,11 +12,11 @@ class FeedsListState extends Equatable {
   @override
   List<Object> get props => [currentIndex, pageController];
 
-  FeedsListState copyWith({
+  AudioFeedsListState copyWith({
     int? currentIndex,
     PageController? pageController,
   }) {
-    return FeedsListState(
+    return AudioFeedsListState(
       currentIndex: currentIndex ?? this.currentIndex,
       pageController: pageController ?? this.pageController,
     );

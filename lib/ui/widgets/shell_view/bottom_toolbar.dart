@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
@@ -29,18 +30,17 @@ class BottomToolbar extends StatelessWidget {
           // inactiveColor: Colors.white,
           currentIndex: state.selectedTab,
           items: [
+            const BottomNavigationBarItem(icon: Icon(CupertinoIcons.flame)),
             const BottomNavigationBarItem(
-              icon: Icon(Icons.headphones_outlined),
-              activeIcon: Icon(Icons.headphones_rounded),
+              icon: Icon(CupertinoIcons.waveform),
             ),
-            const BottomNavigationBarItem(icon: Icon(Icons.search)),
+            const BottomNavigationBarItem(icon: Icon(CupertinoIcons.search)),
+            // const BottomNavigationBarItem(
+            //   icon: Icon(Icons.add_box_outlined),
+            //   activeIcon: Icon(Icons.add_box),
+            // ),
             const BottomNavigationBarItem(
-              icon: Icon(Icons.add_box_outlined),
-              activeIcon: Icon(Icons.add_box),
-            ),
-            const BottomNavigationBarItem(
-              icon: Icon(Icons.comment_outlined),
-              activeIcon: Icon(Icons.comment),
+              icon: Icon(CupertinoIcons.bubble_middle_bottom),
             ),
             // BottomNavigationBarItem(icon: Icon(Icons.person)),
             BottomNavigationBarItem(

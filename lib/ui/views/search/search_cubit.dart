@@ -30,6 +30,8 @@ class SearchCubit extends Cubit<SearchState> {
           // print('Not Now');
         }
       });
+    } else {
+      emit(state.copyWith(loading: false, searchTerm: ''));
     }
   }
 }

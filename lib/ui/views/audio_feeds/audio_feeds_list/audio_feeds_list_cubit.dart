@@ -3,10 +3,10 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-part 'feeds_list_state.dart';
+part 'audio_feeds_list_state.dart';
 
-class FeedsListCubit extends Cubit<FeedsListState> {
-  FeedsListCubit() : super(FeedsListState());
+class AudioFeedsListCubit extends Cubit<AudioFeedsListState> {
+  AudioFeedsListCubit() : super(AudioFeedsListState());
 
   @override
   Future<void> close() async {
