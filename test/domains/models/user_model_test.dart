@@ -12,7 +12,7 @@ void main() {
     final emptyUser = UserModel.empty();
     expect(
       emptyUser,
-      const UserModel(
+      UserModel(
         id: '',
         email: '',
         username: 'anonymous',
@@ -43,7 +43,7 @@ void main() {
   });
 
   test('empty UserModels should be verified using isEmpty and isNotEmpty', () {
-    const emptyUser = UserModel(
+    final emptyUser = UserModel(
       id: '',
       email: '',
       username: 'anonymous',
@@ -77,7 +77,7 @@ void main() {
 
   test('non-empty UserModels shuold be verified using isEmpty and isNotEmpty',
       () {
-    const emptyUser = UserModel(
+    final emptyUser = UserModel(
       id: '1234',
       email: 'jane@example.com',
       username: 'blah',
@@ -181,7 +181,7 @@ void main() {
     final userModel = UserModel.fromDoc(mockDocumentSnapshot);
     expect(
       userModel,
-      const UserModel(
+      UserModel(
         id: '',
         email: '',
         username: 'anonymous',
