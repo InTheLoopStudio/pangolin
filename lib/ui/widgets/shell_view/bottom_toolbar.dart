@@ -30,10 +30,10 @@ class BottomToolbar extends StatelessWidget {
           // inactiveColor: Colors.white,
           currentIndex: state.selectedTab,
           items: [
-            const BottomNavigationBarItem(icon: Icon(CupertinoIcons.flame)),
             const BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.waveform),
             ),
+            const BottomNavigationBarItem(icon: Icon(CupertinoIcons.flame)),
             const BottomNavigationBarItem(icon: Icon(CupertinoIcons.search)),
             // const BottomNavigationBarItem(
             //   icon: Icon(Icons.add_box_outlined),

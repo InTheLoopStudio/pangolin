@@ -35,8 +35,8 @@ class ShellView extends StatelessWidget {
                 body: IndexedStack(
                   index: state.selectedTab,
                   children: [
-                    const FeedsListView(),
-                    const AudioFeedsListView(), // getstream.io activity feed soon?
+                    const AudioFeedsListView(), // getstream.io activity feed?
+                    const FeedsListView(), // getstream.io activity feed?
                     const SearchView(),
                     const MessagingChannelListView(),
                     ProfileView(visitedUserId: currentUser.id),
