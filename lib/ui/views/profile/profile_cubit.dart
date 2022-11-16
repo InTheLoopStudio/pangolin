@@ -143,8 +143,11 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
             .getUserCreatedBadges(visitedUser.id, limit: 1))
         .isNotEmpty;
     if (!badgesAvailable) {
-      emit(state.copyWith(
-          userCreatedBadgeStatus: UserCreatedBadgesStatus.success));
+      emit(
+        state.copyWith(
+          userCreatedBadgeStatus: UserCreatedBadgesStatus.success,
+        ),
+      );
     }
 
     badgeListener = databaseRepository

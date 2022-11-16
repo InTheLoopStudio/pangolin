@@ -7,7 +7,6 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
-import 'package:intheloopapp/ui/views/send_badge/send_badge_view.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/all_loops_list.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/badges_list.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/follow_button.dart';
@@ -150,8 +149,11 @@ class _ProfileViewState extends State<ProfileView> {
           builder: (context, state) {
             final showVenueDashboard = currentUser.id == visitedUser.id &&
                 currentUser.accountType == AccountType.venue;
-            final tabs = _profileTabBar(showVenueDashboard,
-                visitedUser.badgesCount, visitedUser.loopsCount);
+            final tabs = _profileTabBar(
+              showVenueDashboard,
+              visitedUser.badgesCount,
+              visitedUser.loopsCount,
+            );
             return BlocListener<AuthenticationBloc, AuthenticationState>(
               listener: (context, authState) {
                 if (authState is Authenticated) {

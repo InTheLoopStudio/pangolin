@@ -264,7 +264,10 @@ class LocalDatabaseImpl extends DatabaseRepository {
   Stream<Badge> userBadgesObserver(String userId, {int limit = 20}) async* {}
 
   @override
-  Stream<Badge> userCreatedBadgesObserver(String userId, {int limit = 20}) async* {}
+  Stream<Badge> userCreatedBadgesObserver(
+    String userId, {
+    int limit = 20,
+  }) async* {}
 
   @override
   Future<List<Badge>> getUserBadges(
