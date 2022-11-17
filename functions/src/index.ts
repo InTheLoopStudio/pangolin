@@ -262,7 +262,7 @@ const _deleteLoop = async (data: { id: string; userId: string }) => {
   const loopSnapshot = await loopsRef.doc(data.id).get();
 
   loopsRef.doc(data.id).update({
-    audio: FieldValue.delete(),
+    audioPath: FieldValue.delete(),
     comments: FieldValue.delete(),
     downloads: FieldValue.delete(),
     likes: FieldValue.delete(),
@@ -276,8 +276,8 @@ const _deleteLoop = async (data: { id: string; userId: string }) => {
     loopsCount: FieldValue.increment(-1),
   });
 
-  // *delete loops keyed at refFromURL(loop.audio)*
-  if (loopSnapshot.data()?.audio != null) {
+  // *delete loops keyed at refFromURL(loop.audioPath)*
+  if (loopSnapshot.data()?.audioPath != null) {
     storage
       .bucket("in-the-loop-306520.appspot.com")
       .file(_getFileFromURL(loopSnapshot.data()?.audio))

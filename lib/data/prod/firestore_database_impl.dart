@@ -276,7 +276,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     );
     await _loopsRef.add({
       'title': loop.title,
-      'audio': loop.audio,
+      'audioPath': loop.audioPath,
       'userId': loop.userId,
       'timestamp': Timestamp.now(),
       'likes': loop.likes,
@@ -298,7 +298,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     );
 
     await _loopsRef.doc(loop.id).update({
-      'audio': FieldValue.delete(),
+      'audioPath': FieldValue.delete(),
       'comments': FieldValue.delete(),
       'downloads': FieldValue.delete(),
       'likes': FieldValue.delete(),
@@ -312,8 +312,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       'loopsCount': FieldValue.increment(-1),
     });
 
-    // *delete loops keyed at refFromURL(loop.audio)*
-    await _storage.child(_getFileFromURL(loop.audio)).delete();
+    // *delete loops keyed at refFromURL(loop.audioPath)*
+    await _storage.child(_getFileFromURL(loop.audioPath)).delete();
   }
 
   @override
@@ -810,13 +810,9 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   Future<void> sendBadge(String badgeId, String receiverId) async {
     await _analytics.logEvent(name: 'create_badge');
 
-    await _badgesSentRef
-        .doc(receiverId)
-        .collection('badges')
-        .doc(badgeId)
-        .set({
-          'timestamp': Timestamp.now(),
-        });
+    await _badgesSentRef.doc(receiverId).collection('badges').doc(badgeId).set({
+      'timestamp': Timestamp.now(),
+    });
   }
 
   @override

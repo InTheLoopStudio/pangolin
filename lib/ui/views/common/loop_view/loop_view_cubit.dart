@@ -78,7 +78,7 @@ class LoopViewCubit extends Cubit<LoopViewState> {
 
   void initAudio() {
     // _player.setLoopMode(LoopMode.one);
-    state.audioController.setURL(loop.audio);
+    state.audioController.setURL(loop.audioPath);
     if (autoPlay == true) {
       state.audioController.play(audioLockId);
     }

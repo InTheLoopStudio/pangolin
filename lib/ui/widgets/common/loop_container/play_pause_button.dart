@@ -22,7 +22,7 @@ class PlayPauseButton extends StatelessWidget {
             final processingState = playerState.processingState;
 
             if (processingState == ProcessingState.idle) {
-              state.audioController.setURL(state.loop.audio);
+              state.audioController.setURL(state.loop.audioPath);
             }
 
             final playing = playerState.playing;

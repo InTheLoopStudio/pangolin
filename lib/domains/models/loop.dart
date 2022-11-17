@@ -17,7 +17,8 @@ class Loop extends Equatable {
     required this.id,
     required this.userId,
     required this.title,
-    required this.audio,
+    required this.description,
+    required this.audioPath,
     required this.timestamp,
     required this.likes,
     required this.downloads,
@@ -32,7 +33,8 @@ class Loop extends Equatable {
         id: '',
         userId: '',
         title: '',
-        audio: '',
+        description: '',
+        audioPath: '',
         timestamp: DateTime.now(),
         likes: 0,
         downloads: 0,
@@ -56,7 +58,8 @@ class Loop extends Equatable {
       id: doc.id,
       userId: doc.getOrElse('userId', '') as String,
       title: doc.getOrElse('title', '') as String,
-      audio: doc.getOrElse('audio', '') as String,
+      description: doc.getOrElse('description', '') as String,
+      audioPath: doc.getOrElse('audioPath', '') as String,
       timestamp: tmpTimestamp.toDate(),
       likes: doc.getOrElse('likes', 0) as int,
       downloads: doc.getOrElse('downloads', 0) as int,
@@ -86,8 +89,11 @@ class Loop extends Equatable {
   /// The title for this [Loop]
   final String title;
 
+  /// The description/caption/body for this [Loop]
+  final String description;
+
   /// The url for the audio associated with this [Loop]
-  final String audio;
+  final String audioPath;
 
   /// The timestamp this [Loop] for created at
   final DateTime timestamp;
@@ -115,7 +121,8 @@ class Loop extends Equatable {
         id,
         userId,
         title,
-        audio,
+        description,
+        audioPath,
         likes,
         downloads,
         comments,
@@ -139,7 +146,9 @@ class Loop extends Equatable {
     String? id,
     String? userId,
     String? title,
-    String? audio,
+    String? description,
+    String? audioPath,
+    String? imagePath,
     DateTime? timestamp,
     int? likes,
     int? downloads,
@@ -152,7 +161,8 @@ class Loop extends Equatable {
       id: id ?? this.id,
       userId: userId ?? this.userId,
       title: title ?? this.title,
-      audio: audio ?? this.audio,
+      description: description ?? this.description,
+      audioPath: audioPath ?? this.audioPath,
       timestamp: timestamp ?? this.timestamp,
       likes: likes ?? this.likes,
       downloads: downloads ?? this.downloads,

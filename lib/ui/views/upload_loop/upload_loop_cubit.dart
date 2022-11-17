@@ -150,14 +150,14 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
           ),
         );
 
-        final audio = await storageRepository.uploadLoop(
+        final audioPath = await storageRepository.uploadLoop(
           currentUser.id,
           state.pickedAudio!,
         );
 
         final loop = Loop.empty().copyWith(
           title: state.loopTitle.value,
-          audio: audio,
+          audioPath: audioPath,
           userId: currentUser.id,
           // tags: state.selectedTags.map((tag) => tag.value).toList(),
         );
