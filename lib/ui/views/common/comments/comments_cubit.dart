@@ -36,7 +36,7 @@ class CommentsCubit extends Cubit<CommentsState> {
       emit(
         state.copyWith(
           comments: [],
-          commentsCount: loop.comments,
+          commentsCount: loop.commentCount,
         ),
       );
     }

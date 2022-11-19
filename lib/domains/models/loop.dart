@@ -20,10 +20,9 @@ class Loop extends Equatable {
     required this.description,
     required this.audioPath,
     required this.timestamp,
-    required this.likes,
-    required this.downloads,
-    required this.comments,
-    required this.shares,
+    required this.likeCount,
+    required this.commentCount,
+    required this.shareCount,
     required this.tags,
     required this.deleted,
   });
@@ -36,10 +35,9 @@ class Loop extends Equatable {
         description: '',
         audioPath: '',
         timestamp: DateTime.now(),
-        likes: 0,
-        downloads: 0,
-        comments: 0,
-        shares: 0,
+        likeCount: 0,
+        commentCount: 0,
+        shareCount: 0,
         tags: const [],
         deleted: false,
       );
@@ -61,10 +59,9 @@ class Loop extends Equatable {
       description: doc.getOrElse('description', '') as String,
       audioPath: doc.getOrElse('audioPath', '') as String,
       timestamp: tmpTimestamp.toDate(),
-      likes: doc.getOrElse('likes', 0) as int,
-      downloads: doc.getOrElse('downloads', 0) as int,
-      comments: doc.getOrElse('comments', 0) as int,
-      shares: doc.getOrElse('shares', 0) as int,
+      likeCount: doc.getOrElse('likeCount', 0) as int,
+      commentCount: doc.getOrElse('commentCount', 0) as int,
+      shareCount: doc.getOrElse('shareCount', 0) as int,
       tags: List.from(
         doc.getOrElse('tags', <dynamic>[]) as Iterable<dynamic>,
       ),
@@ -99,16 +96,13 @@ class Loop extends Equatable {
   final DateTime timestamp;
 
   /// The number of likes this [Loop] has
-  final int likes;
-
-  /// The number of downloads this [Loop] has
-  final int downloads;
+  final int likeCount;
 
   /// The number of comments this [Loop] has
-  final int comments;
+  final int commentCount;
 
   /// The number of shares this [Loop] has
-  final int shares;
+  final int shareCount;
 
   /// The tags associated with this [Loop]
   final List<String> tags;
@@ -123,10 +117,9 @@ class Loop extends Equatable {
         title,
         description,
         audioPath,
-        likes,
-        downloads,
-        comments,
-        shares,
+        likeCount,
+        commentCount,
+        shareCount,
         tags,
         deleted,
       ];
@@ -150,10 +143,9 @@ class Loop extends Equatable {
     String? audioPath,
     String? imagePath,
     DateTime? timestamp,
-    int? likes,
-    int? downloads,
-    int? comments,
-    int? shares,
+    int? likeCount,
+    int? commentCount,
+    int? shareCount,
     List<String>? tags,
     bool? deleted,
   }) {
@@ -164,10 +156,9 @@ class Loop extends Equatable {
       description: description ?? this.description,
       audioPath: audioPath ?? this.audioPath,
       timestamp: timestamp ?? this.timestamp,
-      likes: likes ?? this.likes,
-      downloads: downloads ?? this.downloads,
-      comments: comments ?? this.comments,
-      shares: shares ?? this.shares,
+      likeCount: likeCount ?? this.likeCount,
+      commentCount: commentCount ?? this.commentCount,
+      shareCount: shareCount ?? this.shareCount,
       tags: tags ?? this.tags,
       deleted: deleted ?? this.deleted,
     );

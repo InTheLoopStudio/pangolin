@@ -126,11 +126,11 @@ class LoopViewCubit extends Cubit<LoopViewState> {
 
   Future<void> initLoopLikes() async {
     final isLiked = await databaseRepository.isLikeLoop(currentUser.id, loop);
-    emit(state.copyWith(isLiked: isLiked, likesCount: loop.likes));
+    emit(state.copyWith(isLiked: isLiked, likesCount: loop.likeCount));
   }
 
   Future<void> initLoopComments() async {
-    emit(state.copyWith(commentsCount: loop.comments));
+    emit(state.copyWith(commentsCount: loop.commentCount));
   }
 
   Future<void> toggleLikeLoop() async {

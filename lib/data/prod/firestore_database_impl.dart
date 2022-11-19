@@ -279,9 +279,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       'audioPath': loop.audioPath,
       'userId': loop.userId,
       'timestamp': Timestamp.now(),
-      'likes': loop.likes,
-      'downloads': loop.downloads,
-      'comments': loop.comments,
+      'likeCount': loop.likeCount,
+      'commentCount': loop.commentCount,
       'tags': loop.tags,
       'deleted': false,
     });
@@ -300,8 +299,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     await _loopsRef.doc(loop.id).update({
       'audioPath': FieldValue.delete(),
       'comments': FieldValue.delete(),
-      'downloads': FieldValue.delete(),
-      'likes': FieldValue.delete(),
+      'likeCount': FieldValue.delete(),
       'tags': FieldValue.delete(),
       'timestamp': FieldValue.delete(),
       'title': '*deleted*',

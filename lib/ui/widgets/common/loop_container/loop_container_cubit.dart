@@ -26,7 +26,7 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
     emit(
       state.copyWith(
         isLiked: isLiked,
-        likesCount: state.loop.likes,
+        likesCount: state.loop.likeCount,
       ),
     );
   }
