@@ -280,7 +280,7 @@ const _deleteLoop = async (data: { id: string; userId: string }) => {
   if (loopSnapshot.data()?.audioPath != null) {
     storage
       .bucket("in-the-loop-306520.appspot.com")
-      .file(_getFileFromURL(loopSnapshot.data()?.audio))
+      .file(_getFileFromURL(loopSnapshot.data()?.audioPath))
       .delete();
   }
 };
