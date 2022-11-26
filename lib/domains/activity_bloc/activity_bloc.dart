@@ -3,9 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
-import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 
 part 'activity_event.dart';
 part 'activity_state.dart';
@@ -13,9 +12,9 @@ part 'activity_state.dart';
 class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
   ActivityBloc({
     required this.databaseRepository,
-    required this.onboardingBloc,
+    required this.authenticationBloc,
   }) : super(const ActivityInitial()) {
-    currentUser = (onboardingBloc.state as Onboarded).currentUser;
+    currentUserId = (authenticationBloc.state as Authenticated).currentUserId;
     on<AddActivityEvent>(
       (event, emit) => emit(
         ActivitySuccess(
@@ -34,8 +33,8 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
     );
   }
   DatabaseRepository databaseRepository;
-  OnboardingBloc onboardingBloc;
-  late UserModel currentUser;
+  AuthenticationBloc authenticationBloc;
+  late String currentUserId;
 
   Future<void> _mapInitListenerEventToState(
     Emitter<ActivityState> emit,
@@ -43,7 +42,7 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
     emit(const ActivityInitial());
 
     final activitiesAvailable = (await databaseRepository.getActivities(
-      currentUser.id,
+      currentUserId,
       limit: 1,
     ))
         .isNotEmpty;
@@ -53,7 +52,7 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
     }
 
     final activityStream =
-        databaseRepository.activitiesObserver(currentUser.id);
+        databaseRepository.activitiesObserver(currentUserId);
 
     await for (final activity in activityStream) {
       emit(
@@ -73,7 +72,7 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
       if (state is ActivityInitial) return;
 
       final activities = await databaseRepository.getActivities(
-        currentUser.id,
+        currentUserId,
         limit: 10,
         lastActivityId: state.activities.last.id,
       );

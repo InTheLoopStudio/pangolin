@@ -102,39 +102,40 @@ class TappedApp extends StatelessWidget {
               },
               home:
                   BlocBuilder<DownForMaintenanceBloc, DownForMaintenanceState>(
-                builder: (context, state) {
-                  if (state.downForMaintenance) {
+                builder: (context, downState) {
+                  if (downState.downForMaintenance) {
                     return const DownForMainenanceView();
                   }
 
                   return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                    builder: (BuildContext context, AuthenticationState state) {
-                      if (state is Uninitialized) {
+                    builder:
+                        (BuildContext context, AuthenticationState authState) {
+                      if (authState is Uninitialized) {
                         return const LoadingView();
                       }
-                      if (state is Authenticated) {
+                      if (authState is Authenticated) {
                         context
                             .read<DynamicLinkBloc>()
                             .add(MonitorDynamicLinks());
-                        context
-                            .read<OnboardingBloc>()
-                            .add(OnboardingCheck(userId: state.currentUserId));
+                        context.read<OnboardingBloc>().add(
+                              OnboardingCheck(userId: authState.currentUserId),
+                            );
                         context
                             .read<StreamRepository>()
-                            .connectUser(state.currentUserId);
+                            .connectUser(authState.currentUserId);
                         context
                             .read<NotificationRepository>()
-                            .saveDeviceToken(userId: state.currentUserId);
+                            .saveDeviceToken(userId: authState.currentUserId);
 
                         context.read<ActivityBloc>().add(InitListenerEvent());
 
                         return BlocBuilder<OnboardingBloc, OnboardingState>(
-                          builder: (context, state) {
-                            if (state is Onboarded) {
+                          builder: (context, onboardState) {
+                            if (onboardState is Onboarded) {
                               return const ShellView();
-                            } else if (state is Onboarding) {
+                            } else if (onboardState is Onboarding) {
                               return const OnboardingView();
-                            } else if (state is Unonboarded) {
+                            } else if (onboardState is Unonboarded) {
                               return const LoadingView();
                             } else {
                               return const LoadingView();
@@ -143,7 +144,7 @@ class TappedApp extends StatelessWidget {
                         );
                       }
 
-                      if (state is Unauthenticated) {
+                      if (authState is Unauthenticated) {
                         return const LoginView();
                       }
 

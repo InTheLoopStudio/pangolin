@@ -51,14 +51,14 @@ List<RepositoryProvider<dynamic>> buildRepositories({
     RepositoryProvider<DynamicLinkRepository>(
       create: (_) => FirebaseDynamicLinkImpl(),
     ),
+    RepositoryProvider<StreamRepository>(
+      create: (_) => StreamImpl(streamChatClient),
+    ),
     RepositoryProvider<NotificationRepository>(
       create: (_) => CloudMessagingImpl(streamChatClient),
     ),
     RepositoryProvider<RemoteConfigRepository>(
       create: (_) => RemoteConfigImpl()..fetchAndActivate(),
-    ),
-    RepositoryProvider<StreamRepository>(
-      create: (_) => StreamImpl(streamChatClient),
     ),
   ];
 }
@@ -99,7 +99,7 @@ List<BlocProvider> buildBlocs({
     BlocProvider<ActivityBloc>(
       create: (context) => ActivityBloc(
         databaseRepository: context.read<DatabaseRepository>(),
-        onboardingBloc: context.read<OnboardingBloc>(),
+        authenticationBloc: context.read<AuthenticationBloc>(),
       ),
     ),
   ];
