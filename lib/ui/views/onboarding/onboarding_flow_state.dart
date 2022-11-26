@@ -1,12 +1,12 @@
-part of 'onboarding_cubit.dart';
+part of 'onboarding_flow_cubit.dart';
 
 enum OnboardingStage {
   stage1,
   stage2,
 }
 
-class OnboardingState extends Equatable {
-  OnboardingState({
+class OnboardingFlowState extends Equatable {
+  OnboardingFlowState({
     required this.currentUser,
     this.onboardingStage = OnboardingStage.stage1,
     this.username = '',
@@ -64,7 +64,7 @@ class OnboardingState extends Equatable {
         formKey
       ];
 
-  OnboardingState copyWith({
+  OnboardingFlowState copyWith({
     bool? loading,
     OnboardingStage? onboardingStage,
     String? username,
@@ -79,7 +79,7 @@ class OnboardingState extends Equatable {
     bool? followingChris,
     bool? followingIlias,
   }) {
-    return OnboardingState(
+    return OnboardingFlowState(
       currentUser: currentUser,
       loading: loading ?? this.loading,
       onboardingStage: onboardingStage ?? this.onboardingStage,

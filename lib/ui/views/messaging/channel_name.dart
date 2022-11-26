@@ -54,7 +54,7 @@ class ChannelName extends StatelessWidget {
           members.map((member) async {
             final user =
                 await databaseRepository.getUserById(member.userId ?? '');
-            return user;
+            return user ?? UserModel.empty();
           }),
         ),
         builder: (context, snapshot) {

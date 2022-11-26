@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
-import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 
 class BadgeReceiverTextField extends StatefulWidget {
   const BadgeReceiverTextField({
@@ -25,8 +25,8 @@ class _BadgeReceiverTextFieldState extends State<BadgeReceiverTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<AuthenticationBloc, AuthenticationState, Authenticated>(
-      selector: (state) => state as Authenticated,
+    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
+      selector: (state) => state as Onboarded,
       builder: (context, state) {
         final currentUser = state.currentUser;
         return TextFormField(

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/common/loading/loop_loading_view.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view_cubit.dart';
 import 'package:intheloopapp/ui/widgets/loop_view/loop_stack.dart';
@@ -28,17 +28,12 @@ class LoopView extends StatelessWidget {
   Widget build(BuildContext context) {
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
-    final authRepository = RepositoryProvider.of<AuthRepository>(context);
-    return StreamBuilder<UserModel>(
-      stream: authRepository.user,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const LoopLoadingView();
-        }
+    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
+      selector: (state) => state as Onboarded,
+      builder: (context, userState) {
+        final currentUser = userState.currentUser;
 
-        final currentUser = snapshot.data!;
-
-        return FutureBuilder<UserModel>(
+        return FutureBuilder<UserModel?>(
           future: databaseRepository.getUserById(loop.userId),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {

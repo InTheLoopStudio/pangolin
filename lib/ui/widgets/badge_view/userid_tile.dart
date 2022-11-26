@@ -20,7 +20,7 @@ class UseridTile extends StatelessWidget {
       future: databaseRepository.getUserById(userid),
       builder: (
         BuildContext context,
-        AsyncSnapshot<UserModel> snapshot,
+        AsyncSnapshot<UserModel?> snapshot,
       ) {
         if (!snapshot.hasData) return const CircularProgressIndicator();
 

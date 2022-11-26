@@ -157,7 +157,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       );
 
       await databaseRepository.updateUserData(user);
-      authenticationBloc.add(UpdateAuthenticatedUser(user));
+      authenticationBloc.add(UpdateAuthenticatedUser(user.id));
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
       navigationBloc.add(const Pop());
     } else {

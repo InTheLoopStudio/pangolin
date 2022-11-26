@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
-import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/audio_feeds/audio_feed/audio_feed_cubit.dart';
 import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
 import 'package:intheloopapp/ui/views/common/loading/loop_loading_view.dart';
@@ -59,13 +58,11 @@ class AudioFeedViewState extends State<AudioFeedView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final authRepo = RepositoryProvider.of<AuthRepository>(context);
-    return StreamBuilder<UserModel>(
-      stream: authRepo.user,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) return const LoopLoadingView();
+    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
+      selector: (state) => state as Onboarded,
+      builder: (context, userState) {
 
-        final currentUser = snapshot.data!;
+        final currentUser = userState.currentUser;
         return BlocProvider(
           create: (context) => AudioFeedCubit(
             currentUserId: currentUser.id,

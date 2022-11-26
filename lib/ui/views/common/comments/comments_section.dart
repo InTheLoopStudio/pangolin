@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
-import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/common/comments/comments_cubit.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view_cubit.dart';
 import 'package:intheloopapp/ui/widgets/comments/comments_header.dart';
@@ -16,22 +15,17 @@ class CommentsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
-    final authRepo = RepositoryProvider.of<AuthRepository>(context);
 
     return BlocBuilder<LoopViewCubit, LoopViewState>(
-      builder: (context, state) {
-        return StreamBuilder<UserModel>(
-          stream: authRepo.user,
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const CircularProgressIndicator();
-            }
-
-            final currentUser = snapshot.data!;
+      builder: (context, loopState) {
+        return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
+          selector: (state) => state as Onboarded,
+          builder: (context, userState) {
+            final currentUser = userState.currentUser;
 
             return BlocProvider(
               create: (context) => CommentsCubit(
-                loop: state.loop,
+                loop: loopState.loop,
                 loopViewCubit: context.read<LoopViewCubit>(),
                 currentUser: currentUser,
                 databaseRepository: databaseRepository,

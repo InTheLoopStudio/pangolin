@@ -1,12 +1,11 @@
 import 'package:intheloopapp/data/auth_repository.dart';
-import 'package:intheloopapp/domains/models/user_model.dart';
 
 class LocalAuthImpl extends AuthRepository {
   @override
-  Stream<UserModel> get user => const Stream.empty();
+  Stream<String> get userId => const Stream.empty();
 
   @override
-  Future<void> updateUserData({required UserModel userData}) async {
+  Future<void> updateUserData({required String userId}) async {
     await Future<void>.delayed(const Duration(seconds: 2));
     return;
   }
@@ -34,18 +33,18 @@ class LocalAuthImpl extends AuthRepository {
   }
 
   @override
-  Future<UserModel> signInWithApple() async {
+  Future<String> signInWithApple() async {
     await Future<void>.delayed(const Duration(seconds: 2));
-    return UserModel.empty();
+    return '';
   }
 
   @override
   Future<void> reauthenticateWithApple() async {}
 
   @override
-  Future<UserModel> signInWithGoogle() async {
+  Future<String> signInWithGoogle() async {
     await Future<void>.delayed(const Duration(seconds: 2));
-    return UserModel.empty();
+    return '';
   }
 
   @override

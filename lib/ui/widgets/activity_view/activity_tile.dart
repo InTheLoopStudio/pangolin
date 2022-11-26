@@ -27,7 +27,7 @@ class ActivityTile extends StatelessWidget {
 
         return FutureBuilder(
           future: databaseRepository.getUserById(activity.fromUserId),
-          builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
+          builder: (BuildContext context, AsyncSnapshot<UserModel?> snapshot) {
             if (!snapshot.hasData) {
               return const SizedBox.shrink();
             } else {

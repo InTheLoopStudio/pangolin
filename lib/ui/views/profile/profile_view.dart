@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
-import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
@@ -154,13 +154,13 @@ class _ProfileViewState extends State<ProfileView> {
               visitedUser.badgesCount,
               visitedUser.loopsCount,
             );
-            return BlocListener<AuthenticationBloc, AuthenticationState>(
-              listener: (context, authState) {
-                if (authState is Authenticated) {
-                  if (authState.currentUser.id == visitedUser.id) {
+            return BlocListener<OnboardingBloc, OnboardingState>(
+              listener: (context, userState) {
+                if (userState is Onboarded) {
+                  if (userState.currentUser.id == visitedUser.id) {
                     context
                         .read<ProfileCubit>()
-                        .refetchVisitedUser(newUserData: authState.currentUser);
+                        .refetchVisitedUser(newUserData: userState.currentUser);
                   }
                 }
               },
@@ -273,9 +273,9 @@ class _ProfileViewState extends State<ProfileView> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body:
-          BlocSelector<AuthenticationBloc, AuthenticationState, Authenticated>(
+          BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
         selector: (state) {
-          return state as Authenticated;
+          return state as Onboarded;
         },
         builder: (context, state) {
           final currentUser = state.currentUser;
@@ -284,7 +284,7 @@ class _ProfileViewState extends State<ProfileView> {
                   future: databaseRepository.getUserById(visitedUserId),
                   builder: (
                     BuildContext context,
-                    AsyncSnapshot<UserModel> snapshot,
+                    AsyncSnapshot<UserModel?> snapshot,
                   ) {
                     if (!snapshot.hasData) {
                       return const LoadingView();

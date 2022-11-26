@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/dynamic_link_repository.dart';
-import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/comments.dart';
@@ -26,8 +26,8 @@ class LoopContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<AuthenticationBloc, AuthenticationState, Authenticated>(
-      selector: (state) => state as Authenticated,
+    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
+      selector: (state) => state as Onboarded,
       builder: (context, state) {
         final currentUser = state.currentUser;
 

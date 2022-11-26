@@ -175,7 +175,7 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
           loopsCount: (currentUser.loopsCount) + 1,
         );
 
-        authenticationBloc.add(UpdateAuthenticatedUser(user));
+        authenticationBloc.add(UpdateAuthenticatedUser(user.id));
         // Navigate back to the feed page
         navigationBloc?.add(const ChangeTab(selectedTab: 0));
       } else {

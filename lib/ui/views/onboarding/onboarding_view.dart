@@ -5,7 +5,7 @@ import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
-import 'package:intheloopapp/ui/views/onboarding/onboarding_cubit.dart';
+import 'package:intheloopapp/ui/views/onboarding/onboarding_flow_cubit.dart';
 import 'package:intheloopapp/ui/widgets/onboarding/control_buttons.dart';
 import 'package:intheloopapp/ui/widgets/onboarding/onboarding_form.dart';
 
@@ -14,13 +14,13 @@ class OnboardingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<AuthenticationBloc, AuthenticationState, Authenticated>(
-      selector: (state) => state as Authenticated,
+    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
+      selector: (state) => state as Onboarded,
       builder: (context, state) {
         final user = state.currentUser;
 
         return BlocProvider(
-          create: (context) => OnboardingCubit(
+          create: (context) => OnboardingFlowCubit(
             currentUser: user,
             onboardingBloc: context.read<OnboardingBloc>(),
             navigationBloc: context.read<NavigationBloc>(),

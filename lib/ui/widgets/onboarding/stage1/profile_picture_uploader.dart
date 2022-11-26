@@ -3,9 +3,8 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/auth_repository.dart';
-import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:intheloopapp/ui/views/onboarding/onboarding_cubit.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
+import 'package:intheloopapp/ui/views/onboarding/onboarding_flow_cubit.dart';
 
 class ProfilePictureUploader extends StatelessWidget {
   const ProfilePictureUploader({Key? key}) : super(key: key);
@@ -27,31 +26,24 @@ class ProfilePictureUploader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authRepo = RepositoryProvider.of<AuthRepository>(context);
-
-    return StreamBuilder<UserModel>(
-      stream: authRepo.user,
-      builder: (context, snapshot) {
-        return BlocBuilder<OnboardingCubit, OnboardingState>(
+    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
+      selector: (state) => state as Onboarded,
+      builder: (context, userState) {
+        return BlocBuilder<OnboardingFlowCubit, OnboardingFlowState>(
           builder: (context, state) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
                   onTap: () =>
-                      context.read<OnboardingCubit>().handleImageFromGallery(),
+                      context.read<OnboardingFlowCubit>().handleImageFromGallery(),
                   child: Stack(
                     children: [
                       CircleAvatar(
                         radius: 45,
-                        backgroundImage: snapshot.hasData
-                            ? displayProfileImage(
+                        backgroundImage: displayProfileImage(
                                 state.pickedPhoto,
-                                snapshot.data!.profilePicture,
-                              )
-                            : displayProfileImage(
-                                state.pickedPhoto,
-                                '',
+                                userState.currentUser.profilePicture,
                               ),
                       ),
                       CircleAvatar(

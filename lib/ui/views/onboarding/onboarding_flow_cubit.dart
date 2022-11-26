@@ -12,17 +12,17 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 
-part 'onboarding_state.dart';
+part 'onboarding_flow_state.dart';
 
-class OnboardingCubit extends Cubit<OnboardingState> {
-  OnboardingCubit({
+class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
+  OnboardingFlowCubit({
     required this.currentUser,
     required this.onboardingBloc,
     required this.navigationBloc,
     required this.authenticationBloc,
     required this.storageRepository,
     required this.databaseRepository,
-  }) : super(OnboardingState(currentUser: currentUser));
+  }) : super(OnboardingFlowState(currentUser: currentUser));
 
   final OnboardingBloc onboardingBloc;
   final NavigationBloc navigationBloc;
@@ -166,12 +166,11 @@ class OnboardingCubit extends Cubit<OnboardingState> {
         profilePicture: profilePictureUrl,
         location: state.location,
         bio: state.bio,
-        onboarded: true,
       );
 
-      await databaseRepository.updateUserData(currentUser);
-      authenticationBloc.add(UpdateAuthenticatedUser(currentUser));
-      onboardingBloc.add(FinishOnboarding());
+      await databaseRepository.createUser(currentUser);
+
+      onboardingBloc.add(FinishOnboarding(user: currentUser));
     }
   }
 }

@@ -26,7 +26,6 @@ class UserModel extends Equatable {
     required this.profilePicture,
     required this.bio,
     required this.location,
-    required this.onboarded,
     required this.loopsCount,
     required this.badgesCount,
     required this.deleted,
@@ -56,7 +55,6 @@ class UserModel extends Equatable {
         profilePicture: '',
         bio: '',
         location: 'Global',
-        onboarded: false,
         loopsCount: 0,
         badgesCount: 0,
         deleted: false,
@@ -98,7 +96,6 @@ class UserModel extends Equatable {
       profilePicture: doc.getOrElse('profilePicture', '') as String,
       bio: doc.getOrElse('bio', '') as String,
       location: doc.getOrElse('location', 'Global') as String,
-      onboarded: doc.getOrElse('onboarded', false) as bool,
       loopsCount: doc.getOrElse('loopsCount', 0) as int,
       badgesCount: doc.getOrElse('badgesCount', 0) as int,
       deleted: doc.getOrElse('deleted', false) as bool,
@@ -132,7 +129,6 @@ class UserModel extends Equatable {
   final String profilePicture;
   final String bio;
   final String location;
-  final bool onboarded;
   final int loopsCount;
   final int badgesCount;
   final bool deleted;
@@ -163,7 +159,6 @@ class UserModel extends Equatable {
         profilePicture,
         bio,
         location,
-        onboarded,
         loopsCount,
         badgesCount,
         deleted,
@@ -194,7 +189,6 @@ class UserModel extends Equatable {
     String? profilePicture,
     String? bio,
     String? location,
-    bool? onboarded,
     int? loopsCount,
     int? badgesCount,
     bool? deleted,
@@ -221,7 +215,6 @@ class UserModel extends Equatable {
       profilePicture: profilePicture ?? this.profilePicture,
       bio: bio ?? this.bio,
       location: location ?? this.location,
-      onboarded: onboarded ?? this.onboarded,
       loopsCount: loopsCount ?? this.loopsCount,
       badgesCount: badgesCount ?? this.badgesCount,
       deleted: deleted ?? this.deleted,
@@ -258,7 +251,6 @@ class UserModel extends Equatable {
       'bio': bio,
       'profilePicture': profilePicture,
       'location': location,
-      'onboarded': onboarded,
       'loopsCount': loopsCount,
       'badgesCount': badgesCount,
       'deleted': deleted,

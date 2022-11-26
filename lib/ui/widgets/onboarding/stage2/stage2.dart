@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/ui/views/onboarding/onboarding_cubit.dart';
+import 'package:intheloopapp/ui/views/onboarding/onboarding_flow_cubit.dart';
 import 'package:intheloopapp/ui/widgets/onboarding/stage2/follow_recommendation.dart';
 
 class Stage2 extends StatelessWidget {
@@ -8,7 +8,7 @@ class Stage2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<OnboardingCubit, OnboardingState>(
+    return BlocBuilder<OnboardingFlowCubit, OnboardingFlowState>(
       builder: (context, state) {
         return Align(
           alignment: const Alignment(0, -1 / 3),

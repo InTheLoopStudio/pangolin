@@ -5,6 +5,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/settings/settings_cubit.dart';
 import 'package:intheloopapp/ui/widgets/settings_view/action_menu.dart';
@@ -23,8 +24,8 @@ class SettingsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return BlocSelector<AuthenticationBloc, AuthenticationState, Authenticated>(
-      selector: (state) => state as Authenticated,
+    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
+      selector: (state) => state as Onboarded,
       builder: (context, state) {
         final currentUser = state.currentUser;
 

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:intheloopapp/ui/views/onboarding/onboarding_cubit.dart';
+import 'package:intheloopapp/ui/views/onboarding/onboarding_flow_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 
 class FollowRecommendation extends StatelessWidget {
@@ -37,7 +37,7 @@ class FollowRecommendation extends StatelessWidget {
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
 
-    return FutureBuilder<UserModel>(
+    return FutureBuilder<UserModel?>(
       future: databaseRepository.getUserById(userId),
       builder: (context, followUserSnapshot) {
         if (!followUserSnapshot.hasData) {
@@ -72,7 +72,7 @@ class FollowRecommendation extends StatelessWidget {
                 ),
                 trailing: _followButton(
                   onFollow: () => context
-                      .read<OnboardingCubit>()
+                      .read<OnboardingFlowCubit>()
                       .followRecommendation(userId),
                 ),
                 title: Text(followUser.username),

@@ -74,14 +74,15 @@ List<BlocProvider> buildBlocs({
     BlocProvider<AuthenticationBloc>(
       create: (context) => AuthenticationBloc(
         authRepository: context.read<AuthRepository>(),
-        databaseRepository: context.read<DatabaseRepository>(),
       )..add(AppStarted()),
     ),
     BlocProvider<NavigationBloc>(
       create: (_) => NavigationBloc(navigationKey: navigatorKey),
     ),
     BlocProvider<OnboardingBloc>(
-      create: (_) => OnboardingBloc(),
+      create: (context) => OnboardingBloc(
+        databaseRepository: context.read<DatabaseRepository>(),
+      ),
     ),
     BlocProvider<DynamicLinkBloc>(
       create: (context) => DynamicLinkBloc(
@@ -98,7 +99,7 @@ List<BlocProvider> buildBlocs({
     BlocProvider<ActivityBloc>(
       create: (context) => ActivityBloc(
         databaseRepository: context.read<DatabaseRepository>(),
-        authenticationBloc: context.read<AuthenticationBloc>(),
+        onboardingBloc: context.read<OnboardingBloc>(),
       ),
     ),
   ];

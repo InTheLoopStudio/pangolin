@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
-import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/all_loops_list.dart';
@@ -50,13 +50,13 @@ class ProfileViewState extends State<OldProfileView> {
           ..loadIsFollowing(currentUser.id, visitedUser.id),
         child: BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, state) {
-            return BlocListener<AuthenticationBloc, AuthenticationState>(
-              listener: (context, authState) {
-                if (authState is Authenticated) {
-                  if (authState.currentUser.id == _visitedUserId) {
+            return BlocListener<OnboardingBloc, OnboardingState>(
+              listener: (context, userState) {
+                if (userState is Onboarded) {
+                  if (userState.currentUser.id == _visitedUserId) {
                     context
                         .read<ProfileCubit>()
-                        .refetchVisitedUser(newUserData: authState.currentUser);
+                        .refetchVisitedUser(newUserData: userState.currentUser);
                   }
                 }
               },
@@ -125,17 +125,17 @@ class ProfileViewState extends State<OldProfileView> {
     return Scaffold(
       backgroundColor: theme.backgroundColor,
       body:
-          BlocSelector<AuthenticationBloc, AuthenticationState, Authenticated>(
-        selector: (state) => state as Authenticated,
-        builder: (context, state) {
-          final currentUser = state.currentUser;
+          BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
+        selector: (state) => state as Onboarded,
+        builder: (context, userState) {
+          final currentUser = userState.currentUser;
 
           return currentUser.id != _visitedUserId
               ? FutureBuilder(
                   future: databaseRepository.getUserById(_visitedUserId),
                   builder: (
                     BuildContext context,
-                    AsyncSnapshot<UserModel> snapshot,
+                    AsyncSnapshot<UserModel?> snapshot,
                   ) {
                     if (!snapshot.hasData) {
                       return const LoadingView();

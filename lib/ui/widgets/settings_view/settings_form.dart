@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:intheloopapp/data/auth_repository.dart';
-import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/settings/settings_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/artist_name_text_field.dart';
@@ -21,12 +20,10 @@ class SettingsForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<UserModel>(
-      stream: RepositoryProvider.of<AuthRepository>(context).user,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) return const CircularProgressIndicator();
-
-        final currentUser = snapshot.data!;
+    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
+      selector: (state) => state as Onboarded,
+      builder: (context, userState) {
+        final currentUser = userState.currentUser;
 
         return BlocBuilder<SettingsCubit, SettingsState>(
           builder: (context, state) {

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/auth_repository.dart';
-import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:intheloopapp/ui/views/onboarding/onboarding_cubit.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
+import 'package:intheloopapp/ui/views/onboarding/onboarding_flow_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/artist_name_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/bio_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/username_text_field.dart';
@@ -14,14 +13,12 @@ class Stage1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<UserModel>(
-      stream: RepositoryProvider.of<AuthRepository>(context).user,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) return const CircularProgressIndicator();
+    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
+      selector: (state) => state as Onboarded,
+      builder: (context, userState) {
+        final currentUser = userState.currentUser;
 
-        final currentUser = snapshot.data!;
-
-        return BlocBuilder<OnboardingCubit, OnboardingState>(
+        return BlocBuilder<OnboardingFlowCubit, OnboardingFlowState>(
           builder: (context, state) {
             return Form(
               key: state.formKey,
@@ -48,7 +45,7 @@ class Stage1 extends StatelessWidget {
                       const SizedBox(height: 50),
                       UsernameTextField(
                         onChanged: (input) => context
-                            .read<OnboardingCubit>()
+                            .read<OnboardingFlowCubit>()
                             .usernameChange(input ?? ''),
                         initialValue: state.username,
                         currentUserId: currentUser.id,
@@ -56,7 +53,7 @@ class Stage1 extends StatelessWidget {
                       const SizedBox(height: 20),
                       ArtistNameTextField(
                         onChanged: (input) => context
-                            .read<OnboardingCubit>()
+                            .read<OnboardingFlowCubit>()
                             .aristNameChange(input ?? ''),
                         initialValue: state.artistName,
                       ),
@@ -64,14 +61,14 @@ class Stage1 extends StatelessWidget {
                       LocationTextField(
                         initialValue: state.location,
                         onChanged: (input) => context
-                            .read<OnboardingCubit>()
+                            .read<OnboardingFlowCubit>()
                             .locationChange(input ?? ''),
                       ),
                       const SizedBox(height: 20),
                       BioTextField(
                         initialValue: state.bio,
                         onChanged: (input) => context
-                            .read<OnboardingCubit>()
+                            .read<OnboardingFlowCubit>()
                             .bioChange(input ?? ''),
                       ),
                       const SizedBox(height: 50),

@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
-import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/send_badge/send_badge_cubit.dart';
 import 'package:intheloopapp/ui/widgets/send_badge_view/badge_description_text_field.dart';
@@ -19,8 +19,8 @@ class SendBadgeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<AuthenticationBloc, AuthenticationState, Authenticated>(
-      selector: (state) => state as Authenticated,
+    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
+      selector: (state) => state as Onboarded,
       builder: (context, state) {
         final currentUser = state.currentUser;
         return BlocProvider(

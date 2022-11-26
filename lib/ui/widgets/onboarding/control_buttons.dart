@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
-import 'package:intheloopapp/ui/views/onboarding/onboarding_cubit.dart';
+import 'package:intheloopapp/ui/views/onboarding/onboarding_flow_cubit.dart';
 
 class ControlButtons extends StatelessWidget {
   const ControlButtons({Key? key}) : super(key: key);
@@ -39,7 +39,7 @@ class ControlButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<OnboardingCubit, OnboardingState>(
+    return BlocBuilder<OnboardingFlowCubit, OnboardingFlowState>(
       builder: (context, state) {
         return Stack(
           children: [
@@ -52,7 +52,7 @@ class ControlButtons extends StatelessWidget {
                     TextButton(
                       onPressed: state.onboardingStage == OnboardingStage.stage1
                           ? null
-                          : context.read<OnboardingCubit>().previous,
+                          : context.read<OnboardingFlowCubit>().previous,
                       child: const Text('Back'),
                     )
                   else
@@ -61,8 +61,8 @@ class ControlButtons extends StatelessWidget {
                     loading: state.loading,
                     stage: state.onboardingStage,
                     onFinish: () =>
-                        context.read<OnboardingCubit>().finishOnboarding(),
-                    onNext: () => context.read<OnboardingCubit>().next(),
+                        context.read<OnboardingFlowCubit>().finishOnboarding(),
+                    onNext: () => context.read<OnboardingFlowCubit>().next(),
                   ),
                 ],
               ),

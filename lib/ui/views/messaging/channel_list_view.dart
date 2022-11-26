@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intheloopapp/data/auth_repository.dart';
-import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/messaging/channel_preview.dart';
 import 'package:intheloopapp/ui/views/messaging/channel_view.dart';
 import 'package:intheloopapp/ui/views/messaging/new_chat/new_chat_view.dart';
@@ -15,7 +13,6 @@ class MessagingChannelListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authRepo = RepositoryProvider.of<AuthRepository>(context);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
@@ -40,14 +37,10 @@ class MessagingChannelListView extends StatelessWidget {
         ),
         child: const Icon(FontAwesomeIcons.message),
       ),
-      body: StreamBuilder<UserModel>(
-        stream: authRepo.user,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const LoadingView();
-          }
-
-          final currentUser = snapshot.data!;
+      body: BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
+        selector: (state) => state as Onboarded,
+        builder: (context, userState) {
+          final currentUser = userState.currentUser;
 
           return StreamChannelListView(
             controller: StreamChannelListController(

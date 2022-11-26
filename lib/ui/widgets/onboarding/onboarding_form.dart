@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
-import 'package:intheloopapp/ui/views/onboarding/onboarding_cubit.dart';
+import 'package:intheloopapp/ui/views/onboarding/onboarding_flow_cubit.dart';
 import 'package:intheloopapp/ui/widgets/onboarding/stage1/stage1.dart';
 import 'package:intheloopapp/ui/widgets/onboarding/stage2/stage2.dart';
 
@@ -32,7 +32,7 @@ class OnboardingForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<OnboardingCubit, OnboardingState>(
+    return BlocBuilder<OnboardingFlowCubit, OnboardingFlowState>(
       builder: (context, state) {
         return PageTransitionSwitcher(
           duration: const Duration(milliseconds: 500),
