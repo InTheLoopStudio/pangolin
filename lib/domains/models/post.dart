@@ -18,7 +18,6 @@ class Post extends Equatable {
     required this.userId,
     required this.title,
     required this.description,
-    required this.imagePath,
     required this.timestamp,
     required this.likeCount,
     required this.commentCount,
@@ -33,7 +32,6 @@ class Post extends Equatable {
         userId: '',
         title: '',
         description: '',
-        imagePath: '',
         timestamp: DateTime.now(),
         likeCount: 0,
         commentCount: 0,
@@ -57,7 +55,6 @@ class Post extends Equatable {
       userId: doc.getOrElse('userId', '') as String,
       title: doc.getOrElse('title', '') as String,
       description: doc.getOrElse('description', '') as String,
-      imagePath: doc.getOrElse('imagePath', '') as String,
       timestamp: tmpTimestamp.toDate(),
       likeCount: doc.getOrElse('likeCount', 0) as int,
       commentCount: doc.getOrElse('commentCount', 0) as int,
@@ -89,9 +86,6 @@ class Post extends Equatable {
   /// The description/caption/body for this [Post]
   final String description;
 
-  /// The url for the audio associated with this [Post]
-  final String imagePath;
-
   /// The timestamp this [Post] for created at
   final DateTime timestamp;
 
@@ -116,7 +110,6 @@ class Post extends Equatable {
         userId,
         title,
         description,
-        imagePath,
         likeCount,
         commentCount,
         shareCount,
@@ -140,7 +133,6 @@ class Post extends Equatable {
     String? userId,
     String? title,
     String? description,
-    String? imagePath,
     DateTime? timestamp,
     int? likeCount,
     int? commentCount,
@@ -153,7 +145,6 @@ class Post extends Equatable {
       userId: userId ?? this.userId,
       title: title ?? this.title,
       description: description ?? this.description,
-      imagePath: imagePath ?? this.imagePath,
       timestamp: timestamp ?? this.timestamp,
       likeCount: likeCount ?? this.likeCount,
       commentCount: commentCount ?? this.commentCount,

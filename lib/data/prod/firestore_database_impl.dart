@@ -30,6 +30,11 @@ final _badgesRef = _firestore.collection('badges');
 final _badgesSentRef = _firestore.collection('badgesSent');
 final _postsRef = _firestore.collection('posts');
 
+const likesSubcollection = 'likes';
+const commentsSubcollection = 'comments';
+const loopsFeedSubcollection = 'userFeed';
+const postsFeedSubcollection = 'userPostsFeed';
+
 class HandleAlreadyExistsException implements Exception {
   HandleAlreadyExistsException(this.cause);
   String cause;
@@ -295,7 +300,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
     await _loopsRef.doc(loop.id).update({
       'audioPath': FieldValue.delete(),
-      'comments': FieldValue.delete(),
+      'commentCount': FieldValue.delete(),
       'likeCount': FieldValue.delete(),
       'tags': FieldValue.delete(),
       'timestamp': FieldValue.delete(),
@@ -392,7 +397,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       final userFeedLoops = await _feedRefs
           .doc(currentUserId)
-          .collection('userFeed')
+          .collection(loopsFeedSubcollection)
           .orderBy('timestamp', descending: true)
           .limit(limit)
           .startAfterDocument(documentSnapshot)
@@ -409,7 +414,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     } else {
       final userFeedLoops = await _feedRefs
           .doc(currentUserId)
-          .collection('userFeed')
+          .collection(loopsFeedSubcollection)
           .orderBy('timestamp', descending: true)
           .limit(limit)
           .get();
@@ -432,7 +437,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }) async* {
     final userFeedLoopsSnapshotObserver = _feedRefs
         .doc(currentUserId)
-        .collection('userFeed')
+        .collection(loopsFeedSubcollection)
         .orderBy('timestamp', descending: true)
         .limit(limit)
         .snapshots();
@@ -973,7 +978,25 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<void> deletePost(Post post) async {}
+  Future<void> deletePost(Post post) async {
+    await _analytics.logEvent(
+      name: 'delete_post',
+      parameters: {
+        'user_id': post.userId,
+        'post_id': post.id,
+      },
+    );
+
+    await _postsRef.doc(post.id).update({
+      'description': FieldValue.delete(),
+      'commentCount': FieldValue.delete(),
+      'likeCount': FieldValue.delete(),
+      'tags': FieldValue.delete(),
+      'timestamp': FieldValue.delete(),
+      'title': '*deleted*',
+      'deleted': true,
+    });
+  }
 
   @override
   Future<List<Post>> getUserPost(
@@ -981,15 +1004,69 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     int limit = 20,
     String? lastPostId,
   }) async {
-    await Future<void>.delayed(Duration.zero);
-    return [];
+    if (lastPostId != null) {
+      final documentSnapshot = await _postsRef.doc(lastPostId).get();
+
+      final userPostsSnapshot = await _postsRef
+          .orderBy('timestamp', descending: true)
+          .where('userId', isEqualTo: userId)
+          // .where('deleted', isNotEqualTo: true)
+          .limit(limit)
+          .startAfterDocument(documentSnapshot)
+          .get();
+
+      final userPosts = userPostsSnapshot.docs
+          .map((doc) => Post.fromDoc(doc))
+          .where((post) => post.deleted != true)
+          .toList();
+
+      return userPosts;
+    } else {
+      final userPostsSnapshot = await _postsRef
+          .orderBy('timestamp', descending: true)
+          .where('userId', isEqualTo: userId)
+          .limit(limit)
+          .get();
+
+      final userPosts = userPostsSnapshot.docs
+          .map((doc) => Post.fromDoc(doc))
+          .where((post) => post.deleted != true)
+          .toList();
+
+      return userPosts;
+    }
   }
 
   @override
   Stream<Post> userPostsObserver(
     String userId, {
     int limit = 20,
-  }) async* {}
+  }) async* {
+    final userPostsSnapshotObserver = _postsRef
+        .where('userId', isEqualTo: userId)
+        .orderBy('timestamp', descending: true)
+        // .where('deleted', isNotEqualTo: true)
+        .limit(limit)
+        .snapshots();
+
+    final userPostsObserver = userPostsSnapshotObserver.map((event) {
+      return event.docChanges
+          .where(
+        (DocumentChange<Map<String, dynamic>> element) =>
+            element.type == DocumentChangeType.added,
+      )
+          .map((DocumentChange<Map<String, dynamic>> element) {
+        return Post.fromDoc(element.doc);
+        // if (element.type == DocumentChangeType.modified) {}
+        // if (element.type == DocumentChangeType.removed) {}
+      });
+    }).flatMap(
+      (value) =>
+          Stream.fromIterable(value).where((post) => post.deleted != true),
+    );
+
+    yield* userPostsObserver;
+  }
 
   @override
   Future<List<Post>> getFollowingPosts(
@@ -997,15 +1074,75 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     int limit = 20,
     String? lastPostId,
   }) async {
-    await Future<void>.delayed(Duration.zero);
-    return [];
+    if (lastPostId != null) {
+      final documentSnapshot = await _postsRef.doc(lastPostId).get();
+
+      final userFeedPosts = await _feedRefs
+          .doc(currentUserId)
+          .collection(postsFeedSubcollection)
+          .orderBy('timestamp', descending: true)
+          .limit(limit)
+          .startAfterDocument(documentSnapshot)
+          .get();
+
+      final followingPosts = await Future.wait(
+        userFeedPosts.docs.map((doc) async {
+          final post = await getPostById(doc.id);
+          return post;
+        }),
+      );
+
+      return followingPosts.where((post) => post.deleted != true).toList();
+    } else {
+      final userFeedPosts = await _feedRefs
+          .doc(currentUserId)
+          .collection(postsFeedSubcollection)
+          .orderBy('timestamp', descending: true)
+          .limit(limit)
+          .get();
+
+      final followingPosts = await Future.wait(
+        userFeedPosts.docs.map((doc) async {
+          final post = await getPostById(doc.id);
+          return post;
+        }),
+      );
+
+      return followingPosts.where((post) => post.deleted != true).toList();
+    }
   }
 
   @override
   Stream<Post> followingPostsObserver(
     String currentUserId, {
     int limit = 20,
-  }) async* {}
+  }) async* {
+    final userFeedPostsSnapshotObserver = _feedRefs
+        .doc(currentUserId)
+        .collection(postsFeedSubcollection)
+        .orderBy('timestamp', descending: true)
+        .limit(limit)
+        .snapshots();
+
+    final userFeedPostsObserver = userFeedPostsSnapshotObserver.map((event) {
+      return event.docChanges
+          .where(
+        (DocumentChange<Map<String, dynamic>> element) =>
+            element.type == DocumentChangeType.added,
+      )
+          .map((DocumentChange<Map<String, dynamic>> element) async {
+        final post = await getPostById(element.doc.id);
+        return post;
+        // if (element.type == DocumentChangeType.modified) {}
+        // if (element.type == DocumentChangeType.removed) {}
+      });
+    }).flatMap(
+      (value) =>
+          Stream.fromFutures(value).where((post) => post.deleted != true),
+    );
+
+    yield* userFeedPostsObserver;
+  }
 
   @override
   Future<List<Post>> getAllPosts(
@@ -1013,13 +1150,68 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     int limit = 20,
     String? lastPostId,
   }) async {
-    await Future<void>.delayed(Duration.zero);
-    return [];
+    if (lastPostId != null) {
+      final documentSnapshot = await _postsRef.doc(lastPostId).get();
+
+      final allPostsDocs = await _postsRef
+          .orderBy('timestamp', descending: true)
+          // .where('deleted', isNotEqualTo: true)
+          .limit(limit)
+          .startAfterDocument(documentSnapshot)
+          .get();
+
+      final allPostsList = await Future.wait(
+        allPostsDocs.docs.map((doc) async => Post.fromDoc(doc)).toList(),
+      );
+
+      return allPostsList
+          .where((e) => e.userId != currentUserId && e.deleted != true)
+          .toList();
+    } else {
+      final allPostsDocs = await _postsRef
+          .orderBy('timestamp', descending: true)
+          // .where('deleted', isNotEqualTo: true)
+          .limit(limit)
+          .get();
+
+      final allPostsList = await Future.wait(
+        allPostsDocs.docs.map((doc) async => Post.fromDoc(doc)).toList(),
+      );
+
+      return allPostsList
+          .where((e) => e.userId != currentUserId && e.deleted != true)
+          .toList();
+    }
   }
 
   @override
   Stream<Post> allPostsObserver(
     String currentUserId, {
     int limit = 20,
-  }) async* {}
+  }) async* {
+    final allPostsSnapshotObserver = _postsRef
+        .orderBy('timestamp', descending: true)
+        // .where('deleted', isNotEqualTo: true)
+        .limit(limit)
+        .snapshots();
+
+    final allPostsObserver = allPostsSnapshotObserver.map((event) {
+      return event.docChanges
+          .where(
+        (DocumentChange<Map<String, dynamic>> element) =>
+            element.type == DocumentChangeType.added,
+      )
+          .map((DocumentChange<Map<String, dynamic>> element) {
+        return Post.fromDoc(element.doc);
+        // if (element.type == DocumentChangeType.modified) {}
+        // if (element.type == DocumentChangeType.removed) {}
+      });
+    }).flatMap(
+      (value) => Stream.fromIterable(value).where(
+        (post) => post.userId != currentUserId && post.deleted != true,
+      ),
+    );
+
+    yield* allPostsObserver;
+  }
 }

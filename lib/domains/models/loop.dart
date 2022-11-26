@@ -141,7 +141,6 @@ class Loop extends Equatable {
     String? title,
     String? description,
     String? audioPath,
-    String? imagePath,
     DateTime? timestamp,
     int? likeCount,
     int? commentCount,
