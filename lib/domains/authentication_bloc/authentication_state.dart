@@ -14,14 +14,14 @@ class Uninitialized extends AuthenticationState {
 }
 
 class Authenticated extends AuthenticationState {
-  const Authenticated(this.currentUser) : super();
-  final UserModel currentUser;
+  const Authenticated(this.currentUserId) : super();
+  final String currentUserId;
 
   @override
-  String toString() => 'Authenticated { email: ${currentUser.email} }';
+  String toString() => 'Authenticated { id: $currentUserId }';
 
   @override
-  List<Object> get props => [currentUser];
+  List<Object> get props => [currentUserId];
 }
 
 class Unauthenticated extends AuthenticationState {

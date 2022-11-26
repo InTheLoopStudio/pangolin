@@ -26,7 +26,7 @@ class FollowRelationshipView extends StatelessWidget {
     final theme = Theme.of(context);
 
     return FutureBuilder<UserModel>(
-      future: databaseRepository.getUser(visitedUserId),
+      future: databaseRepository.getUserById(visitedUserId),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const LoadingView();

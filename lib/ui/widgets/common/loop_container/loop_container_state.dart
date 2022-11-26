@@ -5,7 +5,7 @@ class LoopContainerState extends Equatable {
   LoopContainerState({
     required this.loop,
     AudioController? audioController,
-    this.likesCount = 0,
+    this.likeCount = 0,
     this.isLiked = false,
   }) {
     this.audioController = audioController ?? AudioController();
@@ -13,26 +13,26 @@ class LoopContainerState extends Equatable {
 
   late final AudioController audioController;
   final Loop loop;
-  final int likesCount;
+  final int likeCount;
   final bool isLiked;
 
   @override
   List<Object> get props => [
         loop,
         audioController,
-        likesCount,
+        likeCount,
         isLiked,
       ];
 
   LoopContainerState copyWith({
     Loop? loop,
-    int? likesCount,
+    int? likeCount,
     bool? isLiked,
   }) {
     return LoopContainerState(
       loop: loop ?? this.loop,
       audioController: audioController,
-      likesCount: likesCount ?? this.likesCount,
+      likeCount: likeCount ?? this.likeCount,
       isLiked: isLiked ?? this.isLiked,
     );
   }

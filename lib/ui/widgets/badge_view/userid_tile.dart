@@ -17,7 +17,7 @@ class UseridTile extends StatelessWidget {
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
     return FutureBuilder(
-      future: databaseRepository.getUser(userid),
+      future: databaseRepository.getUserById(userid),
       builder: (
         BuildContext context,
         AsyncSnapshot<UserModel> snapshot,

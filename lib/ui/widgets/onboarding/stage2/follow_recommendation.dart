@@ -38,7 +38,7 @@ class FollowRecommendation extends StatelessWidget {
         RepositoryProvider.of<DatabaseRepository>(context);
 
     return FutureBuilder<UserModel>(
-      future: databaseRepository.getUser(userId),
+      future: databaseRepository.getUserById(userId),
       builder: (context, followUserSnapshot) {
         if (!followUserSnapshot.hasData) {
           return Column(

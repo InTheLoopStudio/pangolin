@@ -15,7 +15,7 @@ class CommentContainer extends StatelessWidget {
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
     return FutureBuilder<UserModel>(
-      future: databaseRepository.getUser(comment.userId!),
+      future: databaseRepository.getUserById(comment.userId!),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const CircularProgressIndicator();

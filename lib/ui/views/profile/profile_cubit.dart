@@ -54,7 +54,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
   Future<void> refetchVisitedUser({UserModel? newUserData}) async {
     if (newUserData == null) {
       final refreshedVisitedUser =
-          await databaseRepository.getUser(state.visitedUser.id);
+          await databaseRepository.getUserById(state.visitedUser.id);
       emit(state.copyWith(visitedUser: refreshedVisitedUser));
     } else {
       emit(state.copyWith(visitedUser: newUserData));

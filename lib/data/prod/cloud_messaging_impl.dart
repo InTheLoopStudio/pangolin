@@ -16,7 +16,7 @@ class CloudMessagingImpl extends NotificationRepository {
   final StreamChatClient _client;
 
   @override
-  Future<void> saveDeviceToken({required UserModel user}) async {
+  Future<void> saveDeviceToken({required String userId}) async {
     final settings = await fcm.requestPermission();
 
     // print('User granted permission: ${settings.authorizationStatus}');
@@ -35,7 +35,7 @@ class CloudMessagingImpl extends NotificationRepository {
           await _client.addDevice(token, PushProvider.firebase);
         }
 
-        await usersRef.doc(user.id).collection('tokens').doc(token).set({
+        await usersRef.doc(userId).collection('tokens').doc(token).set({
           'token': token,
           'platform': Platform.operatingSystem,
         });

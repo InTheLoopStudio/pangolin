@@ -2,14 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 /// project extensions for firebase's `DocumentSnapshot<T>` class
-extension DefaultValue<K, V> on DocumentSnapshot<Map<String, dynamic>> {
+extension DefaultValue<V> on DocumentSnapshot<Map<String, dynamic>> {
   /// helper function to try an index the `DocumentSnapshot<T>` object
   /// and return a custom default value if the desired index doesn't exist
   ///
   /// This is useful for adding new fields to DB models since it means
   /// a custom migration script doesn't need to be made every time
   /// and can instead just set its default client-side
-  V getOrElse(K key, V defaultValue) {
+  V getOrElse(String key, V defaultValue) {
     if (data() != null && data()!.containsKey(key)) {
       return (data()![key] ?? defaultValue) as V;
     } else {

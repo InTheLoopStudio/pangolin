@@ -39,7 +39,7 @@ class LoopView extends StatelessWidget {
         final currentUser = snapshot.data!;
 
         return FutureBuilder<UserModel>(
-          future: databaseRepository.getUser(loop.userId),
+          future: databaseRepository.getUserById(loop.userId),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const LoopLoadingView();

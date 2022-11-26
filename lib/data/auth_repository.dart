@@ -1,13 +1,11 @@
-import 'package:intheloopapp/domains/models/user_model.dart';
-
 abstract class AuthRepository {
-  Stream<UserModel> get user;
-  Future<void> updateUserData({required UserModel userData});
+  Stream<String> get userId;
+  Future<void> updateUserData({required String userId});
   Future<bool> isSignedIn();
   Future<String> getAuthUserId();
-  Future<UserModel> signInWithGoogle();
+  Future<String> signInWithGoogle();
   Future<void> reauthenticateWithGoogle();
-  Future<UserModel> signInWithApple();
+  Future<String> signInWithApple();
   Future<void> reauthenticateWithApple();
   Future<void> logout();
   Future<void> recoverPassword({String email});

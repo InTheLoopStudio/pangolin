@@ -11,7 +11,7 @@ class LoopViewState extends Equatable {
     this.feedId,
     this.isFollowing = false,
     this.isLiked = false,
-    this.likesCount = 0,
+    this.likeCount = 0,
     this.commentsCount = 0,
   }) {
     this.audioController = audioController ?? AudioController();
@@ -25,7 +25,7 @@ class LoopViewState extends Equatable {
   final bool isFollowing;
   final bool isLiked;
   final int commentsCount;
-  final int likesCount;
+  final int likeCount;
 
   late final AudioController audioController;
 
@@ -37,7 +37,7 @@ class LoopViewState extends Equatable {
         isFollowing,
         isLiked,
         commentsCount,
-        likesCount,
+        likeCount,
       ];
 
   LoopViewState copyWith({
@@ -49,7 +49,7 @@ class LoopViewState extends Equatable {
     bool? isFollowing,
     bool? isLiked,
     int? commentsCount,
-    int? likesCount,
+    int? likeCount,
   }) {
     return LoopViewState(
       audioController: audioController,
@@ -61,7 +61,7 @@ class LoopViewState extends Equatable {
       isFollowing: isFollowing ?? this.isFollowing,
       isLiked: isLiked ?? this.isLiked,
       commentsCount: commentsCount ?? this.commentsCount,
-      likesCount: likesCount ?? this.likesCount,
+      likeCount: likeCount ?? this.likeCount,
     );
   }
 }

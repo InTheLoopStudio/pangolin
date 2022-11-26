@@ -72,10 +72,7 @@ class TappedApp extends StatelessWidget {
 
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey();
 
-  final _client = StreamChatClient(
-    'xyk6dwdsp422',
-    logLevel: Level.INFO,
-  );
+  final _client = StreamChatClient('xyk6dwdsp422');
 
   @override
   Widget build(BuildContext context) {
@@ -121,13 +118,13 @@ class TappedApp extends StatelessWidget {
                             .add(MonitorDynamicLinks());
                         context
                             .read<OnboardingBloc>()
-                            .add(OnboardingCheck(user: state.currentUser));
+                            .add(OnboardingCheck(userId: state.currentUserId));
                         context
                             .read<StreamRepository>()
-                            .connectUser(state.currentUser);
+                            .connectUser(state.currentUserId);
                         context
                             .read<NotificationRepository>()
-                            .saveDeviceToken(user: state.currentUser);
+                            .saveDeviceToken(userId: state.currentUserId);
 
                         context.read<ActivityBloc>().add(InitListenerEvent());
 
@@ -137,7 +134,7 @@ class TappedApp extends StatelessWidget {
                               return const ShellView();
                             } else if (state is Onboarding) {
                               return const OnboardingView();
-                            } else if (state is OnboardingInitial) {
+                            } else if (state is Unonboarded) {
                               return const LoadingView();
                             } else {
                               return const LoadingView();

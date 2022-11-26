@@ -9,6 +9,7 @@ import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/post.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils.dart';
 import 'package:rxdart/rxdart.dart';
@@ -27,6 +28,7 @@ final _activitiesRef = _firestore.collection('activities');
 final _commentsRef = _firestore.collection('comments');
 final _badgesRef = _firestore.collection('badges');
 final _badgesSentRef = _firestore.collection('badgesSent');
+final _postsRef = _firestore.collection('posts');
 
 class HandleAlreadyExistsException implements Exception {
   HandleAlreadyExistsException(this.cause);
@@ -118,8 +120,12 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<UserModel> getUser(String userId) async {
+  Future<UserModel?> getUserById(String userId) async {
     final userSnapshot = await _usersRef.doc(userId).get();
+    if (!userSnapshot.exists) {
+      return null;
+    }
+
     final user = UserModel.fromDoc(userSnapshot);
 
     return user;
@@ -266,7 +272,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<void> uploadLoop(Loop loop) async {
+  Future<void> addLoop(Loop loop) async {
     await _analytics.logEvent(
       name: 'upload_loop',
       parameters: {
@@ -274,16 +280,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         'loop_id': loop.id,
       },
     );
-    await _loopsRef.add({
-      'title': loop.title,
-      'audioPath': loop.audioPath,
-      'userId': loop.userId,
-      'timestamp': Timestamp.now(),
-      'likeCount': loop.likeCount,
-      'commentCount': loop.commentCount,
-      'tags': loop.tags,
-      'deleted': false,
-    });
+    await _loopsRef.add(loop.toJson());
   }
 
   @override
@@ -532,43 +529,43 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<void> likeLoop(String currentUserId, Loop loop) async {
+  Future<void> addLike(String currentUserId, String entityId) async {
     await _analytics.logEvent(
-      name: 'like_loop',
+      name: 'like',
       parameters: {
         'user_id': currentUserId,
-        'loop_id': loop.id,
+        'entity_id': entityId,
       },
     );
 
     await _likesRef
-        .doc(loop.id)
-        .collection('loopLikes')
+        .doc(entityId)
+        .collection('likes')
         .doc(currentUserId)
         .set({});
   }
 
   @override
-  Future<void> unlikeLoop(String currentUserId, Loop loop) async {
+  Future<void> deleteLike(String currentUserId, String entityId) async {
     await _analytics.logEvent(
-      name: 'unlike_loop',
+      name: 'unlike',
       parameters: {
         'user_id': currentUserId,
-        'loop_id': loop.id,
+        'entity_id': entityId,
       },
     );
     await _likesRef
-        .doc(loop.id)
-        .collection('loopLikes')
+        .doc(entityId)
+        .collection('likes')
         .doc(currentUserId)
         .delete();
   }
 
   @override
-  Future<bool> isLikeLoop(String currentUserId, Loop loop) async {
+  Future<bool> isLiked(String currentUserId, String entityId) async {
     final userDoc = await _likesRef
-        .doc(loop.id)
-        .collection('loopLikes')
+        .doc(entityId)
+        .collection('likes')
         .doc(currentUserId)
         .get();
 
@@ -576,9 +573,9 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<List<UserModel>> getLikes(Loop loop) async {
+  Future<List<UserModel>> getLikes(String entityId) async {
     final likesSnapshot =
-        await _likesRef.doc(loop.id).collection('loopLikes').get();
+        await _likesRef.doc(entityId).collection('likes').get();
 
     final usersList = await Future.wait(
       likesSnapshot.docs.map((doc) async {
@@ -689,13 +686,13 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<List<Comment>> getLoopComments(
-    Loop loop, {
+  Future<List<Comment>> getComments(
+    String rootId, {
     int limit = 20,
   }) async {
     final loopCommentsSnapshot = await _commentsRef
-        .doc(loop.id)
-        .collection('loopComments')
+        .doc(rootId)
+        .collection('comments')
         .orderBy('timestamp')
         // .where('parentId', isNull: true) // Needed for threaded comments
         .limit(limit)
@@ -708,13 +705,13 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Stream<Comment> loopCommentsObserver(
-    Loop loop, {
+  Stream<Comment> commentsObserver(
+    String rootId, {
     int limit = 20,
   }) async* {
     final loopCommentsSnapshotObserver = _commentsRef
-        .doc(loop.id)
-        .collection('loopComments')
+        .doc(rootId)
+        .collection('comments')
         .orderBy('timestamp')
         .limit(limit)
         // .where('parentId', isNull: true) // Needed for threaded comments
@@ -737,10 +734,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<Comment> getComment(Loop loop, String commentId) async {
+  Future<Comment> getComment(String rootId, String commentId) async {
     final commentSnapshot = await _commentsRef
-        .doc(loop.id)
-        .collection('loopComments')
+        .doc(rootId)
+        .collection('comments')
         .doc(commentId)
         .get();
 
@@ -754,17 +751,17 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     await _analytics.logEvent(
       name: 'new_comment',
       parameters: {
-        'root_loop_id': comment.rootLoopId,
+        'root_id': comment.rootId,
         'user_id': comment.userId,
       },
     );
 
-    await _commentsRef.doc(comment.rootLoopId).collection('loopComments').add({
+    await _commentsRef.doc(comment.rootId).collection('loopComments').add({
       'userId': comment.userId,
       'timestamp': Timestamp.now(),
       'content': comment.content,
       'parentId': comment.parentId,
-      'rootLoopId': comment.rootLoopId,
+      'rootId': comment.rootId,
       'children': comment.children,
       'deleted': false,
     });
@@ -955,4 +952,74 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       return userBadges;
     }
   }
+
+  @override
+  Future<Post> getPostById(String postId) async {
+    final postSnapshot = await _postsRef.doc(postId).get();
+    final post = Post.fromDoc(postSnapshot);
+    return post;
+  }
+
+  @override
+  Future<void> addPost(Post post) async {
+    await _analytics.logEvent(
+      name: 'upload_post',
+      parameters: {
+        'user_id': post.userId,
+        'post_id': post.id,
+      },
+    );
+    await _postsRef.add(post.toJson());
+  }
+
+  @override
+  Future<void> deletePost(Post post) async {}
+
+  @override
+  Future<List<Post>> getUserPost(
+    String userId, {
+    int limit = 20,
+    String? lastPostId,
+  }) async {
+    await Future<void>.delayed(Duration.zero);
+    return [];
+  }
+
+  @override
+  Stream<Post> userPostsObserver(
+    String userId, {
+    int limit = 20,
+  }) async* {}
+
+  @override
+  Future<List<Post>> getFollowingPosts(
+    String currentUserId, {
+    int limit = 20,
+    String? lastPostId,
+  }) async {
+    await Future<void>.delayed(Duration.zero);
+    return [];
+  }
+
+  @override
+  Stream<Post> followingPostsObserver(
+    String currentUserId, {
+    int limit = 20,
+  }) async* {}
+
+  @override
+  Future<List<Post>> getAllPosts(
+    String currentUserId, {
+    int limit = 20,
+    String? lastPostId,
+  }) async {
+    await Future<void>.delayed(Duration.zero);
+    return [];
+  }
+
+  @override
+  Stream<Post> allPostsObserver(
+    String currentUserId, {
+    int limit = 20,
+  }) async* {}
 }

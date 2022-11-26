@@ -90,7 +90,7 @@ class MockDatabaseRepository extends _i1.Mock
         returnValue: _i6.Future<_i2.UserModel?>.value(),
       ) as _i6.Future<_i2.UserModel?>);
   @override
-  _i6.Future<_i2.UserModel> getUser(String? userId) => (super.noSuchMethod(
+  _i6.Future<_i2.UserModel> getUserById(String? userId) => (super.noSuchMethod(
         Invocation.method(
           #getUser,
           [userId],
@@ -103,6 +103,30 @@ class MockDatabaseRepository extends _i1.Mock
           ),
         )),
       ) as _i6.Future<_i2.UserModel>);
+  @override
+  _i6.Future<void> updateUserData(_i2.UserModel? user) => (super.noSuchMethod(
+        Invocation.method(
+          #updateUserData,
+          [user],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+  @override
+  _i6.Future<bool> checkUsernameAvailability(
+    String? username,
+    String? userid,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #checkUsernameAvailability,
+          [
+            username,
+            userid,
+          ],
+        ),
+        returnValue: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
   @override
   _i6.Future<_i3.Loop> getLoopById(String? loopId) => (super.noSuchMethod(
         Invocation.method(
@@ -118,97 +142,7 @@ class MockDatabaseRepository extends _i1.Mock
         )),
       ) as _i6.Future<_i3.Loop>);
   @override
-  _i6.Future<int> followersNum(String? userid) => (super.noSuchMethod(
-        Invocation.method(
-          #followersNum,
-          [userid],
-        ),
-        returnValue: _i6.Future<int>.value(0),
-      ) as _i6.Future<int>);
-  @override
-  _i6.Future<int> followingNum(String? userid) => (super.noSuchMethod(
-        Invocation.method(
-          #followingNum,
-          [userid],
-        ),
-        returnValue: _i6.Future<int>.value(0),
-      ) as _i6.Future<int>);
-  @override
-  _i6.Future<void> updateUserData(_i2.UserModel? user) => (super.noSuchMethod(
-        Invocation.method(
-          #updateUserData,
-          [user],
-        ),
-        returnValue: _i6.Future<void>.value(),
-        returnValueForMissingStub: _i6.Future<void>.value(),
-      ) as _i6.Future<void>);
-  @override
-  _i6.Future<void> followUser(
-    String? currentUserId,
-    String? visitedUserId,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #followUser,
-          [
-            currentUserId,
-            visitedUserId,
-          ],
-        ),
-        returnValue: _i6.Future<void>.value(),
-        returnValueForMissingStub: _i6.Future<void>.value(),
-      ) as _i6.Future<void>);
-  @override
-  _i6.Future<void> unfollowUser(
-    String? currentUserId,
-    String? visitedUserId,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #unfollowUser,
-          [
-            currentUserId,
-            visitedUserId,
-          ],
-        ),
-        returnValue: _i6.Future<void>.value(),
-        returnValueForMissingStub: _i6.Future<void>.value(),
-      ) as _i6.Future<void>);
-  @override
-  _i6.Future<bool> isFollowingUser(
-    String? currentUserId,
-    String? visitedUserId,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #isFollowingUser,
-          [
-            currentUserId,
-            visitedUserId,
-          ],
-        ),
-        returnValue: _i6.Future<bool>.value(false),
-      ) as _i6.Future<bool>);
-  @override
-  _i6.Future<List<_i2.UserModel>> getFollowing(String? currentUserId) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #getFollowing,
-          [currentUserId],
-        ),
-        returnValue: _i6.Future<List<_i2.UserModel>>.value(<_i2.UserModel>[]),
-      ) as _i6.Future<List<_i2.UserModel>>);
-  @override
-  _i6.Future<List<_i2.UserModel>> getFollowers(String? currentUserId) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #getFollowers,
-          [currentUserId],
-        ),
-        returnValue: _i6.Future<List<_i2.UserModel>>.value(<_i2.UserModel>[]),
-      ) as _i6.Future<List<_i2.UserModel>>);
-  @override
-  _i6.Future<void> uploadLoop(_i3.Loop? loop) => (super.noSuchMethod(
+  _i6.Future<void> addLoop(_i3.Loop? loop) => (super.noSuchMethod(
         Invocation.method(
           #uploadLoop,
           [loop],
@@ -316,7 +250,7 @@ class MockDatabaseRepository extends _i1.Mock
         returnValue: _i6.Stream<_i3.Loop>.empty(),
       ) as _i6.Stream<_i3.Loop>);
   @override
-  _i6.Future<void> likeLoop(
+  _i6.Future<void> addLike(
     String? currentUserId,
     _i3.Loop? loop,
   ) =>
@@ -332,7 +266,7 @@ class MockDatabaseRepository extends _i1.Mock
         returnValueForMissingStub: _i6.Future<void>.value(),
       ) as _i6.Future<void>);
   @override
-  _i6.Future<void> unlikeLoop(
+  _i6.Future<void> deleteLike(
     String? currentUserId,
     _i3.Loop? loop,
   ) =>
@@ -348,7 +282,7 @@ class MockDatabaseRepository extends _i1.Mock
         returnValueForMissingStub: _i6.Future<void>.value(),
       ) as _i6.Future<void>);
   @override
-  _i6.Future<bool> isLikeLoop(
+  _i6.Future<bool> isLiked(
     String? currentUserId,
     _i3.Loop? loop,
   ) =>
@@ -368,6 +302,162 @@ class MockDatabaseRepository extends _i1.Mock
         Invocation.method(
           #getLikes,
           [loop],
+        ),
+        returnValue: _i6.Future<List<_i2.UserModel>>.value(<_i2.UserModel>[]),
+      ) as _i6.Future<List<_i2.UserModel>>);
+  @override
+  _i6.Future<List<_i4.Comment>> getLoopComments(
+    _i3.Loop? loop, {
+    int? limit = 20,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getLoopComments,
+          [loop],
+          {#limit: limit},
+        ),
+        returnValue: _i6.Future<List<_i4.Comment>>.value(<_i4.Comment>[]),
+      ) as _i6.Future<List<_i4.Comment>>);
+  @override
+  _i6.Stream<_i4.Comment> loopCommentsObserver(
+    _i3.Loop? loop, {
+    int? limit = 20,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #loopCommentsObserver,
+          [loop],
+          {#limit: limit},
+        ),
+        returnValue: _i6.Stream<_i4.Comment>.empty(),
+      ) as _i6.Stream<_i4.Comment>);
+  @override
+  _i6.Future<_i4.Comment> getLoopComment(
+    _i3.Loop? loop,
+    String? commentId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getComment,
+          [
+            loop,
+            commentId,
+          ],
+        ),
+        returnValue: _i6.Future<_i4.Comment>.value(_FakeComment_2(
+          this,
+          Invocation.method(
+            #getComment,
+            [
+              loop,
+              commentId,
+            ],
+          ),
+        )),
+      ) as _i6.Future<_i4.Comment>);
+  @override
+  _i6.Future<void> addLoopComment(
+    _i4.Comment? comment,
+    String? visitedUserId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #addComment,
+          [
+            comment,
+            visitedUserId,
+          ],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+  @override
+  _i6.Future<void> shareLoop(_i3.Loop? loop) => (super.noSuchMethod(
+        Invocation.method(
+          #shareLoop,
+          [loop],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+  @override
+  _i6.Future<int> followersNum(String? userid) => (super.noSuchMethod(
+        Invocation.method(
+          #followersNum,
+          [userid],
+        ),
+        returnValue: _i6.Future<int>.value(0),
+      ) as _i6.Future<int>);
+  @override
+  _i6.Future<int> followingNum(String? userid) => (super.noSuchMethod(
+        Invocation.method(
+          #followingNum,
+          [userid],
+        ),
+        returnValue: _i6.Future<int>.value(0),
+      ) as _i6.Future<int>);
+  @override
+  _i6.Future<void> followUser(
+    String? currentUserId,
+    String? visitedUserId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #followUser,
+          [
+            currentUserId,
+            visitedUserId,
+          ],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+  @override
+  _i6.Future<void> unfollowUser(
+    String? currentUserId,
+    String? visitedUserId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #unfollowUser,
+          [
+            currentUserId,
+            visitedUserId,
+          ],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+  @override
+  _i6.Future<bool> isFollowingUser(
+    String? currentUserId,
+    String? visitedUserId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #isFollowingUser,
+          [
+            currentUserId,
+            visitedUserId,
+          ],
+        ),
+        returnValue: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
+  @override
+  _i6.Future<List<_i2.UserModel>> getFollowing(String? currentUserId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getFollowing,
+          [currentUserId],
+        ),
+        returnValue: _i6.Future<List<_i2.UserModel>>.value(<_i2.UserModel>[]),
+      ) as _i6.Future<List<_i2.UserModel>>);
+  @override
+  _i6.Future<List<_i2.UserModel>> getFollowers(String? currentUserId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getFollowers,
+          [currentUserId],
         ),
         returnValue: _i6.Future<List<_i2.UserModel>>.value(<_i2.UserModel>[]),
       ) as _i6.Future<List<_i2.UserModel>>);
@@ -432,96 +522,6 @@ class MockDatabaseRepository extends _i1.Mock
         returnValue: _i6.Future<void>.value(),
         returnValueForMissingStub: _i6.Future<void>.value(),
       ) as _i6.Future<void>);
-  @override
-  _i6.Future<List<_i4.Comment>> getLoopComments(
-    _i3.Loop? loop, {
-    int? limit = 20,
-  }) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #getLoopComments,
-          [loop],
-          {#limit: limit},
-        ),
-        returnValue: _i6.Future<List<_i4.Comment>>.value(<_i4.Comment>[]),
-      ) as _i6.Future<List<_i4.Comment>>);
-  @override
-  _i6.Stream<_i4.Comment> loopCommentsObserver(
-    _i3.Loop? loop, {
-    int? limit = 20,
-  }) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #loopCommentsObserver,
-          [loop],
-          {#limit: limit},
-        ),
-        returnValue: _i6.Stream<_i4.Comment>.empty(),
-      ) as _i6.Stream<_i4.Comment>);
-  @override
-  _i6.Future<_i4.Comment> getComment(
-    _i3.Loop? loop,
-    String? commentId,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #getComment,
-          [
-            loop,
-            commentId,
-          ],
-        ),
-        returnValue: _i6.Future<_i4.Comment>.value(_FakeComment_2(
-          this,
-          Invocation.method(
-            #getComment,
-            [
-              loop,
-              commentId,
-            ],
-          ),
-        )),
-      ) as _i6.Future<_i4.Comment>);
-  @override
-  _i6.Future<void> addComment(
-    _i4.Comment? comment,
-    String? visitedUserId,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #addComment,
-          [
-            comment,
-            visitedUserId,
-          ],
-        ),
-        returnValue: _i6.Future<void>.value(),
-        returnValueForMissingStub: _i6.Future<void>.value(),
-      ) as _i6.Future<void>);
-  @override
-  _i6.Future<void> shareLoop(_i3.Loop? loop) => (super.noSuchMethod(
-        Invocation.method(
-          #shareLoop,
-          [loop],
-        ),
-        returnValue: _i6.Future<void>.value(),
-        returnValueForMissingStub: _i6.Future<void>.value(),
-      ) as _i6.Future<void>);
-  @override
-  _i6.Future<bool> checkUsernameAvailability(
-    String? username,
-    String? userid,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #checkUsernameAvailability,
-          [
-            username,
-            userid,
-          ],
-        ),
-        returnValue: _i6.Future<bool>.value(false),
-      ) as _i6.Future<bool>);
   @override
   _i6.Future<void> createBadge(_i8.Badge? badge) => (super.noSuchMethod(
         Invocation.method(

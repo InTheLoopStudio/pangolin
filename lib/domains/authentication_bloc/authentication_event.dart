@@ -14,25 +14,25 @@ class AppStarted extends AuthenticationEvent {
 }
 
 class LoggedIn extends AuthenticationEvent {
-  const LoggedIn({this.user});
-  final UserModel? user;
+  const LoggedIn({this.userId});
+  final String? userId;
 
   @override
-  String toString() => 'LoggedIn { user: ${user?.email ?? ''} }';
+  String toString() => 'LoggedIn { user: ${userId ?? ''} }';
 
   @override
-  List<Object?> get props => [user];
+  List<Object?> get props => [userId];
 }
 
 class UpdateAuthenticatedUser extends AuthenticationEvent {
-  const UpdateAuthenticatedUser(this.user);
-  final UserModel user;
+  const UpdateAuthenticatedUser(this.userId);
+  final String userId;
 
   @override
-  String toString() => 'UpdateAuthenticatedUser { user: ${user.email} }';
+  String toString() => 'UpdateAuthenticatedUser { user: $userId }';
 
   @override
-  List<Object> get props => [user];
+  List<Object> get props => [userId];
 }
 
 class LoggedOut extends AuthenticationEvent {

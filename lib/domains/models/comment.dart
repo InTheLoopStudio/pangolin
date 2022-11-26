@@ -8,7 +8,7 @@ class Comment {
     this.content,
     this.userId,
     this.parentId,
-    this.rootLoopId,
+    this.rootId,
     this.children,
     this.deleted,
   });
@@ -25,7 +25,7 @@ class Comment {
       content: doc.getOrElse('content', '') as String,
       userId: doc.getOrElse('userId', '') as String,
       parentId: doc.getOrElse('parentId', '') as String,
-      rootLoopId: doc.getOrElse('rootLoopId', '') as String,
+      rootId: doc.getOrElse('rootId', '') as String,
       children: List.from(
         doc.getOrElse('children', <dynamic>[]) as Iterable<dynamic>,
       ),
@@ -37,7 +37,7 @@ class Comment {
   String? content;
   String? userId;
   String? parentId;
-  String? rootLoopId;
+  String? rootId;
   List<String>? children;
   bool? deleted;
 

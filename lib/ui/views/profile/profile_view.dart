@@ -281,7 +281,7 @@ class _ProfileViewState extends State<ProfileView> {
           final currentUser = state.currentUser;
           return currentUser.id != visitedUserId
               ? FutureBuilder(
-                  future: databaseRepository.getUser(visitedUserId),
+                  future: databaseRepository.getUserById(visitedUserId),
                   builder: (
                     BuildContext context,
                     AsyncSnapshot<UserModel> snapshot,

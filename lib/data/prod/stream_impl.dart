@@ -18,26 +18,19 @@ class StreamImpl extends StreamRepository {
   bool _connected = false;
 
   @override
-  Future<UserModel> connectUser(UserModel user) async {
+  Future<void> connectUser(String userId) async {
     final token = await getToken();
-
-    final extraData = <String, dynamic>{};
-    extraData['image'] = user.profilePicture;
-    extraData['name'] = user.username;
 
     if (!_connected) {
       await _client.connectUser(
         User(
-          id: user.id,
-          extraData: extraData,
+          id: userId,
         ),
         token,
         // user.streamChatToken,
       );
       _connected = true;
     }
-
-    return user;
   }
 
   @override

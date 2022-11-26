@@ -1,5 +1,5 @@
 name: intheloopapp
-version: 1.1.9+24
+version: 1.1.10+25
 publish_to: none
 description: Mobile app for Tapped.
 environment: 
@@ -22,6 +22,7 @@ dependencies:
   firebase_analytics: ^9.3.4
   firebase_auth: ^3.0.1
   firebase_core: ^1.4.0
+  firebase_core_platform_interface: 4.5.1
   firebase_crashlytics: ^2.1.1
   firebase_dynamic_links: ^4.3.7
   firebase_messaging: ^13.0.1

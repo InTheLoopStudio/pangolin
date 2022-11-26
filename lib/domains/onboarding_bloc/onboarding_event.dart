@@ -5,18 +5,25 @@ abstract class OnboardingEvent extends Equatable {
 }
 
 class OnboardingCheck extends OnboardingEvent {
-  const OnboardingCheck({required this.user});
+  const OnboardingCheck({required this.userId});
+
+  final String userId;
+
+  @override
+  String toString() => 'OnboardingCheck { id: $userId }';
+
+  @override
+  List<Object> get props => [userId];
+}
+
+class FinishOnboarding extends OnboardingEvent {
+  const FinishOnboarding({required this.user});
 
   final UserModel user;
 
   @override
-  String toString() => 'OnboardingCheck { email: ${user.email} }';
+  String toString() => 'FinishOnboarded { email: ${user.email} }';
 
-  @override
-  List<Object> get props => [user];
-}
-
-class FinishOnboarding extends OnboardingEvent {
   @override
   List<Object> get props => [];
 }

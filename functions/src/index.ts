@@ -241,7 +241,7 @@ const _deleteComment = async (data: {
   const rootLoopId = commentSnapshot.data()?.["rootLoopId"];
   loopsRef
     .doc(rootLoopId)
-    .update({ comments: FieldValue.increment(-1) });
+    .update({ commentCount: FieldValue.increment(-1) });
 
   commentSnapshot.ref.update({
     content: "*deleted*",
@@ -263,9 +263,9 @@ const _deleteLoop = async (data: { id: string; userId: string }) => {
 
   loopsRef.doc(data.id).update({
     audioPath: FieldValue.delete(),
-    comments: FieldValue.delete(),
+    commentCount: FieldValue.delete(),
     downloads: FieldValue.delete(),
-    likes: FieldValue.delete(),
+    likeCount: FieldValue.delete(),
     tags: FieldValue.delete(),
     timestamp: FieldValue.delete(),
     title: "*deleted*",
@@ -395,15 +395,6 @@ export const sendToDevice = functions.firestore
 
     return null;
   });
-export const onUserCreated = functions.auth
-  .user()
-  .onCreate((user: auth.UserRecord) =>
-    _createUser({
-      id: user.uid,
-      email: user.email,
-      profilePicture: user.photoURL,
-    })
-  );
 export const createStreamUserOnUserCreated = functions
   .runWith({ secrets: [ streamKey, streamSecret ] })
   .firestore
@@ -549,7 +540,7 @@ export const incrementLikeCountOnLike = functions.firestore
   .onCreate(async (snapshot, context) => {
     await loopsRef
       .doc(context.params.loopId)
-      .update({ likes: FieldValue.increment(1) });
+      .update({ likeCount: FieldValue.increment(1) });
   });
 export const addActivityOnLike = functions.firestore 
   .document("likes/{loopId}/loopLikes/{userId}")
@@ -574,7 +565,7 @@ export const decrementLikeCountOnUnlike = functions.firestore
   .onDelete(async (snapshot, context) => {
     await loopsRef
       .doc(context.params.loopId)
-      .update({ likes: FieldValue.increment(-1) });
+      .update({ likeCount: FieldValue.increment(-1) });
   })
 
 export const incrementCommentCountOnComment = functions.firestore 

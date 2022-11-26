@@ -4,7 +4,7 @@ abstract class OnboardingState extends Equatable {
   const OnboardingState();
 }
 
-class OnboardingInitial extends OnboardingState {
+class Unonboarded extends OnboardingState {
   @override
   List<Object> get props => [];
 }
@@ -15,6 +15,12 @@ class Onboarding extends OnboardingState {
 }
 
 class Onboarded extends OnboardingState {
+  const Onboarded(this.currentUser) : super();
+  final UserModel currentUser;
+
   @override
-  List<Object> get props => [];
+  String toString() => 'Onboarded { email: ${currentUser.email} }';
+
+  @override
+  List<Object> get props => [currentUser];
 }

@@ -162,7 +162,7 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
           // tags: state.selectedTags.map((tag) => tag.value).toList(),
         );
 
-        await databaseRepository.uploadLoop(loop);
+        await databaseRepository.addLoop(loop);
 
         emit(
           state.copyWith(

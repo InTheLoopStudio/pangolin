@@ -2,6 +2,7 @@ import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/post.dart';
 // import 'package:intheloopapp/domains/models/tag.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
@@ -10,13 +11,13 @@ abstract class DatabaseRepository {
   Future<bool> userEmailExists(String email);
   Future<void> createUser(UserModel user);
   Future<UserModel?> getUserByUsername(String? username);
-  Future<UserModel> getUser(String userId);
+  Future<UserModel?> getUserById(String userId);
   Future<void> updateUserData(UserModel user);
   Future<bool> checkUsernameAvailability(String username, String userid);
 
   // Loop related stuff
   Future<Loop> getLoopById(String loopId);
-  Future<void> uploadLoop(Loop loop);
+  Future<void> addLoop(Loop loop);
   Future<void> deleteLoop(Loop loop);
   Future<List<Loop>> getUserLoops(
     String userId, {
@@ -47,21 +48,21 @@ abstract class DatabaseRepository {
   });
 
   // Liking related stuff
-  Future<void> likeLoop(String currentUserId, Loop loop);
-  Future<void> unlikeLoop(String currentUserId, Loop loop);
-  Future<bool> isLikeLoop(String currentUserId, Loop loop);
-  Future<List<UserModel>> getLikes(Loop loop);
+  Future<void> addLike(String currentUserId, String entityId);
+  Future<void> deleteLike(String currentUserId, String entityId);
+  Future<bool> isLiked(String currentUserId, String entityId);
+  Future<List<UserModel>> getLikes(String entityId);
 
-  // Commenting relatedd stuff
-  Future<List<Comment>> getLoopComments(
-    Loop loop, {
+  // Commenting related stuff
+  Future<List<Comment>> getComments(
+    String rootId, {
     int limit = 20,
   });
-  Stream<Comment> loopCommentsObserver(
-    Loop loop, {
+  Stream<Comment> commentsObserver(
+    String rootId, {
     int limit = 20,
   });
-  Future<Comment> getComment(Loop loop, String commentId);
+  Future<Comment> getComment(String rootId, String commentId);
   Future<void> addComment(Comment comment, String visitedUserId);
   // Future<void> deleteComment(Comment comment);
 
@@ -87,7 +88,6 @@ abstract class DatabaseRepository {
   );
   Future<List<UserModel>> getFollowing(String currentUserId);
   Future<List<UserModel>> getFollowers(String currentUserId);
-
 
   // Activity related stuff
   Future<List<Activity>> getActivities(
@@ -127,5 +127,37 @@ abstract class DatabaseRepository {
     String userId, {
     int limit = 20,
     String? lastBadgeId,
+  });
+
+  // Post related stuff
+  Future<Post> getPostById(String postId);
+  Future<void> addPost(Post post);
+  Future<void> deletePost(Post post);
+  Future<List<Post>> getUserPost(
+    String userId, {
+    int limit = 20,
+    String? lastPostId,
+  });
+  Stream<Post> userPostsObserver(
+    String userId, {
+    int limit = 20,
+  });
+  Future<List<Post>> getFollowingPosts(
+    String currentUserId, {
+    int limit = 20,
+    String? lastPostId,
+  });
+  Stream<Post> followingPostsObserver(
+    String currentUserId, {
+    int limit = 20,
+  });
+  Future<List<Post>> getAllPosts(
+    String currentUserId, {
+    int limit = 20,
+    String? lastPostId,
+  });
+  Stream<Post> allPostsObserver(
+    String currentUserId, {
+    int limit = 20,
   });
 }

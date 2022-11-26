@@ -16,7 +16,7 @@ class LikesCubit extends Cubit<LikesState> {
   final DatabaseRepository databaseRepository;
 
   Future<void> initLikes() async {
-    final userLikes = await databaseRepository.getLikes(loop);
+    final userLikes = await databaseRepository.getLikes(loop.id);
 
     emit(state.copyWith(likes: userLikes));
   }

@@ -8,7 +8,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
-import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -16,15 +15,6 @@ final _auth = FirebaseAuth.instance;
 final _fireStore = FirebaseFirestore.instance;
 final _analytics = FirebaseAnalytics.instance;
 final usersRef = _fireStore.collection('users');
-
-extension on User {
-  Future<UserModel> get toUserModel async {
-    final userSnapshot = await usersRef.doc(uid).get();
-    final user = UserModel.fromDoc(userSnapshot);
-
-    return user;
-  }
-}
 
 String _generateNonce([int length = 32]) {
   const charset =
@@ -42,25 +32,23 @@ String _sha256ofString(String input) {
 }
 
 class FirebaseAuthImpl extends AuthRepository {
-  Stream<UserModel> get authUserChanges =>
+  Stream<String> get authUserChanges =>
       _auth.authStateChanges().asyncMap((firebaseUser) async {
-        final user = firebaseUser == null
-            ? UserModel.empty()
-            : await firebaseUser.toUserModel;
+        final userId = firebaseUser == null ? '' : firebaseUser.uid;
 
-        return user;
+        return userId;
       });
   // ignore: close_sinks
-  StreamController<UserModel> manualUserUpdates = StreamController.broadcast();
+  StreamController<String> manualUserUpdates = StreamController.broadcast();
 
   @override
-  Stream<UserModel> get user {
+  Stream<String> get userId {
     return MergeStream([authUserChanges, manualUserUpdates.stream]);
   }
 
   @override
-  Future<void> updateUserData({required UserModel userData}) async {
-    manualUserUpdates.sink.add(userData);
+  Future<void> updateUserData({required String userId}) async {
+    manualUserUpdates.sink.add(userId);
   }
 
   @override
@@ -80,7 +68,7 @@ class FirebaseAuthImpl extends AuthRepository {
   }
 
   @override
-  Future<UserModel> signInWithGoogle() async {
+  Future<String> signInWithGoogle() async {
     // Trigger the authentication flow
     final googleUser = await GoogleSignIn().signIn();
 
@@ -102,15 +90,10 @@ class FirebaseAuthImpl extends AuthRepository {
       await _analytics
           .logEvent(name: 'sign_in', parameters: {'provider': 'Google'});
       await _analytics.setUserId(id: signedInUser.uid);
-      return UserModel.empty().copyWith(
-        id: signedInUser.uid,
-        email: signedInUser.email ?? '',
-        username: signedInUser.displayName ?? 'anonymous',
-        profilePicture: signedInUser.photoURL ?? '',
-      );
+      return signedInUser.uid;
     }
 
-    return UserModel.empty();
+    return '';
   }
 
   @override
@@ -132,7 +115,7 @@ class FirebaseAuthImpl extends AuthRepository {
   }
 
   @override
-  Future<UserModel> signInWithApple() async {
+  Future<String> signInWithApple() async {
     // To prevent replay attacks with the credential returned from Apple, we
     // include a nonce in the credential request. When signing in in with
     // Firebase, the nonce in the id token returned by Apple, is expected to
@@ -161,7 +144,7 @@ class FirebaseAuthImpl extends AuthRepository {
     );
 
     // Sign in the user with Firebase. If the nonce we generated earlier does
-    // not match the nonce in `appleCredential.identityToken`, 
+    // not match the nonce in `appleCredential.identityToken`,
     // sign in will fail.
     final authResult = await _auth.signInWithCredential(oauthCredential);
 
@@ -171,13 +154,10 @@ class FirebaseAuthImpl extends AuthRepository {
       await _analytics
           .logEvent(name: 'sign_in', parameters: {'provider': 'Apple'});
       await _analytics.setUserId(id: signedInUser.uid);
-      return UserModel.empty().copyWith(
-        id: signedInUser.uid,
-        email: signedInUser.email ?? '',
-      );
+      return signedInUser.uid;
     }
 
-    return UserModel.empty();
+    return '';
   }
 
   @override
