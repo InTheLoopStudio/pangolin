@@ -7,7 +7,6 @@ import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/views/send_badge/send_badge_view.dart';
 import 'package:intheloopapp/ui/views/upload_loop/upload_view.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container.dart';
-import 'package:intheloopapp/ui/widgets/upload_loop_view/upload_audio_input.dart';
 
 class AllLoopsList extends StatefulWidget {
   const AllLoopsList({Key? key, required this.scrollController})

@@ -5,12 +5,6 @@ class LocalAuthImpl extends AuthRepository {
   Stream<String> get userId => const Stream.empty();
 
   @override
-  Future<void> updateUserData({required String userId}) async {
-    await Future<void>.delayed(const Duration(seconds: 2));
-    return;
-  }
-
-  @override
   Future<bool> isSignedIn() async {
     await Future<void>.delayed(const Duration(seconds: 2));
     return true;

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:intheloopapp/data/notification_repository.dart';
-import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 final fcm = FirebaseMessaging.instance;

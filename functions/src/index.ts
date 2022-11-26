@@ -54,66 +54,66 @@ const _authenticated = (context: functions.https.CallableContext) => {
   }
 };
 
-const _createUser = async (data: {
-  id: string;
-  email?: string;
-  username?: string;
-  bio?: string;
-  profilePicture?: string;
-  location?: string;
-  onboarded?: boolean;
-  loopsCount?: number;
-  badgesCount?: number;
-  shadowBanned?: boolean;
-  accountType?: string;
-  twitterHandle?: string; 
-  instagramHandle?: string;
-  tiktokHandle?: string;
-  soundcloudHandle?: string;
-  youtubeChannelId?: string ;
-  pushNotificationsLikes?: boolean;
-  pushNotificationsComments?: boolean;
-  pushNotificationsFollows?: boolean;
-  pushNotificationsDirectMessages?: boolean;
-  pushNotificationsITLUpdates?: boolean;
-  emailNotificationsAppReleases?: boolean;
-  emailNotificationsITLUpdates?: boolean;
-}) => {
-  if ((await usersRef.doc(data.id).get()).exists) {
-    return { id: data.id };
-  }
+// const _createUser = async (data: {
+//   id: string;
+//   email?: string;
+//   username?: string;
+//   bio?: string;
+//   profilePicture?: string;
+//   location?: string;
+//   onboarded?: boolean;
+//   loopsCount?: number;
+//   badgesCount?: number;
+//   shadowBanned?: boolean;
+//   accountType?: string;
+//   twitterHandle?: string; 
+//   instagramHandle?: string;
+//   tiktokHandle?: string;
+//   soundcloudHandle?: string;
+//   youtubeChannelId?: string ;
+//   pushNotificationsLikes?: boolean;
+//   pushNotificationsComments?: boolean;
+//   pushNotificationsFollows?: boolean;
+//   pushNotificationsDirectMessages?: boolean;
+//   pushNotificationsITLUpdates?: boolean;
+//   emailNotificationsAppReleases?: boolean;
+//   emailNotificationsITLUpdates?: boolean;
+// }) => {
+//   if ((await usersRef.doc(data.id).get()).exists) {
+//     return { id: data.id };
+//   }
 
-  const filteredUsername = data.username?.trim().toLowerCase() || "anonymous";
+//   const filteredUsername = data.username?.trim().toLowerCase() || "anonymous";
 
-  usersRef.doc(data.id).set({
-    email: data.email || "",
-    username: filteredUsername,
-    bio: data.bio || "",
-    profilePicture: data.profilePicture || "",
-    location: data.location || "Global",
-    onboarded: data.onboarded || false,
-    loopsCount: data.loopsCount || 0,
-    badgesCount: data.badgesCount || 0,
-    deleted: false,
-    shadowBanned: data.shadowBanned || false,
-    accountType: data.accountType || "free",
-    twitterHandle: data.twitterHandle || "",
-    instagramHandle: data.instagramHandle || "",
-    tiktokHandle: data.tiktokHandle || "",
-    soundcloudHandle: data.soundcloudHandle || "",
-    youtubeChannelId: data.youtubeChannelId || "",
-    pushNotificationsLikes: data.pushNotificationsLikes || true,
-    pushNotificationsComments: data.pushNotificationsComments || true,
-    pushNotificationsFollows: data.pushNotificationsFollows || true,
-    pushNotificaionsDirectMessages:
-      data.pushNotificationsDirectMessages || true,
-    pushNotificationsITLUpdates: data.pushNotificationsITLUpdates || true,
-    emailNotificationsAppReleases: data.emailNotificationsAppReleases || true,
-    emailNotificationsITLUpdates: data.emailNotificationsITLUpdates || true,
-  });
+//   usersRef.doc(data.id).set({
+//     email: data.email || "",
+//     username: filteredUsername,
+//     bio: data.bio || "",
+//     profilePicture: data.profilePicture || "",
+//     location: data.location || "Global",
+//     onboarded: data.onboarded || false,
+//     loopsCount: data.loopsCount || 0,
+//     badgesCount: data.badgesCount || 0,
+//     deleted: false,
+//     shadowBanned: data.shadowBanned || false,
+//     accountType: data.accountType || "free",
+//     twitterHandle: data.twitterHandle || "",
+//     instagramHandle: data.instagramHandle || "",
+//     tiktokHandle: data.tiktokHandle || "",
+//     soundcloudHandle: data.soundcloudHandle || "",
+//     youtubeChannelId: data.youtubeChannelId || "",
+//     pushNotificationsLikes: data.pushNotificationsLikes || true,
+//     pushNotificationsComments: data.pushNotificationsComments || true,
+//     pushNotificationsFollows: data.pushNotificationsFollows || true,
+//     pushNotificaionsDirectMessages:
+//       data.pushNotificationsDirectMessages || true,
+//     pushNotificationsITLUpdates: data.pushNotificationsITLUpdates || true,
+//     emailNotificationsAppReleases: data.emailNotificationsAppReleases || true,
+//     emailNotificationsITLUpdates: data.emailNotificationsITLUpdates || true,
+//   });
 
-  return { id: data.id };
-};
+//   return { id: data.id };
+// };
 
 const _deleteUser = async (data: { id: string }) => {
   // Checking attribute.

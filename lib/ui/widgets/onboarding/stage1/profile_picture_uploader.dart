@@ -35,16 +35,17 @@ class ProfilePictureUploader extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
-                  onTap: () =>
-                      context.read<OnboardingFlowCubit>().handleImageFromGallery(),
+                  onTap: () => context
+                      .read<OnboardingFlowCubit>()
+                      .handleImageFromGallery(),
                   child: Stack(
                     children: [
                       CircleAvatar(
                         radius: 45,
                         backgroundImage: displayProfileImage(
-                                state.pickedPhoto,
-                                userState.currentUser.profilePicture,
-                              ),
+                          state.pickedPhoto,
+                          userState.currentUser.profilePicture,
+                        ),
                       ),
                       CircleAvatar(
                         radius: 45,
