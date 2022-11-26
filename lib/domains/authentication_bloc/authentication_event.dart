@@ -24,17 +24,6 @@ class LoggedIn extends AuthenticationEvent {
   List<Object?> get props => [userId];
 }
 
-class UpdateAuthenticatedUser extends AuthenticationEvent {
-  const UpdateAuthenticatedUser(this.userId);
-  final String userId;
-
-  @override
-  String toString() => 'UpdateAuthenticatedUser { user: $userId }';
-
-  @override
-  List<Object> get props => [userId];
-}
-
 class LoggedOut extends AuthenticationEvent {
   @override
   String toString() => 'LoggedOut';

@@ -25,5 +25,16 @@ class FinishOnboarding extends OnboardingEvent {
   String toString() => 'FinishOnboarded { email: ${user.email} }';
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [user];
+}
+
+class UpdateOnboardedUser extends OnboardingEvent {
+  const UpdateOnboardedUser({required this.user});
+
+  final UserModel user;
+  @override
+  String toString() => 'UpdateOnboardedUser { email: ${user.email} }';
+
+  @override
+  List<Object> get props => [user];
 }

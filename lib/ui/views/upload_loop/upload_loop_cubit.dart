@@ -7,24 +7,24 @@ import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
-import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/controllers/audio_controller.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/upload_loop/loop_title.dart';
 
 part 'upload_loop_state.dart';
 
 /// Functionality and instructions for uploading a loop
 class UploadLoopCubit extends Cubit<UploadLoopState> {
-  /// Uploading a loop requires the database, storage, authentication,
+  /// Uploading a loop requires the database, storage, onboarding,
   /// knowledge of the current of the current user, view scaffold info,
   /// and navigation instructions
   UploadLoopCubit({
     required this.databaseRepository,
     required this.storageRepository,
-    required this.authenticationBloc,
+    required this.onboardingBloc,
     required this.currentUser,
     this.scaffoldKey,
     this.navigationBloc,
@@ -36,8 +36,8 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
   /// Object storage methods
   final StorageRepository storageRepository;
 
-  /// Authentication instructions
-  final AuthenticationBloc authenticationBloc;
+  /// Onboarding data
+  final OnboardingBloc onboardingBloc;
 
   /// The currently logged in user
   final UserModel currentUser;
@@ -175,7 +175,7 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
           loopsCount: (currentUser.loopsCount) + 1,
         );
 
-        authenticationBloc.add(UpdateAuthenticatedUser(user.id));
+        onboardingBloc.add(UpdateOnboardedUser(user: user));
         // Navigate back to the feed page
         navigationBloc?.add(const ChangeTab(selectedTab: 0));
       } else {

@@ -32,6 +32,7 @@ class SettingsView extends StatelessWidget {
         return BlocProvider(
           create: (_) => SettingsCubit(
             authenticationBloc: context.read<AuthenticationBloc>(),
+            onboardingBloc: context.read<OnboardingBloc>(),
             authRepository: context.read<AuthRepository>(),
             databaseRepository: context.read<DatabaseRepository>(),
             storageRepository: context.read<StorageRepository>(),

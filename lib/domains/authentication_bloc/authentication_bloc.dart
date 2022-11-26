@@ -37,11 +37,6 @@ class AuthenticationBloc
       emit(Unauthenticated());
       _authRepository.logout();
     });
-    on<UpdateAuthenticatedUser>((event, emit) async {
-      final userId = event.userId;
-      await _authRepository.updateUserData(userId: userId);
-      emit(Authenticated(userId));
-    });
   }
 
   final AuthRepository _authRepository;

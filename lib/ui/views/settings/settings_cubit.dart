@@ -11,6 +11,7 @@ import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 
 part 'settings_state.dart';
 
@@ -18,6 +19,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   SettingsCubit({
     required this.navigationBloc,
     required this.authenticationBloc,
+    required this.onboardingBloc,
     required this.authRepository,
     required this.databaseRepository,
     required this.storageRepository,
@@ -27,6 +29,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   final UserModel currentUser;
   final NavigationBloc navigationBloc;
   final AuthenticationBloc authenticationBloc;
+  final OnboardingBloc onboardingBloc;
   final AuthRepository authRepository;
   final DatabaseRepository databaseRepository;
   final StorageRepository storageRepository;
@@ -156,8 +159,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         emailNotificationsITLUpdates: state.emailNotificationsITLUpdates,
       );
 
-      await databaseRepository.updateUserData(user);
-      authenticationBloc.add(UpdateAuthenticatedUser(user.id));
+      onboardingBloc.add(UpdateOnboardedUser(user: user));
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
       navigationBloc.add(const Pop());
     } else {
@@ -184,7 +186,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       emit(
         state.copyWith(status: FormzStatus.submissionFailure),
       );
-    // ignore: avoid_catching_errors
+      // ignore: avoid_catching_errors
     } on NoSuchMethodError {
       emit(
         state.copyWith(status: FormzStatus.pure),
@@ -207,7 +209,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       emit(
         state.copyWith(status: FormzStatus.submissionFailure),
       );
-    // ignore: avoid_catching_errors
+      // ignore: avoid_catching_errors
     } on NoSuchMethodError {
       emit(
         state.copyWith(status: FormzStatus.pure),

@@ -8,7 +8,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 final _auth = FirebaseAuth.instance;
@@ -32,24 +31,13 @@ String _sha256ofString(String input) {
 }
 
 class FirebaseAuthImpl extends AuthRepository {
-  Stream<String> get authUserChanges =>
+  @override
+  Stream<String> get userId =>
       _auth.authStateChanges().asyncMap((firebaseUser) async {
         final userId = firebaseUser == null ? '' : firebaseUser.uid;
 
         return userId;
       });
-  // ignore: close_sinks
-  StreamController<String> manualUserUpdates = StreamController.broadcast();
-
-  @override
-  Stream<String> get userId {
-    return MergeStream([authUserChanges, manualUserUpdates.stream]);
-  }
-
-  @override
-  Future<void> updateUserData({required String userId}) async {
-    manualUserUpdates.sink.add(userId);
-  }
 
   @override
   Future<bool> isSignedIn() async {

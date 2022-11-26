@@ -26,7 +26,7 @@ class UploadView extends StatelessWidget {
         return BlocProvider(
           create: (_) => UploadLoopCubit(
             databaseRepository: context.read<DatabaseRepository>(),
-            authenticationBloc: context.read<AuthenticationBloc>(),
+            onboardingBloc: context.read<OnboardingBloc>(),
             currentUser: currentUser,
             navigationBloc: context.read<NavigationBloc>(),
             storageRepository: context.read<StorageRepository>(),
