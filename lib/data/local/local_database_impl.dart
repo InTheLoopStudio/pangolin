@@ -152,25 +152,40 @@ class LocalDatabaseImpl extends DatabaseRepository {
   }) async* {}
 
   @override
-  Future<void> addLike(String currentUserId, String entityId) async {
+  Future<void> addLike(
+    String currentUserId,
+    String entityId,
+    EntityType entityType,
+  ) async {
     await Future<void>.delayed(Duration.zero);
     return;
   }
 
   @override
-  Future<void> deleteLike(String currentUserId, String entityId) async {
+  Future<void> deleteLike(
+    String currentUserId,
+    String entityId,
+    EntityType entityType,
+  ) async {
     await Future<void>.delayed(Duration.zero);
     return;
   }
 
   @override
-  Future<bool> isLiked(String currentUserId, String entityId) async {
+  Future<bool> isLiked(
+    String currentUserId,
+    String entityId,
+    EntityType entityType,
+  ) async {
     await Future<void>.delayed(Duration.zero);
     return false;
   }
 
   @override
-  Future<List<UserModel>> getLikes(String entityId) async {
+  Future<List<UserModel>> getLikes(
+    String entityId,
+    EntityType entityType,
+  ) async {
     await Future<void>.delayed(Duration.zero);
     return [];
   }
@@ -210,7 +225,8 @@ class LocalDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<List<Comment>> getComments(
-    String rootId, {
+    String rootId,
+    EntityType rootType, {
     int limit = 20,
   }) async {
     await Future<void>.delayed(Duration.zero);
@@ -218,16 +234,27 @@ class LocalDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Stream<Comment> commentsObserver(String rootId, {int limit = 20}) async* {}
+  Stream<Comment> commentsObserver(
+    String rootId,
+    EntityType rootType, {
+    int limit = 20,
+  }) async* {}
 
   @override
-  Future<Comment> getComment(String rootId, String commentId) async {
+  Future<Comment> getComment(
+    String rootId,
+    EntityType rootType,
+    String commentId,
+  ) async {
     await Future<void>.delayed(Duration.zero);
-    return Comment(content: '');
+    return Comment.empty();
   }
 
   @override
-  Future<void> addComment(Comment comment, String visitedUserId) async {
+  Future<void> addComment(
+    Comment comment,
+    EntityType rootType,
+  ) async {
     await Future<void>.delayed(Duration.zero);
     return;
   }

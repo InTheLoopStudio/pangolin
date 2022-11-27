@@ -125,7 +125,11 @@ class LoopViewCubit extends Cubit<LoopViewState> {
   }
 
   Future<void> initLoopLikes() async {
-    final isLiked = await databaseRepository.isLiked(currentUser.id, loop.id);
+    final isLiked = await databaseRepository.isLiked(
+      currentUser.id,
+      loop.id,
+      EntityType.loop,
+    );
     emit(state.copyWith(isLiked: isLiked, likeCount: loop.likeCount));
   }
 
@@ -142,7 +146,11 @@ class LoopViewCubit extends Cubit<LoopViewState> {
         ),
       );
 
-      await databaseRepository.deleteLike(currentUser.id, loop.id);
+      await databaseRepository.deleteLike(
+        currentUser.id,
+        loop.id,
+        EntityType.loop,
+      );
     } else {
       emit(
         state.copyWith(
@@ -151,7 +159,11 @@ class LoopViewCubit extends Cubit<LoopViewState> {
         ),
       );
 
-      await databaseRepository.addLike(currentUser.id, loop.id);
+      await databaseRepository.addLike(
+        currentUser.id,
+        loop.id,
+        EntityType.loop,
+      );
     }
   }
 

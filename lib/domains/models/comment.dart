@@ -4,14 +4,22 @@ import 'package:intheloopapp/utils.dart';
 class Comment {
   Comment({
     this.id = '',
-    this.timestamp,
-    this.content,
-    this.userId,
+    required this.timestamp,
+    required this.content,
+    required this.userId,
+    required this.rootId,
     this.parentId,
-    this.rootId,
-    this.children,
-    this.deleted,
+    this.children = const [],
+    this.deleted = false,
   });
+
+  factory Comment.empty() => Comment(
+        timestamp: Timestamp.now(),
+        content: '',
+        userId: '',
+        parentId: '',
+        rootId: '',
+      );
 
   factory Comment.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     final tmpTimestamp = doc.getOrElse(
@@ -33,13 +41,13 @@ class Comment {
     );
   }
   String id;
-  Timestamp? timestamp;
-  String? content;
-  String? userId;
+  Timestamp timestamp;
+  String content;
+  String userId;
   String? parentId;
-  String? rootId;
-  List<String>? children;
-  bool? deleted;
+  String rootId;
+  List<String> children;
+  bool deleted;
 
   // TODO(nit): Add `toMap()` function
 }

@@ -15,7 +15,10 @@ void main() {
 
   group('there are no likers', () {
     final databaseRepository = MockDatabaseRepository();
-    when(databaseRepository.getLikes(loop.id)).thenAnswer((_) async => []);
+    when(databaseRepository.getLikes(
+      loop.id,
+      EntityType.loop,
+    )).thenAnswer((_) async => []);
 
     blocTest<LikesCubit, LikesState>(
       'likes should emit empty array if db repo has no likers',
@@ -30,8 +33,10 @@ void main() {
 
   group('there are likers', () {
     final databaseRepository = MockDatabaseRepository();
-    when(databaseRepository.getLikes(loop.id))
-        .thenAnswer((_) async => [UserModel.empty()]);
+    when(databaseRepository.getLikes(
+      loop.id,
+      EntityType.loop,
+    )).thenAnswer((_) async => [UserModel.empty()]);
 
     blocTest<LikesCubit, LikesState>(
       'likes should emit array of likers if db repo has likers',

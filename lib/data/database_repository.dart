@@ -6,6 +6,11 @@ import 'package:intheloopapp/domains/models/post.dart';
 // import 'package:intheloopapp/domains/models/tag.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
+enum EntityType {
+  loop,
+  post,
+}
+
 abstract class DatabaseRepository {
   // User related stuff
   Future<bool> userEmailExists(String email);
@@ -48,22 +53,43 @@ abstract class DatabaseRepository {
   });
 
   // Liking related stuff
-  Future<void> addLike(String currentUserId, String entityId);
-  Future<void> deleteLike(String currentUserId, String entityId);
-  Future<bool> isLiked(String currentUserId, String entityId);
-  Future<List<UserModel>> getLikes(String entityId);
+  Future<void> addLike(
+    String currentUserId,
+    String entityId,
+    EntityType entityType,
+  );
+  Future<void> deleteLike(
+    String currentUserId,
+    String entityId,
+    EntityType entityType,
+  );
+  Future<bool> isLiked(
+    String currentUserId,
+    String entityId,
+    EntityType entityType,
+  );
+  Future<List<UserModel>> getLikes(
+    String entityId,
+    EntityType entityType,
+  );
 
   // Commenting related stuff
   Future<List<Comment>> getComments(
-    String rootId, {
+    String rootId,
+    EntityType rootType, {
     int limit = 20,
   });
   Stream<Comment> commentsObserver(
-    String rootId, {
+    String rootId,
+    EntityType rootType, {
     int limit = 20,
   });
-  Future<Comment> getComment(String rootId, String commentId);
-  Future<void> addComment(Comment comment, String visitedUserId);
+  Future<Comment> getComment(
+      String rootId, EntityType rootType, String commentId);
+  Future<void> addComment(
+    Comment comment,
+    EntityType rootType,
+  );
   // Future<void> deleteComment(Comment comment);
 
   // Future<List<Tag>> getTagSuggestions(String query);

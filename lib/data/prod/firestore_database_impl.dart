@@ -30,11 +30,6 @@ final _badgesRef = _firestore.collection('badges');
 final _badgesSentRef = _firestore.collection('badgesSent');
 final _postsRef = _firestore.collection('posts');
 
-const likesSubcollection = 'likes';
-const commentsSubcollection = 'comments';
-const loopsFeedSubcollection = 'userFeed';
-const postsFeedSubcollection = 'userPostsFeed';
-
 class HandleAlreadyExistsException implements Exception {
   HandleAlreadyExistsException(this.cause);
   String cause;
@@ -49,6 +44,42 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     final fileName = segments.join('/');
 
     return fileName;
+  }
+
+  String _getLikesSubcollectionFromEntityType(EntityType entityType) {
+    const loopLikesSubcollection = 'loopLikes';
+    const postLikesSubcollection = 'postLikes';
+
+    switch (entityType) {
+      case EntityType.loop:
+        return loopLikesSubcollection;
+      case EntityType.post:
+        return postLikesSubcollection;
+    }
+  }
+
+  String _getCommentsSubcollectionFromEntityType(EntityType entityType) {
+    const loopCommentsSubcollection = 'loopComments';
+    const postCommentsSubcollection = 'postComments';
+
+    switch (entityType) {
+      case EntityType.loop:
+        return loopCommentsSubcollection;
+      case EntityType.post:
+        return postCommentsSubcollection;
+    }
+  }
+
+  String _getFeedsSubcollectionFromEntityType(EntityType entityType) {
+    const loopsFeedSubcollection = 'userFeed';
+    const postsFeedSubcollection = 'userPostsFeed';
+
+    switch (entityType) {
+      case EntityType.loop:
+        return loopsFeedSubcollection;
+      case EntityType.post:
+        return postsFeedSubcollection;
+    }
   }
 
   // true if username available, false otherwise
@@ -392,12 +423,14 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     int limit = 20,
     String? lastLoopId,
   }) async {
+    final subcollection = _getFeedsSubcollectionFromEntityType(EntityType.post);
+
     if (lastLoopId != null) {
       final documentSnapshot = await _loopsRef.doc(lastLoopId).get();
 
       final userFeedLoops = await _feedRefs
           .doc(currentUserId)
-          .collection(loopsFeedSubcollection)
+          .collection(subcollection)
           .orderBy('timestamp', descending: true)
           .limit(limit)
           .startAfterDocument(documentSnapshot)
@@ -414,7 +447,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     } else {
       final userFeedLoops = await _feedRefs
           .doc(currentUserId)
-          .collection(loopsFeedSubcollection)
+          .collection(subcollection)
           .orderBy('timestamp', descending: true)
           .limit(limit)
           .get();
@@ -435,9 +468,11 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String currentUserId, {
     int limit = 20,
   }) async* {
+    final subcollection = _getFeedsSubcollectionFromEntityType(EntityType.loop);
+
     final userFeedLoopsSnapshotObserver = _feedRefs
         .doc(currentUserId)
-        .collection(loopsFeedSubcollection)
+        .collection(subcollection)
         .orderBy('timestamp', descending: true)
         .limit(limit)
         .snapshots();
@@ -534,7 +569,11 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<void> addLike(String currentUserId, String entityId) async {
+  Future<void> addLike(
+    String currentUserId,
+    String entityId,
+    EntityType entityType,
+  ) async {
     await _analytics.logEvent(
       name: 'like',
       parameters: {
@@ -543,15 +582,21 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       },
     );
 
+    final subcollection = _getLikesSubcollectionFromEntityType(entityType);
+
     await _likesRef
         .doc(entityId)
-        .collection('likes')
+        .collection(subcollection)
         .doc(currentUserId)
         .set({});
   }
 
   @override
-  Future<void> deleteLike(String currentUserId, String entityId) async {
+  Future<void> deleteLike(
+    String currentUserId,
+    String entityId,
+    EntityType entityType,
+  ) async {
     await _analytics.logEvent(
       name: 'unlike',
       parameters: {
@@ -559,18 +604,27 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         'entity_id': entityId,
       },
     );
+
+    final subcollection = _getLikesSubcollectionFromEntityType(entityType);
+
     await _likesRef
         .doc(entityId)
-        .collection('likes')
+        .collection(subcollection)
         .doc(currentUserId)
         .delete();
   }
 
   @override
-  Future<bool> isLiked(String currentUserId, String entityId) async {
+  Future<bool> isLiked(
+    String currentUserId,
+    String entityId,
+    EntityType entityType,
+  ) async {
+    final subcollection = _getLikesSubcollectionFromEntityType(entityType);
+
     final userDoc = await _likesRef
         .doc(entityId)
-        .collection('likes')
+        .collection(subcollection)
         .doc(currentUserId)
         .get();
 
@@ -578,9 +632,14 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<List<UserModel>> getLikes(String entityId) async {
+  Future<List<UserModel>> getLikes(
+    String entityId,
+    EntityType entityType,
+  ) async {
+    final subcollection = _getLikesSubcollectionFromEntityType(entityType);
+
     final likesSnapshot =
-        await _likesRef.doc(entityId).collection('likes').get();
+        await _likesRef.doc(entityId).collection(subcollection).get();
 
     final usersList = await Future.wait(
       likesSnapshot.docs.map((doc) async {
@@ -692,37 +751,43 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<List<Comment>> getComments(
-    String rootId, {
+    String rootId,
+    EntityType rootType, {
     int limit = 20,
   }) async {
-    final loopCommentsSnapshot = await _commentsRef
+    final subcollection = _getCommentsSubcollectionFromEntityType(rootType);
+
+    final commentsSnapshot = await _commentsRef
         .doc(rootId)
-        .collection('comments')
+        .collection(subcollection)
         .orderBy('timestamp')
         // .where('parentId', isNull: true) // Needed for threaded comments
         .limit(limit)
         .get();
 
-    final loopComments =
-        loopCommentsSnapshot.docs.map((doc) => Comment.fromDoc(doc)).toList();
+    final comments =
+        commentsSnapshot.docs.map((doc) => Comment.fromDoc(doc)).toList();
 
-    return loopComments;
+    return comments;
   }
 
   @override
   Stream<Comment> commentsObserver(
-    String rootId, {
+    String rootId,
+    EntityType rootType, {
     int limit = 20,
   }) async* {
-    final loopCommentsSnapshotObserver = _commentsRef
+    final subcollection = _getCommentsSubcollectionFromEntityType(rootType);
+
+    final commentsSnapshotObserver = _commentsRef
         .doc(rootId)
-        .collection('comments')
+        .collection(subcollection)
         .orderBy('timestamp')
         .limit(limit)
         // .where('parentId', isNull: true) // Needed for threaded comments
         .snapshots();
 
-    final loopCommentsObserver = loopCommentsSnapshotObserver.map((event) {
+    final commentsObserver = commentsSnapshotObserver.map((event) {
       return event.docChanges
           .where(
         (DocumentChange<Map<String, dynamic>> element) =>
@@ -735,14 +800,20 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       });
     }).flatMap((value) => Stream.fromIterable(value));
 
-    yield* loopCommentsObserver;
+    yield* commentsObserver;
   }
 
   @override
-  Future<Comment> getComment(String rootId, String commentId) async {
+  Future<Comment> getComment(
+    String rootId,
+    EntityType rootType,
+    String commentId,
+  ) async {
+    final subcollection = _getCommentsSubcollectionFromEntityType(rootType);
+
     final commentSnapshot = await _commentsRef
         .doc(rootId)
-        .collection('comments')
+        .collection(subcollection)
         .doc(commentId)
         .get();
 
@@ -752,7 +823,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<void> addComment(Comment comment, String visitedUserId) async {
+  Future<void> addComment(
+    Comment comment,
+    EntityType rootType,
+  ) async {
     await _analytics.logEvent(
       name: 'new_comment',
       parameters: {
@@ -761,7 +835,9 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       },
     );
 
-    await _commentsRef.doc(comment.rootId).collection('loopComments').add({
+    final subcollection = _getCommentsSubcollectionFromEntityType(rootType);
+
+    await _commentsRef.doc(comment.rootId).collection(subcollection).add({
       'userId': comment.userId,
       'timestamp': Timestamp.now(),
       'content': comment.content,
@@ -813,6 +889,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     await _badgesSentRef.doc(receiverId).collection('badges').doc(badgeId).set({
       'timestamp': Timestamp.now(),
     });
+
+    await _usersRef
+        .doc(receiverId)
+        .update({'badgesCount': FieldValue.increment(1)});
   }
 
   @override
@@ -1074,12 +1154,14 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     int limit = 20,
     String? lastPostId,
   }) async {
+    final subcollection = _getFeedsSubcollectionFromEntityType(EntityType.post);
+
     if (lastPostId != null) {
       final documentSnapshot = await _postsRef.doc(lastPostId).get();
 
       final userFeedPosts = await _feedRefs
           .doc(currentUserId)
-          .collection(postsFeedSubcollection)
+          .collection(subcollection)
           .orderBy('timestamp', descending: true)
           .limit(limit)
           .startAfterDocument(documentSnapshot)
@@ -1096,7 +1178,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     } else {
       final userFeedPosts = await _feedRefs
           .doc(currentUserId)
-          .collection(postsFeedSubcollection)
+          .collection(subcollection)
           .orderBy('timestamp', descending: true)
           .limit(limit)
           .get();
@@ -1117,9 +1199,11 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String currentUserId, {
     int limit = 20,
   }) async* {
+    final subcollection = _getFeedsSubcollectionFromEntityType(EntityType.post);
+
     final userFeedPostsSnapshotObserver = _feedRefs
         .doc(currentUserId)
-        .collection(postsFeedSubcollection)
+        .collection(subcollection)
         .orderBy('timestamp', descending: true)
         .limit(limit)
         .snapshots();

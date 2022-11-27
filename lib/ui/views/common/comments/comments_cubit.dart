@@ -41,14 +41,22 @@ class CommentsCubit extends Cubit<CommentsState> {
       );
     }
 
-    final commentsAvailable =
-        (await databaseRepository.getComments(loop.id, limit: 1)).isNotEmpty;
+    final commentsAvailable = (await databaseRepository.getComments(
+      loop.id,
+      EntityType.loop,
+      limit: 1,
+    ))
+        .isNotEmpty;
     if (!commentsAvailable) {
       emit(state.copyWith(loading: false));
     }
 
-    commentListener =
-        databaseRepository.commentsObserver(loop.id).listen((Comment event) {
+    commentListener = databaseRepository
+        .commentsObserver(
+      loop.id,
+      EntityType.loop,
+    )
+        .listen((Comment event) {
       // print('Comment { ${event.id} : ${event.content} }');
       emit(
         state.copyWith(
@@ -77,7 +85,7 @@ class CommentsCubit extends Cubit<CommentsState> {
 
       databaseRepository.addComment(
         comment,
-        state.loop.userId,
+        EntityType.loop,
       );
 
       loopViewCubit.addComment();

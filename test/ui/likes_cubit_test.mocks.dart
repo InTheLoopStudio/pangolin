@@ -248,6 +248,7 @@ class MockDatabaseRepository extends _i1.Mock
   _i6.Future<void> addLike(
     String? currentUserId,
     String? entityId,
+    _i5.EntityType? entityType,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -255,6 +256,7 @@ class MockDatabaseRepository extends _i1.Mock
           [
             currentUserId,
             entityId,
+            entityType,
           ],
         ),
         returnValue: _i6.Future<void>.value(),
@@ -264,6 +266,7 @@ class MockDatabaseRepository extends _i1.Mock
   _i6.Future<void> deleteLike(
     String? currentUserId,
     String? entityId,
+    _i5.EntityType? entityType,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -271,6 +274,7 @@ class MockDatabaseRepository extends _i1.Mock
           [
             currentUserId,
             entityId,
+            entityType,
           ],
         ),
         returnValue: _i6.Future<void>.value(),
@@ -280,6 +284,7 @@ class MockDatabaseRepository extends _i1.Mock
   _i6.Future<bool> isLiked(
     String? currentUserId,
     String? entityId,
+    _i5.EntityType? entityType,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -287,41 +292,56 @@ class MockDatabaseRepository extends _i1.Mock
           [
             currentUserId,
             entityId,
+            entityType,
           ],
         ),
         returnValue: _i6.Future<bool>.value(false),
       ) as _i6.Future<bool>);
   @override
-  _i6.Future<List<_i7.UserModel>> getLikes(String? entityId) =>
+  _i6.Future<List<_i7.UserModel>> getLikes(
+    String? entityId,
+    _i5.EntityType? entityType,
+  ) =>
       (super.noSuchMethod(
         Invocation.method(
           #getLikes,
-          [entityId],
+          [
+            entityId,
+            entityType,
+          ],
         ),
         returnValue: _i6.Future<List<_i7.UserModel>>.value(<_i7.UserModel>[]),
       ) as _i6.Future<List<_i7.UserModel>>);
   @override
   _i6.Future<List<_i3.Comment>> getComments(
-    String? rootId, {
+    String? rootId,
+    _i5.EntityType? rootType, {
     int? limit = 20,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
           #getComments,
-          [rootId],
+          [
+            rootId,
+            rootType,
+          ],
           {#limit: limit},
         ),
         returnValue: _i6.Future<List<_i3.Comment>>.value(<_i3.Comment>[]),
       ) as _i6.Future<List<_i3.Comment>>);
   @override
   _i6.Stream<_i3.Comment> commentsObserver(
-    String? rootId, {
+    String? rootId,
+    _i5.EntityType? rootType, {
     int? limit = 20,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
           #commentsObserver,
-          [rootId],
+          [
+            rootId,
+            rootType,
+          ],
           {#limit: limit},
         ),
         returnValue: _i6.Stream<_i3.Comment>.empty(),
@@ -329,6 +349,7 @@ class MockDatabaseRepository extends _i1.Mock
   @override
   _i6.Future<_i3.Comment> getComment(
     String? rootId,
+    _i5.EntityType? rootType,
     String? commentId,
   ) =>
       (super.noSuchMethod(
@@ -336,6 +357,7 @@ class MockDatabaseRepository extends _i1.Mock
           #getComment,
           [
             rootId,
+            rootType,
             commentId,
           ],
         ),
@@ -345,6 +367,7 @@ class MockDatabaseRepository extends _i1.Mock
             #getComment,
             [
               rootId,
+              rootType,
               commentId,
             ],
           ),
@@ -353,14 +376,14 @@ class MockDatabaseRepository extends _i1.Mock
   @override
   _i6.Future<void> addComment(
     _i3.Comment? comment,
-    String? visitedUserId,
+    _i5.EntityType? rootType,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
           #addComment,
           [
             comment,
-            visitedUserId,
+            rootType,
           ],
         ),
         returnValue: _i6.Future<void>.value(),

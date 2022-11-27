@@ -21,7 +21,11 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
   final UserModel currentUser;
 
   Future<void> initLoopLikes() async {
-    final isLiked = await databaseRepository.isLiked(currentUser.id, loop.id);
+    final isLiked = await databaseRepository.isLiked(
+      currentUser.id,
+      loop.id,
+      EntityType.loop,
+    );
 
     emit(
       state.copyWith(
@@ -42,7 +46,11 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
 
   void likeLoop() {
     if (state.isLiked) {
-      databaseRepository.deleteLike(currentUser.id, state.loop.id);
+      databaseRepository.deleteLike(
+        currentUser.id,
+        state.loop.id,
+        EntityType.loop,
+      );
       emit(
         state.copyWith(
           isLiked: false,
@@ -50,7 +58,11 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
         ),
       );
     } else {
-      databaseRepository.addLike(currentUser.id, state.loop.id);
+      databaseRepository.addLike(
+        currentUser.id,
+        state.loop.id,
+        EntityType.loop,
+      );
       emit(
         state.copyWith(
           isLiked: true,
