@@ -77,10 +77,6 @@ class PostFeedCubit extends Cubit<PostFeedState> {
     }
   }
 
-  void tapEasterEgg() {
-    emit(state.copyWith(easterEggTapped: state.easterEggTapped + 1));
-  }
-
   @override
   Future<void> close() async {
     await postListener?.cancel();

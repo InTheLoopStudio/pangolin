@@ -1,6 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/messaging/channel_preview.dart';
 import 'package:intheloopapp/ui/views/messaging/channel_view.dart';
@@ -35,7 +35,7 @@ class MessagingChannelListView extends StatelessWidget {
             builder: (context) => const NewChatView(),
           ),
         ),
-        child: const Icon(FontAwesomeIcons.message),
+        child: const Icon(CupertinoIcons.bubble_middle_bottom),
       ),
       body: BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
         selector: (state) => state as Onboarded,
