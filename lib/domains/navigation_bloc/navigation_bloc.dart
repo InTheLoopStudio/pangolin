@@ -6,6 +6,7 @@ import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/ui/views/activity/activity_view.dart';
 import 'package:intheloopapp/ui/views/badge/badge_view.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view.dart';
+import 'package:intheloopapp/ui/views/create_post/create_post_view.dart';
 import 'package:intheloopapp/ui/views/likes/likes_view.dart';
 import 'package:intheloopapp/ui/views/onboarding/onboarding_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
@@ -77,6 +78,15 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
       navigationKey.currentState?.push(
         MaterialPageRoute<PushLikes>(
           builder: (context) => LikesView(loop: event.loop),
+        ),
+      );
+
+      emit(state);
+    });
+    on<PushCreatePost>((event, emit) {
+      navigationKey.currentState?.push(
+        MaterialPageRoute<PushLikes>(
+          builder: (context) => const CreatePostView(),
         ),
       );
 

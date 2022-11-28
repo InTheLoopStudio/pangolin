@@ -89,6 +89,16 @@ class PushLikes extends NavigationEvent {
   List<Object> get props => [loop];
 }
 
+class PushCreatePost extends NavigationEvent {
+  const PushCreatePost();
+
+  @override
+  String toString() => 'PushCreatePost { }';
+
+  @override
+  List<Object> get props => [];
+}
+
 class ChangeTab extends NavigationEvent {
   const ChangeTab({required this.selectedTab});
 

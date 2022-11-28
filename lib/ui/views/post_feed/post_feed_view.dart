@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
 import 'package:intheloopapp/ui/views/post_feed/post_feed_cubit.dart';
@@ -38,7 +39,9 @@ class PostFeedView extends StatelessWidget {
             ),
             floatingActionButton: FloatingActionButton(
               child: const Icon(CupertinoIcons.add),
-              onPressed: () => {},
+              onPressed: () => context.read<NavigationBloc>().add(
+                    const PushCreatePost(),
+                  ),
             ),
             body: Row(
               mainAxisAlignment: MainAxisAlignment.center,
