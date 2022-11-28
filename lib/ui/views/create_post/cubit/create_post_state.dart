@@ -1,10 +1,27 @@
 part of 'create_post_cubit.dart';
 
-abstract class CreatePostState extends Equatable {
-  const CreatePostState();
+class CreatePostState extends Equatable {
+  const CreatePostState({
+    this.title = '',
+    this.description = '',
+  });
+
+  final String title;
+  final String description;
 
   @override
-  List<Object> get props => [];
-}
+  List<Object> get props => [
+        title,
+        description,
+      ];
 
-class CreatePostInitial extends CreatePostState {}
+  CreatePostState copyWith({
+    String? title,
+    String? description,
+  }) {
+    return CreatePostState(
+      title: title ?? this.title,
+      description: description ?? this.description,
+    );
+  }
+}
