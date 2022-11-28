@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/post_feed/post_feed_cubit.dart';
 
 class PostFeedView extends StatelessWidget {
@@ -7,35 +9,45 @@ class PostFeedView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => PostFeedCubit(),
-      child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
-        appBar: AppBar(
-          title: Row(
-            children: const [
-              Text(
-                'Feed',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
+    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
+      selector: (state) => state as Onboarded,
+      builder: (context, state) {
+        return BlocProvider(
+          create: (context) => PostFeedCubit(
+            currentUserId: state.currentUser.id,
+            databaseRepository: RepositoryProvider.of<DatabaseRepository>(
+              context,
+            ),
           ),
-        ),
-        body: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(
+          child: Scaffold(
+            backgroundColor: Theme.of(context).colorScheme.background,
+            appBar: AppBar(
+              title: Row(
+                children: const [
+                  Text(
+                    'Feed',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            body: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text('Coming Soon'),
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text('Coming Soon'),
+                  ],
+                ),
               ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
