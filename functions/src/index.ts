@@ -390,8 +390,27 @@ const _deleteUserLoopsFromFeed = (data: {
 }) => {
   feedsRef
     .doc(data.feedOwnerId)
-    .collection("userFeed")
+    .collection(loopsFeedSubcollection)
     .where("userId", "==", data.loopsOwnerId)
+    .limit(1000)
+    .get()
+    .then((query) => {
+      query.docs.forEach((doc) => {
+        doc.ref.delete();
+      });
+    });
+
+  return data.feedOwnerId;
+};
+
+const _deleteUserPostsFromFeed = (data: {
+  postsOwnerId: string;
+  feedOwnerId: string;
+}) => {
+  feedsRef
+    .doc(data.feedOwnerId)
+    .collection(postsFeedSubcollection)
+    .where("userId", "==", data.postsOwnerId)
     .limit(1000)
     .get()
     .then((query) => {
@@ -552,6 +571,14 @@ export const deleteUserLoopOnUnfollow = functions.firestore
   .onDelete(async (snapshot, context) => {
     _deleteUserLoopsFromFeed({
       loopsOwnerId: context.params.followeeId,
+      feedOwnerId: context.params.followerId,
+    })
+  });
+export const deleteUserPostOnUnfollow = functions.firestore
+  .document("following/{followerId}/Following/{followeeId}")
+  .onDelete(async (snapshot, context) => {
+    _deleteUserPostsFromFeed({
+      postsOwnerId: context.params.followeeId,
       feedOwnerId: context.params.followerId,
     })
   });
