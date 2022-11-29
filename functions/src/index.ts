@@ -615,7 +615,7 @@ export const sendLoopToFollowers = functions.firestore
     // add loops to owner's feed
     await feedsRef
       .doc(loop.userId)
-      .collection("userFeed")
+      .collection(loopsFeedSubcollection)
       .doc(loop.id)
       .set({
         timestamp: Timestamp.now(),
@@ -633,11 +633,11 @@ export const sendLoopToFollowers = functions.firestore
       .get();
 
     // add loops to followers feed
-    Promise.all(
+    await Promise.all(
       followerSnapshot.docs.map(async (docSnapshot) => {
-        await feedsRef
+        return feedsRef
           .doc(docSnapshot.id)
-          .collection("userFeed")
+          .collection(loopsFeedSubcollection)
           .doc(loop.id).set({
             timestamp: Timestamp.now(),
             userId: loop.userId,
@@ -645,6 +645,44 @@ export const sendLoopToFollowers = functions.firestore
       }),
     );
 
+  });
+export const sendPostToFollowers = functions.firestore
+  .document("Posts/{postId}")
+  .onCreate(async (snapshot) => {
+    const post = snapshot.data();
+    const userDoc = await usersRef.doc(post.userId).get();
+    // add loops to owner's feed
+    await feedsRef
+      .doc(post.userId)
+      .collection(postsFeedSubcollection)
+      .doc(post.id)
+      .set({
+        timestamp: Timestamp.now(),
+        userId: post.userId,
+      });
+
+    const isShadowBanned: boolean = userDoc.data()?.["shadowBanned"] || false
+    if (isShadowBanned === true) {
+      return;
+    }
+    // get followers
+    const followerSnapshot = await followersRef
+      .doc(post.userId)
+      .collection("Followers")
+      .get();
+
+    // add loops to followers feed
+    await Promise.all(
+      followerSnapshot.docs.map(async (docSnapshot) => {
+        return feedsRef
+          .doc(docSnapshot.id)
+          .collection(postsFeedSubcollection)
+          .doc(post.id).set({
+            timestamp: Timestamp.now(),
+            userId: post.userId,
+          });
+      }),
+    );
   });
 
 export const incrementLikeCountOnLoopLike = functions.firestore
