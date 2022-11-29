@@ -650,34 +650,42 @@ export const sendPostToFollowers = functions.firestore
   .document("posts/{postId}")
   .onCreate(async (snapshot) => {
     const post = snapshot.data();
+    functions.logger.debug(post)
+
     const userDoc = await usersRef.doc(post.userId).get();
-    // add loops to owner's feed
+    // add post to owner's feed
+    functions.logger.debug("sending post to user's own feed")
     await feedsRef
       .doc(post.userId)
       .collection(postsFeedSubcollection)
-      .doc(post.id)
+      .doc(snapshot.id)
       .set({
         timestamp: Timestamp.now(),
         userId: post.userId,
       });
 
+
     const isShadowBanned: boolean = userDoc.data()?.["shadowBanned"] || false
     if (isShadowBanned === true) {
+      functions.logger.debug("isShadowBanned === true")
       return;
     }
     // get followers
+    functions.logger.debug("fetching user's followers")
     const followerSnapshot = await followersRef
       .doc(post.userId)
       .collection("Followers")
       .get();
 
-    // add loops to followers feed
+    // add post to followers feed
+    functions.logger.debug("Sending post to followers")
     await Promise.all(
       followerSnapshot.docs.map(async (docSnapshot) => {
         return feedsRef
           .doc(docSnapshot.id)
           .collection(postsFeedSubcollection)
-          .doc(post.id).set({
+          .doc(post.id)
+          .set({
             timestamp: Timestamp.now(),
             userId: post.userId,
           });
