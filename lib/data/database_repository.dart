@@ -85,7 +85,10 @@ abstract class DatabaseRepository {
     int limit = 20,
   });
   Future<Comment> getComment(
-      String rootId, EntityType rootType, String commentId);
+    String rootId,
+    EntityType rootType,
+    String commentId,
+  );
   Future<void> addComment(
     Comment comment,
     EntityType rootType,

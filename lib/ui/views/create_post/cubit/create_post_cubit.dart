@@ -32,7 +32,9 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     final description = PostDescription.dirty(input);
     emit(
       state.copyWith(
-          description: description, status: Formz.validate([description])),
+        description: description,
+        status: Formz.validate([description]),
+      ),
     );
   }
 

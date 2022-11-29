@@ -61,7 +61,9 @@ class CreatePostView extends StatelessWidget {
                   ),
                   body: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 40),
+                      horizontal: 40,
+                      vertical: 40,
+                    ),
                     child: Column(
                       children: const [
                         PostTitleTextField(),

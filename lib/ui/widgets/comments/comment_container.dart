@@ -15,7 +15,7 @@ class CommentContainer extends StatelessWidget {
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
     return FutureBuilder<UserModel?>(
-      future: databaseRepository.getUserById(comment.userId!),
+      future: databaseRepository.getUserById(comment.userId),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const CircularProgressIndicator();
@@ -34,7 +34,7 @@ class CommentContainer extends StatelessWidget {
             ),
             trailing: Text(
               timeago.format(
-                comment.timestamp!.toDate(),
+                comment.timestamp.toDate(),
                 locale: 'en_short',
               ),
               style: const TextStyle(
@@ -45,7 +45,7 @@ class CommentContainer extends StatelessWidget {
               user.username,
             ),
             subtitle: Text(
-              comment.content!,
+              comment.content,
             ),
           ),
         );
