@@ -616,7 +616,7 @@ export const sendLoopToFollowers = functions.firestore
     await feedsRef
       .doc(loop.userId)
       .collection(loopsFeedSubcollection)
-      .doc(loop.id)
+      .doc(snapshot.id)
       .set({
         timestamp: Timestamp.now(),
         userId: loop.userId,
@@ -638,7 +638,7 @@ export const sendLoopToFollowers = functions.firestore
         return feedsRef
           .doc(docSnapshot.id)
           .collection(loopsFeedSubcollection)
-          .doc(loop.id).set({
+          .doc(snapshot.id).set({
             timestamp: Timestamp.now(),
             userId: loop.userId,
           });
@@ -684,7 +684,7 @@ export const sendPostToFollowers = functions.firestore
         return feedsRef
           .doc(docSnapshot.id)
           .collection(postsFeedSubcollection)
-          .doc(post.id)
+          .doc(snapshot.id)
           .set({
             timestamp: Timestamp.now(),
             userId: post.userId,
