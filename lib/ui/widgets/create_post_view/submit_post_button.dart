@@ -15,7 +15,9 @@ class SubmitPostButton extends StatelessWidget {
           // color: tappedAccent,
           onPressed: () => context.read<CreatePostCubit>().createPost(),
           child: state.status.isSubmissionInProgress
-              ? const CircularProgressIndicator()
+              ? const CircularProgressIndicator(
+                  color: Colors.black,
+                )
               : const Text('Post'),
         );
       },
