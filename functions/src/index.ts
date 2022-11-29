@@ -647,7 +647,7 @@ export const sendLoopToFollowers = functions.firestore
 
   });
 export const sendPostToFollowers = functions.firestore
-  .document("Posts/{postId}")
+  .document("posts/{postId}")
   .onCreate(async (snapshot) => {
     const post = snapshot.data();
     const userDoc = await usersRef.doc(post.userId).get();
