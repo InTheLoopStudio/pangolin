@@ -7,13 +7,9 @@ class PostDescription
   const PostDescription.pure() : super.pure('');
   const PostDescription.dirty([String value = '']) : super.dirty(value);
 
-  static final RegExp _emailRegExp = RegExp(
-    r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]',
-  );
-
   @override
   PostDescriptionValidationError? validator(String? value) {
-    return (_emailRegExp.hasMatch(value ?? '') && (value ?? '').isNotEmpty)
+    return (value ?? '').isNotEmpty
         ? null
         : PostDescriptionValidationError.invalid;
   }

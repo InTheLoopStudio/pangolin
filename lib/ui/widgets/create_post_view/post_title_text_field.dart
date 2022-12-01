@@ -17,7 +17,7 @@ class PostTitleTextField extends StatelessWidget {
           decoration: const InputDecoration.collapsed(
             // prefixIcon: Icon(Icons.title),
             // labelText: 'Title (optional)',
-            hintText: 'My glorious title',
+            hintText: 'Title (optional)',
           ),
           maxLength: 56,
           onChanged: (input) => context.read<CreatePostCubit>().onTitleChange(

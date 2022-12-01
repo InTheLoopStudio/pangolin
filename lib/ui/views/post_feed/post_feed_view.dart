@@ -48,7 +48,9 @@ class PostFeedView extends StatelessWidget {
             body: RefreshIndicator(
               displacement: 20,
               onRefresh: () async {
-                await context.read<PostFeedCubit>().initPosts();
+                await context
+                    .read<PostFeedCubit>()
+                    .initPosts(clearPosts: false);
               },
               child: BlocBuilder<PostFeedCubit, PostFeedState>(
                 builder: (context, state) {
@@ -74,23 +76,21 @@ class PostFeedView extends StatelessWidget {
                       }
 
                       return ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (BuildContext context, int index) {
-                          return Column(
-                                  children: [
-                                    PostContainer(
-                                      post: state.posts[index],
-                                    ),
-                                    Container(
-                                      color: Colors.black,
-                                      height: 1,
-                                    )
-                                  ],
-                                );
-                        },
-                        itemCount: state.posts.length
-                      );
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Column(
+                              children: [
+                                PostContainer(
+                                  post: state.posts[index],
+                                ),
+                                Container(
+                                  color: Colors.black,
+                                  height: 1,
+                                )
+                              ],
+                            );
+                          },
+                          itemCount: state.posts.length);
 
                     case PostFeedStatus.failure:
                       return Row(
