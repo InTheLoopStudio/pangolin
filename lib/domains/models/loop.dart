@@ -77,6 +77,20 @@ class Loop extends Equatable {
   /// methods from jsonserialize
   Map<String, dynamic> toJson() => _$LoopToJson(this);
 
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'id': id,
+        'userId': userId,
+        'title': title,
+        'description': description,
+        'audioPath': audioPath,
+        'timestamp': timestamp,
+        'likeCount': likeCount,
+        'commentCount': commentCount,
+        'shareCount': shareCount,
+        'tags': tags,
+        'deleted': deleted,
+      };
+
   /// The uuid of this [Loop]
   final String id;
 

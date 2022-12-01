@@ -5,7 +5,9 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
+import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
 import 'package:intheloopapp/ui/views/post_feed/post_feed_cubit.dart';
+import 'package:intheloopapp/ui/widgets/post_feed_view/post_container.dart';
 
 class PostFeedView extends StatelessWidget {
   const PostFeedView({Key? key}) : super(key: key);
@@ -21,7 +23,7 @@ class PostFeedView extends StatelessWidget {
             databaseRepository: RepositoryProvider.of<DatabaseRepository>(
               context,
             ),
-          ),
+          )..initPosts(),
           child: Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,
             appBar: AppBar(
@@ -43,19 +45,71 @@ class PostFeedView extends StatelessWidget {
                     const PushCreatePost(),
                   ),
             ),
-            body: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    EasterEggPlaceholder(
-                      text: 'No Posts',
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
-              ],
+            body: RefreshIndicator(
+              displacement: 20,
+              onRefresh: () async {
+                await context.read<PostFeedCubit>().initPosts();
+              },
+              child: BlocBuilder<PostFeedCubit, PostFeedState>(
+                builder: (context, state) {
+                  switch (state.status) {
+                    case PostFeedStatus.initial:
+                      return const LoadingView();
+                    case PostFeedStatus.success:
+                      if (state.posts.isEmpty) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                EasterEggPlaceholder(
+                                  text: 'No Posts',
+                                  color: Colors.white,
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      }
+
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (BuildContext context, int index) {
+                          return Column(
+                                  children: [
+                                    PostContainer(
+                                      post: state.posts[index],
+                                    ),
+                                    Container(
+                                      color: Colors.black,
+                                      height: 1,
+                                    )
+                                  ],
+                                );
+                        },
+                        itemCount: state.posts.length
+                      );
+
+                    case PostFeedStatus.failure:
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              EasterEggPlaceholder(
+                                text: 'Error Fetching Posts :(',
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                  }
+                },
+              ),
             ),
           ),
         );

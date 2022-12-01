@@ -34,7 +34,7 @@ class PostFeedCubit extends Cubit<PostFeedState> {
       currentUserId,
       limit: 1,
     );
-    if (!followingPosts.isNotEmpty) {
+    if (followingPosts.isEmpty) {
       emit(state.copyWith(status: PostFeedStatus.success));
     }
 

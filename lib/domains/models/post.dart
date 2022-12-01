@@ -74,6 +74,19 @@ class Post extends Equatable {
   /// methods from jsonserialize
   Map<String, dynamic> toJson() => _$PostToJson(this);
 
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'id': id,
+        'userId': userId,
+        'title': title,
+        'description': description,
+        'timestamp': timestamp,
+        'likeCount': likeCount,
+        'commentCount': commentCount,
+        'shareCount': shareCount,
+        'tags': tags,
+        'deleted': deleted,
+      };
+
   /// The uuid of this [Post]
   final String id;
 

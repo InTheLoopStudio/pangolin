@@ -328,7 +328,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         'loop_id': loop.id,
       },
     );
-    await _loopsRef.add(loop.toJson());
+    await _loopsRef.add(loop.toMap());
   }
 
   @override
@@ -1066,7 +1066,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         'post_id': post.id,
       },
     );
-    await _postsRef.add(post.toJson());
+    await _postsRef.add(post.toMap());
   }
 
   @override
