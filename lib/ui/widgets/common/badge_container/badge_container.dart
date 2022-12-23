@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/domains/models/badge.dart';
+import 'package:intheloopapp/domains/models/badge.dart' as badge_model;
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -11,7 +11,7 @@ class BadgeContainer extends StatelessWidget {
     required this.badge,
   }) : super(key: key);
 
-  final Badge badge;
+  final badge_model.Badge badge;
 
   @override
   Widget build(BuildContext context) {

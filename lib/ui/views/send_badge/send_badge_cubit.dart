@@ -7,7 +7,7 @@ import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
-import 'package:intheloopapp/domains/models/badge.dart';
+import 'package:intheloopapp/domains/models/badge.dart' as badge_model;
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:uuid/uuid.dart';
@@ -81,7 +81,7 @@ class SendBadgeCubit extends Cubit<SendBadgeState> {
 
         // create badge object
         final badgeId = const Uuid().v4();
-        final badge = Badge(
+        final badge = badge_model.Badge(
           id: badgeId,
           creatorId: currentUser.id,
           imageUrl: badgeImageUrl,

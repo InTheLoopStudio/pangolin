@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:intheloopapp/domains/models/badge.dart';
+import 'package:intheloopapp/domains/models/badge.dart' as badge_model;
 import 'package:intheloopapp/ui/widgets/badge_view/userid_tile.dart';
 
 /// The full page view for a badge
@@ -12,7 +12,7 @@ class BadgeView extends StatelessWidget {
   }) : super(key: key);
 
   /// The badge to display
-  final Badge badge;
+  final badge_model.Badge badge;
 
   @override
   Widget build(BuildContext context) {
