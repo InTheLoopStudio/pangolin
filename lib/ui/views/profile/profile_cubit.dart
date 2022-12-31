@@ -115,7 +115,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
     badgeListener = databaseRepository
         .userBadgesObserver(visitedUser.id)
         .listen((Badge event) {
-      // print('loop { ${event.id} : ${event.title} }');
+      // print('badge { ${event.id} : ${event.title} }');
       emit(
         state.copyWith(
           badgeStatus: BadgesStatus.success,

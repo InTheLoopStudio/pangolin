@@ -58,7 +58,7 @@ class PushLoop extends NavigationEvent {
 class PushBadge extends NavigationEvent {
   const PushBadge(this.badge);
 
-  final Badge badge;
+  final badge_model.Badge badge;
 
   @override
   String toString() => 'PushProfile { badge: $badge}';

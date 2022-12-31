@@ -90,7 +90,8 @@ class PostFeedView extends StatelessWidget {
                               ],
                             );
                           },
-                          itemCount: state.posts.length);
+                          itemCount: state.posts.length,
+                        );
 
                     case PostFeedStatus.failure:
                       return Row(

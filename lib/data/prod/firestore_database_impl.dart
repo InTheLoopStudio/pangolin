@@ -953,6 +953,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       )
           .map((DocumentChange<Map<String, dynamic>> element) async {
         final badgeId = element.doc.id;
+        // print('BADGE ID { $badgeId }');
         final badgeSnapshot = await _badgesRef.doc(badgeId).get();
         return Badge.fromDoc(badgeSnapshot);
       });
@@ -1041,7 +1042,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       final userBadges = Future.wait(
         userBadgesSnapshot.docs.map((doc) async {
-          final badgeId = doc.getOrElse('badgeId', '') as String;
+          final badgeId = doc.id;
           final badgeSnapshot = await _badgesRef.doc(badgeId).get();
           return Badge.fromDoc(badgeSnapshot);
         }).toList(),
