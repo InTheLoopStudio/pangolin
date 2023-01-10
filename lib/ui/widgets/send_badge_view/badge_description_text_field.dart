@@ -22,7 +22,7 @@ class BadgeDescriptionTextField extends StatelessWidget {
         hintText: 'give a brief description of the badge',
       ),
       validator: (input) {
-        if (input!.trim().isNotEmpty && input.trim().length < 256) {
+        if (input!.trim().isEmpty || input.trim().length > 256) {
           return 'please enter a valid badge description';
         }
 
