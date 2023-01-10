@@ -30,14 +30,14 @@ class BadgeNameTextField extends StatelessWidget {
       },
       onSaved: (input) async {
         if (input == null || input.isEmpty) return;
-        input = input.trim().toLowerCase();
+        input = input.trim();
         if (onSaved != null) {
           onSaved?.call(input);
         }
       },
       onChanged: (input) async {
         if (input.isEmpty) return;
-        input = input.trim().toLowerCase();
+        input = input.trim();
         if (onChanged != null) {
           onChanged?.call(input);
         }
