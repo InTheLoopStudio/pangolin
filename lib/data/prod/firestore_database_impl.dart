@@ -30,6 +30,8 @@ final _badgesRef = _firestore.collection('badges');
 final _badgesSentRef = _firestore.collection('badgesSent');
 final _postsRef = _firestore.collection('posts');
 
+const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
+
 class HandleAlreadyExistsException implements Exception {
   HandleAlreadyExistsException(this.cause);
   String cause;
@@ -880,6 +882,17 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     await _loopsRef.doc(loop.id).update({
       'shares': FieldValue.increment(1),
     });
+  }
+
+  @override
+  Future<bool> isVerified(String userId) async {
+    final verifiedBadgeSentDoc = await _badgesSentRef
+        .doc(userId)
+        .collection('badges')
+        .doc(verifiedBadgeId)
+        .get();
+
+    return verifiedBadgeSentDoc.exists;
   }
 
   @override

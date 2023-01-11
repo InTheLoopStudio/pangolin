@@ -137,6 +137,7 @@ abstract class DatabaseRepository {
   Future<void> markActivityAsRead(Activity activity);
 
   // Badge related stuff
+  Future<bool> isVerified(String userId);
   Future<void> createBadge(Badge badge);
   Future<void> sendBadge(String badgeId, String receiverId);
   Stream<Badge> userCreatedBadgesObserver(

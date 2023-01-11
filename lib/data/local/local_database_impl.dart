@@ -277,6 +277,12 @@ class LocalDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  Future<bool> isVerified(String userId) async {
+    await Future<void>.delayed(Duration.zero);
+    return false;
+  }
+
+  @override
   Future<void> createBadge(Badge badge) async {
     await Future<void>.delayed(Duration.zero);
     return;

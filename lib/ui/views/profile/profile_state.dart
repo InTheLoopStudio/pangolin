@@ -23,6 +23,7 @@ class ProfileState extends Equatable {
     this.followerCount = 0,
     this.followingCount = 0,
     this.isFollowing = false,
+    this.isVerified = false,
     this.userLoops = const [],
     this.userBadges = const [],
     this.userCreatedBadges = const [],
@@ -39,6 +40,7 @@ class ProfileState extends Equatable {
   final int followerCount;
   final int followingCount;
   final bool isFollowing;
+  final bool isVerified;
   final List<Loop> userLoops;
   final List<Badge> userBadges;
   final List<Badge> userCreatedBadges;
@@ -56,6 +58,7 @@ class ProfileState extends Equatable {
         followingCount,
         followerCount,
         isFollowing,
+        isVerified,
         userLoops,
         userBadges,
         userCreatedBadges,
@@ -73,6 +76,7 @@ class ProfileState extends Equatable {
     int? followerCount,
     int? followingCount,
     bool? isFollowing,
+    bool? isVerified,
     List<Loop>? userLoops,
     List<Badge>? userBadges,
     List<Badge>? userCreatedBadges,
@@ -89,6 +93,7 @@ class ProfileState extends Equatable {
       followingCount: followingCount ?? this.followingCount,
       followerCount: followerCount ?? this.followerCount,
       isFollowing: isFollowing ?? this.isFollowing,
+      isVerified: isVerified ?? this.isVerified,
       userLoops: userLoops ?? this.userLoops,
       userBadges: userBadges ?? this.userBadges,
       userCreatedBadges: userCreatedBadges ?? this.userCreatedBadges,

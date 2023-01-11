@@ -314,6 +314,16 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
     );
   }
 
+  Future<void> loadIsVerified(String visitedUserId) async {
+    final isVerified = await databaseRepository.isVerified(visitedUserId);
+
+    emit(
+      state.copyWith(
+        isVerified: isVerified,
+      ),
+    );
+  }
+
   void deleteLoop(Loop loop) {
     final newLoops = List<Loop>.of(state.userLoops)
       ..removeWhere((element) => element.id == loop.id);

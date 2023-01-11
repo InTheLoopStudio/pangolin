@@ -144,7 +144,8 @@ class _ProfileViewState extends State<ProfileView> {
           ..initUserCreatedBadges()
           ..loadFollower(visitedUser.id)
           ..loadFollowing(visitedUser.id)
-          ..loadIsFollowing(currentUser.id, visitedUser.id),
+          ..loadIsFollowing(currentUser.id, visitedUser.id)
+          ..loadIsVerified(visitedUser.id),
         child: BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, state) {
             final showVenueDashboard = currentUser.id == visitedUser.id &&
@@ -181,7 +182,9 @@ class _ProfileViewState extends State<ProfileView> {
                     // ignore: unawaited_futures
                     ..loadFollowing(visitedUser.id)
                     // ignore: unawaited_futures
-                    ..loadFollower(visitedUser.id);
+                    ..loadFollower(visitedUser.id)
+                    // ignore: unawaited_futures
+                    ..loadIsVerified(visitedUser.id);
                 },
                 child: DefaultTabController(
                   length: tabs.length,
@@ -206,6 +209,16 @@ class _ProfileViewState extends State<ProfileView> {
                                     fontSize: 32,
                                   ),
                                 ),
+                                const SizedBox(width: 4),
+                                if (state.isVerified)
+                                  const Icon(
+                                    // CupertinoIcons.check_mark_circled_solid,
+                                    Icons.verified,
+                                    size: 18,
+                                    color: tappedAccent,
+                                  )
+                                else
+                                  const SizedBox.shrink()
                               ],
                             ),
                             background: Container(
@@ -272,8 +285,7 @@ class _ProfileViewState extends State<ProfileView> {
         RepositoryProvider.of<DatabaseRepository>(context);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      body:
-          BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
+      body: BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
         selector: (state) {
           return state as Onboarded;
         },
