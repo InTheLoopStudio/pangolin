@@ -33,7 +33,11 @@ class BottomToolbar extends StatelessWidget {
             const BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.waveform),
             ),
-            const BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.gem)),
+            const BottomNavigationBarItem(
+              icon: Icon(
+                CupertinoIcons.pencil_ellipsis_rectangle,
+              ),
+            ),
             const BottomNavigationBarItem(icon: Icon(CupertinoIcons.search)),
             // const BottomNavigationBarItem(
             //   icon: Icon(Icons.add_box_outlined),
