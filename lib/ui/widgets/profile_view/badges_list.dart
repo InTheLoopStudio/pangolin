@@ -67,38 +67,37 @@ class BadgesListState extends State<BadgesList> {
               return const EasterEggPlaceholder(text: 'No Badges Yet');
             }
 
-            return SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    children: [
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (BuildContext context, int index) {
-                          return index >= state.userBadges.length
-                              ? const Center(
-                                  child: SizedBox(
-                                    height: 24,
-                                    width: 24,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 1.5,
-                                    ),
-                                  ),
-                                )
-                              : BadgeContainer(
-                                  badge: state.userBadges[index],
-                                );
-                        },
-                        itemCount: state.hasReachedMaxBadges
-                            ? state.userBadges.length
-                            : state.userBadges.length + 1,
-                      ),
-                    ],
+            return CustomScrollView(
+              // The "controller" and "primary" members should be left
+              // unset, so that the NestedScrollView can control this
+              // inner scroll view.
+              // If the "controller" property is set, then this scroll
+              // view will not be associated with the NestedScrollView.
+              // The PageStorageKey should be unique to this ScrollView;
+              // it allows the list to remember its scroll position when
+              // the tab view is not on the screen.
+              key: const PageStorageKey<String>('badges'),
+              slivers: [
+                SliverOverlapInjector(
+                  // This is the flip side of the SliverOverlapAbsorber
+                  handle:
+                      NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.all(8),
+                  sliver: SliverList(
+                    // itemExtent: 100,
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        return BadgeContainer(
+                          badge: state.userBadges[index],
+                        );
+                      },
+                      childCount: state.userBadges.length,
+                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             );
         }
       },

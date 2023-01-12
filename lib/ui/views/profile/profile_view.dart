@@ -89,26 +89,8 @@ class _ProfileViewState extends State<ProfileView> {
     return tabs;
   }
 
-  Widget _badgesTab() => SingleChildScrollView(
-        controller: _scrollController,
-        physics: const NeverScrollableScrollPhysics(),
-        child: Column(
-          children: [
-            const SizedBox(height: 15),
-            BadgesList(scrollController: _scrollController),
-          ],
-        ),
-      );
-
-  Widget _loopsTab() => SingleChildScrollView(
-        controller: _scrollController,
-        physics: const NeverScrollableScrollPhysics(),
-        child: Column(
-          children: [
-            AllLoopsList(scrollController: _scrollController),
-          ],
-        ),
-      );
+  Widget _badgesTab() => BadgesList(scrollController: _scrollController);
+  Widget _loopsTab() => AllLoopsList(scrollController: _scrollController);
 
   List<Widget> _profileTabs(bool showVenueDashboard) {
     final tabs = [
@@ -257,12 +239,30 @@ class _ProfileViewState extends State<ProfileView> {
                             child: SocialMediaIcons(),
                           ),
                         ),
-                        SliverPersistentHeader(
-                          pinned: true,
-                          delegate: _SliverAppBarDelegate(
-                            TabBar(
-                              indicatorColor: tappedAccent,
-                              tabs: tabs,
+                        SliverOverlapAbsorber(
+                          // This widget takes the overlapping behavior of the
+                          // SliverAppBar,
+                          // and redirects it to the SliverOverlapInjector below.
+                          // If it is
+                          // missing, then it is possible for the nested "inner"
+                          // scroll view
+                          // below to end up under the SliverAppBar even when
+                          // the inner
+                          // scroll view thinks it has not been scrolled.
+                          // This is not necessary if the "headerSliverBuilder"
+                          // only builds
+                          // widgets that do not overlap the next sliver.
+                          handle:
+                              NestedScrollView.sliverOverlapAbsorberHandleFor(
+                            context,
+                          ),
+                          sliver: SliverPersistentHeader(
+                            pinned: true,
+                            delegate: _SliverAppBarDelegate(
+                              TabBar(
+                                indicatorColor: tappedAccent,
+                                tabs: tabs,
+                              ),
                             ),
                           ),
                         ),

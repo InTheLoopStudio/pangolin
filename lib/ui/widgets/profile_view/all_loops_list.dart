@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
@@ -65,46 +66,51 @@ class AllLoopsListState extends State<AllLoopsList> {
           return const EasterEggPlaceholder(text: 'No Posts');
         }
 
-        return SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (BuildContext context, int index) {
-                      return index >= state.userLoops.length
-                          ? const Center(
-                              child: SizedBox(
-                                height: 24,
-                                width: 24,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 1.5,
-                                ),
-                              ),
-                            )
-                          : Column(
-                              children: [
-                                LoopContainer(
-                                  loop: state.userLoops[index],
-                                ),
-                                Container(
-                                  color: Colors.black,
-                                  height: 1,
-                                )
-                              ],
-                            );
-                    },
-                    itemCount: state.hasReachedMaxLoops
-                        ? state.userLoops.length
-                        : state.userLoops.length + 1,
+        return CustomScrollView(
+          // The "controller" and "primary" members should be left
+          // unset, so that the NestedScrollView can control this
+          // inner scroll view.
+          // If the "controller" property is set, then this scroll
+          // view will not be associated with the NestedScrollView.
+          // The PageStorageKey should be unique to this ScrollView;
+          // it allows the list to remember its scroll position when
+          // the tab view is not on the screen.
+          key: const PageStorageKey<String>('loops'),
+          slivers: [
+            SliverOverlapInjector(
+              // This is the flip side of the SliverOverlapAbsorber
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+            ),
+                        if (state.currentUser.id == state.visitedUser.id)
+              SliverPadding(
+                padding: const EdgeInsets.all(8),
+                sliver: SliverToBoxAdapter(
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute<SendBadgeView>(
+                        builder: (context) => UploadView(),
+                      ),
+                    ),
+                    child: const Text('Upload Loop'),
                   ),
-                ],
+                ),
               ),
-            ],
-          ),
+            SliverPadding(
+              padding: const EdgeInsets.all(8),
+              sliver: SliverList(
+                // itemExtent: 100,
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return LoopContainer(
+                      loop: state.userLoops[index],
+                    );
+                  },
+                  childCount: state.userLoops.length,
+                ),
+              ),
+            )
+          ],
         );
     }
   }
@@ -112,22 +118,8 @@ class AllLoopsListState extends State<AllLoopsList> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
-      builder: (context, state) {
-        return Column(
-          children: [
-            OutlinedButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute<SendBadgeView>(
-                  builder: (context) => UploadView(),
-                ),
-              ),
-              child: const Text('Upload Loop'),
-            ),
-            loopsList(context, state)
-          ],
-        );
-      },
+      builder: loopsList,
     );
   }
 }
+

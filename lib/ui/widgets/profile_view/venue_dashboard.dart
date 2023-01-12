@@ -69,87 +69,79 @@ class VenueDashboardState extends State<VenueDashboard> {
               return const EasterEggPlaceholder(text: 'No Badges Yet');
             }
 
-            return Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 16,
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      OutlinedButton(
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute<SendBadgeView>(
-                            builder: (context) => const SendBadgeView(),
-                          ),
-                        ),
-                        child: const Text('Create Badge'),
-                      ),
-                      const SizedBox(height: 20),
-                      OutlinedButton(
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute<SendBadgeView>(
-                            builder: (context) => const SendBadgeView(),
-                          ),
-                        ),
-                        child: const Text('Send Badge'),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Column(
-                    children: [
-                      const Text(
-                        'Created Badges',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
-                        ),
-                      ),
-                      SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Column(
-                              children: [
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return index >=
-                                            state.userCreatedBadges.length
-                                        ? const Center(
-                                            child: SizedBox(
-                                              height: 24,
-                                              width: 24,
-                                              child: CircularProgressIndicator(
-                                                strokeWidth: 1.5,
-                                              ),
-                                            ),
-                                          )
-                                        : BadgeContainer(
-                                            badge:
-                                                state.userCreatedBadges[index],
-                                          );
-                                  },
-                                  itemCount:
-                                      state.hasReachedMaxUserCreatedBadges
-                                          ? state.userCreatedBadges.length
-                                          : state.userCreatedBadges.length + 1,
-                                ),
-                              ],
+            return CustomScrollView(
+              // The "controller" and "primary" members should be left
+              // unset, so that the NestedScrollView can control this
+              // inner scroll view.
+              // If the "controller" property is set, then this scroll
+              // view will not be associated with the NestedScrollView.
+              // The PageStorageKey should be unique to this ScrollView;
+              // it allows the list to remember its scroll position when
+              // the tab view is not on the screen.
+              key: const PageStorageKey<String>('venue'),
+              slivers: [
+                SliverOverlapInjector(
+                  // This is the flip side of the SliverOverlapAbsorber
+                  handle:
+                      NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                ),
+                if (state.currentUser.id == state.visitedUser.id)
+                  SliverPadding(
+                    padding: const EdgeInsets.all(8),
+                    sliver: SliverToBoxAdapter(
+                      child: Column(
+                        children: [
+                          const Text(
+                            'Created Badges',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 24,
                             ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              OutlinedButton(
+                                onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute<SendBadgeView>(
+                                    builder: (context) => const SendBadgeView(),
+                                  ),
+                                ),
+                                child: const Text('Create Badge'),
+                              ),
+                              const SizedBox(height: 20),
+                              OutlinedButton(
+                                onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute<SendBadgeView>(
+                                    builder: (context) => const SendBadgeView(),
+                                  ),
+                                ),
+                                child: const Text('Send Badge'),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ],
-              ),
+                SliverPadding(
+                  padding: const EdgeInsets.all(8),
+                  sliver: SliverList(
+                    // itemExtent: 100,
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        return BadgeContainer(
+                          badge: state.userCreatedBadges[index],
+                        );
+                      },
+                      childCount: state.userCreatedBadges.length,
+                    ),
+                  ),
+                )
+              ],
             );
         }
       },
