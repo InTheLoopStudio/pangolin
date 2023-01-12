@@ -83,7 +83,9 @@ class PostContainer extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                const SizedBox(width: 2,),
+                                const SizedBox(
+                                  width: 2,
+                                ),
                                 if (isVerified)
                                   const Icon(
                                     Icons.verified,
@@ -114,14 +116,15 @@ class PostContainer extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 14),
-                  Text(
-                    post.title,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                  if (post.title.isNotEmpty) const SizedBox(height: 14),
+                  if (post.title.isNotEmpty)
+                    Text(
+                      post.title,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
                   const SizedBox(height: 14),
                   Text(
                     post.description,

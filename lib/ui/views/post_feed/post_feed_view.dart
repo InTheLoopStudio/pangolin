@@ -30,7 +30,7 @@ class PostFeedView extends StatelessWidget {
               title: Row(
                 children: const [
                   Text(
-                    'Feed',
+                    'Gems',
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
