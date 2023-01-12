@@ -69,11 +69,13 @@ class _ProfileViewState extends State<ProfileView> {
     int loopsCount,
   ) {
     final tabs = [
-      Tab(
-        text: 'Badges ($badgesCount)',
+      const Tab(
+        text: 'BADGES',
+        icon: Icon(Icons.shield),
       ),
-      Tab(
-        text: 'Loops ($loopsCount)',
+      const Tab(
+        text: 'LOOPS',
+        icon: Icon(Icons.audiotrack),
       ),
     ];
 
@@ -81,7 +83,8 @@ class _ProfileViewState extends State<ProfileView> {
       tabs.insert(
         0,
         const Tab(
-          text: 'Venue',
+          text: 'VENUE',
+          icon: Icon(Icons.business_rounded),
         ),
       );
     }

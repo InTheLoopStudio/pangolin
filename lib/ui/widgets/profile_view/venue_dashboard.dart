@@ -85,48 +85,32 @@ class VenueDashboardState extends State<VenueDashboard> {
                   handle:
                       NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 ),
-                if (state.currentUser.id == state.visitedUser.id)
-                  SliverPadding(
-                    padding: const EdgeInsets.all(8),
-                    sliver: SliverToBoxAdapter(
-                      child: Column(
-                        children: [
-                          const Text(
-                            'Created Badges',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 24,
+                SliverPadding(
+                  padding: const EdgeInsets.all(8),
+                  sliver: SliverToBoxAdapter(
+                    child: Column(
+                      children: [
+                        const Text(
+                          'Created Badges',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        OutlinedButton(
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute<SendBadgeView>(
+                              builder: (context) => const SendBadgeView(),
                             ),
                           ),
-                          const SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              OutlinedButton(
-                                onPressed: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute<SendBadgeView>(
-                                    builder: (context) => const SendBadgeView(),
-                                  ),
-                                ),
-                                child: const Text('Create Badge'),
-                              ),
-                              const SizedBox(height: 20),
-                              OutlinedButton(
-                                onPressed: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute<SendBadgeView>(
-                                    builder: (context) => const SendBadgeView(),
-                                  ),
-                                ),
-                                child: const Text('Send Badge'),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                          child: const Text('Create Badge'),
+                        ),
+                      ],
                     ),
                   ),
+                ),
                 SliverPadding(
                   padding: const EdgeInsets.all(8),
                   sliver: SliverList(
