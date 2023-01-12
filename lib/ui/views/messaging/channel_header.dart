@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/ui/views/messaging/channel_name.dart';
-// ignore: implementation_imports
-import 'package:stream_chat_flutter/src/channel_info.dart';
-// ignore: implementation_imports
-import 'package:stream_chat_flutter/src/extension.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart' hide ChannelName;
 
 /// ![screenshot](https://raw.githubusercontent.com/GetStream/stream-chat-flutter/master/screenshots/channel_header.png)
@@ -109,7 +105,7 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
         (showBackButton
             ? StreamBackButton(
                 onPressed: onBackPressed,
-                showUnreads: true,
+                showUnreadCount: true,
               )
             : const SizedBox());
 
