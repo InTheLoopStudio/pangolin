@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
@@ -60,8 +61,8 @@ class PostContainer extends StatelessWidget {
                               radius: 24,
                               backgroundImage: user.profilePicture.isEmpty
                                   ? const AssetImage(
-                                          'assets/default_avatar.png')
-                                      as ImageProvider
+                                      'assets/default_avatar.png',
+                                    ) as ImageProvider
                                   : CachedNetworkImageProvider(
                                       user.profilePicture,
                                     ),
@@ -136,6 +137,23 @@ class PostContainer extends StatelessWidget {
                   // TODO(jonaylor89): add like and comment buttons
 
                   const SizedBox(height: 14),
+                  Row(
+                    children: [
+                      Icon(
+                        CupertinoIcons.heart,
+                        size: 18,
+                      ),
+                      SizedBox(width: 6),
+                      Text("4"),
+                      SizedBox(width: 12),
+                      Icon(
+                        CupertinoIcons.bubble_middle_bottom,
+                        size: 18,
+                      ),
+                      SizedBox(width: 6),
+                      Text("8"),
+                    ],
+                  ),
                   const Divider(
                     color: Colors.grey,
                     height: 10,

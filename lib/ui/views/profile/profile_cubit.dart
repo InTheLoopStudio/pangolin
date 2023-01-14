@@ -5,6 +5,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/post.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
 part 'profile_state.dart';
@@ -25,6 +26,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
   final UserModel visitedUser;
   StreamSubscription<Loop>? loopListener;
   StreamSubscription<Badge>? badgeListener;
+  StreamSubscription<Post>? postListener;
   StreamSubscription<Badge>? userCreatedBadgeListener;
 
   @override
@@ -126,6 +128,39 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
     });
   }
 
+  Future<void> initPosts({bool clearPosts = true}) async {
+    await postListener?.cancel();
+    if (clearPosts) {
+      emit(
+        state.copyWith(
+          postStatus: PostStatus.initial,
+          userPosts: [],
+          hasReachedMaxPosts: false,
+        ),
+      );
+    }
+
+    final postsAvailable =
+        (await databaseRepository.getUserPosts(visitedUser.id, limit: 1))
+            .isNotEmpty;
+    if (!postsAvailable) {
+      emit(state.copyWith(postStatus: PostStatus.success));
+    }
+
+    postListener = databaseRepository
+        .userPostsObserver(visitedUser.id)
+        .listen((Post event) {
+      // print('post { ${event.id} : ${event.title} }');
+      emit(
+        state.copyWith(
+          postStatus: PostStatus.success,
+          userPosts: List.of(state.userPosts)..add(event),
+          hasReachedMaxPosts: state.userPosts.length < 10,
+        ),
+      );
+    });
+  }
+
   Future<void> initUserCreatedBadges({bool clearBadges = true}) async {
     await userCreatedBadgeListener?.cancel();
 
@@ -217,6 +252,35 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
       emit(state.copyWith(badgeStatus: BadgesStatus.failure));
     }
   }
+
+  Future<void> fetchMorePost() async {
+    if (state.hasReachedMaxPosts) return;
+
+    try {
+      if (state.postStatus == PostStatus.initial) {
+        await initPosts();
+      }
+
+      final posts = await databaseRepository.getUserPosts(
+        visitedUser.id,
+        limit: 10,
+        lastPostId: state.userPosts.last.id,
+      );
+      posts.isEmpty
+          ? emit(state.copyWith(hasReachedMaxPosts: true))
+          : emit(
+              state.copyWith(
+                postStatus: PostStatus.success,
+                userPosts: List.of(state.userPosts)..addAll(posts),
+                hasReachedMaxPosts: false,
+              ),
+            );
+    } on Exception {
+      emit(state.copyWith(postStatus: PostStatus.failure));
+    }
+  }
+
+
 
   Future<void> fetchMoreUserCreatedBadges() async {
     if (state.hasReachedMaxUserCreatedBadges) return;

@@ -335,7 +335,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
   @override
   Future<void> deletePost(Post post) async {}
   @override
-  Future<List<Post>> getUserPost(
+  Future<List<Post>> getUserPosts(
     String userId, {
     int limit = 20,
     String? lastPostId,

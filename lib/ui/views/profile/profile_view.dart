@@ -12,6 +12,7 @@ import 'package:intheloopapp/ui/widgets/profile_view/badges_list.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/follow_button.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/follower_count.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/following_count.dart';
+import 'package:intheloopapp/ui/widgets/profile_view/posts_list.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/share_profile_button.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/social_media_icons.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/venue_dashboard.dart';
@@ -74,6 +75,10 @@ class _ProfileViewState extends State<ProfileView> {
         icon: Icon(Icons.shield),
       ),
       const Tab(
+        text: 'GEMS',
+        icon: Icon(Icons.diamond_outlined),
+      ),
+      const Tab(
         text: 'LOOPS',
         icon: Icon(Icons.audiotrack),
       ),
@@ -94,10 +99,12 @@ class _ProfileViewState extends State<ProfileView> {
 
   Widget _badgesTab() => BadgesList(scrollController: _scrollController);
   Widget _loopsTab() => AllLoopsList(scrollController: _scrollController);
+  Widget _postsTab() => PostsList(scrollController: _scrollController);
 
   List<Widget> _profileTabs(bool showVenueDashboard) {
     final tabs = [
       _badgesTab(),
+      _postsTab(),
       _loopsTab(),
     ];
 
@@ -126,6 +133,7 @@ class _ProfileViewState extends State<ProfileView> {
         )
           ..initLoops()
           ..initBadges()
+          ..initPosts()
           ..initUserCreatedBadges()
           ..loadFollower(visitedUser.id)
           ..loadFollowing(visitedUser.id)
@@ -158,6 +166,8 @@ class _ProfileViewState extends State<ProfileView> {
                     ..initLoops()
                     // ignore: unawaited_futures
                     ..initBadges()
+                    // ignore: unawaited_futures
+                    ..initPosts()
                     // ignore: unawaited_futures
                     ..initUserCreatedBadges()
                     // ignore: unawaited_futures

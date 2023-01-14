@@ -163,7 +163,7 @@ abstract class DatabaseRepository {
   Future<Post> getPostById(String postId);
   Future<void> addPost(Post post);
   Future<void> deletePost(Post post);
-  Future<List<Post>> getUserPost(
+  Future<List<Post>> getUserPosts(
     String userId, {
     int limit = 20,
     String? lastPostId,

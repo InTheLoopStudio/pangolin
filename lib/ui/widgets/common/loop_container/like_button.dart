@@ -27,7 +27,7 @@ class LikeButton extends StatelessWidget {
               ),
               const SizedBox(width: 5),
               Text(
-                '${state.likeCount} likes',
+                '${state.likeCount}',
                 style: const TextStyle(
                   fontSize: 10,
                 ),

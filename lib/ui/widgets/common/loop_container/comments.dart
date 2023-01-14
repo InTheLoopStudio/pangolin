@@ -28,7 +28,7 @@ class Comments extends StatelessWidget {
               ),
               const SizedBox(width: 5),
               Text(
-                '${state.loop.commentCount} comments',
+                '${state.loop.commentCount}',
                 style: const TextStyle(
                   fontSize: 10,
                 ),
