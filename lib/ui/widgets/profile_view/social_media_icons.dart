@@ -34,7 +34,9 @@ class SocialMediaIcons extends StatelessWidget {
             children: [
               _socialMediaIcon(
                 state.visitedUser.twitterHandle.isNotEmpty,
-                icon: const Icon(FontAwesomeIcons.twitter),
+                icon: const Icon(
+                  FontAwesomeIcons.twitter,
+                ),
                 onTap: () {
                   launchUrl(
                     Uri(
@@ -46,7 +48,9 @@ class SocialMediaIcons extends StatelessWidget {
               ),
               _socialMediaIcon(
                 state.visitedUser.instagramHandle.isNotEmpty,
-                icon: const Icon(FontAwesomeIcons.instagram),
+                icon: const Icon(
+                  FontAwesomeIcons.instagram,
+                ),
                 onTap: () {
                   launchUrl(
                     Uri(

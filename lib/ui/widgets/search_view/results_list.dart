@@ -25,13 +25,17 @@ class ResultsList extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
-                Icon(Icons.search, size: 200),
+                Icon(
+                  Icons.search,
+                  size: 200,
+                  color: Color(0xFF757575),
+                ),
                 Text(
                   'Search',
                   style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w400,
-                  ),
+                      fontSize: 22,
+                      fontWeight: FontWeight.w400,
+                      color: Color(0xFF757575)),
                 ),
               ],
             ),

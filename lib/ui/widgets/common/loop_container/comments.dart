@@ -25,12 +25,14 @@ class Comments extends StatelessWidget {
               const Icon(
                 Icons.comment,
                 size: 20,
+                color: Color(0xFF757575),
               ),
               const SizedBox(width: 5),
               Text(
                 '${state.loop.commentCount}',
                 style: const TextStyle(
                   fontSize: 10,
+                  color: Color(0xFF757575),
                 ),
               )
             ],
