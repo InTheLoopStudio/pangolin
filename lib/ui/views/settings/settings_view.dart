@@ -42,7 +42,19 @@ class SettingsView extends StatelessWidget {
           child: Scaffold(
             backgroundColor: theme.colorScheme.background,
             appBar: AppBar(
-              title: Text(currentUser.username),
+              title: Row(
+                children: [
+                  Text(
+                    currentUser.artistName.isNotEmpty 
+                      ? currentUser.artistName 
+                      : currentUser.username,
+                    style: const TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
               elevation: 0,
               actions: const [
                 ConnectivityStatus(),

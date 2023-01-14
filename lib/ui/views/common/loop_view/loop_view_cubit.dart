@@ -133,6 +133,11 @@ class LoopViewCubit extends Cubit<LoopViewState> {
     emit(state.copyWith(isLiked: isLiked, likeCount: loop.likeCount));
   }
 
+  Future<void> checkIsVerified() async {
+    final isVerified = await databaseRepository.isVerified(loop.userId);
+    emit(state.copyWith(isVerified: isVerified));
+  }
+
   Future<void> initLoopComments() async {
     emit(state.copyWith(commentsCount: loop.commentCount));
   }

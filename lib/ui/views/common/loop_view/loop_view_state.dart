@@ -11,6 +11,7 @@ class LoopViewState extends Equatable {
     this.feedId,
     this.isFollowing = false,
     this.isLiked = false,
+    this.isVerified = false,
     this.likeCount = 0,
     this.commentsCount = 0,
   }) {
@@ -24,6 +25,7 @@ class LoopViewState extends Equatable {
   final bool loadingLoop;
   final bool isFollowing;
   final bool isLiked;
+  final bool isVerified;
   final int commentsCount;
   final int likeCount;
 
@@ -36,6 +38,7 @@ class LoopViewState extends Equatable {
         loadingLoop,
         isFollowing,
         isLiked,
+        isVerified,
         commentsCount,
         likeCount,
       ];
@@ -48,6 +51,7 @@ class LoopViewState extends Equatable {
     bool? loading,
     bool? isFollowing,
     bool? isLiked,
+    bool? isVerified,
     int? commentsCount,
     int? likeCount,
   }) {
@@ -60,6 +64,7 @@ class LoopViewState extends Equatable {
       loadingLoop: loading ?? loadingLoop,
       isFollowing: isFollowing ?? this.isFollowing,
       isLiked: isLiked ?? this.isLiked,
+      isVerified: isVerified ?? this.isVerified,
       commentsCount: commentsCount ?? this.commentsCount,
       likeCount: likeCount ?? this.likeCount,
     );

@@ -56,7 +56,8 @@ class LoopView extends StatelessWidget {
                 ..initAudio()
                 ..initIsFollowing()
                 ..initLoopLikes()
-                ..initLoopComments(),
+                ..initLoopComments()
+                ..checkIsVerified(),
               child: const LoopStack(),
             );
           },
