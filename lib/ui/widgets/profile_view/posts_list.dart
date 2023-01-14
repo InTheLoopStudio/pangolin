@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
 import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
-import 'package:intheloopapp/ui/widgets/post_feed_view/post_container.dart';
+import 'package:intheloopapp/ui/widgets/common/post_container/post_container.dart';
 
 class PostsList extends StatefulWidget {
   const PostsList({Key? key, required this.scrollController})
@@ -94,7 +94,7 @@ class _PostsListState extends State<PostsList> {
                           post: state.userPosts[index],
                         );
                       },
-                      childCount: state.userBadges.length,
+                      childCount: state.userPosts.length,
                     ),
                   ),
                 ),

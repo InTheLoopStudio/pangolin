@@ -115,7 +115,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
     final userQuery =
         await _usersRef.where('username', isEqualTo: username).get();
-    if (userQuery.docs.isNotEmpty && userQuery.docs[0].id != userid) {
+    if (userQuery.docs.isNotEmpty || userQuery.docs[0].id != userid) {
       // print('''
       //   username check for already taken username:
       //     userId: ${data.userId},

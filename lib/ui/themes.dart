@@ -68,7 +68,7 @@ class Themes {
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: navigationBarDarkColor,
       selectedItemColor: primaryColor,
-      unselectedItemColor: Colors.white,
+      unselectedItemColor: Color(0xFF757575),
     ),
     // switch active color
     canvasColor: backgroundDarkColor,

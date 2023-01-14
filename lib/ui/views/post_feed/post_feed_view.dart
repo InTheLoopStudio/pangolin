@@ -7,7 +7,7 @@ import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
 import 'package:intheloopapp/ui/views/post_feed/post_feed_cubit.dart';
-import 'package:intheloopapp/ui/widgets/post_feed_view/post_container.dart';
+import 'package:intheloopapp/ui/widgets/common/post_container/post_container.dart';
 
 class PostFeedView extends StatelessWidget {
   const PostFeedView({Key? key}) : super(key: key);
