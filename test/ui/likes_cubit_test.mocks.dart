@@ -541,6 +541,14 @@ class MockDatabaseRepository extends _i1.Mock
         returnValueForMissingStub: _i6.Future<void>.value(),
       ) as _i6.Future<void>);
   @override
+  _i6.Future<bool> isVerified(String? userId) => (super.noSuchMethod(
+        Invocation.method(
+          #isVerified,
+          [userId],
+        ),
+        returnValue: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
+  @override
   _i6.Future<void> createBadge(_i9.Badge? badge) => (super.noSuchMethod(
         Invocation.method(
           #createBadge,
@@ -658,14 +666,14 @@ class MockDatabaseRepository extends _i1.Mock
         returnValueForMissingStub: _i6.Future<void>.value(),
       ) as _i6.Future<void>);
   @override
-  _i6.Future<List<_i4.Post>> getUserPost(
+  _i6.Future<List<_i4.Post>> getUserPosts(
     String? userId, {
     int? limit = 20,
     String? lastPostId,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
-          #getUserPost,
+          #getUserPosts,
           [userId],
           {
             #limit: limit,
