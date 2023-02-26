@@ -35,6 +35,7 @@ const postCommentsGroupRef = db.collectionGroup("postComments");
 const feedsRef = db.collection("feeds");
 // const badgesRef = db.collection("badges");
 // const badgesSentRef = db.collection("badgesSent");
+const tokensRef = db.collection("device_tokens")
 
 // const loopLikesSubcollection = "loopLikes";
 // const postLikesSubcollection = "postLikes";
@@ -478,7 +479,7 @@ export const sendToDevice = functions.firestore
       return;
     }
 
-    const querySnapshot = await usersRef
+    const querySnapshot = await tokensRef
       .doc(activity["toUserId"])
       .collection("tokens")
       .get();

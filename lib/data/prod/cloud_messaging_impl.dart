@@ -7,7 +7,7 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 final fcm = FirebaseMessaging.instance;
 final _fireStore = FirebaseFirestore.instance;
-final usersRef = _fireStore.collection('users');
+final tokensRef = _fireStore.collection('device_tokens');
 
 class CloudMessagingImpl extends NotificationRepository {
   CloudMessagingImpl(this._client);
@@ -34,7 +34,7 @@ class CloudMessagingImpl extends NotificationRepository {
           await _client.addDevice(token, PushProvider.firebase);
         }
 
-        await usersRef.doc(userId).collection('tokens').doc(token).set({
+        await tokensRef.doc(userId).collection('tokens').doc(token).set({
           'token': token,
           'platform': Platform.operatingSystem,
         });
