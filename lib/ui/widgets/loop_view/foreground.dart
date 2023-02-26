@@ -34,8 +34,8 @@ class Foreground extends StatelessWidget {
                 )
               ],
             ),
-            Row(
-              children: const [
+            const Row(
+              children:  [
                 LoopSeekBar(),
               ],
             ),

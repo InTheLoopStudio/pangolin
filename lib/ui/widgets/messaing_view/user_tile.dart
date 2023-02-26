@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:intheloopapp/ui/views/messaging/channel_view.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
-import 'package:stream_chat_flutter/stream_chat_flutter.dart' hide UserAvatar;
 
 class UserTile extends StatelessWidget {
   const UserTile({Key? key, required this.user}) : super(key: key);
@@ -14,6 +13,7 @@ class UserTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final streamRepository = RepositoryProvider.of<StreamRepository>(context);
+    final navigationBloc = BlocProvider.of<NavigationBloc>(context);
 
     return ListTile(
       leading: UserAvatar(
@@ -27,16 +27,7 @@ class UserTile extends StatelessWidget {
           await channel.watch();
         }
 
-        if (!context.mounted) return;
-        await Navigator.push(
-          context,
-          MaterialPageRoute<StreamChannel>(
-            builder: (context) => StreamChannel(
-              channel: channel,
-              child: const ChannelView(),
-            ),
-          ),
-        );
+        navigationBloc.add(PushStreamChannel(channel));
       },
     );
   }

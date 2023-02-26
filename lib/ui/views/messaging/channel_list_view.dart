@@ -16,8 +16,8 @@ class MessagingChannelListView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        title: Row(
-          children: const [
+        title: const Row(
+          children: [
             Text(
               'Messaging',
               style: TextStyle(
@@ -49,7 +49,7 @@ class MessagingChannelListView extends StatelessWidget {
                 'members',
                 [currentUser.id],
               ),
-              sort: const [SortOption('last_message_at')],
+              channelStateSort: const [SortOption('last_message_at')],
               limit: 20,
             ),
             itemBuilder: (

@@ -21,10 +21,10 @@ class ResultsList extends StatelessWidget {
         }
 
         if (state.searchTerm.isEmpty) {
-          return Center(
+          return const Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Icon(
                   Icons.search,
                   size: 200,
@@ -33,9 +33,10 @@ class ResultsList extends StatelessWidget {
                 Text(
                   'Search',
                   style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xFF757575)),
+                    fontSize: 22,
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xFF757575),
+                  ),
                 ),
               ],
             ),

@@ -76,18 +76,18 @@ class LoopContainer extends StatelessWidget {
                 ),
               ],
             ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Column(
                 children: [
                   Row(
                     children: [
-                      const PlayPauseButton(),
-                      const SizedBox(width: 10),
+                      PlayPauseButton(),
+                      SizedBox(width: 10),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
+                          children: [
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 20),
                               child: LoopTitle(),
@@ -99,18 +99,18 @@ class LoopContainer extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 15),
+                  SizedBox(height: 15),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
-                        children: const [
+                        children: [
                           LikeButton(),
                           SizedBox(width: 20),
                           Comments(),
                         ],
                       ),
-                      const Timestamp(),
+                      Timestamp(),
                     ],
                   ),
                 ],

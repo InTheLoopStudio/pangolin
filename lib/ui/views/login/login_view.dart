@@ -34,10 +34,10 @@ class LoginView extends StatelessWidget {
               ),
               const SizedBox(height: 30),
               TextButton(
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
+                  children: [
                     Text(
                       'Privacy Policy',
                       style: TextStyle(color: Colors.white),
@@ -58,10 +58,10 @@ class LoginView extends StatelessWidget {
                 ),
               ),
               TextButton(
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
+                  children: [
                     Text(
                       'Terms of Service',
                       style: TextStyle(color: Colors.white),

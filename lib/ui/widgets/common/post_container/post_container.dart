@@ -170,14 +170,15 @@ class PostContainer extends StatelessWidget {
                             ),
                             const SizedBox(width: 12),
                             GestureDetector(
-                                onTap: () => navigationBloc.add(
-                                      PushPost(post),
-                                    ),
-                                child: const Icon(
-                                  CupertinoIcons.bubble_middle_bottom,
-                                  size: 18,
-                                  color: Color(0xFF757575),
-                                )),
+                              onTap: () => navigationBloc.add(
+                                PushPost(post),
+                              ),
+                              child: const Icon(
+                                CupertinoIcons.bubble_middle_bottom,
+                                size: 18,
+                                color: Color(0xFF757575),
+                              ),
+                            ),
                             const SizedBox(width: 6),
                             Text(
                               '${state.commentCount}',

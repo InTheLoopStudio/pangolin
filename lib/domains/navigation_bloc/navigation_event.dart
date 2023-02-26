@@ -125,3 +125,18 @@ class ChangeTab extends NavigationEvent {
   @override
   List<Object> get props => [selectedTab];
 }
+
+class PushStreamChannel extends NavigationEvent {
+  const PushStreamChannel(
+    this.channel,
+  );
+
+  final Channel channel;
+
+  @override
+  String toString() =>
+      '''PushStreamChannel { loop: $channel }''';
+
+  @override
+  List<Object> get props => [channel];
+}

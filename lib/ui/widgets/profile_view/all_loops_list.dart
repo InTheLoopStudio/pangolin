@@ -92,11 +92,11 @@ class AllLoopsListState extends State<AllLoopsList> {
                         builder: (context) => UploadView(),
                       ),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Icon(
                             FontAwesomeIcons.fileArrowUp,
                           ),

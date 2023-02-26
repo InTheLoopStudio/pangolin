@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/ui/views/messaging/channel_header.dart';
-import 'package:stream_chat_flutter/stream_chat_flutter.dart'
-    hide ChannelHeader;
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class ChannelView extends StatelessWidget {
   const ChannelView({
@@ -10,10 +9,10 @@ class ChannelView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const ChannelHeader(),
+    return const Scaffold(
+      appBar: ChannelHeader(),
       body: Column(
-        children: const [
+        children: [
           Expanded(
             child: StreamMessageListView(),
           ),

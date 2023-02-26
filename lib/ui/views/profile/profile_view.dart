@@ -232,12 +232,12 @@ class _ProfileViewState extends State<ProfileView> {
                             ),
                           ),
                         ),
-                        SliverToBoxAdapter(
+                        const SliverToBoxAdapter(
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 8),
+                            padding: EdgeInsets.only(top: 8),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: const [
+                              children: [
                                 FollowerCount(),
                                 FollowingCount(),
                                 ShareProfileButton(),
@@ -255,7 +255,7 @@ class _ProfileViewState extends State<ProfileView> {
                         SliverOverlapAbsorber(
                           // This widget takes the overlapping behavior of the
                           // SliverAppBar,
-                          // and redirects it to the SliverOverlapInjector below.
+                          // and redirects it to the SliverOverlapInjector below
                           // If it is
                           // missing, then it is possible for the nested "inner"
                           // scroll view

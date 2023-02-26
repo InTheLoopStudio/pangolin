@@ -15,9 +15,9 @@ class Stage2 extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     SizedBox(height: 100),
                     Text(
                       'Follow Recommendations',

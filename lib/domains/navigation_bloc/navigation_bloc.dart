@@ -10,8 +10,10 @@ import 'package:intheloopapp/ui/views/common/loop_view/loop_view.dart';
 import 'package:intheloopapp/ui/views/common/post_view/post_view.dart';
 import 'package:intheloopapp/ui/views/create_post/create_post_view.dart';
 import 'package:intheloopapp/ui/views/likes/likes_view.dart';
+import 'package:intheloopapp/ui/views/messaging/channel_view.dart';
 import 'package:intheloopapp/ui/views/onboarding/onboarding_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 part 'navigation_event.dart';
 part 'navigation_state.dart';
@@ -102,6 +104,18 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
         MaterialPageRoute<PushLikes>(
           builder: (context) => const CreatePostView(),
         ),
+      );
+
+      emit(state);
+    });
+    on<PushStreamChannel>((event, emit) {
+      navigationKey.currentState?.push(
+        MaterialPageRoute<StreamChannel>(
+            builder: (context) => StreamChannel(
+              channel: event.channel,
+              child: const ChannelView(),
+            ),
+          ),
       );
 
       emit(state);

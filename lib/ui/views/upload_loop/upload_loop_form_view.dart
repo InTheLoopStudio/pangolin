@@ -38,15 +38,15 @@ class UploadLoopFormView extends StatelessWidget {
               );
           }
         },
-        child: Align(
-          alignment: const Alignment(0, -1 / 3),
+        child: const Align(
+          alignment: Alignment(0, -1 / 3),
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50),
+              padding: EdgeInsets.symmetric(horizontal: 50),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   AudioContainer(),
                   SizedBox(height: 40),
                   TitleInput(),

@@ -27,8 +27,8 @@ class PostFeedView extends StatelessWidget {
           child: Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,
             appBar: AppBar(
-              title: Row(
-                children: const [
+              title: const Row(
+                children: [
                   Text(
                     'Gems',
                     style: TextStyle(
@@ -59,12 +59,12 @@ class PostFeedView extends StatelessWidget {
                       return const LoadingView();
                     case PostFeedStatus.success:
                       if (state.posts.isEmpty) {
-                        return Row(
+                        return const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 EasterEggPlaceholder(
                                   text: 'No Posts',
                                   color: Colors.white,
@@ -94,12 +94,12 @@ class PostFeedView extends StatelessWidget {
                         );
 
                     case PostFeedStatus.failure:
-                      return Row(
+                      return const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
+                            children: [
                               EasterEggPlaceholder(
                                 text: 'Error Fetching Posts :(',
                                 color: Colors.white,

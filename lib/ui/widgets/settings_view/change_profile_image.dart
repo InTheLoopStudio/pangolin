@@ -45,13 +45,13 @@ class ChangeProfileImage extends StatelessWidget {
                       user.profilePicture,
                     ),
                   ),
-                  CircleAvatar(
+                  const CircleAvatar(
                     radius: 45,
                     backgroundColor: Colors.black54,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: const [
+                      children: [
                         Icon(
                           Icons.camera_alt,
                           size: 50,

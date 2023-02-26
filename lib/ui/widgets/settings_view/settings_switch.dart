@@ -10,6 +10,7 @@ class SettingsSwitch extends StatelessWidget {
 
   final String label;
   final bool activated;
+  // ignore: avoid_positional_boolean_parameters
   final void Function(bool) onChanged;
 
   @override

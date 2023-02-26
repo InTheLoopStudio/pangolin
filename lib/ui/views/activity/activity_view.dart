@@ -8,8 +8,8 @@ class ActivityView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: const [
+        title: const Row(
+          children: [
             Text(
               'Activities',
               style: TextStyle(
