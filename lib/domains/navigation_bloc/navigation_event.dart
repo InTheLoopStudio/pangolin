@@ -49,10 +49,25 @@ class PushLoop extends NavigationEvent {
 
   @override
   String toString() =>
-      '''PushProfile { loop: $loop, showComments: $showComments, autoPlay: $autoPlay }''';
+      '''PushLoop { loop: $loop, showComments: $showComments, autoPlay: $autoPlay }''';
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [loop];
+}
+
+class PushPost extends NavigationEvent {
+    const PushPost(
+    this.post,
+    );
+
+  final Post post;
+
+  @override
+  String toString() =>
+      '''PushPost { post: $post }''';
+
+  @override
+  List<Object> get props => [post];
 }
 
 class PushBadge extends NavigationEvent {
