@@ -28,7 +28,6 @@ class OnboardingView extends StatelessWidget {
             storageRepository: context.read<StorageRepository>(),
             databaseRepository: context.read<DatabaseRepository>(),
           )
-            ..initUserData()
             ..initFollowRecommendations(),
           child: Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,

@@ -31,17 +31,6 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
   final DatabaseRepository databaseRepository;
   String currentUserId;
 
-  void initUserData() {
-    emit(
-      state.copyWith(
-        username: '',
-        artistName: '',
-        location: '',
-        bio: '',
-      ),
-    );
-  }
-
   Future<void> initFollowRecommendations() async {
     for (final userId in [
       'VWj4qT2JMIhjjEYYFnbvebIazfB3',

@@ -128,16 +128,12 @@ class SettingsCubit extends Cubit<SettingsState> {
         !state.status.isSubmissionInProgress) {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
-      var profilePictureUrl = '';
-      if (state.profileImage == null) {
-        profilePictureUrl = currentUser.profilePicture;
-      } else {
-        profilePictureUrl = await storageRepository.uploadProfilePicture(
-          currentUser.id,
-          currentUser.profilePicture,
-          state.profileImage!,
-        );
-      }
+      final profilePictureUrl = state.profileImage != null
+          ? await storageRepository.uploadProfilePicture(
+              currentUser.id,
+              state.profileImage!,
+            )
+          : currentUser.profilePicture;
 
       final user = currentUser.copyWith(
         username: state.username,
