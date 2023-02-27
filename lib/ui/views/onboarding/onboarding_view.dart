@@ -14,14 +14,14 @@ class OnboardingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
-      selector: (state) => state as Onboarded,
+    return BlocSelector<AuthenticationBloc, AuthenticationState, Authenticated>(
+      selector: (state) => state as Authenticated,
       builder: (context, state) {
-        final user = state.currentUser;
+        final userId = state.currentUserId;
 
         return BlocProvider(
           create: (context) => OnboardingFlowCubit(
-            currentUser: user,
+            currentUserId: userId,
             onboardingBloc: context.read<OnboardingBloc>(),
             navigationBloc: context.read<NavigationBloc>(),
             authenticationBloc: context.read<AuthenticationBloc>(),

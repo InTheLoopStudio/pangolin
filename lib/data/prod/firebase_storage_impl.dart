@@ -12,22 +12,13 @@ class FirebaseStorageImpl extends StorageRepository {
   @override
   Future<String> uploadProfilePicture(
     String userId,
-    String url,
     File imageFile,
   ) async {
     final prefix = userId.isEmpty ? 'images/users' : 'images/users/$userId';
 
-    var uniquePhotoId = const Uuid().v4();
+    final uniquePhotoId = const Uuid().v4();
     final image = await compressImage(uniquePhotoId, imageFile);
 
-    if (url.isNotEmpty) {
-      final exp = RegExp('userProfile_(.*).jpg');
-      final oldUniquePhotoId = exp.firstMatch(url);
-
-      if (oldUniquePhotoId != null) {
-        uniquePhotoId = oldUniquePhotoId[1]!;
-      }
-    }
     final uploadTask = storageRef
         .child('$prefix/userProfile_$uniquePhotoId.jpg')
         .putFile(image);

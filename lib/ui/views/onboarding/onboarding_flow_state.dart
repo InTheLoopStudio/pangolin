@@ -7,7 +7,7 @@ enum OnboardingStage {
 
 class OnboardingFlowState extends Equatable {
   OnboardingFlowState({
-    required this.currentUser,
+    required this.currentUserId,
     this.onboardingStage = OnboardingStage.stage1,
     this.username = '',
     this.artistName = '',
@@ -28,7 +28,7 @@ class OnboardingFlowState extends Equatable {
     this.formKey = formKey ?? GlobalKey<FormState>(debugLabel: 'onboarding');
   }
 
-  final UserModel currentUser;
+  final String currentUserId;
   final bool loading;
   final OnboardingStage onboardingStage;
   final String username;
@@ -48,6 +48,7 @@ class OnboardingFlowState extends Equatable {
 
   @override
   List<Object?> get props => [
+        currentUserId,
         loading,
         onboardingStage,
         username,
@@ -80,7 +81,7 @@ class OnboardingFlowState extends Equatable {
     bool? followingIlias,
   }) {
     return OnboardingFlowState(
-      currentUser: currentUser,
+      currentUserId: currentUserId,
       loading: loading ?? this.loading,
       onboardingStage: onboardingStage ?? this.onboardingStage,
       username: username ?? this.username,

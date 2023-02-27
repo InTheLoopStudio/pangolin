@@ -16,28 +16,28 @@ part 'onboarding_flow_state.dart';
 
 class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
   OnboardingFlowCubit({
-    required this.currentUser,
+    required this.currentUserId,
     required this.onboardingBloc,
     required this.navigationBloc,
     required this.authenticationBloc,
     required this.storageRepository,
     required this.databaseRepository,
-  }) : super(OnboardingFlowState(currentUser: currentUser));
+  }) : super(OnboardingFlowState(currentUserId: currentUserId));
 
   final OnboardingBloc onboardingBloc;
   final NavigationBloc navigationBloc;
   final AuthenticationBloc authenticationBloc;
   final StorageRepository storageRepository;
   final DatabaseRepository databaseRepository;
-  UserModel currentUser;
+  String currentUserId;
 
   void initUserData() {
     emit(
       state.copyWith(
-        username: currentUser.username,
-        artistName: currentUser.artistName,
-        location: currentUser.location,
-        bio: currentUser.bio,
+        username: '',
+        artistName: '',
+        location: '',
+        bio: '',
       ),
     );
   }
@@ -51,11 +51,11 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
     ]) {
       var isFollowing = false;
 
-      if (userId == currentUser.id) {
+      if (userId == currentUserId) {
         isFollowing = true;
       } else {
         isFollowing = await databaseRepository.isFollowingUser(
-          currentUser.id,
+          currentUserId,
           userId,
         );
       }
@@ -98,7 +98,7 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
     }
 
     await databaseRepository.followUser(
-      currentUser.id,
+      currentUserId,
       userId,
     );
   }
@@ -151,16 +151,16 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
     if (!state.loading) {
       emit(state.copyWith(loading: true));
 
-      var profilePictureUrl = currentUser.profilePicture;
-      if (state.pickedPhoto != null) {
-        profilePictureUrl = await storageRepository.uploadProfilePicture(
-          currentUser.id,
-          currentUser.profilePicture,
-          state.pickedPhoto!,
-        );
-      }
 
-      currentUser = currentUser.copyWith(
+      final profilePictureUrl = state.pickedPhoto != null
+          ? await storageRepository.uploadProfilePicture(
+              currentUserId,
+              state.pickedPhoto!,
+            )
+          : '';
+
+      final emptyUser = UserModel.empty();
+      final currentUser = emptyUser.copyWith(
         username: state.username,
         artistName: state.artistName,
         profilePicture: profilePictureUrl,
