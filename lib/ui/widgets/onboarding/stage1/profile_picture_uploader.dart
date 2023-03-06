@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/onboarding/onboarding_flow_cubit.dart';
 
@@ -26,8 +27,8 @@ class ProfilePictureUploader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
-      selector: (state) => state as Onboarded,
+    return BlocSelector<AuthenticationBloc, AuthenticationState, Authenticated>(
+      selector: (state) => state as Authenticated,
       builder: (context, userState) {
         return BlocBuilder<OnboardingFlowCubit, OnboardingFlowState>(
           builder: (context, state) {
@@ -44,7 +45,7 @@ class ProfilePictureUploader extends StatelessWidget {
                         radius: 45,
                         backgroundImage: displayProfileImage(
                           state.pickedPhoto,
-                          userState.currentUser.profilePicture,
+                          '',
                         ),
                       ),
                       const CircleAvatar(

@@ -115,7 +115,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
     final userQuery =
         await _usersRef.where('username', isEqualTo: username).get();
-    if (userQuery.docs.isNotEmpty || userQuery.docs[0].id != userid) {
+    if (userQuery.docs.isNotEmpty && userQuery.docs.first.id != userid) {
       // print('''
       //   username check for already taken username:
       //     userId: ${data.userId},
@@ -148,7 +148,11 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       return;
     }
 
-    if (await checkUsernameAvailability(user.username.toString(), user.id)) {
+    final usernameAvailable = await checkUsernameAvailability(
+      user.username.toString(),
+      user.id,
+    );
+    if (!usernameAvailable) {
       throw HandleAlreadyExistsException('username availability check failed');
     }
 

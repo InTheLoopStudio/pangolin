@@ -49,7 +49,7 @@ class UserModel extends Equatable {
   factory UserModel.empty() => UserModel(
         id: '',
         email: '',
-        username: Username('anonymous'),
+        username: Username.fromString('anonymous'),
         artistName: '',
         profilePicture: '',
         bio: '',
@@ -90,7 +90,8 @@ class UserModel extends Equatable {
     return UserModel(
       id: doc.id,
       email: doc.getOrElse('email', '') as String,
-      username: Username(doc.getOrElse('username', 'anonymous') as String),
+      username:
+          Username.fromString(doc.getOrElse('username', 'anonymous') as String),
       artistName: doc.getOrElse('artistName', '') as String,
       profilePicture: doc.getOrElse('profilePicture', '') as String,
       bio: doc.getOrElse('bio', '') as String,
@@ -245,7 +246,7 @@ class UserModel extends Equatable {
     return {
       'id': id,
       'email': email,
-      'username': username,
+      'username': username.toString(),
       'artistName': artistName,
       'bio': bio,
       'profilePicture': profilePicture,

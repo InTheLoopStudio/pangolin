@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/onboarding/onboarding_flow_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/artist_name_text_field.dart';
@@ -13,10 +14,10 @@ class Stage1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
-      selector: (state) => state as Onboarded,
+    return BlocSelector<AuthenticationBloc, AuthenticationState, Authenticated>(
+      selector: (state) => state as Authenticated,
       builder: (context, userState) {
-        final currentUser = userState.currentUser;
+        final currentUserId = userState.currentUserId;
 
         return BlocBuilder<OnboardingFlowCubit, OnboardingFlowState>(
           builder: (context, state) {
@@ -48,7 +49,7 @@ class Stage1 extends StatelessWidget {
                             .read<OnboardingFlowCubit>()
                             .usernameChange(input ?? ''),
                         initialValue: state.username,
-                        currentUserId: currentUser.id,
+                        currentUserId: currentUserId,
                       ),
                       const SizedBox(height: 20),
                       ArtistNameTextField(

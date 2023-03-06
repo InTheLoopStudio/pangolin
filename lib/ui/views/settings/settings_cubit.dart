@@ -137,7 +137,7 @@ class SettingsCubit extends Cubit<SettingsState> {
           : currentUser.profilePicture;
 
       final user = currentUser.copyWith(
-        username: Username(state.username),
+        username: Username.fromString(state.username),
         artistName: state.artistName,
         bio: state.bio,
         location: state.location,

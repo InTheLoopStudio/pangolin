@@ -151,7 +151,8 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
 
       final emptyUser = UserModel.empty();
       final currentUser = emptyUser.copyWith(
-        username: Username(state.username),
+        id: currentUserId,
+        username: Username.fromString(state.username),
         artistName: state.artistName,
         profilePicture: profilePictureUrl,
         location: state.location,

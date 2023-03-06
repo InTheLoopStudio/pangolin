@@ -1,15 +1,22 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-@JsonSerializable()
+part 'username.g.dart';
+
+@JsonSerializable(constructor: '_')
 class Username extends Equatable {
-  Username(String input) {
+  // dart trick to create private constructor
+  const Username._(this.username);
+
+  factory Username.fromString(String input) {
     final username = input.trim().toLowerCase();
-    this.username = username;
+    return Username._(username);
   }
 
-  late final String username;
+  factory Username.fromJson(Map<String, dynamic> json) =>
+      _$UsernameFromJson(json);
+
+  final String username;
 
   @override
   List<Object> get props => [username];
