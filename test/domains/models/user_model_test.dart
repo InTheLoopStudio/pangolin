@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/models/username.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
@@ -15,7 +16,7 @@ void main() {
       UserModel(
         id: '',
         email: '',
-        username: 'anonymous',
+        username: Username.fromString('anonymous'),
         artistName: '',
         profilePicture: '',
         bio: '',
@@ -45,7 +46,7 @@ void main() {
     final emptyUser = UserModel(
       id: '',
       email: '',
-      username: 'anonymous',
+      username: Username.fromString('anonymous'),
       artistName: '',
       profilePicture: '',
       bio: '',
@@ -78,7 +79,7 @@ void main() {
     final emptyUser = UserModel(
       id: '1234',
       email: 'jane@example.com',
-      username: 'blah',
+      username: Username.fromString('blah'),
       artistName: 'blah',
       profilePicture: '',
       bio: '',
@@ -179,7 +180,7 @@ void main() {
       UserModel(
         id: '',
         email: '',
-        username: 'anonymous',
+        username: Username.fromString('anonymous'),
         artistName: '',
         profilePicture: '',
         bio: '',
