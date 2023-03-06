@@ -10,6 +10,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/models/username.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 
@@ -37,7 +38,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   void initUserData() {
     emit(
       state.copyWith(
-        username: currentUser.username,
+        username: currentUser.username.toString(),
         artistName: currentUser.artistName,
         bio: currentUser.bio,
         location: currentUser.location,
@@ -136,7 +137,7 @@ class SettingsCubit extends Cubit<SettingsState> {
           : currentUser.profilePicture;
 
       final user = currentUser.copyWith(
-        username: state.username,
+        username: Username(state.username),
         artistName: state.artistName,
         bio: state.bio,
         location: state.location,

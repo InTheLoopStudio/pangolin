@@ -5,7 +5,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 
 class UserTile extends StatelessWidget {
-  const UserTile({Key? key, required this.user}) : super(key: key);
+  const UserTile({required this.user, Key? key}) : super(key: key);
 
   final UserModel user;
 
@@ -18,7 +18,7 @@ class UserTile extends StatelessWidget {
         backgroundImageUrl: user.profilePicture,
         radius: 20,
       ),
-      title: Text(user.username),
+      title: Text(user.username.toString()),
       onTap: () => navigationBloc.add(PushProfile(user.id)),
     );
   }

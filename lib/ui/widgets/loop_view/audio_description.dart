@@ -42,7 +42,7 @@ class AudioDescription extends StatelessWidget {
                     Text(
                       user.artistName.isNotEmpty
                           ? user.artistName
-                          : user.username,
+                          : user.username.toString(),
                       style: const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,

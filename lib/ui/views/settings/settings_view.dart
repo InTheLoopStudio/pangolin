@@ -47,7 +47,7 @@ class SettingsView extends StatelessWidget {
                   Text(
                     currentUser.artistName.isNotEmpty 
                       ? currentUser.artistName 
-                      : currentUser.username,
+                      : currentUser.username.toString(),
                     style: const TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,

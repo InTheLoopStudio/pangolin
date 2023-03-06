@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:intheloopapp/domains/models/username.dart';
 import 'package:intheloopapp/utils.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -18,10 +19,10 @@ enum AccountType {
 
 @JsonSerializable()
 class UserModel extends Equatable {
-  UserModel({
+  const UserModel({
     required this.id,
     required this.email,
-    required String username,
+    required this.username,
     required this.artistName,
     required this.profilePicture,
     required this.bio,
@@ -43,14 +44,12 @@ class UserModel extends Equatable {
     required this.pushNotificationsITLUpdates,
     required this.emailNotificationsAppReleases,
     required this.emailNotificationsITLUpdates,
-  }) {
-    this.username = username.trim().toLowerCase();
-  }
+  });
 
   factory UserModel.empty() => UserModel(
         id: '',
         email: '',
-        username: 'anonymous',
+        username: Username('anonymous'),
         artistName: '',
         profilePicture: '',
         bio: '',
@@ -91,7 +90,7 @@ class UserModel extends Equatable {
     return UserModel(
       id: doc.id,
       email: doc.getOrElse('email', '') as String,
-      username: doc.getOrElse('username', 'anonymous') as String,
+      username: Username(doc.getOrElse('username', 'anonymous') as String),
       artistName: doc.getOrElse('artistName', '') as String,
       profilePicture: doc.getOrElse('profilePicture', '') as String,
       bio: doc.getOrElse('bio', '') as String,
@@ -124,7 +123,7 @@ class UserModel extends Equatable {
   }
   final String id;
   final String email;
-  late final String username;
+  final Username username;
   final String artistName;
   final String profilePicture;
   final String bio;
@@ -184,7 +183,7 @@ class UserModel extends Equatable {
   UserModel copyWith({
     String? id,
     String? email,
-    String? username,
+    Username? username,
     String? artistName,
     String? profilePicture,
     String? bio,
@@ -210,7 +209,7 @@ class UserModel extends Equatable {
     return UserModel(
       id: id ?? this.id,
       email: email ?? this.email,
-      username: username?.trim().toLowerCase() ?? this.username,
+      username: username ?? this.username,
       artistName: artistName ?? this.artistName,
       profilePicture: profilePicture ?? this.profilePicture,
       bio: bio ?? this.bio,

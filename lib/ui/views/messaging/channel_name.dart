@@ -71,14 +71,15 @@ class ChannelName extends StatelessWidget {
                 final otherMembers = userMembers
                     .where((member) => member.id != client.currentUser!.id);
                 if (otherMembers.length == 1) {
-                  title = otherMembers.first.username;
+                  title = otherMembers.first.username.toString();
                 } else if (otherMembers.isNotEmpty == true) {
                   final maxWidth = constraints.maxWidth;
                   final maxChars = maxWidth / (textStyle?.fontSize ?? 1);
                   var currentChars = 0;
                   final currentMembers = <UserModel>[];
                   for (final element in otherMembers) {
-                    final newLength = currentChars + (element.username.length);
+                    final newLength =
+                        currentChars + (element.username.toString().length);
                     if (newLength < maxChars) {
                       currentChars = newLength;
                       currentMembers.add(element);

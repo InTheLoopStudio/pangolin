@@ -148,7 +148,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       return;
     }
 
-    if (await checkUsernameAvailability(user.username, user.id)) {
+    if (await checkUsernameAvailability(user.username.toString(), user.id)) {
       throw HandleAlreadyExistsException('username availability check failed');
     }
 
@@ -209,7 +209,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<void> updateUserData(UserModel user) async {
     await _analytics.logEvent(name: 'user_data_update');
-    if (await checkUsernameAvailability(user.username, user.id)) {
+    if (await checkUsernameAvailability(user.username.toString(), user.id)) {
       throw HandleAlreadyExistsException('username availability check failed');
     }
 

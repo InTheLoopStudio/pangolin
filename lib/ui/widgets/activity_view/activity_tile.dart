@@ -9,7 +9,7 @@ import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class ActivityTile extends StatelessWidget {
-  const ActivityTile({Key? key, required this.activity}) : super(key: key);
+  const ActivityTile({required this.activity, Key? key}) : super(key: key);
 
   final Activity activity;
 
@@ -64,7 +64,7 @@ class ActivityTile extends StatelessWidget {
                         ),
                       ),
                       title: Text(
-                        user.username,
+                        user.username.toString(),
                       ),
                       subtitle: () {
                         switch (activity.type) {

@@ -9,6 +9,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/models/username.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 
@@ -150,7 +151,7 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
 
       final emptyUser = UserModel.empty();
       final currentUser = emptyUser.copyWith(
-        username: state.username,
+        username: Username(state.username),
         artistName: state.artistName,
         profilePicture: profilePictureUrl,
         location: state.location,
