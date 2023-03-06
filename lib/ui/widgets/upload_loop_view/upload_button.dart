@@ -13,14 +13,14 @@ class UploadButton extends StatelessWidget {
     return BlocBuilder<UploadLoopCubit, UploadLoopState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        return state.status.isSubmissionInProgress
+        return state.status.isInProgress
             ? const CircularProgressIndicator()
             : Material(
                 elevation: 5,
                 color: tappedAccent,
                 borderRadius: BorderRadius.circular(30),
                 child: MaterialButton(
-                  onPressed: state.status.isValidated
+                  onPressed: state.isValid
                       ? () => context.read<UploadLoopCubit>().uploadLoop()
                       : null,
                   minWidth: 120,

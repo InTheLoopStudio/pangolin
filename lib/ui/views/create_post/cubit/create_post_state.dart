@@ -1,15 +1,15 @@
 part of 'create_post_cubit.dart';
 
-class CreatePostState extends Equatable {
+class CreatePostState extends Equatable with FormzMixin {
   const CreatePostState({
     this.title = const PostTitle.pure(),
     this.description = const PostDescription.pure(),
-    this.status = FormzStatus.pure,
+    this.status = FormzSubmissionStatus.initial,
   });
 
   final PostTitle title;
   final PostDescription description;
-  final FormzStatus status;
+  final FormzSubmissionStatus status;
 
   @override
   List<Object> get props => [
@@ -17,11 +17,16 @@ class CreatePostState extends Equatable {
         description,
         status,
       ];
+  @override
+  List<FormzInput<dynamic, dynamic>> get inputs => [
+        title,
+        description,
+      ];
 
   CreatePostState copyWith({
     PostTitle? title,
     PostDescription? description,
-    FormzStatus? status,
+    FormzSubmissionStatus? status,
   }) {
     return CreatePostState(
       title: title ?? this.title,

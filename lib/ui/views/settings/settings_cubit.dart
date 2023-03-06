@@ -125,9 +125,8 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
 
     state.formKey.currentState!.save();
-    if (state.formKey.currentState!.validate() &&
-        !state.status.isSubmissionInProgress) {
-      emit(state.copyWith(status: FormzStatus.submissionInProgress));
+    if (state.formKey.currentState!.validate() && !state.status.isInProgress) {
+      emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
 
       final profilePictureUrl = state.profileImage != null
           ? await storageRepository.uploadProfilePicture(
@@ -157,7 +156,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       );
 
       onboardingBloc.add(UpdateOnboardedUser(user: user));
-      emit(state.copyWith(status: FormzStatus.submissionSuccess));
+      emit(state.copyWith(status: FormzSubmissionStatus.success));
       navigationBloc.add(const Pop());
     } else {
       // print('invalid');
@@ -170,46 +169,46 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   Future<void> reauthWithGoogle() async {
     emit(
-      state.copyWith(status: FormzStatus.submissionInProgress),
+      state.copyWith(status: FormzSubmissionStatus.inProgress),
     );
     try {
       await authRepository.reauthenticateWithGoogle();
       deleteUser();
       emit(
-        state.copyWith(status: FormzStatus.submissionSuccess),
+        state.copyWith(status: FormzSubmissionStatus.success),
       );
     } on Exception {
       // print(e);
       emit(
-        state.copyWith(status: FormzStatus.submissionFailure),
+        state.copyWith(status: FormzSubmissionStatus.failure),
       );
       // ignore: avoid_catching_errors
     } on NoSuchMethodError {
       emit(
-        state.copyWith(status: FormzStatus.pure),
+        state.copyWith(status: FormzSubmissionStatus.initial),
       );
     }
   }
 
   Future<void> reauthWithApple() async {
     emit(
-      state.copyWith(status: FormzStatus.submissionInProgress),
+      state.copyWith(status: FormzSubmissionStatus.inProgress),
     );
     try {
       await authRepository.reauthenticateWithApple();
       deleteUser();
       emit(
-        state.copyWith(status: FormzStatus.submissionSuccess),
+        state.copyWith(status: FormzSubmissionStatus.success),
       );
     } on Exception {
       // print(e);
       emit(
-        state.copyWith(status: FormzStatus.submissionFailure),
+        state.copyWith(status: FormzSubmissionStatus.failure),
       );
       // ignore: avoid_catching_errors
     } on NoSuchMethodError {
       emit(
-        state.copyWith(status: FormzStatus.pure),
+        state.copyWith(status: FormzSubmissionStatus.initial),
       );
     }
   }

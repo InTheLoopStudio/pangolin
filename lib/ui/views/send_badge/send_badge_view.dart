@@ -72,7 +72,7 @@ class SendBadgeView extends StatelessWidget {
                           onPressed: context.read<SendBadgeCubit>().sendBadge,
                           child: const Text('Send'),
                         ),
-                        if (state.status.isSubmissionInProgress)
+                        if (state.status.isInProgress)
                           const CircularProgressIndicator(
                             valueColor: AlwaysStoppedAnimation(tappedAccent),
                           )

@@ -12,7 +12,7 @@ class SettingsState extends Equatable {
     this.tiktokHandle = '',
     this.youtubeChannelId = '',
     this.profileImage,
-    this.status = FormzStatus.pure,
+    this.status = FormzSubmissionStatus.initial,
     this.pushNotificationsLikes = true,
     this.pushNotificationsComments = true,
     this.pushNotificationsFollows = true,
@@ -37,7 +37,7 @@ class SettingsState extends Equatable {
   final String tiktokHandle;
   final String youtubeChannelId;
   final File? profileImage;
-  final FormzStatus status;
+  final FormzSubmissionStatus status;
   late final ImagePicker picker;
   late final GlobalKey<FormState> formKey;
 
@@ -82,7 +82,7 @@ class SettingsState extends Equatable {
     String? soundcloudHandle,
     String? youtubeChannelId,
     File? profileImage,
-    FormzStatus? status,
+    FormzSubmissionStatus? status,
     bool? pushNotificationsLikes,
     bool? pushNotificationsComments,
     bool? pushNotificationsFollows,

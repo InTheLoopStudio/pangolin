@@ -15,7 +15,7 @@ class OnboardingFlowState extends Equatable {
     this.bio = '',
     // this.musicianType = const [],
     this.pickedPhoto,
-    this.status = FormzStatus.pure,
+    this.status = FormzSubmissionStatus.initial,
     this.loading = false,
     this.followingInfamous = false,
     this.followingJohannes = false,
@@ -37,7 +37,7 @@ class OnboardingFlowState extends Equatable {
   final String bio;
   // final List<String> musicianType;
   final File? pickedPhoto;
-  final FormzStatus status;
+  final FormzSubmissionStatus status;
   late final ImagePicker picker;
   late final GlobalKey<FormState> formKey;
 
@@ -74,7 +74,7 @@ class OnboardingFlowState extends Equatable {
     String? bio,
     // List<String>? musicianType,
     File? pickedPhoto,
-    FormzStatus? status,
+    FormzSubmissionStatus? status,
     bool? followingInfamous,
     bool? followingJohannes,
     bool? followingChris,

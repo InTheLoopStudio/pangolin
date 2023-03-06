@@ -78,7 +78,6 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
     emit(
       state.copyWith(
         loopTitle: title,
-        status: Formz.validate([title]),
       ),
     );
   }
@@ -112,9 +111,6 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
         emit(
           state.copyWith(
             pickedAudio: pickedAudio,
-            status: Formz.validate([
-              LoopTitle.dirty(pickedAudioName),
-            ]),
             loopTitle: LoopTitle.dirty(pickedAudioName),
           ),
         );
@@ -124,7 +120,7 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
     } catch (error) {
       emit(
         state.copyWith(
-          status: FormzStatus.submissionFailure,
+          status: FormzSubmissionStatus.failure,
         ),
       );
     }
@@ -135,7 +131,7 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
     // print('PATH 1 : ${state.pickedAudio!.path}');
 
     try {
-      if (!state.status.isValidated || state.pickedAudio == null) return;
+      if (!state.isValid || state.pickedAudio == null) return;
 
       final tmp = await state.audioController.setAudioFile(state.pickedAudio);
 
@@ -143,10 +139,10 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
 
       final tooLarge = audioDuration.compareTo(_maxDuration) >= 0;
 
-      if (state.loopTitle.value.isNotEmpty && !tooLarge) {
+      if (!tooLarge) {
         emit(
           state.copyWith(
-            status: FormzStatus.submissionInProgress,
+            status: FormzSubmissionStatus.inProgress,
           ),
         );
 
@@ -167,7 +163,7 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
         emit(
           state.copyWith(
             loopTitle: const LoopTitle.pure(),
-            status: FormzStatus.submissionSuccess,
+            status: FormzSubmissionStatus.success,
           ),
         );
 
@@ -211,7 +207,7 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
       }
       emit(
         state.copyWith(
-          status: FormzStatus.submissionFailure,
+          status: FormzSubmissionStatus.failure,
         ),
       );
     }

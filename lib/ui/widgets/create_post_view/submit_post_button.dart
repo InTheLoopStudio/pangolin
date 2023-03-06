@@ -14,7 +14,7 @@ class SubmitPostButton extends StatelessWidget {
         return CupertinoButton.filled(
           // color: tappedAccent,
           onPressed: () => context.read<CreatePostCubit>().createPost(),
-          child: state.status.isSubmissionInProgress
+          child: state.status.isInProgress
               ? const CircularProgressIndicator(
                   color: Colors.black,
                 )

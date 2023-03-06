@@ -1,12 +1,12 @@
 part of 'upload_loop_cubit.dart';
 
 @immutable
-class UploadLoopState extends Equatable {
+class UploadLoopState extends Equatable with FormzMixin {
   UploadLoopState({
     this.pickedAudio,
     this.loopTitle = const LoopTitle.pure(),
     // this.selectedTags = const [],
-    this.status = FormzStatus.pure,
+    this.status = FormzSubmissionStatus.initial,
     AudioController? audioController,
   }) {
     this.audioController = audioController ?? AudioController();
@@ -17,7 +17,7 @@ class UploadLoopState extends Equatable {
   final File? pickedAudio;
   // final List<Tag> selectedTags;
   final LoopTitle loopTitle;
-  final FormzStatus status;
+  final FormzSubmissionStatus status;
 
   @override
   List<Object?> get props => [
@@ -28,11 +28,16 @@ class UploadLoopState extends Equatable {
         status,
       ];
 
+  @override
+  List<FormzInput<dynamic, dynamic>> get inputs => [
+    loopTitle,
+  ];
+
   UploadLoopState copyWith({
     File? pickedAudio,
     // List<Tag>? selectedTags,
     LoopTitle? loopTitle,
-    FormzStatus? status,
+    FormzSubmissionStatus? status,
   }) {
     return UploadLoopState(
       pickedAudio: pickedAudio ?? this.pickedAudio,

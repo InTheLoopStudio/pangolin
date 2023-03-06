@@ -24,7 +24,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
   void onTitleChange(String input) {
     final title = PostTitle.dirty(input);
     emit(
-      state.copyWith(title: title, status: Formz.validate([title])),
+      state.copyWith(title: title),
     );
   }
 
@@ -33,19 +33,18 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     emit(
       state.copyWith(
         description: description,
-        status: Formz.validate([description]),
       ),
     );
   }
 
   Future<void> createPost() async {
     try {
-      if (!state.status.isValidated) return;
+      if (!state.status.isSuccess) return;
 
-      if (state.description.value.isNotEmpty) {
+      if (state.isValid) {
         emit(
           state.copyWith(
-            status: FormzStatus.submissionInProgress,
+            status: FormzSubmissionStatus.inProgress,
           ),
         );
 
@@ -62,7 +61,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
           state.copyWith(
             title: const PostTitle.pure(),
             description: const PostDescription.pure(),
-            status: FormzStatus.submissionSuccess,
+            status: FormzSubmissionStatus.success,
           ),
         );
 
@@ -73,7 +72,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     } catch (e) {
       emit(
         state.copyWith(
-          status: FormzStatus.submissionFailure,
+          status: FormzSubmissionStatus.failure,
         ),
       );
     }

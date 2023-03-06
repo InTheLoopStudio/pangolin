@@ -26,7 +26,7 @@ class DeleteAccountButton extends StatelessWidget {
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: state.status.isSubmissionInProgress
+                children: state.status.isInProgress
                     ? [const CircularProgressIndicator()]
                     : [
                         const Text(

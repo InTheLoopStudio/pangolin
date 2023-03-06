@@ -2,16 +2,16 @@ part of 'login_cubit.dart';
 
 class LoginState extends Equatable {
   const LoginState({
-    this.status = FormzStatus.pure,
+    this.status = FormzSubmissionStatus.initial,
   });
 
-  final FormzStatus status;
+  final FormzSubmissionStatus status;
 
   @override
   List<Object> get props => [status];
 
   LoginState copyWith({
-    FormzStatus? status,
+    FormzSubmissionStatus? status,
   }) {
     return LoginState(
       status: status ?? this.status,

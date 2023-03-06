@@ -84,7 +84,7 @@ class SettingsForm extends StatelessWidget {
                   ),
                   const SizedBox(height: 15),
                   const ThemeSwitch(),
-                  if (state.status.isSubmissionInProgress)
+                  if (state.status.isInProgress)
                     const CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation(tappedAccent),
                     )

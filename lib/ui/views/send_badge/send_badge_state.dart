@@ -6,7 +6,7 @@ class SendBadgeState extends Equatable {
     this.badgeName = '',
     this.badgeDescription = '',
     this.receiverUsername = '',
-    this.status = FormzStatus.pure,
+    this.status = FormzSubmissionStatus.initial,
     GlobalKey<FormState>? formKey,
     ImagePicker? picker,
   }) {
@@ -21,7 +21,7 @@ class SendBadgeState extends Equatable {
 
   late final ImagePicker picker;
   late final GlobalKey<FormState> formKey;
-  final FormzStatus status;
+  final FormzSubmissionStatus status;
 
   @override
   List<Object?> get props => [
@@ -37,7 +37,7 @@ class SendBadgeState extends Equatable {
     String? badgeName,
     String? badgeDescription,
     String? receiverUsername,
-    FormzStatus? status,
+    FormzSubmissionStatus? status,
   }) {
     return SendBadgeState(
       badgeImage: badgeImage ?? this.badgeImage,

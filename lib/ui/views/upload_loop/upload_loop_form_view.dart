@@ -28,7 +28,7 @@ class UploadLoopFormView extends StatelessWidget {
       floatingActionButton: const UploadButton(),
       body: BlocListener<UploadLoopCubit, UploadLoopState>(
         listener: (context, state) {
-          if (state.status.isSubmissionFailure == true) {
+          if (state.status.isFailure) {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(

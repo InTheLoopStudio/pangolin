@@ -15,7 +15,7 @@ class TitleInput extends StatelessWidget {
             border: const OutlineInputBorder(),
             labelText: 'Title',
             hintText: state.loopTitle.value,
-            errorText: state.loopTitle.invalid ? 'invalid' : null,
+            errorText: state.loopTitle.isNotValid ? 'invalid' : null,
           ),
           onChanged: (title) =>
               context.read<UploadLoopCubit>().titleChanged(title),

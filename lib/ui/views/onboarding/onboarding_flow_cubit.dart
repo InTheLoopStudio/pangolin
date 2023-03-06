@@ -118,11 +118,11 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
 
       state.formKey.currentState!.save();
       if (state.formKey.currentState!.validate() &&
-          !state.status.isSubmissionInProgress) {
-        emit(state.copyWith(status: FormzStatus.submissionInProgress));
+          state.status != FormzSubmissionStatus.inProgress) {
+        emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
 
         // Write data to db
-        emit(state.copyWith(status: FormzStatus.submissionSuccess));
+        emit(state.copyWith(status: FormzSubmissionStatus.success));
         emit(state.copyWith(onboardingStage: OnboardingStage.stage2));
       }
     } else if (state.onboardingStage == OnboardingStage.stage2) {
@@ -140,7 +140,6 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
   Future<void> finishOnboarding() async {
     if (!state.loading) {
       emit(state.copyWith(loading: true));
-
 
       final profilePictureUrl = state.pickedPhoto != null
           ? await storageRepository.uploadProfilePicture(
