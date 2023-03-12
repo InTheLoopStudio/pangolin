@@ -34,6 +34,7 @@ class BookingContainer extends StatelessWidget {
           }
 
           return ListTile(
+            enabled: booking.status != BookingStatus.canceled,
             leading: UserAvatar(
               radius: 20,
               backgroundImageUrl: requestee.profilePicture,

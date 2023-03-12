@@ -41,6 +41,9 @@ class BookingView extends StatelessWidget {
                 return CustomScrollView(
                   slivers: [
                     const SliverToBoxAdapter(
+                      child: SizedBox(height: 12),
+                    ),
+                    const SliverToBoxAdapter(
                       child: Text(
                         'Booking Requests',
                         style: TextStyle(
@@ -51,6 +54,9 @@ class BookingView extends StatelessWidget {
                     ),
                     BookingsList(
                       bookings: state.pendingBookings,
+                    ),
+                    const SliverToBoxAdapter(
+                      child: SizedBox(height: 12),
                     ),
                     const SliverToBoxAdapter(
                       child: Text(
@@ -65,6 +71,9 @@ class BookingView extends StatelessWidget {
                       bookings: state.upcomingBookings,
                     ),
                     const SliverToBoxAdapter(
+                      child: SizedBox(height: 12),
+                    ),
+                    const SliverToBoxAdapter(
                       child: Text(
                         'Past Events',
                         style: TextStyle(
@@ -75,6 +84,9 @@ class BookingView extends StatelessWidget {
                     ),
                     BookingsList(
                       bookings: state.pastBookings,
+                    ),
+                    const SliverToBoxAdapter(
+                      child: SizedBox(height: 12),
                     ),
                     const SliverToBoxAdapter(
                       child: Text(
