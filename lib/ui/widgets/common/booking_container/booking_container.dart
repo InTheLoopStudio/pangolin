@@ -1,4 +1,5 @@
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -110,7 +111,7 @@ class BookingContainer extends StatelessWidget {
                             isDestructiveAction: true,
                             onPressed: () {
                               final updated = booking.copyWith(
-                                status: BookingStatus.confirmed,
+                                status: BookingStatus.canceled,
                               );
                               database.updateBooking(updated);
                               onDeny(updated);
