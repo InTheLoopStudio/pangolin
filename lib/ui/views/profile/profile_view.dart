@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
@@ -13,6 +14,7 @@ import 'package:intheloopapp/ui/widgets/profile_view/follow_button.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/follower_count.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/following_count.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/posts_list.dart';
+import 'package:intheloopapp/ui/widgets/profile_view/request_to_book.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/share_profile_button.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/social_media_icons.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/venue_dashboard.dart';
@@ -251,6 +253,9 @@ class _ProfileViewState extends State<ProfileView> {
                             padding: EdgeInsets.only(bottom: 8),
                             child: SocialMediaIcons(),
                           ),
+                        ),
+                        const SliverToBoxAdapter(
+                          child: RequestToBookButton(),
                         ),
                         SliverOverlapAbsorber(
                           // This widget takes the overlapping behavior of the

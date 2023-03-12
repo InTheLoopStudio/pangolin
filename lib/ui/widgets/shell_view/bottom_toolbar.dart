@@ -8,8 +8,7 @@ import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 
 class BottomToolbar extends StatelessWidget {
   const BottomToolbar({
-    Key? key,
-    required this.user,
+    required this.user, Key? key,
   }) : super(key: key);
 
   final UserModel user;
@@ -38,10 +37,9 @@ class BottomToolbar extends StatelessWidget {
               ),
             ),
             const BottomNavigationBarItem(icon: Icon(CupertinoIcons.search)),
-            // const BottomNavigationBarItem(
-            //   icon: Icon(Icons.add_box_outlined),
-            //   activeIcon: Icon(Icons.add_box),
-            // ),
+            const BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.tickets),
+            ),
             const BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.bubble_middle_bottom),
             ),

@@ -181,6 +181,11 @@ class UserModel extends Equatable {
   bool get isNotEmpty => this != UserModel.empty();
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
+  bool get isVenue => accountType == AccountType.venue;
+  bool get isNotVenue => accountType != AccountType.venue;
+  bool get isFree => accountType == AccountType.free;
+  bool get isNotFree => accountType != AccountType.free;
+
   UserModel copyWith({
     String? id,
     String? email,

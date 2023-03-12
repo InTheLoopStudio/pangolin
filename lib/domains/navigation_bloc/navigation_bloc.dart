@@ -8,6 +8,7 @@ import 'package:intheloopapp/ui/views/activity/activity_view.dart';
 import 'package:intheloopapp/ui/views/badge/badge_view.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view.dart';
 import 'package:intheloopapp/ui/views/common/post_view/post_view.dart';
+import 'package:intheloopapp/ui/views/create_booking/create_booking_view.dart';
 import 'package:intheloopapp/ui/views/create_post/create_post_view.dart';
 import 'package:intheloopapp/ui/views/likes/likes_view.dart';
 import 'package:intheloopapp/ui/views/messaging/channel_view.dart';
@@ -111,11 +112,22 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<PushStreamChannel>((event, emit) {
       navigationKey.currentState?.push(
         MaterialPageRoute<StreamChannel>(
-            builder: (context) => StreamChannel(
-              channel: event.channel,
-              child: const ChannelView(),
-            ),
+          builder: (context) => StreamChannel(
+            channel: event.channel,
+            child: const ChannelView(),
           ),
+        ),
+      );
+
+      emit(state);
+    });
+    on<PushCreateBooking>((event, emit) {
+      navigationKey.currentState?.push(
+        MaterialPageRoute<StreamChannel>(
+          builder: (context) => CreateBookingView(
+            requesteeId: event.requesteeId,
+          ),
+        ),
       );
 
       emit(state);

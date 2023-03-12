@@ -6,6 +6,7 @@ import 'package:intheloopapp/data/dynamic_link_repository.dart';
 import 'package:intheloopapp/data/image_picker_repository.dart';
 import 'package:intheloopapp/data/local/image_picker_impl.dart';
 import 'package:intheloopapp/data/notification_repository.dart';
+import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/data/prod/algolia_search_impl.dart';
 import 'package:intheloopapp/data/prod/cloud_messaging_impl.dart';
 import 'package:intheloopapp/data/prod/firebase_auth_impl.dart';
@@ -14,6 +15,7 @@ import 'package:intheloopapp/data/prod/firebase_storage_impl.dart';
 import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
 import 'package:intheloopapp/data/prod/remote_config_impl.dart';
 import 'package:intheloopapp/data/prod/stream_impl.dart';
+import 'package:intheloopapp/data/prod/stripe_payment_impl.dart';
 import 'package:intheloopapp/data/remote_config_repository.dart';
 import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
@@ -59,6 +61,9 @@ List<RepositoryProvider<dynamic>> buildRepositories({
     ),
     RepositoryProvider<RemoteConfigRepository>(
       create: (_) => RemoteConfigImpl()..fetchAndActivate(),
+    ),
+    RepositoryProvider<PaymentRepository>(
+      create: (_) => StripePaymentImpl(), 
     ),
   ];
 }

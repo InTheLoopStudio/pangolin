@@ -56,15 +56,14 @@ class PushLoop extends NavigationEvent {
 }
 
 class PushPost extends NavigationEvent {
-    const PushPost(
+  const PushPost(
     this.post,
-    );
+  );
 
   final Post post;
 
   @override
-  String toString() =>
-      '''PushPost { post: $post }''';
+  String toString() => '''PushPost { post: $post }''';
 
   @override
   List<Object> get props => [post];
@@ -134,9 +133,20 @@ class PushStreamChannel extends NavigationEvent {
   final Channel channel;
 
   @override
-  String toString() =>
-      '''PushStreamChannel { loop: $channel }''';
+  String toString() => '''PushStreamChannel { channel: $channel }''';
 
   @override
   List<Object> get props => [channel];
+}
+
+class PushCreateBooking extends NavigationEvent {
+  const PushCreateBooking(this.requesteeId);
+
+  final String requesteeId;
+
+  @override
+  String toString() => '''PushCreateBooking { requestee: $requesteeId }''';
+
+  @override
+  List<Object> get props => [requesteeId];
 }
