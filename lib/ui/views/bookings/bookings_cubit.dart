@@ -4,14 +4,14 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
-part 'booking_state.dart';
+part 'bookings_state.dart';
 
-class BookingCubit extends Cubit<BookingState> {
-  BookingCubit({
+class BookingsCubit extends Cubit<BookingsState> {
+  BookingsCubit({
     required this.currentUserId,
     required this.accountType,
     required this.databaseRepository,
-  }) : super(const BookingState());
+  }) : super(const BookingsState());
 
   final String currentUserId;
   final AccountType accountType;

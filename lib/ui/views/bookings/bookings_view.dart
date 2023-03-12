@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
-import 'package:intheloopapp/ui/views/booking/booking_cubit.dart';
+import 'package:intheloopapp/ui/views/bookings/bookings_cubit.dart';
 import 'package:intheloopapp/ui/widgets/booking_view/pending_bookings.dart';
 
-class BookingView extends StatelessWidget {
-  const BookingView({Key? key}) : super(key: key);
+class BookingsView extends StatelessWidget {
+  const BookingsView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class BookingView extends StatelessWidget {
       builder: (context, onboardState) {
         final currentUser = onboardState.currentUser;
         return BlocProvider(
-          create: (context) => BookingCubit(
+          create: (context) => BookingsCubit(
             currentUserId: currentUser.id,
             accountType: currentUser.accountType,
             databaseRepository:
@@ -36,7 +36,7 @@ class BookingView extends StatelessWidget {
                 ],
               ),
             ),
-            body: BlocBuilder<BookingCubit, BookingState>(
+            body: BlocBuilder<BookingsCubit, BookingsState>(
               builder: (context, state) {
                 return CustomScrollView(
                   slivers: [

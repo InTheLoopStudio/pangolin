@@ -1,7 +1,7 @@
-part of 'booking_cubit.dart';
+part of 'bookings_cubit.dart';
 
-class BookingState extends Equatable {
-  const BookingState({
+class BookingsState extends Equatable {
+  const BookingsState({
     this.bookings = const [],
   });
 
@@ -10,10 +10,10 @@ class BookingState extends Equatable {
   @override
   List<Object> get props => [bookings];
 
-  BookingState copyWith({
+  BookingsState copyWith({
     List<Booking>? bookings,
   }) {
-    return BookingState(
+    return BookingsState(
       bookings: bookings ?? this.bookings,
     );
   }

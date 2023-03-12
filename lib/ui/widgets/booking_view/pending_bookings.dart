@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
-import 'package:intheloopapp/ui/views/booking/booking_cubit.dart';
+import 'package:intheloopapp/ui/views/bookings/bookings_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/booking_container/booking_container.dart';
 
 class BookingsList extends StatelessWidget {
@@ -12,7 +12,7 @@ class BookingsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeColor = Theme.of(context).primaryIconTheme.color ?? Colors.black;
-    return BlocBuilder<BookingCubit, BookingState>(
+    return BlocBuilder<BookingsCubit, BookingsState>(
       builder: (context, state) {
         return bookings.isEmpty
             ? SliverToBoxAdapter(
@@ -38,8 +38,8 @@ class BookingsList extends StatelessWidget {
                   (BuildContext context, int index) {
                     return BookingContainer(
                       booking: bookings[index],
-                      onConfirm: context.read<BookingCubit>().onConfirm,
-                      onDeny: context.read<BookingCubit>().onDeny,
+                      onConfirm: context.read<BookingsCubit>().onConfirm,
+                      onDeny: context.read<BookingsCubit>().onDeny,
                     );
                   },
                   childCount: bookings.length,
