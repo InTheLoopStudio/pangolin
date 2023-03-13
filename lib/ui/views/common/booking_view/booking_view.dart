@@ -56,169 +56,172 @@ class BookingView extends StatelessWidget {
           ],
         ),
       ),
-      body: CustomScrollView(
-        slivers: [
-          const SliverToBoxAdapter(
-            child: Text(
-              'Booker',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: FutureBuilder<UserModel?>(
-              future: database.getUserById(booking.requesterId),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const CircularProgressIndicator();
-                }
-
-                final requester = snapshot.data;
-                if (requester == null) {
-                  return const CircularProgressIndicator();
-                }
-                return UserTile(user: requester);
-              },
-            ),
-          ),
-          const SliverToBoxAdapter(
-            child: SizedBox(height: 20),
-          ),
-          const SliverToBoxAdapter(
-            child: Text(
-              'Band',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: FutureBuilder<UserModel?>(
-              future: database.getUserById(booking.requesteeId),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const CircularProgressIndicator();
-                }
-
-                final requestee = snapshot.data;
-                if (requestee == null) {
-                  return const CircularProgressIndicator();
-                }
-                return UserTile(user: requestee);
-              },
-            ),
-          ),
-          const SliverToBoxAdapter(
-            child: SizedBox(height: 20),
-          ),
-          const SliverToBoxAdapter(
-            child: Text(
-              'Date',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Text(
-              '${timeago.format(
-                booking.startTime,
-                allowFromNow: true,
-              )} on $formattedDate',
-            ),
-          ),
-          const SliverToBoxAdapter(
-            child: SizedBox(height: 20),
-          ),
-          const SliverToBoxAdapter(
-            child: Text(
-              'Duration',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Text(
-              formattedDuration(booking.endTime.difference(booking.startTime)),
-            ),
-          ),
-          const SliverToBoxAdapter(
-            child: SizedBox(height: 20),
-          ),
-          const SliverToBoxAdapter(
-            child: Text(
-              'Start Time',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Text(
-              formattedTime(booking.startTime),
-            ),
-          ),
-          const SliverToBoxAdapter(
-            child: SizedBox(height: 20),
-          ),
-          const SliverToBoxAdapter(
-            child: Text(
-              'End Time',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Text(
-              formattedTime(booking.endTime),
-            ),
-          ),
-          const SliverToBoxAdapter(
-            child: SizedBox(height: 20),
-          ),
-          SliverToBoxAdapter(
-            child: booking.isPending
-                ? CupertinoButton.filled(
-                    onPressed: () {
-                      final updated = booking.copyWith(
-                        status: BookingStatus.confirmed,
-                      );
-                      database.updateBooking(updated);
-                      onConfirm?.call(updated);
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Confirm Booking'),
-                  )
-                : const SizedBox.shrink(),
-          ),
-          SliverToBoxAdapter(
-            child: CupertinoButton(
-              onPressed: () {
-                final updated = booking.copyWith(
-                  status: BookingStatus.canceled,
-                );
-                database.updateBooking(updated);
-                onDeny?.call(updated);
-                navigationBloc.add(const Pop());
-              },
-              child: const Text(
-                'Cancel Booking',
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: CustomScrollView(
+          slivers: [
+            const SliverToBoxAdapter(
+              child: Text(
+                'Booker',
                 style: TextStyle(
-                  color: Colors.red,
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-          )
-        ],
+            SliverToBoxAdapter(
+              child: FutureBuilder<UserModel?>(
+                future: database.getUserById(booking.requesterId),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const CircularProgressIndicator();
+                  }
+      
+                  final requester = snapshot.data;
+                  if (requester == null) {
+                    return const CircularProgressIndicator();
+                  }
+                  return UserTile(user: requester);
+                },
+              ),
+            ),
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 20),
+            ),
+            const SliverToBoxAdapter(
+              child: Text(
+                'Band',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: FutureBuilder<UserModel?>(
+                future: database.getUserById(booking.requesteeId),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const CircularProgressIndicator();
+                  }
+      
+                  final requestee = snapshot.data;
+                  if (requestee == null) {
+                    return const CircularProgressIndicator();
+                  }
+                  return UserTile(user: requestee);
+                },
+              ),
+            ),
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 20),
+            ),
+            const SliverToBoxAdapter(
+              child: Text(
+                'Date',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Text(
+                '${timeago.format(
+                  booking.startTime,
+                  allowFromNow: true,
+                )} on $formattedDate',
+              ),
+            ),
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 20),
+            ),
+            const SliverToBoxAdapter(
+              child: Text(
+                'Duration',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Text(
+                formattedDuration(booking.endTime.difference(booking.startTime)),
+              ),
+            ),
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 20),
+            ),
+            const SliverToBoxAdapter(
+              child: Text(
+                'Start Time',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Text(
+                formattedTime(booking.startTime),
+              ),
+            ),
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 20),
+            ),
+            const SliverToBoxAdapter(
+              child: Text(
+                'End Time',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Text(
+                formattedTime(booking.endTime),
+              ),
+            ),
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 20),
+            ),
+            SliverToBoxAdapter(
+              child: booking.isPending
+                  ? CupertinoButton.filled(
+                      onPressed: () {
+                        final updated = booking.copyWith(
+                          status: BookingStatus.confirmed,
+                        );
+                        database.updateBooking(updated);
+                        onConfirm?.call(updated);
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Confirm Booking'),
+                    )
+                  : const SizedBox.shrink(),
+            ),
+            SliverToBoxAdapter(
+              child: CupertinoButton(
+                onPressed: () {
+                  final updated = booking.copyWith(
+                    status: BookingStatus.canceled,
+                  );
+                  database.updateBooking(updated);
+                  onDeny?.call(updated);
+                  navigationBloc.add(const Pop());
+                },
+                child: const Text(
+                  'Cancel Booking',
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
