@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/bookings/bookings_cubit.dart';
-import 'package:intheloopapp/ui/widgets/booking_view/pending_bookings.dart';
+import 'package:intheloopapp/ui/widgets/booking_view/bookings_list.dart';
 
 class BookingsView extends StatelessWidget {
   const BookingsView({Key? key}) : super(key: key);
@@ -27,7 +27,7 @@ class BookingsView extends StatelessWidget {
               title: const Row(
                 children: [
                   Text(
-                    'Booking',
+                    'Bookings',
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
@@ -60,7 +60,7 @@ class BookingsView extends StatelessWidget {
                     ),
                     const SliverToBoxAdapter(
                       child: Text(
-                        'Uploading Events',
+                        'Upcoming Bookings',
                         style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
@@ -75,7 +75,7 @@ class BookingsView extends StatelessWidget {
                     ),
                     const SliverToBoxAdapter(
                       child: Text(
-                        'Past Events',
+                        'Past Bookings',
                         style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
@@ -90,7 +90,7 @@ class BookingsView extends StatelessWidget {
                     ),
                     const SliverToBoxAdapter(
                       child: Text(
-                        'Canceled Events',
+                        'Canceled Bookings',
                         style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,

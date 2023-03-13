@@ -28,7 +28,7 @@ class BookingsState extends Equatable {
       .where(
         (element) =>
             (element.status == BookingStatus.confirmed) &&
-            (element.bookingDate.isBefore(DateTime.now())),
+            (element.startTime.isBefore(DateTime.now())),
       )
       .toList();
 
@@ -36,7 +36,7 @@ class BookingsState extends Equatable {
       .where(
         (element) =>
             (element.status == BookingStatus.confirmed) &&
-            (element.bookingDate.isAfter(DateTime.now())),
+            (element.startTime.isAfter(DateTime.now())),
       )
       .toList();
 

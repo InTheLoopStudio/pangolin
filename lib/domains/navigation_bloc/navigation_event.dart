@@ -150,3 +150,15 @@ class PushCreateBooking extends NavigationEvent {
   @override
   List<Object> get props => [requesteeId];
 }
+
+class PushBooking extends NavigationEvent {
+  const PushBooking(this.booking);
+
+  final Booking booking;
+
+  @override
+  String toString() => '''PushBooking { booking: $booking }''';
+
+  @override
+  List<Object> get props => [booking];
+}

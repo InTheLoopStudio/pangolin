@@ -40,7 +40,8 @@ class CreateBookingView extends StatelessWidget {
                     requesterId: currentUser.id,
                     requesteeId: requesteeId,
                     status: BookingStatus.pending,
-                    bookingDate: DateTime.parse('2023-04-04'),
+                    startTime: DateTime.parse('2023-04-04 13:00:00'),
+                    endTime: DateTime.parse('2023-04-04 14:00:00'),
                     timestamp: DateTime.now(),
                   );
                   databaseRepository.createBooking(booking);

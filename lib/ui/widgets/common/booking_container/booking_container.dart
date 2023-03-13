@@ -1,11 +1,11 @@
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -13,14 +13,14 @@ import 'package:timeago/timeago.dart' as timeago;
 class BookingContainer extends StatelessWidget {
   const BookingContainer({
     required this.booking,
-    required this.onConfirm,
-    required this.onDeny,
+    this.onConfirm,
+    this.onDeny,
     Key? key,
   }) : super(key: key);
 
   final Booking booking;
-  final void Function(Booking) onConfirm;
-  final void Function(Booking) onDeny;
+  final void Function(Booking)? onConfirm;
+  final void Function(Booking)? onDeny;
 
   Widget venueTile(DatabaseRepository database) => FutureBuilder<UserModel?>(
         future: database.getUserById(booking.requesteeId),
@@ -35,6 +35,9 @@ class BookingContainer extends StatelessWidget {
           }
 
           return ListTile(
+            onTap: () {
+              context.read<NavigationBloc>().add(PushBooking(booking));
+            },
             enabled: booking.status != BookingStatus.canceled,
             leading: UserAvatar(
               radius: 20,
@@ -43,7 +46,7 @@ class BookingContainer extends StatelessWidget {
             title: Text(requestee.username.toString()),
             subtitle: Text(
               timeago.format(
-                booking.bookingDate,
+                booking.startTime,
                 allowFromNow: true,
               ),
               style: const TextStyle(
@@ -73,6 +76,9 @@ class BookingContainer extends StatelessWidget {
           }
 
           return ListTile(
+            onTap: () {
+              context.read<NavigationBloc>().add(PushBooking(booking));
+            },
             leading: UserAvatar(
               radius: 20,
               backgroundImageUrl: requester.profilePicture,
@@ -80,7 +86,7 @@ class BookingContainer extends StatelessWidget {
             title: Text(requester.username.toString()),
             subtitle: Text(
               timeago.format(
-                booking.bookingDate,
+                booking.startTime,
                 allowFromNow: true,
               ),
               style: const TextStyle(
@@ -102,7 +108,7 @@ class BookingContainer extends StatelessWidget {
                                 status: BookingStatus.confirmed,
                               );
                               database.updateBooking(updated);
-                              onConfirm(updated);
+                              onConfirm?.call(updated);
                               Navigator.pop(context);
                             },
                             child: const Text('Accept'),
@@ -114,7 +120,7 @@ class BookingContainer extends StatelessWidget {
                                 status: BookingStatus.canceled,
                               );
                               database.updateBooking(updated);
-                              onDeny(updated);
+                              onDeny?.call(updated);
                               Navigator.pop(context);
                             },
                             child: const Text('Deny'),

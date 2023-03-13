@@ -14,15 +14,18 @@ class Booking {
     required this.requesterId,
     required this.requesteeId,
     required this.status,
-    required this.bookingDate,
+    required this.startTime,
+    required this.endTime,
     required this.timestamp,
   });
 
   factory Booking.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     final tmpTimestamp =
         doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
-    final tmpBookingDate =
-        doc.getOrElse('bookingDate', Timestamp.now()) as Timestamp;
+    final tmpStartTime =
+        doc.getOrElse('startTime', Timestamp.now()) as Timestamp;
+    final tmpEndTime =
+        doc.getOrElse('endTime', Timestamp.now()) as Timestamp;
     return Booking(
       id: doc.id,
       requesterId: doc.getOrElse('requesterId', '') as String,
@@ -32,7 +35,8 @@ class Booking {
             doc.getOrElse('status', '') as String,
           ) ??
           BookingStatus.pending,
-      bookingDate: tmpBookingDate.toDate(),
+      startTime: tmpStartTime.toDate(),
+      endTime: tmpEndTime.toDate(),
       timestamp: tmpTimestamp.toDate(),
     );
   }
@@ -41,7 +45,8 @@ class Booking {
   String requesterId;
   String requesteeId;
   BookingStatus status;
-  DateTime bookingDate;
+  DateTime startTime;
+  DateTime endTime;
   DateTime timestamp;
 
   Map<String, dynamic> toMap() {
@@ -51,7 +56,8 @@ class Booking {
       'requesteeId': requesteeId,
       'status': EnumToString.convertToString(status),
       'timestamp': Timestamp.fromDate(timestamp),
-      'bookingDate': Timestamp.fromDate(bookingDate),
+      'startTime': Timestamp.fromDate(startTime),
+      'endTime': Timestamp.fromDate(endTime),
     };
   }
 
@@ -59,7 +65,8 @@ class Booking {
     String? id,
     String? requesterId,
     String? requesteeId,
-    DateTime? bookingDate,
+    DateTime? startTime,
+    DateTime? endTime,
     DateTime? timestamp,
     BookingStatus? status,
   }) {
@@ -67,9 +74,14 @@ class Booking {
       id: id ?? this.id,
       requesterId: requesterId ?? this.requesterId,
       requesteeId: requesteeId ?? this.requesteeId,
-      bookingDate: bookingDate ?? this.bookingDate,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
       timestamp: timestamp ?? this.timestamp,
       status: status ?? this.status,
     );
   }
+
+  bool get isPending => status == BookingStatus.pending;
+  bool get isConfirmed => status == BookingStatus.confirmed;
+  bool get isCancaled => status == BookingStatus.canceled;
 }
