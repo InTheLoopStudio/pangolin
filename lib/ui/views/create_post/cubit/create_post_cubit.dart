@@ -7,6 +7,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/widgets/create_post_view/post_description.dart';
 import 'package:intheloopapp/ui/widgets/create_post_view/post_title.dart';
+import 'package:intl/intl.dart';
 
 part 'create_post_state.dart';
 

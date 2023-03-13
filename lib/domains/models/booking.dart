@@ -11,6 +11,8 @@ enum BookingStatus {
 class Booking {
   Booking({
     required this.id,
+    required this.name,
+    required this.note,
     required this.requesterId,
     required this.requesteeId,
     required this.status,
@@ -24,10 +26,11 @@ class Booking {
         doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
     final tmpStartTime =
         doc.getOrElse('startTime', Timestamp.now()) as Timestamp;
-    final tmpEndTime =
-        doc.getOrElse('endTime', Timestamp.now()) as Timestamp;
+    final tmpEndTime = doc.getOrElse('endTime', Timestamp.now()) as Timestamp;
     return Booking(
       id: doc.id,
+      name: doc.getOrElse('name', '') as String,
+      note: doc.getOrElse('note', '') as String,
       requesterId: doc.getOrElse('requesterId', '') as String,
       requesteeId: doc.getOrElse('requesteeId', '') as String,
       status: EnumToString.fromString(
@@ -42,6 +45,8 @@ class Booking {
   }
 
   String id;
+  String name;
+  String note;
   String requesterId;
   String requesteeId;
   BookingStatus status;
@@ -52,6 +57,8 @@ class Booking {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'name': name,
+      'note': note,
       'requesterId': requesterId,
       'requesteeId': requesteeId,
       'status': EnumToString.convertToString(status),
@@ -63,6 +70,8 @@ class Booking {
 
   Booking copyWith({
     String? id,
+    String? name,
+    String? note,
     String? requesterId,
     String? requesteeId,
     DateTime? startTime,
@@ -72,6 +81,8 @@ class Booking {
   }) {
     return Booking(
       id: id ?? this.id,
+      name: name ?? this.name,
+      note: note ?? this.note,
       requesterId: requesterId ?? this.requesterId,
       requesteeId: requesteeId ?? this.requesteeId,
       startTime: startTime ?? this.startTime,

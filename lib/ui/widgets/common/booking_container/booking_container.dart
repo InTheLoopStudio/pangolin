@@ -8,6 +8,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
+import 'package:skeletons/skeletons.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class BookingContainer extends StatelessWidget {
@@ -26,12 +27,12 @@ class BookingContainer extends StatelessWidget {
         future: database.getUserById(booking.requesteeId),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return const CircularProgressIndicator();
+            return SkeletonListTile();
           }
 
           final requestee = snapshot.data;
           if (requestee == null) {
-            return const CircularProgressIndicator();
+            return SkeletonListTile();
           }
 
           return ListTile(
@@ -67,12 +68,12 @@ class BookingContainer extends StatelessWidget {
         future: database.getUserById(booking.requesterId),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return const CircularProgressIndicator();
+            return SkeletonListTile();
           }
 
           final requester = snapshot.data;
           if (requester == null) {
-            return const CircularProgressIndicator();
+            return SkeletonListTile();
           }
 
           return ListTile(

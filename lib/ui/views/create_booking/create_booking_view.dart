@@ -1,10 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
-import 'package:intheloopapp/domains/models/booking.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
-import 'package:uuid/uuid.dart';
+import 'package:intheloopapp/ui/views/create_booking/create_booking_cubit.dart';
+import 'package:intheloopapp/ui/widgets/create_booking_view/booking_name.dart';
+import 'package:intheloopapp/ui/widgets/create_booking_view/create_booking_form.dart';
 
 class CreateBookingView extends StatelessWidget {
   const CreateBookingView({required this.requesteeId, Key? key})
@@ -14,8 +15,6 @@ class CreateBookingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final databaseRepository =
-        RepositoryProvider.of<DatabaseRepository>(context);
     return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
       selector: (state) => state as Onboarded,
       builder: (context, state) {
@@ -23,33 +22,26 @@ class CreateBookingView extends StatelessWidget {
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.background,
           appBar: AppBar(
-            title: const Text('booking'),
+            title: const Row(
+              children: [
+                Text(
+                  'Request to Book',
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
           ),
-          body: Column(
-            children: [
-              const Text('booking form'),
-              const Text(
-                'What night are you booking for (maybe make this a range?)',
-              ),
-              const Text('Event name (optional)'),
-              const Text('Intro note (make this a long form paragraph)'),
-              CupertinoButton.filled(
-                onPressed: () {
-                  final booking = Booking(
-                    id: const Uuid().v4(),
-                    requesterId: currentUser.id,
-                    requesteeId: requesteeId,
-                    status: BookingStatus.pending,
-                    startTime: DateTime.parse('2023-04-04 13:00:00'),
-                    endTime: DateTime.parse('2023-04-04 14:00:00'),
-                    timestamp: DateTime.now(),
-                  );
-                  databaseRepository.createBooking(booking);
-                  Navigator.pop(context);
-                },
-                child: const Text('Confirm'),
-              ),
-            ],
+          body: BlocProvider(
+            create: (context) => CreateBookingCubit(
+              currentUserId: currentUser.id,
+              requesteeId: requesteeId,
+              navigationBloc: context.read<NavigationBloc>(),
+              database: RepositoryProvider.of<DatabaseRepository>(context),
+            ),
+            child: const CreateBookingForm(),
           ),
         );
       },
