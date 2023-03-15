@@ -158,8 +158,8 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
             )
           : '';
 
-      final lat = state.place.latLng?.lat ?? 0;
-      final lng = state.place.latLng?.lng ?? 0;
+      final lat = state.place.latLng?.lat ?? rvaLat;
+      final lng = state.place.latLng?.lng ?? rvaLng;
       final geohash = geocodeEncode(lat: lat, lng: lng);
 
       final emptyUser = UserModel.empty();
