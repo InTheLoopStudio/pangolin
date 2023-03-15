@@ -16,7 +16,7 @@ class SearchBar extends StatelessWidget {
           ),
           controller: state.textController,
           onChanged: (input) {
-            context.read<SearchCubit>().searchUsers(input);
+            context.read<SearchCubit>().search(input);
           },
         );
         // title: TextField(

@@ -21,6 +21,8 @@ abstract class DatabaseRepository {
     required double lat,
     required double lng,
     int radius = 50 * 1000, // 50km
+    int limit = 20,
+    String? lastUserId,
   });
   Future<void> updateUserData(UserModel user);
   Future<bool> checkUsernameAvailability(String username, String userid);
