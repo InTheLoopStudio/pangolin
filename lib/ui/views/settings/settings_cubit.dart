@@ -40,15 +40,12 @@ class SettingsCubit extends Cubit<SettingsState> {
   final StorageRepository storageRepository;
   final PlacesRepository places;
 
-  Future<void> initUserData() async {
-    final place = await places.getPlaceById(currentUser.placeId);
-
+  void initUserData() {
     emit(
       state.copyWith(
         username: currentUser.username.toString(),
         artistName: currentUser.artistName,
         bio: currentUser.bio,
-        place: place,
         placeId: currentUser.placeId,
         twitterHandle: currentUser.twitterHandle,
         instagramHandle: currentUser.instagramHandle,
@@ -66,6 +63,11 @@ class SettingsCubit extends Cubit<SettingsState> {
         emailNotificationsITLUpdates: currentUser.emailNotificationsITLUpdates,
       ),
     );
+  }
+
+  Future<void> initPlace() async {
+    final place = await places.getPlaceById(currentUser.placeId);
+    emit(state.copyWith(place: place));
   }
 
   void changeBio(String value) => emit(state.copyWith(bio: value));
@@ -139,7 +141,6 @@ class SettingsCubit extends Cubit<SettingsState> {
       return;
     }
 
-    state.formKey.currentState!.save();
     if (state.formKey.currentState!.validate() && !state.status.isInProgress) {
       emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
 

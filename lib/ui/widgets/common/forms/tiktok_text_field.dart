@@ -5,11 +5,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class TikTokTextField extends StatelessWidget {
   const TikTokTextField({
     Key? key,
-    this.onSaved,
+    this.onChanged,
     this.initialValue,
   }) : super(key: key);
 
-  final void Function(String)? onSaved;
+  final void Function(String)? onChanged;
   final String? initialValue;
 
   @override
@@ -25,9 +25,9 @@ class TikTokTextField extends StatelessWidget {
         prefixText: '@ ',
         labelText: 'TikTok',
       ),
-      onSaved: (input) {
-        input = input?.trim().toLowerCase();
-        onSaved?.call(input ?? '');
+      onChanged: (input) {
+        input = input.trim().toLowerCase();
+        onChanged?.call(input);
       },
     );
   }

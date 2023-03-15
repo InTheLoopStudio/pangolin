@@ -5,11 +5,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class YoutubeTextField extends StatelessWidget {
   const YoutubeTextField({
     Key? key,
-    this.onSaved,
+    this.onChanged,
     this.initialValue,
   }) : super(key: key);
 
-  final void Function(String)? onSaved;
+  final void Function(String)? onChanged;
   final String? initialValue;
 
   @override
@@ -25,9 +25,9 @@ class YoutubeTextField extends StatelessWidget {
         prefixText: 'youtube.com/channel/',
         labelText: 'Youtube Channel',
       ),
-      onSaved: (input) {
-        input = input?.trim();
-        onSaved?.call(input ?? '');
+      onChanged: (input) {
+        input = input.trim();
+        onChanged?.call(input);
       },
     );
   }

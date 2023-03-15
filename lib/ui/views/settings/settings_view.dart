@@ -40,7 +40,8 @@ class SettingsView extends StatelessWidget {
             navigationBloc: context.read<NavigationBloc>(),
             places: context.read<PlacesRepository>(),
             currentUser: currentUser,
-          )..initUserData(),
+          )..initUserData()
+          ..initPlace(),
           child: Scaffold(
             backgroundColor: theme.colorScheme.background,
             appBar: AppBar(
