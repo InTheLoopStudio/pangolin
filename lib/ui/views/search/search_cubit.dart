@@ -113,7 +113,8 @@ class SearchCubit extends Cubit<SearchState> {
     AutocompletePrediction prediction,
   ) async {
     final placeId = prediction.placeId;
-    emit(state.copyWith(loading: true));
+    final mainText = prediction.primaryText;
+    emit(state.copyWith(loading: true, searchTerm: mainText));
     // input hasn't changed in the last 500 milliseconds..
     // you can start search
     // print('Now !!! search term : ${state.searchTerm}');
