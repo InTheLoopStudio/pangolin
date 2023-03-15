@@ -103,6 +103,8 @@ class MockDatabaseRepository extends _i1.Mock
     required double? lat,
     required double? lng,
     int? radius = 50000,
+    int? limit = 20,
+    String? lastUserId,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -112,6 +114,8 @@ class MockDatabaseRepository extends _i1.Mock
             #lat: lat,
             #lng: lng,
             #radius: radius,
+            #limit: limit,
+            #lastUserId: lastUserId,
           },
         ),
         returnValue: _i6.Future<List<_i7.UserModel>>.value(<_i7.UserModel>[]),
