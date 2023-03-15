@@ -10,8 +10,10 @@ import 'package:intheloopapp/ui/views/upload_loop/upload_view.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container.dart';
 
 class AllLoopsList extends StatefulWidget {
-  const AllLoopsList({Key? key, required this.scrollController})
-      : super(key: key);
+  const AllLoopsList({
+    required this.scrollController,
+    Key? key,
+  }) : super(key: key);
 
   final ScrollController scrollController;
 

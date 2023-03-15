@@ -829,8 +829,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   Future<void> addActivity({
     required String currentUserId,
     required ActivityType type,
-    Loop? loop,
     required String visitedUserId,
+    Loop? loop,
   }) async {
     await _analytics.logEvent(
       name: 'new_activity',

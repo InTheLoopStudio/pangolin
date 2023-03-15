@@ -18,8 +18,8 @@ import 'package:share_plus/share_plus.dart';
 
 class LoopContainer extends StatelessWidget {
   const LoopContainer({
-    Key? key,
     required this.loop,
+    Key? key,
   }) : super(key: key);
 
   final Loop loop;

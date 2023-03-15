@@ -3,7 +3,10 @@ import 'package:intheloopapp/ui/views/messaging/channel_view.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class ChannelPreview extends StatelessWidget {
-  const ChannelPreview({Key? key, required this.channel}) : super(key: key);
+  const ChannelPreview({
+    required this.channel,
+    Key? key,
+  }) : super(key: key);
 
   final Channel channel;
 

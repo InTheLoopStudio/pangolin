@@ -75,8 +75,10 @@ class FirebaseAuthImpl extends AuthRepository {
     final signedInUser = authResult.user;
 
     if (signedInUser != null) {
-      await _analytics
-          .logEvent(name: 'sign_in', parameters: {'provider': 'Google'});
+      await _analytics.logEvent(
+        name: 'sign_in',
+        parameters: {'provider': 'Google'},
+      );
       await _analytics.setUserId(id: signedInUser.uid);
       return signedInUser.uid;
     }

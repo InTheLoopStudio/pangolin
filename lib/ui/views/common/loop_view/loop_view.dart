@@ -10,8 +10,8 @@ import 'package:intheloopapp/ui/widgets/loop_view/loop_stack.dart';
 
 class LoopView extends StatelessWidget {
   const LoopView({
-    Key? key,
     required this.loop,
+    Key? key,
     this.feedId = 'unknown',
     this.showComments = false,
     this.autoPlay = true,

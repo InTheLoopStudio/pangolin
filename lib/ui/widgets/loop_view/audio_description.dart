@@ -8,9 +8,9 @@ import 'package:intheloopapp/ui/views/profile/profile_view.dart';
 
 class AudioDescription extends StatelessWidget {
   const AudioDescription({
-    Key? key,
     required this.loop,
     required this.user,
+    Key? key,
   }) : super(key: key);
   final Loop loop;
   final UserModel user;

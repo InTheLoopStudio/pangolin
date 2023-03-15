@@ -46,7 +46,10 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 }
 
 class ProfileView extends StatefulWidget {
-  const ProfileView({Key? key, required this.visitedUserId}) : super(key: key);
+  const ProfileView({
+    required this.visitedUserId,
+    Key? key,
+  }) : super(key: key);
 
   final String visitedUserId;
 
