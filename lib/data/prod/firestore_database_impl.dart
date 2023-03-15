@@ -191,6 +191,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     required double lat,
     required double lng,
     int radius = 50 * 1000, // 50km
+    int limit = 20,
+    String? lastUserId,
   }) async {
     final range = getGeohashRange(
       latitude: lat,
@@ -198,40 +200,82 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       distance: radius,
     );
 
-    final usersSnapshot = await _usersRef
-        .orderBy('geohash')
-        .where('geohash', isGreaterThanOrEqualTo: range.lower)
-        .where('geohash', isLessThanOrEqualTo: range.upper)
-        .get();
+    if (lastUserId != null) {
+      final documentSnapshot = await _usersRef.doc(lastUserId).get();
 
-    if (usersSnapshot.docs.isEmpty) {
-      return [];
+      final usersSnapshot = await _usersRef
+          .orderBy('geohash')
+          .where('geohash', isGreaterThanOrEqualTo: range.lower)
+          .where('geohash', isLessThanOrEqualTo: range.upper)
+          .limit(limit)
+          .startAfterDocument(documentSnapshot)
+          .get();
+
+      if (usersSnapshot.docs.isEmpty) {
+        return [];
+      }
+
+      final usersWithFP =
+          usersSnapshot.docs.map((doc) => UserModel.fromDoc(doc)).toList();
+
+      final users = usersWithFP
+          .map((user) {
+            // We have to filter out a few false positives due to GeoHash
+            // accuracy, but most will match
+            final distanceInKm = geoDistance(
+              Point(latitude: user.lat, longitude: user.lng),
+              Point(latitude: lat, longitude: lng),
+            );
+
+            final distanceInM = distanceInKm * 1000;
+            if (distanceInM > radius) {
+              return null;
+            }
+
+            return user;
+          })
+          .where((e) => e != null)
+          .whereType<UserModel>()
+          .toList();
+
+      return users;
+    } else {
+      final usersSnapshot = await _usersRef
+          .orderBy('geohash')
+          .where('geohash', isGreaterThanOrEqualTo: range.lower)
+          .where('geohash', isLessThanOrEqualTo: range.upper)
+          .limit(limit)
+          .get();
+
+      if (usersSnapshot.docs.isEmpty) {
+        return [];
+      }
+
+      final usersWithFP =
+          usersSnapshot.docs.map((doc) => UserModel.fromDoc(doc)).toList();
+
+      final users = usersWithFP
+          .map((user) {
+            // We have to filter out a few false positives due to GeoHash
+            // accuracy, but most will match
+            final distanceInKm = geoDistance(
+              Point(latitude: user.lat, longitude: user.lng),
+              Point(latitude: lat, longitude: lng),
+            );
+
+            final distanceInM = distanceInKm * 1000;
+            if (distanceInM > radius) {
+              return null;
+            }
+
+            return user;
+          })
+          .where((e) => e != null)
+          .whereType<UserModel>()
+          .toList();
+
+      return users;
     }
-
-    final usersWithFP =
-        usersSnapshot.docs.map((doc) => UserModel.fromDoc(doc)).toList();
-
-    final users = usersWithFP
-        .map((user) {
-          // We have to filter out a few false positives due to GeoHash
-          // accuracy, but most will match
-          final distanceInKm = geoDistance(
-            Point(latitude: user.lat, longitude: user.lng),
-            Point(latitude: lat, longitude: lng),
-          );
-
-          final distanceInM = distanceInKm * 1000;
-          if (distanceInM > radius) {
-            return null;
-          }
-
-          return user;
-        })
-        .where((e) => e != null)
-        .whereType<UserModel>()
-        .toList();
-
-    return users;
   }
 
   @override

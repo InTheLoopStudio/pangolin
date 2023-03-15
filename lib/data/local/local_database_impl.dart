@@ -382,6 +382,8 @@ class LocalDatabaseImpl extends DatabaseRepository {
     required double lat,
     required double lng,
     int radius = 50 * 1000,
+    int limit = 20,
+    String? lastLoopId,
   }) async {
     return [];
   }
