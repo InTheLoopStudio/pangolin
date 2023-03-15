@@ -11,7 +11,7 @@ class OnboardingFlowState extends Equatable {
     this.onboardingStage = OnboardingStage.stage1,
     this.username = '',
     this.artistName = '',
-    this.location = '',
+    this.placeId = '',
     this.bio = '',
     // this.musicianType = const [],
     this.pickedPhoto,
@@ -21,11 +21,13 @@ class OnboardingFlowState extends Equatable {
     this.followingJohannes = false,
     this.followingChris = false,
     this.followingIlias = false,
+    Place? place,
     ImagePicker? picker,
     GlobalKey<FormState>? formKey,
   }) {
     this.picker = picker ?? ImagePicker();
     this.formKey = formKey ?? GlobalKey<FormState>(debugLabel: 'onboarding');
+    this.place = place ?? const Place();
   }
 
   final String currentUserId;
@@ -33,13 +35,14 @@ class OnboardingFlowState extends Equatable {
   final OnboardingStage onboardingStage;
   final String username;
   final String artistName;
-  final String location;
+  final String placeId;
   final String bio;
   // final List<String> musicianType;
   final File? pickedPhoto;
   final FormzSubmissionStatus status;
   late final ImagePicker picker;
   late final GlobalKey<FormState> formKey;
+  late final Place place;
 
   final bool followingInfamous;
   final bool followingJohannes;
@@ -53,7 +56,8 @@ class OnboardingFlowState extends Equatable {
         onboardingStage,
         username,
         artistName,
-        location,
+        placeId,
+        place,
         bio,
         // musicianType,
         pickedPhoto,
@@ -70,7 +74,8 @@ class OnboardingFlowState extends Equatable {
     OnboardingStage? onboardingStage,
     String? username,
     String? artistName,
-    String? location,
+    String? placeId,
+    Place? place,
     String? bio,
     // List<String>? musicianType,
     File? pickedPhoto,
@@ -86,7 +91,8 @@ class OnboardingFlowState extends Equatable {
       onboardingStage: onboardingStage ?? this.onboardingStage,
       username: username ?? this.username,
       artistName: artistName ?? this.artistName,
-      location: location ?? this.location,
+      placeId: placeId ?? this.placeId,
+      place: place ?? this.place,
       bio: bio ?? this.bio,
       // musicianType: musicianType ?? this.musicianType,
       pickedPhoto: pickedPhoto ?? this.pickedPhoto,

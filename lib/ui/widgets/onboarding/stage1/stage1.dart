@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
-import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/onboarding/onboarding_flow_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/artist_name_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/bio_text_field.dart';
+import 'package:intheloopapp/ui/widgets/common/forms/location_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/username_text_field.dart';
-import 'package:intheloopapp/ui/widgets/onboarding/stage1/location_text_field.dart';
 import 'package:intheloopapp/ui/widgets/onboarding/stage1/profile_picture_uploader.dart';
+
+const rvaPlaceId = 'ChIJ7cmZVwkRsYkRxTxC4m0-2L8';
+const rvaLat = 37.5407246;
+const rvaLng = -77.43604809999999;
+const initialPlace = Place(
+  latLng: LatLng(lat: rvaLat, lng: rvaLng),
+);
 
 class Stage1 extends StatelessWidget {
   const Stage1({Key? key}) : super(key: key);
@@ -60,10 +67,11 @@ class Stage1 extends StatelessWidget {
                       ),
                       const SizedBox(height: 20),
                       LocationTextField(
-                        initialValue: state.location,
-                        onChanged: (input) => context
+                        initialPlaceId: rvaPlaceId,
+                        initialPlace: initialPlace,
+                        onChanged: (place, placeId) => context
                             .read<OnboardingFlowCubit>()
-                            .locationChange(input ?? ''),
+                            .locationChange(place, placeId),
                       ),
                       const SizedBox(height: 20),
                       BioTextField(
