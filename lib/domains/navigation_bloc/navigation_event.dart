@@ -26,6 +26,27 @@ class PushProfile extends NavigationEvent {
   List<Object> get props => [userId];
 }
 
+class PushLocationForm extends NavigationEvent {
+  const PushLocationForm({
+    required this.initialPlaceId,
+    required this.initialPlace,
+    required this.onSelected,
+  });
+
+  final String initialPlaceId;
+  final Place initialPlace;
+  final void Function(Place?, String) onSelected;
+
+  @override
+  String toString() => 'PushLocationForm { initialPlaceId : $initialPlaceId }';
+
+  @override
+  List<Object> get props => [
+        initialPlaceId,
+        onSelected,
+      ];
+}
+
 class PushActivity extends NavigationEvent {
   const PushActivity();
 
@@ -56,15 +77,14 @@ class PushLoop extends NavigationEvent {
 }
 
 class PushPost extends NavigationEvent {
-    const PushPost(
+  const PushPost(
     this.post,
-    );
+  );
 
   final Post post;
 
   @override
-  String toString() =>
-      '''PushPost { post: $post }''';
+  String toString() => '''PushPost { post: $post }''';
 
   @override
   List<Object> get props => [post];
@@ -134,8 +154,7 @@ class PushStreamChannel extends NavigationEvent {
   final Channel channel;
 
   @override
-  String toString() =>
-      '''PushStreamChannel { loop: $channel }''';
+  String toString() => '''PushStreamChannel { loop: $channel }''';
 
   @override
   List<Object> get props => [channel];

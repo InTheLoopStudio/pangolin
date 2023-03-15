@@ -5,7 +5,7 @@ class SettingsState extends Equatable {
     this.username = '',
     this.artistName = '',
     this.bio = '',
-    this.location = '',
+    this.placeId = '',
     this.twitterHandle = '',
     this.instagramHandle = '',
     this.soundcloudHandle = '',
@@ -20,17 +20,19 @@ class SettingsState extends Equatable {
     this.pushNotificationsITLUpdates = true,
     this.emailNotificationsAppReleases = true,
     this.emailNotificationsITLUpdates = true,
+    Place? place,
     ImagePicker? picker,
     GlobalKey<FormState>? formKey,
   }) {
     this.picker = picker ?? ImagePicker();
     this.formKey = formKey ?? GlobalKey<FormState>(debugLabel: 'settings');
+    this.place = place ?? const Place();
   }
 
   final String username;
   final String artistName;
   final String bio;
-  final String location;
+  final String placeId;
   final String twitterHandle;
   final String instagramHandle;
   final String soundcloudHandle;
@@ -38,6 +40,7 @@ class SettingsState extends Equatable {
   final String youtubeChannelId;
   final File? profileImage;
   final FormzSubmissionStatus status;
+  late final Place place;
   late final ImagePicker picker;
   late final GlobalKey<FormState> formKey;
 
@@ -54,7 +57,8 @@ class SettingsState extends Equatable {
         username,
         artistName,
         bio,
-        location,
+        place,
+        placeId,
         twitterHandle,
         instagramHandle,
         tiktokHandle,
@@ -75,7 +79,8 @@ class SettingsState extends Equatable {
     String? username,
     String? artistName,
     String? bio,
-    String? location,
+    Place? place,
+    String? placeId,
     String? twitterHandle,
     String? instagramHandle,
     String? tiktokHandle,
@@ -95,7 +100,8 @@ class SettingsState extends Equatable {
       username: username ?? this.username,
       artistName: artistName ?? this.artistName,
       bio: bio ?? this.bio,
-      location: location ?? this.location,
+      place: place ?? this.place,
+      placeId: placeId ?? this.placeId,
       twitterHandle: twitterHandle ?? this.twitterHandle,
       instagramHandle: instagramHandle ?? this.instagramHandle,
       tiktokHandle: tiktokHandle ?? this.tiktokHandle,

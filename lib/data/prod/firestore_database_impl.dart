@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:georange/georange.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
@@ -186,6 +187,54 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  Future<List<UserModel>> searchUsersByLocation({
+    required double lat,
+    required double lng,
+    int radius = 50 * 1000, // 50km
+  }) async {
+    final range = getGeohashRange(
+      latitude: lat,
+      longitude: lng,
+      distance: radius,
+    );
+
+    final usersSnapshot = await _usersRef
+        .orderBy('geohash')
+        .where('geohash', isGreaterThanOrEqualTo: range.lower)
+        .where('geohash', isLessThanOrEqualTo: range.upper)
+        .get();
+
+    if (usersSnapshot.docs.isEmpty) {
+      return [];
+    }
+
+    final usersWithFP =
+        usersSnapshot.docs.map((doc) => UserModel.fromDoc(doc)).toList();
+
+    final users = usersWithFP
+        .map((user) {
+          // We have to filter out a few false positives due to GeoHash
+          // accuracy, but most will match
+          final distanceInKm = geoDistance(
+            Point(latitude: user.lat, longitude: user.lng),
+            Point(latitude: lat, longitude: lng),
+          );
+
+          final distanceInM = distanceInKm * 1000;
+          if (distanceInM > radius) {
+            return null;
+          }
+
+          return user;
+        })
+        .where((e) => e != null)
+        .whereType<UserModel>()
+        .toList();
+
+    return users;
+  }
+
+  @override
   Future<Loop> getLoopById(String loopId) async {
     final loopSnapshot = await _loopsRef.doc(loopId).get();
 
@@ -213,7 +262,9 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<void> updateUserData(UserModel user) async {
     await _analytics.logEvent(name: 'user_data_update');
-    if (await checkUsernameAvailability(user.username.toString(), user.id)) {
+    final isUsernameAvailable =
+        await checkUsernameAvailability(user.username.toString(), user.id);
+    if (!isUsernameAvailable) {
       throw HandleAlreadyExistsException('username availability check failed');
     }
 
