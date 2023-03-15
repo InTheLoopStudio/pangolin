@@ -17,6 +17,11 @@ abstract class DatabaseRepository {
   Future<void> createUser(UserModel user);
   Future<UserModel?> getUserByUsername(String? username);
   Future<UserModel?> getUserById(String userId);
+  Future<List<UserModel>> searchUsersByLocation({
+    required double lat,
+    required double lng,
+    int radius = 50 * 1000, // 50km
+  });
   Future<void> updateUserData(UserModel user);
   Future<bool> checkUsernameAvailability(String username, String userid);
 

@@ -32,6 +32,7 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^8.1.1
   flutter_cache_manager: ^3.1.2
+  flutter_google_places_sdk: ^0.3.2+6
   flutter_image_compress: ^1.0.0
   flutter_native_splash: ^2.2.9
   flutter_slidable: ^2.0.0
@@ -39,6 +40,7 @@ dependencies:
   flutter_svg: ^1.0.1
   font_awesome_flutter: ^10.2.1
   formz: ^0.5.0+1
+  georange: ^1.0.0
   google_sign_in: ^6.0.1
   hydrated_bloc: ^9.0.0
   image_picker: ^0.8.2

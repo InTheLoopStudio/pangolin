@@ -6,12 +6,14 @@ import 'package:intheloopapp/data/dynamic_link_repository.dart';
 import 'package:intheloopapp/data/image_picker_repository.dart';
 import 'package:intheloopapp/data/local/image_picker_impl.dart';
 import 'package:intheloopapp/data/notification_repository.dart';
+import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/prod/algolia_search_impl.dart';
 import 'package:intheloopapp/data/prod/cloud_messaging_impl.dart';
 import 'package:intheloopapp/data/prod/firebase_auth_impl.dart';
 import 'package:intheloopapp/data/prod/firebase_dynamic_link_impl.dart';
 import 'package:intheloopapp/data/prod/firebase_storage_impl.dart';
 import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
+import 'package:intheloopapp/data/prod/google_places_impl.dart';
 import 'package:intheloopapp/data/prod/remote_config_impl.dart';
 import 'package:intheloopapp/data/prod/stream_impl.dart';
 import 'package:intheloopapp/data/remote_config_repository.dart';
@@ -59,6 +61,9 @@ List<RepositoryProvider<dynamic>> buildRepositories({
     ),
     RepositoryProvider<RemoteConfigRepository>(
       create: (_) => RemoteConfigImpl()..fetchAndActivate(),
+    ),
+    RepositoryProvider<PlacesRepository>(
+      create: (_) => GooglePlacesImpl(),
     ),
   ];
 }

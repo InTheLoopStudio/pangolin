@@ -52,10 +52,11 @@ class SettingsForm extends StatelessWidget {
                     initialValue: state.bio,
                   ),
                   LocationTextField(
-                    onSaved: (value) => context
+                    onChanged: (place, placeId) => context
                         .read<SettingsCubit>()
-                        .changeLocation(value ?? ''),
-                    initialValue: state.location,
+                        .changePlace(place, placeId),
+                    initialPlace: state.place,
+                    initialPlaceId: state.placeId,
                   ),
                   TwitterTextField(
                     initialValue: state.twitterHandle,

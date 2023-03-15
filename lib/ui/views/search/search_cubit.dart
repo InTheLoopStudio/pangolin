@@ -31,7 +31,7 @@ class SearchCubit extends Cubit<SearchState> {
         }
       });
     } else {
-      emit(state.copyWith(loading: false, searchTerm: ''));
+      emit(state.copyWith(loading: false, searchTerm: '', searchResults: []));
     }
   }
 }

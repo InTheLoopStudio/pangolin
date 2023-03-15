@@ -99,6 +99,24 @@ class MockDatabaseRepository extends _i1.Mock
         returnValue: _i6.Future<_i7.UserModel?>.value(),
       ) as _i6.Future<_i7.UserModel?>);
   @override
+  _i6.Future<List<_i7.UserModel>> searchUsersByLocation({
+    required double? lat,
+    required double? lng,
+    int? radius = 50000,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #searchUsersByLocation,
+          [],
+          {
+            #lat: lat,
+            #lng: lng,
+            #radius: radius,
+          },
+        ),
+        returnValue: _i6.Future<List<_i7.UserModel>>.value(<_i7.UserModel>[]),
+      ) as _i6.Future<List<_i7.UserModel>>);
+  @override
   _i6.Future<void> updateUserData(_i7.UserModel? user) => (super.noSuchMethod(
         Invocation.method(
           #updateUserData,

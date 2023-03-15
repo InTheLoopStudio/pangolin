@@ -154,7 +154,7 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
         username: Username.fromString(state.username),
         artistName: state.artistName,
         profilePicture: profilePictureUrl,
-        location: state.location,
+        // location: state.location,
         bio: state.bio,
       );
 
