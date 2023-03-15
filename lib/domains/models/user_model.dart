@@ -6,6 +6,11 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'user_model.g.dart';
 
+const rvaPlaceId = 'ChIJ7cmZVwkRsYkRxTxC4m0-2L8';
+const rvaGeoHash = 'dq8vtfhf9639';
+const rvaLat = 37.5407246;
+const rvaLng = -77.43604809999999;
+
 /// The different account types for a user
 enum AccountType {
   /// Venue users
@@ -26,7 +31,10 @@ class UserModel extends Equatable {
     required this.artistName,
     required this.profilePicture,
     required this.bio,
-    required this.location,
+    required this.placeId,
+    required this.geohash,
+    required this.lat,
+    required this.lng,
     required this.loopsCount,
     required this.badgesCount,
     required this.deleted,
@@ -53,7 +61,13 @@ class UserModel extends Equatable {
         artistName: '',
         profilePicture: '',
         bio: '',
-        location: 'Global',
+
+        // PlaceId for Richmond, Virginia, USA
+        placeId: rvaPlaceId,
+        geohash: rvaGeoHash,
+        lat: rvaLat,
+        lng: rvaLng,
+
         loopsCount: 0,
         badgesCount: 0,
         deleted: false,
@@ -95,7 +109,13 @@ class UserModel extends Equatable {
       artistName: doc.getOrElse('artistName', '') as String,
       profilePicture: doc.getOrElse('profilePicture', '') as String,
       bio: doc.getOrElse('bio', '') as String,
-      location: doc.getOrElse('location', 'Global') as String,
+
+      // PlaceId for Richmond, Virginia, USA
+      placeId:
+          doc.getOrElse('placeId', rvaPlaceId) as String,
+      geohash: doc.getOrElse('geohash', rvaGeoHash) as String,
+      lat: doc.getOrElse('lat', rvaLat) as double,
+      lng: doc.getOrElse('lng', rvaLng) as double,
       loopsCount: doc.getOrElse('loopsCount', 0) as int,
       badgesCount: doc.getOrElse('badgesCount', 0) as int,
       deleted: doc.getOrElse('deleted', false) as bool,
@@ -128,7 +148,10 @@ class UserModel extends Equatable {
   final String artistName;
   final String profilePicture;
   final String bio;
-  final String location;
+  final String placeId;
+  final String geohash;
+  final double lat;
+  final double lng;
   final int loopsCount;
   final int badgesCount;
   final bool deleted;
@@ -158,7 +181,10 @@ class UserModel extends Equatable {
         artistName,
         profilePicture,
         bio,
-        location,
+        placeId,
+        geohash,
+        lat,
+        lng,
         loopsCount,
         badgesCount,
         deleted,
@@ -193,7 +219,10 @@ class UserModel extends Equatable {
     String? artistName,
     String? profilePicture,
     String? bio,
-    String? location,
+    String? placeId,
+    String? geohash,
+    double? lat,
+    double? lng,
     int? loopsCount,
     int? badgesCount,
     bool? deleted,
@@ -219,7 +248,10 @@ class UserModel extends Equatable {
       artistName: artistName ?? this.artistName,
       profilePicture: profilePicture ?? this.profilePicture,
       bio: bio ?? this.bio,
-      location: location ?? this.location,
+      placeId: placeId ?? this.placeId,
+      geohash: geohash ?? this.geohash,
+      lat: lat ?? this.lat,
+      lng: lng ?? this.lng,
       loopsCount: loopsCount ?? this.loopsCount,
       badgesCount: badgesCount ?? this.badgesCount,
       deleted: deleted ?? this.deleted,
@@ -255,7 +287,10 @@ class UserModel extends Equatable {
       'artistName': artistName,
       'bio': bio,
       'profilePicture': profilePicture,
-      'location': location,
+      'placeId': placeId,
+      'geohash': geohash,
+      'lat': lat,
+      'lng': lng,
       'loopsCount': loopsCount,
       'badgesCount': badgesCount,
       'deleted': deleted,

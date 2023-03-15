@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/domains/models/badge.dart' as badge_model;
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
@@ -16,6 +17,7 @@ import 'package:intheloopapp/ui/views/likes/likes_view.dart';
 import 'package:intheloopapp/ui/views/messaging/channel_view.dart';
 import 'package:intheloopapp/ui/views/onboarding/onboarding_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
+import 'package:intheloopapp/ui/widgets/common/forms/location_form/location_form_view.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 part 'navigation_event.dart';
@@ -141,6 +143,19 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
             booking: event.booking,
           ),
         ),
+      );
+
+      emit(state);
+    });
+    on<PushLocationForm>((event, emit) {
+      navigationKey.currentState?.push(
+        MaterialPageRoute<LocationFormView>(
+            builder: (context) => LocationFormView(
+              initialPlaceId: event.initialPlaceId,
+              initialPlace: event.initialPlace,
+              onSelected: event.onSelected,
+            ),
+          ),
       );
 
       emit(state);

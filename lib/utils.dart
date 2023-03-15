@@ -1,5 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
+import 'package:georange/georange.dart';
 import 'package:intl/intl.dart';
+
+final georange = GeoRange();
+
+const latPerMile = 0.0144927536231884; // degrees latitude per mile
+const lngPerMile = 0.0181818181818182; // degrees longitude per mile
 
 /// project extensions for firebase's `DocumentSnapshot<T>` class
 extension DefaultValue<V> on DocumentSnapshot<Map<String, dynamic>> {
@@ -52,3 +59,58 @@ String formatDateMessage(DateTime date) {
 bool isSameWeek(DateTime timestamp) {
   return DateTime.now().difference(timestamp).inDays < 7;
 }
+
+String geocodeEncode({
+  required double lat,
+  required double lng,
+}) {
+  return georange.encode(lng, lat);
+}
+
+LatLng geocodeDecode(String geohash) {
+  final decoded = georange.decode(geohash);
+  return LatLng(
+    lng: decoded.longitude,
+    lat: decoded.latitude,
+  );
+}
+
+// Get the geohash upper & lower bounds
+GeoHashRange getGeohashRange({
+  required double latitude,
+  required double longitude,
+  int distance = 12, // miles
+}) {
+  final lowerLat = latitude - latPerMile * distance;
+  final lowerLon = longitude - lngPerMile * distance;
+
+  final upperLat = latitude + latPerMile * distance;
+  final upperLon = longitude + lngPerMile * distance;
+
+  final lower = georange.encode(lowerLat, lowerLon);
+  final upper = georange.encode(upperLat, upperLon);
+
+  return GeoHashRange(lower: lower, upper: upper);
+}
+
+double geoDistance(Point p1, Point p2) {
+  return georange.distance(p1, p2);
+}
+
+class GeoHashRange {
+  GeoHashRange({
+    required this.upper,
+    required this.lower,
+  });
+
+  final String upper;
+  final String lower;
+}
+
+String formattedAddress(List<AddressComponent>? shortNames) =>
+    shortNames
+        ?.map(
+          (e) => e.shortName,
+        )
+        .join(', ') ??
+    '';

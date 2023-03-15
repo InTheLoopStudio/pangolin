@@ -3,16 +3,19 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/models/username.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
+import 'package:intheloopapp/utils.dart';
 
 part 'settings_state.dart';
 
@@ -24,6 +27,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     required this.authRepository,
     required this.databaseRepository,
     required this.storageRepository,
+    required this.places,
     required this.currentUser,
   }) : super(SettingsState());
 
@@ -34,14 +38,18 @@ class SettingsCubit extends Cubit<SettingsState> {
   final AuthRepository authRepository;
   final DatabaseRepository databaseRepository;
   final StorageRepository storageRepository;
+  final PlacesRepository places;
 
-  void initUserData() {
+  Future<void> initUserData() async {
+    final place = await places.getPlaceById(currentUser.placeId);
+
     emit(
       state.copyWith(
         username: currentUser.username.toString(),
         artistName: currentUser.artistName,
         bio: currentUser.bio,
-        location: currentUser.location,
+        place: place,
+        placeId: currentUser.placeId,
         twitterHandle: currentUser.twitterHandle,
         instagramHandle: currentUser.instagramHandle,
         tiktokHandle: currentUser.tiktokHandle,
@@ -73,7 +81,14 @@ class SettingsCubit extends Cubit<SettingsState> {
       emit(state.copyWith(soundcloudHandle: value));
   void changeYoutube(String value) =>
       emit(state.copyWith(youtubeChannelId: value));
-  void changeLocation(String value) => emit(state.copyWith(location: value));
+  void changePlace(Place? place, String placeId) {
+    emit(
+      state.copyWith(
+        place: place,
+        placeId: placeId,
+      ),
+    );
+  }
 
   void changeNewLikesPush({required bool selected}) =>
       emit(state.copyWith(pushNotificationsLikes: selected));
@@ -135,11 +150,19 @@ class SettingsCubit extends Cubit<SettingsState> {
             )
           : currentUser.profilePicture;
 
+      final lat = state.place.latLng?.lat ?? 0;
+      final lng = state.place.latLng?.lng ?? 0;
+      final geohash = geocodeEncode(lat: lat, lng: lng);
+
+      // placeId => geohash
       final user = currentUser.copyWith(
         username: Username.fromString(state.username),
         artistName: state.artistName,
         bio: state.bio,
-        location: state.location,
+        placeId: state.placeId,
+        geohash: geohash,
+        lat: lat,
+        lng: lng,
         twitterHandle: state.twitterHandle,
         instagramHandle: state.instagramHandle,
         tiktokHandle: state.tiktokHandle,

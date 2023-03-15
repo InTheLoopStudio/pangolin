@@ -10,49 +10,47 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 class LocalDatabaseImpl extends DatabaseRepository {
   @override
   Future<bool> userEmailExists(String email) async {
-    await Future<void>.delayed(Duration.zero);
     return true;
   }
 
   @override
   Future<UserModel> getUserByUsername(String? username) async {
-    await Future<void>.delayed(Duration.zero);
     return UserModel.empty();
   }
 
   @override
   Future<void> createUser(UserModel user) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return;
   }
 
   @override
   Future<UserModel> getUserById(String userId) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return UserModel.empty();
   }
 
   @override
   Future<Loop> getLoopById(String loopId) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return Loop.empty();
   }
 
   @override
   Future<int> followersNum(String userid) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return 42;
   }
 
   @override
   Future<int> followingNum(String userid) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return 42;
   }
 
   @override
   Future<void> updateUserData(UserModel user) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return;
   }
 
@@ -61,7 +59,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     String currentUserId,
     String visitedUserId,
   ) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return;
   }
 
@@ -70,7 +68,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     String currentUserId,
     String visitedUserId,
   ) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return;
   }
 
@@ -79,31 +77,31 @@ class LocalDatabaseImpl extends DatabaseRepository {
     String currentUserId,
     String visitedUserId,
   ) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return false;
   }
 
   @override
   Future<List<UserModel>> getFollowing(String currentUserId) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return [];
   }
 
   @override
   Future<List<UserModel>> getFollowers(String currentUserId) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return [];
   }
 
   @override
   Future<void> addLoop(Loop loop) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return;
   }
 
   @override
   Future<void> deleteLoop(Loop loop) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return;
   }
 
@@ -113,7 +111,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     int limit = 0,
     String? lastLoopId,
   }) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return [];
   }
 
@@ -126,7 +124,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     int limit = 0,
     String? lastLoopId,
   }) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return [];
   }
 
@@ -142,7 +140,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     int limit = 0,
     String? lastLoopId,
   }) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return [];
   }
 
@@ -158,7 +156,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     String entityId,
     EntityType entityType,
   ) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return;
   }
 
@@ -168,7 +166,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     String entityId,
     EntityType entityType,
   ) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return;
   }
 
@@ -178,7 +176,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     String entityId,
     EntityType entityType,
   ) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return false;
   }
 
@@ -187,7 +185,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     String entityId,
     EntityType entityType,
   ) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return [];
   }
 
@@ -197,7 +195,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     int limit = 0,
     String? lastActivityId,
   }) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return [];
   }
 
@@ -214,13 +212,13 @@ class LocalDatabaseImpl extends DatabaseRepository {
     required ActivityType type,
     String? visitedUserId,
   }) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return;
   }
 
   @override
   Future<void> markActivityAsRead(Activity activity) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return;
   }
 
@@ -230,7 +228,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     EntityType rootType, {
     int limit = 20,
   }) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return [];
   }
 
@@ -247,7 +245,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     EntityType rootType,
     String commentId,
   ) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return Comment.empty();
   }
 
@@ -256,7 +254,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     Comment comment,
     EntityType rootType,
   ) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return;
   }
 
@@ -267,31 +265,31 @@ class LocalDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<void> shareLoop(Loop loop) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return;
   }
 
   @override
   Future<bool> checkUsernameAvailability(String username, String userid) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return true;
   }
 
   @override
   Future<bool> isVerified(String userId) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return false;
   }
 
   @override
   Future<void> createBadge(Badge badge) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return;
   }
 
   @override
   Future<void> sendBadge(String badgeId, String receiverId) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return;
   }
 
@@ -310,7 +308,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     String? lastBadgeId,
     int limit = 20,
   }) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return [];
   }
 
@@ -320,14 +318,14 @@ class LocalDatabaseImpl extends DatabaseRepository {
     String? lastBadgeId,
     int limit = 20,
   }) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return [];
   }
 
   // Post related stuff
   @override
   Future<Post> getPostById(String postId) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return Post.empty();
   }
 
@@ -341,7 +339,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     int limit = 20,
     String? lastPostId,
   }) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return [];
   }
 
@@ -356,7 +354,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     int limit = 20,
     String? lastPostId,
   }) async {
-    await Future<void>.delayed(Duration.zero);
+    
     return [];
   }
 
@@ -371,7 +369,6 @@ class LocalDatabaseImpl extends DatabaseRepository {
     int limit = 20,
     String? lastPostId,
   }) async {
-    await Future<void>.delayed(Duration.zero);
     return [];
   }
 
@@ -426,5 +423,14 @@ class LocalDatabaseImpl extends DatabaseRepository {
   @override
   Future<void> updateBooking(Booking booking) {
     return Future(() => []);
+  }
+
+  @override
+  Future<List<UserModel>> searchUsersByLocation({
+    required double lat,
+    required double lng,
+    int radius = 50 * 1000,
+  }) async {
+    return [];
   }
 }
