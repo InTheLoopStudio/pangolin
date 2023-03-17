@@ -20,12 +20,12 @@ class LoginCubit extends Cubit<LoginState> {
         ),
       );
 
-  void updateEmail(String input) => emit(
+  void updateEmail(String? input) => emit(
         state.copyWith(
           email: input,
         ),
       );
-  void updatePassword(String input) => emit(
+  void updatePassword(String? input) => emit(
         state.copyWith(
           password: input,
         ),
@@ -151,5 +151,9 @@ class LoginCubit extends Cubit<LoginState> {
         state.copyWith(status: FormzSubmissionStatus.initial),
       );
     }
+  }
+
+  Future<void> sendResetPasswordLink() async {
+    await authRepository.recoverPassword(email: state.email);
   }
 }
