@@ -69,6 +69,18 @@ class FirebaseAuthImpl extends AuthRepository {
   }
 
   @override
+  Future<void> reauthenticateWithCredentials(
+    String email,
+    String password,
+  ) async {
+    final creds = EmailAuthProvider.credential(
+      email: email,
+      password: password,
+    );
+    await _auth.currentUser?.reauthenticateWithCredential(creds);
+  }
+
+  @override
   Future<String?> signUpWithCredentials(
     String email,
     String password,

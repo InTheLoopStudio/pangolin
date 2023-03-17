@@ -59,6 +59,7 @@ class SettingsView extends StatelessWidget {
                       ),
                       children: const [
                         WidgetSpan(
+                          alignment: PlaceholderAlignment.middle,
                           child: ConnectivityStatus(),
                         ),
                       ],

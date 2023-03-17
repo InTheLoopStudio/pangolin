@@ -33,7 +33,10 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    return _tabBar;
+    return ColoredBox(
+      color: Theme.of(context).colorScheme.background,
+      child: _tabBar,
+    );
   }
 
   @override
@@ -285,7 +288,7 @@ class _ProfileViewState extends State<ProfileView> {
                           ),
                         ),
                       ];
-                  },
+                    },
                     body: TabBarView(
                       children: _profileTabs(showVenueDashboard),
                     ),

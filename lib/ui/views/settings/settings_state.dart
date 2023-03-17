@@ -20,6 +20,8 @@ class SettingsState extends Equatable {
     this.pushNotificationsITLUpdates = true,
     this.emailNotificationsAppReleases = true,
     this.emailNotificationsITLUpdates = true,
+    this.email = '',
+    this.password = '',
     Place? place,
     ImagePicker? picker,
     GlobalKey<FormState>? formKey,
@@ -52,6 +54,9 @@ class SettingsState extends Equatable {
   final bool emailNotificationsAppReleases;
   final bool emailNotificationsITLUpdates;
 
+  final String email;
+  final String password;
+
   @override
   List<Object?> get props => [
         username,
@@ -73,6 +78,8 @@ class SettingsState extends Equatable {
         pushNotificationsITLUpdates,
         emailNotificationsAppReleases,
         emailNotificationsITLUpdates,
+        email,
+        password,
       ];
 
   SettingsState copyWith({
@@ -95,6 +102,8 @@ class SettingsState extends Equatable {
     bool? pushNotificationsITLUpdates,
     bool? emailNotificationsAppReleases,
     bool? emailNotificationsITLUpdates,
+    String? email,
+    String? password,
   }) {
     return SettingsState(
       username: username ?? this.username,
@@ -125,6 +134,8 @@ class SettingsState extends Equatable {
           emailNotificationsITLUpdates ?? this.emailNotificationsITLUpdates,
       picker: picker,
       formKey: formKey,
+      email: email ?? this.email,
+      password: password ?? this.password,
     );
   }
 }
