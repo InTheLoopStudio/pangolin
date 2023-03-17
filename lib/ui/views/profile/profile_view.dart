@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,10 +33,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    return ColoredBox(
-      color: Colors.black,
-      child: _tabBar,
-    );
+    return _tabBar;
   }
 
   @override
@@ -283,14 +279,13 @@ class _ProfileViewState extends State<ProfileView> {
                             pinned: true,
                             delegate: _SliverAppBarDelegate(
                               TabBar(
-                                indicatorColor: tappedAccent,
                                 tabs: tabs,
                               ),
                             ),
                           ),
                         ),
                       ];
-                    },
+                  },
                     body: TabBarView(
                       children: _profileTabs(showVenueDashboard),
                     ),

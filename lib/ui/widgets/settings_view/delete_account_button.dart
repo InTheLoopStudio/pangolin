@@ -6,6 +6,7 @@ import 'package:formz/formz.dart';
 import 'package:intheloopapp/ui/views/settings/settings_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/apple_login_button.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/google_login_button.dart';
+import 'package:intheloopapp/ui/widgets/login_view/traditional_login.dart';
 
 class DeleteAccountButton extends StatelessWidget {
   const DeleteAccountButton({Key? key}) : super(key: key);
@@ -34,6 +35,8 @@ class DeleteAccountButton extends StatelessWidget {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 20),
+                        // TraditionalLogin(),
+                        // const SizedBox(height: 20),
                         GoogleLoginButton(
                           onPressed:
                               context.read<SettingsCubit>().reauthWithGoogle,
