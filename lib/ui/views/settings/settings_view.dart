@@ -58,7 +58,9 @@ class SettingsView extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                       children: const [
-                        WidgetSpan(child: ConnectivityStatus(),),
+                        WidgetSpan(
+                          child: ConnectivityStatus(),
+                        ),
                       ],
                     ),
                   ),
