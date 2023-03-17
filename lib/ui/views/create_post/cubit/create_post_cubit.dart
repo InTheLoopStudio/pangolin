@@ -39,7 +39,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
 
   Future<void> createPost() async {
     try {
-      if (!state.status.isSuccess) return;
+      if (state.status.isInProgress) return;
 
       if (state.isValid) {
         emit(

@@ -34,7 +34,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     bool overlapsContent,
   ) {
     return ColoredBox(
-      color: Colors.black,
+      color: Theme.of(context).colorScheme.background,
       child: _tabBar,
     );
   }
@@ -46,7 +46,10 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 }
 
 class ProfileView extends StatefulWidget {
-  const ProfileView({Key? key, required this.visitedUserId}) : super(key: key);
+  const ProfileView({
+    required this.visitedUserId,
+    Key? key,
+  }) : super(key: key);
 
   final String visitedUserId;
 
@@ -188,33 +191,39 @@ class _ProfileViewState extends State<ProfileView> {
                     headerSliverBuilder: (context, innerBoxIsScrolled) {
                       return <Widget>[
                         SliverAppBar(
-                          expandedHeight: 250,
+                          expandedHeight: 200,
                           pinned: true,
                           flexibleSpace: FlexibleSpaceBar(
                             titlePadding: const EdgeInsets.symmetric(
                               horizontal: 20,
                               vertical: 12,
                             ),
-                            title: Row(
-                              children: [
-                                Text(
-                                  visitedUser.artistName,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 32,
-                                  ),
+                            centerTitle: false,
+                            title: Text.rich(
+                              TextSpan(
+                                text: visitedUser.artistName,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 32,
                                 ),
-                                const SizedBox(width: 4),
-                                if (state.isVerified)
-                                  const Icon(
-                                    // CupertinoIcons.check_mark_circled_solid,
-                                    Icons.verified,
-                                    size: 18,
-                                    color: tappedAccent,
-                                  )
-                                else
-                                  const SizedBox.shrink()
-                              ],
+                                children: [
+                                  if (state.isVerified)
+                                    const WidgetSpan(
+                                      child: Icon(
+                                        Icons.verified,
+                                        size: 18,
+                                        color: tappedAccent,
+                                      ),
+                                      alignment: PlaceholderAlignment.middle,
+                                    )
+                                  else
+                                    const WidgetSpan(
+                                      child: SizedBox.shrink(),
+                                    ),
+                                ],
+                              ),
+                              overflow: TextOverflow.fade,
+                              maxLines: 2,
                             ),
                             background: Container(
                               decoration: BoxDecoration(
@@ -273,7 +282,6 @@ class _ProfileViewState extends State<ProfileView> {
                             pinned: true,
                             delegate: _SliverAppBarDelegate(
                               TabBar(
-                                indicatorColor: tappedAccent,
                                 tabs: tabs,
                               ),
                             ),

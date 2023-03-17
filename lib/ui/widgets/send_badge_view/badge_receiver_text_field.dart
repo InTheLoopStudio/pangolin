@@ -48,7 +48,7 @@ class _BadgeReceiverTextFieldState extends State<BadgeReceiverTextField> {
               return 'user does not exist';
             }
 
-            if (input == currentUser.username) {
+            if (input == currentUser.username.toString()) {
               return 'cannot send badges to yourself';
             }
 

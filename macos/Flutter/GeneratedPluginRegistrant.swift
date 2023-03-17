@@ -20,7 +20,7 @@ import firebase_remote_config
 import firebase_storage
 import just_audio
 import package_info_plus
-import path_provider_macos
+import path_provider_foundation
 import photo_manager
 import share_plus_macos
 import sign_in_with_apple

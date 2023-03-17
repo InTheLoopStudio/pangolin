@@ -5,17 +5,19 @@ import 'package:intheloopapp/data/database_repository.dart';
 
 class UsernameTextField extends StatefulWidget {
   const UsernameTextField({
+    required this.currentUserId,
     Key? key,
     this.onSaved,
     this.onChanged,
     this.initialValue,
-    required this.currentUserId,
+    this.validateUniqueness = true,
   }) : super(key: key);
 
   final void Function(String?)? onSaved;
   final void Function(String?)? onChanged;
   final String? initialValue;
   final String currentUserId;
+  final bool validateUniqueness;
 
   @override
   State<UsernameTextField> createState() => _UsernameTextFieldState();
@@ -25,6 +27,7 @@ class _UsernameTextFieldState extends State<UsernameTextField> {
   bool _usernameTaken = false;
 
   String get _currentUserId => widget.currentUserId;
+  bool get _validateUniqueness => widget.validateUniqueness;
   void Function(String?)? get _onSaved => widget.onSaved;
   void Function(String?)? get _onChanged => widget.onChanged;
 
@@ -69,12 +72,18 @@ class _UsernameTextFieldState extends State<UsernameTextField> {
         if (input.isEmpty) return;
 
         input = input.trim().toLowerCase();
-        final databaseRepo = RepositoryProvider.of<DatabaseRepository>(context);
-        final available =
-            await databaseRepo.checkUsernameAvailability(input, _currentUserId);
-        setState(() {
-          _usernameTaken = !available;
-        });
+
+        if (_validateUniqueness) {
+          final databaseRepo =
+              RepositoryProvider.of<DatabaseRepository>(context);
+          final available = await databaseRepo.checkUsernameAvailability(
+            input,
+            _currentUserId,
+          );
+          setState(() {
+            _usernameTaken = !available;
+          });
+        }
 
         _onChanged?.call(input);
       },

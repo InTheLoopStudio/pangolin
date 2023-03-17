@@ -3,9 +3,9 @@ part of 'loop_view_cubit.dart';
 @immutable
 class LoopViewState extends Equatable {
   LoopViewState({
-    AudioController? audioController,
     required this.loop,
     required this.user,
+    AudioController? audioController,
     this.showComments = false,
     this.loadingLoop = false,
     this.feedId,

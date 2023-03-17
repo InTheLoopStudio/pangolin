@@ -18,10 +18,10 @@ class StreamImpl extends StreamRepository {
   bool _connected = false;
 
   @override
-  Future<void> connectUser(String userId) async {
-    final token = await getToken();
-
+  Future<bool> connectUser(String userId) async {
     if (!_connected) {
+      await _client.disconnectUser();
+      final token = await getToken();
       await _client.connectUser(
         User(
           id: userId,
@@ -31,6 +31,8 @@ class StreamImpl extends StreamRepository {
       );
       _connected = true;
     }
+
+    return _connected;
   }
 
   @override
@@ -55,6 +57,7 @@ class StreamImpl extends StreamRepository {
   Future<String> getToken() async {
     final callable =
         _functions.httpsCallable('ext-auth-chat-getStreamUserToken');
+
     final results = await callable<String>();
 
     final token = results.data;

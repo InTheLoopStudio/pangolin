@@ -8,8 +8,10 @@ import 'package:intheloopapp/ui/views/send_badge/send_badge_view.dart';
 import 'package:intheloopapp/ui/widgets/common/badge_container/badge_container.dart';
 
 class VenueDashboard extends StatefulWidget {
-  const VenueDashboard({Key? key, required this.scrollController})
-      : super(key: key);
+  const VenueDashboard({
+    required this.scrollController,
+    Key? key,
+  }) : super(key: key);
 
   final ScrollController scrollController;
 

@@ -121,7 +121,7 @@ class SearchCubit extends Cubit<SearchState> {
 
     final place = await places.getPlaceById(placeId);
 
-    // TODO: In the future, this should be paginated
+    // TODO(jonaylor89): In the future, this should be paginated
     final searchRes = await database.searchUsersByLocation(
       lat: place?.latLng?.lat ?? rvaLat,
       lng: place?.latLng?.lng ?? rvaLng,

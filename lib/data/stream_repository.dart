@@ -18,7 +18,7 @@ abstract class StreamRepository {
   // Future<bool> connectIfExist(String userId);
 
   /// Connects the [userId] with chat DB using their `token`
-  Future<void> connectUser(String userId);
+  Future<bool> connectUser(String userId);
 
   /// Creates a group chat in the chat DB between the given [members]
   Future<Channel> createGroupChat(

@@ -13,8 +13,8 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class PostContainer extends StatelessWidget {
   const PostContainer({
-    Key? key,
     required this.post,
+    Key? key,
   }) : super(key: key);
 
   final Post post;
@@ -189,11 +189,6 @@ class PostContainer extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 8),
-                        const Divider(
-                          color: Color(0xFF757575),
-                          height: 10,
-                          thickness: 1,
-                        ),
                       ],
                     ),
                   );

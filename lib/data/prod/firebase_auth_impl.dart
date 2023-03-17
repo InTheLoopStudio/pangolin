@@ -56,6 +56,44 @@ class FirebaseAuthImpl extends AuthRepository {
   }
 
   @override
+  Future<String?> signInWithCredentials(
+    String email,
+    String password,
+  ) async {
+    final user = await _auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    return user.user?.uid;
+  }
+
+  @override
+  Future<void> reauthenticateWithCredentials(
+    String email,
+    String password,
+  ) async {
+    final creds = EmailAuthProvider.credential(
+      email: email,
+      password: password,
+    );
+    await _auth.currentUser?.reauthenticateWithCredential(creds);
+  }
+
+  @override
+  Future<String?> signUpWithCredentials(
+    String email,
+    String password,
+  ) async {
+    final user = await _auth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    return user.user?.uid;
+  }
+
+  @override
   Future<String> signInWithGoogle() async {
     // Trigger the authentication flow
     final googleUser = await GoogleSignIn().signIn();
@@ -75,8 +113,10 @@ class FirebaseAuthImpl extends AuthRepository {
     final signedInUser = authResult.user;
 
     if (signedInUser != null) {
-      await _analytics
-          .logEvent(name: 'sign_in', parameters: {'provider': 'Google'});
+      await _analytics.logEvent(
+        name: 'sign_in',
+        parameters: {'provider': 'Google'},
+      );
       await _analytics.setUserId(id: signedInUser.uid);
       return signedInUser.uid;
     }

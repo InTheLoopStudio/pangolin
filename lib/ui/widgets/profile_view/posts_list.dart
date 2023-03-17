@@ -7,8 +7,10 @@ import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/post_container/post_container.dart';
 
 class PostsList extends StatefulWidget {
-  const PostsList({Key? key, required this.scrollController})
-      : super(key: key);
+  const PostsList({
+    required this.scrollController,
+    Key? key,
+  }) : super(key: key);
 
   final ScrollController scrollController;
 
@@ -21,7 +23,6 @@ class _PostsListState extends State<PostsList> {
 
   Timer? _debounce;
   ScrollController get _scrollController => widget.scrollController;
-
 
   bool get _isBottom {
     if (!_scrollController.hasClients) return false;
