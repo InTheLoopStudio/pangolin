@@ -113,4 +113,4 @@ String formattedAddress(List<AddressComponent>? shortNames) =>
           (e) => e.shortName,
         )
         .join(', ') ??
-    '';
+    'Location';

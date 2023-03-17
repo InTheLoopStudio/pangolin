@@ -48,4 +48,20 @@ class LocalAuthImpl extends AuthRepository {
   Future<void> deleteUser() async {
     return;
   }
+
+  @override
+  Future<String?> signInWithCredentials(
+    String email,
+    String password,
+  ) async {
+    return null;
+  }
+
+  @override
+  Future<String?> signUpWithCredentials(
+    String email,
+    String password,
+  ) async {
+    return null;
+  }
 }

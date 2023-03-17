@@ -56,6 +56,32 @@ class FirebaseAuthImpl extends AuthRepository {
   }
 
   @override
+  Future<String?> signInWithCredentials(
+    String email,
+    String password,
+  ) async {
+    final user = await _auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    return user.user?.uid;
+  }
+
+  @override
+  Future<String?> signUpWithCredentials(
+    String email,
+    String password,
+  ) async {
+    final user = await _auth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    return user.user?.uid;
+  }
+
+  @override
   Future<String> signInWithGoogle() async {
     // Trigger the authentication flow
     final googleUser = await GoogleSignIn().signIn();
