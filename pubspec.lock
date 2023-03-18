@@ -209,6 +209,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+  cancelable_retry:
+    dependency: "direct main"
+    description:
+      name: cancelable_retry
+      sha256: "4f5ff7bef595618a1df566fbf55342c44086d8bc78091ad4478995606126e35d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0+1"
   characters:
     dependency: transitive
     description:
