@@ -48,9 +48,9 @@ class _DevInformationState extends State<DevInformation> {
                 color: Colors.grey,
               ),
             ),
-            const Text(
-              'Copyright © Tapped 2022',
-              style: TextStyle(
+            Text(
+              'Copyright © Tapped ${DateTime.now().year}',
+              style: const TextStyle(
                 color: Colors.grey,
               ),
             ),
