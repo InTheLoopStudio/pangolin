@@ -7,8 +7,10 @@ import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/badge_container/badge_container.dart';
 
 class BadgesList extends StatefulWidget {
-  const BadgesList({Key? key, required this.scrollController})
-      : super(key: key);
+  const BadgesList({
+    required this.scrollController,
+    Key? key,
+  }) : super(key: key);
 
   final ScrollController scrollController;
 

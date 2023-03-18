@@ -40,15 +40,12 @@ class SettingsCubit extends Cubit<SettingsState> {
   final StorageRepository storageRepository;
   final PlacesRepository places;
 
-  Future<void> initUserData() async {
-    final place = await places.getPlaceById(currentUser.placeId);
-
+  void initUserData() {
     emit(
       state.copyWith(
         username: currentUser.username.toString(),
         artistName: currentUser.artistName,
         bio: currentUser.bio,
-        place: place,
         placeId: currentUser.placeId,
         twitterHandle: currentUser.twitterHandle,
         instagramHandle: currentUser.instagramHandle,
@@ -66,6 +63,11 @@ class SettingsCubit extends Cubit<SettingsState> {
         emailNotificationsITLUpdates: currentUser.emailNotificationsITLUpdates,
       ),
     );
+  }
+
+  Future<void> initPlace() async {
+    final place = await places.getPlaceById(currentUser.placeId);
+    emit(state.copyWith(place: place));
   }
 
   void changeBio(String value) => emit(state.copyWith(bio: value));
@@ -89,6 +91,14 @@ class SettingsCubit extends Cubit<SettingsState> {
       ),
     );
   }
+
+  void updateEmail(String? input) => emit(
+        state.copyWith(email: input),
+      );
+
+  void updatePassword(String? input) => emit(
+        state.copyWith(password: input),
+      );
 
   void changeNewLikesPush({required bool selected}) =>
       emit(state.copyWith(pushNotificationsLikes: selected));
@@ -139,7 +149,6 @@ class SettingsCubit extends Cubit<SettingsState> {
       return;
     }
 
-    state.formKey.currentState!.save();
     if (state.formKey.currentState!.validate() && !state.status.isInProgress) {
       emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
 
@@ -219,6 +228,32 @@ class SettingsCubit extends Cubit<SettingsState> {
     );
     try {
       await authRepository.reauthenticateWithApple();
+      deleteUser();
+      emit(
+        state.copyWith(status: FormzSubmissionStatus.success),
+      );
+    } on Exception {
+      // print(e);
+      emit(
+        state.copyWith(status: FormzSubmissionStatus.failure),
+      );
+      // ignore: avoid_catching_errors
+    } on NoSuchMethodError {
+      emit(
+        state.copyWith(status: FormzSubmissionStatus.initial),
+      );
+    }
+  }
+
+  Future<void> reauthWithCredentials() async {
+    emit(
+      state.copyWith(status: FormzSubmissionStatus.inProgress),
+    );
+    try {
+      await authRepository.reauthenticateWithCredentials(
+        state.email,
+        state.password,
+      );
       deleteUser();
       emit(
         state.copyWith(status: FormzSubmissionStatus.success),

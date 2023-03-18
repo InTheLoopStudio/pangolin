@@ -28,7 +28,6 @@ class LocalAuthImpl extends AuthRepository {
 
   @override
   Future<String> signInWithApple() async {
-    await Future<void>.delayed(const Duration(seconds: 2));
     return '';
   }
 
@@ -37,7 +36,6 @@ class LocalAuthImpl extends AuthRepository {
 
   @override
   Future<String> signInWithGoogle() async {
-    await Future<void>.delayed(const Duration(seconds: 2));
     return '';
   }
 
@@ -47,5 +45,27 @@ class LocalAuthImpl extends AuthRepository {
   @override
   Future<void> deleteUser() async {
     return;
+  }
+
+  @override
+  Future<String?> signInWithCredentials(
+    String email,
+    String password,
+  ) async {
+    return null;
+  }
+
+  @override
+  Future<void> reauthenticateWithCredentials(
+    String email,
+    String password,
+  ) async {}
+
+  @override
+  Future<String?> signUpWithCredentials(
+    String email,
+    String password,
+  ) async {
+    return null;
   }
 }

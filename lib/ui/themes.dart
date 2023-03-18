@@ -42,6 +42,12 @@ class Themes {
       foregroundColor: Colors.black,
     ),
 
+    tabBarTheme: const TabBarTheme(
+      labelColor: Colors.black,
+      unselectedLabelColor: Colors.black,
+      indicatorColor: tappedAccent,
+    ),
+
     sliderTheme: const SliderThemeData(
       activeTrackColor: tappedAccent,
       inactiveTrackColor: tappedAccent,
@@ -74,6 +80,12 @@ class Themes {
     canvasColor: backgroundDarkColor,
     appBarTheme: const AppBarTheme(
       backgroundColor: navigationBarDarkColor,
+    ),
+
+    tabBarTheme: const TabBarTheme(
+      indicatorColor: tappedAccent,
+      labelColor: Colors.white,
+      unselectedLabelColor: Colors.white,
     ),
 
     sliderTheme: const SliderThemeData(

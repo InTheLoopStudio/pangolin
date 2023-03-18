@@ -57,6 +57,26 @@ class PushActivity extends NavigationEvent {
   List<Object> get props => [];
 }
 
+class PushForgotPassword extends NavigationEvent {
+  const PushForgotPassword();
+
+  @override
+  String toString() => 'PushForgotPassword { }';
+
+  @override
+  List<Object> get props => [];
+}
+
+class PushSignUp extends NavigationEvent {
+  const PushSignUp();
+
+  @override
+  String toString() => 'PushSignUp { }';
+
+  @override
+  List<Object> get props => [];
+}
+
 class PushLoop extends NavigationEvent {
   const PushLoop(
     this.loop, {

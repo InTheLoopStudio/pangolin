@@ -1,5 +1,5 @@
 name: intheloopapp
-version: 1.1.22+32
+version: 1.1.24+34
 publish_to: none
 description: Mobile app for Tapped.
 environment: 
@@ -16,6 +16,7 @@ dependencies:
   connectivity_plus: ^3.0.2
   crypto: ^3.0.1
   cupertino_icons: ^1.0.3
+  email_validator: ^2.1.17
   enum_to_string: ^2.0.1
   equatable: ^2.0.3
   file_picker: ^5.0.1

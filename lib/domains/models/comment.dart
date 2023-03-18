@@ -3,11 +3,11 @@ import 'package:intheloopapp/utils.dart';
 
 class Comment {
   Comment({
-    this.id = '',
     required this.timestamp,
     required this.content,
     required this.userId,
     required this.rootId,
+    this.id = '',
     this.parentId,
     this.children = const [],
     this.deleted = false,

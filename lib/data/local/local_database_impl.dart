@@ -208,8 +208,8 @@ class LocalDatabaseImpl extends DatabaseRepository {
   @override
   Future<void> addActivity({
     required String currentUserId,
-    Loop? loop,
     required ActivityType type,
+    Loop? loop,
     String? visitedUserId,
   }) async {
     
@@ -430,6 +430,8 @@ class LocalDatabaseImpl extends DatabaseRepository {
     required double lat,
     required double lng,
     int radius = 50 * 1000,
+    int limit = 20,
+    String? lastUserId,
   }) async {
     return [];
   }

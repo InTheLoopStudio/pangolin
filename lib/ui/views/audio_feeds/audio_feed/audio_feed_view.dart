@@ -9,10 +9,10 @@ import 'package:intheloopapp/ui/views/common/loop_view/loop_view.dart';
 
 class AudioFeedView extends StatefulWidget {
   const AudioFeedView({
-    Key? key,
     required this.feedId,
     required this.sourceFunction,
     required this.sourceStream,
+    Key? key,
   }) : super(key: key);
   final String feedId;
   final Future<List<Loop>> Function(

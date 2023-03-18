@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/login/login_cubit.dart';
 import 'package:intheloopapp/ui/widgets/login_view/login_form.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -13,76 +14,53 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: BlocProvider(
-        create: (context) => LoginCubit(context.read<AuthRepository>()),
-        child: DecoratedBox(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-              colors: <Color>[
-                Color(0xff000000),
-                Color(0xff383838),
+        create: (context) => LoginCubit(
+          authRepository: context.read<AuthRepository>(),
+          navigationBloc: context.read<NavigationBloc>(),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            LoginForm(
+              authenticationBloc: context.read<AuthenticationBloc>(),
+            ),
+            const SizedBox(height: 15),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  child: const Text(
+                    'Privacy Policy',
+                    style: TextStyle(
+                      color: tappedAccent,
+                    ),
+                  ),
+                  onPressed: () => launchUrl(
+                    Uri(
+                      scheme: 'https',
+                      path: 'intheloopstudio.com/privacy',
+                    ),
+                  ),
+                ),
+                TextButton(
+                  child: const Text(
+                    'Terms of Service',
+                    style: TextStyle(
+                      color: tappedAccent,
+                    ),
+                  ),
+                  onPressed: () => launchUrl(
+                    Uri(
+                      scheme: 'https',
+                      path: 'intheloopstudio.com/terms',
+                    ),
+                  ),
+                ),
               ],
             ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              LoginForm(
-                authenticationBloc: context.read<AuthenticationBloc>(),
-              ),
-              const SizedBox(height: 30),
-              TextButton(
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Privacy Policy',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    SizedBox(width: 10),
-                    Icon(
-                      FontAwesomeIcons.upRightFromSquare,
-                      color: Colors.white,
-                      size: 15,
-                    ),
-                  ],
-                ),
-                onPressed: () => launchUrl(
-                  Uri(
-                    scheme: 'https',
-                    path: 'intheloopstudio.com/privacy',
-                  ),
-                ),
-              ),
-              TextButton(
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Terms of Service',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    SizedBox(width: 10),
-                    Icon(
-                      FontAwesomeIcons.upRightFromSquare,
-                      color: Colors.white,
-                      size: 15,
-                    ),
-                  ],
-                ),
-                onPressed: () => launchUrl(
-                  Uri(
-                    scheme: 'https',
-                    path: 'intheloopstudio.com/terms',
-                  ),
-                ),
-              ),
-            ],
-          ),
+          ],
         ),
       ),
     );

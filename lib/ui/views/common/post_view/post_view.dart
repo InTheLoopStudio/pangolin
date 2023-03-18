@@ -13,7 +13,10 @@ import 'package:intheloopapp/ui/widgets/post_view/comments_list.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class PostView extends StatelessWidget {
-  const PostView({Key? key, required this.post}) : super(key: key);
+  const PostView({
+    required this.post,
+    Key? key,
+  }) : super(key: key);
 
   final Post post;
 
@@ -55,74 +58,72 @@ class PostView extends StatelessWidget {
                     ),
                     appBar: AppBar(
                       title: GestureDetector(
-                            onTap: () =>
-                                navigationBloc.add(PushProfile(user.id)),
-                            child: Row(
+                        onTap: () => navigationBloc.add(PushProfile(user.id)),
+                        child: Row(
+                          children: [
+                            Column(
                               children: [
-                                Column(
-                                  children: [
-                                    // + User Avatar
-                                    CircleAvatar(
-                                      radius: 24,
-                                      backgroundImage:
-                                          user.profilePicture.isEmpty
-                                              ? const AssetImage(
-                                                  'assets/default_avatar.png',
-                                                ) as ImageProvider
-                                              : CachedNetworkImageProvider(
-                                                  user.profilePicture,
-                                                ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  width: 28,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          user.artistName,
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                // + User Avatar
+                                CircleAvatar(
+                                  radius: 24,
+                                  backgroundImage: user.profilePicture.isEmpty
+                                      ? const AssetImage(
+                                          'assets/default_avatar.png',
+                                        ) as ImageProvider
+                                      : CachedNetworkImageProvider(
+                                          user.profilePicture,
                                         ),
-                                        const SizedBox(
-                                          width: 2,
-                                        ),
-                                        if (state.isVerified)
-                                          const Icon(
-                                            Icons.verified,
-                                            size: 8,
-                                            color: tappedAccent,
-                                          )
-                                      ],
-                                    ),
-                                    Text(
-                                      '@${user.username}',
-                                      style: const TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                    Text(
-                                      timeago.format(
-                                        post.timestamp,
-                                        locale: 'en_short',
-                                      ),
-                                      style: const TextStyle(
-                                        fontSize: 10,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ],
                                 ),
                               ],
                             ),
-                          ),
+                            const SizedBox(
+                              width: 28,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      user.artistName,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 2,
+                                    ),
+                                    if (state.isVerified)
+                                      const Icon(
+                                        Icons.verified,
+                                        size: 8,
+                                        color: tappedAccent,
+                                      )
+                                  ],
+                                ),
+                                Text(
+                                  '@${user.username}',
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                Text(
+                                  timeago.format(
+                                    post.timestamp,
+                                    locale: 'en_short',
+                                  ),
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                     body: Padding(
                       padding: const EdgeInsets.symmetric(

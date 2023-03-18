@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class SettingsSwitch extends StatelessWidget {
   const SettingsSwitch({
-    Key? key,
     required this.label,
     required this.activated,
     required this.onChanged,
+    Key? key,
   }) : super(key: key);
 
   final String label;

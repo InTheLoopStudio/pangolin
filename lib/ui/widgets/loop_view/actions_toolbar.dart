@@ -12,9 +12,9 @@ import 'package:share_plus/share_plus.dart';
 
 class ActionsToolbar extends StatelessWidget {
   const ActionsToolbar({
-    Key? key,
     required this.user,
     required this.loop,
+    Key? key,
   }) : super(key: key);
   final UserModel user;
   final Loop loop;

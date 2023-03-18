@@ -40,27 +40,34 @@ class SettingsView extends StatelessWidget {
             navigationBloc: context.read<NavigationBloc>(),
             places: context.read<PlacesRepository>(),
             currentUser: currentUser,
-          )..initUserData(),
+          )
+            ..initUserData()
+            ..initPlace(),
           child: Scaffold(
             backgroundColor: theme.colorScheme.background,
             appBar: AppBar(
               title: Row(
                 children: [
-                  Text(
-                    currentUser.artistName.isNotEmpty 
-                      ? currentUser.artistName 
-                      : currentUser.username.toString(),
-                    style: const TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
+                  Text.rich(
+                    TextSpan(
+                      text: currentUser.artistName.isNotEmpty
+                          ? currentUser.artistName
+                          : currentUser.username.toString(),
+                      style: const TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      children: const [
+                        WidgetSpan(
+                          alignment: PlaceholderAlignment.middle,
+                          child: ConnectivityStatus(),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
               elevation: 0,
-              actions: const [
-                ConnectivityStatus(),
-              ],
             ),
             body: ListView(
               physics: const ClampingScrollPhysics(),

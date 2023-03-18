@@ -31,7 +31,7 @@ class LocationResults extends StatelessWidget {
                   color: Color(0xFF757575),
                 ),
                 Text(
-                  'Search',
+                  'Search Location',
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w400,

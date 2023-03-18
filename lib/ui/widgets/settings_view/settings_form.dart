@@ -47,7 +47,7 @@ class SettingsForm extends StatelessWidget {
                     initialValue: state.artistName,
                   ),
                   BioTextField(
-                    onSaved: (value) =>
+                    onChanged: (value) =>
                         context.read<SettingsCubit>().changeBio(value ?? ''),
                     initialValue: state.bio,
                   ),
@@ -60,27 +60,27 @@ class SettingsForm extends StatelessWidget {
                   ),
                   TwitterTextField(
                     initialValue: state.twitterHandle,
-                    onSaved: (value) =>
+                    onChanged: (value) =>
                         context.read<SettingsCubit>().changeTwitter(value),
                   ),
                   InstagramTextField(
                     initialValue: state.instagramHandle,
-                    onSaved: (value) =>
+                    onChanged: (value) =>
                         context.read<SettingsCubit>().changeInstagram(value),
                   ),
                   TikTokTextField(
                     initialValue: state.tiktokHandle,
-                    onSaved: (value) =>
+                    onChanged: (value) =>
                         context.read<SettingsCubit>().changeTikTik(value),
                   ),
                   SoundcloudTextField(
                     initialValue: state.soundcloudHandle,
-                    onSaved: (value) =>
+                    onChanged: (value) =>
                         context.read<SettingsCubit>().changeSoundcloud(value),
                   ),
                   YoutubeTextField(
                     initialValue: state.youtubeChannelId,
-                    onSaved: (value) =>
+                    onChanged: (value) =>
                         context.read<SettingsCubit>().changeYoutube(value),
                   ),
                   const SizedBox(height: 15),

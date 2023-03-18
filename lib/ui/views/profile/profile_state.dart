@@ -26,8 +26,8 @@ enum UserCreatedBadgesStatus {
 
 class ProfileState extends Equatable {
   const ProfileState({
-    required this.visitedUser,
     required this.currentUser,
+    required this.visitedUser,
     this.followerCount = 0,
     this.followingCount = 0,
     this.isFollowing = false,

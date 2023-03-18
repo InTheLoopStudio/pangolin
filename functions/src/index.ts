@@ -730,7 +730,11 @@ export const addActivityOnPostLike = functions.firestore
   .onCreate(async (snapshot, context) => {
     const postSnapshot = await postsRef.doc(context.params.postId).get();
     const post = postSnapshot.data();
-    if (post === undefined || !post.exists) {
+    if (post === undefined) {
+      return;
+    }
+
+    if (!post.exists) {
       return;
     }
 

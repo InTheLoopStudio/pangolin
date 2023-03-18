@@ -189,11 +189,6 @@ class PostContainer extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 8),
-                        const Divider(
-                          color: Color(0xFF757575),
-                          height: 10,
-                          thickness: 1,
-                        ),
                       ],
                     ),
                   );

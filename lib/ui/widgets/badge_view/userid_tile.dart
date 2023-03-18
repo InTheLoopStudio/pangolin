@@ -6,8 +6,8 @@ import 'package:intheloopapp/ui/widgets/common/user_tile.dart';
 
 class UseridTile extends StatelessWidget {
   const UseridTile({
-    Key? key,
     required this.userid,
+    Key? key,
   }) : super(key: key);
 
   final String userid;

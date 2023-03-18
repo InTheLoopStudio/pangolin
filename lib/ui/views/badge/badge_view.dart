@@ -7,8 +7,8 @@ import 'package:intheloopapp/ui/widgets/badge_view/userid_tile.dart';
 class BadgeView extends StatelessWidget {
   /// Just a badge model is required for the view
   const BadgeView({
-    Key? key,
     required this.badge,
+    Key? key,
   }) : super(key: key);
 
   /// The badge to display

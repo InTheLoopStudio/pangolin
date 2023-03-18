@@ -8,7 +8,8 @@ import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 
 class BottomToolbar extends StatelessWidget {
   const BottomToolbar({
-    required this.user, Key? key,
+    required this.user,
+    Key? key,
   }) : super(key: key);
 
   final UserModel user;

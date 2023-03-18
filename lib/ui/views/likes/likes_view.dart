@@ -7,8 +7,8 @@ import 'package:intheloopapp/ui/widgets/common/user_tile.dart';
 
 class LikesView extends StatelessWidget {
   const LikesView({
-    Key? key,
     required this.loop,
+    Key? key,
   }) : super(key: key);
 
   final Loop loop;

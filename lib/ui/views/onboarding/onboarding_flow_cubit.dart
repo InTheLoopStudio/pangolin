@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intheloopapp/data/database_repository.dart';
@@ -12,6 +13,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/models/username.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
+import 'package:intheloopapp/utils.dart';
 
 part 'onboarding_flow_state.dart';
 
@@ -95,7 +97,15 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
 
   void usernameChange(String input) => emit(state.copyWith(username: input));
   void aristNameChange(String input) => emit(state.copyWith(artistName: input));
-  void locationChange(String input) => emit(state.copyWith(location: input));
+  void locationChange(Place? place, String placeId) {
+    emit(
+      state.copyWith(
+        place: place,
+        placeId: placeId,
+      ),
+    );
+  }
+
   void bioChange(String input) => emit(state.copyWith(bio: input));
 
   Future<void> handleImageFromGallery() async {
@@ -148,14 +158,21 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
             )
           : '';
 
+      final lat = state.place.latLng?.lat ?? rvaLat;
+      final lng = state.place.latLng?.lng ?? rvaLng;
+      final geohash = geocodeEncode(lat: lat, lng: lng);
+
       final emptyUser = UserModel.empty();
       final currentUser = emptyUser.copyWith(
         id: currentUserId,
         username: Username.fromString(state.username),
         artistName: state.artistName,
         profilePicture: profilePictureUrl,
-        // location: state.location,
         bio: state.bio,
+        placeId: state.placeId,
+        geohash: geohash,
+        lat: lat,
+        lng: lng,
       );
 
       await databaseRepository.createUser(currentUser);

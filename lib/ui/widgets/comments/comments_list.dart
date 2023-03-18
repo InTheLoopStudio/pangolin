@@ -4,8 +4,10 @@ import 'package:intheloopapp/ui/views/common/comments/comments_cubit.dart';
 import 'package:intheloopapp/ui/widgets/comments/comment_container.dart';
 
 class CommentsList extends StatelessWidget {
-  const CommentsList({Key? key, required this.scrollController})
-      : super(key: key);
+  const CommentsList({
+    required this.scrollController,
+    Key? key,
+  }) : super(key: key);
 
   final ScrollController scrollController;
 

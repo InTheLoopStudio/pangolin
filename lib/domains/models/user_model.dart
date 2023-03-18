@@ -78,13 +78,13 @@ class UserModel extends Equatable {
         tiktokHandle: '',
         instagramHandle: '',
         twitterHandle: '',
-        pushNotificationsLikes: false,
-        pushNotificationsComments: false,
-        pushNotificationsFollows: false,
-        pushNotificationsDirectMessages: false,
-        pushNotificationsITLUpdates: false,
-        emailNotificationsAppReleases: false,
-        emailNotificationsITLUpdates: false,
+        pushNotificationsLikes: true,
+        pushNotificationsComments: true,
+        pushNotificationsFollows: true,
+        pushNotificationsDirectMessages: true,
+        pushNotificationsITLUpdates: true,
+        emailNotificationsAppReleases: true,
+        emailNotificationsITLUpdates: true,
       );
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>

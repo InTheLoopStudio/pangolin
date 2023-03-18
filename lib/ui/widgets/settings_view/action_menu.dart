@@ -40,34 +40,6 @@ class ActionMenu extends StatelessWidget {
             const Divider(),
             SettingsButton(
               icon: const Icon(
-                FontAwesomeIcons.discord,
-                size: 20,
-              ),
-              label: 'Join our Discord community',
-              onTap: () => launchUrl(
-                Uri(
-                  scheme: 'https',
-                  path: 'discord.gg/ZwpPGx98Qc',
-                ),
-              ),
-            ),
-            const Divider(),
-            SettingsButton(
-              icon: const Icon(
-                FontAwesomeIcons.spotify,
-                size: 20,
-              ),
-              label: 'In The Loop Podcast',
-              onTap: () => launchUrl(
-                Uri(
-                  scheme: 'https',
-                  path: 'https://open.spotify.com/show/6LQi6uQ5nEgIK9vo0am9PS',
-                ),
-              ),
-            ),
-            const Divider(),
-            SettingsButton(
-              icon: const Icon(
                 FontAwesomeIcons.instagram,
                 size: 20,
               ),
@@ -75,7 +47,7 @@ class ActionMenu extends StatelessWidget {
               onTap: () => launchUrl(
                 Uri(
                   scheme: 'https',
-                  path: 'www.instagram.com/itl_studios/',
+                  path: 'www.instagram.com/tappednetwork/',
                 ),
               ),
             ),

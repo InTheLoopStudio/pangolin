@@ -5,9 +5,9 @@ import 'package:intheloopapp/ui/themes.dart';
 
 class SeekBar extends StatefulWidget {
   const SeekBar({
-    Key? key,
     required this.duration,
     required this.position,
+    Key? key,
     this.bufferedPosition,
     this.onChanged,
     this.onChangeEnd,

@@ -14,6 +14,8 @@ import 'package:intheloopapp/ui/views/common/post_view/post_view.dart';
 import 'package:intheloopapp/ui/views/create_booking/create_booking_view.dart';
 import 'package:intheloopapp/ui/views/create_post/create_post_view.dart';
 import 'package:intheloopapp/ui/views/likes/likes_view.dart';
+import 'package:intheloopapp/ui/views/login/forgot_password_view.dart';
+import 'package:intheloopapp/ui/views/login/signup_view.dart';
 import 'package:intheloopapp/ui/views/messaging/channel_view.dart';
 import 'package:intheloopapp/ui/views/onboarding/onboarding_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
@@ -81,6 +83,26 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
         MaterialPageRoute<ActivityView>(
           builder: (context) => const Material(
             child: ActivityView(),
+          ),
+        ),
+      );
+      emit(state);
+    });
+    on<PushForgotPassword>((event, emit) {
+      navigationKey.currentState?.push(
+        MaterialPageRoute<ForgotPasswordView>(
+          builder: (context) => const Material(
+            child: ForgotPasswordView(),
+          ),
+        ),
+      );
+      emit(state);
+    });
+    on<PushSignUp>((event, emit) {
+      navigationKey.currentState?.push(
+        MaterialPageRoute<SignUpView>(
+          builder: (context) => const Material(
+            child: SignUpView(),
           ),
         ),
       );

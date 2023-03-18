@@ -193,6 +193,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     required double lat,
     required double lng,
     int radius = 50 * 1000, // 50km
+    int limit = 100,
+    String? lastUserId,
   }) async {
     final range = getGeohashRange(
       latitude: lat,
@@ -200,40 +202,82 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       distance: radius,
     );
 
-    final usersSnapshot = await _usersRef
-        .orderBy('geohash')
-        .where('geohash', isGreaterThanOrEqualTo: range.lower)
-        .where('geohash', isLessThanOrEqualTo: range.upper)
-        .get();
+    if (lastUserId != null) {
+      final documentSnapshot = await _usersRef.doc(lastUserId).get();
 
-    if (usersSnapshot.docs.isEmpty) {
-      return [];
+      final usersSnapshot = await _usersRef
+          .orderBy('geohash')
+          .where('geohash', isGreaterThanOrEqualTo: range.lower)
+          .where('geohash', isLessThanOrEqualTo: range.upper)
+          .limit(limit)
+          .startAfterDocument(documentSnapshot)
+          .get();
+
+      if (usersSnapshot.docs.isEmpty) {
+        return [];
+      }
+
+      final usersWithFP =
+          usersSnapshot.docs.map((doc) => UserModel.fromDoc(doc)).toList();
+
+      final users = usersWithFP
+          .map((user) {
+            // We have to filter out a few false positives due to GeoHash
+            // accuracy, but most will match
+            final distanceInKm = geoDistance(
+              Point(latitude: user.lat, longitude: user.lng),
+              Point(latitude: lat, longitude: lng),
+            );
+
+            final distanceInM = distanceInKm * 1000;
+            if (distanceInM > radius) {
+              return null;
+            }
+
+            return user;
+          })
+          .where((e) => e != null)
+          .whereType<UserModel>()
+          .toList();
+
+      return users;
+    } else {
+      final usersSnapshot = await _usersRef
+          .orderBy('geohash')
+          .where('geohash', isGreaterThanOrEqualTo: range.lower)
+          .where('geohash', isLessThanOrEqualTo: range.upper)
+          .limit(limit)
+          .get();
+
+      if (usersSnapshot.docs.isEmpty) {
+        return [];
+      }
+
+      final usersWithFP =
+          usersSnapshot.docs.map((doc) => UserModel.fromDoc(doc)).toList();
+
+      final users = usersWithFP
+          .map((user) {
+            // We have to filter out a few false positives due to GeoHash
+            // accuracy, but most will match
+            final distanceInKm = geoDistance(
+              Point(latitude: user.lat, longitude: user.lng),
+              Point(latitude: lat, longitude: lng),
+            );
+
+            final distanceInM = distanceInKm * 1000;
+            if (distanceInM > radius) {
+              return null;
+            }
+
+            return user;
+          })
+          .where((e) => e != null)
+          .whereType<UserModel>()
+          .toList();
+
+      return users;
     }
-
-    final usersWithFP =
-        usersSnapshot.docs.map((doc) => UserModel.fromDoc(doc)).toList();
-
-    final users = usersWithFP
-        .map((user) {
-          // We have to filter out a few false positives due to GeoHash
-          // accuracy, but most will match
-          final distanceInKm = geoDistance(
-            Point(latitude: user.lat, longitude: user.lng),
-            Point(latitude: lat, longitude: lng),
-          );
-
-          final distanceInM = distanceInKm * 1000;
-          if (distanceInM > radius) {
-            return null;
-          }
-
-          return user;
-        })
-        .where((e) => e != null)
-        .whereType<UserModel>()
-        .toList();
-
-    return users;
   }
 
   @override
@@ -421,7 +465,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<Loop>> getUserLoops(
     String userId, {
-    int limit = 20,
+    int limit = 100,
     String? lastLoopId,
   }) async {
     if (lastLoopId != null) {
@@ -460,7 +504,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Stream<Loop> userLoopsObserver(
     String userId, {
-    int limit = 20,
+    int limit = 100,
   }) async* {
     final userLoopsSnapshotObserver = _loopsRef
         .where('userId', isEqualTo: userId)
@@ -491,7 +535,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<Loop>> getFollowingLoops(
     String currentUserId, {
-    int limit = 20,
+    int limit = 100,
     String? lastLoopId,
   }) async {
     final subcollection = _getFeedsSubcollectionFromEntityType(EntityType.post);
@@ -537,7 +581,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Stream<Loop> followingLoopsObserver(
     String currentUserId, {
-    int limit = 20,
+    int limit = 100,
   }) async* {
     final subcollection = _getFeedsSubcollectionFromEntityType(EntityType.loop);
 
@@ -571,7 +615,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<Loop>> getAllLoops(
     String currentUserId, {
-    int limit = 20,
+    int limit = 100,
     String? lastLoopId,
   }) async {
     if (lastLoopId != null) {
@@ -611,7 +655,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Stream<Loop> allLoopsObserver(
     String currentUserId, {
-    int limit = 20,
+    int limit = 100,
   }) async* {
     final allLoopsSnapshotObserver = _loopsRef
         .orderBy('timestamp', descending: true)
@@ -725,7 +769,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<Activity>> getActivities(
     String userId, {
-    int limit = 20,
+    int limit = 100,
     String? lastActivityId,
   }) async {
     if (lastActivityId != null) {
@@ -759,7 +803,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Stream<Activity> activitiesObserver(
     String userId, {
-    int limit = 20,
+    int limit = 100,
   }) async* {
     final activitiesSnapshotObserver = _activitiesRef
         .orderBy('timestamp', descending: true)
@@ -787,8 +831,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   Future<void> addActivity({
     required String currentUserId,
     required ActivityType type,
-    Loop? loop,
     required String visitedUserId,
+    Loop? loop,
   }) async {
     await _analytics.logEvent(
       name: 'new_activity',
@@ -824,7 +868,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   Future<List<Comment>> getComments(
     String rootId,
     EntityType rootType, {
-    int limit = 20,
+    int limit = 100,
   }) async {
     final subcollection = _getCommentsSubcollectionFromEntityType(rootType);
 
@@ -846,7 +890,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   Stream<Comment> commentsObserver(
     String rootId,
     EntityType rootType, {
-    int limit = 20,
+    int limit = 100,
   }) async* {
     final subcollection = _getCommentsSubcollectionFromEntityType(rootType);
 
@@ -980,7 +1024,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Stream<Badge> userCreatedBadgesObserver(
     String userId, {
-    int limit = 20,
+    int limit = 100,
   }) async* {
     final userCreatedBadgesSnapshotObserver = _badgesRef
         .where('creatorId', isEqualTo: userId)
@@ -1006,7 +1050,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Stream<Badge> userBadgesObserver(
     String userId, {
-    int limit = 20,
+    int limit = 100,
   }) async* {
     final userBadgesSnapshotObserver = _badgesSentRef
         .doc(userId)
@@ -1041,7 +1085,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<Badge>> getUserCreatedBadges(
     String userId, {
-    int limit = 20,
+    int limit = 100,
     String? lastBadgeId,
   }) async {
     if (lastBadgeId != null) {
@@ -1076,7 +1120,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<Badge>> getUserBadges(
     String userId, {
-    int limit = 20,
+    int limit = 100,
     String? lastBadgeId,
   }) async {
     if (lastBadgeId != null) {
@@ -1164,7 +1208,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<Post>> getUserPosts(
     String userId, {
-    int limit = 20,
+    int limit = 100,
     String? lastPostId,
   }) async {
     if (lastPostId != null) {
@@ -1203,7 +1247,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Stream<Post> userPostsObserver(
     String userId, {
-    int limit = 20,
+    int limit = 100,
   }) async* {
     final userPostsSnapshotObserver = _postsRef
         .where('userId', isEqualTo: userId)
@@ -1234,7 +1278,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<Post>> getFollowingPosts(
     String currentUserId, {
-    int limit = 20,
+    int limit = 100,
     String? lastPostId,
   }) async {
     final subcollection = _getFeedsSubcollectionFromEntityType(EntityType.post);
@@ -1280,7 +1324,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Stream<Post> followingPostsObserver(
     String currentUserId, {
-    int limit = 20,
+    int limit = 100,
   }) async* {
     final subcollection = _getFeedsSubcollectionFromEntityType(EntityType.post);
 
@@ -1314,7 +1358,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<Post>> getAllPosts(
     String currentUserId, {
-    int limit = 20,
+    int limit = 100,
     String? lastPostId,
   }) async {
     if (lastPostId != null) {
@@ -1354,7 +1398,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Stream<Post> allPostsObserver(
     String currentUserId, {
-    int limit = 20,
+    int limit = 100,
   }) async* {
     final allPostsSnapshotObserver = _postsRef
         .orderBy('timestamp', descending: true)
