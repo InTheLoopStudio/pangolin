@@ -140,7 +140,7 @@ class CreateBookingForm extends StatelessWidget {
                   ],
                 ),
                 const BookingNoteTextField(),
-                const Text('Payment Details HERE'),
+                const SizedBox(height: 20,),
                 CupertinoButton.filled(
                   onPressed: () =>
                       context.read<CreateBookingCubit>().createBooking(),

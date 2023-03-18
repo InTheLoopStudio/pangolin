@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/create_booking/create_booking_cubit.dart';
-import 'package:intheloopapp/ui/widgets/create_booking_view/booking_name.dart';
 import 'package:intheloopapp/ui/widgets/create_booking_view/create_booking_form.dart';
 
 class CreateBookingView extends StatelessWidget {
@@ -40,6 +40,7 @@ class CreateBookingView extends StatelessWidget {
               requesteeId: requesteeId,
               navigationBloc: context.read<NavigationBloc>(),
               database: RepositoryProvider.of<DatabaseRepository>(context),
+              streamRepo: RepositoryProvider.of<StreamRepository>(context),
             ),
             child: const CreateBookingForm(),
           ),
