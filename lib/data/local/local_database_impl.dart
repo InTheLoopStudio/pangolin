@@ -1,6 +1,7 @@
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
+import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/post.dart';
@@ -376,6 +377,53 @@ class LocalDatabaseImpl extends DatabaseRepository {
     String currentUserId, {
     int limit = 20,
   }) async* {}
+
+  @override
+  Future<void> createBooking(
+    Booking booking,
+  ) {
+    return Future(() => null);
+  }
+
+  @override
+  Future<Booking?> getBookingById(
+    String bookRequestId,
+  ) {
+    return Future(() => null);
+  }
+
+  @override
+  Future<List<Booking>> getBookingsByRequesterRequestee(
+    String requesterId,
+    String requesteeId, {
+    int limit = 20,
+    String? lastBookingRequestId,
+  }) {
+    return Future(() => []);
+  }
+
+  @override
+  Future<List<Booking>> getBookingsByRequester(
+    String userId, {
+    int limit = 20,
+    String? lastBookingRequestId,
+  }) {
+    return Future(() => []);
+  }
+
+  @override
+  Future<List<Booking>> getBookingsByRequestee(
+    String userId, {
+    int limit = 20,
+    String? lastBookingRequestId,
+  }) {
+    return Future(() => []);
+  }
+
+  @override
+  Future<void> updateBooking(Booking booking) {
+    return Future(() => []);
+  }
 
   @override
   Future<List<UserModel>> searchUsersByLocation({

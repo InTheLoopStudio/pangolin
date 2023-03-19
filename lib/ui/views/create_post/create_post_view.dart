@@ -16,68 +16,63 @@ class CreatePostView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
       selector: (state) => state as Onboarded,
-      builder: (context, state) {
+      builder: (context, userState) {
+        final currentUser = userState.currentUser;
         return BlocProvider(
           create: (context) => CreatePostCubit(
-            currentUser: state.currentUser,
+            currentUser: currentUser,
             databaseRepository: context.read<DatabaseRepository>(),
             navigationBloc: context.read<NavigationBloc>(),
           ),
-          child: BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
-            selector: (state) => state as Onboarded,
-            builder: (context, userState) {
-              final currentUser = userState.currentUser;
-              return SafeArea(
-                child: Scaffold(
-                  backgroundColor: Theme.of(context).colorScheme.background,
-                  appBar: AppBar(
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Create Post',
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Container(
-                          height: 30,
-                          width: 30,
-                          padding: const EdgeInsets.all(1),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .bottomNavigationBarTheme
-                                .unselectedItemColor,
-                            borderRadius: BorderRadius.circular(30.0 / 2),
-                          ),
-                          child: UserAvatar(
-                            radius: 45,
-                            backgroundImageUrl: currentUser.profilePicture,
-                          ),
-                        ),
-                      ],
+          child: SafeArea(
+            child: Scaffold(
+              backgroundColor: Theme.of(context).colorScheme.background,
+              appBar: AppBar(
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Create Post',
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  body: const Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 40,
-                      vertical: 40,
+                    Container(
+                      height: 30,
+                      width: 30,
+                      padding: const EdgeInsets.all(1),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context)
+                            .bottomNavigationBarTheme
+                            .unselectedItemColor,
+                        borderRadius: BorderRadius.circular(30.0 / 2),
+                      ),
+                      child: UserAvatar(
+                        radius: 45,
+                        backgroundImageUrl: currentUser.profilePicture,
+                      ),
                     ),
-                    child: Column(
-                      children: [
-                        PostTitleTextField(),
-                        SizedBox(
-                          height: 24,
-                        ),
-                        PostDescriptionTextField(),
-                      ],
-                    ),
-                  ),
-                  floatingActionButton: const SubmitPostButton(),
+                  ],
                 ),
-              );
-            },
+              ),
+              body: const Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 40,
+                ),
+                child: Column(
+                  children: [
+                    PostTitleTextField(),
+                    SizedBox(
+                      height: 24,
+                    ),
+                    PostDescriptionTextField(),
+                  ],
+                ),
+              ),
+              floatingActionButton: const SubmitPostButton(),
+            ),
           ),
         );
       },

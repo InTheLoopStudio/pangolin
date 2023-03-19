@@ -17,6 +17,7 @@ class CreatePostState extends Equatable with FormzMixin {
         description,
         status,
       ];
+
   @override
   List<FormzInput<dynamic, dynamic>> get inputs => [
         title,

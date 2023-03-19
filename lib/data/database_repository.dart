@@ -1,5 +1,6 @@
 import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
+import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/post.dart';
@@ -197,4 +198,27 @@ abstract class DatabaseRepository {
     String currentUserId, {
     int limit = 100,
   });
+  Future<void> createBooking(
+    Booking booking,
+  );
+  Future<Booking?> getBookingById(
+    String bookRequestId,
+  );
+  Future<List<Booking>> getBookingsByRequesterRequestee(
+    String requesterId,
+    String requesteeId, {
+    int limit = 20,
+    String? lastBookingRequestId,
+  });
+  Future<List<Booking>> getBookingsByRequester(
+    String userId, {
+    int limit = 20,
+    String? lastBookingRequestId,
+  });
+  Future<List<Booking>> getBookingsByRequestee(
+    String userId, {
+    int limit = 20,
+    String? lastBookingRequestId,
+  });
+  Future<void> updateBooking(Booking booking);
 }

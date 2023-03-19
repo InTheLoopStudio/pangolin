@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/audio_feeds/audio_feeds_list/audio_feeds_list_view.dart';
-import 'package:intheloopapp/ui/views/messaging/channel_list_view.dart';
+import 'package:intheloopapp/ui/views/bookings/bookings_view.dart';
+import 'package:intheloopapp/ui/views/messaging/messaging_view.dart';
 import 'package:intheloopapp/ui/views/post_feed/post_feed_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
 import 'package:intheloopapp/ui/views/search/search_view.dart';
@@ -33,6 +34,7 @@ class ShellView extends StatelessWidget {
                   const AudioFeedsListView(), // getstream.io activity feed?
                   const PostFeedView(), // getstream.io activity feed?
                   const SearchView(),
+                  const BookingsView(),
                   const MessagingChannelListView(),
                   ProfileView(visitedUserId: currentUser.id),
                 ],

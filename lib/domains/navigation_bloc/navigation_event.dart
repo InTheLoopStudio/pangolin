@@ -174,8 +174,32 @@ class PushStreamChannel extends NavigationEvent {
   final Channel channel;
 
   @override
-  String toString() => '''PushStreamChannel { loop: $channel }''';
+  String toString() => '''PushStreamChannel { channel: $channel }''';
 
   @override
   List<Object> get props => [channel];
+}
+
+class PushCreateBooking extends NavigationEvent {
+  const PushCreateBooking(this.requesteeId);
+
+  final String requesteeId;
+
+  @override
+  String toString() => '''PushCreateBooking { requestee: $requesteeId }''';
+
+  @override
+  List<Object> get props => [requesteeId];
+}
+
+class PushBooking extends NavigationEvent {
+  const PushBooking(this.booking);
+
+  final Booking booking;
+
+  @override
+  String toString() => '''PushBooking { booking: $booking }''';
+
+  @override
+  List<Object> get props => [booking];
 }

@@ -65,7 +65,7 @@ class _PostsListState extends State<PostsList> {
             return const Center(child: Text('failed to fetch posts'));
 
           case PostStatus.success:
-            if (state.userBadges.isEmpty || state.visitedUser.deleted == true) {
+            if (state.userPosts.isEmpty || state.visitedUser.deleted == true) {
               return const EasterEggPlaceholder(text: 'No Posts Yet');
             }
 

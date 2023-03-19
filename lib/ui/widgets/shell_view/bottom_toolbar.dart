@@ -38,10 +38,9 @@ class BottomToolbar extends StatelessWidget {
               ),
             ),
             const BottomNavigationBarItem(icon: Icon(CupertinoIcons.search)),
-            // const BottomNavigationBarItem(
-            //   icon: Icon(Icons.add_box_outlined),
-            //   activeIcon: Icon(Icons.add_box),
-            // ),
+            const BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.tickets),
+            ),
             const BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.bubble_middle_bottom),
             ),

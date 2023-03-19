@@ -75,6 +75,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
           status: FormzSubmissionStatus.failure,
         ),
       );
+      navigationBloc.add(const Pop());
     }
   }
 }

@@ -8,6 +8,7 @@ import 'package:georange/georange.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
+import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/post.dart';
@@ -30,6 +31,7 @@ final _commentsRef = _firestore.collection('comments');
 final _badgesRef = _firestore.collection('badges');
 final _badgesSentRef = _firestore.collection('badgesSent');
 final _postsRef = _firestore.collection('posts');
+final _bookingsRef = _firestore.collection('bookings');
 
 const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
 
@@ -1422,5 +1424,96 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     );
 
     yield* allPostsObserver;
+  }
+
+  @override
+  Future<void> createBooking(
+    Booking booking,
+  ) async {
+    await _analytics.logEvent(name: 'booking_request_created');
+    await _bookingsRef.doc(booking.id).set(booking.toMap());
+  }
+
+  @override
+  Future<Booking?> getBookingById(
+    String bookRequestId,
+  ) async {
+    final bookingSnapshot = await _bookingsRef.doc(bookRequestId).get();
+    final bookingRequest = Booking.fromDoc(bookingSnapshot);
+
+    return bookingRequest;
+  }
+
+  @override
+  Future<List<Booking>> getBookingsByRequesterRequestee(
+    String requesterId,
+    String requesteeId, {
+    int limit = 20,
+    String? lastBookingRequestId,
+  }) async {
+    final bookingSnapshot = await _bookingsRef
+        .where(
+          'requesterId',
+          isEqualTo: requesterId,
+        )
+        .where(
+          'requesteeId',
+          isEqualTo: requesteeId,
+        )
+        .get();
+
+    final bookingRequests =
+        bookingSnapshot.docs.map((doc) => Booking.fromDoc(doc)).toList();
+
+    return bookingRequests;
+  }
+
+  @override
+  Future<List<Booking>> getBookingsByRequester(
+    String userId, {
+    int limit = 20,
+    String? lastBookingRequestId,
+  }) async {
+    final bookingSnapshot = await _bookingsRef
+        .where(
+          'requesterId',
+          isEqualTo: userId,
+        )
+        .get();
+
+    final bookingRequests =
+        bookingSnapshot.docs.map((doc) => Booking.fromDoc(doc)).toList();
+
+    return bookingRequests;
+  }
+
+  @override
+  Future<List<Booking>> getBookingsByRequestee(
+    String userId, {
+    int limit = 20,
+    String? lastBookingRequestId,
+  }) async {
+    final bookingSnapshot = await _bookingsRef
+        .where(
+          'requesteeId',
+          isEqualTo: userId,
+        )
+        .get();
+
+    final bookingRequests =
+        bookingSnapshot.docs.map((doc) => Booking.fromDoc(doc)).toList();
+
+    return bookingRequests;
+  }
+
+  @override
+  Future<void> updateBooking(Booking booking) async {
+    await _analytics.logEvent(
+      name: 'update_booking',
+      parameters: {
+        'status': EnumToString.convertToString(booking.status),
+      },
+    );
+    await _bookingsRef.doc(booking.id).set(booking.toMap());
   }
 }

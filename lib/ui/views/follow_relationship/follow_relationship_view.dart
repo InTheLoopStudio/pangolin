@@ -10,7 +10,8 @@ import 'package:intheloopapp/ui/widgets/follow_relationship_view/following_tab.d
 
 class FollowRelationshipView extends StatelessWidget {
   const FollowRelationshipView({
-    required this.visitedUserId, Key? key,
+    required this.visitedUserId,
+    Key? key,
     this.initialIndex,
   }) : super(key: key);
 
@@ -59,7 +60,17 @@ class FollowRelationshipView extends StatelessWidget {
                     ),
                   ],
                 ),
-                title: Text(user.username.toString()),
+                title: Row(
+                  children: [
+                    Text(
+                      user.username.toString(),
+                      style: const TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               body: const TabBarView(
                 children: [

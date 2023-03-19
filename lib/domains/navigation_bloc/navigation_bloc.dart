@@ -3,12 +3,15 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/domains/models/badge.dart' as badge_model;
+import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/post.dart';
 import 'package:intheloopapp/ui/views/activity/activity_view.dart';
 import 'package:intheloopapp/ui/views/badge/badge_view.dart';
+import 'package:intheloopapp/ui/views/common/booking_view/booking_view.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view.dart';
 import 'package:intheloopapp/ui/views/common/post_view/post_view.dart';
+import 'package:intheloopapp/ui/views/create_booking/create_booking_view.dart';
 import 'package:intheloopapp/ui/views/create_post/create_post_view.dart';
 import 'package:intheloopapp/ui/views/likes/likes_view.dart';
 import 'package:intheloopapp/ui/views/login/forgot_password_view.dart';
@@ -57,7 +60,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     });
     on<PushBadge>((event, emit) {
       navigationKey.currentState?.push(
-        MaterialPageRoute<PushBadge>(
+        MaterialPageRoute<BadgeView>(
           builder: (context) => Material(
             child: BadgeView(
               badge: event.badge,
@@ -69,7 +72,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     });
     on<PushProfile>((event, emit) {
       navigationKey.currentState?.push(
-        MaterialPageRoute<PushProfile>(
+        MaterialPageRoute<ProfileView>(
           builder: (context) => ProfileView(visitedUserId: event.userId),
         ),
       );
@@ -107,7 +110,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     });
     on<PushOnboarding>((event, emit) {
       navigationKey.currentState?.push(
-        MaterialPageRoute<PushOnboarding>(
+        MaterialPageRoute<OnboardingView>(
           builder: (context) => const OnboardingView(),
         ),
       );
@@ -125,7 +128,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     });
     on<PushCreatePost>((event, emit) {
       navigationKey.currentState?.push(
-        MaterialPageRoute<PushLikes>(
+        MaterialPageRoute<CreatePostView>(
           builder: (context) => const CreatePostView(),
         ),
       );
@@ -135,11 +138,33 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<PushStreamChannel>((event, emit) {
       navigationKey.currentState?.push(
         MaterialPageRoute<StreamChannel>(
-            builder: (context) => StreamChannel(
-              channel: event.channel,
-              child: const ChannelView(),
-            ),
+          builder: (context) => StreamChannel(
+            channel: event.channel,
+            child: const ChannelView(),
           ),
+        ),
+      );
+
+      emit(state);
+    });
+    on<PushCreateBooking>((event, emit) {
+      navigationKey.currentState?.push(
+        MaterialPageRoute<CreateBookingView>(
+          builder: (context) => CreateBookingView(
+            requesteeId: event.requesteeId,
+          ),
+        ),
+      );
+
+      emit(state);
+    });
+    on<PushBooking>((event, emit) {
+      navigationKey.currentState?.push(
+        MaterialPageRoute<BookingView>(
+          builder: (context) => BookingView(
+            booking: event.booking,
+          ),
+        ),
       );
 
       emit(state);

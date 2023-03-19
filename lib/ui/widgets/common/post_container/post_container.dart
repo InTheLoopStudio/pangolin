@@ -97,7 +97,7 @@ class PostContainer extends StatelessWidget {
                                       if (state.isVerified)
                                         const Icon(
                                           Icons.verified,
-                                          size: 8,
+                                          size: 14,
                                           color: tappedAccent,
                                         )
                                     ],
