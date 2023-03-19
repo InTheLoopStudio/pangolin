@@ -21,89 +21,96 @@ class BookingsView extends StatelessWidget {
             databaseRepository:
                 RepositoryProvider.of<DatabaseRepository>(context),
           )..initBookings(),
-          child: Scaffold(
-            backgroundColor: Theme.of(context).colorScheme.background,
-            appBar: AppBar(
-              title: const Row(
-                children: [
-                  Text(
-                    'Bookings',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
+          child: BlocBuilder<BookingsCubit, BookingsState>(
+            builder: (context, state) {
+              return RefreshIndicator(
+                onRefresh: context.read<BookingsCubit>().initBookings,
+                child: Scaffold(
+                  backgroundColor: Theme.of(context).colorScheme.background,
+                  appBar: AppBar(
+                    title: const Row(
+                      children: [
+                        Text(
+                          'Bookings',
+                          style: TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
-            body: BlocBuilder<BookingsCubit, BookingsState>(
-              builder: (context, state) {
-                return CustomScrollView(
-                  slivers: [
-                    const SliverToBoxAdapter(
-                      child: SizedBox(height: 12),
-                    ),
-                    const SliverToBoxAdapter(
-                      child: Text(
-                        'Booking Requests',
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    BookingsList(
-                      bookings: state.pendingBookings,
-                    ),
-                    const SliverToBoxAdapter(
-                      child: SizedBox(height: 12),
-                    ),
-                    const SliverToBoxAdapter(
-                      child: Text(
-                        'Upcoming Bookings',
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    BookingsList(
-                      bookings: state.upcomingBookings,
-                    ),
-                    const SliverToBoxAdapter(
-                      child: SizedBox(height: 12),
-                    ),
-                    const SliverToBoxAdapter(
-                      child: Text(
-                        'Past Bookings',
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    BookingsList(
-                      bookings: state.pastBookings,
-                    ),
-                    const SliverToBoxAdapter(
-                      child: SizedBox(height: 12),
-                    ),
-                    const SliverToBoxAdapter(
-                      child: Text(
-                        'Canceled Bookings',
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    BookingsList(
-                      bookings: state.canceledBookings,
-                    ),
-                  ],
-                );
-              },
-            ),
+                  body: BlocBuilder<BookingsCubit, BookingsState>(
+                    builder: (context, state) {
+                      return CustomScrollView(
+                        slivers: [
+                          const SliverToBoxAdapter(
+                            child: SizedBox(height: 12),
+                          ),
+                          const SliverToBoxAdapter(
+                            child: Text(
+                              'Booking Requests',
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          BookingsList(
+                            bookings: state.pendingBookings,
+                          ),
+                          const SliverToBoxAdapter(
+                            child: SizedBox(height: 12),
+                          ),
+                          const SliverToBoxAdapter(
+                            child: Text(
+                              'Upcoming Bookings',
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          BookingsList(
+                            bookings: state.upcomingBookings,
+                          ),
+                          const SliverToBoxAdapter(
+                            child: SizedBox(height: 12),
+                          ),
+                          const SliverToBoxAdapter(
+                            child: Text(
+                              'Past Bookings',
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          BookingsList(
+                            bookings: state.pastBookings,
+                          ),
+                          const SliverToBoxAdapter(
+                            child: SizedBox(height: 12),
+                          ),
+                          const SliverToBoxAdapter(
+                            child: Text(
+                              'Canceled Bookings',
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          BookingsList(
+                            bookings: state.canceledBookings,
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              );
+            },
           ),
         );
       },

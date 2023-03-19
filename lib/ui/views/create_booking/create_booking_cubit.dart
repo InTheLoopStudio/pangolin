@@ -40,6 +40,9 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
   void updateStartTime(DateTime value) => emit(
         state.copyWith(
           startTime: BookingStartTime.dirty(value),
+          endTime: value.isAfter(state.endTime.value)
+            ? BookingEndTime.dirty(value)
+            : state.endTime,
         ),
       );
 
@@ -60,11 +63,6 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
           note: BookingNote.dirty(value),
         ),
       );
-
-  Future<UserModel?> requesteeInfo() async {
-    final requestee = await database.getUserById(state.requesteeId);
-    return requestee;
-  }
 
   Future<void> createBooking() async {
     final booking = Booking(

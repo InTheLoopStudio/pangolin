@@ -2,19 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/create_booking/create_booking_cubit.dart';
-import 'package:intheloopapp/ui/widgets/common/user_tile.dart';
 import 'package:intheloopapp/ui/widgets/create_booking_view/booking_name_text_field.dart';
 import 'package:intheloopapp/ui/widgets/create_booking_view/booking_note_text_field.dart';
-import 'package:skeletons/skeletons.dart';
 
-class CreateBookingForm extends StatelessWidget {
+class CreateBookingForm extends StatefulWidget {
   const CreateBookingForm({Key? key}) : super(key: key);
 
+  @override
+  State<CreateBookingForm> createState() => _CreateBookingFormState();
+}
+
+class _CreateBookingFormState extends State<CreateBookingForm> {
   // This function displays a CupertinoModalPopup with a reasonable fixed height
-  // which hosts CupertinoDatePicker.
   void _showDialog(BuildContext context, Widget child) {
     showCupertinoModalPopup<void>(
       context: context,
@@ -37,121 +38,101 @@ class CreateBookingForm extends StatelessWidget {
     );
   }
 
+  final bookingNameController = TextEditingController();
+  final noteController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CreateBookingCubit, CreateBookingState>(
       builder: (context, state) {
         return Form(
           key: state.formKey,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Column(
-              children: [
-                const Row(
-                  children: [
-                    Text(
-                      'Band',
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
+          child: Column(
+            children: [
+              BookingNameTextField(
+                controller: bookingNameController,
+              ),
+              _FormItem(
+                children: [
+                  const Text('Start Time'),
+                  CupertinoButton(
+                    onPressed: () => _showDialog(
+                      context,
+                      CupertinoDatePicker(
+                        initialDateTime: state.startTime.value,
+                        use24hFormat: true,
+                        onDateTimeChanged: (DateTime newDateTime) {
+                          context
+                              .read<CreateBookingCubit>()
+                              .updateStartTime(newDateTime);
+                        },
                       ),
                     ),
-                  ],
-                ),
-                FutureBuilder<UserModel?>(
-                  future: context.read<CreateBookingCubit>().requesteeInfo(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return SkeletonListTile();
-                    }
-
-                    final requestee = snapshot.data;
-                    if (requestee == null) {
-                      return SkeletonListTile();
-                    }
-
-                    return UserTile(user: requestee);
-                  },
-                ),
-                const BookingNameTextField(),
-                _FormItem(
-                  children: <Widget>[
-                    const Text('Start Time'),
-                    CupertinoButton(
-                      onPressed: () => _showDialog(
-                        context,
-                        CupertinoDatePicker(
-                          initialDateTime: state.startTime.value,
-                          use24hFormat: true,
-                          onDateTimeChanged: (DateTime newDateTime) {
-                            context
-                                .read<CreateBookingCubit>()
-                                .updateStartTime(newDateTime);
-                          },
-                        ),
-                      ),
-                      child: Text(
-                        state.formattedStartTime,
-                        style: const TextStyle(
-                          fontSize: 22,
-                        ),
+                    child: Text(
+                      state.formattedStartTime,
+                      style: const TextStyle(
+                        fontSize: 22,
                       ),
                     ),
-                  ],
-                ),
-                _FormItem(
-                  children: <Widget>[
-                    const Text('End Time'),
-                    CupertinoButton(
-                      onPressed: () => _showDialog(
-                        context,
-                        CupertinoDatePicker(
-                          initialDateTime: state.endTime.value,
-                          minimumDate: state.startTime.value,
-                          use24hFormat: true,
-                          onDateTimeChanged: (DateTime newDateTime) {
-                            context
-                                .read<CreateBookingCubit>()
-                                .updateEndTime(newDateTime);
-                          },
-                        ),
-                      ),
-                      child: Text(
-                        state.formattedEndTime,
-                        style: const TextStyle(
-                          fontSize: 22,
-                        ),
+                  ),
+                ],
+              ),
+              _FormItem(
+                children: <Widget>[
+                  const Text('End Time'),
+                  CupertinoButton(
+                    onPressed: () => _showDialog(
+                      context,
+                      CupertinoDatePicker(
+                        initialDateTime: state.endTime.value,
+                        minimumDate: state.startTime.value,
+                        use24hFormat: true,
+                        onDateTimeChanged: (DateTime newDateTime) {
+                          context
+                              .read<CreateBookingCubit>()
+                              .updateEndTime(newDateTime);
+                        },
                       ),
                     ),
-                  ],
-                ),
-                _FormItem(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 22),
-                      child: Text('Duration'),
-                    ),
-                    Text(
-                        state.formattedDuration,
-                        style: const TextStyle(
-                          fontSize: 22,
-                        ),
+                    child: Text(
+                      state.formattedEndTime,
+                      style: const TextStyle(
+                        fontSize: 22,
                       ),
-                  ],
-                ),
-                const BookingNoteTextField(),
-                const SizedBox(height: 20,),
-                CupertinoButton.filled(
-                  onPressed: () =>
-                      context.read<CreateBookingCubit>().createBooking(),
-                  child: state.status.isInProgress
-                      ? const CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation(tappedAccent),
-                        )
-                      : const Text('Confirm'),
-                ),
-              ],
-            ),
+                    ),
+                  ),
+                ],
+              ),
+              _FormItem(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 22),
+                    child: Text('Duration'),
+                  ),
+                  Text(
+                    state.formattedDuration,
+                    style: const TextStyle(
+                      fontSize: 22,
+                    ),
+                  ),
+                ],
+              ),
+              BookingNoteTextField(
+                controller: noteController,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              CupertinoButton.filled(
+                onPressed: () =>
+                    context.read<CreateBookingCubit>().createBooking(),
+                child: state.status.isInProgress
+                    ? const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation(tappedAccent),
+                      )
+                    : const Text('Confirm'),
+              ),
+            ],
           ),
         );
       },

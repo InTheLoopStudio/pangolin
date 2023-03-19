@@ -55,6 +55,7 @@ class CreateBookingState extends Equatable with FormzMixin {
     FormzSubmissionStatus? status,
   }) {
     return CreateBookingState(
+      formKey: formKey,
       currentUserId: currentUserId ?? this.currentUserId,
       requesteeId: requesteeId ?? this.requesteeId,
       name: name ?? this.name,
