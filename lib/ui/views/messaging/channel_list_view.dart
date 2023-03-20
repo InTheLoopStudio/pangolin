@@ -1,3 +1,4 @@
+import 'package:cancelable_retry/cancelable_retry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
@@ -18,14 +19,15 @@ class ChannelListView extends StatelessWidget {
       builder: (context, userState) {
         final currentUser = userState.currentUser;
 
+        final future = CancelableRetry(
+          () => context.read<StreamRepository>().connectUser(currentUser.id),
+          retryIf: (result) => result == false,
+        );
+
         return FutureBuilder<bool>(
-          future: context.read<StreamRepository>().connectUser(currentUser.id),
+          future: future.run(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return const LoadingView();
-            }
-
-            if (snapshot.data == false) {
               return const LoadingView();
             }
 

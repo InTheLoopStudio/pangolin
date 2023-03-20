@@ -21,16 +21,20 @@ class StreamImpl extends StreamRepository {
   @override
   Future<bool> connectUser(String userId) async {
     if (!_connected) {
-      await _client.disconnectUser();
-      final token = await getToken();
-      await _client.connectUser(
-        User(
-          id: userId,
-        ),
-        token,
-        // user.streamChatToken,
-      );
-      _connected = true;
+      try {
+        await _client.disconnectUser();
+        final token = await getToken();
+        await _client.connectUser(
+          User(
+            id: userId,
+          ),
+          token,
+          // user.streamChatToken,
+        );
+        _connected = true;
+      } on Exception {
+        _connected = false;
+      }
     }
 
     return _connected;
