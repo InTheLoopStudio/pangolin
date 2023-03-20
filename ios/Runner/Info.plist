@@ -27,9 +27,11 @@
 		<key>NSAppleMusicUsageDescription</key>
 		<string>To play the audio from user uploaded loops</string>
 		<key>NSPhotoLibraryUsageDescription</key>
-		<string>TO give users the ability to upload mp3 music samples</string>
+		<string>TO give users the ability to upload mp3 music samples and send pictures in direct messages</string>
 		<key>NSMicrophoneUsageDescription</key>
 		<string>Record audio for playback</string>
+		<key>NSCameraUsageDescription</key>
+		<string>All users to send pictures through direct messages</string>
 		<key>UILaunchStoryboardName</key>
 		<string>LaunchScreen</string>
 		<key>UIMainStoryboardFile</key>

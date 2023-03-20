@@ -7,38 +7,27 @@ class LoadingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: DecoratedBox(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
-            colors: <Color>[
-              Color(0xff383838),
-              Color(0xff000000),
-            ],
-          ),
-        ),
-        child: Align(
-          alignment: const Alignment(0, -1 / 4),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/tapped_logo_reversed.png',
-                    height: 60,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 40),
-              const SpinKitWave(
-                color: Colors.white,
-                size: 25,
-              ),
-            ],
-          ),
+      backgroundColor: Theme.of(context).colorScheme.background,
+      body: Align(
+        alignment: const Alignment(0, -1 / 4),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/tapped_logo_reversed.png',
+                  height: 60,
+                ),
+              ],
+            ),
+            const SizedBox(height: 40),
+            const SpinKitWave(
+              color: Colors.white,
+              size: 25,
+            ),
+          ],
         ),
       ),
     );
