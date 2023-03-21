@@ -45,7 +45,11 @@ class PostFeedCubit extends Cubit<PostFeedState> {
       emit(
         state.copyWith(
           status: PostFeedStatus.success,
-          posts: List.of(state.posts)..insert(0, event),
+          posts: List.of(state.posts)
+            ..insert(0, event)
+            ..sort(
+              (a, b) => b.timestamp.compareTo(a.timestamp),
+            ),
         ),
       );
     });
@@ -68,7 +72,11 @@ class PostFeedCubit extends Cubit<PostFeedState> {
           : emit(
               state.copyWith(
                 status: PostFeedStatus.success,
-                posts: List.of(state.posts)..insertAll(0, posts),
+                posts: List.of(state.posts)
+                  ..insertAll(0, posts)
+                  ..sort(
+                    (a, b) => b.timestamp.compareTo(a.timestamp),
+                  ),
                 hasReachedMax: false,
               ),
             );

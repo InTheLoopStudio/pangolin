@@ -71,7 +71,11 @@ class AudioFeedCubit extends Cubit<AudioFeedState> {
       emit(
         state.copyWith(
           status: AudioFeedStatus.success,
-          loops: List.of(state.loops)..insert(0, event),
+          loops: List.of(state.loops)
+            ..insert(0, event)
+            ..sort(
+              (a, b) => b.timestamp.compareTo(a.timestamp),
+            ),
         ),
       );
     });
@@ -95,7 +99,11 @@ class AudioFeedCubit extends Cubit<AudioFeedState> {
           : emit(
               state.copyWith(
                 status: AudioFeedStatus.success,
-                loops: List.of(state.loops)..insertAll(0, loops),
+                loops: List.of(state.loops)
+                  ..insertAll(0, loops)
+                  ..sort(
+                    (a, b) => b.timestamp.compareTo(a.timestamp),
+                  ),
                 hasReachedMax: false,
               ),
             );
