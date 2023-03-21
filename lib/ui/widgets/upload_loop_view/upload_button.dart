@@ -6,7 +6,7 @@ import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/upload_loop/upload_loop_cubit.dart';
 
 class UploadButton extends StatelessWidget {
-  const UploadButton({Key? key}) : super(key: key);
+  const UploadButton({super.key});
 
   @override
   Widget build(BuildContext context) {

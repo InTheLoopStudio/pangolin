@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intheloopapp/ui/themes.dart';
 
 class AppleLoginButton extends StatelessWidget {
-  const AppleLoginButton({Key? key, this.onPressed}) : super(key: key);
+  const AppleLoginButton({super.key, this.onPressed});
 
   final void Function()? onPressed;
 

@@ -12,8 +12,8 @@ class AudioFeedView extends StatefulWidget {
     required this.feedId,
     required this.sourceFunction,
     required this.sourceStream,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   final String feedId;
   final Future<List<Loop>> Function(
     String currentUserId, {

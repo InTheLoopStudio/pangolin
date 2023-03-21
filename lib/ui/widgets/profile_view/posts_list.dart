@@ -9,8 +9,8 @@ import 'package:intheloopapp/ui/widgets/common/post_container/post_container.dar
 class PostsList extends StatefulWidget {
   const PostsList({
     required this.scrollController,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final ScrollController scrollController;
 

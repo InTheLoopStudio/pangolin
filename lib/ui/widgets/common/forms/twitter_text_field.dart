@@ -4,10 +4,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class TwitterTextField extends StatelessWidget {
   const TwitterTextField({
-    Key? key,
+    super.key,
     this.onChanged,
     this.initialValue,
-  }) : super(key: key);
+  });
 
   final void Function(String)? onChanged;
   final String? initialValue;

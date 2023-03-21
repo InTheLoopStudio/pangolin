@@ -10,8 +10,8 @@ import 'package:intheloopapp/ui/widgets/common/badge_container/badge_container.d
 class VenueDashboard extends StatefulWidget {
   const VenueDashboard({
     required this.scrollController,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final ScrollController scrollController;
 

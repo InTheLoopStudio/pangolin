@@ -6,8 +6,8 @@ import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 class UserTile extends StatelessWidget {
   const UserTile({
     required this.user,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final UserModel user;
 

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/views/create_post/cubit/create_post_cubit.dart';
 
 class PostDescriptionTextField extends StatelessWidget {
-  const PostDescriptionTextField({Key? key}) : super(key: key);
+  const PostDescriptionTextField({super.key});
 
   @override
   Widget build(BuildContext context) {

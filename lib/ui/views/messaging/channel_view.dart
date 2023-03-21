@@ -4,8 +4,8 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class ChannelView extends StatelessWidget {
   const ChannelView({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

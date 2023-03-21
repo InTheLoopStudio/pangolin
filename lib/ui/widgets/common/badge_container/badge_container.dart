@@ -8,8 +8,8 @@ import 'package:timeago/timeago.dart' as timeago;
 class BadgeContainer extends StatelessWidget {
   const BadgeContainer({
     required this.badge,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final badge_model.Badge badge;
 

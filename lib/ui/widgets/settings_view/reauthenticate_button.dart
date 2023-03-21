@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class ReauthenticateButton extends StatelessWidget {
-  const ReauthenticateButton({this.onPressed, Key? key}) : super(key: key);
+  const ReauthenticateButton({this.onPressed, super.key});
 
   final void Function()? onPressed;
 

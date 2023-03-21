@@ -5,7 +5,7 @@ import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/upload_loop/upload_loop_cubit.dart';
 
 class UploadLoopSplashView extends StatelessWidget {
-  const UploadLoopSplashView({Key? key}) : super(key: key);
+  const UploadLoopSplashView({super.key});
 
   @override
   Widget build(BuildContext context) {

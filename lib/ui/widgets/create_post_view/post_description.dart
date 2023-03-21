@@ -5,7 +5,7 @@ enum PostDescriptionValidationError { invalid }
 class PostDescription
     extends FormzInput<String, PostDescriptionValidationError> {
   const PostDescription.pure() : super.pure('');
-  const PostDescription.dirty([String value = '']) : super.dirty(value);
+  const PostDescription.dirty([super.value = '']) : super.dirty();
 
   @override
   PostDescriptionValidationError? validator(String? value) {

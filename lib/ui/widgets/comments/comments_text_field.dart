@@ -4,7 +4,7 @@ import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/common/comments/comments_cubit.dart';
 
 class CommentsTextField extends StatefulWidget {
-  const CommentsTextField({Key? key}) : super(key: key);
+  const CommentsTextField({super.key});
 
   @override
   CommentsTextFieldState createState() => CommentsTextFieldState();

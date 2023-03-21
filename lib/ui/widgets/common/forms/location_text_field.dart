@@ -10,8 +10,8 @@ class LocationTextField extends StatelessWidget {
     required this.initialPlaceId,
     required this.initialPlace,
     required this.onChanged,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final void Function(Place?, String) onChanged;
   final Place initialPlace;

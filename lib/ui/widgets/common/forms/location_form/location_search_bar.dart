@@ -8,8 +8,8 @@ import 'package:intheloopapp/utils.dart';
 class LocationSearchBar extends StatelessWidget {
   const LocationSearchBar({
     required this.initialPlace,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Place initialPlace;
 

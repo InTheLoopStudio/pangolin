@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/views/settings/settings_cubit.dart';
 
 class PopoutMenu extends StatelessWidget {
-  const PopoutMenu({Key? key}) : super(key: key);
+  const PopoutMenu({super.key});
 
   @override
   Widget build(BuildContext context) {

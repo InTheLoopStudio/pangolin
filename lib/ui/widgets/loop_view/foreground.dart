@@ -6,7 +6,7 @@ import 'package:intheloopapp/ui/widgets/loop_view/audio_description.dart';
 import 'package:intheloopapp/ui/widgets/loop_view/loop_seek_bar.dart';
 
 class Foreground extends StatelessWidget {
-  const Foreground({Key? key}) : super(key: key);
+  const Foreground({super.key});
 
   @override
   Widget build(BuildContext context) {

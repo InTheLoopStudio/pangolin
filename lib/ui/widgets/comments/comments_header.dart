@@ -5,7 +5,7 @@ import 'package:intheloopapp/ui/views/common/comments/comments_cubit.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view_cubit.dart';
 
 class CommentsHeader extends StatelessWidget {
-  const CommentsHeader({Key? key}) : super(key: key);
+  const CommentsHeader({super.key});
 
   @override
   Widget build(BuildContext context) {

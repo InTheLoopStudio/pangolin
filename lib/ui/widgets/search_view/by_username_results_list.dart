@@ -5,7 +5,7 @@ import 'package:intheloopapp/ui/views/search/search_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/user_tile.dart';
 
 class ByUsernameResultsList extends StatelessWidget {
-  const ByUsernameResultsList({Key? key}) : super(key: key);
+  const ByUsernameResultsList({super.key});
 
   @override
   Widget build(BuildContext context) {

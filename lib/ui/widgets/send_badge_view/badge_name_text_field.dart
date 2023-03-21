@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class BadgeNameTextField extends StatelessWidget {
   const BadgeNameTextField({
-    Key? key,
+    super.key,
     this.onSaved,
     this.onChanged,
     this.initialValue,
-  }) : super(key: key);
+  });
 
   final void Function(String?)? onSaved;
   final void Function(String?)? onChanged;

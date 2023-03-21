@@ -4,7 +4,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container_cubit.dart';
 
 class LikeButton extends StatelessWidget {
-  const LikeButton({Key? key}) : super(key: key);
+  const LikeButton({super.key});
 
   @override
   Widget build(BuildContext context) {

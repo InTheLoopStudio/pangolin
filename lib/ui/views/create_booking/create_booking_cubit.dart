@@ -5,7 +5,6 @@ import 'package:formz/formz.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
-import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/widgets/create_booking_view/booking_end_time.dart';
 import 'package:intheloopapp/ui/widgets/create_booking_view/booking_name.dart';
@@ -13,7 +12,6 @@ import 'package:intheloopapp/ui/widgets/create_booking_view/booking_note.dart';
 import 'package:intheloopapp/ui/widgets/create_booking_view/booking_start_time.dart';
 import 'package:intl/intl.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
-import 'package:uuid/uuid.dart';
 
 part 'create_booking_state.dart';
 

@@ -5,7 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/location_form/location_cubit.dart';
 
 class LocationResults extends StatelessWidget {
-  const LocationResults({Key? key}) : super(key: key);
+  const LocationResults({super.key});
 
   @override
   Widget build(BuildContext context) {

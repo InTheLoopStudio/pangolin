@@ -14,8 +14,8 @@ class OldProfileView extends StatefulWidget {
   @Deprecated('deprecated in favor of `ProfileView()`')
   const OldProfileView({
     required this.visitedUserId,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   final String visitedUserId;
 
   @override

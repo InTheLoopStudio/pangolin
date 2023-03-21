@@ -8,11 +8,10 @@ import 'package:intheloopapp/ui/widgets/common/forms/apple_login_button.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/email_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/google_login_button.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/password_text_field.dart';
-import 'package:intheloopapp/ui/widgets/login_view/traditional_login.dart';
 import 'package:intheloopapp/ui/widgets/settings_view/reauthenticate_button.dart';
 
 class DeleteAccountButton extends StatelessWidget {
-  const DeleteAccountButton({Key? key}) : super(key: key);
+  const DeleteAccountButton({super.key});
 
   @override
   Widget build(BuildContext context) {

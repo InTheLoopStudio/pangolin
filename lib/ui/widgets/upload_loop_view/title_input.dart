@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/views/upload_loop/upload_loop_cubit.dart';
 
 class TitleInput extends StatelessWidget {
-  const TitleInput({Key? key}) : super(key: key);
+  const TitleInput({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -6,7 +6,7 @@ import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/views/settings/settings_view.dart';
 
 class FollowButton extends StatelessWidget {
-  const FollowButton({Key? key}) : super(key: key);
+  const FollowButton({super.key});
 
   @override
   Widget build(BuildContext context) {

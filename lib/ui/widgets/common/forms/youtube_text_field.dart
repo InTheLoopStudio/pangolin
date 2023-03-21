@@ -4,10 +4,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class YoutubeTextField extends StatelessWidget {
   const YoutubeTextField({
-    Key? key,
+    super.key,
     this.onChanged,
     this.initialValue,
-  }) : super(key: key);
+  });
 
   final void Function(String)? onChanged;
   final String? initialValue;

@@ -6,11 +6,11 @@ import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 
 class BadgeReceiverTextField extends StatefulWidget {
   const BadgeReceiverTextField({
-    Key? key,
+    super.key,
     this.onSaved,
     this.onChanged,
     this.initialValue,
-  }) : super(key: key);
+  });
 
   final void Function(String?)? onSaved;
   final void Function(String?)? onChanged;

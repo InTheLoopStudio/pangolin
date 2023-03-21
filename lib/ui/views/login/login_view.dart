@@ -9,7 +9,7 @@ import 'package:intheloopapp/ui/widgets/login_view/login_form.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginView extends StatelessWidget {
-  const LoginView({Key? key}) : super(key: key);
+  const LoginView({super.key});
 
   @override
   Widget build(BuildContext context) {

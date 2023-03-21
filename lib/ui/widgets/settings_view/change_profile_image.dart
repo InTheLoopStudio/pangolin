@@ -7,7 +7,7 @@ import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/settings/settings_cubit.dart';
 
 class ChangeProfileImage extends StatelessWidget {
-  const ChangeProfileImage({Key? key}) : super(key: key);
+  const ChangeProfileImage({super.key});
 
   ImageProvider displayProfileImage(
     File? newProfileImage,

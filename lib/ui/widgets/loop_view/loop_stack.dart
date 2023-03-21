@@ -7,7 +7,7 @@ import 'package:intheloopapp/ui/widgets/loop_view/background.dart';
 import 'package:intheloopapp/ui/widgets/loop_view/foreground.dart';
 
 class LoopStack extends StatelessWidget {
-  const LoopStack({Key? key}) : super(key: key);
+  const LoopStack({super.key});
 
   @override
   Widget build(BuildContext context) {

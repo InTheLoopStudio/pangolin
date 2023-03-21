@@ -14,8 +14,8 @@ import 'package:timeago/timeago.dart' as timeago;
 class PostContainer extends StatelessWidget {
   const PostContainer({
     required this.post,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Post post;
 

@@ -8,7 +8,7 @@ import 'package:intheloopapp/ui/widgets/onboarding/stage1/stage1.dart';
 import 'package:intheloopapp/ui/widgets/onboarding/stage2/stage2.dart';
 
 class OnboardingForm extends StatelessWidget {
-  const OnboardingForm({Key? key}) : super(key: key);
+  const OnboardingForm({super.key});
 
   Widget currentStageView(OnboardingStage stage) {
     if (stage == OnboardingStage.stage1) {

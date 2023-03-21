@@ -5,7 +5,7 @@ import 'package:intheloopapp/ui/views/bookings/bookings_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/booking_container/booking_container.dart';
 
 class BookingsList extends StatelessWidget {
-  const BookingsList({required this.bookings, Key? key}) : super(key: key);
+  const BookingsList({required this.bookings, super.key});
 
   final List<Booking> bookings;
 

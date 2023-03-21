@@ -16,8 +16,8 @@ class BookingView extends StatelessWidget {
     required this.booking,
     this.onConfirm,
     this.onDeny,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Booking booking;
   final void Function(Booking)? onConfirm;

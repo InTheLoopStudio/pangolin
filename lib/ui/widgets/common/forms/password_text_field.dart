@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class PasswordTextField extends StatelessWidget {
   const PasswordTextField({
-    Key? key,
+    super.key,
     this.onSaved,
     this.onChanged,
     this.labelText = 'Password',
-  }) : super(key: key);
+  });
 
   final void Function(String?)? onSaved;
   final void Function(String?)? onChanged;

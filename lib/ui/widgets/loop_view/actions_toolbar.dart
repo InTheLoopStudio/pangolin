@@ -14,8 +14,8 @@ class ActionsToolbar extends StatelessWidget {
   const ActionsToolbar({
     required this.user,
     required this.loop,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   final UserModel user;
   final Loop loop;
 

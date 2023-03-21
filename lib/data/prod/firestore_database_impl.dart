@@ -218,7 +218,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       }
 
       final usersWithFP =
-          usersSnapshot.docs.map((doc) => UserModel.fromDoc(doc)).toList();
+          usersSnapshot.docs.map(UserModel.fromDoc).toList();
 
       final users = usersWithFP
           .map((user) {
@@ -254,7 +254,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       }
 
       final usersWithFP =
-          usersSnapshot.docs.map((doc) => UserModel.fromDoc(doc)).toList();
+          usersSnapshot.docs.map(UserModel.fromDoc).toList();
 
       final users = usersWithFP
           .map((user) {
@@ -480,7 +480,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .get();
 
       final userLoops = userLoopsSnapshot.docs
-          .map((doc) => Loop.fromDoc(doc))
+          .map(Loop.fromDoc)
           .where((loop) => loop.deleted != true)
           .toList();
 
@@ -493,7 +493,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .get();
 
       final userLoops = userLoopsSnapshot.docs
-          .map((doc) => Loop.fromDoc(doc))
+          .map(Loop.fromDoc)
           .where((loop) => loop.deleted != true)
           .toList();
 
@@ -783,7 +783,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .get();
 
       final activities =
-          activitiesSnapshot.docs.map((doc) => Activity.fromDoc(doc)).toList();
+          activitiesSnapshot.docs.map(Activity.fromDoc).toList();
 
       return activities;
     } else {
@@ -794,7 +794,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .get();
 
       final activities =
-          activitiesSnapshot.docs.map((doc) => Activity.fromDoc(doc)).toList();
+          activitiesSnapshot.docs.map(Activity.fromDoc).toList();
 
       return activities;
     }
@@ -822,7 +822,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         // if (element.type == DocumentChangeType.modified) {}
         // if (element.type == DocumentChangeType.removed) {}
       });
-    }).flatMap((value) => Stream.fromIterable(value));
+    }).flatMap(Stream.fromIterable);
 
     yield* activitiesObserver;
   }
@@ -881,7 +881,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         .get();
 
     final comments =
-        commentsSnapshot.docs.map((doc) => Comment.fromDoc(doc)).toList();
+        commentsSnapshot.docs.map(Comment.fromDoc).toList();
 
     return comments;
   }
@@ -913,7 +913,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         // if (element.type == DocumentChangeType.modified) {}
         // if (element.type == DocumentChangeType.removed) {}
       });
-    }).flatMap((value) => Stream.fromIterable(value));
+    }).flatMap(Stream.fromIterable);
 
     yield* commentsObserver;
   }
@@ -1042,7 +1042,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .map((DocumentChange<Map<String, dynamic>> element) {
         return Badge.fromDoc(element.doc);
       });
-    }).flatMap((value) => Stream.fromIterable(value));
+    }).flatMap(Stream.fromIterable);
 
     yield* userCreatedBadgesObserver;
   }
@@ -1071,7 +1071,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         final badgeSnapshot = await _badgesRef.doc(badgeId).get();
         return Badge.fromDoc(badgeSnapshot);
       });
-    }).flatMap((value) => Stream.fromIterable(value));
+    }).flatMap(Stream.fromIterable);
 
     await for (final badge in userBadgesObserver) {
       try {
@@ -1099,7 +1099,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .get();
 
       final userCreatedBadges = userCreatedBadgesSnapshot.docs
-          .map((doc) => Badge.fromDoc(doc))
+          .map(Badge.fromDoc)
           .toList();
       return userCreatedBadges;
     } else {
@@ -1110,7 +1110,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .get();
 
       final userCreatedBadges = userCreatedBadgesSnapshot.docs
-          .map((doc) => Badge.fromDoc(doc))
+          .map(Badge.fromDoc)
           .toList();
 
       return userCreatedBadges;
@@ -1223,7 +1223,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .get();
 
       final userPosts = userPostsSnapshot.docs
-          .map((doc) => Post.fromDoc(doc))
+          .map(Post.fromDoc)
           .where((post) => post.deleted != true)
           .toList();
 
@@ -1236,7 +1236,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .get();
 
       final userPosts = userPostsSnapshot.docs
-          .map((doc) => Post.fromDoc(doc))
+          .map(Post.fromDoc)
           .where((post) => post.deleted != true)
           .toList();
 
@@ -1463,7 +1463,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         .get();
 
     final bookingRequests =
-        bookingSnapshot.docs.map((doc) => Booking.fromDoc(doc)).toList();
+        bookingSnapshot.docs.map(Booking.fromDoc).toList();
 
     return bookingRequests;
   }
@@ -1482,7 +1482,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         .get();
 
     final bookingRequests =
-        bookingSnapshot.docs.map((doc) => Booking.fromDoc(doc)).toList();
+        bookingSnapshot.docs.map(Booking.fromDoc).toList();
 
     return bookingRequests;
   }
@@ -1501,7 +1501,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         .get();
 
     final bookingRequests =
-        bookingSnapshot.docs.map((doc) => Booking.fromDoc(doc)).toList();
+        bookingSnapshot.docs.map(Booking.fromDoc).toList();
 
     return bookingRequests;
   }

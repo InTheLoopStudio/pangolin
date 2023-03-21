@@ -6,7 +6,7 @@ import 'package:intheloopapp/ui/widgets/messaing_view/results_list.dart';
 import 'package:intheloopapp/ui/widgets/messaing_view/search_bar.dart';
 
 class NewChatView extends StatelessWidget {
-  const NewChatView({Key? key}) : super(key: key);
+  const NewChatView({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -10,7 +10,7 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart'
     hide ChannelName, ChannelPreview;
 
 class ChannelListView extends StatelessWidget {
-  const ChannelListView({Key? key}) : super(key: key);
+  const ChannelListView({super.key});
 
   @override
   Widget build(BuildContext context) {

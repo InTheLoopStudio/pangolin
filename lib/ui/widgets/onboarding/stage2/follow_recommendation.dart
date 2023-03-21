@@ -8,8 +8,8 @@ import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 
 class FollowRecommendation extends StatelessWidget {
   const FollowRecommendation({
-    required this.userId, required this.isFollowing, Key? key,
-  }) : super(key: key);
+    required this.userId, required this.isFollowing, super.key,
+  });
 
   final String userId;
   final bool isFollowing;

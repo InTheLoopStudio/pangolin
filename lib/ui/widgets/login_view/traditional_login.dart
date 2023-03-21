@@ -3,13 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/views/login/login_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/email_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/password_text_field.dart';
-import 'package:intheloopapp/ui/widgets/common/forms/username_text_field.dart';
 import 'package:intheloopapp/ui/widgets/login_view/forgot_password_button.dart';
 import 'package:intheloopapp/ui/widgets/login_view/login_button.dart';
 import 'package:intheloopapp/ui/widgets/login_view/signup_button.dart';
 
 class TraditionalLogin extends StatelessWidget {
-  const TraditionalLogin({Key? key}) : super(key: key);
+  const TraditionalLogin({super.key});
 
   @override
   Widget build(BuildContext context) {

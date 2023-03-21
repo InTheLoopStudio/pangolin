@@ -5,7 +5,7 @@ import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/upload_loop/upload_loop_cubit.dart';
 
 class UploadAudioInput extends StatelessWidget {
-  const UploadAudioInput({Key? key}) : super(key: key);
+  const UploadAudioInput({super.key});
 
   @override
   Widget build(BuildContext context) {

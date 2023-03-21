@@ -15,7 +15,7 @@ import 'package:intheloopapp/ui/widgets/send_badge_view/badge_receiver_text_fiel
 /// The screen for sending a badge
 class SendBadgeView extends StatelessWidget {
   ///
-  const SendBadgeView({Key? key}) : super(key: key);
+  const SendBadgeView({super.key});
 
   @override
   Widget build(BuildContext context) {

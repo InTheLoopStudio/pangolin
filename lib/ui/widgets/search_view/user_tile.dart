@@ -5,7 +5,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 
 class UserTile extends StatelessWidget {
-  const UserTile({required this.user, Key? key}) : super(key: key);
+  const UserTile({required this.user, super.key});
 
   final UserModel user;
 

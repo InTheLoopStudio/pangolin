@@ -10,7 +10,7 @@ import 'package:intheloopapp/ui/widgets/common/forms/google_login_button.dart';
 import 'package:intheloopapp/ui/widgets/login_view/traditional_login.dart';
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({Key? key, this.authenticationBloc}) : super(key: key);
+  const LoginForm({super.key, this.authenticationBloc});
   final AuthenticationBloc? authenticationBloc;
 
   @override

@@ -7,7 +7,7 @@ import 'package:intheloopapp/ui/widgets/upload_loop_view/title_input.dart';
 import 'package:intheloopapp/ui/widgets/upload_loop_view/upload_button.dart';
 
 class UploadLoopFormView extends StatelessWidget {
-  const UploadLoopFormView({Key? key}) : super(key: key);
+  const UploadLoopFormView({super.key});
 
   @override
   Widget build(BuildContext context) {

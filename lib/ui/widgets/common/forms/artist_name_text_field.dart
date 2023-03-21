@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class ArtistNameTextField extends StatelessWidget {
   const ArtistNameTextField({
-    Key? key,
+    super.key,
     this.onSaved,
     this.onChanged,
     this.initialValue,
-  }) : super(key: key);
+  });
 
   final void Function(String?)? onSaved;
   final void Function(String?)? onChanged;

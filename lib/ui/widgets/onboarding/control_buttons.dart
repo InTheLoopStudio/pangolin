@@ -4,7 +4,7 @@ import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/onboarding/onboarding_flow_cubit.dart';
 
 class ControlButtons extends StatelessWidget {
-  const ControlButtons({Key? key}) : super(key: key);
+  const ControlButtons({super.key});
 
   Widget _nextStepButton({
     required OnboardingStage stage,

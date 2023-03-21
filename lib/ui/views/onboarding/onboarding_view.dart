@@ -10,7 +10,7 @@ import 'package:intheloopapp/ui/widgets/onboarding/control_buttons.dart';
 import 'package:intheloopapp/ui/widgets/onboarding/onboarding_form.dart';
 
 class OnboardingView extends StatelessWidget {
-  const OnboardingView({Key? key}) : super(key: key);
+  const OnboardingView({super.key});
 
   @override
   Widget build(BuildContext context) {

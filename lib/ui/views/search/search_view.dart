@@ -10,7 +10,7 @@ import 'package:intheloopapp/ui/widgets/search_view/by_username_results_list.dar
 import 'package:intheloopapp/ui/widgets/search_view/search_bar.dart';
 
 class SearchView extends StatefulWidget {
-  const SearchView({Key? key}) : super(key: key);
+  const SearchView({super.key});
 
   @override
   // ignore: library_private_types_in_public_api

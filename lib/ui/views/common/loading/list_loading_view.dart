@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 
 class ListLoadingView extends StatelessWidget {
-  const ListLoadingView({Key? key}) : super(key: key);
+  const ListLoadingView({super.key});
 
   @override
   Widget build(BuildContext context) {

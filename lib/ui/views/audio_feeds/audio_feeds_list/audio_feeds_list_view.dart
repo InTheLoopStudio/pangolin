@@ -6,7 +6,7 @@ import 'package:intheloopapp/ui/views/audio_feeds/audio_feeds_list/audio_feeds_l
 import 'package:intheloopapp/ui/widgets/feeds_list_view/control_buttons.dart';
 
 class AudioFeedsListView extends StatelessWidget {
-  const AudioFeedsListView({Key? key}) : super(key: key);
+  const AudioFeedsListView({super.key});
 
   @override
   Widget build(BuildContext context) {

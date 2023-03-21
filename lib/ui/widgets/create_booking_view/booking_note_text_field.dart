@@ -5,8 +5,8 @@ import 'package:intheloopapp/ui/views/create_booking/create_booking_cubit.dart';
 class BookingNoteTextField extends StatelessWidget {
   const BookingNoteTextField({
     this.controller,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final TextEditingController? controller;
 

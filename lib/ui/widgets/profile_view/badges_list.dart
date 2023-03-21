@@ -9,8 +9,8 @@ import 'package:intheloopapp/ui/widgets/common/badge_container/badge_container.d
 class BadgesList extends StatefulWidget {
   const BadgesList({
     required this.scrollController,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final ScrollController scrollController;
 

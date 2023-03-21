@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class SocialActionButton extends StatelessWidget {
   const SocialActionButton({
-    Key? key,
+    super.key,
     this.title,
     this.icon,
     this.onTap,
@@ -10,7 +10,7 @@ class SocialActionButton extends StatelessWidget {
     this.width = 60,
     this.height = 60,
     this.iconSize = 35,
-  }) : super(key: key);
+  });
 
   final String? title;
   final IconData? icon;

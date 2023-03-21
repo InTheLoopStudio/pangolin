@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DownForMainenanceView extends StatelessWidget {
-  const DownForMainenanceView({Key? key}) : super(key: key);
+  const DownForMainenanceView({super.key});
 
   @override
   Widget build(BuildContext context) {

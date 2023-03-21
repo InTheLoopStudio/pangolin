@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class DevInformation extends StatefulWidget {
-  const DevInformation({Key? key}) : super(key: key);
+  const DevInformation({super.key});
 
   @override
   State<DevInformation> createState() => _DevInformationState();
