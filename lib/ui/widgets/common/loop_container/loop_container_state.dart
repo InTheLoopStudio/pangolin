@@ -2,16 +2,14 @@ part of 'loop_container_cubit.dart';
 
 @immutable
 class LoopContainerState extends Equatable {
-  LoopContainerState({
+  const LoopContainerState({
     required this.loop,
-    AudioController? audioController,
+    required this.audioController,
     this.likeCount = 0,
     this.isLiked = false,
-  }) {
-    this.audioController = audioController ?? AudioController();
-  }
+  });
 
-  late final AudioController audioController;
+  final AudioController audioController;
   final Loop loop;
   final int likeCount;
   final bool isLiked;

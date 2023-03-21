@@ -6,12 +6,12 @@ import 'package:intheloopapp/data/database_repository.dart';
 class UsernameTextField extends StatefulWidget {
   const UsernameTextField({
     required this.currentUserId,
-    Key? key,
+    super.key,
     this.onSaved,
     this.onChanged,
     this.initialValue,
     this.validateUniqueness = true,
-  }) : super(key: key);
+  });
 
   final void Function(String?)? onSaved;
   final void Function(String?)? onChanged;

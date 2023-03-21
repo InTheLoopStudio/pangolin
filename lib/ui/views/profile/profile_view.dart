@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
@@ -50,8 +49,8 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 class ProfileView extends StatefulWidget {
   const ProfileView({
     required this.visitedUserId,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String visitedUserId;
 

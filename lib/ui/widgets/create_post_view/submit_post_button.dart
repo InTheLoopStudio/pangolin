@@ -5,7 +5,7 @@ import 'package:formz/formz.dart';
 import 'package:intheloopapp/ui/views/create_post/cubit/create_post_cubit.dart';
 
 class SubmitPostButton extends StatelessWidget {
-  const SubmitPostButton({Key? key}) : super(key: key);
+  const SubmitPostButton({super.key});
 
   @override
   Widget build(BuildContext context) {

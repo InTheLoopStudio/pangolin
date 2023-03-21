@@ -5,8 +5,8 @@ class SettingsSwitch extends StatelessWidget {
     required this.label,
     required this.activated,
     required this.onChanged,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String label;
   final bool activated;

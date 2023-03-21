@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 class SettingsButton extends StatelessWidget {
   const SettingsButton({
-    Key? key,
+    super.key,
     this.icon,
     this.label,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final Icon? icon;
   final String? label;

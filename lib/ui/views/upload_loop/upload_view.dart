@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -9,7 +10,7 @@ import 'package:intheloopapp/ui/views/upload_loop/upload_loop_form_view.dart';
 import 'package:intheloopapp/ui/views/upload_loop/upload_loop_splash_view.dart';
 
 class UploadView extends StatelessWidget {
-  UploadView({Key? key}) : super(key: key);
+  UploadView({super.key});
 
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
       GlobalKey<ScaffoldMessengerState>();
@@ -24,13 +25,14 @@ class UploadView extends StatelessWidget {
 
         return BlocProvider(
           create: (_) => UploadLoopCubit(
+            audioRepo: context.read<AudioRepository>(),
             databaseRepository: context.read<DatabaseRepository>(),
             onboardingBloc: context.read<OnboardingBloc>(),
             currentUser: currentUser,
             navigationBloc: context.read<NavigationBloc>(),
             storageRepository: context.read<StorageRepository>(),
             scaffoldKey: _scaffoldKey,
-          )..listenToAudioLockChange(),
+          ),
           child: Scaffold(
             backgroundColor: theme.colorScheme.background,
             body: ScaffoldMessenger(

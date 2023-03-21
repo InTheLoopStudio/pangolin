@@ -3,10 +3,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class EasterEggPlaceholder extends StatefulWidget {
   const EasterEggPlaceholder({
-    Key? key,
+    super.key,
     this.text = '',
     this.color,
-  }) : super(key: key);
+  });
 
   final String text;
   final Color? color;

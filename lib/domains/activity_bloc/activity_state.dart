@@ -22,15 +22,13 @@ class ActivityInitial extends ActivityState {
 /// The state after successfully pulling new activities
 class ActivitySuccess extends ActivityState {
   /// By default, the activity list is empty
-  const ActivitySuccess({List<Activity> activities = const <Activity>[]})
-      : super(activities: activities);
+  const ActivitySuccess({super.activities});
 }
 
 /// The state when reaching the last page in paginated activities
 class ActivityEnd extends ActivityState {
   /// By default, the activity list is empty
-  const ActivityEnd({List<Activity> activities = const []})
-      : super(activities: activities);
+  const ActivityEnd({super.activities});
 }
 
 /// The state when there is an error pulling new activities

@@ -4,7 +4,7 @@ enum PostTitleValidationError { invalid }
 
 class PostTitle extends FormzInput<String, PostTitleValidationError> {
   const PostTitle.pure() : super.pure('');
-  const PostTitle.dirty([String value = '']) : super.dirty(value);
+  const PostTitle.dirty([super.value = '']) : super.dirty();
 
   @override
   PostTitleValidationError? validator(String? value) {

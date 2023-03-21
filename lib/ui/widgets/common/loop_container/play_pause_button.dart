@@ -4,14 +4,14 @@ import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container_cub
 import 'package:just_audio/just_audio.dart';
 
 class PlayPauseButton extends StatelessWidget {
-  const PlayPauseButton({Key? key}) : super(key: key);
+  const PlayPauseButton({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoopContainerCubit, LoopContainerState>(
       builder: (context, state) {
         return StreamBuilder<PlayerState>(
-          stream: state.audioController.player.playerStateStream,
+          stream: state.audioController.playerStateStream,
           builder: (context, snapshot) {
             final playerState = snapshot.data;
 
@@ -20,10 +20,6 @@ class PlayPauseButton extends StatelessWidget {
             }
 
             final processingState = playerState.processingState;
-
-            if (processingState == ProcessingState.idle) {
-              state.audioController.setURL(state.loop.audioPath);
-            }
 
             final playing = playerState.playing;
             if (processingState == ProcessingState.loading ||
@@ -39,7 +35,7 @@ class PlayPauseButton extends StatelessWidget {
                 icon: const Icon(Icons.play_arrow),
                 iconSize: 48,
                 onPressed: () {
-                  state.audioController.play(state.loop.id);
+                  state.audioController.play();
                 },
               );
             } else if (processingState != ProcessingState.completed) {
@@ -56,7 +52,7 @@ class PlayPauseButton extends StatelessWidget {
                 iconSize: 48,
                 onPressed: () => state.audioController.seek(
                   Duration.zero,
-                  index: state.audioController.player.effectiveIndices!.first,
+                  index: state.audioController.effectiveIndices!.first,
                 ),
               );
             }

@@ -12,8 +12,8 @@ class LocationFormView extends StatelessWidget {
     required this.initialPlaceId,
     required this.initialPlace,
     required this.onSelected,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String initialPlaceId;
   final Place initialPlace;

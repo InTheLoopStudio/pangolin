@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 
 class LoopLoadingView extends StatelessWidget {
-  const LoopLoadingView({Key? key}) : super(key: key);
+  const LoopLoadingView({super.key});
   // const ProgressSpinner = new ProgressSpinner();
 
   @override

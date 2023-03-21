@@ -4,7 +4,7 @@ import 'package:intheloopapp/ui/views/settings/settings_cubit.dart';
 import 'package:intheloopapp/ui/widgets/settings_view/settings_switch.dart';
 
 class NotificationSettingsForm extends StatelessWidget {
-  const NotificationSettingsForm({Key? key}) : super(key: key);
+  const NotificationSettingsForm({super.key});
 
   @override
   Widget build(BuildContext context) {

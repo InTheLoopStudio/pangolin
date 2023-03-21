@@ -12,7 +12,7 @@ import 'package:intheloopapp/ui/widgets/common/forms/password_text_field.dart';
 import 'package:intheloopapp/ui/widgets/login_view/confirm_signup_button.dart';
 
 class SignUpView extends StatelessWidget {
-  const SignUpView({Key? key}) : super(key: key);
+  const SignUpView({super.key});
 
   @override
   Widget build(BuildContext context) {

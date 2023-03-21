@@ -5,7 +5,7 @@ enum BookingNoteValidationError { invalid }
 class BookingNote
     extends FormzInput<String, BookingNoteValidationError> {
   const BookingNote.pure() : super.pure('');
-  const BookingNote.dirty([String value = '']) : super.dirty(value);
+  const BookingNote.dirty([super.value = '']) : super.dirty();
 
   @override
   BookingNoteValidationError? validator(String value) {

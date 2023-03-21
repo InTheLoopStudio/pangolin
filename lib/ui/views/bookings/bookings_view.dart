@@ -6,7 +6,7 @@ import 'package:intheloopapp/ui/views/bookings/bookings_cubit.dart';
 import 'package:intheloopapp/ui/widgets/booking_view/bookings_list.dart';
 
 class BookingsView extends StatelessWidget {
-  const BookingsView({Key? key}) : super(key: key);
+  const BookingsView({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 class BookingRequestsView extends StatelessWidget {
-  const BookingRequestsView({Key? key}) : super(key: key);
+  const BookingRequestsView({super.key});
 
   @override
   Widget build(BuildContext context) {

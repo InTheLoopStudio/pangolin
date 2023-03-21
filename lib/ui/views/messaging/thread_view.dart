@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class ThreadView extends StatelessWidget {
-  const ThreadView({Key? key, this.parent}) : super(key: key);
+  const ThreadView({super.key, this.parent});
 
   final Message? parent;
 

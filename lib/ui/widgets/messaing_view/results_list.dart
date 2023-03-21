@@ -5,7 +5,7 @@ import 'package:intheloopapp/ui/views/messaging/new_chat/new_chat_cubit.dart';
 import 'package:intheloopapp/ui/widgets/messaing_view/user_tile.dart';
 
 class ResultsList extends StatelessWidget {
-  const ResultsList({Key? key}) : super(key: key);
+  const ResultsList({super.key});
 
   @override
   Widget build(BuildContext context) {

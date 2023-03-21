@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intheloopapp/ui/widgets/activity_view/activity_list.dart';
 
 class ActivityView extends StatelessWidget {
-  const ActivityView({Key? key}) : super(key: key);
+  const ActivityView({super.key});
 
   @override
   Widget build(BuildContext context) {

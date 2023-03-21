@@ -19,7 +19,7 @@ import 'package:intheloopapp/ui/widgets/settings_view/save_button.dart';
 import 'package:intheloopapp/ui/widgets/settings_view/settings_form.dart';
 
 class SettingsView extends StatelessWidget {
-  const SettingsView({Key? key}) : super(key: key);
+  const SettingsView({super.key});
 
   @override
   Widget build(BuildContext context) {

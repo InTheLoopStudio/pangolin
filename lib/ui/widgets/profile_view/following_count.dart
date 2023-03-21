@@ -5,7 +5,7 @@ import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
 import 'package:intl/intl.dart';
 
 class FollowingCount extends StatelessWidget {
-  const FollowingCount({Key? key}) : super(key: key);
+  const FollowingCount({super.key});
 
   @override
   Widget build(BuildContext context) {

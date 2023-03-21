@@ -62,7 +62,7 @@ Future<void> main() async {
 /// The root widget for the app
 class TappedApp extends StatelessWidget {
   /// create the root widget for the app
-  TappedApp({Key? key}) : super(key: key);
+  TappedApp({super.key});
 
   static final _analytics = FirebaseAnalytics.instance;
   static final _observer = FirebaseAnalyticsObserver(analytics: _analytics);

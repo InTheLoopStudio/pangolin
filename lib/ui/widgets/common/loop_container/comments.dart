@@ -4,7 +4,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container_cubit.dart';
 
 class Comments extends StatelessWidget {
-  const Comments({Key? key}) : super(key: key);
+  const Comments({super.key});
 
   @override
   Widget build(BuildContext context) {

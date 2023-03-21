@@ -10,8 +10,8 @@ class AudioDescription extends StatelessWidget {
   const AudioDescription({
     required this.loop,
     required this.user,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   final Loop loop;
   final UserModel user;
 

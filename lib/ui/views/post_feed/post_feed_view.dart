@@ -10,7 +10,7 @@ import 'package:intheloopapp/ui/views/post_feed/post_feed_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/post_container/post_container.dart';
 
 class PostFeedView extends StatelessWidget {
-  const PostFeedView({Key? key}) : super(key: key);
+  const PostFeedView({super.key});
 
   @override
   Widget build(BuildContext context) {

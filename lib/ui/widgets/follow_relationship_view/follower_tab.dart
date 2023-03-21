@@ -4,7 +4,7 @@ import 'package:intheloopapp/ui/views/follow_relationship/follow_relationship_cu
 import 'package:intheloopapp/ui/widgets/common/user_tile.dart';
 
 class FollowerTab extends StatelessWidget {
-  const FollowerTab({Key? key}) : super(key: key);
+  const FollowerTab({super.key});
 
   @override
   Widget build(BuildContext context) {

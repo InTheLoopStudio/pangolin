@@ -11,8 +11,7 @@ import 'package:intheloopapp/ui/widgets/create_booking_view/create_booking_form.
 import 'package:skeletons/skeletons.dart';
 
 class CreateBookingView extends StatelessWidget {
-  const CreateBookingView({required this.requesteeId, Key? key})
-      : super(key: key);
+  const CreateBookingView({required this.requesteeId, super.key});
 
   final String requesteeId;
 

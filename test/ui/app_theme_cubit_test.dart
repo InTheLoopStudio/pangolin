@@ -22,20 +22,20 @@ void main() async {
   group('AppThemeCubit', () {
     blocTest<AppThemeCubit, bool>(
       'emit `true` when theme updated to dark',
-      build: () => AppThemeCubit(),
+      build: AppThemeCubit.new,
       expect: () => <bool>[],
     );
 
     blocTest<AppThemeCubit, bool>(
       'emit `true` when theme updated to dark',
-      build: () => AppThemeCubit(),
+      build: AppThemeCubit.new,
       act: (AppThemeCubit bloc) => bloc.updateTheme(isDarkMode: true),
       expect: () => [true],
     );
 
     blocTest<AppThemeCubit, bool>(
       'emit `false` when theme updated to light',
-      build: () => AppThemeCubit(),
+      build: AppThemeCubit.new,
       act: (AppThemeCubit bloc) => bloc.updateTheme(isDarkMode: false),
       expect: () => [false],
     );

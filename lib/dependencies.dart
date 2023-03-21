@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/dynamic_link_repository.dart';
@@ -9,6 +10,7 @@ import 'package:intheloopapp/data/notification_repository.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/prod/algolia_search_impl.dart';
+import 'package:intheloopapp/data/prod/audio_service_impl.dart';
 import 'package:intheloopapp/data/prod/cloud_messaging_impl.dart';
 import 'package:intheloopapp/data/prod/firebase_auth_impl.dart';
 import 'package:intheloopapp/data/prod/firebase_dynamic_link_impl.dart';
@@ -65,10 +67,13 @@ List<RepositoryProvider<dynamic>> buildRepositories({
       create: (_) => RemoteConfigImpl()..fetchAndActivate(),
     ),
     RepositoryProvider<PaymentRepository>(
-      create: (_) => StripePaymentImpl(), 
+      create: (_) => StripePaymentImpl(),
     ),
     RepositoryProvider<PlacesRepository>(
       create: (_) => GooglePlacesImpl(),
+    ),
+    RepositoryProvider<AudioRepository>(
+      create: (_) => AudioServiceImpl()..initAudioService(),
     ),
   ];
 }

@@ -6,7 +6,7 @@ import 'package:intheloopapp/ui/widgets/settings_view/settings_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ActionMenu extends StatelessWidget {
-  const ActionMenu({Key? key}) : super(key: key);
+  const ActionMenu({super.key});
 
   String? encodeQueryParameters(Map<String, String> params) {
     return params.entries

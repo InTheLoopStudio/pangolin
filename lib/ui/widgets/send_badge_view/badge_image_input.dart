@@ -5,7 +5,7 @@ import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/send_badge/send_badge_cubit.dart';
 
 class BadgeImageInput extends StatelessWidget {
-  const BadgeImageInput({Key? key}) : super(key: key);
+  const BadgeImageInput({super.key});
 
   Widget imagePicker(BuildContext context) {
     return Row(

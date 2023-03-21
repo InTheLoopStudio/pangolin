@@ -17,7 +17,7 @@ const initialPlace = Place(
 );
 
 class Stage1 extends StatelessWidget {
-  const Stage1({Key? key}) : super(key: key);
+  const Stage1({super.key});
 
   @override
   Widget build(BuildContext context) {

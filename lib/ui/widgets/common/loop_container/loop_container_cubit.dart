@@ -12,13 +12,20 @@ part 'loop_container_state.dart';
 class LoopContainerCubit extends Cubit<LoopContainerState> {
   LoopContainerCubit({
     required this.databaseRepository,
+    required this.audioController,
     required this.loop,
     required this.currentUser,
-  }) : super(LoopContainerState(loop: loop));
+  }) : super(
+          LoopContainerState(
+            loop: loop,
+            audioController: audioController,
+          ),
+        );
 
   final Loop loop;
   final DatabaseRepository databaseRepository;
   final UserModel currentUser;
+  final AudioController audioController;
 
   Future<void> initLoopLikes() async {
     final isLiked = await databaseRepository.isLiked(
@@ -36,7 +43,6 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
   }
 
   void initAudio() {
-    audioLock.addListener(onAudioLockChange);
     state.audioController.setLoopMode(LoopMode.one);
   }
 
@@ -72,17 +78,9 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
     }
   }
 
-  void onAudioLockChange() {
-    if (audioLock.value != state.loop.id) {
-      state.audioController.pause();
-    }
-  }
-
   @override
   Future<void> close() async {
-    audioLock.removeListener(onAudioLockChange);
-    state.audioController.pause();
-    state.audioController.dispose();
+    await state.audioController.dispose();
     await super.close();
   }
 }

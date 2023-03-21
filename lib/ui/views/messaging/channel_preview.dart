@@ -5,8 +5,8 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 class ChannelPreview extends StatelessWidget {
   const ChannelPreview({
     required this.channel,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Channel channel;
 

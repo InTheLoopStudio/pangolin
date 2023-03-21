@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 
 class ForgotPasswordButton extends StatelessWidget {
-  const ForgotPasswordButton({Key? key}) : super(key: key);
+  const ForgotPasswordButton({super.key});
 
   @override
   Widget build(BuildContext context) {

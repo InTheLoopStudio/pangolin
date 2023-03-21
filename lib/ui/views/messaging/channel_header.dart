@@ -50,7 +50,7 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart' hide ChannelName;
 class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
   /// Creates a channel header
   const ChannelHeader({
-    Key? key,
+    super.key,
     this.showBackButton = true,
     this.onBackPressed,
     this.onTitleTap,
@@ -62,8 +62,7 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
     this.leading,
     this.actions,
   // ignore: avoid_field_initializers_in_const_classes
-  })  : preferredSize = const Size.fromHeight(kToolbarHeight),
-        super(key: key);
+  })  : preferredSize = const Size.fromHeight(kToolbarHeight);
 
   /// True if this header shows the leading back button
   final bool showBackButton;

@@ -9,7 +9,7 @@ import 'package:intheloopapp/ui/widgets/comments/comments_list.dart';
 import 'package:intheloopapp/ui/widgets/comments/comments_text_field.dart';
 
 class CommentsSection extends StatelessWidget {
-  const CommentsSection({Key? key}) : super(key: key);
+  const CommentsSection({super.key});
 
   @override
   Widget build(BuildContext context) {

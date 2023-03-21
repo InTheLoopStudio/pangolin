@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/controllers/audio_controller.dart';
 import 'package:intheloopapp/ui/views/upload_loop/upload_loop_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/seek_bar.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
 
 class AudioContainer extends StatelessWidget {
-  const AudioContainer({Key? key}) : super(key: key);
+  const AudioContainer({super.key});
 
   static const String audioLockId = 'uploaded-loop';
 
@@ -34,8 +35,7 @@ class AudioContainer extends StatelessWidget {
                         Row(
                           children: [
                             StreamBuilder<PlayerState>(
-                              stream: state
-                                  .audioController.player.playerStateStream,
+                              stream: state.audioController?.playerStateStream,
                               builder: (context, snapshot) {
                                 final playerState = snapshot.data;
 
@@ -46,10 +46,6 @@ class AudioContainer extends StatelessWidget {
                                 final processingState =
                                     playerState.processingState;
 
-                                if (processingState == ProcessingState.idle) {
-                                  state.audioController
-                                      .setAudioFile(state.pickedAudio);
-                                }
                                 final playing = playerState.playing;
                                 if (processingState ==
                                         ProcessingState.loading ||
@@ -66,7 +62,7 @@ class AudioContainer extends StatelessWidget {
                                     icon: const Icon(Icons.play_arrow),
                                     iconSize: 48,
                                     onPressed: () {
-                                      state.audioController.play(audioLockId);
+                                      state.audioController?.play();
                                     },
                                   );
                                 } else if (processingState !=
@@ -75,17 +71,18 @@ class AudioContainer extends StatelessWidget {
                                     icon: const Icon(Icons.pause),
                                     iconSize: 48,
                                     onPressed: () {
-                                      state.audioController.pause();
+                                      state.audioController?.pause();
                                     },
                                   );
                                 } else {
                                   return IconButton(
                                     icon: const Icon(Icons.replay),
                                     iconSize: 48,
-                                    onPressed: () => state.audioController.seek(
+                                    onPressed: () =>
+                                        state.audioController?.seek(
                                       Duration.zero,
-                                      index: state.audioController.player
-                                          .effectiveIndices!.first,
+                                      index: state.audioController
+                                          ?.effectiveIndices!.first,
                                     ),
                                   );
                                 }
@@ -97,23 +94,17 @@ class AudioContainer extends StatelessWidget {
                               children: [
                                 const SizedBox(height: 10),
                                 StreamBuilder<Duration?>(
-                                  stream: state
-                                      .audioController.player.durationStream,
+                                  stream: state.audioController?.durationStream,
                                   builder: (context, snapshot) {
                                     final duration =
                                         snapshot.data ?? Duration.zero;
                                     return StreamBuilder<PositionData>(
                                       stream: Rx.combineLatest2<Duration,
                                           Duration, PositionData>(
-                                        state.audioController.player
-                                            .positionStream,
-                                        state.audioController.player
+                                        state.audioController!.positionStream,
+                                        state.audioController!
                                             .bufferedPositionStream,
-                                        (position, bufferedPosition) =>
-                                            PositionData(
-                                          position,
-                                          bufferedPosition,
-                                        ),
+                                        PositionData.new,
                                       ),
                                       builder: (context, snapshot) {
                                         final positionData = snapshot.data ??
@@ -135,7 +126,7 @@ class AudioContainer extends StatelessWidget {
                                           position: position,
                                           bufferedPosition: bufferedPosition,
                                           onChangeEnd: (newPosition) {
-                                            state.audioController.seek(
+                                            state.audioController?.seek(
                                               newPosition ?? Duration.zero,
                                             );
                                           },

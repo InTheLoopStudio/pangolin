@@ -12,8 +12,8 @@ import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container.dar
 class AllLoopsList extends StatefulWidget {
   const AllLoopsList({
     required this.scrollController,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final ScrollController scrollController;
 

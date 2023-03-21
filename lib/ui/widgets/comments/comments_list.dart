@@ -6,8 +6,8 @@ import 'package:intheloopapp/ui/widgets/comments/comment_container.dart';
 class CommentsList extends StatelessWidget {
   const CommentsList({
     required this.scrollController,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final ScrollController scrollController;
 

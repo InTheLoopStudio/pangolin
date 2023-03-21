@@ -6,7 +6,7 @@ import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
 
 class ThemeSwitch extends StatelessWidget {
-  const ThemeSwitch({Key? key}) : super(key: key);
+  const ThemeSwitch({super.key});
 
   @override
   Widget build(BuildContext context) {

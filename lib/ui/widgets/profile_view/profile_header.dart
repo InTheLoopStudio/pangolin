@@ -13,7 +13,7 @@ import 'package:intheloopapp/ui/widgets/profile_view/social_media_icons.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ProfileHeader extends StatelessWidget {
-  const ProfileHeader({Key? key}) : super(key: key);
+  const ProfileHeader({super.key});
 
   @override
   Widget build(BuildContext context) {

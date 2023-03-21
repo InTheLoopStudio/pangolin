@@ -26,6 +26,10 @@
 		<true/>
 		<key>NSAppleMusicUsageDescription</key>
 		<string>To play the audio from user uploaded loops</string>
+		<key>UIBackgroundModes</key>
+		<array>
+			<string>audio</string>
+		</array>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>TO give users the ability to upload mp3 music samples and send pictures in direct messages</string>
 		<key>NSMicrophoneUsageDescription</key>

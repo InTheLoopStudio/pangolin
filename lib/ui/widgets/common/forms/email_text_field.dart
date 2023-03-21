@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 class EmailTextField extends StatelessWidget {
   const EmailTextField({
-    Key? key,
+    super.key,
     this.onChanged,
     this.labelText = 'Email',
-  }) : super(key: key);
+  });
 
   final void Function(String?)? onChanged;
   final String labelText;

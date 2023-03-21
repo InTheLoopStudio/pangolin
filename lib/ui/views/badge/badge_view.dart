@@ -8,8 +8,8 @@ class BadgeView extends StatelessWidget {
   /// Just a badge model is required for the view
   const BadgeView({
     required this.badge,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The badge to display
   final badge_model.Badge badge;

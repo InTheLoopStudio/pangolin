@@ -6,7 +6,7 @@ import 'package:intheloopapp/ui/views/common/loop_view/loop_view_cubit.dart';
 import 'package:intheloopapp/ui/widgets/loop_view/follow_icon.dart';
 
 class FollowActionButton extends StatelessWidget {
-  const FollowActionButton({Key? key}) : super(key: key);
+  const FollowActionButton({super.key});
 
   static const double actionWidgetSize = 60;
   static const double actionIconSize = 35;

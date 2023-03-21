@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/views/login/login_cubit.dart';
 
 class LoginButton extends StatelessWidget {
-  const LoginButton({Key? key}) : super(key: key);
+  const LoginButton({super.key});
 
   @override
   Widget build(BuildContext context) {

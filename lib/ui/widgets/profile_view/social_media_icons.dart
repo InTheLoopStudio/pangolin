@@ -5,7 +5,7 @@ import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SocialMediaIcons extends StatelessWidget {
-  const SocialMediaIcons({Key? key}) : super(key: key);
+  const SocialMediaIcons({super.key});
 
   Widget _socialMediaIcon(
     bool show, {

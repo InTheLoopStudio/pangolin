@@ -5,7 +5,7 @@ import 'package:intheloopapp/ui/views/audio_feeds/audio_feeds_list/audio_feeds_l
 import 'package:intheloopapp/ui/widgets/profile_view/notification_icon_button.dart';
 
 class ControlButtons extends StatelessWidget {
-  const ControlButtons({Key? key}) : super(key: key);
+  const ControlButtons({super.key});
 
   @override
   Widget build(BuildContext context) {

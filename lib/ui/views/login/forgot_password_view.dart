@@ -7,7 +7,7 @@ import 'package:intheloopapp/ui/views/login/login_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/email_text_field.dart';
 
 class ForgotPasswordView extends StatefulWidget {
-  const ForgotPasswordView({Key? key}) : super(key: key);
+  const ForgotPasswordView({super.key});
 
   @override
   State<ForgotPasswordView> createState() => _ForgotPasswordViewState();

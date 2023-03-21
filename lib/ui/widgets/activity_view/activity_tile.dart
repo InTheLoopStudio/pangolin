@@ -9,7 +9,7 @@ import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class ActivityTile extends StatelessWidget {
-  const ActivityTile({required this.activity, Key? key}) : super(key: key);
+  const ActivityTile({required this.activity, super.key});
 
   final Activity activity;
 

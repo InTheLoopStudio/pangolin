@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
+import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/controllers/audio_controller.dart';
@@ -22,6 +23,7 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
   /// knowledge of the current of the current user, view scaffold info,
   /// and navigation instructions
   UploadLoopCubit({
+    required this.audioRepo,
     required this.databaseRepository,
     required this.storageRepository,
     required this.onboardingBloc,
@@ -39,6 +41,10 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
   /// Onboarding data
   final OnboardingBloc onboardingBloc;
 
+  AudioController? audioController;
+
+  AudioRepository audioRepo;
+
   /// The currently logged in user
   final UserModel currentUser;
 
@@ -48,29 +54,17 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
   /// Navigation instructions
   final NavigationBloc? navigationBloc;
 
-  static const String _audioLockId = 'uploaded-loop';
   static const Duration _maxDuration = Duration(minutes: 10);
 
   @override
   Future<void> close() async {
-    state.audioController.dispose();
+    await state.audioController?.dispose();
     await super.close();
   }
 
   // Future<List<Tag>> getTagSuggestions(String value) async {
   //   return databaseRepository.getTagSuggestions(value);
   // }
-
-  /// checks if the audio lock has changed
-  /// and plays or pauses music accordingly
-  void listenToAudioLockChange() {
-    audioLock.addListener(() {
-      if (audioLock.value != _audioLockId &&
-          state.audioController.player.playing == true) {
-        state.audioController.pause();
-      }
-    });
-  }
 
   /// what to do it the title of the loop changes
   void titleChanged(String value) {
@@ -92,7 +86,7 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
 
   /// What to do if an upload is canceled
   Future<void> cancelUpload() async {
-    state.audioController.pause();
+    await state.audioController?.detach();
     emit(UploadLoopState());
   }
 
@@ -115,7 +109,15 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
           ),
         );
 
-        await state.audioController.setAudioFile(pickedAudio);
+        await state.audioController?.detach();
+        audioController = AudioController.fromAudioFile(
+          audioRepo: audioRepo,
+          audioFile: pickedAudio,
+          title: state.loopTitle.value,
+          artist: currentUser.artistName,
+          image: currentUser.profilePicture,
+        );
+        await audioController?.attach();
       }
     } catch (error) {
       emit(
@@ -133,9 +135,9 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
     try {
       if (!state.isValid || state.pickedAudio == null) return;
 
-      final tmp = await state.audioController.setAudioFile(state.pickedAudio);
-
-      final audioDuration = tmp ?? Duration.zero;
+      // Just settings the audio to get the duration
+      final audioDuration =
+          await AudioController.getDuration(state.pickedAudio);
 
       final tooLarge = audioDuration.compareTo(_maxDuration) >= 0;
 

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container_cubit.dart';
 
 class LoopTitle extends StatelessWidget {
-  const LoopTitle({Key? key}) : super(key: key);
+  const LoopTitle({super.key});
 
   @override
   Widget build(BuildContext context) {

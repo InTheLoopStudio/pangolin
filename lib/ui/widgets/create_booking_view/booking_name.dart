@@ -5,7 +5,7 @@ enum BookingNameValidationError { invalid }
 class BookingName
     extends FormzInput<String, BookingNameValidationError> {
   const BookingName.pure() : super.pure('');
-  const BookingName.dirty([String value = '']) : super.dirty(value);
+  const BookingName.dirty([super.value = '']) : super.dirty();
 
   @override
   BookingNameValidationError? validator(String value) {

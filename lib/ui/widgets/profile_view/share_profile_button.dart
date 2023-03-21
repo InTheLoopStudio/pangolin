@@ -5,7 +5,7 @@ import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ShareProfileButton extends StatelessWidget {
-  const ShareProfileButton({Key? key}) : super(key: key);
+  const ShareProfileButton({super.key});
 
   @override
   Widget build(BuildContext context) {

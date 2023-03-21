@@ -4,7 +4,7 @@ import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view_cubit.dart';
 
 class FollowIcon extends StatelessWidget {
-  const FollowIcon({Key? key}) : super(key: key);
+  const FollowIcon({super.key});
 
   static const double actionWidgetSize = 60;
   static const double actionIconSize = 35;

@@ -8,7 +8,7 @@ import 'package:intheloopapp/ui/widgets/create_booking_view/booking_name_text_fi
 import 'package:intheloopapp/ui/widgets/create_booking_view/booking_note_text_field.dart';
 
 class CreateBookingForm extends StatefulWidget {
-  const CreateBookingForm({Key? key}) : super(key: key);
+  const CreateBookingForm({super.key});
 
   @override
   State<CreateBookingForm> createState() => _CreateBookingFormState();

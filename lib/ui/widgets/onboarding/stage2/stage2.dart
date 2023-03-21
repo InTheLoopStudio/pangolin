@@ -4,7 +4,7 @@ import 'package:intheloopapp/ui/views/onboarding/onboarding_flow_cubit.dart';
 import 'package:intheloopapp/ui/widgets/onboarding/stage2/follow_recommendation.dart';
 
 class Stage2 extends StatelessWidget {
-  const Stage2({Key? key}) : super(key: key);
+  const Stage2({super.key});
 
   @override
   Widget build(BuildContext context) {

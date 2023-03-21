@@ -10,7 +10,7 @@ import 'package:intheloopapp/ui/widgets/create_post_view/post_title_text_field.d
 import 'package:intheloopapp/ui/widgets/create_post_view/submit_post_button.dart';
 
 class CreatePostView extends StatelessWidget {
-  const CreatePostView({Key? key}) : super(key: key);
+  const CreatePostView({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -16,7 +16,7 @@ import 'package:intheloopapp/ui/widgets/common/forms/youtube_text_field.dart';
 import 'package:intheloopapp/ui/widgets/settings_view/theme_switch.dart';
 
 class SettingsForm extends StatelessWidget {
-  const SettingsForm({Key? key}) : super(key: key);
+  const SettingsForm({super.key});
 
   @override
   Widget build(BuildContext context) {

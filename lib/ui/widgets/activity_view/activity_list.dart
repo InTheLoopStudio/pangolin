@@ -8,7 +8,7 @@ import 'package:intheloopapp/ui/views/common/loading/list_loading_view.dart';
 import 'package:intheloopapp/ui/widgets/activity_view/activity_tile.dart';
 
 class ActivityList extends StatefulWidget {
-  const ActivityList({Key? key}) : super(key: key);
+  const ActivityList({super.key});
 
   @override
   State<ActivityList> createState() => _ActivityListState();

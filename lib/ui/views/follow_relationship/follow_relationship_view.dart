@@ -11,9 +11,9 @@ import 'package:intheloopapp/ui/widgets/follow_relationship_view/following_tab.d
 class FollowRelationshipView extends StatelessWidget {
   const FollowRelationshipView({
     required this.visitedUserId,
-    Key? key,
+    super.key,
     this.initialIndex,
-  }) : super(key: key);
+  });
 
   final String visitedUserId;
   final int? initialIndex;

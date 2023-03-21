@@ -12,9 +12,9 @@ import 'package:intheloopapp/ui/widgets/shell_view/bottom_toolbar.dart';
 
 class ShellView extends StatelessWidget {
   const ShellView({
-    Key? key,
+    super.key,
     this.initialTab = 0,
-  }) : super(key: key);
+  });
 
   final int initialTab;
 

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/controllers/audio_controller.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/seek_bar.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LoopSeekBar extends StatelessWidget {
-  const LoopSeekBar({Key? key}) : super(key: key);
+  const LoopSeekBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,15 +16,14 @@ class LoopSeekBar extends StatelessWidget {
           child: SizedBox(
             height: 50,
             child: StreamBuilder<Duration?>(
-              stream: state.audioController.player.durationStream,
+              stream: state.audioController.durationStream,
               builder: (context, snapshot) {
                 final duration = snapshot.data ?? Duration.zero;
                 return StreamBuilder<PositionData>(
                   stream: Rx.combineLatest2<Duration, Duration, PositionData>(
-                    state.audioController.player.positionStream,
-                    state.audioController.player.bufferedPositionStream,
-                    (position, bufferedPosition) =>
-                        PositionData(position, bufferedPosition),
+                    state.audioController.positionStream,
+                    state.audioController.bufferedPositionStream,
+                    PositionData.new,
                   ),
                   builder: (context, snapshot) {
                     final positionData = snapshot.data ??

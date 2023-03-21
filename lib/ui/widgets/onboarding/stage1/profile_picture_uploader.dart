@@ -7,7 +7,7 @@ import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dar
 import 'package:intheloopapp/ui/views/onboarding/onboarding_flow_cubit.dart';
 
 class ProfilePictureUploader extends StatelessWidget {
-  const ProfilePictureUploader({Key? key}) : super(key: key);
+  const ProfilePictureUploader({super.key});
 
   ImageProvider displayProfileImage(
     File? newProfileImage,

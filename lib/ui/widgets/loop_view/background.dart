@@ -5,14 +5,14 @@ import 'package:intheloopapp/ui/views/common/loop_view/loop_view_cubit.dart';
 import 'package:just_audio/just_audio.dart';
 
 class Background extends StatelessWidget {
-  const Background({Key? key}) : super(key: key);
+  const Background({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoopViewCubit, LoopViewState>(
       builder: (context, state) {
         return StreamBuilder<PlayerState>(
-          stream: state.audioController.player.playerStateStream,
+          stream: state.audioController.playerStateStream,
           builder: (context, snapshot) {
             final playerState = snapshot.data;
 

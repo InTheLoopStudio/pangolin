@@ -4,7 +4,7 @@ import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container_cub
 import 'package:timeago/timeago.dart' as timeago;
 
 class Timestamp extends StatelessWidget {
-  const Timestamp({Key? key}) : super(key: key);
+  const Timestamp({super.key});
 
   @override
   Widget build(BuildContext context) {

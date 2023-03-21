@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 
 class NotificationIconButton extends StatelessWidget {
-  const NotificationIconButton({Key? key}) : super(key: key);
+  const NotificationIconButton({super.key});
 
   @override
   Widget build(BuildContext context) {

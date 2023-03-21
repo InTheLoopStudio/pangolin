@@ -10,8 +10,8 @@ class LocationTextField extends StatelessWidget {
     required this.initialPlaceId,
     required this.initialPlace,
     required this.onChanged,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final void Function(Place?, String) onChanged;
   final Place initialPlace;
@@ -45,6 +45,7 @@ class LocationTextField extends StatelessWidget {
                 ),
                 Text(
                   formattedAddress(initialPlace.addressComponents),
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     color: tappedAccent,
                     fontSize: 18,
