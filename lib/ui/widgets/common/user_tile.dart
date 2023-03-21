@@ -37,7 +37,11 @@ class _UserTileState extends State<UserTile> {
             backgroundImageUrl: widget.user.profilePicture,
           ),
           title: Text(widget.user.displayName),
-          subtitle: Text(widget.user.bio),
+          subtitle: Text(
+            widget.user.bio,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
           trailing: currentUser.id != widget.user.id
               ? FutureBuilder<bool>(
                   future:
