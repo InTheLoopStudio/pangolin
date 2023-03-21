@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
+import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/controllers/audio_controller.dart';
@@ -22,6 +23,7 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
   /// knowledge of the current of the current user, view scaffold info,
   /// and navigation instructions
   UploadLoopCubit({
+    required this.audioRepo,
     required this.databaseRepository,
     required this.storageRepository,
     required this.onboardingBloc,
@@ -41,6 +43,8 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
 
   AudioController? audioController;
 
+  AudioRepository audioRepo;
+
   /// The currently logged in user
   final UserModel currentUser;
 
@@ -54,7 +58,7 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
 
   @override
   Future<void> close() async {
-    state.audioController?.dispose();
+    await state.audioController?.dispose();
     await super.close();
   }
 
@@ -106,7 +110,13 @@ class UploadLoopCubit extends Cubit<UploadLoopState> {
         );
 
         await state.audioController?.detach();
-        audioController = AudioController.fromAudioFile(pickedAudio);
+        audioController = AudioController.fromAudioFile(
+          audioRepo: audioRepo,
+          audioFile: pickedAudio,
+          title: state.loopTitle.value,
+          artist: currentUser.artistName,
+          image: currentUser.profilePicture,
+        );
         await audioController?.attach();
       }
     } catch (error) {

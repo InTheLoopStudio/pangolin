@@ -2,79 +2,79 @@ import 'package:audio_service/audio_service.dart';
 import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:just_audio/just_audio.dart';
 
-AudioHandler? audioHandler;
-final _player = AudioPlayer();
+AudioHandler? _audioHandler;
 
 class AudioServiceImpl implements AudioRepository {
-
   @override
   Future<void> initAudioService() async {
     final handler = await AudioService.init(
       builder: AudioHandler.new,
       config: const AudioServiceConfig(
         androidNotificationChannelId: 'com.intheloopstudio.audio',
-        androidNotificationChannelName: 'Audio Service',
+        androidNotificationChannelName: 'Tapped Audio',
         androidNotificationOngoing: true,
       ),
     );
 
-    audioHandler = handler;
+    _audioHandler = handler;
   }
-  
+
   @override
-  // TODO: implement bufferedPositionStream
-  Stream<Duration> get bufferedPositionStream => throw UnimplementedError();
-  
+  Stream<Duration>? get bufferedPositionStream =>
+      _audioHandler?.bufferedPositionStream;
+
   @override
-  // TODO: implement durationStream
-  Stream<Duration?> get durationStream => throw UnimplementedError();
-  
+  Stream<Duration?>? get durationStream => _audioHandler?.durationStream;
+
   @override
-  // TODO: implement effectiveIndices
-  List<int>? get effectiveIndices => throw UnimplementedError();
-  
+  List<int>? get effectiveIndices => _audioHandler?.effectiveIndices;
+
   @override
   bool isPlaying() {
-    // TODO: implement isPlaying
-    throw UnimplementedError();
+    return _audioHandler?.playing ?? false;
   }
-  
+
   @override
-  Future<void> pause() {
-    // TODO: implement pause
-    throw UnimplementedError();
+  Future<void> pause() async {
+    await _audioHandler?.pause();
   }
-  
+
   @override
-  Future<void> play() {
-    // TODO: implement play
-    throw UnimplementedError();
+  Future<void> play() async {
+    await _audioHandler?.play();
   }
-  
+
   @override
-  // TODO: implement playerStateStream
-  Stream<PlayerState> get playerStateStream => throw UnimplementedError();
-  
-  @override
-  // TODO: implement positionStream
-  Stream<Duration> get positionStream => throw UnimplementedError();
-  
-  @override
-  Future<void> seek(Duration? duration, {int? index}) {
-    // TODO: implement seek
-    throw UnimplementedError();
+  Future<void> playMediaItem(MediaItem mediaItem) async {
+    await _audioHandler?.playMediaItem(mediaItem);
   }
-  
+
   @override
-  Future<void> setFilePath(String source, {Duration initialPosition = Duration.zero}) {
-    // TODO: implement setFilePath
-    throw UnimplementedError();
+  Stream<PlayerState>? get playerStateStream =>
+      _audioHandler?.playerStateStream;
+
+  @override
+  Stream<Duration>? get positionStream => _audioHandler?.positionStream;
+
+  @override
+  Future<void> seek(Duration? position, {int? index}) async {
+    await _audioHandler?.seek(
+      position ?? Duration.zero,
+      index: index,
+    );
   }
-  
+
   @override
-  Future<void> setLoopMode(LoopMode mode) {
-    // TODO: implement setLoopMode
-    throw UnimplementedError();
+  Future<void> setFilePath(
+    String source, {
+    Duration? initialPosition,
+  }) async {
+    await _audioHandler?.setFilePath(source, initialPosition: initialPosition);
+  }
+
+  @override
+  Future<void> setLoopMode(LoopMode mode) async {
+    await _audioHandler?.setLoopMode(mode);
   }
 }
 
@@ -82,32 +82,13 @@ class AudioHandler extends BaseAudioHandler {
   AudioHandler() {
     _loadEmptyPlaylist();
     _notifyAudioHandlerAboutPlaybackEvents();
-    // _listenToCurrentPosition();
-    _listenForCurrentSongIndexChanges();
   }
 
+  final _player = AudioPlayer();
   final _playlist = ConcatenatingAudioSource(children: []);
 
   Future<void> _loadEmptyPlaylist() async {
     await _player.setAudioSource(_playlist);
-  }
-
-  @override
-  Future<void> addQueueItems(List<MediaItem> mediaItems) async {
-    // manage Just Audio
-    final audioSource = mediaItems.map(_createAudioSource);
-    await _playlist.addAll(audioSource.toList());
-
-    // notify system
-    final newQueue = queue.value..addAll(mediaItems);
-    queue.add(newQueue);
-  }
-
-  UriAudioSource _createAudioSource(MediaItem mediaItem) {
-    return AudioSource.uri(
-      Uri.parse(mediaItem.extras!['url'] as String),
-      tag: mediaItem,
-    );
   }
 
   void _notifyAudioHandlerAboutPlaybackEvents() {
@@ -132,6 +113,11 @@ class AudioHandler extends BaseAudioHandler {
             ProcessingState.ready: AudioProcessingState.ready,
             ProcessingState.completed: AudioProcessingState.completed,
           }[_player.processingState]!,
+          repeatMode: const {
+            LoopMode.off: AudioServiceRepeatMode.none,
+            LoopMode.one: AudioServiceRepeatMode.one,
+            LoopMode.all: AudioServiceRepeatMode.all,
+          }[_player.loopMode]!,
           playing: playing,
           updatePosition: _player.position,
           bufferedPosition: _player.bufferedPosition,
@@ -142,23 +128,30 @@ class AudioHandler extends BaseAudioHandler {
     });
   }
 
-  // void _listenToCurrentPosition() {
-  //   AudioService.position.listen((position) {
-  //     final oldState = progressNotifier.value;
-  //     progressNotifier.value = ProgressBarState(
-  //       current: position,
-  //       buffered: oldState.buffered,
-  //       total: oldState.total,
-  //     );
-  //   });
-  // }
+  bool get playing => _player.playing;
 
-  void _listenForCurrentSongIndexChanges() {
-    _player.currentIndexStream.listen((index) {
-      final playlist = queue.value;
-      if (index == null || playlist.isEmpty) return;
-      mediaItem.add(playlist[index]);
-    });
+  @override
+  Future<void> playMediaItem(MediaItem mediaItem) async {
+    await _player.play();
+    return super.playMediaItem(mediaItem);
+  }
+
+  @override
+  Future<void> play() async {
+    await _player.play();
+    return super.play();
+  }
+
+  @override
+  Future<void> seek(Duration position, {int? index}) async {
+    await _player.seek(position, index: index);
+    return super.seek(position);
+  }
+
+  @override
+  Future<void> pause() async {
+    await _player.pause();
+    return super.pause();
   }
 
   @override
@@ -166,4 +159,21 @@ class AudioHandler extends BaseAudioHandler {
     await _player.stop();
     return super.stop();
   }
+
+  Future<void> setFilePath(
+    String source, {
+    Duration? initialPosition,
+  }) async {
+    await _player.setFilePath(source, initialPosition: initialPosition);
+  }
+
+  Future<void> setLoopMode(LoopMode mode) async {
+    await _player.setLoopMode(mode);
+  }
+
+  Stream<Duration> get bufferedPositionStream => _player.bufferedPositionStream;
+  Stream<Duration?> get durationStream => _player.durationStream;
+  List<int>? get effectiveIndices => _player.effectiveIndices;
+  Stream<PlayerState> get playerStateStream => _player.playerStateStream;
+  Stream<Duration> get positionStream => _player.positionStream;
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/controllers/audio_controller.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
@@ -29,6 +30,7 @@ class LoopView extends StatelessWidget {
   Widget build(BuildContext context) {
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
+    final audioRepo = RepositoryProvider.of<AudioRepository>(context);
     return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
       selector: (state) => state as Onboarded,
       builder: (context, userState) {
@@ -37,7 +39,13 @@ class LoopView extends StatelessWidget {
         return FutureBuilder<List<Object?>>(
           future: Future.wait([
             databaseRepository.getUserById(loop.userId),
-            AudioController.fromUrl(loop.audioPath),
+            AudioController.fromUrl(
+              audioRepo: audioRepo,
+              url: loop.audioPath,
+              title: loop.title,
+              artist: loop.userId,
+              image: currentUser.profilePicture,
+            ),
           ]),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {

@@ -1,47 +1,56 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:just_audio/just_audio.dart';
-// import 'package:just_audio_background/just_audio_background.dart';
 
 AudioController? currentController;
 
 class AudioController {
   AudioController._({
+    required this.audioRepo,
     this.source,
     this.duration = Duration.zero,
     this.position = Duration.zero,
     this.bufferedPosition = Duration.zero,
     this.loopMode = LoopMode.one,
+    this.image,
+    this.title,
+    this.artist,
   }) {
     playerState = PlayerState(false, ProcessingState.idle);
   }
 
-  factory AudioController.fromAudioFile(File? audioFile) {
+  factory AudioController.fromAudioFile({
+    required AudioRepository audioRepo,
+    File? audioFile,
+    String? title,
+    String? artist,
+    String? image,
+  }) {
     return AudioController._(
+      audioRepo: audioRepo,
       source: audioFile?.path ?? '',
+      title: title,
+      artist: artist,
+      image: image,
     );
   }
 
-  static Future<AudioController> fromUrl(String url) async {
+  static Future<AudioController> fromUrl({
+    required AudioRepository audioRepo,
+    required String url,
+    String? title,
+    String? image,
+    String? artist,
+  }) async {
     final File file = await DefaultCacheManager().getSingleFile(url);
     final duration = await AudioPlayer().setFilePath(file.path);
 
-    // AudioSource.file(
-    //   file.path,
-    //   tag: MediaItem(
-    //     // Specify a unique ID for each media item:
-    //     id: '1',
-    //     // Metadata to display in the notification:
-    //     album: "Album name",
-    //     title: "Song name",
-    //     artUri: Uri.parse('https://example.com/albumart.jpg'),
-    //   ),
-    // );
-
     return AudioController._(
+      audioRepo: audioRepo,
       source: file.path,
       duration: duration,
     );
@@ -50,8 +59,12 @@ class AudioController {
   final AudioRepository audioRepo;
 
   final String? source;
-  LoopMode loopMode;
 
+  final String? title;
+  final String? image;
+  final String? artist;
+
+  LoopMode loopMode;
   Duration? duration;
   Duration position;
   Duration bufferedPosition;
@@ -74,7 +87,11 @@ class AudioController {
       attached ? audioRepo.effectiveIndices : null;
 
   Stream<Duration?> combinedDurationStream() async* {
-    await for (final playerDuration in audioRepo.durationStream) {
+    if (audioRepo.durationStream == null) {
+      yield duration;
+    }
+
+    await for (final playerDuration in audioRepo.durationStream!) {
       if (attached) {
         yield playerDuration;
       } else {
@@ -84,7 +101,11 @@ class AudioController {
   }
 
   Stream<Duration> combinedPositionStream() async* {
-    await for (final playerPosition in audioRepo.positionStream) {
+    if (audioRepo.positionStream == null) {
+      yield position;
+    }
+
+    await for (final playerPosition in audioRepo.positionStream!) {
       if (attached) {
         yield playerPosition;
       } else {
@@ -94,8 +115,12 @@ class AudioController {
   }
 
   Stream<Duration> combinedBufferedPositionStream() async* {
+    if (audioRepo.bufferedPositionStream == null) {
+      yield bufferedPosition;
+    }
+
     await for (final playerBufferedPosition
-        in audioRepo.bufferedPositionStream) {
+        in audioRepo.bufferedPositionStream!) {
       if (attached) {
         yield playerBufferedPosition;
       } else {
@@ -105,7 +130,11 @@ class AudioController {
   }
 
   Stream<PlayerState> combinedPlayerStateStream() async* {
-    await for (final fromStreamState in audioRepo.playerStateStream) {
+    if (audioRepo.playerStateStream == null) {
+      yield playerState;
+    }
+
+    await for (final fromStreamState in audioRepo.playerStateStream!) {
       if (attached) {
         yield fromStreamState;
       } else {
@@ -135,16 +164,17 @@ class AudioController {
     await audioRepo.setLoopMode(loopMode);
 
     // listen to the audio streams
-    durationListener = audioRepo.durationStream.listen((event) {
+    durationListener = audioRepo.durationStream?.listen((event) {
       duration = event;
     });
-    positionListener = audioRepo.positionStream.listen((event) {
+    positionListener = audioRepo.positionStream?.listen((event) {
       position = event;
     });
-    bufferedPositionListener = audioRepo.bufferedPositionStream.listen((event) {
+    bufferedPositionListener =
+        audioRepo.bufferedPositionStream?.listen((event) {
       bufferedPosition = event;
     });
-    playerStateListener = audioRepo.playerStateStream.listen((event) {
+    playerStateListener = audioRepo.playerStateStream?.listen((event) {
       playerState = event;
     });
 
@@ -168,7 +198,13 @@ class AudioController {
       await attach();
     }
 
-    await audioRepo.play();
+    final item = MediaItem(
+      id: '',
+      title: title ?? '',
+      artist: artist,
+      artUri: Uri.parse(image ?? ''),
+    );
+    await audioRepo.playMediaItem(item);
   }
 
   Future<void> pause() async {

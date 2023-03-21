@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/dynamic_link_repository.dart';
 import 'package:intheloopapp/domains/controllers/audio_controller.dart';
@@ -34,7 +35,13 @@ class LoopContainer extends StatelessWidget {
         final currentUser = state.currentUser;
 
         return FutureBuilder<AudioController>(
-          future: AudioController.fromUrl(loop.audioPath),
+          future: AudioController.fromUrl(
+            audioRepo: context.read<AudioRepository>(),
+            url: loop.audioPath,
+            title: loop.title,
+            artist: loop.userId,
+            image: currentUser.profilePicture,
+          ),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return SkeletonListTile();

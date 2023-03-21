@@ -45,6 +45,7 @@ class LocationTextField extends StatelessWidget {
                 ),
                 Text(
                   formattedAddress(initialPlace.addressComponents),
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     color: tappedAccent,
                     fontSize: 18,
