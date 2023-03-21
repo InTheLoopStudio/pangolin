@@ -16,6 +16,7 @@ class LoopViewCubit extends Cubit<LoopViewState> {
     required this.currentUser,
     required this.loop,
     required this.user,
+    required this.audioController,
     this.showComments = false,
     this.autoPlay = true,
     this.pageController,
@@ -26,10 +27,9 @@ class LoopViewCubit extends Cubit<LoopViewState> {
             feedId: feedId,
             user: user,
             showComments: showComments,
+            audioController: audioController,
           ),
         );
-
-  String get audioLockId => '$feedId-${loop.id}';
 
   final DatabaseRepository databaseRepository;
   final UserModel currentUser;
@@ -40,11 +40,11 @@ class LoopViewCubit extends Cubit<LoopViewState> {
   final bool autoPlay;
   final PageController? pageController;
 
+  final AudioController audioController;
+
   @override
   Future<void> close() async {
-    state.audioController.pause();
-    state.audioController.dispose();
-    audioLock.removeListener(audioLockListener);
+    await state.audioController.dispose();
     await super.close();
   }
 
@@ -63,26 +63,18 @@ class LoopViewCubit extends Cubit<LoopViewState> {
   }
 
   void togglePlaying() {
-    if (state.audioController.player.playing == true) {
+    if (state.audioController.isPlaying) {
       state.audioController.pause();
     } else {
-      state.audioController.play(audioLockId);
-    }
-  }
-
-  void audioLockListener() {
-    if (audioLock.value != audioLockId) {
-      state.audioController.pause();
+      state.audioController.play();
     }
   }
 
   void initAudio() {
     // _player.setLoopMode(LoopMode.one);
-    state.audioController.setURL(loop.audioPath);
     if (autoPlay == true) {
-      state.audioController.play(audioLockId);
+      state.audioController.play();
     }
-    audioLock.addListener(audioLockListener);
   }
 
   void addComment() {

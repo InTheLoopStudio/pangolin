@@ -2,10 +2,10 @@ part of 'loop_view_cubit.dart';
 
 @immutable
 class LoopViewState extends Equatable {
-  LoopViewState({
+  const LoopViewState({
     required this.loop,
     required this.user,
-    AudioController? audioController,
+    required this.audioController,
     this.showComments = false,
     this.loadingLoop = false,
     this.feedId,
@@ -14,9 +14,7 @@ class LoopViewState extends Equatable {
     this.isVerified = false,
     this.likeCount = 0,
     this.commentsCount = 0,
-  }) {
-    this.audioController = audioController ?? AudioController();
-  }
+  });
 
   final Loop loop;
   final UserModel user;
@@ -29,7 +27,7 @@ class LoopViewState extends Equatable {
   final int commentsCount;
   final int likeCount;
 
-  late final AudioController audioController;
+  final AudioController audioController;
 
   @override
   List<Object> get props => [

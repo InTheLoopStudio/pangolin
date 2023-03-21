@@ -12,7 +12,7 @@ class Background extends StatelessWidget {
     return BlocBuilder<LoopViewCubit, LoopViewState>(
       builder: (context, state) {
         return StreamBuilder<PlayerState>(
-          stream: state.audioController.player.playerStateStream,
+          stream: state.audioController.playerStateStream,
           builder: (context, snapshot) {
             final playerState = snapshot.data;
 

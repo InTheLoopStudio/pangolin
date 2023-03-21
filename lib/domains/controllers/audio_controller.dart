@@ -1,91 +1,206 @@
+import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:just_audio/just_audio.dart';
+// import 'package:just_audio_background/just_audio_background.dart';
 
-ValueNotifier<String> audioLock = ValueNotifier('');
+AudioController? currentController;
 
 class AudioController {
-  AudioController() : player = AudioPlayer();
+  AudioController._({
+    this.source,
+    this.duration = Duration.zero,
+    this.position = Duration.zero,
+    this.bufferedPosition = Duration.zero,
+    this.loopMode = LoopMode.one,
+  }) {
+    playerState = PlayerState(false, ProcessingState.idle);
+  }
 
-  AudioPlayer player;
+  factory AudioController.fromAudioFile(File? audioFile) {
+    return AudioController._(
+      source: audioFile?.path ?? '',
+    );
+  }
 
-  Future<Duration?> setURL(String url) async {
-    try {
-      final File file = await DefaultCacheManager().getSingleFile(url);
-      final duration = await setAudioFile(file);
+  static Future<AudioController> fromUrl(String url) async {
+    final File file = await DefaultCacheManager().getSingleFile(url);
+    final duration = await AudioPlayer().setFilePath(file.path);
 
-      return duration;
-    } on PlayerException {
-      // iOS/macOS: maps to NSError.code
-      // Android: maps to ExoPlayerException.type
-      // Web: maps to MediaError.code
-      // print('Error code: ${e.code}');
-      // iOS/macOS: maps to NSError.localizedDescription
-      // Android: maps to ExoPlaybackException.getMessage()
-      // Web: a generic message
-      // print('Error message: ${e.message}');
-    } on PlayerInterruptedException {
-      // This call was interrupted since another audio source was loaded or the
-      // player was stopped or disposed before this audio source could complete
-      // loading.
-      // print('Connection aborted: ${e.message}');
-    } on Exception {
-      // Fallback for all errors
-      // print(e);
+    // AudioSource.file(
+    //   file.path,
+    //   tag: MediaItem(
+    //     // Specify a unique ID for each media item:
+    //     id: '1',
+    //     // Metadata to display in the notification:
+    //     album: "Album name",
+    //     title: "Song name",
+    //     artUri: Uri.parse('https://example.com/albumart.jpg'),
+    //   ),
+    // );
+
+    return AudioController._(
+      source: file.path,
+      duration: duration,
+    );
+  }
+
+  final AudioRepository audioRepo;
+
+  final String? source;
+  LoopMode loopMode;
+
+  Duration? duration;
+  Duration position;
+  Duration bufferedPosition;
+  late PlayerState playerState;
+
+  StreamSubscription<Duration?>? durationListener;
+  StreamSubscription<Duration>? positionListener;
+  StreamSubscription<Duration>? bufferedPositionListener;
+  StreamSubscription<PlayerState>? playerStateListener;
+
+  bool get attached => this == currentController;
+  bool get isPlaying => attached && audioRepo.isPlaying();
+
+  Stream<Duration?> get durationStream => combinedDurationStream();
+  Stream<Duration> get positionStream => combinedPositionStream();
+  Stream<Duration> get bufferedPositionStream =>
+      combinedBufferedPositionStream();
+  Stream<PlayerState> get playerStateStream => combinedPlayerStateStream();
+  List<int>? get effectiveIndices =>
+      attached ? audioRepo.effectiveIndices : null;
+
+  Stream<Duration?> combinedDurationStream() async* {
+    await for (final playerDuration in audioRepo.durationStream) {
+      if (attached) {
+        yield playerDuration;
+      } else {
+        yield duration;
+      }
     }
-    final duration = await player.setUrl(url);
-    return duration!;
   }
 
-  Future<Duration?> setAudioFile(File? audioFile) async {
-    Duration? duration;
+  Stream<Duration> combinedPositionStream() async* {
+    await for (final playerPosition in audioRepo.positionStream) {
+      if (attached) {
+        yield playerPosition;
+      } else {
+        yield position;
+      }
+    }
+  }
 
-    if (audioFile == null) return Duration.zero;
+  Stream<Duration> combinedBufferedPositionStream() async* {
+    await for (final playerBufferedPosition
+        in audioRepo.bufferedPositionStream) {
+      if (attached) {
+        yield playerBufferedPosition;
+      } else {
+        yield bufferedPosition;
+      }
+    }
+  }
 
-    try {
-      duration = await player.setFilePath(audioFile.path);
-    } on PlayerException {
-      // iOS/macOS: maps to NSError.code
-      // Android: maps to ExoPlayerException.type
-      // Web: maps to MediaError.code
-      // print('Error code: ${e.code}');
-      // iOS/macOS: maps to NSError.localizedDescription
-      // Android: maps to ExoPlaybackException.getMessage()
-      // Web: a generic message
-      // print('Error message: ${e.message}');
-    } on PlayerInterruptedException {
-      // This call was interrupted since another audio source was loaded or the
-      // player was stopped or disposed before this audio source could complete
-      // loading.
-      // print('Connection aborted: ${e.message}');
-    } on Exception {
-      // Fallback for all errors
-      // print(e);
+  Stream<PlayerState> combinedPlayerStateStream() async* {
+    await for (final fromStreamState in audioRepo.playerStateStream) {
+      if (attached) {
+        yield fromStreamState;
+      } else {
+        yield playerState;
+      }
+    }
+  }
+
+  static Future<Duration> getDuration(File? audioFile) async {
+    return await AudioPlayer().setFilePath(audioFile?.path ?? '') ??
+        Duration.zero;
+  }
+
+  Future<void> attach() async {
+    if (source == null) {
+      throw Exception('cannot attach with an empty source');
     }
 
-    return duration;
+    await currentController?.detach();
+
+    // set the source
+    await audioRepo.setFilePath(
+      source!,
+      initialPosition: position,
+    );
+
+    await audioRepo.setLoopMode(loopMode);
+
+    // listen to the audio streams
+    durationListener = audioRepo.durationStream.listen((event) {
+      duration = event;
+    });
+    positionListener = audioRepo.positionStream.listen((event) {
+      position = event;
+    });
+    bufferedPositionListener = audioRepo.bufferedPositionStream.listen((event) {
+      bufferedPosition = event;
+    });
+    playerStateListener = audioRepo.playerStateStream.listen((event) {
+      playerState = event;
+    });
+
+    currentController = this;
   }
 
-  void play(String id) {
-    audioLock.value = id;
-    player.play();
+  Future<void> detach() async {
+    await audioRepo.pause();
+
+    // stop listening to the streams
+    await positionListener?.cancel();
+    await durationListener?.cancel();
+    await bufferedPositionListener?.cancel();
+    await playerStateListener?.cancel();
+
+    currentController = null;
   }
 
-  void pause() {
-    player.pause();
+  Future<void> play() async {
+    if (!attached) {
+      await attach();
+    }
+
+    await audioRepo.play();
   }
 
-  void seek(Duration? duration, {int? index}) {
-    player.seek(duration, index: index);
+  Future<void> pause() async {
+    if (!attached) {
+      return;
+      // await attach();
+    }
+
+    await audioRepo.pause();
   }
 
-  void setLoopMode(LoopMode mode) {
-    player.setLoopMode(mode);
+  Future<void> seek(Duration? duration, {int? index}) async {
+    position = duration ?? Duration.zero;
+    if (attached) {
+      await audioRepo.seek(duration, index: index);
+    }
   }
 
-  void dispose() {
-    player.dispose();
+  Future<void> setLoopMode(LoopMode mode) async {
+    loopMode = mode;
+    if (attached) {
+      await audioRepo.setLoopMode(mode);
+    }
   }
+
+  Future<void> dispose() async {
+    await detach();
+  }
+}
+
+class PositionData {
+  PositionData(this.position, this.bufferedPosition);
+  final Duration position;
+  final Duration bufferedPosition;
 }

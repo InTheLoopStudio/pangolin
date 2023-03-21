@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/domains/controllers/audio_controller.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
@@ -11,12 +12,12 @@ import 'package:intheloopapp/ui/widgets/loop_view/loop_stack.dart';
 class LoopView extends StatelessWidget {
   const LoopView({
     required this.loop,
-    Key? key,
+    super.key,
     this.feedId = 'unknown',
     this.showComments = false,
-    this.autoPlay = true,
+    this.autoPlay = false,
     this.pageController,
-  }) : super(key: key);
+  });
 
   final Loop loop;
   final String feedId;
@@ -33,14 +34,22 @@ class LoopView extends StatelessWidget {
       builder: (context, userState) {
         final currentUser = userState.currentUser;
 
-        return FutureBuilder<UserModel?>(
-          future: databaseRepository.getUserById(loop.userId),
+        return FutureBuilder<List<Object?>>(
+          future: Future.wait([
+            databaseRepository.getUserById(loop.userId),
+            AudioController.fromUrl(loop.audioPath),
+          ]),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const LoopLoadingView();
             }
 
-            final user = snapshot.data!;
+            final user = snapshot.data![0] as UserModel?;
+            final audioController = snapshot.data![1] as AudioController?;
+
+            if (user == null || audioController == null) {
+              return const LoopLoadingView();
+            }
 
             return BlocProvider(
               create: (context) => LoopViewCubit(
@@ -52,6 +61,7 @@ class LoopView extends StatelessWidget {
                 pageController: pageController,
                 showComments: showComments,
                 autoPlay: autoPlay,
+                audioController: audioController,
               )
                 ..initAudio()
                 ..initIsFollowing()

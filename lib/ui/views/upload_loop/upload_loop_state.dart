@@ -3,16 +3,14 @@ part of 'upload_loop_cubit.dart';
 @immutable
 class UploadLoopState extends Equatable with FormzMixin {
   UploadLoopState({
+    this.audioController,
     this.pickedAudio,
     this.loopTitle = const LoopTitle.pure(),
     // this.selectedTags = const [],
     this.status = FormzSubmissionStatus.initial,
-    AudioController? audioController,
-  }) {
-    this.audioController = audioController ?? AudioController();
-  }
+  });
 
-  late final AudioController audioController;
+  final AudioController? audioController;
 
   final File? pickedAudio;
   // final List<Tag> selectedTags;
@@ -37,13 +35,14 @@ class UploadLoopState extends Equatable with FormzMixin {
     File? pickedAudio,
     // List<Tag>? selectedTags,
     LoopTitle? loopTitle,
+    AudioController? audioController,
     FormzSubmissionStatus? status,
   }) {
     return UploadLoopState(
       pickedAudio: pickedAudio ?? this.pickedAudio,
       // selectedTags: selectedTags ?? this.selectedTags,
       loopTitle: loopTitle ?? this.loopTitle,
-      audioController: audioController,
+      audioController: audioController ?? this.audioController,
       status: status ?? this.status,
     );
   }

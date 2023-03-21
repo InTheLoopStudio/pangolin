@@ -25,6 +25,7 @@ import 'package:intheloopapp/ui/views/login/login_view.dart';
 import 'package:intheloopapp/ui/views/onboarding/onboarding_view.dart';
 import 'package:intheloopapp/ui/views/shell/shell_view.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -52,6 +53,12 @@ Future<void> main() async {
     DeviceOrientation.portraitDown,
   ]);
 
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
+    androidNotificationChannelName: 'Audio playback',
+    androidNotificationOngoing: true,
+  );
+
   Bloc.observer = SimpleBlocObserver();
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -62,7 +69,7 @@ Future<void> main() async {
 /// The root widget for the app
 class TappedApp extends StatelessWidget {
   /// create the root widget for the app
-  TappedApp({Key? key}) : super(key: key);
+  TappedApp({super.key});
 
   static final _analytics = FirebaseAnalytics.instance;
   static final _observer = FirebaseAnalyticsObserver(analytics: _analytics);

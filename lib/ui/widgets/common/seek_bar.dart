@@ -7,11 +7,11 @@ class SeekBar extends StatefulWidget {
   const SeekBar({
     required this.duration,
     required this.position,
-    Key? key,
+    super.key,
     this.bufferedPosition,
     this.onChanged,
     this.onChangeEnd,
-  }) : super(key: key);
+  });
   final Duration duration;
   final Duration position;
   final Duration? bufferedPosition;
@@ -109,8 +109,3 @@ class SeekBarState extends State<SeekBar> {
   Duration get _remaining => widget.duration - widget.position;
 }
 
-class PositionData {
-  PositionData(this.position, this.bufferedPosition);
-  final Duration position;
-  final Duration bufferedPosition;
-}

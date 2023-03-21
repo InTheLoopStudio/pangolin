@@ -9,7 +9,7 @@ import 'package:intheloopapp/ui/views/upload_loop/upload_loop_form_view.dart';
 import 'package:intheloopapp/ui/views/upload_loop/upload_loop_splash_view.dart';
 
 class UploadView extends StatelessWidget {
-  UploadView({Key? key}) : super(key: key);
+  UploadView({super.key});
 
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
       GlobalKey<ScaffoldMessengerState>();
@@ -30,7 +30,7 @@ class UploadView extends StatelessWidget {
             navigationBloc: context.read<NavigationBloc>(),
             storageRepository: context.read<StorageRepository>(),
             scaffoldKey: _scaffoldKey,
-          )..listenToAudioLockChange(),
+          ),
           child: Scaffold(
             backgroundColor: theme.colorScheme.background,
             body: ScaffoldMessenger(
