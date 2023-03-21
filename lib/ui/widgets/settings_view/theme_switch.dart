@@ -20,7 +20,7 @@ class ThemeSwitch extends StatelessWidget {
           onValueChanged: (value) async {
             await context
                 .read<AppThemeCubit>()
-                .updateTheme(isDarkMode: value! as bool);
+                .updateTheme(isDarkMode: value ?? true);
           },
           children: const {
             false: Padding(

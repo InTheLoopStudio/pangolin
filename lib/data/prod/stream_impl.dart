@@ -1,4 +1,3 @@
-import 'package:cancelable_retry/cancelable_retry.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
@@ -63,23 +62,7 @@ class StreamImpl extends StreamRepository {
     final callable =
         _functions.httpsCallable('ext-auth-chat-getStreamUserToken');
 
-    final request = CancelableRetry(
-      // Provide request function
-      // ignore: unnecessary_lambdas
-      () => callable<String>(),
-      // Set conditions for retry
-      retryIf: (result) => result == '',
-      // Optional:
-      // - Define max retry attempts
-      maxAttempts: 5,
-      // - Define max delay between retries
-      // maxDelay: const Duration(seconds: 30),
-      // - Tune delay between retries
-      delayFactor: const Duration(milliseconds: 100),
-      // randomizationFactor: 0.25,
-    );
-
-    final results = await request.run();
+    final results = await callable<String>();
     final token = results.data;
 
     // print('TOKEN ' + token);
