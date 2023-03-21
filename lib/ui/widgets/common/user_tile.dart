@@ -11,10 +11,12 @@ import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 class UserTile extends StatefulWidget {
   const UserTile({
     required this.user,
+    this.showFollowButton = true,
     super.key,
   });
 
   final UserModel user;
+  final bool showFollowButton;
 
   @override
   State<UserTile> createState() => _UserTileState();
@@ -42,7 +44,8 @@ class _UserTileState extends State<UserTile> {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
-          trailing: currentUser.id != widget.user.id
+          trailing: (currentUser.id != widget.user.id) &&
+                  widget.showFollowButton
               ? FutureBuilder<bool>(
                   future:
                       database.isFollowingUser(currentUser.id, widget.user.id),

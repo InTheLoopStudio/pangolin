@@ -87,7 +87,10 @@ class BookingView extends StatelessWidget {
                       if (requester == null) {
                         return SkeletonListTile();
                       }
-                      return UserTile(user: requester);
+                      return UserTile(
+                        user: requester,
+                        showFollowButton: false,
+                      );
                     },
                   ),
                 ),
@@ -115,7 +118,10 @@ class BookingView extends StatelessWidget {
                       if (requestee == null) {
                         return SkeletonListTile();
                       }
-                      return UserTile(user: requestee);
+                      return UserTile(
+                        user: requestee,
+                        showFollowButton: false,
+                      );
                     },
                   ),
                 ),

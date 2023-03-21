@@ -16,6 +16,8 @@ class PostDescriptionTextField extends StatelessWidget {
             hintText: "What's on your mind?",
           ),
           maxLength: 256,
+          validator: (value) =>
+              value!.isEmpty ? 'Description cannot be empty' : null ,
           onChanged: (input) =>
               context.read<CreatePostCubit>().onDescriptionChange(
                     input,
