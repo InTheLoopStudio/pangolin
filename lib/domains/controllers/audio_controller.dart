@@ -53,6 +53,9 @@ class AudioController {
       audioRepo: audioRepo,
       source: file.path,
       duration: duration,
+      title: title,
+      image: image,
+      artist: artist,
     );
   }
 
@@ -69,6 +72,13 @@ class AudioController {
   Duration position;
   Duration bufferedPosition;
   late PlayerState playerState;
+
+  MediaItem get mediaItem => MediaItem(
+        id: '',
+        title: title ?? '',
+        artist: artist,
+        artUri: Uri.parse(image ?? ''),
+      );
 
   StreamSubscription<Duration?>? durationListener;
   StreamSubscription<Duration>? positionListener;
@@ -198,13 +208,7 @@ class AudioController {
       await attach();
     }
 
-    final item = MediaItem(
-      id: '',
-      title: title ?? '',
-      artist: artist,
-      artUri: Uri.parse(image ?? ''),
-    );
-    await audioRepo.playMediaItem(item);
+    await audioRepo.playMediaItem(mediaItem);
   }
 
   Future<void> pause() async {

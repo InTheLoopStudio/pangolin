@@ -6,6 +6,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/dynamic_link_repository.dart';
 import 'package:intheloopapp/domains/controllers/audio_controller.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
@@ -29,113 +30,132 @@ class LoopContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final database = RepositoryProvider.of<DatabaseRepository>(context);
     return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
       selector: (state) => state as Onboarded,
       builder: (context, state) {
         final currentUser = state.currentUser;
 
-        return FutureBuilder<AudioController>(
-          future: AudioController.fromUrl(
-            audioRepo: context.read<AudioRepository>(),
-            url: loop.audioPath,
-            title: loop.title,
-            artist: loop.userId,
-            image: currentUser.profilePicture,
-          ),
+        return FutureBuilder<UserModel?>(
+          future: database.getUserById(loop.userId),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return SkeletonListTile();
             }
 
-            final audioController = snapshot.data!;
+            final loopUser = snapshot.data;
+            if (loopUser == null){
+              return SkeletonListTile();
+            }
 
-            return BlocProvider(
-              create: (context) => LoopContainerCubit(
-                databaseRepository: context.read<DatabaseRepository>(),
-                currentUser: currentUser,
-                loop: loop,
-                audioController: audioController,
-              )
-                ..initLoopLikes()
-                ..initAudio(),
-              child: Slidable(
-                startActionPane: ActionPane(
-                  motion: const ScrollMotion(),
-                  children: [
-                    if (currentUser.id == loop.userId)
-                      BlocBuilder<LoopContainerCubit, LoopContainerState>(
-                        builder: (context, state) {
-                          return SlidableAction(
-                            onPressed: (context) {
-                              context.read<LoopContainerCubit>().deleteLoop();
-                              context.read<ProfileCubit>().deleteLoop(loop);
+            return FutureBuilder<AudioController>(
+              future: AudioController.fromUrl(
+                audioRepo: context.read<AudioRepository>(),
+                url: loop.audioPath,
+                title: loop.title,
+                artist: loopUser.username.toString(),
+                image: currentUser.profilePicture,
+              ),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return SkeletonListTile();
+                }
+
+                final audioController = snapshot.data!;
+
+                return BlocProvider(
+                  create: (context) => LoopContainerCubit(
+                    databaseRepository: context.read<DatabaseRepository>(),
+                    currentUser: currentUser,
+                    loop: loop,
+                    audioController: audioController,
+                  )
+                    ..initLoopLikes()
+                    ..initAudio(),
+                  child: Slidable(
+                    startActionPane: ActionPane(
+                      motion: const ScrollMotion(),
+                      children: [
+                        if (currentUser.id == loop.userId)
+                          BlocBuilder<LoopContainerCubit, LoopContainerState>(
+                            builder: (context, state) {
+                              return SlidableAction(
+                                onPressed: (context) {
+                                  context
+                                      .read<LoopContainerCubit>()
+                                      .deleteLoop();
+                                  context.read<ProfileCubit>().deleteLoop(loop);
+                                },
+                                backgroundColor: Colors.red[600]!,
+                                foregroundColor: Colors.white,
+                                icon: Icons.delete,
+                                label: 'Delete',
+                              );
                             },
-                            backgroundColor: Colors.red[600]!,
-                            foregroundColor: Colors.white,
-                            icon: Icons.delete,
-                            label: 'Delete',
-                          );
-                        },
-                      )
-                    else
-                      const SizedBox.shrink(),
-                    SlidableAction(
-                      onPressed: (context) async {
-                        final link = await context
-                            .read<DynamicLinkRepository>()
-                            .getShareLoopDynamicLink(loop);
-                        await Share.share(
-                          'Check out this loop on Tapped $link',
-                        );
-                      },
-                      backgroundColor: tappedAccent,
-                      foregroundColor: Colors.white,
-                      icon: Icons.share,
-                      label: 'Share',
+                          )
+                        else
+                          const SizedBox.shrink(),
+                        SlidableAction(
+                          onPressed: (context) async {
+                            final link = await context
+                                .read<DynamicLinkRepository>()
+                                .getShareLoopDynamicLink(loop);
+                            await Share.share(
+                              'Check out this loop on Tapped $link',
+                            );
+                          },
+                          backgroundColor: tappedAccent,
+                          foregroundColor: Colors.white,
+                          icon: Icons.share,
+                          label: 'Share',
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          PlayPauseButton(),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 20),
-                                  child: LoopTitle(),
-                                ),
-                                SizedBox(height: 10),
-                                LoopSeekBar(),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 15),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: const Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      child: Column(
                         children: [
                           Row(
                             children: [
-                              LikeButton(),
-                              SizedBox(width: 20),
-                              Comments(),
+                              PlayPauseButton(),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 20),
+                                      child: LoopTitle(),
+                                    ),
+                                    SizedBox(height: 10),
+                                    LoopSeekBar(),
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
-                          Timestamp(),
+                          SizedBox(height: 15),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  LikeButton(),
+                                  SizedBox(width: 20),
+                                  Comments(),
+                                ],
+                              ),
+                              Timestamp(),
+                            ],
+                          ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             );
           },
         );

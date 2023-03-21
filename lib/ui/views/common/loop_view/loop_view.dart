@@ -36,47 +36,58 @@ class LoopView extends StatelessWidget {
       builder: (context, userState) {
         final currentUser = userState.currentUser;
 
-        return FutureBuilder<List<Object?>>(
-          future: Future.wait([
-            databaseRepository.getUserById(loop.userId),
-            AudioController.fromUrl(
-              audioRepo: audioRepo,
-              url: loop.audioPath,
-              title: loop.title,
-              artist: loop.userId,
-              image: currentUser.profilePicture,
-            ),
-          ]),
+        return FutureBuilder<UserModel?>(
+          future: databaseRepository.getUserById(loop.userId),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const LoopLoadingView();
             }
 
-            final user = snapshot.data![0] as UserModel?;
-            final audioController = snapshot.data![1] as AudioController?;
+            final user = snapshot.data;
 
-            if (user == null || audioController == null) {
+            if (user == null) {
               return const LoopLoadingView();
             }
 
-            return BlocProvider(
-              create: (context) => LoopViewCubit(
-                databaseRepository: databaseRepository,
-                currentUser: currentUser,
-                loop: loop,
-                feedId: feedId,
-                user: user,
-                pageController: pageController,
-                showComments: showComments,
-                autoPlay: autoPlay,
-                audioController: audioController,
-              )
-                ..initAudio()
-                ..initIsFollowing()
-                ..initLoopLikes()
-                ..initLoopComments()
-                ..checkIsVerified(),
-              child: const LoopStack(),
+            return FutureBuilder<AudioController>(
+              future: AudioController.fromUrl(
+                audioRepo: audioRepo,
+                url: loop.audioPath,
+                title: loop.title,
+                artist: user.username.toString(),
+                image: user.profilePicture,
+              ),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const LoopLoadingView();
+                }
+
+                final audioController = snapshot.data;
+
+                if (audioController == null) {
+                  return const LoopLoadingView();
+                }
+
+                return BlocProvider(
+                  create: (context) => LoopViewCubit(
+                    databaseRepository: databaseRepository,
+                    currentUser: currentUser,
+                    loop: loop,
+                    feedId: feedId,
+                    user: user,
+                    pageController: pageController,
+                    showComments: showComments,
+                    autoPlay: autoPlay,
+                    audioController: audioController,
+                  )
+                    ..initAudio()
+                    ..initIsFollowing()
+                    ..initLoopLikes()
+                    ..initLoopComments()
+                    ..checkIsVerified(),
+                  child: const LoopStack(),
+                );
+              },
             );
           },
         );

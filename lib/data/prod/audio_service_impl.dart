@@ -133,6 +133,7 @@ class AudioHandler extends BaseAudioHandler {
   @override
   Future<void> playMediaItem(MediaItem mediaItem) async {
     await _player.play();
+    this.mediaItem.add(mediaItem);
     return super.playMediaItem(mediaItem);
   }
 
