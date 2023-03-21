@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intheloopapp/ui/views/common/tapped_app_bar.dart';
 import 'package:intheloopapp/ui/views/messaging/channel_list_view.dart';
 
 class MessagingChannelListView extends StatelessWidget {
@@ -8,19 +9,8 @@ class MessagingChannelListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: AppBar(
-        title: const Row(
-          children: [
-            Text(
-              'Messaging',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
+      extendBodyBehindAppBar: true,
+      appBar: const TappedAppBar(title: 'Messaging'),
       body: const ChannelListView(),
     );
   }

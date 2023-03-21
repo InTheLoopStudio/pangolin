@@ -1,8 +1,12 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/bookings/bookings_cubit.dart';
+import 'package:intheloopapp/ui/views/common/tapped_app_bar.dart';
 import 'package:intheloopapp/ui/widgets/booking_view/bookings_list.dart';
 
 class BookingsView extends StatelessWidget {
@@ -27,23 +31,37 @@ class BookingsView extends StatelessWidget {
                 onRefresh: context.read<BookingsCubit>().initBookings,
                 child: Scaffold(
                   backgroundColor: Theme.of(context).colorScheme.background,
-                  appBar: AppBar(
-                    title: const Row(
-                      children: [
-                        Text(
-                          'Bookings',
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  extendBodyBehindAppBar: true,
+                  // appBar: const TappedAppBar(title: 'Bookings'),
                   body: BlocBuilder<BookingsCubit, BookingsState>(
                     builder: (context, state) {
                       return CustomScrollView(
                         slivers: [
+                          SliverAppBar(
+                            pinned: true,
+                            backgroundColor: Colors.transparent,
+                            systemOverlayStyle: SystemUiOverlayStyle.dark,
+                            flexibleSpace: ClipRect(
+                              child: BackdropFilter(
+                                filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
+                                child: Container(
+                                  color: Colors.transparent,
+                                ),
+                              ),
+                            ),
+                            title: const Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Bookings',
+                                  style: TextStyle(
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                           const SliverToBoxAdapter(
                             child: SizedBox(height: 12),
                           ),

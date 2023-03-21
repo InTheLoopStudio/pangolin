@@ -212,6 +212,8 @@ class UserModel extends Equatable {
   bool get isFree => accountType == AccountType.free;
   bool get isNotFree => accountType != AccountType.free;
 
+  String get displayName => artistName.isEmpty ? username.username : artistName;
+
   UserModel copyWith({
     String? id,
     String? email,

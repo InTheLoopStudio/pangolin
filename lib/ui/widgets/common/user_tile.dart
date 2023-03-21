@@ -1,9 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 
-class UserTile extends StatelessWidget {
+class UserTile extends StatefulWidget {
   const UserTile({
     required this.user,
     super.key,
@@ -12,21 +17,55 @@ class UserTile extends StatelessWidget {
   final UserModel user;
 
   @override
+  State<UserTile> createState() => _UserTileState();
+}
+
+class _UserTileState extends State<UserTile> {
+  bool followingOverride = false;
+
+  @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: UserAvatar(
-        radius: 25,
-        backgroundImageUrl: user.profilePicture,
-      ),
-      title: Text(user.artistName),
-      subtitle: Text(user.bio),
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute<ProfileView>(
-            builder: (context) => ProfileView(
-              visitedUserId: user.id,
-            ),
+    final navigationBloc = context.read<NavigationBloc>();
+    final database = context.read<DatabaseRepository>();
+    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
+      selector: (state) => state as Onboarded,
+      builder: (context, state) {
+        final currentUser = state.currentUser;
+        return ListTile(
+          leading: UserAvatar(
+            radius: 25,
+            backgroundImageUrl: widget.user.profilePicture,
           ),
+          title: Text(widget.user.displayName),
+          subtitle: Text(widget.user.bio),
+          trailing: currentUser.id != widget.user.id
+              ? FutureBuilder<bool>(
+                  future:
+                      database.isFollowingUser(currentUser.id, widget.user.id),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) return const SizedBox.shrink();
+
+                    final isFollowing = snapshot.data ?? false;
+                    return CupertinoButton(
+                      onPressed: (!isFollowing && !followingOverride)
+                          ? () async {
+                              await database.followUser(
+                                currentUser.id,
+                                widget.user.id,
+                              );
+                              setState(() {
+                                followingOverride = true;
+                              });
+                            }
+                          : null,
+                      child: (!isFollowing && !followingOverride)
+                          ? const Text('Follow')
+                          : const Text('Following'),
+                    );
+                  },
+                )
+              : const SizedBox.shrink(),
+          onTap: () => navigationBloc.add(PushProfile(widget.user.id)),
         );
       },
     );

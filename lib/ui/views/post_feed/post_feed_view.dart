@@ -1,11 +1,15 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
+import 'package:intheloopapp/ui/views/common/tapped_app_bar.dart';
 import 'package:intheloopapp/ui/views/post_feed/post_feed_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/post_container/post_container.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/notification_icon_button.dart';
@@ -27,20 +31,10 @@ class PostFeedView extends StatelessWidget {
           )..initPosts(),
           child: Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,
-            appBar: AppBar(
-              title: const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Gems',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  NotificationIconButton(),
-                ],
-              ),
+            extendBodyBehindAppBar: true,
+            appBar: const TappedAppBar(
+              title: 'Gems',
+              trailing: NotificationIconButton(),
             ),
             floatingActionButton: FloatingActionButton(
               child: const Icon(CupertinoIcons.add),

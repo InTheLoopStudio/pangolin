@@ -88,15 +88,15 @@ class _ProfileViewState extends State<ProfileView> {
       ),
     ];
 
-    if (showVenueDashboard) {
-      tabs.insert(
-        0,
-        const Tab(
-          text: 'VENUE',
-          icon: Icon(Icons.business_rounded),
-        ),
-      );
-    }
+    // if (showVenueDashboard) {
+    //   tabs.insert(
+    //     0,
+    //     const Tab(
+    //       text: 'VENUE',
+    //       icon: Icon(Icons.business_rounded),
+    //     ),
+    //   );
+    // }
 
     return tabs;
   }
@@ -112,14 +112,14 @@ class _ProfileViewState extends State<ProfileView> {
       _loopsTab(),
     ];
 
-    if (showVenueDashboard) {
-      tabs.insert(
-        0,
-        VenueDashboard(
-          scrollController: _scrollController,
-        ),
-      );
-    }
+    // if (showVenueDashboard) {
+    //   tabs.insert(
+    //     0,
+    //     VenueDashboard(
+    //       scrollController: _scrollController,
+    //     ),
+    //   );
+    // }
 
     return tabs;
   }
