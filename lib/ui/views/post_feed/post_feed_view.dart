@@ -8,6 +8,7 @@ import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
 import 'package:intheloopapp/ui/views/post_feed/post_feed_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/post_container/post_container.dart';
+import 'package:intheloopapp/ui/widgets/profile_view/notification_icon_button.dart';
 
 class PostFeedView extends StatelessWidget {
   const PostFeedView({super.key});
@@ -28,6 +29,7 @@ class PostFeedView extends StatelessWidget {
             backgroundColor: Theme.of(context).colorScheme.background,
             appBar: AppBar(
               title: const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     'Gems',
@@ -36,6 +38,7 @@ class PostFeedView extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  NotificationIconButton(),
                 ],
               ),
             ),
@@ -76,22 +79,22 @@ class PostFeedView extends StatelessWidget {
                       }
 
                       return ListView.builder(
-                          shrinkWrap: true,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Column(
-                              children: [
-                                PostContainer(
-                                  post: state.posts[index],
-                                ),
-                                Container(
-                                  color: Colors.black,
-                                  height: 1,
-                                )
-                              ],
-                            );
-                          },
-                          itemCount: state.posts.length,
-                        );
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Column(
+                            children: [
+                              PostContainer(
+                                post: state.posts[index],
+                              ),
+                              Container(
+                                color: Colors.black,
+                                height: 1,
+                              )
+                            ],
+                          );
+                        },
+                        itemCount: state.posts.length,
+                      );
 
                     case PostFeedStatus.failure:
                       return const Row(

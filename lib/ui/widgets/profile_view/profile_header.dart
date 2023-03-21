@@ -36,20 +36,15 @@ class ProfileHeader extends StatelessWidget {
               ),
             ),
             if (state.currentUser.id == state.visitedUser.id)
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(
+                    padding: EdgeInsets.symmetric(
                       vertical: 15,
                       horizontal: 20,
                     ),
-                    child: GestureDetector(
-                      onTap: () => context
-                          .read<NavigationBloc>()
-                          .add(const PushActivity()),
-                      child: const NotificationIconButton(),
-                    ),
+                    child: NotificationIconButton(),
                   ),
                 ],
               )

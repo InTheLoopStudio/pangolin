@@ -73,7 +73,7 @@ class PostFeedCubit extends Cubit<PostFeedState> {
               state.copyWith(
                 status: PostFeedStatus.success,
                 posts: List.of(state.posts)
-                  ..insertAll(0, posts)
+                  ..addAll(posts)
                   ..sort(
                     (a, b) => b.timestamp.compareTo(a.timestamp),
                   ),

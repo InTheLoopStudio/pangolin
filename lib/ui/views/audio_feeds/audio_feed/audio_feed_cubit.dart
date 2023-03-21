@@ -100,7 +100,7 @@ class AudioFeedCubit extends Cubit<AudioFeedState> {
               state.copyWith(
                 status: AudioFeedStatus.success,
                 loops: List.of(state.loops)
-                  ..insertAll(0, loops)
+                  ..addAll(loops)
                   ..sort(
                     (a, b) => b.timestamp.compareTo(a.timestamp),
                   ),
