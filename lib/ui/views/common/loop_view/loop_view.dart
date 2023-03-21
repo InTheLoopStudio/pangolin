@@ -14,7 +14,7 @@ class LoopView extends StatelessWidget {
     Key? key,
     this.feedId = 'unknown',
     this.showComments = false,
-    this.autoPlay = true,
+    this.autoPlay = false,
     this.pageController,
   }) : super(key: key);
 
