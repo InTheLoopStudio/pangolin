@@ -26,6 +26,7 @@ class BottomToolbar extends StatelessWidget {
           inactiveColor:
               theme.bottomNavigationBarTheme.unselectedItemColor ?? Colors.grey,
           backgroundColor: theme.bottomNavigationBarTheme.backgroundColor,
+          // backgroundColor: Colors.transparent,
           // inactiveColor: Colors.white,
           currentIndex: state.selectedTab,
           items: [

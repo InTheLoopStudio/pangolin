@@ -73,17 +73,14 @@ class PostFeedView extends StatelessWidget {
                       }
 
                       return ListView.builder(
-                        shrinkWrap: true,
+                        // shrinkWrap: true,
+                        physics: const ClampingScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
                           return Column(
                             children: [
                               PostContainer(
                                 post: state.posts[index],
                               ),
-                              Container(
-                                color: Colors.black,
-                                height: 1,
-                              )
                             ],
                           );
                         },
