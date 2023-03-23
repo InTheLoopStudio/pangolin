@@ -41,6 +41,8 @@ void main() {
         pushNotificationsITLUpdates: false,
         emailNotificationsAppReleases: false,
         emailNotificationsITLUpdates: false,
+        bookingRate: 0,
+        stripeConnectedAccountId: '',
       ),
     );
   });
@@ -74,6 +76,8 @@ void main() {
       pushNotificationsITLUpdates: false,
       emailNotificationsAppReleases: false,
       emailNotificationsITLUpdates: false,
+        bookingRate: 0,
+        stripeConnectedAccountId: '',
     );
 
     expect(emptyUser.isEmpty, true);
@@ -110,6 +114,8 @@ void main() {
       pushNotificationsITLUpdates: false,
       emailNotificationsAppReleases: false,
       emailNotificationsITLUpdates: false,
+        bookingRate: 0,
+        stripeConnectedAccountId: '',
     );
 
     expect(emptyUser.isEmpty, false);
@@ -144,7 +150,9 @@ void main() {
         'pushNotificationsDirectMessages': false,
         'pushNotificationsITLUpdates': false,
         'emailNotificationsAppReleases': false,
-        'emailNotificationsITLUpdates': false
+        'emailNotificationsITLUpdates': false,
+        'bookingRate': 0,
+        'stripeConnectedAccountId': '',
       },
     );
   });
@@ -178,6 +186,8 @@ void main() {
         'pushNotificationsITLUpdates': false,
         'emailNotificationsAppReleases': false,
         'emailNotificationsITLUpdates': false,
+        'bookingRate': 0,
+        'stripeConnectedAccountId': '',
       },
     );
 
@@ -214,6 +224,8 @@ void main() {
         pushNotificationsITLUpdates: false,
         emailNotificationsAppReleases: false,
         emailNotificationsITLUpdates: false,
+        bookingRate: 0,
+        stripeConnectedAccountId: '',
       ),
     );
   });

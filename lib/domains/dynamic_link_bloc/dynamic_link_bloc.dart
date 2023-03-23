@@ -33,6 +33,17 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
               navigationBloc.add(PushProfile(event.id ?? ''));
             }
             break;
+          case DynamicLinkType.connectStripeRedirect:
+            if (event.id != null) {
+              // add accountId to the users data
+              // redirect to settings?
+            }
+            break;
+          case DynamicLinkType.connectStripeRefresh:
+            if (event.id != null) {
+              // resend the create account request?
+            }
+            break;
         }
       });
 

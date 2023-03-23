@@ -108,9 +108,4 @@ class GeoHashRange {
 }
 
 String formattedAddress(List<AddressComponent>? shortNames) =>
-    shortNames
-        ?.map(
-          (e) => e.shortName,
-        )
-        .join(', ') ??
-    'Location';
+    shortNames?.first.shortName ?? 'Location';

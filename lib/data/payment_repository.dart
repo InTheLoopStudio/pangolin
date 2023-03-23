@@ -1,19 +1,25 @@
-
-import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:intheloopapp/domains/models/payment_user.dart';
 
 abstract class PaymentRepository {
-  Future<PaymentMethod> createPaymentMethod();
-  Future<PaymentIntent> handleNextAction();
-  Future<PaymentIntent> confirmPayment();
-  Future<void> configure3dSecure();
-  Future<bool> isApplePaySupported();
-  Future<void> presentApplePay();
-  Future<void> confirmApplePayPayment();
-  Future<SetupIntent> confirmSetupIntent();
-  Future<PaymentIntent> retrievePaymentIntent();
-  Future<String> createTokenForCVCUpdate();
-
-  Future<void> initPaymentSheet();
+  Future<void> initPaymentSheet({
+    required String payerId,
+    required String payeeId,
+    required int amount,
+  });
   Future<void> presentPaymentSheet();
-  Future<void> confirmPaymentSheetPayment();
+  Future<ConnectedAccountResponse> createConnectedAccount();
+
+  Future<PaymentUser> getAccountById(String id);
+}
+
+class ConnectedAccountResponse {
+  ConnectedAccountResponse({
+    required this.success,
+    required this.accountId,
+    required this.url,
+  });
+
+  final bool success;
+  final String accountId;
+  final String url;
 }

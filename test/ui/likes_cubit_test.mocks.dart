@@ -8,6 +8,7 @@ import 'dart:async' as _i6;
 import 'package:intheloopapp/data/database_repository.dart' as _i5;
 import 'package:intheloopapp/domains/models/activity.dart' as _i8;
 import 'package:intheloopapp/domains/models/badge.dart' as _i9;
+import 'package:intheloopapp/domains/models/booking.dart' as _i10;
 import 'package:intheloopapp/domains/models/comment.dart' as _i3;
 import 'package:intheloopapp/domains/models/loop.dart' as _i2;
 import 'package:intheloopapp/domains/models/post.dart' as _i4;
@@ -103,7 +104,7 @@ class MockDatabaseRepository extends _i1.Mock
     required double? lat,
     required double? lng,
     int? radius = 50000,
-    int? limit = 20,
+    int? limit = 100,
     String? lastUserId,
   }) =>
       (super.noSuchMethod(
@@ -179,7 +180,7 @@ class MockDatabaseRepository extends _i1.Mock
   @override
   _i6.Future<List<_i2.Loop>> getUserLoops(
     String? userId, {
-    int? limit = 20,
+    int? limit = 100,
     String? lastLoopId,
   }) =>
       (super.noSuchMethod(
@@ -196,7 +197,7 @@ class MockDatabaseRepository extends _i1.Mock
   @override
   _i6.Stream<_i2.Loop> userLoopsObserver(
     String? userId, {
-    int? limit = 20,
+    int? limit = 100,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -209,7 +210,7 @@ class MockDatabaseRepository extends _i1.Mock
   @override
   _i6.Future<List<_i2.Loop>> getFollowingLoops(
     String? currentUserId, {
-    int? limit = 20,
+    int? limit = 100,
     String? lastLoopId,
   }) =>
       (super.noSuchMethod(
@@ -226,7 +227,7 @@ class MockDatabaseRepository extends _i1.Mock
   @override
   _i6.Stream<_i2.Loop> followingLoopsObserver(
     String? currentUserId, {
-    int? limit = 20,
+    int? limit = 100,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -239,7 +240,7 @@ class MockDatabaseRepository extends _i1.Mock
   @override
   _i6.Future<List<_i2.Loop>> getAllLoops(
     String? currentUserId, {
-    int? limit = 20,
+    int? limit = 100,
     String? lastLoopId,
   }) =>
       (super.noSuchMethod(
@@ -256,7 +257,7 @@ class MockDatabaseRepository extends _i1.Mock
   @override
   _i6.Stream<_i2.Loop> allLoopsObserver(
     String? currentUserId, {
-    int? limit = 20,
+    int? limit = 100,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -338,7 +339,7 @@ class MockDatabaseRepository extends _i1.Mock
   _i6.Future<List<_i3.Comment>> getComments(
     String? rootId,
     _i5.EntityType? rootType, {
-    int? limit = 20,
+    int? limit = 100,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -355,7 +356,7 @@ class MockDatabaseRepository extends _i1.Mock
   _i6.Stream<_i3.Comment> commentsObserver(
     String? rootId,
     _i5.EntityType? rootType, {
-    int? limit = 20,
+    int? limit = 100,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -504,7 +505,7 @@ class MockDatabaseRepository extends _i1.Mock
   @override
   _i6.Future<List<_i8.Activity>> getActivities(
     String? userId, {
-    int? limit = 20,
+    int? limit = 100,
     String? lastActivityId,
   }) =>
       (super.noSuchMethod(
@@ -521,7 +522,7 @@ class MockDatabaseRepository extends _i1.Mock
   @override
   _i6.Stream<_i8.Activity> activitiesObserver(
     String? userId, {
-    int? limit = 20,
+    int? limit = 100,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -598,7 +599,7 @@ class MockDatabaseRepository extends _i1.Mock
   @override
   _i6.Stream<_i9.Badge> userCreatedBadgesObserver(
     String? userId, {
-    int? limit = 20,
+    int? limit = 100,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -611,7 +612,7 @@ class MockDatabaseRepository extends _i1.Mock
   @override
   _i6.Future<List<_i9.Badge>> getUserCreatedBadges(
     String? userId, {
-    int? limit = 20,
+    int? limit = 100,
     String? lastBadgeId,
   }) =>
       (super.noSuchMethod(
@@ -628,7 +629,7 @@ class MockDatabaseRepository extends _i1.Mock
   @override
   _i6.Stream<_i9.Badge> userBadgesObserver(
     String? userId, {
-    int? limit = 20,
+    int? limit = 100,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -641,7 +642,7 @@ class MockDatabaseRepository extends _i1.Mock
   @override
   _i6.Future<List<_i9.Badge>> getUserBadges(
     String? userId, {
-    int? limit = 20,
+    int? limit = 100,
     String? lastBadgeId,
   }) =>
       (super.noSuchMethod(
@@ -690,7 +691,7 @@ class MockDatabaseRepository extends _i1.Mock
   @override
   _i6.Future<List<_i4.Post>> getUserPosts(
     String? userId, {
-    int? limit = 20,
+    int? limit = 100,
     String? lastPostId,
   }) =>
       (super.noSuchMethod(
@@ -707,7 +708,7 @@ class MockDatabaseRepository extends _i1.Mock
   @override
   _i6.Stream<_i4.Post> userPostsObserver(
     String? userId, {
-    int? limit = 20,
+    int? limit = 100,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -720,7 +721,7 @@ class MockDatabaseRepository extends _i1.Mock
   @override
   _i6.Future<List<_i4.Post>> getFollowingPosts(
     String? currentUserId, {
-    int? limit = 20,
+    int? limit = 100,
     String? lastPostId,
   }) =>
       (super.noSuchMethod(
@@ -737,7 +738,7 @@ class MockDatabaseRepository extends _i1.Mock
   @override
   _i6.Stream<_i4.Post> followingPostsObserver(
     String? currentUserId, {
-    int? limit = 20,
+    int? limit = 100,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -750,7 +751,7 @@ class MockDatabaseRepository extends _i1.Mock
   @override
   _i6.Future<List<_i4.Post>> getAllPosts(
     String? currentUserId, {
-    int? limit = 20,
+    int? limit = 100,
     String? lastPostId,
   }) =>
       (super.noSuchMethod(
@@ -767,7 +768,7 @@ class MockDatabaseRepository extends _i1.Mock
   @override
   _i6.Stream<_i4.Post> allPostsObserver(
     String? currentUserId, {
-    int? limit = 20,
+    int? limit = 100,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -777,4 +778,86 @@ class MockDatabaseRepository extends _i1.Mock
         ),
         returnValue: _i6.Stream<_i4.Post>.empty(),
       ) as _i6.Stream<_i4.Post>);
+  @override
+  _i6.Future<void> createBooking(_i10.Booking? booking) => (super.noSuchMethod(
+        Invocation.method(
+          #createBooking,
+          [booking],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+  @override
+  _i6.Future<_i10.Booking?> getBookingById(String? bookRequestId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getBookingById,
+          [bookRequestId],
+        ),
+        returnValue: _i6.Future<_i10.Booking?>.value(),
+      ) as _i6.Future<_i10.Booking?>);
+  @override
+  _i6.Future<List<_i10.Booking>> getBookingsByRequesterRequestee(
+    String? requesterId,
+    String? requesteeId, {
+    int? limit = 20,
+    String? lastBookingRequestId,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getBookingsByRequesterRequestee,
+          [
+            requesterId,
+            requesteeId,
+          ],
+          {
+            #limit: limit,
+            #lastBookingRequestId: lastBookingRequestId,
+          },
+        ),
+        returnValue: _i6.Future<List<_i10.Booking>>.value(<_i10.Booking>[]),
+      ) as _i6.Future<List<_i10.Booking>>);
+  @override
+  _i6.Future<List<_i10.Booking>> getBookingsByRequester(
+    String? userId, {
+    int? limit = 20,
+    String? lastBookingRequestId,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getBookingsByRequester,
+          [userId],
+          {
+            #limit: limit,
+            #lastBookingRequestId: lastBookingRequestId,
+          },
+        ),
+        returnValue: _i6.Future<List<_i10.Booking>>.value(<_i10.Booking>[]),
+      ) as _i6.Future<List<_i10.Booking>>);
+  @override
+  _i6.Future<List<_i10.Booking>> getBookingsByRequestee(
+    String? userId, {
+    int? limit = 20,
+    String? lastBookingRequestId,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getBookingsByRequestee,
+          [userId],
+          {
+            #limit: limit,
+            #lastBookingRequestId: lastBookingRequestId,
+          },
+        ),
+        returnValue: _i6.Future<List<_i10.Booking>>.value(<_i10.Booking>[]),
+      ) as _i6.Future<List<_i10.Booking>>);
+  @override
+  _i6.Future<void> updateBooking(_i10.Booking? booking) => (super.noSuchMethod(
+        Invocation.method(
+          #updateBooking,
+          [booking],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
 }

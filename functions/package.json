@@ -18,7 +18,8 @@
     "firebase-admin": "^11.2.1",
     "firebase-functions": "^4.1.0",
     "nodemailer": "^6.6.3",
-    "stream-chat": "^4.1.0"
+    "stream-chat": "^4.1.0",
+    "stripe": "^11.15.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.9.1",

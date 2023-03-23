@@ -12,11 +12,17 @@ import { getStorage } from "firebase-admin/storage";
 import { getMessaging } from "firebase-admin/messaging";
 import { StreamChat } from "stream-chat";
 import { defineSecret } from "firebase-functions/params";
+import Stripe from "stripe";
 
 const app = initializeApp();
 
-const streamKey = defineSecret("STREAM_KEY")
-const streamSecret = defineSecret("STREAM_SECRET")
+const streamKey = defineSecret("STREAM_KEY");
+const streamSecret = defineSecret("STREAM_SECRET");
+
+const stripeKey = defineSecret("STRIPE_TEST_KEY");
+const stripePublishableKey = defineSecret("STRIPE_PUBLISHABLE_TEST_KEY");
+// const stripeKey = defineSecret("STRIPE_KEY");
+// const stripePublishableKey = defineSecret("STRIPE_PUBLISHABLE_KEY");
 
 const db = getFirestore(app);
 const storage = getStorage(app);
@@ -423,9 +429,95 @@ const _deleteUserPostsFromFeed = (data: {
   return data.feedOwnerId;
 };
 
+const _createPaymentIntent = async (data: {
+  destination?: string;
+  amount?: number,
+}) => {
+
+  if (data.destination === undefined || data.destination === null || data.destination === "") {
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function argument 'destination' cannot be empty"
+    );
+  }
+
+  if (data.amount === undefined || data.amount === null || data.amount < 0) {
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function argument 'amount' cannot be empty or negative"
+    );
+  }
+
+  const stripe = new Stripe(stripeKey.value(), {
+    apiVersion: "2022-11-15",
+  });
+
+
+  // Use an existing Customer ID if this is a returning customer.
+  const customer = await stripe.customers.create();
+  const ephemeralKey = await stripe.ephemeralKeys.create(
+    { customer: customer.id },
+    { apiVersion: "2022-11-15" }
+  );
+
+  // Set the application fee to be 10%
+  const application_fee = data.amount * 0.10;
+
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: data.amount,
+    currency: "usd",
+    customer: customer.id,
+    application_fee_amount: application_fee,
+    automatic_payment_methods: {
+      enabled: true,
+    },
+    transfer_data: {
+      destination: data.destination,
+    }
+  });
+
+  return {
+    paymentIntent: paymentIntent.client_secret,
+    ephemeralKey: ephemeralKey.secret,
+    customer: customer.id,
+    publishableKey: stripePublishableKey.value(),
+  };
+};
+
+const _createConnectedAccount = async () => {
+  const stripe = new Stripe(stripeKey.value(), {
+    apiVersion: "2022-11-15",
+  });
+
+  const account = await stripe.accounts.create({
+    type: "express",
+  })
+
+  const appLink = "https://tappednetwork.page.link";
+
+  const accountLinks = await stripe.accountLinks.create({
+    account: account.id,
+    refresh_url: `${appLink}/connect_payment?account_id=${account.id}&refresh=true`,
+    return_url: `${appLink}/connect_payment?account_id=${account.id}&result=success`,
+    type: "account_onboarding",
+  })
+
+  return { success: true, url: accountLinks.url, accountId: account.id };
+}
+
+const _getAccountById = async (data: { accountId: string }) => {
+  const stripe = new Stripe(stripeKey.value(), {
+    apiVersion: "2022-11-15",
+  });
+
+  const account = await stripe.accounts.retrieve(data.accountId);
+
+  return account;
+}
+
 // --------------------------------------------------------
 export const sendToDevice = functions.firestore
-  .document("activities/{activityId}")
+  .document("/activities/{activityId}")
   .onCreate(async (snapshot) => {
     const activity = snapshot.data();
 
@@ -494,7 +586,7 @@ export const sendToDevice = functions.firestore
 export const createStreamUserOnUserCreated = functions
   .runWith({ secrets: [ streamKey, streamSecret ] })
   .firestore
-  .document("users/{userId}")
+  .document("/users/{userId}")
   .onCreate(async (snapshot) => {
     const streamClient = StreamChat.getInstance(
       streamKey.value(),
@@ -513,7 +605,7 @@ export const createStreamUserOnUserCreated = functions
 export const updateStreamUserOnUserUpdate = functions
   .runWith({ secrets: [ streamKey, streamSecret ] })
   .firestore
-  .document("users/{userId}")
+  .document("/users/{userId}")
   .onUpdate(async (snapshot) => {
     const streamClient = StreamChat.getInstance(
       streamKey.value(),
@@ -532,7 +624,7 @@ export const updateStreamUserOnUserUpdate = functions
   })
 
 export const addFollowersEntryOnFollow = functions.firestore
-  .document("following/{followerId}/Following/{followeeId}")
+  .document("/following/{followerId}/Following/{followeeId}")
   .onCreate(async (snapshot, context) => {
     await followersRef
       .doc(context.params.followeeId)
@@ -541,7 +633,7 @@ export const addFollowersEntryOnFollow = functions.firestore
       .set({});
   });
 export const copyLoopFeedOnFollow = functions.firestore
-  .document("following/{followerId}/Following/{followeeId}")
+  .document("/following/{followerId}/Following/{followeeId}")
   .onCreate(async (snapshot, context) => {
     _copyUserLoopsToFeed({
       loopsOwnerId: context.params.followeeId,
@@ -549,7 +641,7 @@ export const copyLoopFeedOnFollow = functions.firestore
     });
   });
 export const copyPostFeedOnFollow = functions.firestore
-  .document("following/{followerId}/Following/{followeeId}")
+  .document("/following/{followerId}/Following/{followeeId}")
   .onCreate(async (snapshot, context) => {
     _copyUserPostsToFeed({
       postsOwnerId: context.params.followeeId,
@@ -558,7 +650,7 @@ export const copyPostFeedOnFollow = functions.firestore
   });
 
 export const addActivityOnFollow = functions.firestore
-  .document("followers/{followeeId}/Followers/{followerId}")
+  .document("/followers/{followeeId}/Followers/{followerId}")
   .onCreate(async (snapshot, context) => {
     await _addActivity({
       toUserId: context.params.followeeId,
@@ -568,7 +660,7 @@ export const addActivityOnFollow = functions.firestore
   })
 
 export const deleteUserLoopOnUnfollow = functions.firestore
-  .document("following/{followerId}/Following/{followeeId}")
+  .document("/following/{followerId}/Following/{followeeId}")
   .onDelete(async (snapshot, context) => {
     _deleteUserLoopsFromFeed({
       loopsOwnerId: context.params.followeeId,
@@ -576,7 +668,7 @@ export const deleteUserLoopOnUnfollow = functions.firestore
     })
   });
 export const deleteUserPostOnUnfollow = functions.firestore
-  .document("following/{followerId}/Following/{followeeId}")
+  .document("/following/{followerId}/Following/{followeeId}")
   .onDelete(async (snapshot, context) => {
     _deleteUserPostsFromFeed({
       postsOwnerId: context.params.followeeId,
@@ -584,7 +676,7 @@ export const deleteUserPostOnUnfollow = functions.firestore
     })
   });
 export const deteteFollowersEntryOnUnfollow = functions.firestore
-  .document("following/{followerId}/Following/{followeeId}")
+  .document("/following/{followerId}/Following/{followeeId}")
   .onDelete(async (snapshot, context) => {
     const doc = await followersRef
       .doc(context.params.followeeId)
@@ -601,7 +693,7 @@ export const deteteFollowersEntryOnUnfollow = functions.firestore
 
 
 export const incrementLoopCountOnUpload = functions.firestore
-  .document("loops/{loopId}")
+  .document("/loops/{loopId}")
   .onCreate(async (snapshot) => {
     const loop = snapshot.data();
     await usersRef
@@ -609,7 +701,7 @@ export const incrementLoopCountOnUpload = functions.firestore
       .update({ loopsCount: FieldValue.increment(1) });
   })
 export const sendLoopToFollowers = functions.firestore
-  .document("loops/{loopId}")
+  .document("/loops/{loopId}")
   .onCreate(async (snapshot) => {
     const loop = snapshot.data();
     const userDoc = await usersRef.doc(loop.userId).get();
@@ -648,7 +740,7 @@ export const sendLoopToFollowers = functions.firestore
 
   });
 export const sendPostToFollowers = functions.firestore
-  .document("posts/{postId}")
+  .document("/posts/{postId}")
   .onCreate(async (snapshot) => {
     const post = snapshot.data();
     functions.logger.debug(post)
@@ -695,21 +787,21 @@ export const sendPostToFollowers = functions.firestore
   });
 
 export const incrementLikeCountOnLoopLike = functions.firestore
-  .document("likes/{loopId}/loopLikes/{userId}")
+  .document("/likes/{loopId}/loopLikes/{userId}")
   .onCreate(async (snapshot, context) => {
     await loopsRef
       .doc(context.params.loopId)
       .update({ likeCount: FieldValue.increment(1) });
   });
 export const incrementLikeCountOnPostLike = functions.firestore
-  .document("likes/{postId}/postLikes/{userId}")
+  .document("/likes/{postId}/postLikes/{userId}")
   .onCreate(async (snapshot, context) => {
     await postsRef
       .doc(context.params.postId)
       .update({ likeCount: FieldValue.increment(1) });
   });
 export const addActivityOnLoopLike = functions.firestore
-  .document("likes/{loopId}/loopLikes/{userId}")
+  .document("/likes/{loopId}/loopLikes/{userId}")
   .onCreate(async (snapshot, context) => {
     const loopSnapshot = await loopsRef.doc(context.params.loopId).get();
     const loop = loopSnapshot.data();
@@ -726,7 +818,7 @@ export const addActivityOnLoopLike = functions.firestore
     }
   });
 export const addActivityOnPostLike = functions.firestore
-  .document("likes/{postId}/postLikes/{userId}")
+  .document("/likes/{postId}/postLikes/{userId}")
   .onCreate(async (snapshot, context) => {
     const postSnapshot = await postsRef.doc(context.params.postId).get();
     const post = postSnapshot.data();
@@ -749,14 +841,14 @@ export const addActivityOnPostLike = functions.firestore
 
 
 export const decrementLoopLikeCountOnUnlike = functions.firestore
-  .document("likes/{loopId}/loopLikes/{userId}")
+  .document("/likes/{loopId}/loopLikes/{userId}")
   .onDelete(async (snapshot, context) => {
     await loopsRef
       .doc(context.params.loopId)
       .update({ likeCount: FieldValue.increment(-1) });
   })
 export const decrementPostLikeCountOnUnlike = functions.firestore
-  .document("likes/{postId}/postLikes/{userId}")
+  .document("/likes/{postId}/postLikes/{userId}")
   .onDelete(async (snapshot, context) => {
     await postsRef
       .doc(context.params.postId)
@@ -765,7 +857,7 @@ export const decrementPostLikeCountOnUnlike = functions.firestore
 
 
 export const incrementLoopCommentCountOnComment = functions.firestore
-  .document("comments/{loopId}/loopComments/{commentId}")
+  .document("/comments/{loopId}/loopComments/{commentId}")
   .onCreate(async (snapshot, context) => {
     const loopSnapshot = await loopsRef.doc(context.params.loopId).get();
     const loop = loopSnapshot.data();
@@ -779,7 +871,7 @@ export const incrementLoopCommentCountOnComment = functions.firestore
       .update({ likeCount: FieldValue.increment(1) });
   });
 export const incrementPostCommentCountOnComment = functions.firestore
-  .document("comments/{postId}/postComments/{commentId}")
+  .document("/comments/{postId}/postComments/{commentId}")
   .onCreate(async (snapshot, context) => {
     const postSnapshot = await postsRef.doc(context.params.postId).get();
     const post = postSnapshot.data();
@@ -794,7 +886,7 @@ export const incrementPostCommentCountOnComment = functions.firestore
   });
 
 export const addActivityOnLoopComment = functions.firestore
-  .document("comments/{loopId}/loopComments/{commentId}")
+  .document("/comments/{loopId}/loopComments/{commentId}")
   .onCreate(async (snapshot, context) => {
     const comment = snapshot.data();
     const loopSnapshot = await loopsRef.doc(context.params.loopId).get();
@@ -813,7 +905,7 @@ export const addActivityOnLoopComment = functions.firestore
     }
   });
 export const addActivityOnPostComment = functions.firestore
-  .document("comments/{postId}/postComments/{commentId}")
+  .document("/comments/{postId}/postComments/{commentId}")
   .onCreate(async (snapshot, context) => {
     const comment = snapshot.data();
     const postSnapshot = await postsRef.doc(context.params.postId).get();
@@ -833,7 +925,7 @@ export const addActivityOnPostComment = functions.firestore
   });
 
 export const incrementBadgeCountOnBadgeSent = functions.firestore
-  .document("badgesSent/{userId}/badges/{badgeId}")
+  .document("/badgesSent/{userId}/badges/{badgeId}")
   .onCreate(async (snapshot, context) => {
     await usersRef
       .doc(context.params.userId)
@@ -858,3 +950,24 @@ export const addActivity = functions.https.onCall((data, context) => {
   _authenticated(context);
   return _addActivity(data);
 });
+export const createPaymentIntent = functions
+  .runWith({ secrets: [ stripeKey, stripePublishableKey ] })
+  .https
+  .onCall((data, context) => {
+    _authenticated(context);
+    return _createPaymentIntent(data);
+  });
+export const createConnectedAccount = functions
+  .runWith({ secrets: [ stripeKey, stripePublishableKey ] })
+  .https
+  .onCall((data, context) => {
+    _authenticated(context);
+    return _createConnectedAccount();
+  });
+export const getAccountById = functions
+  .runWith({ secrets: [ stripeKey, stripePublishableKey ] })
+  .https
+  .onCall((data, context) => {
+    _authenticated(context);
+    return _getAccountById(data);
+  });

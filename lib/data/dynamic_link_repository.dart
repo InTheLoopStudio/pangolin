@@ -5,6 +5,8 @@ enum DynamicLinkType {
   createPost,
   shareLoop,
   shareProfile,
+  connectStripeRedirect,
+  connectStripeRefresh,
 }
 
 class DynamicLinkRedirect {

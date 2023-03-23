@@ -61,6 +61,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         emailNotificationsAppReleases:
             currentUser.emailNotificationsAppReleases,
         emailNotificationsITLUpdates: currentUser.emailNotificationsITLUpdates,
+        rate: currentUser.bookingRate,
       ),
     );
   }
@@ -91,6 +92,8 @@ class SettingsCubit extends Cubit<SettingsState> {
       ),
     );
   }
+
+  void changeRate(int value) => emit(state.copyWith(rate: value));
 
   void updateEmail(String? input) => emit(
         state.copyWith(email: input),
@@ -185,6 +188,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         pushNotificationsITLUpdates: state.pushNotificationsITLUpdates,
         emailNotificationsAppReleases: state.emailNotificationsAppReleases,
         emailNotificationsITLUpdates: state.emailNotificationsITLUpdates,
+        bookingRate: state.rate,
       );
 
       onboardingBloc.add(UpdateOnboardedUser(user: user));

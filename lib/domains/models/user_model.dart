@@ -52,6 +52,8 @@ class UserModel extends Equatable {
     required this.pushNotificationsITLUpdates,
     required this.emailNotificationsAppReleases,
     required this.emailNotificationsITLUpdates,
+    required this.bookingRate,
+    required this.stripeConnectedAccountId,
   });
 
   factory UserModel.empty() => UserModel(
@@ -85,6 +87,9 @@ class UserModel extends Equatable {
         pushNotificationsITLUpdates: true,
         emailNotificationsAppReleases: true,
         emailNotificationsITLUpdates: true,
+
+        bookingRate: 0,
+        stripeConnectedAccountId: '',
       );
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -111,8 +116,7 @@ class UserModel extends Equatable {
       bio: doc.getOrElse('bio', '') as String,
 
       // PlaceId for Richmond, Virginia, USA
-      placeId:
-          doc.getOrElse('placeId', rvaPlaceId) as String,
+      placeId: doc.getOrElse('placeId', rvaPlaceId) as String,
       geohash: doc.getOrElse('geohash', rvaGeoHash) as String,
       lat: doc.getOrElse('lat', rvaLat) as double,
       lng: doc.getOrElse('lng', rvaLng) as double,
@@ -140,6 +144,11 @@ class UserModel extends Equatable {
           doc.getOrElse('emailNotificationsAppReleases', true) as bool,
       emailNotificationsITLUpdates:
           doc.getOrElse('emailNotificationsITLUpdates', true) as bool,
+      bookingRate: doc.getOrElse('bookingRate', 0) as int,
+      stripeConnectedAccountId: doc.getOrElse(
+        'stripeConnectedAccountId',
+        '',
+      ) as String,
     );
   }
   final String id;
@@ -173,6 +182,10 @@ class UserModel extends Equatable {
   final bool emailNotificationsAppReleases;
   final bool emailNotificationsITLUpdates;
 
+  // booking rate in cents (USD)
+  final int bookingRate;
+  final String stripeConnectedAccountId;
+
   @override
   List<Object> get props => [
         id,
@@ -202,6 +215,8 @@ class UserModel extends Equatable {
         pushNotificationsITLUpdates,
         emailNotificationsAppReleases,
         emailNotificationsITLUpdates,
+        bookingRate,
+        stripeConnectedAccountId,
       ];
   bool get isEmpty => this == UserModel.empty();
   bool get isNotEmpty => this != UserModel.empty();
@@ -242,6 +257,8 @@ class UserModel extends Equatable {
     bool? pushNotificationsITLUpdates,
     bool? emailNotificationsAppReleases,
     bool? emailNotificationsITLUpdates,
+    int? bookingRate,
+    String? stripeConnectedAccountId,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -278,6 +295,9 @@ class UserModel extends Equatable {
           emailNotificationsAppReleases ?? this.emailNotificationsAppReleases,
       emailNotificationsITLUpdates:
           emailNotificationsITLUpdates ?? this.emailNotificationsITLUpdates,
+      bookingRate: bookingRate ?? this.bookingRate,
+      stripeConnectedAccountId:
+          stripeConnectedAccountId ?? this.stripeConnectedAccountId,
     );
   }
 
@@ -310,6 +330,8 @@ class UserModel extends Equatable {
       'pushNotificationsITLUpdates': pushNotificationsITLUpdates,
       'emailNotificationsAppReleases': emailNotificationsAppReleases,
       'emailNotificationsITLUpdates': emailNotificationsITLUpdates,
+      'bookingRate': bookingRate,
+      'stripeConnectedAccountId': stripeConnectedAccountId,
     };
   }
 }
