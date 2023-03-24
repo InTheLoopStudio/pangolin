@@ -80,7 +80,8 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
 
         final success = linkParameters['success'];
         if (success != 'true') {
-          return null;
+          // TODO handle error
+          // return null;
         }
 
         return DynamicLinkRedirect(
@@ -97,7 +98,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
     final parameters = DynamicLinkParameters(
       uriPrefix: 'https://tappednetwork.page.link',
       link: Uri.parse(
-        'https://intheloopstudio.com/loop?id=${loop.id}',
+        'https://tappednetwork.page.link/loop?id=${loop.id}',
       ),
       androidParameters: const AndroidParameters(
         packageName: 'com.intheloopstudio',
@@ -122,7 +123,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
   Future<String> getShareProfileDynamicLink(UserModel user) async {
     final parameters = DynamicLinkParameters(
       uriPrefix: 'https://tappednetwork.page.link',
-      link: Uri.parse('https://tappednetwork.com/user?id=${user.id}'),
+      link: Uri.parse('https://tappednetwork.page.link/user?id=${user.id}'),
       androidParameters: const AndroidParameters(
         packageName: 'com.intheloopstudio',
       ),

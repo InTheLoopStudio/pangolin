@@ -26,6 +26,16 @@ class PushProfile extends NavigationEvent {
   List<Object> get props => [userId];
 }
 
+class PushSettings extends NavigationEvent {
+  const PushSettings();
+
+  @override
+  String toString() => 'PushSettings { }';
+
+  @override
+  List<Object> get props => [];
+}
+
 class PushLocationForm extends NavigationEvent {
   const PushLocationForm({
     required this.initialPlaceId,

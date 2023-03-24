@@ -493,12 +493,17 @@ const _createConnectedAccount = async () => {
     type: "express",
   })
 
-  const appLink = "https://tappednetwork.page.link";
+  const subdomain = "tappednetwork";
+  const deepLink = "https://tappednetwork.page.link/connect_payment";
+  const appInfo = "&apn=com.intheloopstudio&isi=1574937614&ibi=com.intheloopstudio";
+
+  const refreshUrl = `https://${subdomain}.page.link/?link=${deepLink}?account_id=${account.id}&refresh=true${appInfo}`;
+  const returnUrl = `https://${subdomain}.page.link/?link=${deepLink}?account_id=${account.id}&result=success${appInfo}`;
 
   const accountLinks = await stripe.accountLinks.create({
     account: account.id,
-    refresh_url: `${appLink}/connect_payment?account_id=${account.id}&refresh=true`,
-    return_url: `${appLink}/connect_payment?account_id=${account.id}&result=success`,
+    refresh_url: refreshUrl,
+    return_url: returnUrl,
     type: "account_onboarding",
   })
 

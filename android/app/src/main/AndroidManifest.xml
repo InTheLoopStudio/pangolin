@@ -51,7 +51,7 @@
                 <!-- Accepts URIs that begin with YOUR_SCHEME://YOUR_HOST -->
                 <data
                     android:scheme="https"
-                    android:host="intheloopstudio.page.link" />
+                    android:host="tappednetwork.page.link" />
             </intent-filter>
 
         </activity>

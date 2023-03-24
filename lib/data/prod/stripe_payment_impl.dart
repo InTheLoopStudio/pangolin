@@ -71,7 +71,6 @@ class StripePaymentImpl implements PaymentRepository {
 
     final results = await callable<Map<String, dynamic>>();
     final data = results.data;
-    print('RES $data');
 
     final res = ConnectedAccountResponse(
       success: (data['success'] as bool?) ?? false,
@@ -83,11 +82,12 @@ class StripePaymentImpl implements PaymentRepository {
   }
 
   @override
-  Future<PaymentUser> getAccountById(String id) async {
+  Future<PaymentUser?> getAccountById(String id) async {
     final callable = _functions.httpsCallable('getAccountById');
-    final results = await callable<Map<String, dynamic>>();
+    final results = await callable<Map<String, dynamic>>({
+      'accountId': id,
+    });
     final data = results.data;
-    print('RES $data');
 
     final paymentUser = PaymentUser.fromJson(data);
 

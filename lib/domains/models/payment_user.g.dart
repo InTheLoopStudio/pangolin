@@ -24,7 +24,7 @@ PaymentUser _$PaymentUserFromJson(Map<String, dynamic> json) {
     chargesEnabled: json['charges_enabled'] as bool,
     payoutsEnabled: json['payouts_enabled'] as bool,
     country: json['country'] as String,
-    createdAt: DateTime.parse(json['created'] as String),
+    createdAt: DateTime.fromMillisecondsSinceEpoch(json['created'] as int),
     defaultCurrency: json['default_currency'] as String,
     detailsSubmitted: json['details_submitted'] as bool,
   );

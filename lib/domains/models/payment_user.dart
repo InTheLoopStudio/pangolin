@@ -30,7 +30,7 @@ class PaymentUser {
   @JsonKey(required: true)
   final String country;
 
-  @JsonKey(required: true, name: 'created')
+  @JsonKey(required: true, name: 'created', fromJson: dateTimeFromInt)
   final DateTime createdAt;
 
   @JsonKey(required: true, name: 'default_currency')
@@ -39,6 +39,11 @@ class PaymentUser {
   @JsonKey(required: true, name: 'details_submitted')
   final bool detailsSubmitted;
 
-
   Map<String, dynamic> toJson() => _$PaymentUserToJson(this);
+}
+
+DateTime dateTimeFromInt(int? timestamp) {
+  return timestamp == null
+      ? DateTime.now()
+      : DateTime.fromMillisecondsSinceEpoch(timestamp);
 }

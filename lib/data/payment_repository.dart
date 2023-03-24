@@ -9,7 +9,7 @@ abstract class PaymentRepository {
   Future<void> presentPaymentSheet();
   Future<ConnectedAccountResponse> createConnectedAccount();
 
-  Future<PaymentUser> getAccountById(String id);
+  Future<PaymentUser?> getAccountById(String id);
 }
 
 class ConnectedAccountResponse {

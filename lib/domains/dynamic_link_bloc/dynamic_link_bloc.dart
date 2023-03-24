@@ -3,12 +3,15 @@ import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/dynamic_link_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
+import 'package:intheloopapp/ui/widgets/onboarding/onboarding_form.dart';
 
 part 'dynamic_link_event.dart';
 part 'dynamic_link_state.dart';
 
 class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
   DynamicLinkBloc({
+    required this.onboardingBloc,
     required this.navigationBloc,
     required this.dynamicLinkRepository,
     required this.databaseRepository,
@@ -34,10 +37,25 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
             }
             break;
           case DynamicLinkType.connectStripeRedirect:
-            if (event.id != null) {
-              // add accountId to the users data
-              // redirect to settings?
+            if (event.id == null) {
+              break;
             }
+            // add accountId to the users data
+            if (onboardingBloc.state is! Onboarded) {
+              break;
+            }
+
+            final currentUser =
+                (onboardingBloc.state as Onboarded).currentUser.copyWith(
+                      stripeConnectedAccountId: event.id ?? '',
+                    );
+            onboardingBloc.add(
+              UpdateOnboardedUser(
+                user: currentUser,
+              ),
+            );
+
+            navigationBloc.add(const PushSettings());
             break;
           case DynamicLinkType.connectStripeRefresh:
             if (event.id != null) {
@@ -52,6 +70,7 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
   }
 
   final NavigationBloc navigationBloc;
+  final OnboardingBloc onboardingBloc;
   final DynamicLinkRepository dynamicLinkRepository;
   final DatabaseRepository databaseRepository;
 }
