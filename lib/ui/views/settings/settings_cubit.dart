@@ -191,6 +191,8 @@ class SettingsCubit extends Cubit<SettingsState> {
         bookingRate: state.rate,
       );
 
+      print(currentUser);
+
       onboardingBloc.add(UpdateOnboardedUser(user: user));
       emit(state.copyWith(status: FormzSubmissionStatus.success));
       navigationBloc.add(const Pop());
