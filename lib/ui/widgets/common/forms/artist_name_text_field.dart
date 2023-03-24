@@ -18,7 +18,7 @@ class ArtistNameTextField extends StatelessWidget {
       initialValue: initialValue,
       decoration: const InputDecoration(
         prefixIcon: Icon(Icons.person),
-        labelText: 'Artist Name',
+        labelText: 'Artist Name (optional)',
         hintText: 'Tapped Network',
       ),
       validator: (input) {
