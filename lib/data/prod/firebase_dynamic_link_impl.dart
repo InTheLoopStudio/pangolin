@@ -78,12 +78,6 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
           );
         }
 
-        final success = linkParameters['success'];
-        if (success != 'true') {
-          // TODO handle error
-          // return null;
-        }
-
         return DynamicLinkRedirect(
           type: DynamicLinkType.connectStripeRedirect,
           id: accountId,

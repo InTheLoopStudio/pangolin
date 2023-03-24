@@ -498,7 +498,7 @@ const _createConnectedAccount = async () => {
   const appInfo = "&apn=com.intheloopstudio&isi=1574937614&ibi=com.intheloopstudio";
 
   const refreshUrl = `https://${subdomain}.page.link/?link=${deepLink}?account_id=${account.id}&refresh=true${appInfo}`;
-  const returnUrl = `https://${subdomain}.page.link/?link=${deepLink}?account_id=${account.id}&result=success${appInfo}`;
+  const returnUrl = `https://${subdomain}.page.link/?link=${deepLink}?account_id=${account.id}`;
 
   const accountLinks = await stripe.accountLinks.create({
     account: account.id,
