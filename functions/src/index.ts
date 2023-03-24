@@ -511,6 +511,13 @@ const _createConnectedAccount = async () => {
 }
 
 const _getAccountById = async (data: { accountId: string }) => {
+  if (data.accountId === undefined || data.accountId === null || data.accountId === "") {
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function argument 'accountId' cannot be empty"
+    );
+  }
+
   const stripe = new Stripe(stripeKey.value(), {
     apiVersion: "2022-11-15",
   });
