@@ -1,9 +1,10 @@
 import 'package:intheloopapp/domains/models/payment_user.dart';
 
 abstract class PaymentRepository {
+  Future<void> initPayments();
   Future<void> initPaymentSheet({
     required String payerId,
-    required String payeeId,
+    required String payeeConnectedAccountId,
     required int amount,
   });
   Future<void> presentPaymentSheet();

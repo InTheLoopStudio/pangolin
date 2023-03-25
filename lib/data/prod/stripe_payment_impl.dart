@@ -5,26 +5,37 @@ import 'package:intheloopapp/domains/models/payment_user.dart';
 
 final _functions = FirebaseFunctions.instance;
 final _stripe = Stripe.instance;
-// const _publishableTestKey =
-// 'pk_test_51MjqoRIdnJ3C1QPEjac68utViyu6vQcJfRfEyNesdoi9eKZP5hKnxbuyHCcSFVH8mBjYAxN0qyMdn2P8ZQb5OuZo00Bfy49Ebc';
+
+const _publishableTestKey =
+    'pk_test_51MjqoRIdnJ3C1QPEjac68utViyu6vQcJfRfEyNesdoi9eKZP5hKnxbuyHCcSFVH8mBjYAxN0qyMdn2P8ZQb5OuZo00Bfy49Ebc';
 
 class StripePaymentImpl implements PaymentRepository {
+
+  @override
+  Future<void> initPayments() async {
+    Stripe.publishableKey = _publishableTestKey;
+    Stripe.merchantIdentifier = 'merchant.com.intheloopstudio';
+    await _stripe.applySettings();
+  }
+
   Future<PaymentIntentResponse> _createTestPaymentSheet({
     required String payerId,
-    required String payeeId,
+    required String payeeConnectedAccountId,
     required int amount,
   }) async {
     final callable = _functions.httpsCallable('createPaymentIntent');
 
-    final results = await callable<Map<String, String>>();
+    final results = await callable<Map<String, dynamic>>({
+      'destination': payeeConnectedAccountId,
+      'amount': amount,
+    });
     final data = results.data;
-    print('RES $data');
 
     final res = PaymentIntentResponse(
-      paymentIntent: data['paymentIntent'] ?? '',
-      ephemeralKey: data['ephemeralKey'] ?? '',
-      customer: data['customer'] ?? '',
-      publishableKey: data['publishableKey'] ?? '',
+      paymentIntent: data['paymentIntent'] as String,
+      ephemeralKey: data['ephemeralKey'] as String,
+      customer: data['customer'] as String,
+      publishableKey: data['publishableKey'] as String,
     );
 
     return res;
@@ -33,13 +44,13 @@ class StripePaymentImpl implements PaymentRepository {
   @override
   Future<void> initPaymentSheet({
     required String payerId,
-    required String payeeId,
+    required String payeeConnectedAccountId,
     required int amount,
   }) async {
     // 1. create payment intent on the server
     final intent = await _createTestPaymentSheet(
       payerId: payerId,
-      payeeId: payeeId,
+      payeeConnectedAccountId: payeeConnectedAccountId,
       amount: amount,
     );
 

@@ -67,7 +67,7 @@ List<RepositoryProvider<dynamic>> buildRepositories({
       create: (_) => RemoteConfigImpl()..fetchAndActivate(),
     ),
     RepositoryProvider<PaymentRepository>(
-      create: (_) => StripePaymentImpl(),
+      create: (_) => StripePaymentImpl()..initPayments(),
     ),
     RepositoryProvider<PlacesRepository>(
       create: (_) => GooglePlacesImpl(),
