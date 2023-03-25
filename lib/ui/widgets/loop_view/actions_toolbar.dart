@@ -45,7 +45,7 @@ class ActionsToolbar extends StatelessWidget {
                 onTap: () => context.read<LoopViewCubit>().toggleLikeLoop(),
               ),
               SocialActionButton(
-                icon: Icons.comment,
+                icon: CupertinoIcons.bubble_right,
                 title: state.commentsCount.toString(),
                 color: Colors.grey[300],
                 onTap: () => context.read<LoopViewCubit>().toggleComments(),
@@ -56,7 +56,7 @@ class ActionsToolbar extends StatelessWidget {
               //   onTap: null,
               // ),
               SocialActionButton(
-                icon: Icons.share,
+                icon: CupertinoIcons.share,
                 title: 'Share',
                 color: Colors.grey[300],
                 onTap: () async {

@@ -64,7 +64,7 @@ class ActivityTile extends StatelessWidget {
                         ),
                       ),
                       title: Text(
-                        user.username.toString(),
+                        user.displayName,
                       ),
                       subtitle: () {
                         switch (activity.type) {

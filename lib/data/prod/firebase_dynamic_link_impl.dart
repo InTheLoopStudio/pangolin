@@ -125,7 +125,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
         bundleId: 'com.intheloopstudio',
       ),
       socialMetaTagParameters: SocialMetaTagParameters(
-        title: '${user.username} on Tapped',
+        title: '${user.displayName} on Tapped',
         description:
             '''Tapped Network - The online platform tailored for producers and creators to share their loops to the world, get feedback on their music, and join the world-wide community of artists to collaborate with''',
       ),

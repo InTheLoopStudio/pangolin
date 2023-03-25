@@ -37,7 +37,7 @@ class PostFeedView extends StatelessWidget {
               trailing: NotificationIconButton(),
             ),
             floatingActionButton: FloatingActionButton(
-              child: const Icon(CupertinoIcons.add),
+              child: const Icon(Icons.edit_outlined),
               onPressed: () => context.read<NavigationBloc>().add(
                     const PushCreatePost(),
                   ),

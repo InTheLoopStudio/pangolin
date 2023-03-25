@@ -46,10 +46,14 @@ class FollowButton extends StatelessWidget {
                   navigationBloc.add(const PushSettings());
                 },
                 icon: const Icon(
-                  CupertinoIcons.gear,
+                  Icons.settings_outlined,
+                  color: Colors.white,
                 ),
                 label: const Text(
                   'Edit',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
               );
       },

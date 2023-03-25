@@ -44,7 +44,7 @@ class BookingContainer extends StatelessWidget {
               radius: 20,
               backgroundImageUrl: requestee.profilePicture,
             ),
-            title: Text(requestee.username.toString()),
+            title: Text(requestee.displayName),
             subtitle: Text(
               timeago.format(
                 booking.startTime,
@@ -93,7 +93,7 @@ class BookingContainer extends StatelessWidget {
               radius: 20,
               backgroundImageUrl: requester.profilePicture,
             ),
-            title: Text(requester.username.toString()),
+            title: Text(requester.displayName),
             subtitle: Text(
               timeago.format(
                 booking.startTime,

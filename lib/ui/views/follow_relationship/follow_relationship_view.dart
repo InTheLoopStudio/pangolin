@@ -63,7 +63,7 @@ class FollowRelationshipView extends StatelessWidget {
                 title: Row(
                   children: [
                     Text(
-                      user.username.toString(),
+                      user.displayName,
                       style: const TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,

@@ -54,7 +54,7 @@ class LoopView extends StatelessWidget {
                 audioRepo: audioRepo,
                 url: loop.audioPath,
                 title: loop.title,
-                artist: user.username.toString(),
+                artist: user.displayName,
                 image: user.profilePicture,
               ),
               builder: (context, snapshot) {

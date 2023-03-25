@@ -38,12 +38,12 @@ class BottomToolbar extends StatelessWidget {
                 CupertinoIcons.pencil_ellipsis_rectangle,
               ),
             ),
-            const BottomNavigationBarItem(icon: Icon(CupertinoIcons.search)),
+            const BottomNavigationBarItem(icon: Icon(CupertinoIcons.compass)),
             const BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.tickets),
             ),
             const BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.bubble_middle_bottom),
+              icon: Icon(CupertinoIcons.bubble_right),
             ),
             // BottomNavigationBarItem(icon: Icon(Icons.person)),
             BottomNavigationBarItem(

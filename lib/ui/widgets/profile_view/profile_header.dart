@@ -69,7 +69,7 @@ class ProfileHeader extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                state.visitedUser.username.toString(),
+                                state.visitedUser.displayName,
                                 style: const TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,
