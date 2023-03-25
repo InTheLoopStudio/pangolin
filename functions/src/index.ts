@@ -609,7 +609,8 @@ export const createStreamUserOnUserCreated = functions
     const user = snapshot.data();
     await streamClient.upsertUser({
       id: user.id,
-      name: user.username,
+      name: user.artistName,
+      username: user.username,
       email: user.email,
       image: user.profilePicture,
     });
@@ -629,7 +630,8 @@ export const updateStreamUserOnUserUpdate = functions
     streamClient.partialUpdateUser({
       id: user.id,
       set: {
-        name: user.username,
+        name: user.artistName,
+        username: user.username,
         email: user.email,
         image: user.profilePicture,
       },
