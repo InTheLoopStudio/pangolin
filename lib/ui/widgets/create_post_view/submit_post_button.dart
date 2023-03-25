@@ -11,14 +11,15 @@ class SubmitPostButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CreatePostCubit, CreatePostState>(
       builder: (context, state) {
-        return CupertinoButton.filled(
+        return FloatingActionButton.extended(
           // color: tappedAccent,
           onPressed: () => context.read<CreatePostCubit>().createPost(),
-          child: state.status.isInProgress
-              ? const CircularProgressIndicator(
-                  color: Colors.black,
-                )
-              : const Text('Post'),
+          icon: const Icon(
+            Icons.edit_outlined,
+          ),
+          label: state.status.isInProgress
+              ? const CircularProgressIndicator()
+              : const Text('Create Post'),
         );
       },
     );

@@ -65,7 +65,7 @@ class ConnectBankButton extends StatelessWidget {
 
             return const CupertinoButton(
               onPressed: null,
-              child: Text('Bank Account Connected'),
+              child: Text('✅ Bank Account Connected'),
             );
           },
         );

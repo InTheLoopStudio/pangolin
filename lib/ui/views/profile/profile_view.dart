@@ -16,7 +16,6 @@ import 'package:intheloopapp/ui/widgets/profile_view/posts_list.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/request_to_book.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/share_profile_button.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/social_media_icons.dart';
-import 'package:intheloopapp/ui/widgets/profile_view/venue_dashboard.dart';
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   _SliverAppBarDelegate(this._tabBar);

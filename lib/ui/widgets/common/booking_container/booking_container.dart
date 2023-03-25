@@ -56,8 +56,17 @@ class BookingContainer extends StatelessWidget {
             ),
             trailing: Text(
               EnumToString.convertToString(booking.status),
-              style: const TextStyle(
-                color: Colors.grey,
+              style: TextStyle(
+                color: () {
+                  switch (booking.status) {
+                    case BookingStatus.pending:
+                      return Colors.orange[300];
+                    case BookingStatus.confirmed:
+                      return Colors.green[300];
+                    case BookingStatus.canceled:
+                      return Colors.red[300];
+                  }
+                }(),
               ),
             ),
           );
