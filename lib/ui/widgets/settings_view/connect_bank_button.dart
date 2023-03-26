@@ -20,7 +20,9 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
     required PaymentRepository payments,
   }) =>
       CupertinoButton.filled(
-        child: const Text('Connect Bank Account'),
+        child: loading 
+        ? const CircularProgressIndicator()
+        : const Text('Connect Bank Account'),
         onPressed: () async {
           if (loading) {
             return;
