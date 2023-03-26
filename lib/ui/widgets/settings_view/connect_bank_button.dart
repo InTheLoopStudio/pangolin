@@ -6,8 +6,15 @@ import 'package:intheloopapp/domains/models/payment_user.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ConnectBankButton extends StatelessWidget {
+class ConnectBankButton extends StatefulWidget {
   const ConnectBankButton({super.key});
+
+  @override
+  State<ConnectBankButton> createState() => _ConnectBankButtonState();
+}
+
+class _ConnectBankButtonState extends State<ConnectBankButton> {
+  bool loading = false;
 
   Widget _connectBankAccountButton({
     required PaymentRepository payments,
@@ -15,6 +22,13 @@ class ConnectBankButton extends StatelessWidget {
       CupertinoButton.filled(
         child: const Text('Connect Bank Account'),
         onPressed: () async {
+          if (loading) {
+            return;
+          }
+
+          setState(() {
+            loading = true;
+          });
           // create connected account
           final res = await payments.createConnectedAccount();
 
@@ -26,6 +40,10 @@ class ConnectBankButton extends StatelessWidget {
             Uri.parse(res.url),
             mode: LaunchMode.externalApplication,
           );
+
+          setState(() {
+            loading = false;
+          });
         },
       );
 
