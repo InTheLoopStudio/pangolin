@@ -61,7 +61,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
             indicatorColor: tappedAccent,
             labelColor: tappedAccent,
             tabs: const [
-              Tab(child: Text('Artist Name')),
+              Tab(child: Text('Username')),
               Tab(child: Text('Location')),
             ],
           ),

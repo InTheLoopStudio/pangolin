@@ -164,6 +164,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
         MaterialPageRoute<CreateBookingView>(
           builder: (context) => CreateBookingView(
             requesteeId: event.requesteeId,
+            requesteeStripeConnectedAccountId: event.requesteeStripeConnectedAccountId,
           ),
         ),
       );

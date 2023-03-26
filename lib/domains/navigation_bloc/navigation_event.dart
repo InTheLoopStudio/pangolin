@@ -191,15 +191,19 @@ class PushStreamChannel extends NavigationEvent {
 }
 
 class PushCreateBooking extends NavigationEvent {
-  const PushCreateBooking(this.requesteeId);
+  const PushCreateBooking({
+    required this.requesteeId,
+    required this.requesteeStripeConnectedAccountId,
+  });
 
   final String requesteeId;
+  final String requesteeStripeConnectedAccountId;
 
   @override
-  String toString() => '''PushCreateBooking { requestee: $requesteeId }''';
+  String toString() => '''PushCreateBooking { requestee: $requesteeId, requesteeStripeConnectedAccountId: $requesteeStripeConnectedAccountId }''';
 
   @override
-  List<Object> get props => [requesteeId];
+  List<Object> get props => [requesteeId, requesteeStripeConnectedAccountId];
 }
 
 class PushBooking extends NavigationEvent {
