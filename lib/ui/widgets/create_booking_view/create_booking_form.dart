@@ -124,8 +124,16 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                 height: 20,
               ),
               CupertinoButton.filled(
-                onPressed: () =>
-                    context.read<CreateBookingCubit>().createBooking(),
+                onPressed: () async {
+                  try {
+                    await context.read<CreateBookingCubit>().createBooking();
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error: $e')),
+                    );
+                    rethrow;
+                  }
+                },
                 child: state.status.isInProgress
                     ? const CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation(tappedAccent),
