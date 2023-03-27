@@ -485,7 +485,7 @@ const _createPaymentIntent = async (data: {
   };
 };
 
-const _createConnectedAccount = async () => {
+const _createStripeAccount = async () => {
   const stripe = new Stripe(stripeKey.value(), {
     apiVersion: "2022-11-15",
   });
@@ -494,21 +494,36 @@ const _createConnectedAccount = async () => {
     type: "express",
   })
 
+  return account.id;
+}
+
+const _createConnectedAccount = async (data: {
+  accountId: string;
+}) => {
+
+  const stripe = new Stripe(stripeKey.value(), {
+    apiVersion: "2022-11-15",
+  });
+
+  const accountId = (data.accountId === undefined || data.accountId === null || data.accountId === "") 
+    ? (await _createStripeAccount())
+    : data.accountId
+
   const subdomain = "tappednetwork";
   const deepLink = "https://tappednetwork.page.link/connect_payment";
   const appInfo = "&apn=com.intheloopstudio&isi=1574937614&ibi=com.intheloopstudio";
 
-  const refreshUrl = `https://${subdomain}.page.link/?link=${deepLink}?account_id=${account.id}&refresh=true${appInfo}`;
-  const returnUrl = `https://${subdomain}.page.link/?link=${deepLink}?account_id=${account.id}`;
+  const refreshUrl = `https://${subdomain}.page.link/?link=${deepLink}?account_id=${accountId}&refresh=true${appInfo}`;
+  const returnUrl = `https://${subdomain}.page.link/?link=${deepLink}?account_id=${accountId}`;
 
   const accountLinks = await stripe.accountLinks.create({
-    account: account.id,
+    account: accountId,
     refresh_url: refreshUrl,
     return_url: returnUrl,
     type: "account_onboarding",
   })
 
-  return { success: true, url: accountLinks.url, accountId: account.id };
+  return { success: true, url: accountLinks.url, accountId: accountId };
 }
 
 const _getAccountById = async (data: { accountId: string }) => {
@@ -973,8 +988,8 @@ export const createConnectedAccount = functions
   .https
   .onCall((data, context) => {
     _authenticated(context);
-    return _createConnectedAccount();
-  });
+    return _createConnectedAccount(data);
+  })
 export const getAccountById = functions
   .runWith({ secrets: [ stripeKey, stripePublishableKey ] })
   .https

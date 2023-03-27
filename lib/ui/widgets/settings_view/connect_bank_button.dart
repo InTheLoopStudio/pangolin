@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/domains/models/payment_user.dart';
+import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -18,11 +19,13 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
 
   Widget _connectBankAccountButton({
     required PaymentRepository payments,
+    required UserModel currentUser,
+    required OnboardingBloc onboardingBloc,
   }) =>
       CupertinoButton.filled(
-        child: loading 
-        ? const CircularProgressIndicator()
-        : const Text('Connect Bank Account'),
+        child: loading
+            ? const CircularProgressIndicator()
+            : const Text('Connect Bank Account'),
         onPressed: () async {
           if (loading) {
             return;
@@ -37,6 +40,15 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
           if (res.success != true) {
             // show error
           }
+          final updatedUser = currentUser.copyWith(
+            stripeConnectedAccountId: res.accountId,
+          );
+
+          onboardingBloc.add(
+            UpdateOnboardedUser(
+              user: updatedUser,
+            ),
+          );
 
           await launchUrl(
             Uri.parse(res.url),
@@ -59,6 +71,8 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
         if (currentUser.stripeConnectedAccountId.isEmpty) {
           return _connectBankAccountButton(
             payments: payments,
+            currentUser: currentUser,
+            onboardingBloc: context.read<OnboardingBloc>(),
           );
         }
 
@@ -74,12 +88,16 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
             if (paymentUser == null) {
               return _connectBankAccountButton(
                 payments: payments,
+                currentUser: currentUser,
+                onboardingBloc: context.read<OnboardingBloc>(),
               );
             }
 
             if (!paymentUser.payoutsEnabled) {
               return _connectBankAccountButton(
                 payments: payments,
+                currentUser: currentUser,
+                onboardingBloc: context.read<OnboardingBloc>(),
               );
             }
 

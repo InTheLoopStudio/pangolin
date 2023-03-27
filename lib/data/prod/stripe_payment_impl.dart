@@ -10,7 +10,6 @@ const _publishableTestKey =
     'pk_test_51MjqoRIdnJ3C1QPEjac68utViyu6vQcJfRfEyNesdoi9eKZP5hKnxbuyHCcSFVH8mBjYAxN0qyMdn2P8ZQb5OuZo00Bfy49Ebc';
 
 class StripePaymentImpl implements PaymentRepository {
-
   @override
   Future<void> initPayments() async {
     Stripe.publishableKey = _publishableTestKey;
@@ -77,10 +76,14 @@ class StripePaymentImpl implements PaymentRepository {
   }
 
   @override
-  Future<ConnectedAccountResponse> createConnectedAccount() async {
+  Future<ConnectedAccountResponse> createConnectedAccount({
+    String? accountId,
+  }) async {
     final callable = _functions.httpsCallable('createConnectedAccount');
 
-    final results = await callable<Map<String, dynamic>>();
+    final results = await callable<Map<String, dynamic>>({
+      'accountId': accountId ?? '',
+    });
     final data = results.data;
 
     final res = ConnectedAccountResponse(

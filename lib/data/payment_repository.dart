@@ -8,7 +8,9 @@ abstract class PaymentRepository {
     required int amount,
   });
   Future<void> presentPaymentSheet();
-  Future<ConnectedAccountResponse> createConnectedAccount();
+  Future<ConnectedAccountResponse> createConnectedAccount({
+    String accountId,
+  });
 
   Future<PaymentUser?> getAccountById(String id);
 }

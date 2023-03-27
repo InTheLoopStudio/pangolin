@@ -20,8 +20,6 @@ class PaymentSettingsForm extends StatelessWidget {
           builder: (context, state) {
             return Column(
               children: [
-
-                // ConnectStripAccountButton(),
                 const ConnectBankButton(),
                 const SizedBox(height: 20),
                 RateTextField(
