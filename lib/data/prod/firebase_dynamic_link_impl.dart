@@ -68,15 +68,19 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
         );
       case '/connect_payment':
         final linkParameters = deepLink.queryParameters;
-        final accountId = linkParameters['account_id'] ?? '';
+        final accountId = linkParameters['account_id'];
 
-        final refresh = linkParameters['refresh'] ?? '';
-        if (refresh == 'true') {
-          return DynamicLinkRedirect(
-            type: DynamicLinkType.connectStripeRefresh,
-            id: accountId,
-          );
+        if (accountId == null) {
+          return null;
         }
+
+        // final refresh = linkParameters['refresh'] ?? '';
+        // if (refresh == 'true') {
+        //   return DynamicLinkRedirect(
+        //     type: DynamicLinkType.connectStripeRefresh,
+        //     id: accountId,
+        //   );
+        // }
 
         return DynamicLinkRedirect(
           type: DynamicLinkType.connectStripeRedirect,
