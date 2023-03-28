@@ -465,10 +465,10 @@ const _createPaymentIntent = async (data: {
   const application_fee = data.amount * 0.10;
 
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: data.amount,
+    amount: Math.floor(data.amount),
     currency: "usd",
     customer: customer.id,
-    application_fee_amount: application_fee,
+    application_fee_amount: Math.floor(application_fee),
     automatic_payment_methods: {
       enabled: true,
     },
