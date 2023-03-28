@@ -37,7 +37,7 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
             }
             break;
           case DynamicLinkType.connectStripeRedirect:
-            if (event.id == null) {
+            if (event.id == null || event.id == '') {
               break;
             }
             // add accountId to the users data
