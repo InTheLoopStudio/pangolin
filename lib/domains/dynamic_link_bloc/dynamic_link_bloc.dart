@@ -33,7 +33,7 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
             break;
           case DynamicLinkType.shareProfile:
             if (event.id != null) {
-              navigationBloc.add(PushProfile(event.id ?? ''));
+              navigationBloc.add(PushProfile(event.id!));
             }
             break;
           case DynamicLinkType.connectStripeRedirect:
@@ -47,8 +47,9 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
 
             final currentUser =
                 (onboardingBloc.state as Onboarded).currentUser.copyWith(
-                      stripeConnectedAccountId: event.id ?? '',
+                      stripeConnectedAccountId: event.id!,
                     );
+
             onboardingBloc.add(
               UpdateOnboardedUser(
                 user: currentUser,

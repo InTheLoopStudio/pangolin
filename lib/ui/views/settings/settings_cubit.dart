@@ -189,6 +189,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         emailNotificationsAppReleases: state.emailNotificationsAppReleases,
         emailNotificationsITLUpdates: state.emailNotificationsITLUpdates,
         bookingRate: state.rate,
+        // stripeConnectedAccountId: state.stripeConnectedAccountId,
       );
 
       onboardingBloc.add(UpdateOnboardedUser(user: user));

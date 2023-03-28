@@ -36,12 +36,14 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
           setState(() {
             loading = true;
           });
+
           // create connected account
           final res = await payments.createConnectedAccount();
 
           if (res.success != true) {
             // show error
           }
+
           final updatedUser = currentUser.copyWith(
             stripeConnectedAccountId: res.accountId,
           );

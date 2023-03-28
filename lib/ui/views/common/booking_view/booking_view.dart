@@ -234,24 +234,29 @@ class BookingView extends StatelessWidget {
                             )
                           : const SizedBox.shrink(),
                 ),
-                SliverToBoxAdapter(
-                  child: CupertinoButton(
-                    onPressed: () {
-                      final updated = booking.copyWith(
-                        status: BookingStatus.canceled,
-                      );
-                      database.updateBooking(updated);
-                      onDeny?.call(updated);
-                      navigationBloc.add(const Pop());
-                    },
-                    child: const Text(
-                      'Cancel Booking',
-                      style: TextStyle(
-                        color: Colors.red,
+                if (booking.status == BookingStatus.canceled)
+                  SliverToBoxAdapter(
+                    child: CupertinoButton(
+                      onPressed: () {
+                        final updated = booking.copyWith(
+                          status: BookingStatus.canceled,
+                        );
+                        database.updateBooking(updated);
+                        onDeny?.call(updated);
+                        navigationBloc.add(const Pop());
+                      },
+                      child: const Text(
+                        'Cancel Booking',
+                        style: TextStyle(
+                          color: Colors.red,
+                        ),
                       ),
                     ),
+                  )
+                else
+                  const SliverToBoxAdapter(
+                    child: SizedBox.shrink(),
                   ),
-                )
               ],
             ),
           ),
