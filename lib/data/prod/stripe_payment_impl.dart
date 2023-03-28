@@ -17,7 +17,7 @@ class StripePaymentImpl implements PaymentRepository {
     await _stripe.applySettings();
   }
 
-  Future<PaymentIntentResponse> _createTestPaymentSheet({
+  Future<PaymentIntentResponse> _createPaymentSheet({
     required String payerId,
     required String payeeConnectedAccountId,
     required int amount,
@@ -47,7 +47,7 @@ class StripePaymentImpl implements PaymentRepository {
     required int amount,
   }) async {
     // 1. create payment intent on the server
-    final intent = await _createTestPaymentSheet(
+    final intent = await _createPaymentSheet(
       payerId: payerId,
       payeeConnectedAccountId: payeeConnectedAccountId,
       amount: amount,
@@ -73,6 +73,11 @@ class StripePaymentImpl implements PaymentRepository {
   @override
   Future<void> presentPaymentSheet() async {
     await _stripe.presentPaymentSheet();
+  }
+
+  @override 
+  Future<void> confirmPaymentSheetPayment() async {
+    await _stripe.confirmPaymentSheetPayment();
   }
 
   @override

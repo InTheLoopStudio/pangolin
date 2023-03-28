@@ -60,6 +60,9 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                       context,
                       CupertinoDatePicker(
                         initialDateTime: state.startTime.value,
+                        minimumDate: DateTime.now().subtract(
+                          const Duration(hours: 1),
+                        ),
                         use24hFormat: true,
                         onDateTimeChanged: (DateTime newDateTime) {
                           context
@@ -117,6 +120,51 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                   ),
                 ],
               ),
+              _FormItem(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 22),
+                    child: Text(
+                      // ignore: lines_longer_than_80_chars
+                      'Artist Rate (\$${(state.requesteeBookingRate / 100).toStringAsFixed(2)})',
+                    ),
+                  ),
+                  Text(
+                    state.formattedArtistRate,
+                    style: const TextStyle(
+                      fontSize: 22,
+                    ),
+                  ),
+                ],
+              ),
+              _FormItem(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 22),
+                    child: Text('Booking Fee (%10)'),
+                  ),
+                  Text(
+                    state.formattedBookingFee,
+                    style: const TextStyle(
+                      fontSize: 22,
+                    ),
+                  ),
+                ],
+              ),
+              _FormItem(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 22),
+                    child: Text('Total'),
+                  ),
+                  Text(
+                    state.formattedTotal,
+                    style: const TextStyle(
+                      fontSize: 22,
+                    ),
+                  ),
+                ],
+              ),
               BookingNoteTextField(
                 controller: noteController,
               ),
@@ -136,7 +184,7 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                 },
                 child: state.status.isInProgress
                     ? const CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation(tappedAccent),
+                        valueColor: AlwaysStoppedAnimation(Colors.white),
                       )
                     : const Text('Confirm'),
               ),

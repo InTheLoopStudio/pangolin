@@ -194,16 +194,23 @@ class PushCreateBooking extends NavigationEvent {
   const PushCreateBooking({
     required this.requesteeId,
     required this.requesteeStripeConnectedAccountId,
+    required this.requesteeBookingRate,
   });
 
   final String requesteeId;
   final String requesteeStripeConnectedAccountId;
+  final int requesteeBookingRate;
 
   @override
-  String toString() => '''PushCreateBooking { requestee: $requesteeId, requesteeStripeConnectedAccountId: $requesteeStripeConnectedAccountId }''';
+  String toString() =>
+      '''PushCreateBooking { requestee: $requesteeId, requesteeStripeConnectedAccountId: $requesteeStripeConnectedAccountId, requesteeBookingRate: $requesteeBookingRate }''';
 
   @override
-  List<Object> get props => [requesteeId, requesteeStripeConnectedAccountId];
+  List<Object> get props => [
+        requesteeId,
+        requesteeStripeConnectedAccountId,
+        requesteeBookingRate,
+      ];
 }
 
 class PushBooking extends NavigationEvent {

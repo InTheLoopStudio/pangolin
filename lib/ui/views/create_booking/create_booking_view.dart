@@ -15,11 +15,13 @@ class CreateBookingView extends StatelessWidget {
   const CreateBookingView({
     required this.requesteeId,
     required this.requesteeStripeConnectedAccountId,
+    required this.requesteeBookingRate,
     super.key,
   });
 
   final String requesteeId;
   final String requesteeStripeConnectedAccountId;
+  final int requesteeBookingRate;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +51,7 @@ class CreateBookingView extends StatelessWidget {
               requesteeId: requesteeId,
               requesteeStripeConnectedAccountId:
                   requesteeStripeConnectedAccountId,
+              requesteeBookingRate: requesteeBookingRate,
               navigationBloc: context.read<NavigationBloc>(),
               database: database,
               streamRepo: RepositoryProvider.of<StreamRepository>(context),
@@ -56,7 +59,7 @@ class CreateBookingView extends StatelessWidget {
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
+              child: ListView(
                 children: [
                   const Row(
                     children: [

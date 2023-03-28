@@ -130,6 +130,23 @@ class BookingView extends StatelessWidget {
                 ),
                 const SliverToBoxAdapter(
                   child: Text(
+                    'Artist Rate Paid',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: Text(
+                    '\$${(booking.rate / 100).toStringAsFixed(2)} / hour',
+                  ),
+                ),
+                const SliverToBoxAdapter(
+                  child: SizedBox(height: 20),
+                ),
+                const SliverToBoxAdapter(
+                  child: Text(
                     'Date',
                     style: TextStyle(
                       fontSize: 28,

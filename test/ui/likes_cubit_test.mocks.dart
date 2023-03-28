@@ -103,7 +103,7 @@ class MockDatabaseRepository extends _i1.Mock
   _i6.Future<List<_i7.UserModel>> searchUsersByLocation({
     required double? lat,
     required double? lng,
-    int? radius = 50000,
+    int? radiusInMeters = 50000,
     int? limit = 100,
     String? lastUserId,
   }) =>
@@ -114,7 +114,7 @@ class MockDatabaseRepository extends _i1.Mock
           {
             #lat: lat,
             #lng: lng,
-            #radius: radius,
+            #radius: radiusInMeters,
             #limit: limit,
             #lastUserId: lastUserId,
           },

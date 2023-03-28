@@ -80,7 +80,6 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
       emit(state);
     });
     on<PushSettings>((event, emit) {
-      
       // this is sus, the 5 shouldn't be hardcoded
       emit(state.copyWith(selectedTab: 5));
       navigationKey.currentState?.push(
@@ -164,7 +163,9 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
         MaterialPageRoute<CreateBookingView>(
           builder: (context) => CreateBookingView(
             requesteeId: event.requesteeId,
-            requesteeStripeConnectedAccountId: event.requesteeStripeConnectedAccountId,
+            requesteeStripeConnectedAccountId:
+                event.requesteeStripeConnectedAccountId,
+            requesteeBookingRate: event.requesteeBookingRate,
           ),
         ),
       );
@@ -185,12 +186,12 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<PushLocationForm>((event, emit) {
       navigationKey.currentState?.push(
         MaterialPageRoute<LocationFormView>(
-            builder: (context) => LocationFormView(
-              initialPlaceId: event.initialPlaceId,
-              initialPlace: event.initialPlace,
-              onSelected: event.onSelected,
-            ),
+          builder: (context) => LocationFormView(
+            initialPlaceId: event.initialPlaceId,
+            initialPlace: event.initialPlace,
+            onSelected: event.onSelected,
           ),
+        ),
       );
 
       emit(state);

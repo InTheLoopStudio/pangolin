@@ -21,6 +21,7 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
     required this.currentUserId,
     required this.requesteeId,
     required this.requesteeStripeConnectedAccountId,
+    required this.requesteeBookingRate,
     required this.navigationBloc,
     required this.database,
     required this.streamRepo,
@@ -29,12 +30,14 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
           CreateBookingState(
             currentUserId: currentUserId,
             requesteeId: requesteeId,
+            requesteeBookingRate: requesteeBookingRate,
           ),
         );
 
   final String currentUserId;
   final String requesteeId;
   final String requesteeStripeConnectedAccountId;
+  final int requesteeBookingRate;
   final NavigationBloc navigationBloc;
   final DatabaseRepository database;
   final StreamRepository streamRepo;
@@ -68,38 +71,44 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
       );
 
   Future<void> createBooking() async {
-    // final booking = Booking(
-    //   id: const Uuid().v4(),
-    //   name: state.name.value,
-    //   note: state.note.value,
-    //   requesterId: state.currentUserId,
-    //   requesteeId: state.requesteeId,
-    //   status: BookingStatus.pending,
-    //   startTime: state.startTime.value,
-    //   endTime: state.endTime.value,
-    //   timestamp: DateTime.now(),
-    // );
-    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
-    await payments.initPaymentSheet(
-      payerId: state.currentUserId,
-      payeeConnectedAccountId: requesteeStripeConnectedAccountId,
-      amount: 100,
+    final booking = Booking(
+      id: const Uuid().v4(),
+      name: state.name.value,
+      note: state.note.value,
+      requesterId: state.currentUserId,
+      requesteeId: state.requesteeId,
+      rate: state.requesteeBookingRate,
+      status: BookingStatus.pending,
+      startTime: state.startTime.value,
+      endTime: state.endTime.value,
+      timestamp: DateTime.now(),
     );
-    await payments.presentPaymentSheet();
+    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+    final d = state.endTime.value.difference(state.startTime.value);
+    final rateInMinutes = requesteeBookingRate / 60;
+    final total = d.inMinutes * rateInMinutes;
+    try {
+      await payments.initPaymentSheet(
+        payerId: state.currentUserId,
+        payeeConnectedAccountId: requesteeStripeConnectedAccountId,
+        amount: total.toInt(),
+      );
+      await payments.presentPaymentSheet();
 
-    // try {
-    //   final channel = await streamRepo.createSimpleChat(state.requesteeId);
-    //   await channel.sendMessage(
-    //     Message(
-    //       text: state.note.value,
-    //     ),
-    //   );
-    //   await database.createBooking(booking);
-    //   emit(state.copyWith(status: FormzSubmissionStatus.success));
-    // } on Exception {
-    //   emit(state.copyWith(status: FormzSubmissionStatus.failure));
-    // }
+      await payments.confirmPaymentSheetPayment();
 
-    // navigationBloc.add(const Pop());
+      final channel = await streamRepo.createSimpleChat(state.requesteeId);
+      await channel.sendMessage(
+        Message(
+          text: state.note.value,
+        ),
+      );
+      await database.createBooking(booking);
+      emit(state.copyWith(status: FormzSubmissionStatus.success));
+    } on Exception {
+      emit(state.copyWith(status: FormzSubmissionStatus.failure));
+    }
+
+    navigationBloc.add(const Pop());
   }
 }

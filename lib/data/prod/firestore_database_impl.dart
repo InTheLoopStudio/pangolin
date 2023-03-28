@@ -192,14 +192,14 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   Future<List<UserModel>> searchUsersByLocation({
     required double lat,
     required double lng,
-    int radius = 50 * 1000, // 50km
+    int radiusInMeters = 100 * 1000, // 100km
     int limit = 100,
     String? lastUserId,
   }) async {
     final range = getGeohashRange(
       latitude: lat,
       longitude: lng,
-      distance: radius,
+      distance: radiusInMeters ~/ 1000,
     );
 
     if (lastUserId != null) {
@@ -217,8 +217,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         return [];
       }
 
-      final usersWithFP =
-          usersSnapshot.docs.map(UserModel.fromDoc).toList();
+      final usersWithFP = usersSnapshot.docs.map(UserModel.fromDoc).toList();
 
       final users = usersWithFP
           .map((user) {
@@ -230,7 +229,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
             );
 
             final distanceInM = distanceInKm * 1000;
-            if (distanceInM > radius) {
+            if (distanceInM > radiusInMeters) {
               return null;
             }
 
@@ -253,8 +252,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         return [];
       }
 
-      final usersWithFP =
-          usersSnapshot.docs.map(UserModel.fromDoc).toList();
+      final usersWithFP = usersSnapshot.docs.map(UserModel.fromDoc).toList();
 
       final users = usersWithFP
           .map((user) {
@@ -266,7 +264,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
             );
 
             final distanceInM = distanceInKm * 1000;
-            if (distanceInM > radius) {
+            if (distanceInM > radiusInMeters) {
               return null;
             }
 
@@ -782,8 +780,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .startAfterDocument(documentSnapshot)
           .get();
 
-      final activities =
-          activitiesSnapshot.docs.map(Activity.fromDoc).toList();
+      final activities = activitiesSnapshot.docs.map(Activity.fromDoc).toList();
 
       return activities;
     } else {
@@ -793,8 +790,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .limit(limit)
           .get();
 
-      final activities =
-          activitiesSnapshot.docs.map(Activity.fromDoc).toList();
+      final activities = activitiesSnapshot.docs.map(Activity.fromDoc).toList();
 
       return activities;
     }
@@ -880,8 +876,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         .limit(limit)
         .get();
 
-    final comments =
-        commentsSnapshot.docs.map(Comment.fromDoc).toList();
+    final comments = commentsSnapshot.docs.map(Comment.fromDoc).toList();
 
     return comments;
   }
@@ -1098,9 +1093,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .startAfterDocument(documentSnapshot)
           .get();
 
-      final userCreatedBadges = userCreatedBadgesSnapshot.docs
-          .map(Badge.fromDoc)
-          .toList();
+      final userCreatedBadges =
+          userCreatedBadgesSnapshot.docs.map(Badge.fromDoc).toList();
       return userCreatedBadges;
     } else {
       final userCreatedBadgesSnapshot = await _badgesRef
@@ -1109,9 +1103,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .limit(limit)
           .get();
 
-      final userCreatedBadges = userCreatedBadgesSnapshot.docs
-          .map(Badge.fromDoc)
-          .toList();
+      final userCreatedBadges =
+          userCreatedBadgesSnapshot.docs.map(Badge.fromDoc).toList();
 
       return userCreatedBadges;
     }
@@ -1462,8 +1455,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         )
         .get();
 
-    final bookingRequests =
-        bookingSnapshot.docs.map(Booking.fromDoc).toList();
+    final bookingRequests = bookingSnapshot.docs.map(Booking.fromDoc).toList();
 
     return bookingRequests;
   }
@@ -1481,8 +1473,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         )
         .get();
 
-    final bookingRequests =
-        bookingSnapshot.docs.map(Booking.fromDoc).toList();
+    final bookingRequests = bookingSnapshot.docs.map(Booking.fromDoc).toList();
 
     return bookingRequests;
   }
@@ -1500,8 +1491,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         )
         .get();
 
-    final bookingRequests =
-        bookingSnapshot.docs.map(Booking.fromDoc).toList();
+    final bookingRequests = bookingSnapshot.docs.map(Booking.fromDoc).toList();
 
     return bookingRequests;
   }

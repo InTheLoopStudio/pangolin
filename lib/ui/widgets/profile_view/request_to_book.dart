@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
 
@@ -27,13 +25,15 @@ class RequestToBookButton extends StatelessWidget {
                               requesteeId: state.visitedUser.id,
                               requesteeStripeConnectedAccountId:
                                   state.visitedUser.stripeConnectedAccountId,
+                              requesteeBookingRate:
+                                  state.visitedUser.bookingRate,
                             ),
                           );
                         }
                       : null,
                   child: state.visitedUser.stripeConnectedAccountId.isNotEmpty
                       ? const Text('Request to Book')
-                      : const Text('Payment Info not Connected'),
+                      : const Text('Artist Payment Info not Connected'),
                 ),
               )
             : const SizedBox(

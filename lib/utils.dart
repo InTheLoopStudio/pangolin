@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 
 final georange = GeoRange();
 
-const latPerMile = 0.0144927536231884; // degrees latitude per mile
-const lngPerMile = 0.0181818181818182; // degrees longitude per mile
+const latPerKm = 0.009090909090909; // degrees latitude per Km
+const lngPerKm = 0.0089847259658580; // degrees longitude per Km
 
 /// project extensions for firebase's `DocumentSnapshot<T>` class
 extension DefaultValue<V> on DocumentSnapshot<Map<String, dynamic>> {
@@ -64,7 +64,7 @@ String geocodeEncode({
   required double lat,
   required double lng,
 }) {
-  return georange.encode(lng, lat);
+  return georange.encode(lat, lng);
 }
 
 LatLng geocodeDecode(String geohash) {
@@ -79,13 +79,13 @@ LatLng geocodeDecode(String geohash) {
 GeoHashRange getGeohashRange({
   required double latitude,
   required double longitude,
-  int distance = 12, // miles
+  int distance = 100, // Km
 }) {
-  final lowerLat = latitude - latPerMile * distance;
-  final lowerLon = longitude - lngPerMile * distance;
+  final lowerLat = latitude - latPerKm * distance;
+  final lowerLon = longitude - lngPerKm * distance;
 
-  final upperLat = latitude + latPerMile * distance;
-  final upperLon = longitude + lngPerMile * distance;
+  final upperLat = latitude + latPerKm * distance;
+  final upperLon = longitude + lngPerKm * distance;
 
   final lower = georange.encode(lowerLat, lowerLon);
   final upper = georange.encode(upperLat, upperLon);
@@ -108,4 +108,4 @@ class GeoHashRange {
 }
 
 String formattedAddress(List<AddressComponent>? shortNames) =>
-    shortNames?.first.shortName ?? 'Location';
+    shortNames?.first.shortName ?? 'Unknown';

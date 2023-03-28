@@ -16,6 +16,7 @@ class Booking {
     required this.requesterId,
     required this.requesteeId,
     required this.status,
+    required this.rate,
     required this.startTime,
     required this.endTime,
     required this.timestamp,
@@ -33,6 +34,7 @@ class Booking {
       note: doc.getOrElse('note', '') as String,
       requesterId: doc.getOrElse('requesterId', '') as String,
       requesteeId: doc.getOrElse('requesteeId', '') as String,
+      rate: doc.getOrElse('rate', 0) as int,
       status: EnumToString.fromString(
             BookingStatus.values,
             doc.getOrElse('status', '') as String,
@@ -50,6 +52,7 @@ class Booking {
   String requesterId;
   String requesteeId;
   BookingStatus status;
+  int rate;
   DateTime startTime;
   DateTime endTime;
   DateTime timestamp;
@@ -61,6 +64,7 @@ class Booking {
       'note': note,
       'requesterId': requesterId,
       'requesteeId': requesteeId,
+      'rate': rate,
       'status': EnumToString.convertToString(status),
       'timestamp': Timestamp.fromDate(timestamp),
       'startTime': Timestamp.fromDate(startTime),
@@ -74,6 +78,7 @@ class Booking {
     String? note,
     String? requesterId,
     String? requesteeId,
+    int? rate,
     DateTime? startTime,
     DateTime? endTime,
     DateTime? timestamp,
@@ -83,6 +88,7 @@ class Booking {
       id: id ?? this.id,
       name: name ?? this.name,
       note: note ?? this.note,
+      rate: rate ?? this.rate,
       requesterId: requesterId ?? this.requesterId,
       requesteeId: requesteeId ?? this.requesteeId,
       startTime: startTime ?? this.startTime,
@@ -95,4 +101,7 @@ class Booking {
   bool get isPending => status == BookingStatus.pending;
   bool get isConfirmed => status == BookingStatus.confirmed;
   bool get isCancaled => status == BookingStatus.canceled;
+
+  int get totalCost =>
+      ((rate / 60) * endTime.difference(startTime).inMinutes).toInt();
 }

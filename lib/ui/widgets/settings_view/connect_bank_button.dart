@@ -24,7 +24,9 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
   }) =>
       CupertinoButton.filled(
         child: loading
-            ? const CircularProgressIndicator()
+            ? const CircularProgressIndicator(
+              color: Colors.white,
+            )
             : const Text('Connect Bank Account'),
         onPressed: () async {
           if (loading) {
