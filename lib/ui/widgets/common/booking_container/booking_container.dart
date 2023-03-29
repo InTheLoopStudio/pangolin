@@ -152,11 +152,10 @@ class BookingContainer extends StatelessWidget {
       selector: (state) => state as Onboarded,
       builder: (context, state) {
         final currentUser = state.currentUser;
-        switch (currentUser.accountType) {
-          case AccountType.venue:
-            return venueTile(databaseRepository);
-          case AccountType.free:
-            return freeTile(databaseRepository);
+        if (currentUser.id == booking.requesterId) {
+          return venueTile(databaseRepository);
+        } else {
+          return freeTile(databaseRepository);
         }
       },
     );
