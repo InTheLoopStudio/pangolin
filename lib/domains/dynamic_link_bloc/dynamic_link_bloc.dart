@@ -4,7 +4,6 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/dynamic_link_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
-import 'package:intheloopapp/ui/widgets/onboarding/onboarding_form.dart';
 
 part 'dynamic_link_event.dart';
 part 'dynamic_link_state.dart';
@@ -47,7 +46,7 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
 
             final currentUser =
                 (onboardingBloc.state as Onboarded).currentUser.copyWith(
-                      stripeConnectedAccountId: event.id!,
+                      stripeConnectedAccountId: event.id,
                     );
 
             onboardingBloc.add(
