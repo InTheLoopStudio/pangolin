@@ -492,7 +492,14 @@ const _createStripeAccount = async () => {
 
   const account = await stripe.accounts.create({
     type: "express",
-  })
+    settings: {
+      payouts: {
+        schedule: {
+          interval: "manual",
+        },
+      },
+    },
+  });
 
   return account.id;
 }
