@@ -27,6 +27,7 @@ class StripePaymentImpl implements PaymentRepository {
     final results = await callable<Map<String, dynamic>>({
       'destination': payeeConnectedAccountId,
       'amount': amount,
+      'customerId': payerCustomerId,
     });
     final data = results.data;
 
