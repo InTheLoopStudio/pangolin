@@ -13,4 +13,9 @@ class RemoteConfigImpl implements RemoteConfigRepository {
   Future<bool> getDownForMaintenanceStatus() async {
     return _remoteConfig.getBool('down_for_maintenance');
   }
+
+  @override
+  Future<double> getBookingFee() async {
+    return _remoteConfig.getDouble('booking_fee');
+  }
 }

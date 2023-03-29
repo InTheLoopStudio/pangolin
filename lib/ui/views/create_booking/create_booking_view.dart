@@ -100,7 +100,7 @@ class CreateBookingView extends StatelessWidget {
                   const Row(
                     children: [
                       Text(
-                        'Band',
+                        'Performer',
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,

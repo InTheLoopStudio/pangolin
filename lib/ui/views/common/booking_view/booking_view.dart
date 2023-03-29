@@ -99,7 +99,7 @@ class BookingView extends StatelessWidget {
                 ),
                 const SliverToBoxAdapter(
                   child: Text(
-                    'Band',
+                    'Performer',
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,

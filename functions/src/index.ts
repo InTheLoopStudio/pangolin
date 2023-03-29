@@ -1,8 +1,11 @@
 /* eslint-disable import/no-unresolved */
-import type { messaging, auth } from "firebase-admin";
+import { messaging, auth } from "firebase-admin";
 
 import * as functions from "firebase-functions";
 import { initializeApp } from "firebase-admin/app";
+import { 
+  initializeApp as firebaseInitializeApp 
+} from "firebase/app";
 import {
   getFirestore,
   FieldValue,
@@ -10,11 +13,24 @@ import {
 } from "firebase-admin/firestore";
 import { getStorage } from "firebase-admin/storage";
 import { getMessaging } from "firebase-admin/messaging";
+import { getRemoteConfig, getValue } from "firebase/remote-config";
 import { StreamChat } from "stream-chat";
 import { defineSecret } from "firebase-functions/params";
-import Stripe from "stripe";
 import { HttpsError } from "firebase-functions/v1/auth";
 
+import Stripe from "stripe";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBIHwGYfS7MGREOR4nSTYJxZPLXNApTJ3M",
+  authDomain: "in-the-loop-306520.firebaseapp.com",
+  projectId: "in-the-loop-306520",
+  storageBucket: "in-the-loop-306520.appspot.com",
+  messagingSenderId: "269420857313",
+  appId: "1:269420857313:web:1ace984d27362ddcf7f4a0",
+  measurementId: "G-D8EFYQBB2Q"
+};
+
+const firebaseApp = firebaseInitializeApp(firebaseConfig);
 const app = initializeApp();
 
 const streamKey = defineSecret("STREAM_KEY");
@@ -28,6 +44,7 @@ const stripePublishableKey = defineSecret("STRIPE_PUBLISHABLE_TEST_KEY");
 const db = getFirestore(app);
 const storage = getStorage(app);
 const fcm = getMessaging(app);
+const remote = getRemoteConfig(firebaseApp);
 
 const usersRef = db.collection("users");
 const loopsRef = db.collection("loops");
@@ -50,7 +67,6 @@ const tokensRef = db.collection("device_tokens")
 // const postCommentsSubcollection = "postComments";
 const loopsFeedSubcollection = "userFeed";
 const postsFeedSubcollection = "userPostsFeed";
-
 
 
 type EntityType = "loop" | "post";
@@ -446,6 +462,7 @@ const _createPaymentIntent = async (data: {
   customerId?: string,
 }) => {
 
+
   if (data.destination === undefined || data.destination === null || data.destination === "") {
     throw new functions.https.HttpsError(
       "invalid-argument",
@@ -465,7 +482,7 @@ const _createPaymentIntent = async (data: {
   });
 
 
-  const customerId = (data.customerId === undefined || data.customerId === null || data.customerId === "") 
+  const customerId = (data.customerId === undefined || data.customerId === null || data.customerId === "")
     ? (await _createStripeCustomer())
     : data.customerId
 
@@ -475,8 +492,10 @@ const _createPaymentIntent = async (data: {
     { apiVersion: "2022-11-15" }
   );
 
+  const bookingFee = await getValue(remote, "booking_fee").asNumber();
+
   // Set the application fee to be 10%
-  const application_fee = data.amount * 0.10;
+  const application_fee = data.amount * bookingFee;
 
   const paymentIntent = await stripe.paymentIntents.create({
     amount: Math.floor(data.amount),
@@ -526,7 +545,7 @@ const _createConnectedAccount = async (data: {
     apiVersion: "2022-11-15",
   });
 
-  const accountId = (data.accountId === undefined || data.accountId === null || data.accountId === "") 
+  const accountId = (data.accountId === undefined || data.accountId === null || data.accountId === "")
     ? (await _createStripeAccount())
     : data.accountId
 
