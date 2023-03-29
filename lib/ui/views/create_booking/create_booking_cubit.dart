@@ -6,7 +6,9 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
+import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/widgets/create_booking_view/booking_end_time.dart';
 import 'package:intheloopapp/ui/widgets/create_booking_view/booking_name.dart';
 import 'package:intheloopapp/ui/widgets/create_booking_view/booking_note.dart';
@@ -18,27 +20,29 @@ part 'create_booking_state.dart';
 
 class CreateBookingCubit extends Cubit<CreateBookingState> {
   CreateBookingCubit({
-    required this.currentUserId,
+    required this.currentUser,
     required this.requesteeId,
     required this.requesteeStripeConnectedAccountId,
     required this.requesteeBookingRate,
     required this.navigationBloc,
+    required this.onboardingBloc,
     required this.database,
     required this.streamRepo,
     required this.payments,
   }) : super(
           CreateBookingState(
-            currentUserId: currentUserId,
+            currentUserId: currentUser.id,
             requesteeId: requesteeId,
             requesteeBookingRate: requesteeBookingRate,
           ),
         );
 
-  final String currentUserId;
+  final UserModel currentUser;
   final String requesteeId;
   final String requesteeStripeConnectedAccountId;
   final int requesteeBookingRate;
   final NavigationBloc navigationBloc;
+  final OnboardingBloc onboardingBloc;
   final DatabaseRepository database;
   final StreamRepository streamRepo;
   final PaymentRepository payments;
@@ -88,11 +92,22 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
     final rateInMinutes = requesteeBookingRate / 60;
     final total = d.inMinutes * rateInMinutes;
     try {
-      await payments.initPaymentSheet(
-        payerId: state.currentUserId,
+      final intent = await payments.initPaymentSheet(
+        payerCustomerId: currentUser.stripeCustomerId,
         payeeConnectedAccountId: requesteeStripeConnectedAccountId,
         amount: total.toInt(),
       );
+
+      if (intent.customer != currentUser.stripeCustomerId) {
+        onboardingBloc.add(
+          UpdateOnboardedUser(
+            user: currentUser.copyWith(
+              stripeCustomerId: intent.customer,
+            ),
+          ),
+        );
+      }
+
       await payments.presentPaymentSheet();
 
       await payments.confirmPaymentSheetPayment();

@@ -47,12 +47,13 @@ class CreateBookingView extends StatelessWidget {
           ),
           body: BlocProvider(
             create: (context) => CreateBookingCubit(
-              currentUserId: currentUser.id,
+              currentUser: currentUser,
               requesteeId: requesteeId,
               requesteeStripeConnectedAccountId:
                   requesteeStripeConnectedAccountId,
               requesteeBookingRate: requesteeBookingRate,
               navigationBloc: context.read<NavigationBloc>(),
+              onboardingBloc: context.read<OnboardingBloc>(),
               database: database,
               streamRepo: RepositoryProvider.of<StreamRepository>(context),
               payments: RepositoryProvider.of<PaymentRepository>(context),

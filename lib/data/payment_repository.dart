@@ -2,8 +2,8 @@ import 'package:intheloopapp/domains/models/payment_user.dart';
 
 abstract class PaymentRepository {
   Future<void> initPayments();
-  Future<void> initPaymentSheet({
-    required String payerId,
+  Future<PaymentIntentResponse> initPaymentSheet({
+    required String payerCustomerId,
     required String payeeConnectedAccountId,
     required int amount,
   });
@@ -26,4 +26,18 @@ class ConnectedAccountResponse {
   final bool success;
   final String accountId;
   final String url;
+}
+
+class PaymentIntentResponse {
+  PaymentIntentResponse({
+    required this.paymentIntent,
+    required this.ephemeralKey,
+    required this.customer,
+    required this.publishableKey,
+  });
+
+  final String paymentIntent;
+  final String ephemeralKey;
+  final String customer;
+  final String publishableKey;
 }

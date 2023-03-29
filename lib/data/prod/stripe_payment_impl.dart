@@ -18,7 +18,7 @@ class StripePaymentImpl implements PaymentRepository {
   }
 
   Future<PaymentIntentResponse> _createPaymentSheet({
-    required String payerId,
+    required String payerCustomerId,
     required String payeeConnectedAccountId,
     required int amount,
   }) async {
@@ -41,14 +41,14 @@ class StripePaymentImpl implements PaymentRepository {
   }
 
   @override
-  Future<void> initPaymentSheet({
-    required String payerId,
+  Future<PaymentIntentResponse> initPaymentSheet({
+    required String payerCustomerId,
     required String payeeConnectedAccountId,
     required int amount,
   }) async {
     // 1. create payment intent on the server
     final intent = await _createPaymentSheet(
-      payerId: payerId,
+      payerCustomerId: payerCustomerId,
       payeeConnectedAccountId: payeeConnectedAccountId,
       amount: amount,
     );
@@ -68,6 +68,8 @@ class StripePaymentImpl implements PaymentRepository {
         googlePay: const PaymentSheetGooglePay(merchantCountryCode: 'US'),
       ),
     );
+
+    return intent;
   }
 
   @override
@@ -75,7 +77,7 @@ class StripePaymentImpl implements PaymentRepository {
     await _stripe.presentPaymentSheet();
   }
 
-  @override 
+  @override
   Future<void> confirmPaymentSheetPayment() async {
     await _stripe.confirmPaymentSheetPayment();
   }
@@ -112,18 +114,4 @@ class StripePaymentImpl implements PaymentRepository {
 
     return paymentUser;
   }
-}
-
-class PaymentIntentResponse {
-  PaymentIntentResponse({
-    required this.paymentIntent,
-    required this.ephemeralKey,
-    required this.customer,
-    required this.publishableKey,
-  });
-
-  final String paymentIntent;
-  final String ephemeralKey;
-  final String customer;
-  final String publishableKey;
 }

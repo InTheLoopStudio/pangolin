@@ -430,9 +430,20 @@ const _deleteUserPostsFromFeed = (data: {
   return data.feedOwnerId;
 };
 
+const _createStripeCustomer = async () => {
+  const stripe = new Stripe(stripeKey.value(), {
+    apiVersion: "2022-11-15",
+  });
+
+  const customer = await stripe.customers.create();
+
+  return customer.id;
+}
+
 const _createPaymentIntent = async (data: {
   destination?: string;
   amount?: number,
+  customerId?: string,
 }) => {
 
   if (data.destination === undefined || data.destination === null || data.destination === "") {
@@ -454,10 +465,13 @@ const _createPaymentIntent = async (data: {
   });
 
 
+  const customerId = (data.customerId === undefined || data.customerId === null || data.customerId === "") 
+    ? (await _createStripeCustomer())
+    : data.customerId
+
   // Use an existing Customer ID if this is a returning customer.
-  const customer = await stripe.customers.create();
   const ephemeralKey = await stripe.ephemeralKeys.create(
-    { customer: customer.id },
+    { customer: customerId },
     { apiVersion: "2022-11-15" }
   );
 
@@ -467,7 +481,7 @@ const _createPaymentIntent = async (data: {
   const paymentIntent = await stripe.paymentIntents.create({
     amount: Math.floor(data.amount),
     currency: "usd",
-    customer: customer.id,
+    customer: customerId,
     application_fee_amount: Math.floor(application_fee),
     automatic_payment_methods: {
       enabled: true,
@@ -480,7 +494,7 @@ const _createPaymentIntent = async (data: {
   return {
     paymentIntent: paymentIntent.client_secret,
     ephemeralKey: ephemeralKey.secret,
-    customer: customer.id,
+    customer: customerId,
     publishableKey: stripePublishableKey.value(),
   };
 };

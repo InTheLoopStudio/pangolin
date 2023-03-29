@@ -54,6 +54,7 @@ class UserModel extends Equatable {
     required this.emailNotificationsITLUpdates,
     required this.bookingRate,
     required this.stripeConnectedAccountId,
+    required this.stripeCustomerId,
   });
 
   factory UserModel.empty() => UserModel(
@@ -90,6 +91,7 @@ class UserModel extends Equatable {
 
         bookingRate: 0,
         stripeConnectedAccountId: '',
+        stripeCustomerId: '',
       );
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -149,6 +151,7 @@ class UserModel extends Equatable {
         'stripeConnectedAccountId',
         '',
       ) as String,
+      stripeCustomerId: doc.getOrElse('stripeCustomerId', '') as String,
     );
   }
   final String id;
@@ -185,6 +188,7 @@ class UserModel extends Equatable {
   // booking rate in cents (USD)
   final int bookingRate;
   final String stripeConnectedAccountId;
+  final String stripeCustomerId;
 
   @override
   List<Object> get props => [
@@ -217,6 +221,7 @@ class UserModel extends Equatable {
         emailNotificationsITLUpdates,
         bookingRate,
         stripeConnectedAccountId,
+        stripeCustomerId,
       ];
   bool get isEmpty => this == UserModel.empty();
   bool get isNotEmpty => this != UserModel.empty();
@@ -259,6 +264,7 @@ class UserModel extends Equatable {
     bool? emailNotificationsITLUpdates,
     int? bookingRate,
     String? stripeConnectedAccountId,
+    String? stripeCustomerId,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -298,6 +304,7 @@ class UserModel extends Equatable {
       bookingRate: bookingRate ?? this.bookingRate,
       stripeConnectedAccountId:
           stripeConnectedAccountId ?? this.stripeConnectedAccountId,
+      stripeCustomerId: stripeCustomerId ?? this.stripeCustomerId,
     );
   }
 
@@ -332,6 +339,7 @@ class UserModel extends Equatable {
       'emailNotificationsITLUpdates': emailNotificationsITLUpdates,
       'bookingRate': bookingRate,
       'stripeConnectedAccountId': stripeConnectedAccountId,
+      'stripeCustomerId': stripeCustomerId,
     };
   }
 }
