@@ -114,7 +114,7 @@ class MockDatabaseRepository extends _i1.Mock
           {
             #lat: lat,
             #lng: lng,
-            #radius: radiusInMeters,
+            #radiusInMeters: radiusInMeters,
             #limit: limit,
             #lastUserId: lastUserId,
           },

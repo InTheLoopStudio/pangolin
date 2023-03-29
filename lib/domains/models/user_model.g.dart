@@ -39,6 +39,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
           json['emailNotificationsITLUpdates'] as bool,
       bookingRate: json['bookingRate'] as int,
       stripeConnectedAccountId: json['stripeConnectedAccountId'] as String,
+      stripeCustomerId: json['stripeCustomerId'] as String,
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
@@ -72,6 +73,7 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'emailNotificationsITLUpdates': instance.emailNotificationsITLUpdates,
       'bookingRate': instance.bookingRate,
       'stripeConnectedAccountId': instance.stripeConnectedAccountId,
+      'stripeCustomerId': instance.stripeCustomerId,
     };
 
 const _$AccountTypeEnumMap = {
