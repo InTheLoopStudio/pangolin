@@ -141,7 +141,7 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                 children: [
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 22),
-                    child: Text('Booking Fee (%10)'),
+                    child: Text('Booking Fee (10%)'),
                   ),
                   Text(
                     state.formattedBookingFee,
