@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:formz/formz.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/create_booking/create_booking_cubit.dart';
@@ -175,11 +176,20 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                 onPressed: () async {
                   try {
                     await context.read<CreateBookingCubit>().createBooking();
+                  } on StripeException catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.red,
+                        content: Text('Error: ${e.error.localizedMessage}'),
+                      ),
+                    );
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error: $e')),
+                      const SnackBar(
+                        backgroundColor: Colors.red,
+                        content: Text('Error making payment'),
+                      ),
                     );
-                    rethrow;
                   }
                 },
                 child: state.status.isInProgress

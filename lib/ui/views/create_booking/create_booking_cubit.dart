@@ -105,10 +105,10 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
       );
       await database.createBooking(booking);
       emit(state.copyWith(status: FormzSubmissionStatus.success));
+      navigationBloc.add(const Pop());
     } on Exception {
       emit(state.copyWith(status: FormzSubmissionStatus.failure));
+      rethrow;
     }
-
-    navigationBloc.add(const Pop());
   }
 }
