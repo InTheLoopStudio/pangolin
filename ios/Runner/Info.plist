@@ -84,5 +84,10 @@
 		<true/>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true/>
+		<key>FirebaseDynamicLinksCustomDomains</key>
+		<array>
+    		<string>https://tappednetwork.page.linked</string>
+    		<string>https://intheloopstudio.page.linked</string>
+		</array>
 	</dict>
 </plist>

@@ -7,7 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 class SocialMediaIcons extends StatelessWidget {
   const SocialMediaIcons({super.key});
 
-  Widget _socialMediaIcon(
+  Widget? _socialMediaIcon(
     bool show, {
     required Icon icon,
     void Function()? onTap,
@@ -20,7 +20,7 @@ class SocialMediaIcons extends StatelessWidget {
               child: icon,
             ),
           )
-        : const SizedBox.shrink();
+        : null;
   }
 
   @override
@@ -99,7 +99,7 @@ class SocialMediaIcons extends StatelessWidget {
                   );
                 },
               ),
-            ],
+            ].where((element) => element != null).whereType<Widget>().toList(),
           ),
         );
       },

@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/post.dart';
@@ -13,6 +15,7 @@ part 'profile_state.dart';
 class ProfileCubit extends HydratedCubit<ProfileState> {
   ProfileCubit({
     required this.databaseRepository,
+    required this.places,
     required this.currentUser,
     required this.visitedUser,
   }) : super(
@@ -22,6 +25,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
           ),
         );
   final DatabaseRepository databaseRepository;
+  final PlacesRepository places;
   final UserModel currentUser;
   final UserModel visitedUser;
   StreamSubscription<Loop>? loopListener;
@@ -199,6 +203,11 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
     });
   }
 
+  Future<void> initPlace() async {
+    final place = await places.getPlaceById(visitedUser.placeId);
+    emit(state.copyWith(place: place));
+  }
+
   Future<void> fetchMoreLoops() async {
     if (state.hasReachedMaxLoops) return;
 
@@ -279,8 +288,6 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
       emit(state.copyWith(postStatus: PostStatus.failure));
     }
   }
-
-
 
   Future<void> fetchMoreUserCreatedBadges() async {
     if (state.hasReachedMaxUserCreatedBadges) return;

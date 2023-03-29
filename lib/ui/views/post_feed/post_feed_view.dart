@@ -1,8 +1,5 @@
-import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -37,7 +34,7 @@ class PostFeedView extends StatelessWidget {
               trailing: NotificationIconButton(),
             ),
             floatingActionButton: FloatingActionButton(
-              child: const Icon(CupertinoIcons.add),
+              child: const Icon(Icons.edit_outlined),
               onPressed: () => context.read<NavigationBloc>().add(
                     const PushCreatePost(),
                   ),

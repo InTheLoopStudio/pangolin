@@ -44,7 +44,7 @@ class BookingContainer extends StatelessWidget {
               radius: 20,
               backgroundImageUrl: requestee.profilePicture,
             ),
-            title: Text(requestee.username.toString()),
+            title: Text(requestee.displayName),
             subtitle: Text(
               timeago.format(
                 booking.startTime,
@@ -56,8 +56,17 @@ class BookingContainer extends StatelessWidget {
             ),
             trailing: Text(
               EnumToString.convertToString(booking.status),
-              style: const TextStyle(
-                color: Colors.grey,
+              style: TextStyle(
+                color: () {
+                  switch (booking.status) {
+                    case BookingStatus.pending:
+                      return Colors.orange[300];
+                    case BookingStatus.confirmed:
+                      return Colors.green[300];
+                    case BookingStatus.canceled:
+                      return Colors.red[300];
+                  }
+                }(),
               ),
             ),
           );
@@ -84,7 +93,7 @@ class BookingContainer extends StatelessWidget {
               radius: 20,
               backgroundImageUrl: requester.profilePicture,
             ),
-            title: Text(requester.username.toString()),
+            title: Text(requester.displayName),
             subtitle: Text(
               timeago.format(
                 booking.startTime,
@@ -143,11 +152,10 @@ class BookingContainer extends StatelessWidget {
       selector: (state) => state as Onboarded,
       builder: (context, state) {
         final currentUser = state.currentUser;
-        switch (currentUser.accountType) {
-          case AccountType.venue:
-            return venueTile(databaseRepository);
-          case AccountType.free:
-            return freeTile(databaseRepository);
+        if (currentUser.id == booking.requesterId) {
+          return venueTile(databaseRepository);
+        } else {
+          return freeTile(databaseRepository);
         }
       },
     );

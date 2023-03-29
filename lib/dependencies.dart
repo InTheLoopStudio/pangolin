@@ -67,7 +67,7 @@ List<RepositoryProvider<dynamic>> buildRepositories({
       create: (_) => RemoteConfigImpl()..fetchAndActivate(),
     ),
     RepositoryProvider<PaymentRepository>(
-      create: (_) => StripePaymentImpl(),
+      create: (_) => StripePaymentImpl()..initPayments(),
     ),
     RepositoryProvider<PlacesRepository>(
       create: (_) => GooglePlacesImpl(),
@@ -101,6 +101,7 @@ List<BlocProvider> buildBlocs({
     ),
     BlocProvider<DynamicLinkBloc>(
       create: (context) => DynamicLinkBloc(
+        onboardingBloc: context.read<OnboardingBloc>(),
         navigationBloc: context.read<NavigationBloc>(),
         dynamicLinkRepository: context.read<DynamicLinkRepository>(),
         databaseRepository: context.read<DatabaseRepository>(),

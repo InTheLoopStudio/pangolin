@@ -66,6 +66,26 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
           type: DynamicLinkType.shareLoop,
           id: loopId,
         );
+      case '/connect_payment':
+        final linkParameters = deepLink.queryParameters;
+        final accountId = linkParameters['account_id'];
+
+        if (accountId == null) {
+          return null;
+        }
+
+        // final refresh = linkParameters['refresh'] ?? '';
+        // if (refresh == 'true') {
+        //   return DynamicLinkRedirect(
+        //     type: DynamicLinkType.connectStripeRefresh,
+        //     id: accountId,
+        //   );
+        // }
+
+        return DynamicLinkRedirect(
+          type: DynamicLinkType.connectStripeRedirect,
+          id: accountId,
+        );
       default:
         return null;
     }
@@ -76,7 +96,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
     final parameters = DynamicLinkParameters(
       uriPrefix: 'https://tappednetwork.page.link',
       link: Uri.parse(
-        'https://intheloopstudio.com/loop?id=${loop.id}',
+        'https://tappednetwork.page.link/loop?id=${loop.id}',
       ),
       androidParameters: const AndroidParameters(
         packageName: 'com.intheloopstudio',
@@ -101,7 +121,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
   Future<String> getShareProfileDynamicLink(UserModel user) async {
     final parameters = DynamicLinkParameters(
       uriPrefix: 'https://tappednetwork.page.link',
-      link: Uri.parse('https://tappednetwork.com/user?id=${user.id}'),
+      link: Uri.parse('https://tappednetwork.page.link/user?id=${user.id}'),
       androidParameters: const AndroidParameters(
         packageName: 'com.intheloopstudio',
       ),
@@ -109,7 +129,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
         bundleId: 'com.intheloopstudio',
       ),
       socialMetaTagParameters: SocialMetaTagParameters(
-        title: '${user.username} on Tapped',
+        title: '${user.displayName} on Tapped',
         description:
             '''Tapped Network - The online platform tailored for producers and creators to share their loops to the world, get feedback on their music, and join the world-wide community of artists to collaborate with''',
       ),

@@ -22,11 +22,11 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
     });
     on<FinishOnboarding>((event, emit) => emit(Onboarded(event.user)));
     on<UpdateOnboardedUser>((event, emit) async {
-      // Update user in db
-      await databaseRepository.updateUserData(event.user);
-
       // emit new user in state
       emit(Onboarded(event.user));
+
+      // Update user in db
+      await databaseRepository.updateUserData(event.user);
     });
   }
 

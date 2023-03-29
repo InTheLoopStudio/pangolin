@@ -4,6 +4,7 @@ class CreateBookingState extends Equatable with FormzMixin {
   CreateBookingState({
     required this.currentUserId,
     required this.requesteeId,
+    required this.requesteeBookingRate,
     this.name = const BookingName.pure(),
     this.note = const BookingNote.pure(),
     this.status = FormzSubmissionStatus.initial,
@@ -20,6 +21,7 @@ class CreateBookingState extends Equatable with FormzMixin {
   final BookingNote note;
   final String currentUserId;
   final String requesteeId;
+  final int requesteeBookingRate;
   final FormzSubmissionStatus status;
   late final BookingStartTime startTime;
   late final BookingEndTime endTime;
@@ -29,6 +31,7 @@ class CreateBookingState extends Equatable with FormzMixin {
   List<Object?> get props => [
         currentUserId,
         requesteeId,
+        requesteeBookingRate,
         name,
         note,
         status,
@@ -48,6 +51,7 @@ class CreateBookingState extends Equatable with FormzMixin {
   CreateBookingState copyWith({
     String? currentUserId,
     String? requesteeId,
+    int? requesteeBookingRate,
     BookingName? name,
     BookingNote? note,
     BookingStartTime? startTime,
@@ -58,6 +62,7 @@ class CreateBookingState extends Equatable with FormzMixin {
       formKey: formKey,
       currentUserId: currentUserId ?? this.currentUserId,
       requesteeId: requesteeId ?? this.requesteeId,
+      requesteeBookingRate: requesteeBookingRate ?? this.requesteeBookingRate,
       name: name ?? this.name,
       note: note ?? this.note,
       startTime: startTime ?? this.startTime,
@@ -81,5 +86,39 @@ class CreateBookingState extends Equatable with FormzMixin {
   String get formattedDuration {
     final d = endTime.value.difference(startTime.value);
     return d.toString().split('.').first.padLeft(8, '0');
+  }
+
+  int get artistCost {
+    final d = endTime.value.difference(startTime.value);
+    final rateInMinutes = requesteeBookingRate / 60;
+    final total = d.inMinutes * rateInMinutes;
+
+    return total.toInt();
+  }
+
+  int get bookingFee {
+    final total = artistCost;
+    final fee = (total * 0.1).toInt();
+    return fee;
+  }
+
+  int get totalCost {
+    final total = artistCost + bookingFee;
+    return total;
+  }
+
+  String get formattedBookingFee {
+    final fee = bookingFee / 100;
+    return '\$${fee.toStringAsFixed(2)}';
+  }
+
+  String get formattedArtistRate {
+    final rate = artistCost / 100;
+    return '\$${rate.toStringAsFixed(2)}';
+  }
+
+  String get formattedTotal {
+    final total = totalCost / 100;
+    return '\$${total.toStringAsFixed(2)}';
   }
 }

@@ -12,11 +12,18 @@ import { getStorage } from "firebase-admin/storage";
 import { getMessaging } from "firebase-admin/messaging";
 import { StreamChat } from "stream-chat";
 import { defineSecret } from "firebase-functions/params";
+import Stripe from "stripe";
+import { HttpsError } from "firebase-functions/v1/auth";
 
 const app = initializeApp();
 
-const streamKey = defineSecret("STREAM_KEY")
-const streamSecret = defineSecret("STREAM_SECRET")
+const streamKey = defineSecret("STREAM_KEY");
+const streamSecret = defineSecret("STREAM_SECRET");
+
+const stripeKey = defineSecret("STRIPE_TEST_KEY");
+const stripePublishableKey = defineSecret("STRIPE_PUBLISHABLE_TEST_KEY");
+// const stripeKey = defineSecret("STRIPE_KEY");
+// const stripePublishableKey = defineSecret("STRIPE_PUBLISHABLE_KEY");
 
 const db = getFirestore(app);
 const storage = getStorage(app);
@@ -423,6 +430,140 @@ const _deleteUserPostsFromFeed = (data: {
   return data.feedOwnerId;
 };
 
+const _createStripeCustomer = async () => {
+  const stripe = new Stripe(stripeKey.value(), {
+    apiVersion: "2022-11-15",
+  });
+
+  const customer = await stripe.customers.create();
+
+  return customer.id;
+}
+
+const _createPaymentIntent = async (data: {
+  destination?: string;
+  amount?: number,
+  customerId?: string,
+}) => {
+
+  if (data.destination === undefined || data.destination === null || data.destination === "") {
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function argument 'destination' cannot be empty"
+    );
+  }
+
+  if (data.amount === undefined || data.amount === null || data.amount < 0) {
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function argument 'amount' cannot be empty or negative"
+    );
+  }
+
+  const stripe = new Stripe(stripeKey.value(), {
+    apiVersion: "2022-11-15",
+  });
+
+
+  const customerId = (data.customerId === undefined || data.customerId === null || data.customerId === "") 
+    ? (await _createStripeCustomer())
+    : data.customerId
+
+  // Use an existing Customer ID if this is a returning customer.
+  const ephemeralKey = await stripe.ephemeralKeys.create(
+    { customer: customerId },
+    { apiVersion: "2022-11-15" }
+  );
+
+  // Set the application fee to be 10%
+  const application_fee = data.amount * 0.10;
+
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: Math.floor(data.amount),
+    currency: "usd",
+    customer: customerId,
+    application_fee_amount: Math.floor(application_fee),
+    automatic_payment_methods: {
+      enabled: true,
+    },
+    transfer_data: {
+      destination: data.destination,
+    }
+  });
+
+  return {
+    paymentIntent: paymentIntent.client_secret,
+    ephemeralKey: ephemeralKey.secret,
+    customer: customerId,
+    publishableKey: stripePublishableKey.value(),
+  };
+};
+
+const _createStripeAccount = async () => {
+  const stripe = new Stripe(stripeKey.value(), {
+    apiVersion: "2022-11-15",
+  });
+
+  const account = await stripe.accounts.create({
+    type: "express",
+    settings: {
+      payouts: {
+        schedule: {
+          interval: "manual",
+        },
+      },
+    },
+  });
+
+  return account.id;
+}
+
+const _createConnectedAccount = async (data: {
+  accountId: string;
+}) => {
+
+  const stripe = new Stripe(stripeKey.value(), {
+    apiVersion: "2022-11-15",
+  });
+
+  const accountId = (data.accountId === undefined || data.accountId === null || data.accountId === "") 
+    ? (await _createStripeAccount())
+    : data.accountId
+
+  const subdomain = "tappednetwork";
+  const deepLink = "https://tappednetwork.page.link/connect_payment";
+  const appInfo = "&apn=com.intheloopstudio&isi=1574937614&ibi=com.intheloopstudio";
+
+  const refreshUrl = `https://${subdomain}.page.link/?link=${deepLink}?account_id=${accountId}&refresh=true${appInfo}`;
+  const returnUrl = `https://${subdomain}.page.link/?link=${deepLink}?account_id=${accountId}`;
+
+  const accountLinks = await stripe.accountLinks.create({
+    account: accountId,
+    refresh_url: refreshUrl,
+    return_url: returnUrl,
+    type: "account_onboarding",
+  })
+
+  return { success: true, url: accountLinks.url, accountId: accountId };
+}
+
+const _getAccountById = async (data: { accountId: string }) => {
+  if (data.accountId === undefined || data.accountId === null || data.accountId === "") {
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "The function argument 'accountId' cannot be empty"
+    );
+  }
+
+  const stripe = new Stripe(stripeKey.value(), {
+    apiVersion: "2022-11-15",
+  });
+
+  const account = await stripe.accounts.retrieve(data.accountId);
+
+  return account;
+}
+
 // --------------------------------------------------------
 export const sendToDevice = functions.firestore
   .document("activities/{activityId}")
@@ -504,7 +645,8 @@ export const createStreamUserOnUserCreated = functions
     const user = snapshot.data();
     await streamClient.upsertUser({
       id: user.id,
-      name: user.username,
+      name: user.artistName,
+      username: user.username,
       email: user.email,
       image: user.profilePicture,
     });
@@ -524,7 +666,8 @@ export const updateStreamUserOnUserUpdate = functions
     streamClient.partialUpdateUser({
       id: user.id,
       set: {
-        name: user.username,
+        name: user.artistName,
+        username: user.username,
         email: user.email,
         image: user.profilePicture,
       },
@@ -713,7 +856,7 @@ export const addActivityOnLoopLike = functions.firestore
   .onCreate(async (snapshot, context) => {
     const loopSnapshot = await loopsRef.doc(context.params.loopId).get();
     const loop = loopSnapshot.data();
-    if (loop === undefined || !loop.exists) {
+    if (loop === undefined) {
       return;
     }
 
@@ -731,11 +874,7 @@ export const addActivityOnPostLike = functions.firestore
     const postSnapshot = await postsRef.doc(context.params.postId).get();
     const post = postSnapshot.data();
     if (post === undefined) {
-      return;
-    }
-
-    if (!post.exists) {
-      return;
+      throw new HttpsError("failed-precondition", `post ${context.params.postId} does not exist`);
     }
 
     if (post.userId !== context.params.userId) {
@@ -771,7 +910,7 @@ export const incrementLoopCommentCountOnComment = functions.firestore
     const loop = loopSnapshot.data();
 
     if (loop === undefined) {
-      return;
+      throw new HttpsError("failed-precondition", `loop ${context.params.loopId} does not exist`);
     }
 
     await usersRef
@@ -785,7 +924,7 @@ export const incrementPostCommentCountOnComment = functions.firestore
     const post = postSnapshot.data();
 
     if (post === undefined) {
-      return;
+      throw new HttpsError("failed-precondition", `post ${context.params.postId} does not exist`);
     }
 
     await usersRef
@@ -801,7 +940,7 @@ export const addActivityOnLoopComment = functions.firestore
     const loop = loopSnapshot.data();
 
     if (loop === undefined) {
-      return;
+      throw new HttpsError("failed-precondition", `loop ${context.params.loopId} does not exist`);
     }
 
     if (loop.userId !== comment.userId) {
@@ -820,7 +959,7 @@ export const addActivityOnPostComment = functions.firestore
     const post = postSnapshot.data();
 
     if (post === undefined) {
-      return;
+      throw new HttpsError("failed-precondition", `post ${context.params.postId} does not exist`);
     }
 
     if (post.userId !== comment.userId) {
@@ -858,3 +997,24 @@ export const addActivity = functions.https.onCall((data, context) => {
   _authenticated(context);
   return _addActivity(data);
 });
+export const createPaymentIntent = functions
+  .runWith({ secrets: [ stripeKey, stripePublishableKey ] })
+  .https
+  .onCall((data, context) => {
+    _authenticated(context);
+    return _createPaymentIntent(data);
+  });
+export const createConnectedAccount = functions
+  .runWith({ secrets: [ stripeKey, stripePublishableKey ] })
+  .https
+  .onCall((data, context) => {
+    _authenticated(context);
+    return _createConnectedAccount(data);
+  })
+export const getAccountById = functions
+  .runWith({ secrets: [ stripeKey, stripePublishableKey ] })
+  .https
+  .onCall((data, context) => {
+    _authenticated(context);
+    return _getAccountById(data);
+  });

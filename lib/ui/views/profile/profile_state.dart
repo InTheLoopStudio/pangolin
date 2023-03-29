@@ -25,7 +25,7 @@ enum UserCreatedBadgesStatus {
 }
 
 class ProfileState extends Equatable {
-  const ProfileState({
+  ProfileState({
     required this.currentUser,
     required this.visitedUser,
     this.followerCount = 0,
@@ -44,7 +44,11 @@ class ProfileState extends Equatable {
     this.badgeStatus = BadgesStatus.initial,
     this.userCreatedBadgeStatus = UserCreatedBadgesStatus.initial,
     this.postStatus = PostStatus.initial,
-  });
+    Place? place,
+  }) {
+
+    this.place = place ?? const Place();
+  }
 
   final int followerCount;
   final int followingCount;
@@ -64,6 +68,7 @@ class ProfileState extends Equatable {
   final PostStatus postStatus;
   final UserModel visitedUser;
   final UserModel currentUser;
+  late final Place place;
 
   @override
   List<Object> get props => [
@@ -84,7 +89,8 @@ class ProfileState extends Equatable {
         postStatus,
         userCreatedBadgeStatus,
         visitedUser,
-        currentUser
+        currentUser,
+        place,
       ];
 
   ProfileState copyWith({
@@ -106,6 +112,7 @@ class ProfileState extends Equatable {
     UserCreatedBadgesStatus? userCreatedBadgeStatus,
     UserModel? currentUser,
     UserModel? visitedUser,
+    Place? place,
   }) {
     return ProfileState(
       followingCount: followingCount ?? this.followingCount,
@@ -128,6 +135,7 @@ class ProfileState extends Equatable {
           userCreatedBadgeStatus ?? this.userCreatedBadgeStatus,
       currentUser: currentUser ?? this.currentUser,
       visitedUser: visitedUser ?? this.visitedUser,
+      place: place ?? this.place,
     );
   }
 }

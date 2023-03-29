@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:formz/formz.dart';
-import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/create_booking/create_booking_cubit.dart';
 import 'package:intheloopapp/ui/widgets/create_booking_view/booking_name_text_field.dart';
 import 'package:intheloopapp/ui/widgets/create_booking_view/booking_note_text_field.dart';
@@ -60,6 +60,9 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                       context,
                       CupertinoDatePicker(
                         initialDateTime: state.startTime.value,
+                        minimumDate: DateTime.now().subtract(
+                          const Duration(hours: 1),
+                        ),
                         use24hFormat: true,
                         onDateTimeChanged: (DateTime newDateTime) {
                           context
@@ -117,20 +120,53 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                   ),
                 ],
               ),
+              _FormItem(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 22),
+                    child: Text(
+                      // ignore: lines_longer_than_80_chars
+                      'Artist Rate (\$${(state.requesteeBookingRate / 100).toStringAsFixed(2)})',
+                    ),
+                  ),
+                  Text(
+                    state.formattedArtistRate,
+                    style: const TextStyle(
+                      fontSize: 22,
+                    ),
+                  ),
+                ],
+              ),
+              _FormItem(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 22),
+                    child: Text('Booking Fee (10%)'),
+                  ),
+                  Text(
+                    state.formattedBookingFee,
+                    style: const TextStyle(
+                      fontSize: 22,
+                    ),
+                  ),
+                ],
+              ),
+              _FormItem(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 22),
+                    child: Text('Total'),
+                  ),
+                  Text(
+                    state.formattedTotal,
+                    style: const TextStyle(
+                      fontSize: 22,
+                    ),
+                  ),
+                ],
+              ),
               BookingNoteTextField(
                 controller: noteController,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              CupertinoButton.filled(
-                onPressed: () =>
-                    context.read<CreateBookingCubit>().createBooking(),
-                child: state.status.isInProgress
-                    ? const CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation(tappedAccent),
-                      )
-                    : const Text('Confirm'),
               ),
             ],
           ),

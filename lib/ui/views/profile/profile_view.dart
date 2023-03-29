@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
@@ -16,7 +17,6 @@ import 'package:intheloopapp/ui/widgets/profile_view/posts_list.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/request_to_book.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/share_profile_button.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/social_media_icons.dart';
-import 'package:intheloopapp/ui/widgets/profile_view/venue_dashboard.dart';
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   _SliverAppBarDelegate(this._tabBar);
@@ -128,9 +128,11 @@ class _ProfileViewState extends State<ProfileView> {
     UserModel currentUser,
     UserModel visitedUser,
     DatabaseRepository databaseRepository,
+    PlacesRepository places,
   ) =>
       BlocProvider(
         create: (context) => ProfileCubit(
+          places: places,
           databaseRepository: databaseRepository,
           currentUser: currentUser,
           visitedUser: visitedUser,
@@ -142,7 +144,8 @@ class _ProfileViewState extends State<ProfileView> {
           ..loadFollower(visitedUser.id)
           ..loadFollowing(visitedUser.id)
           ..loadIsFollowing(currentUser.id, visitedUser.id)
-          ..loadIsVerified(visitedUser.id),
+          ..loadIsVerified(visitedUser.id)
+          ..initPlace(),
         child: BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, state) {
             final showVenueDashboard = currentUser.id == visitedUser.id &&
@@ -184,6 +187,8 @@ class _ProfileViewState extends State<ProfileView> {
                     ..loadFollower(visitedUser.id)
                     // ignore: unawaited_futures
                     ..loadIsVerified(visitedUser.id);
+                  // ignore: unawaited_futures
+                  // ..initPlace();
                 },
                 child: DefaultTabController(
                   length: tabs.length,
@@ -256,6 +261,25 @@ class _ProfileViewState extends State<ProfileView> {
                             ),
                           ),
                         ),
+                        // SliverToBoxAdapter(
+                        //   child: Padding(
+                        //     padding: const EdgeInsets.symmetric(vertical: 12),
+                        //     child: Row(
+                        //       children: [
+                        //         Text('@${state.visitedUser.username}'),
+                        //         Text(
+                        //           formattedAddress(
+                        //             state.place.addressComponents,
+                        //           ),
+                        //           overflow: TextOverflow.ellipsis,
+                        //           style: const TextStyle(
+                        //             fontSize: 18,
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
                         const SliverToBoxAdapter(
                           child: Padding(
                             padding: EdgeInsets.only(bottom: 8),
@@ -308,6 +332,7 @@ class _ProfileViewState extends State<ProfileView> {
   Widget build(BuildContext context) {
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
+    final places = RepositoryProvider.of<PlacesRepository>(context);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
@@ -332,6 +357,7 @@ class _ProfileViewState extends State<ProfileView> {
                       currentUser,
                       visitedUser,
                       databaseRepository,
+                      places,
                     );
                   },
                 )
@@ -339,6 +365,7 @@ class _ProfileViewState extends State<ProfileView> {
                   currentUser,
                   currentUser,
                   databaseRepository,
+                  places,
                 );
         },
       ),

@@ -19,6 +19,7 @@ import 'package:intheloopapp/ui/views/login/signup_view.dart';
 import 'package:intheloopapp/ui/views/messaging/channel_view.dart';
 import 'package:intheloopapp/ui/views/onboarding/onboarding_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
+import 'package:intheloopapp/ui/views/settings/settings_view.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/location_form/location_form_view.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -74,6 +75,16 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
       navigationKey.currentState?.push(
         MaterialPageRoute<ProfileView>(
           builder: (context) => ProfileView(visitedUserId: event.userId),
+        ),
+      );
+      emit(state);
+    });
+    on<PushSettings>((event, emit) {
+      // this is sus, the 5 shouldn't be hardcoded
+      emit(state.copyWith(selectedTab: 5));
+      navigationKey.currentState?.push(
+        MaterialPageRoute<ProfileView>(
+          builder: (context) => const SettingsView(),
         ),
       );
       emit(state);
@@ -152,6 +163,9 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
         MaterialPageRoute<CreateBookingView>(
           builder: (context) => CreateBookingView(
             requesteeId: event.requesteeId,
+            requesteeStripeConnectedAccountId:
+                event.requesteeStripeConnectedAccountId,
+            requesteeBookingRate: event.requesteeBookingRate,
           ),
         ),
       );
@@ -172,12 +186,12 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<PushLocationForm>((event, emit) {
       navigationKey.currentState?.push(
         MaterialPageRoute<LocationFormView>(
-            builder: (context) => LocationFormView(
-              initialPlaceId: event.initialPlaceId,
-              initialPlace: event.initialPlace,
-              onSelected: event.onSelected,
-            ),
+          builder: (context) => LocationFormView(
+            initialPlaceId: event.initialPlaceId,
+            initialPlace: event.initialPlace,
+            onSelected: event.onSelected,
           ),
+        ),
       );
 
       emit(state);

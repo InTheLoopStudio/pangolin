@@ -42,7 +42,7 @@ class CommentContainer extends StatelessWidget {
               ),
             ),
             title: Text(
-              user.username.toString(),
+              user.displayName,
             ),
             subtitle: Text(
               comment.content,

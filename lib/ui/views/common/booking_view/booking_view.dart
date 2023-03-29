@@ -130,6 +130,23 @@ class BookingView extends StatelessWidget {
                 ),
                 const SliverToBoxAdapter(
                   child: Text(
+                    'Artist Rate Paid',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: Text(
+                    '\$${(booking.rate / 100).toStringAsFixed(2)} / hour',
+                  ),
+                ),
+                const SliverToBoxAdapter(
+                  child: SizedBox(height: 20),
+                ),
+                const SliverToBoxAdapter(
+                  child: Text(
                     'Date',
                     style: TextStyle(
                       fontSize: 28,
@@ -217,24 +234,29 @@ class BookingView extends StatelessWidget {
                             )
                           : const SizedBox.shrink(),
                 ),
-                SliverToBoxAdapter(
-                  child: CupertinoButton(
-                    onPressed: () {
-                      final updated = booking.copyWith(
-                        status: BookingStatus.canceled,
-                      );
-                      database.updateBooking(updated);
-                      onDeny?.call(updated);
-                      navigationBloc.add(const Pop());
-                    },
-                    child: const Text(
-                      'Cancel Booking',
-                      style: TextStyle(
-                        color: Colors.red,
+                if (booking.status == BookingStatus.canceled)
+                  SliverToBoxAdapter(
+                    child: CupertinoButton(
+                      onPressed: () {
+                        final updated = booking.copyWith(
+                          status: BookingStatus.canceled,
+                        );
+                        database.updateBooking(updated);
+                        onDeny?.call(updated);
+                        navigationBloc.add(const Pop());
+                      },
+                      child: const Text(
+                        'Cancel Booking',
+                        style: TextStyle(
+                          color: Colors.red,
+                        ),
                       ),
                     ),
+                  )
+                else
+                  const SliverToBoxAdapter(
+                    child: SizedBox.shrink(),
                   ),
-                )
               ],
             ),
           ),

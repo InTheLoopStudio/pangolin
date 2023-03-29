@@ -18,9 +18,12 @@ class BookingsCubit extends Cubit<BookingsState> {
   final DatabaseRepository databaseRepository;
 
   Future<void> initBookings() async {
-    final bookings = accountType == AccountType.venue
-        ? await databaseRepository.getBookingsByRequester(currentUserId)
-        : await databaseRepository.getBookingsByRequestee(currentUserId);
+    final requesterBookings =
+        await databaseRepository.getBookingsByRequester(currentUserId);
+    final requesteeBookings =
+        await databaseRepository.getBookingsByRequestee(currentUserId);
+
+    final bookings = requesteeBookings..addAll(requesterBookings);
 
     emit(
       state.copyWith(

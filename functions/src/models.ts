@@ -4,6 +4,7 @@ export type UserModel = {
   id: string;
   email?: string;
   username?: string;
+  artistName?: string;
   bio?: string;
   profilePicture?: string;
   location?: string;
@@ -25,6 +26,8 @@ export type UserModel = {
   pushNotificationsITLUpdates?: boolean;
   emailNotificationsAppReleases?: boolean;
   emailNotificationsITLUpdates?: boolean;
+  bookingRate?: number;
+  stripeConnectedAccountId?: string;
 };
 
 export type Badge = {

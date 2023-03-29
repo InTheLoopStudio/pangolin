@@ -31,7 +31,7 @@ class ByUsernameResultsList extends StatelessWidget {
                   color: Color(0xFF757575),
                 ),
                 Text(
-                  'Search Artist Name',
+                  'Search Username',
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w400,

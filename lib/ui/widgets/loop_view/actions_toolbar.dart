@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/dynamic_link_repository.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view_cubit.dart';
 import 'package:intheloopapp/ui/widgets/loop_view/follow_action_button.dart';
 import 'package:intheloopapp/ui/widgets/loop_view/social_action_button.dart';
@@ -45,7 +44,7 @@ class ActionsToolbar extends StatelessWidget {
                 onTap: () => context.read<LoopViewCubit>().toggleLikeLoop(),
               ),
               SocialActionButton(
-                icon: Icons.comment,
+                icon: CupertinoIcons.bubble_right,
                 title: state.commentsCount.toString(),
                 color: Colors.grey[300],
                 onTap: () => context.read<LoopViewCubit>().toggleComments(),
@@ -56,7 +55,7 @@ class ActionsToolbar extends StatelessWidget {
               //   onTap: null,
               // ),
               SocialActionButton(
-                icon: Icons.share,
+                icon: CupertinoIcons.share,
                 title: 'Share',
                 color: Colors.grey[300],
                 onTap: () async {

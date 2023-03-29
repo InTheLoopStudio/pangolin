@@ -13,8 +13,11 @@ class AudioController {
     required this.audioRepo,
     this.source,
     this.duration = Duration.zero,
+    // ignore: unused_element
     this.position = Duration.zero,
+    // ignore: unused_element
     this.bufferedPosition = Duration.zero,
+    // ignore: unused_element
     this.loopMode = LoopMode.one,
     this.image,
     this.title,

@@ -15,6 +15,7 @@ import 'package:intheloopapp/ui/widgets/settings_view/connectivity_status.dart';
 import 'package:intheloopapp/ui/widgets/settings_view/delete_account_button.dart';
 import 'package:intheloopapp/ui/widgets/settings_view/dev_information.dart';
 import 'package:intheloopapp/ui/widgets/settings_view/notification_settings_form.dart';
+import 'package:intheloopapp/ui/widgets/settings_view/payment_settings_form.dart';
 import 'package:intheloopapp/ui/widgets/settings_view/save_button.dart';
 import 'package:intheloopapp/ui/widgets/settings_view/settings_form.dart';
 
@@ -95,6 +96,16 @@ class SettingsView extends StatelessWidget {
                           SaveButton(),
                         ],
                       ),
+                      SizedBox(height: 20),
+                      Text(
+                        'Payments',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      PaymentSettingsForm(),
                       SizedBox(height: 20),
                       Text(
                         'Preferences',

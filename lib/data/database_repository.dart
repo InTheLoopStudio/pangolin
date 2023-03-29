@@ -21,7 +21,7 @@ abstract class DatabaseRepository {
   Future<List<UserModel>> searchUsersByLocation({
     required double lat,
     required double lng,
-    int radius = 50 * 1000, // 50km
+    int radiusInMeters = 50 * 1000, // 50km
     int limit = 100,
     String? lastUserId,
   });

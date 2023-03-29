@@ -1,15 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
-import 'package:intheloopapp/ui/views/settings/settings_view.dart';
 
 class FollowButton extends StatelessWidget {
   const FollowButton({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final navigationBloc = context.read<NavigationBloc>();
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return state.currentUser.id != state.visitedUser.id
@@ -39,25 +39,18 @@ class FollowButton extends StatelessWidget {
                   ),
                 ),
               )
-            : OutlinedButton.icon(
+            : FilledButton.icon(
                 onPressed: () async {
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute<SettingsView>(
-                      builder: (context) => const SettingsView(),
-                    ),
-                  );
+                  navigationBloc.add(const PushSettings());
                 },
                 icon: const Icon(
-                  CupertinoIcons.gear,
-                  color: tappedAccent,
+                  Icons.settings_outlined,
+                  color: Colors.white,
                 ),
                 label: const Text(
                   'Edit',
                   style: TextStyle(
-                    fontSize: 20,
-                    color: tappedAccent,
-                    // fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
               );

@@ -18,9 +18,9 @@ class NotificationIconButton extends StatelessWidget {
               IconButton(
                 onPressed: () =>
                     context.read<NavigationBloc>().add(const PushActivity()),
-                icon: const Icon(
+                icon: Icon(
                   Icons.notifications,
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.outline,
                   size: 30,
                 ),
               ),

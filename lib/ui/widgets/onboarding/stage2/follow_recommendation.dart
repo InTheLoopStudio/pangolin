@@ -73,7 +73,7 @@ class FollowRecommendation extends StatelessWidget {
                       .read<OnboardingFlowCubit>()
                       .followRecommendation(userId),
                 ),
-                title: Text(followUser.username.toString()),
+                title: Text(followUser.displayName),
               ),
             ),
           ],

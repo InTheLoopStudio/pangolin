@@ -26,6 +26,16 @@ class PushProfile extends NavigationEvent {
   List<Object> get props => [userId];
 }
 
+class PushSettings extends NavigationEvent {
+  const PushSettings();
+
+  @override
+  String toString() => 'PushSettings { }';
+
+  @override
+  List<Object> get props => [];
+}
+
 class PushLocationForm extends NavigationEvent {
   const PushLocationForm({
     required this.initialPlaceId,
@@ -181,15 +191,26 @@ class PushStreamChannel extends NavigationEvent {
 }
 
 class PushCreateBooking extends NavigationEvent {
-  const PushCreateBooking(this.requesteeId);
+  const PushCreateBooking({
+    required this.requesteeId,
+    required this.requesteeStripeConnectedAccountId,
+    required this.requesteeBookingRate,
+  });
 
   final String requesteeId;
+  final String requesteeStripeConnectedAccountId;
+  final int requesteeBookingRate;
 
   @override
-  String toString() => '''PushCreateBooking { requestee: $requesteeId }''';
+  String toString() =>
+      '''PushCreateBooking { requestee: $requesteeId, requesteeStripeConnectedAccountId: $requesteeStripeConnectedAccountId, requesteeBookingRate: $requesteeBookingRate }''';
 
   @override
-  List<Object> get props => [requesteeId];
+  List<Object> get props => [
+        requesteeId,
+        requesteeStripeConnectedAccountId,
+        requesteeBookingRate,
+      ];
 }
 
 class PushBooking extends NavigationEvent {

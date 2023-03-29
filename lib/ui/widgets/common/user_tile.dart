@@ -5,7 +5,6 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
-import 'package:intheloopapp/ui/views/profile/profile_view.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 
 class UserTile extends StatefulWidget {
@@ -29,6 +28,9 @@ class _UserTileState extends State<UserTile> {
   Widget build(BuildContext context) {
     final navigationBloc = context.read<NavigationBloc>();
     final database = context.read<DatabaseRepository>();
+
+    if (widget.user.deleted) return const SizedBox.shrink();
+
     return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
       selector: (state) => state as Onboarded,
       builder: (context, state) {
