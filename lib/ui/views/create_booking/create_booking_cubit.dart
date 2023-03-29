@@ -92,25 +92,27 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
     final rateInMinutes = requesteeBookingRate / 60;
     final total = d.inMinutes * rateInMinutes;
     try {
-      final intent = await payments.initPaymentSheet(
-        payerCustomerId: currentUser.stripeCustomerId,
-        payeeConnectedAccountId: requesteeStripeConnectedAccountId,
-        amount: total.toInt(),
-      );
-
-      if (intent.customer != currentUser.stripeCustomerId) {
-        onboardingBloc.add(
-          UpdateOnboardedUser(
-            user: currentUser.copyWith(
-              stripeCustomerId: intent.customer,
-            ),
-          ),
+      if (total > 0) {
+        final intent = await payments.initPaymentSheet(
+          payerCustomerId: currentUser.stripeCustomerId,
+          payeeConnectedAccountId: requesteeStripeConnectedAccountId,
+          amount: total.toInt(),
         );
+
+        if (intent.customer != currentUser.stripeCustomerId) {
+          onboardingBloc.add(
+            UpdateOnboardedUser(
+              user: currentUser.copyWith(
+                stripeCustomerId: intent.customer,
+              ),
+            ),
+          );
+        }
+
+        await payments.presentPaymentSheet();
+
+        await payments.confirmPaymentSheetPayment();
       }
-
-      await payments.presentPaymentSheet();
-
-      await payments.confirmPaymentSheetPayment();
 
       final channel = await streamRepo.createSimpleChat(state.requesteeId);
       await channel.sendMessage(
