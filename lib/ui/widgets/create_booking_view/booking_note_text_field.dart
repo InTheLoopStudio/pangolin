@@ -22,7 +22,7 @@ class BookingNoteTextField extends StatelessWidget {
           ),
           textInputAction: TextInputAction.newline,
           keyboardType: TextInputType.multiline,
-          maxLines: 10,
+          maxLines: 5,
           maxLength: 256,
           onChanged: (input) =>
               context.read<CreateBookingCubit>().updateNote(input),

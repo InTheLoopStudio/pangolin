@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:formz/formz.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
@@ -30,35 +33,67 @@ class CreateBookingView extends StatelessWidget {
       selector: (state) => state as Onboarded,
       builder: (context, state) {
         final currentUser = state.currentUser;
-        return Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.background,
-          appBar: AppBar(
-            title: const Row(
-              children: [
-                Text(
-                  'Request to Book',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
+        return BlocProvider(
+          create: (context) => CreateBookingCubit(
+            currentUser: currentUser,
+            requesteeId: requesteeId,
+            requesteeStripeConnectedAccountId:
+                requesteeStripeConnectedAccountId,
+            requesteeBookingRate: requesteeBookingRate,
+            navigationBloc: context.read<NavigationBloc>(),
+            onboardingBloc: context.read<OnboardingBloc>(),
+            database: database,
+            streamRepo: RepositoryProvider.of<StreamRepository>(context),
+            payments: RepositoryProvider.of<PaymentRepository>(context),
           ),
-          body: BlocProvider(
-            create: (context) => CreateBookingCubit(
-              currentUser: currentUser,
-              requesteeId: requesteeId,
-              requesteeStripeConnectedAccountId:
-                  requesteeStripeConnectedAccountId,
-              requesteeBookingRate: requesteeBookingRate,
-              navigationBloc: context.read<NavigationBloc>(),
-              onboardingBloc: context.read<OnboardingBloc>(),
-              database: database,
-              streamRepo: RepositoryProvider.of<StreamRepository>(context),
-              payments: RepositoryProvider.of<PaymentRepository>(context),
+          child: Scaffold(
+            backgroundColor: Theme.of(context).colorScheme.background,
+            appBar: AppBar(
+              title: const Row(
+                children: [
+                  Text(
+                    'Request to Book',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            child: Padding(
+            floatingActionButton:
+                BlocBuilder<CreateBookingCubit, CreateBookingState>(
+              builder: (context, state) {
+                return FloatingActionButton.extended(
+                  onPressed: () async {
+                    try {
+                      await context.read<CreateBookingCubit>().createBooking();
+                    } on StripeException catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Text('Error: ${e.error.localizedMessage}'),
+                        ),
+                      );
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Text('Error making payment'),
+                        ),
+                      );
+                    }
+                  },
+                  icon: const Icon(Icons.book),
+                  label: state.status.isInProgress
+                      ? const CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation(Colors.white),
+                        )
+                      : const Text('Confirm'),
+                );
+              },
+            ),
+            body: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: ListView(
                 children: [

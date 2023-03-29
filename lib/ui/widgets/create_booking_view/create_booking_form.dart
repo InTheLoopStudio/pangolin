@@ -168,35 +168,6 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
               BookingNoteTextField(
                 controller: noteController,
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              CupertinoButton.filled(
-                onPressed: () async {
-                  try {
-                    await context.read<CreateBookingCubit>().createBooking();
-                  } on StripeException catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: Colors.red,
-                        content: Text('Error: ${e.error.localizedMessage}'),
-                      ),
-                    );
-                  } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        backgroundColor: Colors.red,
-                        content: Text('Error making payment'),
-                      ),
-                    );
-                  }
-                },
-                child: state.status.isInProgress
-                    ? const CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation(Colors.white),
-                      )
-                    : const Text('Confirm'),
-              ),
             ],
           ),
         );
