@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/bookings/bookings_cubit.dart';
-import 'package:intheloopapp/ui/views/common/tapped_app_bar.dart';
 import 'package:intheloopapp/ui/widgets/booking_view/bookings_list.dart';
 
 class BookingsView extends StatelessWidget {
@@ -43,14 +42,16 @@ class BookingsView extends StatelessWidget {
                             systemOverlayStyle: SystemUiOverlayStyle.dark,
                             flexibleSpace: ClipRect(
                               child: BackdropFilter(
-                                filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
+                                filter: ImageFilter.blur(
+                                  sigmaX: 7,
+                                  sigmaY: 7,
+                                ),
                                 child: Container(
                                   color: Colors.transparent,
                                 ),
                               ),
                             ),
                             title: const Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                   'Bookings',

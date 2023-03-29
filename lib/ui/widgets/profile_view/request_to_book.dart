@@ -12,7 +12,6 @@ class RequestToBookButton extends StatelessWidget {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return (state.currentUser.id != state.visitedUser.id &&
-                state.visitedUser.isNotVenue &&
                 state.currentUser.isVenue)
             ? Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
