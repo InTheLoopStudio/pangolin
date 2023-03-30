@@ -74,6 +74,10 @@ class ActivityTile extends StatelessWidget {
                             return const Text('liked your loop ❤️');
                           case ActivityType.comment:
                             return const Text('commented on your loop 💬');
+                          case ActivityType.bookingRequest:
+                            return const Text('sent you a booking request 📩');
+                          case ActivityType.bookingUpdate:
+                            return const Text('updated your booking 📩');
                         }
                       }(),
                     ),

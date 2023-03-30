@@ -87,4 +87,6 @@ enum ActivityType {
   follow,
   like,
   comment,
+  bookingRequest,
+  bookingUpdate,
 }
