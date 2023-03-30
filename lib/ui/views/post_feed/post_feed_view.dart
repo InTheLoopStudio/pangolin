@@ -30,7 +30,7 @@ class PostFeedView extends StatelessWidget {
             backgroundColor: Theme.of(context).colorScheme.background,
             extendBodyBehindAppBar: true,
             appBar: const TappedAppBar(
-              title: 'Gems',
+              title: 'Posts',
               trailing: NotificationIconButton(),
             ),
             floatingActionButton: FloatingActionButton(

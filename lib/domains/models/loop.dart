@@ -19,6 +19,7 @@ class Loop extends Equatable {
     required this.title,
     required this.description,
     required this.audioPath,
+    required this.imagePaths,
     required this.timestamp,
     required this.likeCount,
     required this.commentCount,
@@ -34,6 +35,7 @@ class Loop extends Equatable {
         title: '',
         description: '',
         audioPath: '',
+        imagePaths: const [],
         timestamp: DateTime.now(),
         likeCount: 0,
         commentCount: 0,
@@ -58,6 +60,9 @@ class Loop extends Equatable {
       title: doc.getOrElse('title', '') as String,
       description: doc.getOrElse('description', '') as String,
       audioPath: doc.getOrElse('audioPath', '') as String,
+      imagePaths: List.from(
+        doc.getOrElse('imagePaths', <dynamic>[]) as Iterable<dynamic>,
+      ),
       timestamp: tmpTimestamp.toDate(),
       likeCount: doc.getOrElse('likeCount', 0) as int,
       commentCount: doc.getOrElse('commentCount', 0) as int,
@@ -83,6 +88,7 @@ class Loop extends Equatable {
         'title': title,
         'description': description,
         'audioPath': audioPath,
+        'imagePaths': imagePaths,
         'timestamp': timestamp,
         'likeCount': likeCount,
         'commentCount': commentCount,
@@ -105,6 +111,9 @@ class Loop extends Equatable {
 
   /// The url for the audio associated with this [Loop]
   final String audioPath;
+
+  /// The urls for the images associated with this [Loop]
+  final List<String> imagePaths;
 
   /// The timestamp this [Loop] for created at
   final DateTime timestamp;
@@ -131,6 +140,7 @@ class Loop extends Equatable {
         title,
         description,
         audioPath,
+        imagePaths,
         likeCount,
         commentCount,
         shareCount,
@@ -155,6 +165,7 @@ class Loop extends Equatable {
     String? title,
     String? description,
     String? audioPath,
+    List<String>? imagePaths,
     DateTime? timestamp,
     int? likeCount,
     int? commentCount,
@@ -168,6 +179,7 @@ class Loop extends Equatable {
       title: title ?? this.title,
       description: description ?? this.description,
       audioPath: audioPath ?? this.audioPath,
+      imagePaths: imagePaths ?? this.imagePaths,
       timestamp: timestamp ?? this.timestamp,
       likeCount: likeCount ?? this.likeCount,
       commentCount: commentCount ?? this.commentCount,
