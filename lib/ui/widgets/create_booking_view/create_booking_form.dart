@@ -144,7 +144,7 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                     child: Text('Booking Fee (10%)'),
                   ),
                   Text(
-                    state.formattedBookingFee,
+                    state.formattedApplicationFee,
                     style: const TextStyle(
                       fontSize: 22,
                     ),
