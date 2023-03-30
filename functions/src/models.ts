@@ -1,3 +1,5 @@
+import { firestore } from "firebase-admin";
+
 export type AccountType = "free" | "venue";
 
 export type UserModel = {
@@ -28,6 +30,7 @@ export type UserModel = {
   emailNotificationsITLUpdates?: boolean;
   bookingRate?: number;
   stripeConnectedAccountId?: string;
+  stripeCustomerId?: string;
 };
 
 export type Badge = {
@@ -59,3 +62,16 @@ export type Comment = {
   parentId: string | null;
   children: Array<string>;
 };
+
+export type Booking = {
+  id: string;
+  name: string;
+  note: string;
+  requesterId: string;
+  requesteeId: string;
+  status: string;
+  rate: number;
+  startTime: firestore.Timestamp;
+  endTime: firestore.Timestamp;
+  timestamp: firestore.Timestamp;
+}

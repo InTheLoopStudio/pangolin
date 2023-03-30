@@ -3,8 +3,8 @@ import { messaging, auth } from "firebase-admin";
 
 import * as functions from "firebase-functions";
 import { initializeApp } from "firebase-admin/app";
-import { 
-  initializeApp as firebaseInitializeApp 
+import {
+  initializeApp as firebaseInitializeApp
 } from "firebase/app";
 import {
   getFirestore,
@@ -19,6 +19,7 @@ import { defineSecret } from "firebase-functions/params";
 import { HttpsError } from "firebase-functions/v1/auth";
 
 import Stripe from "stripe";
+import { Booking } from "./models";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBIHwGYfS7MGREOR4nSTYJxZPLXNApTJ3M",
@@ -237,12 +238,12 @@ const _addActivity = async (data: {
       "The function argument 'fromUserId' cannot be empty"
     );
   }
-  if (![ "follow", "like", "comment" ].includes(data.type)) {
+  if (!["follow", "like", "comment", "bookingRequest", "bookingUpdate",].includes(data.type)) {
     // Throwing an HttpsError so that the client gets the error details.
     throw new functions.https.HttpsError(
       "invalid-argument",
       "The function argument 'type' must be either " +
-      "'follow', 'like', or 'comment'"
+      "'follow', 'like', 'comment', 'bookingRequest', or 'bookingUpdate'"
     );
   }
 
@@ -294,10 +295,10 @@ const _deleteComment = async (data: {
 
   const subcollection = function () {
     switch (data.entityType) {
-    case "loop":
-      return "loopComments";
-    case "post":
-      return "loopComments";
+      case "loop":
+        return "loopComments";
+      case "post":
+        return "loopComments";
     }
   }()
 
@@ -309,16 +310,16 @@ const _deleteComment = async (data: {
 
   const rootId = commentSnapshot.data()?.["rootId"];
   switch (data.entityType) {
-  case "loop":
-    loopsRef
-      .doc(rootId)
-      .update({ commentCount: FieldValue.increment(-1) });
-    break;
-  case "post":
-    postsRef
-      .doc(rootId)
-      .update({ commentCount: FieldValue.increment(-1) });
-    break;
+    case "loop":
+      loopsRef
+        .doc(rootId)
+        .update({ commentCount: FieldValue.increment(-1) });
+      break;
+    case "post":
+      postsRef
+        .doc(rootId)
+        .update({ commentCount: FieldValue.increment(-1) });
+      break;
   }
 
   commentSnapshot.ref.update({
@@ -604,39 +605,57 @@ export const sendToDevice = functions.firestore
     };
 
     switch (activityType) {
-    case "comment":
-      if (!user["pushNotificationsComments"]) return;
+      case "comment":
+        if (!user["pushNotificationsComments"]) return;
 
-      payload = {
-        notification: {
-          title: "New Comment",
-          body: "Someone commented on your loop 👀",
-          clickAction: "FLUTTER_NOTIFICATION_CLICK",
-        },
-      };
-      break;
-    case "like":
-      if (!user["pushNotificationsLikes"]) return;
-      payload = {
-        notification: {
-          title: "New Like",
-          body: "Someone liked your loops 👍",
-          clickAction: "FLUTTER_NOTIFICATION_CLICK",
-        },
-      };
-      break;
-    case "follow":
-      if (!user["pushNotificationsFollows"]) return;
-      payload = {
-        notification: {
-          title: "New Follower",
-          body: "You just got a new follower 🔥",
-          clickAction: "FLUTTER_NOTIFICATION_CLICK",
-        },
-      };
-      break;
-    default:
-      return;
+        payload = {
+          notification: {
+            title: "New Comment",
+            body: "Someone commented on your loop 👀",
+            clickAction: "FLUTTER_NOTIFICATION_CLICK",
+          },
+        };
+        break;
+      case "like":
+        if (!user["pushNotificationsLikes"]) return;
+        payload = {
+          notification: {
+            title: "New Like",
+            body: "Someone liked your loops 👍",
+            clickAction: "FLUTTER_NOTIFICATION_CLICK",
+          },
+        };
+        break;
+      case "follow":
+        if (!user["pushNotificationsFollows"]) return;
+        payload = {
+          notification: {
+            title: "New Follower",
+            body: "You just got a new follower 🔥",
+            clickAction: "FLUTTER_NOTIFICATION_CLICK",
+          },
+        };
+        break;
+      case "bookingRequest":
+        payload = {
+          notification: {
+            title: "New Booking Request",
+            body: "You just got a new booking request 🔥",
+            clickAction: "FLUTTER_NOTIFICATION_CLICK",
+          },
+        };
+        break;
+      case "bookingUpdate":
+        payload = {
+          notification: {
+            title: "Booking Update",
+            body: "There was an update to one of your bookings",
+            clickAction: "FLUTTER_NOTIFICATION_CLICK",
+          },
+        };
+        break;
+      default:
+        return;
     }
 
     const querySnapshot = await tokensRef
@@ -652,7 +671,7 @@ export const sendToDevice = functions.firestore
     return null;
   });
 export const createStreamUserOnUserCreated = functions
-  .runWith({ secrets: [ streamKey, streamSecret ] })
+  .runWith({ secrets: [streamKey, streamSecret] })
   .firestore
   .document("users/{userId}")
   .onCreate(async (snapshot) => {
@@ -672,7 +691,7 @@ export const createStreamUserOnUserCreated = functions
   })
 
 export const updateStreamUserOnUserUpdate = functions
-  .runWith({ secrets: [ streamKey, streamSecret ] })
+  .runWith({ secrets: [streamKey, streamSecret] })
   .firestore
   .document("users/{userId}")
   .onUpdate(async (snapshot) => {
@@ -921,6 +940,41 @@ export const decrementPostLikeCountOnUnlike = functions.firestore
       .update({ likeCount: FieldValue.increment(-1) });
   })
 
+export const addActivityOnBooking = functions.firestore
+  .document("bookings/{bookingId}")
+  .onCreate(async (snapshot, context) => {
+    const booking = snapshot.data() as Booking;
+    if (booking === undefined) {
+      throw new HttpsError("failed-precondition", `booking ${context.params.bookingId} does not exist`,);
+    }
+
+    _addActivity({
+      fromUserId: booking.requesterId,
+      type: "bookingRequest",
+      toUserId: booking.requesteeId,
+    });
+  });
+export const addActivityOnBookingUpdate = functions.firestore
+  .document("bookings/{bookingId}")
+  .onUpdate(async (change, context) => {
+    const booking = change.after.data() as Booking;
+    if (booking === undefined) {
+      throw new HttpsError("failed-precondition", `booking ${context.params.bookingId} does not exist`,);
+    }
+
+    Promise.all([
+      _addActivity({
+        fromUserId: booking.requesterId,
+        type: "bookingRequest",
+        toUserId: booking.requesteeId,
+      }),
+      _addActivity({
+        fromUserId: booking.requesteeId,
+        type: "bookingRequest",
+        toUserId: booking.requesterId,
+      }),
+    ]);
+  });
 
 export const incrementLoopCommentCountOnComment = functions.firestore
   .document("comments/{loopId}/loopComments/{commentId}")
@@ -1002,7 +1056,7 @@ export const onUserDeleted = functions.auth
   .user()
   .onDelete((user: auth.UserRecord) => _deleteUser({ id: user.uid }));
 export const deleteStreamUser = functions
-  .runWith({ secrets: [ streamKey, streamSecret ] })
+  .runWith({ secrets: [streamKey, streamSecret] })
   .auth
   .user()
   .onDelete((user) => {
@@ -1017,21 +1071,21 @@ export const addActivity = functions.https.onCall((data, context) => {
   return _addActivity(data);
 });
 export const createPaymentIntent = functions
-  .runWith({ secrets: [ stripeKey, stripePublishableKey ] })
+  .runWith({ secrets: [stripeKey, stripePublishableKey] })
   .https
   .onCall((data, context) => {
     _authenticated(context);
     return _createPaymentIntent(data);
   });
 export const createConnectedAccount = functions
-  .runWith({ secrets: [ stripeKey, stripePublishableKey ] })
+  .runWith({ secrets: [stripeKey, stripePublishableKey] })
   .https
   .onCall((data, context) => {
     _authenticated(context);
     return _createConnectedAccount(data);
   })
 export const getAccountById = functions
-  .runWith({ secrets: [ stripeKey, stripePublishableKey ] })
+  .runWith({ secrets: [stripeKey, stripePublishableKey] })
   .https
   .onCall((data, context) => {
     _authenticated(context);
