@@ -29,11 +29,13 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
     required this.database,
     required this.streamRepo,
     required this.payments,
+    required this.bookingFee,
   }) : super(
           CreateBookingState(
             currentUserId: currentUser.id,
             requesteeId: requesteeId,
             requesteeBookingRate: requesteeBookingRate,
+            bookingFee: bookingFee,
           ),
         );
 
@@ -41,6 +43,7 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
   final String requesteeId;
   final String requesteeStripeConnectedAccountId;
   final int requesteeBookingRate;
+  final double bookingFee;
   final NavigationBloc navigationBloc;
   final OnboardingBloc onboardingBloc;
   final DatabaseRepository database;
@@ -88,15 +91,14 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
       timestamp: DateTime.now(),
     );
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
-    final d = state.endTime.value.difference(state.startTime.value);
-    final rateInMinutes = requesteeBookingRate / 60;
-    final total = d.inMinutes * rateInMinutes;
+    final total = state.totalCost;
+
     try {
       if (total > 0) {
         final intent = await payments.initPaymentSheet(
           payerCustomerId: currentUser.stripeCustomerId,
           payeeConnectedAccountId: requesteeStripeConnectedAccountId,
-          amount: total.toInt(),
+          amount: total,
         );
 
         if (intent.customer != currentUser.stripeCustomerId) {

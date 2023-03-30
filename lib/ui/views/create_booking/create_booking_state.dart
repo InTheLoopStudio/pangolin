@@ -5,6 +5,7 @@ class CreateBookingState extends Equatable with FormzMixin {
     required this.currentUserId,
     required this.requesteeId,
     required this.requesteeBookingRate,
+    required this.bookingFee,
     this.name = const BookingName.pure(),
     this.note = const BookingNote.pure(),
     this.status = FormzSubmissionStatus.initial,
@@ -22,6 +23,7 @@ class CreateBookingState extends Equatable with FormzMixin {
   final String currentUserId;
   final String requesteeId;
   final int requesteeBookingRate;
+  final double bookingFee;
   final FormzSubmissionStatus status;
   late final BookingStartTime startTime;
   late final BookingEndTime endTime;
@@ -32,6 +34,7 @@ class CreateBookingState extends Equatable with FormzMixin {
         currentUserId,
         requesteeId,
         requesteeBookingRate,
+        bookingFee,
         name,
         note,
         status,
@@ -52,6 +55,7 @@ class CreateBookingState extends Equatable with FormzMixin {
     String? currentUserId,
     String? requesteeId,
     int? requesteeBookingRate,
+    double? bookingFee,
     BookingName? name,
     BookingNote? note,
     BookingStartTime? startTime,
@@ -63,6 +67,7 @@ class CreateBookingState extends Equatable with FormzMixin {
       currentUserId: currentUserId ?? this.currentUserId,
       requesteeId: requesteeId ?? this.requesteeId,
       requesteeBookingRate: requesteeBookingRate ?? this.requesteeBookingRate,
+      bookingFee: bookingFee ?? this.bookingFee,
       name: name ?? this.name,
       note: note ?? this.note,
       startTime: startTime ?? this.startTime,
@@ -96,19 +101,19 @@ class CreateBookingState extends Equatable with FormzMixin {
     return total.toInt();
   }
 
-  int get bookingFee {
+  int get applicationFee {
     final total = artistCost;
     final fee = (total * 0.1).toInt();
     return fee;
   }
 
   int get totalCost {
-    final total = artistCost + bookingFee;
+    final total = artistCost + applicationFee;
     return total;
   }
 
-  String get formattedBookingFee {
-    final fee = bookingFee / 100;
+  String get formattedApplicationFee {
+    final fee = applicationFee / 100;
     return '\$${fee.toStringAsFixed(2)}';
   }
 
