@@ -234,7 +234,7 @@ class BookingView extends StatelessWidget {
                             )
                           : const SizedBox.shrink(),
                 ),
-                if (booking.status == BookingStatus.canceled)
+                if (booking.status != BookingStatus.canceled)
                   SliverToBoxAdapter(
                     child: CupertinoButton(
                       onPressed: () {
