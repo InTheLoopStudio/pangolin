@@ -14,8 +14,16 @@ class UploadAudioButton extends StatelessWidget {
             ? FilledButton.icon(
                 onPressed: () =>
                     context.read<CreateLoopCubit>().handleAudioFromFiles(),
-                icon: const Icon(Icons.upload_file),
-                label: const Text('Upload Audio (optional)'),
+                icon: const Icon(
+                  Icons.upload_file,
+                  color: Colors.white,
+                ),
+                label: const Text(
+                  'Upload Audio (optional)',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
               )
             : const AudioContainer();
       },
