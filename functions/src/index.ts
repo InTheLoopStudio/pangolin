@@ -23,10 +23,10 @@ const app = initializeApp();
 const streamKey = defineSecret("STREAM_KEY");
 const streamSecret = defineSecret("STREAM_SECRET");
 
-const stripeKey = defineSecret("STRIPE_TEST_KEY");
-const stripePublishableKey = defineSecret("STRIPE_PUBLISHABLE_TEST_KEY");
-// const stripeKey = defineSecret("STRIPE_KEY");
-// const stripePublishableKey = defineSecret("STRIPE_PUBLISHABLE_KEY");
+// const stripeKey = defineSecret("STRIPE_TEST_KEY");
+// const stripePublishableKey = defineSecret("STRIPE_PUBLISHABLE_TEST_KEY");
+const stripeKey = defineSecret("STRIPE_KEY");
+const stripePublishableKey = defineSecret("STRIPE_PUBLISHABLE_KEY");
 
 const db = getFirestore(app);
 const storage = getStorage(app);
@@ -35,28 +35,21 @@ const remote = getRemoteConfig(app);
 
 const usersRef = db.collection("users");
 const loopsRef = db.collection("loops");
-const postsRef = db.collection("posts");
 const activitiesRef = db.collection("activities");
 // const followingRef = db.collection("following");
 const followersRef = db.collection("followers");
 // const likesRef = db.collection("likes");
 const commentsRef = db.collection("comments");
 const loopCommentsGroupRef = db.collectionGroup("loopComments");
-const postCommentsGroupRef = db.collectionGroup("postComments");
 const feedsRef = db.collection("feeds");
 // const badgesRef = db.collection("badges");
 // const badgesSentRef = db.collection("badgesSent");
 const tokensRef = db.collection("device_tokens")
 
 // const loopLikesSubcollection = "loopLikes";
-// const postLikesSubcollection = "postLikes";
 // const loopCommentsSubcollection = "loopComments";
-// const postCommentsSubcollection = "postComments";
 const loopsFeedSubcollection = "userFeed";
-const postsFeedSubcollection = "userPostsFeed";
 
-
-type EntityType = "loop" | "post";
 
 const _getFileFromURL = (fileURL: string): string => {
   const fSlashes = fileURL.split("/");
@@ -171,21 +164,6 @@ const _deleteUser = async (data: { id: string }) => {
       id: snapshot.id,
       rootId: comment.rootId,
       userId: comment.userId,
-      entityType: "loop",
-    });
-  });
-
-  const userPostsComments = await postCommentsGroupRef
-    .orderBy("timestamp", "desc")
-    .where("userId", "==", data.id)
-    .get();
-  userPostsComments.docs.forEach((snapshot) => {
-    const comment = snapshot.data();
-    _deleteComment({
-      id: snapshot.id,
-      rootId: comment.rootId,
-      userId: comment.userId,
-      entityType: "post",
     });
   });
 
@@ -247,7 +225,6 @@ const _deleteComment = async (data: {
   id: string;
   userId: string
   rootId: string,
-  entityType: EntityType
 }) => {
   // Checking attribute.
   if (data.id.length === 0) {
@@ -271,42 +248,17 @@ const _deleteComment = async (data: {
       "The function argument 'rootId' cannot be empty"
     );
   }
-  if (data.entityType !== "loop" && data.entityType !== "post") {
-    // Throwing an HttpsError so that the client gets the error details.
-    throw new functions.https.HttpsError(
-      "invalid-argument",
-      "The function argument 'entityType' can only be 'loop' or 'post'"
-    );
-  }
-
-  const subcollection = function () {
-    switch (data.entityType) {
-    case "loop":
-      return "loopComments";
-    case "post":
-      return "loopComments";
-    }
-  }()
 
   const commentSnapshot = await commentsRef
     .doc(data.rootId)
-    .collection(subcollection)
+    .collection("loopComments")
     .doc(data.id)
     .get();
 
   const rootId = commentSnapshot.data()?.["rootId"];
-  switch (data.entityType) {
-  case "loop":
-    loopsRef
-      .doc(rootId)
-      .update({ commentCount: FieldValue.increment(-1) });
-    break;
-  case "post":
-    postsRef
-      .doc(rootId)
-      .update({ commentCount: FieldValue.increment(-1) });
-    break;
-  }
+  loopsRef
+    .doc(rootId)
+    .update({ commentCount: FieldValue.increment(-1) });
 
   commentSnapshot.ref.update({
     content: "*deleted*",
@@ -372,28 +324,6 @@ const _copyUserLoopsToFeed = async (data: {
 
   return data.feedOwnerId;
 };
-const _copyUserPostsToFeed = async (data: {
-  postsOwnerId: string;
-  feedOwnerId: string;
-}) => {
-  const postsQuerySnapshot = await postsRef
-    .where("userId", "==", data.postsOwnerId)
-    .limit(1000)
-    .get();
-
-  postsQuerySnapshot.docs.forEach((doc) => {
-    feedsRef
-      .doc(data.feedOwnerId)
-      .collection(postsFeedSubcollection)
-      .doc(doc.id)
-      .set({
-        timestamp: doc.data()["timestamp"] || Timestamp.now(),
-        userId: data.postsOwnerId,
-      });
-  });
-
-  return data.feedOwnerId;
-};
 
 const _deleteUserLoopsFromFeed = (data: {
   loopsOwnerId: string;
@@ -403,25 +333,6 @@ const _deleteUserLoopsFromFeed = (data: {
     .doc(data.feedOwnerId)
     .collection(loopsFeedSubcollection)
     .where("userId", "==", data.loopsOwnerId)
-    .limit(1000)
-    .get()
-    .then((query) => {
-      query.docs.forEach((doc) => {
-        doc.ref.delete();
-      });
-    });
-
-  return data.feedOwnerId;
-};
-
-const _deleteUserPostsFromFeed = (data: {
-  postsOwnerId: string;
-  feedOwnerId: string;
-}) => {
-  feedsRef
-    .doc(data.feedOwnerId)
-    .collection(postsFeedSubcollection)
-    .where("userId", "==", data.postsOwnerId)
     .limit(1000)
     .get()
     .then((query) => {
@@ -725,14 +636,6 @@ export const copyLoopFeedOnFollow = functions.firestore
       feedOwnerId: context.params.followerId,
     });
   });
-export const copyPostFeedOnFollow = functions.firestore
-  .document("following/{followerId}/Following/{followeeId}")
-  .onCreate(async (snapshot, context) => {
-    _copyUserPostsToFeed({
-      postsOwnerId: context.params.followeeId,
-      feedOwnerId: context.params.followerId,
-    });
-  });
 
 export const addActivityOnFollow = functions.firestore
   .document("followers/{followeeId}/Followers/{followerId}")
@@ -752,14 +655,7 @@ export const deleteUserLoopOnUnfollow = functions.firestore
       feedOwnerId: context.params.followerId,
     })
   });
-export const deleteUserPostOnUnfollow = functions.firestore
-  .document("following/{followerId}/Following/{followeeId}")
-  .onDelete(async (snapshot, context) => {
-    _deleteUserPostsFromFeed({
-      postsOwnerId: context.params.followeeId,
-      feedOwnerId: context.params.followerId,
-    })
-  });
+
 export const deteteFollowersEntryOnUnfollow = functions.firestore
   .document("following/{followerId}/Following/{followeeId}")
   .onDelete(async (snapshot, context) => {
@@ -785,6 +681,7 @@ export const incrementLoopCountOnUpload = functions.firestore
       .doc(loop.userId)
       .update({ loopsCount: FieldValue.increment(1) });
   })
+
 export const sendLoopToFollowers = functions.firestore
   .document("loops/{loopId}")
   .onCreate(async (snapshot) => {
@@ -824,52 +721,6 @@ export const sendLoopToFollowers = functions.firestore
     );
 
   });
-export const sendPostToFollowers = functions.firestore
-  .document("posts/{postId}")
-  .onCreate(async (snapshot) => {
-    const post = snapshot.data();
-    functions.logger.debug(post)
-
-    const userDoc = await usersRef.doc(post.userId).get();
-    // add post to owner's feed
-    functions.logger.debug("sending post to user's own feed")
-    await feedsRef
-      .doc(post.userId)
-      .collection(postsFeedSubcollection)
-      .doc(snapshot.id)
-      .set({
-        timestamp: Timestamp.now(),
-        userId: post.userId,
-      });
-
-
-    const isShadowBanned: boolean = userDoc.data()?.["shadowBanned"] || false
-    if (isShadowBanned === true) {
-      functions.logger.debug("isShadowBanned === true")
-      return;
-    }
-    // get followers
-    functions.logger.debug("fetching user's followers")
-    const followerSnapshot = await followersRef
-      .doc(post.userId)
-      .collection("Followers")
-      .get();
-
-    // add post to followers feed
-    functions.logger.debug("Sending post to followers")
-    await Promise.all(
-      followerSnapshot.docs.map(async (docSnapshot) => {
-        return feedsRef
-          .doc(docSnapshot.id)
-          .collection(postsFeedSubcollection)
-          .doc(snapshot.id)
-          .set({
-            timestamp: Timestamp.now(),
-            userId: post.userId,
-          });
-      }),
-    );
-  });
 
 export const incrementLikeCountOnLoopLike = functions.firestore
   .document("likes/{loopId}/loopLikes/{userId}")
@@ -878,13 +729,7 @@ export const incrementLikeCountOnLoopLike = functions.firestore
       .doc(context.params.loopId)
       .update({ likeCount: FieldValue.increment(1) });
   });
-export const incrementLikeCountOnPostLike = functions.firestore
-  .document("likes/{postId}/postLikes/{userId}")
-  .onCreate(async (snapshot, context) => {
-    await postsRef
-      .doc(context.params.postId)
-      .update({ likeCount: FieldValue.increment(1) });
-  });
+
 export const addActivityOnLoopLike = functions.firestore
   .document("likes/{loopId}/loopLikes/{userId}")
   .onCreate(async (snapshot, context) => {
@@ -902,37 +747,12 @@ export const addActivityOnLoopLike = functions.firestore
       });
     }
   });
-export const addActivityOnPostLike = functions.firestore
-  .document("likes/{postId}/postLikes/{userId}")
-  .onCreate(async (snapshot, context) => {
-    const postSnapshot = await postsRef.doc(context.params.postId).get();
-    const post = postSnapshot.data();
-    if (post === undefined) {
-      throw new HttpsError("failed-precondition", `post ${context.params.postId} does not exist`);
-    }
-
-    if (post.userId !== context.params.userId) {
-      _addActivity({
-        fromUserId: context.params.userId,
-        type: "like",
-        toUserId: post.userId,
-      });
-    }
-  })
-
 
 export const decrementLoopLikeCountOnUnlike = functions.firestore
   .document("likes/{loopId}/loopLikes/{userId}")
   .onDelete(async (snapshot, context) => {
     await loopsRef
       .doc(context.params.loopId)
-      .update({ likeCount: FieldValue.increment(-1) });
-  })
-export const decrementPostLikeCountOnUnlike = functions.firestore
-  .document("likes/{postId}/postLikes/{userId}")
-  .onDelete(async (snapshot, context) => {
-    await postsRef
-      .doc(context.params.postId)
       .update({ likeCount: FieldValue.increment(-1) });
   })
 
@@ -986,20 +806,6 @@ export const incrementLoopCommentCountOnComment = functions.firestore
       .doc(loop.id)
       .update({ likeCount: FieldValue.increment(1) });
   });
-export const incrementPostCommentCountOnComment = functions.firestore
-  .document("comments/{postId}/postComments/{commentId}")
-  .onCreate(async (snapshot, context) => {
-    const postSnapshot = await postsRef.doc(context.params.postId).get();
-    const post = postSnapshot.data();
-
-    if (post === undefined) {
-      throw new HttpsError("failed-precondition", `post ${context.params.postId} does not exist`);
-    }
-
-    await postsRef
-      .doc(post.id)
-      .update({ likeCount: FieldValue.increment(1) });
-  });
 
 export const addActivityOnLoopComment = functions.firestore
   .document("comments/{loopId}/loopComments/{commentId}")
@@ -1015,25 +821,6 @@ export const addActivityOnLoopComment = functions.firestore
     if (loop.userId !== comment.userId) {
       _addActivity({
         toUserId: loop.userId,
-        fromUserId: comment.userId,
-        type: "comment",
-      });
-    }
-  });
-export const addActivityOnPostComment = functions.firestore
-  .document("comments/{postId}/postComments/{commentId}")
-  .onCreate(async (snapshot, context) => {
-    const comment = snapshot.data();
-    const postSnapshot = await postsRef.doc(context.params.postId).get();
-    const post = postSnapshot.data();
-
-    if (post === undefined) {
-      throw new HttpsError("failed-precondition", `post ${context.params.postId} does not exist`);
-    }
-
-    if (post.userId !== comment.userId) {
-      _addActivity({
-        toUserId: post.userId,
         fromUserId: comment.userId,
         type: "comment",
       });
