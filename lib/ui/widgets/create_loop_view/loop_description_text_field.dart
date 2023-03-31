@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/ui/views/create_post/cubit/create_post_cubit.dart';
+import 'package:intheloopapp/ui/views/create_loop/cubit/create_loop_cubit.dart';
 
-class PostDescriptionTextField extends StatelessWidget {
-  const PostDescriptionTextField({super.key});
+class LoopDescriptionTextField extends StatelessWidget {
+  const LoopDescriptionTextField({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreatePostCubit, CreatePostState>(
+    return BlocBuilder<CreateLoopCubit, CreateLoopState>(
       builder: (context, state) {
         return TextFormField(
           keyboardType: TextInputType.multiline,
@@ -16,10 +16,11 @@ class PostDescriptionTextField extends StatelessWidget {
             hintText: "What's on your mind?",
           ),
           maxLength: 256,
+          minLines: 6,
           validator: (value) =>
-              value!.isEmpty ? 'Description cannot be empty' : null ,
+              value!.isEmpty ? 'Description cannot be empty' : null,
           onChanged: (input) =>
-              context.read<CreatePostCubit>().onDescriptionChange(
+              context.read<CreateLoopCubit>().onDescriptionChange(
                     input,
                   ),
         );

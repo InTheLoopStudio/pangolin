@@ -9,10 +9,10 @@ import 'package:intheloopapp/domains/models/post.dart';
 import 'package:intheloopapp/ui/views/activity/activity_view.dart';
 import 'package:intheloopapp/ui/views/badge/badge_view.dart';
 import 'package:intheloopapp/ui/views/common/booking_view/booking_view.dart';
-import 'package:intheloopapp/ui/views/common/loop_view/loop_view.dart';
+import 'package:intheloopapp/ui/views/common/loop_view/loop_view_new.dart';
 import 'package:intheloopapp/ui/views/common/post_view/post_view.dart';
 import 'package:intheloopapp/ui/views/create_booking/create_booking_view.dart';
-import 'package:intheloopapp/ui/views/create_post/create_post_view.dart';
+import 'package:intheloopapp/ui/views/create_loop/create_loop_view.dart';
 import 'package:intheloopapp/ui/views/likes/likes_view.dart';
 import 'package:intheloopapp/ui/views/login/forgot_password_view.dart';
 import 'package:intheloopapp/ui/views/login/signup_view.dart';
@@ -35,12 +35,10 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     });
     on<PushLoop>((event, emit) {
       navigationKey.currentState?.push(
-        MaterialPageRoute<LoopView>(
+        MaterialPageRoute<LoopViewNew>(
           builder: (context) => Material(
-            child: LoopView(
+            child: LoopViewNew(
               loop: event.loop,
-              showComments: event.showComments,
-              autoPlay: event.autoPlay,
             ),
           ),
         ),
@@ -80,8 +78,6 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
       emit(state);
     });
     on<PushSettings>((event, emit) {
-      // this is sus, the 5 shouldn't be hardcoded
-      emit(state.copyWith(selectedTab: 5));
       navigationKey.currentState?.push(
         MaterialPageRoute<ProfileView>(
           builder: (context) => const SettingsView(),
@@ -137,10 +133,10 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
 
       emit(state);
     });
-    on<PushCreatePost>((event, emit) {
+    on<PushCreateLoop>((event, emit) {
       navigationKey.currentState?.push(
-        MaterialPageRoute<CreatePostView>(
-          builder: (context) => const CreatePostView(),
+        MaterialPageRoute<CreateLoopView>(
+          builder: (context) => const CreateLoopView(),
         ),
       );
 

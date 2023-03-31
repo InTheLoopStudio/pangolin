@@ -2,11 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
 import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
-import 'package:intheloopapp/ui/views/send_badge/send_badge_view.dart';
-import 'package:intheloopapp/ui/views/upload_loop/upload_view.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container.dart';
 
 class AllLoopsList extends StatefulWidget {
@@ -83,33 +80,6 @@ class AllLoopsListState extends State<AllLoopsList> {
               // This is the flip side of the SliverOverlapAbsorber
               handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
             ),
-            if (state.currentUser.id == state.visitedUser.id)
-              SliverPadding(
-                padding: const EdgeInsets.all(8),
-                sliver: SliverToBoxAdapter(
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute<SendBadgeView>(
-                        builder: (context) => UploadView(),
-                      ),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            FontAwesomeIcons.fileArrowUp,
-                          ),
-                          SizedBox(width: 6),
-                          Text('Upload Loop'),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
             SliverPadding(
               padding: const EdgeInsets.all(8),
               sliver: SliverList(

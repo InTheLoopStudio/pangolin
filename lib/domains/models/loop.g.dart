@@ -12,6 +12,9 @@ Loop _$LoopFromJson(Map<String, dynamic> json) => Loop(
       title: json['title'] as String,
       description: json['description'] as String,
       audioPath: json['audioPath'] as String,
+      imagePaths: (json['imagePaths'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
       timestamp: DateTime.parse(json['timestamp'] as String),
       likeCount: json['likeCount'] as int,
       commentCount: json['commentCount'] as int,
@@ -26,6 +29,7 @@ Map<String, dynamic> _$LoopToJson(Loop instance) => <String, dynamic>{
       'title': instance.title,
       'description': instance.description,
       'audioPath': instance.audioPath,
+      'imagePaths': instance.imagePaths,
       'timestamp': instance.timestamp.toIso8601String(),
       'likeCount': instance.likeCount,
       'commentCount': instance.commentCount,

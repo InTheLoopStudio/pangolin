@@ -1,58 +1,66 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/data/database_repository.dart';
-import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
-import 'package:intheloopapp/ui/views/common/tapped_app_bar.dart';
-import 'package:intheloopapp/ui/views/post_feed/post_feed_cubit.dart';
-import 'package:intheloopapp/ui/widgets/common/post_container/post_container.dart';
-import 'package:intheloopapp/ui/widgets/profile_view/notification_icon_button.dart';
+import 'package:intheloopapp/ui/views/loop_feed/loop_feed_cubit.dart';
+import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container.dart';
 
-class PostFeedView extends StatelessWidget {
-  const PostFeedView({super.key});
+class LoopFeedView extends StatefulWidget {
+  const LoopFeedView({
+    required this.sourceFunction,
+    required this.sourceStream,
+    super.key,
+  });
+
+  final Future<List<Loop>> Function(
+    String currentUserId, {
+    int limit,
+    String? lastLoopId,
+  }) sourceFunction;
+  final Stream<Loop> Function(
+    String currentUserId, {
+    int limit,
+  }) sourceStream;
+
+  @override
+  State<LoopFeedView> createState() => _LoopFeedViewState();
+}
+
+class _LoopFeedViewState extends State<LoopFeedView>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
       selector: (state) => state as Onboarded,
       builder: (context, state) {
         return BlocProvider(
-          create: (context) => PostFeedCubit(
+          create: (context) => LoopFeedCubit(
             currentUserId: state.currentUser.id,
-            databaseRepository: RepositoryProvider.of<DatabaseRepository>(
-              context,
-            ),
-          )..initPosts(),
+            sourceFunction: widget.sourceFunction,
+            sourceStream: widget.sourceStream,
+          )..initLoops(),
           child: Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,
-            extendBodyBehindAppBar: true,
-            appBar: const TappedAppBar(
-              title: 'Gems',
-              trailing: NotificationIconButton(),
-            ),
-            floatingActionButton: FloatingActionButton(
-              child: const Icon(Icons.edit_outlined),
-              onPressed: () => context.read<NavigationBloc>().add(
-                    const PushCreatePost(),
-                  ),
-            ),
             body: RefreshIndicator(
               displacement: 20,
               onRefresh: () async {
                 await context
-                    .read<PostFeedCubit>()
-                    .initPosts(clearPosts: false);
+                    .read<LoopFeedCubit>()
+                    .initLoops(clearLoops: false);
               },
-              child: BlocBuilder<PostFeedCubit, PostFeedState>(
+              child: BlocBuilder<LoopFeedCubit, LoopFeedState>(
                 builder: (context, state) {
                   switch (state.status) {
-                    case PostFeedStatus.initial:
+                    case LoopFeedStatus.initial:
                       return const LoadingView();
-                    case PostFeedStatus.success:
-                      if (state.posts.isEmpty) {
+                    case LoopFeedStatus.success:
+                      if (state.loops.isEmpty) {
                         return const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -60,7 +68,7 @@ class PostFeedView extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 EasterEggPlaceholder(
-                                  text: 'No Posts',
+                                  text: 'No Loops',
                                   color: Colors.white,
                                 ),
                               ],
@@ -75,16 +83,16 @@ class PostFeedView extends StatelessWidget {
                         itemBuilder: (BuildContext context, int index) {
                           return Column(
                             children: [
-                              PostContainer(
-                                post: state.posts[index],
+                              LoopContainer(
+                                loop: state.loops[index],
                               ),
                             ],
                           );
                         },
-                        itemCount: state.posts.length,
+                        itemCount: state.loops.length,
                       );
 
-                    case PostFeedStatus.failure:
+                    case LoopFeedStatus.failure:
                       return const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -92,7 +100,7 @@ class PostFeedView extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               EasterEggPlaceholder(
-                                text: 'Error Fetching Posts :(',
+                                text: 'Error Fetching Loops :(',
                                 color: Colors.white,
                               ),
                             ],

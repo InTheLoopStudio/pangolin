@@ -46,11 +46,20 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
     state.audioController.setLoopMode(LoopMode.one);
   }
 
+  Future<void> checkVerified() async {
+    final verified = await databaseRepository.isVerified(loop.userId);
+    emit(
+      state.copyWith(
+        isVerified: verified,
+      ),
+    );
+  }
+
   void deleteLoop() {
     databaseRepository.deleteLoop(loop);
   }
 
-  void likeLoop() {
+  void toggleLoopLike() {
     if (state.isLiked) {
       databaseRepository.deleteLike(
         currentUser.id,

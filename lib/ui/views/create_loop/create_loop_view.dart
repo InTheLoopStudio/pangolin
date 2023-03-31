@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
-import 'package:intheloopapp/ui/views/create_post/cubit/create_post_cubit.dart';
+import 'package:intheloopapp/ui/views/create_loop/cubit/create_loop_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
-import 'package:intheloopapp/ui/widgets/create_post_view/post_description_text_field.dart';
-import 'package:intheloopapp/ui/widgets/create_post_view/post_title_text_field.dart';
-import 'package:intheloopapp/ui/widgets/create_post_view/submit_post_button.dart';
+import 'package:intheloopapp/ui/widgets/create_loop_view/loop_description_text_field.dart';
+import 'package:intheloopapp/ui/widgets/create_loop_view/loop_title_text_field.dart';
+import 'package:intheloopapp/ui/widgets/create_loop_view/submit_loop_button.dart';
+import 'package:intheloopapp/ui/widgets/create_loop_view/upload_audio_button.dart';
 
-class CreatePostView extends StatelessWidget {
-  const CreatePostView({super.key});
+class CreateLoopView extends StatelessWidget {
+  const CreateLoopView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +22,12 @@ class CreatePostView extends StatelessWidget {
       builder: (context, userState) {
         final currentUser = userState.currentUser;
         return BlocProvider(
-          create: (context) => CreatePostCubit(
+          create: (context) => CreateLoopCubit(
             currentUser: currentUser,
+            audioRepo: context.read<AudioRepository>(),
+            onboardingBloc: context.read<OnboardingBloc>(),
             databaseRepository: context.read<DatabaseRepository>(),
+            storageRepository: context.read<StorageRepository>(),
             navigationBloc: context.read<NavigationBloc>(),
           ),
           child: SafeArea(
@@ -32,7 +38,7 @@ class CreatePostView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
-                      'Create Post',
+                      'Create Loop',
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
@@ -63,15 +69,19 @@ class CreatePostView extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    PostTitleTextField(),
+                    LoopTitleTextField(),
                     SizedBox(
                       height: 24,
                     ),
-                    PostDescriptionTextField(),
+                    LoopDescriptionTextField(),
+                    SizedBox(
+                      height: 24,
+                    ),
+                    UploadAudioButton(),
                   ],
                 ),
               ),
-              floatingActionButton: const SubmitPostButton(),
+              floatingActionButton: const SubmitLoopButton(),
             ),
           ),
         );

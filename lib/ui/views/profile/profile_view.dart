@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
@@ -13,7 +14,6 @@ import 'package:intheloopapp/ui/widgets/profile_view/badges_list.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/follow_button.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/follower_count.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/following_count.dart';
-import 'package:intheloopapp/ui/widgets/profile_view/posts_list.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/request_to_book.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/share_profile_button.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/social_media_icons.dart';
@@ -79,47 +79,28 @@ class _ProfileViewState extends State<ProfileView> {
         icon: Icon(Icons.shield),
       ),
       const Tab(
-        text: 'GEMS',
-        icon: Icon(Icons.diamond_outlined),
-      ),
-      const Tab(
         text: 'LOOPS',
         icon: Icon(Icons.audiotrack),
       ),
+      const Tab(
+        text: 'BOOKINGS',
+        icon: Icon(CupertinoIcons.tickets_fill),
+      ),
     ];
-
-    // if (showVenueDashboard) {
-    //   tabs.insert(
-    //     0,
-    //     const Tab(
-    //       text: 'VENUE',
-    //       icon: Icon(Icons.business_rounded),
-    //     ),
-    //   );
-    // }
 
     return tabs;
   }
 
   Widget _badgesTab() => BadgesList(scrollController: _scrollController);
   Widget _loopsTab() => AllLoopsList(scrollController: _scrollController);
-  Widget _postsTab() => PostsList(scrollController: _scrollController);
+  Widget _bookingsTab() => const Center(child: Text('Coming Soon'),);
 
   List<Widget> _profileTabs(bool showVenueDashboard) {
     final tabs = [
       _badgesTab(),
-      _postsTab(),
       _loopsTab(),
+      _bookingsTab(),
     ];
-
-    // if (showVenueDashboard) {
-    //   tabs.insert(
-    //     0,
-    //     VenueDashboard(
-    //       scrollController: _scrollController,
-    //     ),
-    //   );
-    // }
 
     return tabs;
   }

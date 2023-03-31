@@ -39,6 +39,7 @@ void main() {
         title: '',
         description: '',
         audioPath: '',
+        imagePaths: const [],
         timestamp: DateTime.now(),
         likeCount: 0,
         commentCount: 0,

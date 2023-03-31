@@ -1,0 +1,165 @@
+import 'dart:io';
+
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:formz/formz.dart';
+import 'package:intheloopapp/data/audio_repository.dart';
+import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/data/storage_repository.dart';
+import 'package:intheloopapp/domains/controllers/audio_controller.dart';
+import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
+import 'package:intheloopapp/ui/widgets/create_loop_view/loop_description.dart';
+import 'package:intheloopapp/ui/widgets/create_loop_view/loop_title.dart';
+
+part 'create_loop_state.dart';
+
+class CreateLoopCubit extends Cubit<CreateLoopState> {
+  CreateLoopCubit({
+    required this.currentUser,
+    required this.onboardingBloc,
+    required this.databaseRepository,
+    required this.navigationBloc,
+    required this.audioRepo,
+    required this.storageRepository,
+  }) : super(const CreateLoopState());
+
+  final UserModel currentUser;
+  AudioRepository audioRepo;
+  AudioController? audioController;
+  final OnboardingBloc onboardingBloc;
+  final DatabaseRepository databaseRepository;
+  final StorageRepository storageRepository;
+  final NavigationBloc navigationBloc;
+
+  static const Duration _maxDuration = Duration(minutes: 10);
+
+  void onTitleChange(String input) {
+    final title = LoopTitle.dirty(input);
+    emit(
+      state.copyWith(title: title),
+    );
+  }
+
+  void onDescriptionChange(String input) {
+    final description = LoopDescription.dirty(input);
+    emit(
+      state.copyWith(
+        description: description,
+      ),
+    );
+  }
+
+  /// opens a user's gallery to upload audio
+  Future<void> handleAudioFromFiles() async {
+    try {
+      final audioFileResult = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['mp3'],
+      );
+      if (audioFileResult != null) {
+        final pickedAudioName =
+            audioFileResult.files.single.path!.split('/').last;
+        final pickedAudio = File(audioFileResult.files.single.path!);
+
+        emit(
+          state.copyWith(
+            pickedAudio: pickedAudio,
+            title: LoopTitle.dirty(pickedAudioName),
+          ),
+        );
+
+        await state.audioController?.detach();
+        audioController = AudioController.fromAudioFile(
+          audioRepo: audioRepo,
+          audioFile: pickedAudio,
+          title: state.title.value,
+          artist: currentUser.artistName,
+          image: currentUser.profilePicture,
+        );
+        await audioController?.attach();
+      }
+    } catch (error) {
+      emit(
+        state.copyWith(
+          status: FormzSubmissionStatus.failure,
+        ),
+      );
+    }
+  }
+
+  Future<void> createLoop() async {
+    try {
+      if (state.status.isInProgress) return;
+
+      if (!state.isValid) {
+        throw Exception('Invalid form');
+      }
+
+      emit(
+        state.copyWith(
+          status: FormzSubmissionStatus.inProgress,
+        ),
+      );
+
+      // Just settings the audio to get the duration
+      final audioDuration =
+          await AudioController.getDuration(state.pickedAudio);
+
+      final tooLarge = audioDuration.compareTo(_maxDuration) >= 0;
+      if (tooLarge) {
+        throw Exception('Audio is too large, must be under 10 minutes');
+      }
+
+      final audioPath = await storageRepository.uploadLoop(
+        currentUser.id,
+        state.pickedAudio!,
+      );
+
+      final loop = Loop.empty().copyWith(
+        title: state.title.value,
+        description: state.description.value,
+        audioPath: audioPath,
+        userId: currentUser.id,
+        // tags: state.selectedTags.map((tag) => tag.value).toList(),
+      );
+
+      await databaseRepository.addLoop(loop);
+
+      emit(
+        state.copyWith(
+          title: const LoopTitle.pure(),
+          description: const LoopDescription.pure(),
+          status: FormzSubmissionStatus.success,
+        ),
+      );
+
+      final user = currentUser.copyWith(
+        loopsCount: (currentUser.loopsCount) + 1,
+      );
+
+      onboardingBloc.add(UpdateOnboardedUser(user: user));
+
+      // Navigate back to the feed page
+      navigationBloc
+        ..add(const ChangeTab(selectedTab: 0))
+        ..add(const Pop());
+    } on Exception {
+      emit(
+        state.copyWith(
+          status: FormzSubmissionStatus.failure,
+        ),
+      );
+      rethrow;
+    }
+  }
+
+  /// What to do if an upload is canceled
+  Future<void> cancelUpload() async {
+    await state.audioController?.detach();
+    emit(const CreateLoopState());
+  }
+}

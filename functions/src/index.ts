@@ -982,8 +982,8 @@ export const incrementLoopCommentCountOnComment = functions.firestore
       throw new HttpsError("failed-precondition", `loop ${context.params.loopId} does not exist`);
     }
 
-    await usersRef
-      .doc(loop.userId)
+    await loopsRef
+      .doc(loop.id)
       .update({ likeCount: FieldValue.increment(1) });
   });
 export const incrementPostCommentCountOnComment = functions.firestore
@@ -996,8 +996,8 @@ export const incrementPostCommentCountOnComment = functions.firestore
       throw new HttpsError("failed-precondition", `post ${context.params.postId} does not exist`);
     }
 
-    await usersRef
-      .doc(post.userId)
+    await postsRef
+      .doc(post.id)
       .update({ likeCount: FieldValue.increment(1) });
   });
 

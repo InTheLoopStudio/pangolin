@@ -25,7 +25,6 @@ class CommentsList extends StatelessWidget {
                   CommentContainer(
                     comment: state.comments[index],
                   ),
-                  const Divider(),
                 ],
               );
             },

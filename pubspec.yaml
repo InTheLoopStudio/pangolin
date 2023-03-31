@@ -1,5 +1,5 @@
 name: intheloopapp
-version: 1.1.27+37
+version: 1.1.28+38
 publish_to: none
 description: Mobile app for Tapped.
 environment: 
@@ -30,13 +30,16 @@ dependencies:
   firebase_crashlytics: ^3.0.9
   firebase_dynamic_links: ^5.0.11
   firebase_messaging: ^14.2.1
-  firebase_remote_config: ^3.0.9
+  firebase_remote_config: ^4.0.0
   firebase_storage: ^11.0.10
   flutter: 
     sdk: flutter
   flutter_bloc: ^8.1.1
   flutter_cache_manager: ^3.1.2
-  flutter_google_places_sdk: ^0.3.2+6
+  flutter_google_places_sdk:
+    git:
+      url: https://github.com/jonaylor89/flutter_google_places_sdk
+      path: flutter_google_places_sdk
   flutter_image_compress: ^1.0.0
   flutter_native_splash: ^2.2.9
   flutter_slidable: ^2.0.0
@@ -44,7 +47,7 @@ dependencies:
   flutter_stripe: ^9.0.0+1
   flutter_svg: ^1.0.4
   font_awesome_flutter: ^10.2.1
-  formz: ^0.5.0+1
+  formz: ^0.6.0
   georange: ^1.0.0
   google_sign_in: ^6.0.1
   hydrated_bloc: ^9.0.0

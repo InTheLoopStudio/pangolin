@@ -1,22 +1,20 @@
-part of 'audio_feed_cubit.dart';
+part of 'loop_feed_cubit.dart';
 
-enum AudioFeedStatus { initial, success, failure }
+enum LoopFeedStatus { initial, success, failure }
 
 @immutable
-class AudioFeedState extends Equatable {
-  const AudioFeedState({
+class LoopFeedState extends Equatable {
+  const LoopFeedState({
     this.currentIndex = 0,
     this.hasReachedMax = false,
-    this.status = AudioFeedStatus.initial,
+    this.status = LoopFeedStatus.initial,
     this.loops = const [],
-    this.easterEggTapped = 0,
   });
 
   final int currentIndex;
   final bool hasReachedMax;
-  final AudioFeedStatus status;
+  final LoopFeedStatus status;
   final List<Loop> loops;
-  final int easterEggTapped;
 
   @override
   List<Object> get props => [
@@ -24,22 +22,19 @@ class AudioFeedState extends Equatable {
         hasReachedMax,
         status,
         loops,
-        easterEggTapped,
       ];
 
-  AudioFeedState copyWith({
+  LoopFeedState copyWith({
     int? currentIndex,
     bool? hasReachedMax,
-    AudioFeedStatus? status,
+    LoopFeedStatus? status,
     List<Loop>? loops,
-    int? easterEggTapped,
   }) {
-    return AudioFeedState(
+    return LoopFeedState(
       currentIndex: currentIndex ?? this.currentIndex,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
       status: status ?? this.status,
       loops: loops ?? this.loops,
-      easterEggTapped: easterEggTapped ?? this.easterEggTapped,
     );
   }
 }

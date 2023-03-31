@@ -1,18 +1,19 @@
 import 'dart:async';
 
+import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 
-part 'audio_feed_state.dart';
+part 'loop_feed_state.dart';
 
-class AudioFeedCubit extends Cubit<AudioFeedState> {
-  AudioFeedCubit({
+class LoopFeedCubit extends Cubit<LoopFeedState> {
+  LoopFeedCubit({
     required this.currentUserId,
     required this.sourceFunction,
     required this.sourceStream,
-  }) : super(const AudioFeedState());
+  }) : super(const LoopFeedState());
 
   final String currentUserId;
   final Future<List<Loop>> Function(
@@ -26,51 +27,32 @@ class AudioFeedCubit extends Cubit<AudioFeedState> {
   }) sourceStream;
   StreamSubscription<Loop>? loopListener;
 
-  // @override
-  // AudioFeedState? fromJson(Map<String, dynamic> json) {
-  //   return AudioFeedState(
-  //     currentIndex: json['currentIndex'],
-  //     hasReachedMax: json['hasReachedMax'],
-  //     status: json['status'],
-  //     loops: json['loops'] as List<Loop>,
-  //     easterEggTapped: state.easterEggTapped,
-  //   );
-  // }
-
-  // @override
-  // Map<String, dynamic>? toJson(AudioFeedState state) {
-  //   return {
-  //     'currentIndex': state.currentIndex,
-  //     'hasReachedMax': state.hasReachedMax,
-  //     'status': state.status,
-  //     'loops': state.loops.map((loop) => loop.toJson()).toList(),
-  //     'easterEggTapped': state.easterEggTapped,
-  //   };
-  // }
-
   Future<void> initLoops({bool clearLoops = true}) async {
     await loopListener?.cancel();
     if (clearLoops) {
       emit(
         state.copyWith(
-          status: AudioFeedStatus.initial,
+          status: LoopFeedStatus.initial,
           loops: [],
           hasReachedMax: false,
         ),
       );
     }
 
-    final loopsAvailable =
-        (await sourceFunction(currentUserId, limit: 1)).isNotEmpty;
-    if (!loopsAvailable) {
-      emit(state.copyWith(status: AudioFeedStatus.success));
+    final loopsAvailable = await sourceFunction(
+      currentUserId,
+      limit: 1,
+    );
+    if (loopsAvailable.isEmpty) {
+      emit(state.copyWith(status: LoopFeedStatus.success));
     }
 
-    loopListener = sourceStream(currentUserId, limit: 20).listen((Loop event) {
+    loopListener = sourceStream(currentUserId)
+        .listen((Loop event) {
       // print('loop { ${event.id} : ${event.title} }');
       emit(
         state.copyWith(
-          status: AudioFeedStatus.success,
+          status: LoopFeedStatus.success,
           loops: List.of(state.loops)
             ..insert(0, event)
             ..sort(
@@ -85,20 +67,19 @@ class AudioFeedCubit extends Cubit<AudioFeedState> {
     if (state.hasReachedMax) return;
 
     try {
-      if (state.status == AudioFeedStatus.initial) {
+      if (state.status == LoopFeedStatus.initial) {
         await initLoops();
       }
 
       final loops = await sourceFunction(
         currentUserId,
-        limit: 20,
         lastLoopId: state.loops.last.id,
       );
       loops.isEmpty
           ? emit(state.copyWith(hasReachedMax: true))
           : emit(
               state.copyWith(
-                status: AudioFeedStatus.success,
+                status: LoopFeedStatus.success,
                 loops: List.of(state.loops)
                   ..addAll(loops)
                   ..sort(
@@ -108,12 +89,8 @@ class AudioFeedCubit extends Cubit<AudioFeedState> {
               ),
             );
     } on Exception {
-      emit(state.copyWith(status: AudioFeedStatus.failure));
+      emit(state.copyWith(status: LoopFeedStatus.failure));
     }
-  }
-
-  void tapEasterEgg() {
-    emit(state.copyWith(easterEggTapped: state.easterEggTapped + 1));
   }
 
   @override

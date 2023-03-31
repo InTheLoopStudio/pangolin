@@ -17,7 +17,8 @@ class LikeButton extends StatelessWidget {
             children: [
               const SizedBox(width: 20),
               GestureDetector(
-                onTap: () => context.read<LoopContainerCubit>().likeLoop(),
+                onTap: () =>
+                    context.read<LoopContainerCubit>().toggleLoopLike(),
                 child: Icon(
                   state.isLiked ? Icons.favorite : Icons.favorite_border,
                   color: state.isLiked ? Colors.red : const Color(0xFF757575),

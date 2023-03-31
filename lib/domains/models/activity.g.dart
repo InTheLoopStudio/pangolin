@@ -28,4 +28,6 @@ const _$ActivityTypeEnumMap = {
   ActivityType.follow: 'follow',
   ActivityType.like: 'like',
   ActivityType.comment: 'comment',
+  ActivityType.bookingRequest: 'bookingRequest',
+  ActivityType.bookingUpdate: 'bookingUpdate',
 };
