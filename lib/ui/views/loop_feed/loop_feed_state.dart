@@ -1,40 +1,40 @@
-part of 'post_feed_cubit.dart';
+part of 'loop_feed_cubit.dart';
 
-enum PostFeedStatus { initial, success, failure }
+enum LoopFeedStatus { initial, success, failure }
 
 @immutable
-class PostFeedState extends Equatable {
-  const PostFeedState({
+class LoopFeedState extends Equatable {
+  const LoopFeedState({
     this.currentIndex = 0,
     this.hasReachedMax = false,
-    this.status = PostFeedStatus.initial,
-    this.posts = const [],
+    this.status = LoopFeedStatus.initial,
+    this.loops = const [],
   });
 
   final int currentIndex;
   final bool hasReachedMax;
-  final PostFeedStatus status;
-  final List<Post> posts;
+  final LoopFeedStatus status;
+  final List<Loop> loops;
 
   @override
   List<Object> get props => [
         currentIndex,
         hasReachedMax,
         status,
-        posts,
+        loops,
       ];
 
-  PostFeedState copyWith({
+  LoopFeedState copyWith({
     int? currentIndex,
     bool? hasReachedMax,
-    PostFeedStatus? status,
-    List<Post>? posts,
+    LoopFeedStatus? status,
+    List<Loop>? loops,
   }) {
-    return PostFeedState(
+    return LoopFeedState(
       currentIndex: currentIndex ?? this.currentIndex,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
       status: status ?? this.status,
-      posts: posts ?? this.posts,
+      loops: loops ?? this.loops,
     );
   }
 }

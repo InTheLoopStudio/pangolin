@@ -58,6 +58,15 @@ class LoopViewCubit extends Cubit<LoopViewState> {
     }
   }
 
+  Future<void> checkVerified() async {
+    final verified = await databaseRepository.isVerified(loop.userId);
+    emit(
+      state.copyWith(
+        isVerified: verified,
+      ),
+    );
+  }
+
   void toggleComments() {
     emit(state.copyWith(showComments: !state.showComments));
   }

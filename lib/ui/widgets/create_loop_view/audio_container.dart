@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/controllers/audio_controller.dart';
-import 'package:intheloopapp/ui/views/upload_loop/upload_loop_cubit.dart';
+import 'package:intheloopapp/ui/views/create_loop/cubit/create_loop_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/seek_bar.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
@@ -15,7 +15,7 @@ class AudioContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return BlocBuilder<UploadLoopCubit, UploadLoopState>(
+    return BlocBuilder<CreateLoopCubit, CreateLoopState>(
       builder: (context, state) {
         return state.pickedAudio == null
             ? const SizedBox.shrink()

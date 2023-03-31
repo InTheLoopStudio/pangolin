@@ -154,11 +154,11 @@ class PushLikes extends NavigationEvent {
   List<Object> get props => [loop];
 }
 
-class PushCreatePost extends NavigationEvent {
-  const PushCreatePost();
+class PushCreateLoop extends NavigationEvent {
+  const PushCreateLoop();
 
   @override
-  String toString() => 'PushCreatePost { }';
+  String toString() => 'PushCreateLoop { }';
 
   @override
   List<Object> get props => [];

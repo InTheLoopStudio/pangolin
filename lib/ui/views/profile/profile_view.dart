@@ -79,10 +79,6 @@ class _ProfileViewState extends State<ProfileView> {
         icon: Icon(Icons.shield),
       ),
       const Tab(
-        text: 'GEMS',
-        icon: Icon(Icons.diamond_outlined),
-      ),
-      const Tab(
         text: 'LOOPS',
         icon: Icon(Icons.audiotrack),
       ),
@@ -103,12 +99,10 @@ class _ProfileViewState extends State<ProfileView> {
 
   Widget _badgesTab() => BadgesList(scrollController: _scrollController);
   Widget _loopsTab() => AllLoopsList(scrollController: _scrollController);
-  Widget _postsTab() => PostsList(scrollController: _scrollController);
 
   List<Widget> _profileTabs(bool showVenueDashboard) {
     final tabs = [
       _badgesTab(),
-      _postsTab(),
       _loopsTab(),
     ];
 

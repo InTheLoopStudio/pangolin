@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/ui/views/create_post/cubit/create_post_cubit.dart';
+import 'package:intheloopapp/ui/views/create_loop/cubit/create_loop_cubit.dart';
 
-class PostTitleTextField extends StatelessWidget {
-  const PostTitleTextField({super.key});
+class LoopTitleTextField extends StatelessWidget {
+  const LoopTitleTextField({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreatePostCubit, CreatePostState>(
+    return BlocBuilder<CreateLoopCubit, CreateLoopState>(
       builder: (context, state) {
         return TextFormField(
           style: const TextStyle(
@@ -20,7 +20,7 @@ class PostTitleTextField extends StatelessWidget {
             hintText: 'Title (optional)',
           ),
           maxLength: 56,
-          onChanged: (input) => context.read<CreatePostCubit>().onTitleChange(
+          onChanged: (input) => context.read<CreateLoopCubit>().onTitleChange(
                 input,
               ),
         );

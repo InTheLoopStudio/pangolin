@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
@@ -7,12 +6,12 @@ import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
 import 'package:intheloopapp/ui/views/common/tapped_app_bar.dart';
-import 'package:intheloopapp/ui/views/post_feed/post_feed_cubit.dart';
-import 'package:intheloopapp/ui/widgets/common/post_container/post_container.dart';
+import 'package:intheloopapp/ui/views/loop_feed/loop_feed_cubit.dart';
+import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/notification_icon_button.dart';
 
-class PostFeedView extends StatelessWidget {
-  const PostFeedView({super.key});
+class LoopFeedView extends StatelessWidget {
+  const LoopFeedView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,39 +19,39 @@ class PostFeedView extends StatelessWidget {
       selector: (state) => state as Onboarded,
       builder: (context, state) {
         return BlocProvider(
-          create: (context) => PostFeedCubit(
+          create: (context) => LoopFeedCubit(
             currentUserId: state.currentUser.id,
             databaseRepository: RepositoryProvider.of<DatabaseRepository>(
               context,
             ),
-          )..initPosts(),
+          )..initLoops(),
           child: Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,
             extendBodyBehindAppBar: true,
             appBar: const TappedAppBar(
-              title: 'Posts',
+              title: 'Loops',
               trailing: NotificationIconButton(),
             ),
             floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.edit_outlined),
               onPressed: () => context.read<NavigationBloc>().add(
-                    const PushCreatePost(),
+                    const PushCreateLoop(),
                   ),
             ),
             body: RefreshIndicator(
               displacement: 20,
               onRefresh: () async {
                 await context
-                    .read<PostFeedCubit>()
-                    .initPosts(clearPosts: false);
+                    .read<LoopFeedCubit>()
+                    .initLoops(clearLoops: false);
               },
-              child: BlocBuilder<PostFeedCubit, PostFeedState>(
+              child: BlocBuilder<LoopFeedCubit, LoopFeedState>(
                 builder: (context, state) {
                   switch (state.status) {
-                    case PostFeedStatus.initial:
+                    case LoopFeedStatus.initial:
                       return const LoadingView();
-                    case PostFeedStatus.success:
-                      if (state.posts.isEmpty) {
+                    case LoopFeedStatus.success:
+                      if (state.loops.isEmpty) {
                         return const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -60,7 +59,7 @@ class PostFeedView extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 EasterEggPlaceholder(
-                                  text: 'No Posts',
+                                  text: 'No Loops',
                                   color: Colors.white,
                                 ),
                               ],
@@ -75,16 +74,16 @@ class PostFeedView extends StatelessWidget {
                         itemBuilder: (BuildContext context, int index) {
                           return Column(
                             children: [
-                              PostContainer(
-                                post: state.posts[index],
+                              LoopContainer(
+                                loop: state.loops[index],
                               ),
                             ],
                           );
                         },
-                        itemCount: state.posts.length,
+                        itemCount: state.loops.length,
                       );
 
-                    case PostFeedStatus.failure:
+                    case LoopFeedStatus.failure:
                       return const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -92,7 +91,7 @@ class PostFeedView extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               EasterEggPlaceholder(
-                                text: 'Error Fetching Posts :(',
+                                text: 'Error Fetching Loops :(',
                                 color: Colors.white,
                               ),
                             ],
