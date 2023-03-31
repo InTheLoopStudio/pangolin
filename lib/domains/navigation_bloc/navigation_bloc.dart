@@ -78,8 +78,6 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
       emit(state);
     });
     on<PushSettings>((event, emit) {
-      // this is sus, the 5 shouldn't be hardcoded
-      emit(state.copyWith(selectedTab: 5));
       navigationKey.currentState?.push(
         MaterialPageRoute<ProfileView>(
           builder: (context) => const SettingsView(),
