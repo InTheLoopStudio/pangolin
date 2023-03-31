@@ -14,7 +14,6 @@ import 'package:intheloopapp/ui/widgets/profile_view/badges_list.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/follow_button.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/follower_count.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/following_count.dart';
-import 'package:intheloopapp/ui/widgets/profile_view/posts_list.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/request_to_book.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/share_profile_button.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/social_media_icons.dart';

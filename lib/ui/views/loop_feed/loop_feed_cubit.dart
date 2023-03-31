@@ -11,11 +11,20 @@ part 'loop_feed_state.dart';
 class LoopFeedCubit extends Cubit<LoopFeedState> {
   LoopFeedCubit({
     required this.currentUserId,
-    required this.databaseRepository,
+    required this.sourceFunction,
+    required this.sourceStream,
   }) : super(const LoopFeedState());
 
   final String currentUserId;
-  final DatabaseRepository databaseRepository;
+  final Future<List<Loop>> Function(
+    String currentUserId, {
+    int limit,
+    String? lastLoopId,
+  }) sourceFunction;
+  final Stream<Loop> Function(
+    String currentUserId, {
+    int limit,
+  }) sourceStream;
   StreamSubscription<Loop>? loopListener;
 
   Future<void> initLoops({bool clearLoops = true}) async {
@@ -30,16 +39,15 @@ class LoopFeedCubit extends Cubit<LoopFeedState> {
       );
     }
 
-    final followingLoops = await databaseRepository.getFollowingLoops(
+    final loopsAvailable = await sourceFunction(
       currentUserId,
       limit: 1,
     );
-    if (followingLoops.isEmpty) {
+    if (loopsAvailable.isEmpty) {
       emit(state.copyWith(status: LoopFeedStatus.success));
     }
 
-    loopListener = databaseRepository
-        .followingLoopsObserver(currentUserId)
+    loopListener = sourceStream(currentUserId)
         .listen((Loop event) {
       // print('loop { ${event.id} : ${event.title} }');
       emit(
@@ -63,7 +71,7 @@ class LoopFeedCubit extends Cubit<LoopFeedState> {
         await initLoops();
       }
 
-      final loops = await databaseRepository.getFollowingLoops(
+      final loops = await sourceFunction(
         currentUserId,
         lastLoopId: state.loops.last.id,
       );
