@@ -30,7 +30,7 @@ dependencies:
   firebase_crashlytics: ^3.0.9
   firebase_dynamic_links: ^5.0.11
   firebase_messaging: ^14.2.1
-  firebase_remote_config: ^3.0.9
+  firebase_remote_config: ^4.0.0
   firebase_storage: ^11.0.10
   flutter: 
     sdk: flutter
@@ -47,7 +47,7 @@ dependencies:
   flutter_stripe: ^9.0.0+1
   flutter_svg: ^1.0.4
   font_awesome_flutter: ^10.2.1
-  formz: ^0.5.0+1
+  formz: ^0.6.0
   georange: ^1.0.0
   google_sign_in: ^6.0.1
   hydrated_bloc: ^9.0.0
