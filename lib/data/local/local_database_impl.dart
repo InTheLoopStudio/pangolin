@@ -4,7 +4,6 @@ import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
-import 'package:intheloopapp/domains/models/post.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
 class LocalDatabaseImpl extends DatabaseRepository {
@@ -137,8 +136,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
   @override
   Future<void> addLike(
     String currentUserId,
-    String entityId,
-    EntityType entityType,
+    String loopId,
   ) async {
     return;
   }
@@ -146,8 +144,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
   @override
   Future<void> deleteLike(
     String currentUserId,
-    String entityId,
-    EntityType entityType,
+    String loopId,
   ) async {
     return;
   }
@@ -155,16 +152,14 @@ class LocalDatabaseImpl extends DatabaseRepository {
   @override
   Future<bool> isLiked(
     String currentUserId,
-    String entityId,
-    EntityType entityType,
+    String loopId,
   ) async {
     return false;
   }
 
   @override
   Future<List<UserModel>> getLikes(
-    String entityId,
-    EntityType entityType,
+    String loopId,
   ) async {
     return [];
   }
@@ -201,8 +196,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<List<Comment>> getComments(
-    String rootId,
-    EntityType rootType, {
+    String rootId, {
     int limit = 20,
   }) async {
     return [];
@@ -210,15 +204,13 @@ class LocalDatabaseImpl extends DatabaseRepository {
 
   @override
   Stream<Comment> commentsObserver(
-    String rootId,
-    EntityType rootType, {
+    String rootId, {
     int limit = 20,
   }) async* {}
 
   @override
   Future<Comment> getComment(
     String rootId,
-    EntityType rootType,
     String commentId,
   ) async {
     return Comment.empty();
@@ -227,7 +219,6 @@ class LocalDatabaseImpl extends DatabaseRepository {
   @override
   Future<void> addComment(
     Comment comment,
-    EntityType rootType,
   ) async {
     return;
   }
@@ -289,59 +280,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     return [];
   }
 
-  // Post related stuff
-  @override
-  Future<Post> getPostById(String postId) async {
-    return Post.empty();
-  }
-
-  @override
-  Future<void> addPost(Post post) async {}
-  @override
-  Future<void> deletePost(Post post) async {}
-  @override
-  Future<List<Post>> getUserPosts(
-    String userId, {
-    int limit = 20,
-    String? lastPostId,
-  }) async {
-    return [];
-  }
-
-  @override
-  Stream<Post> userPostsObserver(
-    String userId, {
-    int limit = 20,
-  }) async* {}
-  @override
-  Future<List<Post>> getFollowingPosts(
-    String currentUserId, {
-    int limit = 20,
-    String? lastPostId,
-  }) async {
-    return [];
-  }
-
-  @override
-  Stream<Post> followingPostsObserver(
-    String currentUserId, {
-    int limit = 20,
-  }) async* {}
-  @override
-  Future<List<Post>> getAllPosts(
-    String currentUserId, {
-    int limit = 20,
-    String? lastPostId,
-  }) async {
-    return [];
-  }
-
-  @override
-  Stream<Post> allPostsObserver(
-    String currentUserId, {
-    int limit = 20,
-  }) async* {}
-
+  // booking related stuff
   @override
   Future<void> createBooking(
     Booking booking,

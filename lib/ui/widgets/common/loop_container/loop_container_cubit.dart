@@ -31,7 +31,6 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
     final isLiked = await databaseRepository.isLiked(
       currentUser.id,
       loop.id,
-      EntityType.loop,
     );
 
     emit(
@@ -64,7 +63,6 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
       databaseRepository.deleteLike(
         currentUser.id,
         state.loop.id,
-        EntityType.loop,
       );
       emit(
         state.copyWith(
@@ -76,7 +74,6 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
       databaseRepository.addLike(
         currentUser.id,
         state.loop.id,
-        EntityType.loop,
       );
       emit(
         state.copyWith(
@@ -85,6 +82,10 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
         ),
       );
     }
+  }
+
+  Future<void> incrementShares() async {
+    await databaseRepository.shareLoop(loop);
   }
 
   @override

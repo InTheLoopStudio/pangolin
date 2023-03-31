@@ -3,14 +3,8 @@ import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
-import 'package:intheloopapp/domains/models/post.dart';
 // import 'package:intheloopapp/domains/models/tag.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
-
-enum EntityType {
-  loop,
-  post,
-}
 
 abstract class DatabaseRepository {
   // User related stuff
@@ -63,43 +57,35 @@ abstract class DatabaseRepository {
   // Liking related stuff
   Future<void> addLike(
     String currentUserId,
-    String entityId,
-    EntityType entityType,
+    String loopId,
   );
   Future<void> deleteLike(
     String currentUserId,
-    String entityId,
-    EntityType entityType,
+    String loopId,
   );
   Future<bool> isLiked(
     String currentUserId,
-    String entityId,
-    EntityType entityType,
+    String loopId,
   );
   Future<List<UserModel>> getLikes(
-    String entityId,
-    EntityType entityType,
+    String loopId,
   );
 
   // Commenting related stuff
   Future<List<Comment>> getComments(
-    String rootId,
-    EntityType rootType, {
+    String rootId, {
     int limit = 100,
   });
   Stream<Comment> commentsObserver(
-    String rootId,
-    EntityType rootType, {
+    String rootId, {
     int limit = 100,
   });
   Future<Comment> getComment(
     String rootId,
-    EntityType rootType,
     String commentId,
   );
   Future<void> addComment(
     Comment comment,
-    EntityType rootType,
   );
   // Future<void> deleteComment(Comment comment);
 
@@ -167,37 +153,7 @@ abstract class DatabaseRepository {
     String? lastBadgeId,
   });
 
-  // Post related stuff
-  Future<Post> getPostById(String postId);
-  Future<void> addPost(Post post);
-  Future<void> deletePost(Post post);
-  Future<List<Post>> getUserPosts(
-    String userId, {
-    int limit = 100,
-    String? lastPostId,
-  });
-  Stream<Post> userPostsObserver(
-    String userId, {
-    int limit = 100,
-  });
-  Future<List<Post>> getFollowingPosts(
-    String currentUserId, {
-    int limit = 100,
-    String? lastPostId,
-  });
-  Stream<Post> followingPostsObserver(
-    String currentUserId, {
-    int limit = 100,
-  });
-  Future<List<Post>> getAllPosts(
-    String currentUserId, {
-    int limit = 100,
-    String? lastPostId,
-  });
-  Stream<Post> allPostsObserver(
-    String currentUserId, {
-    int limit = 100,
-  });
+  // Booking related stuff
   Future<void> createBooking(
     Booking booking,
   );

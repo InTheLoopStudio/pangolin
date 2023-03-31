@@ -18,7 +18,8 @@ class AllLoopsList extends StatefulWidget {
   AllLoopsListState createState() => AllLoopsListState();
 }
 
-class AllLoopsListState extends State<AllLoopsList> {
+class AllLoopsListState extends State<AllLoopsList>
+    with AutomaticKeepAliveClientMixin {
   late ProfileCubit _profileCubit;
 
   Timer? _debounce;
@@ -58,11 +59,11 @@ class AllLoopsListState extends State<AllLoopsList> {
         return const EasterEggPlaceholder(text: 'Waiting for New Loops...');
 
       case LoopsStatus.failure:
-        return const Center(child: Text('failed to fetch posts'));
+        return const Center(child: Text('failed to fetch loops'));
 
       case LoopsStatus.success:
         if (state.userLoops.isEmpty || state.visitedUser.deleted == true) {
-          return const EasterEggPlaceholder(text: 'No Posts');
+          return const EasterEggPlaceholder(text: 'No loops yet...');
         }
 
         return CustomScrollView(
@@ -100,7 +101,11 @@ class AllLoopsListState extends State<AllLoopsList> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: loopsList,
     );

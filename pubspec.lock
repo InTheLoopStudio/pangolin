@@ -835,7 +835,7 @@ packages:
     description:
       path: flutter_google_places_sdk
       ref: HEAD
-      resolved-ref: bd56234c08465411a3d1f0fc6e31dfd977ca226e
+      resolved-ref: "515a73fe2f4d52cf469d476d4d2225167209ac0a"
       url: "https://github.com/jonaylor89/flutter_google_places_sdk"
     source: git
     version: "0.3.2+6"
@@ -844,7 +844,7 @@ packages:
     description:
       path: flutter_google_places_sdk_android
       ref: HEAD
-      resolved-ref: "4f1715dc16c54ea2e52603616057276485f58017"
+      resolved-ref: "515a73fe2f4d52cf469d476d4d2225167209ac0a"
       url: "https://github.com/jonaylor89/flutter_google_places_sdk"
     source: git
     version: "0.1.2+5"

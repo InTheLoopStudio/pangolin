@@ -11,7 +11,6 @@ import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
-import 'package:intheloopapp/domains/models/post.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils.dart';
 import 'package:rxdart/rxdart.dart';
@@ -30,10 +29,13 @@ final _activitiesRef = _firestore.collection('activities');
 final _commentsRef = _firestore.collection('comments');
 final _badgesRef = _firestore.collection('badges');
 final _badgesSentRef = _firestore.collection('badgesSent');
-final _postsRef = _firestore.collection('posts');
 final _bookingsRef = _firestore.collection('bookings');
 
 const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
+
+const commentsSubcollection = 'loopComments';
+const likesSubcollection = 'loopLikes';
+const feedSubcollection = 'userFeed';
 
 class HandleAlreadyExistsException implements Exception {
   HandleAlreadyExistsException(this.cause);
@@ -49,42 +51,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     final fileName = segments.join('/');
 
     return fileName;
-  }
-
-  String _getLikesSubcollectionFromEntityType(EntityType entityType) {
-    const loopLikesSubcollection = 'loopLikes';
-    const postLikesSubcollection = 'postLikes';
-
-    switch (entityType) {
-      case EntityType.loop:
-        return loopLikesSubcollection;
-      case EntityType.post:
-        return postLikesSubcollection;
-    }
-  }
-
-  String _getCommentsSubcollectionFromEntityType(EntityType entityType) {
-    const loopCommentsSubcollection = 'loopComments';
-    const postCommentsSubcollection = 'postComments';
-
-    switch (entityType) {
-      case EntityType.loop:
-        return loopCommentsSubcollection;
-      case EntityType.post:
-        return postCommentsSubcollection;
-    }
-  }
-
-  String _getFeedsSubcollectionFromEntityType(EntityType entityType) {
-    const loopsFeedSubcollection = 'userFeed';
-    const postsFeedSubcollection = 'userPostsFeed';
-
-    switch (entityType) {
-      case EntityType.loop:
-        return loopsFeedSubcollection;
-      case EntityType.post:
-        return postsFeedSubcollection;
-    }
   }
 
   // true if username available, false otherwise
@@ -536,14 +502,13 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     int limit = 100,
     String? lastLoopId,
   }) async {
-    final subcollection = _getFeedsSubcollectionFromEntityType(EntityType.post);
 
     if (lastLoopId != null) {
       final documentSnapshot = await _loopsRef.doc(lastLoopId).get();
 
       final userFeedLoops = await _feedRefs
           .doc(currentUserId)
-          .collection(subcollection)
+          .collection(feedSubcollection)
           .orderBy('timestamp', descending: true)
           .limit(limit)
           .startAfterDocument(documentSnapshot)
@@ -560,7 +525,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     } else {
       final userFeedLoops = await _feedRefs
           .doc(currentUserId)
-          .collection(subcollection)
+          .collection(feedSubcollection)
           .orderBy('timestamp', descending: true)
           .limit(limit)
           .get();
@@ -581,11 +546,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String currentUserId, {
     int limit = 100,
   }) async* {
-    final subcollection = _getFeedsSubcollectionFromEntityType(EntityType.loop);
 
     final userFeedLoopsSnapshotObserver = _feedRefs
         .doc(currentUserId)
-        .collection(subcollection)
+        .collection(feedSubcollection)
         .orderBy('timestamp', descending: true)
         .limit(limit)
         .snapshots();
@@ -684,22 +648,19 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<void> addLike(
     String currentUserId,
-    String entityId,
-    EntityType entityType,
+    String loopId,
   ) async {
     await _analytics.logEvent(
       name: 'like',
       parameters: {
         'user_id': currentUserId,
-        'entity_id': entityId,
+        'loop_id': loopId,
       },
     );
 
-    final subcollection = _getLikesSubcollectionFromEntityType(entityType);
-
     await _likesRef
-        .doc(entityId)
-        .collection(subcollection)
+        .doc(loopId)
+        .collection(likesSubcollection)
         .doc(currentUserId)
         .set({});
   }
@@ -707,22 +668,19 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<void> deleteLike(
     String currentUserId,
-    String entityId,
-    EntityType entityType,
+    String loopId,
   ) async {
     await _analytics.logEvent(
       name: 'unlike',
       parameters: {
         'user_id': currentUserId,
-        'entity_id': entityId,
+        'loop_id': loopId,
       },
     );
 
-    final subcollection = _getLikesSubcollectionFromEntityType(entityType);
-
     await _likesRef
-        .doc(entityId)
-        .collection(subcollection)
+        .doc(loopId)
+        .collection(likesSubcollection)
         .doc(currentUserId)
         .delete();
   }
@@ -730,14 +688,11 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<bool> isLiked(
     String currentUserId,
-    String entityId,
-    EntityType entityType,
+    String loopId,
   ) async {
-    final subcollection = _getLikesSubcollectionFromEntityType(entityType);
-
     final userDoc = await _likesRef
-        .doc(entityId)
-        .collection(subcollection)
+        .doc(loopId)
+        .collection(likesSubcollection)
         .doc(currentUserId)
         .get();
 
@@ -746,13 +701,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<List<UserModel>> getLikes(
-    String entityId,
-    EntityType entityType,
+    String loopId,
   ) async {
-    final subcollection = _getLikesSubcollectionFromEntityType(entityType);
-
     final likesSnapshot =
-        await _likesRef.doc(entityId).collection(subcollection).get();
+        await _likesRef.doc(loopId).collection(likesSubcollection).get();
 
     final usersList = await Future.wait(
       likesSnapshot.docs.map((doc) async {
@@ -862,15 +814,13 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<List<Comment>> getComments(
-    String rootId,
-    EntityType rootType, {
+    String rootId, {
     int limit = 100,
   }) async {
-    final subcollection = _getCommentsSubcollectionFromEntityType(rootType);
 
     final commentsSnapshot = await _commentsRef
         .doc(rootId)
-        .collection(subcollection)
+        .collection(commentsSubcollection)
         .orderBy('timestamp')
         // .where('parentId', isNull: true) // Needed for threaded comments
         .limit(limit)
@@ -883,15 +833,13 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Stream<Comment> commentsObserver(
-    String rootId,
-    EntityType rootType, {
+    String rootId, {
     int limit = 100,
   }) async* {
-    final subcollection = _getCommentsSubcollectionFromEntityType(rootType);
 
     final commentsSnapshotObserver = _commentsRef
         .doc(rootId)
-        .collection(subcollection)
+        .collection(commentsSubcollection)
         .orderBy('timestamp')
         .limit(limit)
         // .where('parentId', isNull: true) // Needed for threaded comments
@@ -916,14 +864,12 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<Comment> getComment(
     String rootId,
-    EntityType rootType,
     String commentId,
   ) async {
-    final subcollection = _getCommentsSubcollectionFromEntityType(rootType);
 
     final commentSnapshot = await _commentsRef
         .doc(rootId)
-        .collection(subcollection)
+        .collection(commentsSubcollection)
         .doc(commentId)
         .get();
 
@@ -935,7 +881,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<void> addComment(
     Comment comment,
-    EntityType rootType,
   ) async {
     await _analytics.logEvent(
       name: 'new_comment',
@@ -945,9 +890,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       },
     );
 
-    final subcollection = _getCommentsSubcollectionFromEntityType(rootType);
-
-    await _commentsRef.doc(comment.rootId).collection(subcollection).add({
+    await _commentsRef
+        .doc(comment.rootId)
+        .collection(commentsSubcollection)
+        .add({
       'userId': comment.userId,
       'timestamp': Timestamp.now(),
       'content': comment.content,
@@ -1156,267 +1102,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       );
       return userBadges;
     }
-  }
-
-  @override
-  Future<Post> getPostById(String postId) async {
-    final postSnapshot = await _postsRef.doc(postId).get();
-    final post = Post.fromDoc(postSnapshot);
-    return post;
-  }
-
-  @override
-  Future<void> addPost(Post post) async {
-    await _analytics.logEvent(
-      name: 'upload_post',
-      parameters: {
-        'user_id': post.userId,
-        'post_id': post.id,
-      },
-    );
-    await _postsRef.add(post.toMap());
-  }
-
-  @override
-  Future<void> deletePost(Post post) async {
-    await _analytics.logEvent(
-      name: 'delete_post',
-      parameters: {
-        'user_id': post.userId,
-        'post_id': post.id,
-      },
-    );
-
-    await _postsRef.doc(post.id).update({
-      'description': FieldValue.delete(),
-      'commentCount': FieldValue.delete(),
-      'likeCount': FieldValue.delete(),
-      'tags': FieldValue.delete(),
-      'timestamp': FieldValue.delete(),
-      'title': '*deleted*',
-      'deleted': true,
-    });
-  }
-
-  @override
-  Future<List<Post>> getUserPosts(
-    String userId, {
-    int limit = 100,
-    String? lastPostId,
-  }) async {
-    if (lastPostId != null) {
-      final documentSnapshot = await _postsRef.doc(lastPostId).get();
-
-      final userPostsSnapshot = await _postsRef
-          .orderBy('timestamp', descending: true)
-          .where('userId', isEqualTo: userId)
-          // .where('deleted', isNotEqualTo: true)
-          .limit(limit)
-          .startAfterDocument(documentSnapshot)
-          .get();
-
-      final userPosts = userPostsSnapshot.docs
-          .map(Post.fromDoc)
-          .where((post) => post.deleted != true)
-          .toList();
-
-      return userPosts;
-    } else {
-      final userPostsSnapshot = await _postsRef
-          .orderBy('timestamp', descending: true)
-          .where('userId', isEqualTo: userId)
-          .limit(limit)
-          .get();
-
-      final userPosts = userPostsSnapshot.docs
-          .map(Post.fromDoc)
-          .where((post) => post.deleted != true)
-          .toList();
-
-      return userPosts;
-    }
-  }
-
-  @override
-  Stream<Post> userPostsObserver(
-    String userId, {
-    int limit = 100,
-  }) async* {
-    final userPostsSnapshotObserver = _postsRef
-        .where('userId', isEqualTo: userId)
-        .orderBy('timestamp', descending: true)
-        // .where('deleted', isNotEqualTo: true)
-        .limit(limit)
-        .snapshots();
-
-    final userPostsObserver = userPostsSnapshotObserver.map((event) {
-      return event.docChanges
-          .where(
-        (DocumentChange<Map<String, dynamic>> element) =>
-            element.type == DocumentChangeType.added,
-      )
-          .map((DocumentChange<Map<String, dynamic>> element) {
-        return Post.fromDoc(element.doc);
-        // if (element.type == DocumentChangeType.modified) {}
-        // if (element.type == DocumentChangeType.removed) {}
-      });
-    }).flatMap(
-      (value) =>
-          Stream.fromIterable(value).where((post) => post.deleted != true),
-    );
-
-    yield* userPostsObserver;
-  }
-
-  @override
-  Future<List<Post>> getFollowingPosts(
-    String currentUserId, {
-    int limit = 100,
-    String? lastPostId,
-  }) async {
-    final subcollection = _getFeedsSubcollectionFromEntityType(EntityType.post);
-
-    if (lastPostId != null) {
-      final documentSnapshot = await _postsRef.doc(lastPostId).get();
-
-      final userFeedPosts = await _feedRefs
-          .doc(currentUserId)
-          .collection(subcollection)
-          .orderBy('timestamp', descending: true)
-          .limit(limit)
-          .startAfterDocument(documentSnapshot)
-          .get();
-
-      final followingPosts = await Future.wait(
-        userFeedPosts.docs.map((doc) async {
-          final post = await getPostById(doc.id);
-          return post;
-        }),
-      );
-
-      return followingPosts.where((post) => post.deleted != true).toList();
-    } else {
-      final userFeedPosts = await _feedRefs
-          .doc(currentUserId)
-          .collection(subcollection)
-          .orderBy('timestamp', descending: true)
-          .limit(limit)
-          .get();
-
-      final followingPosts = await Future.wait(
-        userFeedPosts.docs.map((doc) async {
-          final post = await getPostById(doc.id);
-          return post;
-        }),
-      );
-
-      return followingPosts.where((post) => post.deleted != true).toList();
-    }
-  }
-
-  @override
-  Stream<Post> followingPostsObserver(
-    String currentUserId, {
-    int limit = 100,
-  }) async* {
-    final subcollection = _getFeedsSubcollectionFromEntityType(EntityType.post);
-
-    final userFeedPostsSnapshotObserver = _feedRefs
-        .doc(currentUserId)
-        .collection(subcollection)
-        .orderBy('timestamp', descending: true)
-        .limit(limit)
-        .snapshots();
-
-    final userFeedPostsObserver = userFeedPostsSnapshotObserver.map((event) {
-      return event.docChanges
-          .where(
-        (DocumentChange<Map<String, dynamic>> element) =>
-            element.type == DocumentChangeType.added,
-      )
-          .map((DocumentChange<Map<String, dynamic>> element) async {
-        final post = await getPostById(element.doc.id);
-        return post;
-        // if (element.type == DocumentChangeType.modified) {}
-        // if (element.type == DocumentChangeType.removed) {}
-      });
-    }).flatMap(
-      (value) =>
-          Stream.fromFutures(value).where((post) => post.deleted != true),
-    );
-
-    yield* userFeedPostsObserver;
-  }
-
-  @override
-  Future<List<Post>> getAllPosts(
-    String currentUserId, {
-    int limit = 100,
-    String? lastPostId,
-  }) async {
-    if (lastPostId != null) {
-      final documentSnapshot = await _postsRef.doc(lastPostId).get();
-
-      final allPostsDocs = await _postsRef
-          .orderBy('timestamp', descending: true)
-          // .where('deleted', isNotEqualTo: true)
-          .limit(limit)
-          .startAfterDocument(documentSnapshot)
-          .get();
-
-      final allPostsList = await Future.wait(
-        allPostsDocs.docs.map((doc) async => Post.fromDoc(doc)).toList(),
-      );
-
-      return allPostsList
-          .where((e) => e.userId != currentUserId && e.deleted != true)
-          .toList();
-    } else {
-      final allPostsDocs = await _postsRef
-          .orderBy('timestamp', descending: true)
-          // .where('deleted', isNotEqualTo: true)
-          .limit(limit)
-          .get();
-
-      final allPostsList = await Future.wait(
-        allPostsDocs.docs.map((doc) async => Post.fromDoc(doc)).toList(),
-      );
-
-      return allPostsList
-          .where((e) => e.userId != currentUserId && e.deleted != true)
-          .toList();
-    }
-  }
-
-  @override
-  Stream<Post> allPostsObserver(
-    String currentUserId, {
-    int limit = 100,
-  }) async* {
-    final allPostsSnapshotObserver = _postsRef
-        .orderBy('timestamp', descending: true)
-        // .where('deleted', isNotEqualTo: true)
-        .limit(limit)
-        .snapshots();
-
-    final allPostsObserver = allPostsSnapshotObserver.map((event) {
-      return event.docChanges
-          .where(
-        (DocumentChange<Map<String, dynamic>> element) =>
-            element.type == DocumentChangeType.added,
-      )
-          .map((DocumentChange<Map<String, dynamic>> element) {
-        return Post.fromDoc(element.doc);
-        // if (element.type == DocumentChangeType.modified) {}
-        // if (element.type == DocumentChangeType.removed) {}
-      });
-    }).flatMap(
-      (value) => Stream.fromIterable(value).where(
-        (post) => post.userId != currentUserId && post.deleted != true,
-      ),
-    );
-
-    yield* allPostsObserver;
   }
 
   @override

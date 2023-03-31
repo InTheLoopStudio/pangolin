@@ -43,7 +43,6 @@ class CommentsCubit extends Cubit<CommentsState> {
 
     final commentsAvailable = (await databaseRepository.getComments(
       loop.id,
-      EntityType.loop,
       limit: 1,
     ))
         .isNotEmpty;
@@ -54,7 +53,6 @@ class CommentsCubit extends Cubit<CommentsState> {
     commentListener = databaseRepository
         .commentsObserver(
       loop.id,
-      EntityType.loop,
     )
         .listen((Comment event) {
       // print('Comment { ${event.id} : ${event.content} }');
@@ -85,7 +83,6 @@ class CommentsCubit extends Cubit<CommentsState> {
 
       await databaseRepository.addComment(
         comment,
-        EntityType.loop,
       );
 
       loopViewCubit.addComment();

@@ -5,12 +5,10 @@ import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/domains/models/badge.dart' as badge_model;
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
-import 'package:intheloopapp/domains/models/post.dart';
 import 'package:intheloopapp/ui/views/activity/activity_view.dart';
 import 'package:intheloopapp/ui/views/badge/badge_view.dart';
 import 'package:intheloopapp/ui/views/common/booking_view/booking_view.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view_new.dart';
-import 'package:intheloopapp/ui/views/common/post_view/post_view.dart';
 import 'package:intheloopapp/ui/views/create_booking/create_booking_view.dart';
 import 'package:intheloopapp/ui/views/create_loop/create_loop_view.dart';
 import 'package:intheloopapp/ui/views/likes/likes_view.dart';
@@ -39,18 +37,6 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
           builder: (context) => Material(
             child: LoopViewNew(
               loop: event.loop,
-            ),
-          ),
-        ),
-      );
-      emit(state);
-    });
-    on<PushPost>((event, emit) {
-      navigationKey.currentState?.push(
-        MaterialPageRoute<PostView>(
-          builder: (context) => Material(
-            child: PostView(
-              post: event.post,
             ),
           ),
         ),

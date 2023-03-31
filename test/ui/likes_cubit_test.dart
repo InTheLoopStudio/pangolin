@@ -18,7 +18,6 @@ void main() {
     when(
       databaseRepository.getLikes(
         loop.id,
-        EntityType.loop,
       ),
     ).thenAnswer((_) async => []);
 
@@ -38,7 +37,6 @@ void main() {
     when(
       databaseRepository.getLikes(
         loop.id,
-        EntityType.loop,
       ),
     ).thenAnswer((_) async => [UserModel.empty()]);
 

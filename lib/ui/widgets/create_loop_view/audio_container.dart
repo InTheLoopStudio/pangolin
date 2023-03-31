@@ -6,13 +6,23 @@ import 'package:intheloopapp/ui/widgets/common/seek_bar.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
 
-class AudioContainer extends StatelessWidget {
+class AudioContainer extends StatefulWidget {
   const AudioContainer({super.key});
 
   static const String audioLockId = 'uploaded-loop';
 
   @override
+  State<AudioContainer> createState() => _AudioContainerState();
+}
+
+class _AudioContainerState extends State<AudioContainer>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final theme = Theme.of(context);
 
     return BlocBuilder<CreateLoopCubit, CreateLoopState>(
