@@ -39,9 +39,10 @@ class CommentsTextFieldState extends State<CommentsTextField> {
                 ),
               ),
             ),
+            const SizedBox(width: 10,),
             FloatingActionButton(
-              onPressed: () {
-                context.read<CommentsCubit>().addComment();
+              onPressed: () async {
+                await context.read<CommentsCubit>().addComment();
                 _textEditingController.clear();
               },
               backgroundColor: tappedAccent,

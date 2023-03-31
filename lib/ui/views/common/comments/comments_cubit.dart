@@ -71,7 +71,7 @@ class CommentsCubit extends Cubit<CommentsState> {
     emit(state.copyWith(comment: value));
   }
 
-  void addComment() {
+  Future<void> addComment() async {
     emit(state.copyWith(loading: true));
 
     if (state.comment.isNotEmpty) {
@@ -83,7 +83,7 @@ class CommentsCubit extends Cubit<CommentsState> {
         children: [],
       );
 
-      databaseRepository.addComment(
+      await databaseRepository.addComment(
         comment,
         EntityType.loop,
       );

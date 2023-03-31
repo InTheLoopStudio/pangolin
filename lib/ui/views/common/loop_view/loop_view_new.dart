@@ -14,6 +14,7 @@ import 'package:intheloopapp/ui/views/common/comments/comments_cubit.dart';
 import 'package:intheloopapp/ui/views/common/loading/loop_loading_view.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view_cubit.dart';
 import 'package:intheloopapp/ui/widgets/comments/comments_list.dart';
+import 'package:intheloopapp/ui/widgets/comments/comments_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/play_pause_button.dart';
 import 'package:intheloopapp/ui/widgets/loop_view/loop_seek_bar.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -92,11 +93,6 @@ class LoopViewNew extends StatelessWidget {
                           return Scaffold(
                             backgroundColor:
                                 Theme.of(context).colorScheme.background,
-                            floatingActionButton: FloatingActionButton(
-                              // TODO: Add functionality
-                              onPressed: () => {},
-                              child: const Icon(Icons.edit),
-                            ),
                             appBar: AppBar(
                               title: GestureDetector(
                                 onTap: () =>
@@ -169,102 +165,104 @@ class LoopViewNew extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            body: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 8,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  if (loop.title.isNotEmpty)
-                                    const SizedBox(height: 14),
-                                  if (loop.title.isNotEmpty)
-                                    Text(
-                                      loop.title,
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  const SizedBox(height: 14),
-                                  Text(
-                                    loop.description,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 14),
-                                  Row(
-                                    children: [
-                                      PlayPauseButton(
-                                        audioController: state.audioController,
-                                      ),
-                                      const SizedBox(width: 10),
-                                      const LoopSeekBar(),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () => context
-                                            .read<LoopViewCubit>()
-                                            .toggleLikeLoop(),
-                                        child: state.isLiked
-                                            ? const Icon(
-                                                CupertinoIcons.heart_fill,
-                                                size: 18,
-                                                color: Colors.red,
-                                              )
-                                            : const Icon(
-                                                CupertinoIcons.heart,
-                                                size: 18,
-                                                color: Color(0xFF757575),
-                                              ),
-                                      ),
-                                      const SizedBox(width: 6),
+                            body: BlocProvider(
+                              create: (context) => CommentsCubit(
+                                currentUser: currentUser,
+                                databaseRepository: databaseRepository,
+                                loop: loop,
+                                loopViewCubit: context.read<LoopViewCubit>(),
+                              )..initComments(),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 8,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    if (loop.title.isNotEmpty)
+                                      const SizedBox(height: 14),
+                                    if (loop.title.isNotEmpty)
                                       Text(
-                                        '${state.likeCount}',
-                                        style: TextStyle(
-                                          color: state.isLiked
-                                              ? Colors.red
-                                              : const Color(0xFF757575),
+                                        loop.title,
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      const SizedBox(width: 12),
-                                      const Icon(
-                                        CupertinoIcons.bubble_middle_bottom,
-                                        size: 18,
-                                        color: Color(0xFF757575),
+                                    const SizedBox(height: 14),
+                                    Text(
+                                      loop.description,
+                                      style: const TextStyle(
+                                        fontSize: 14,
                                       ),
-                                      const SizedBox(width: 6),
-                                      Text(
-                                        '${state.commentsCount}',
-                                        style: const TextStyle(
+                                    ),
+                                    const SizedBox(height: 14),
+                                    Row(
+                                      children: [
+                                        PlayPauseButton(
+                                          audioController:
+                                              state.audioController,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        const LoopSeekBar(),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () => context
+                                              .read<LoopViewCubit>()
+                                              .toggleLikeLoop(),
+                                          child: state.isLiked
+                                              ? const Icon(
+                                                  CupertinoIcons.heart_fill,
+                                                  size: 18,
+                                                  color: Colors.red,
+                                                )
+                                              : const Icon(
+                                                  CupertinoIcons.heart,
+                                                  size: 18,
+                                                  color: Color(0xFF757575),
+                                                ),
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          '${state.likeCount}',
+                                          style: TextStyle(
+                                            color: state.isLiked
+                                                ? Colors.red
+                                                : const Color(0xFF757575),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 12),
+                                        const Icon(
+                                          CupertinoIcons.bubble_middle_bottom,
+                                          size: 18,
                                           color: Color(0xFF757575),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                  const Divider(
-                                    color: Color(0xFF757575),
-                                    height: 10,
-                                    thickness: 1,
-                                  ),
-                                  BlocProvider(
-                                    create: (context) => CommentsCubit(
-                                      currentUser: currentUser,
-                                      databaseRepository: databaseRepository,
-                                      loop: loop,
-                                      loopViewCubit:
-                                          context.read<LoopViewCubit>(),
-                                    )..initComments(),
-                                    child: CommentsList(
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          '${state.commentsCount}',
+                                          style: const TextStyle(
+                                            color: Color(0xFF757575),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    const Divider(
+                                      color: Color(0xFF757575),
+                                      height: 10,
+                                      thickness: 1,
+                                    ),
+                                    CommentsList(
                                       scrollController: ScrollController(),
                                     ),
-                                  ),
-                                ],
+                                    const CommentsTextField(),
+                                    const SizedBox(height: 20),
+                                  ],
+                                ),
                               ),
                             ),
                           );
