@@ -833,18 +833,20 @@ packages:
   flutter_google_places_sdk:
     dependency: "direct main"
     description:
-      name: flutter_google_places_sdk
-      sha256: "2a1678f1987a4fe35bf70af7fc34cccfc00efa8b7eb7df3eedc2189038b66e38"
-      url: "https://pub.dev"
-    source: hosted
+      path: flutter_google_places_sdk
+      ref: HEAD
+      resolved-ref: bd56234c08465411a3d1f0fc6e31dfd977ca226e
+      url: "https://github.com/jonaylor89/flutter_google_places_sdk"
+    source: git
     version: "0.3.2+6"
   flutter_google_places_sdk_android:
     dependency: transitive
     description:
-      name: flutter_google_places_sdk_android
-      sha256: "86ca4df771f81a2e444f80fffeb182ec22218a8a33a65d0b65d12a9a58b3d5a7"
-      url: "https://pub.dev"
-    source: hosted
+      path: flutter_google_places_sdk_android
+      ref: HEAD
+      resolved-ref: "4f1715dc16c54ea2e52603616057276485f58017"
+      url: "https://github.com/jonaylor89/flutter_google_places_sdk"
+    source: git
     version: "0.1.2+5"
   flutter_google_places_sdk_ios:
     dependency: transitive
