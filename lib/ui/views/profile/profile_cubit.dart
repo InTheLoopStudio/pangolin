@@ -77,10 +77,9 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
       );
     }
 
-    final loopsAvailable =
-        (await databaseRepository.getUserLoops(visitedUser.id, limit: 1))
-            .isNotEmpty;
-    if (!loopsAvailable) {
+    final userLoops =
+        await databaseRepository.getUserLoops(visitedUser.id, limit: 1);
+    if (userLoops.isEmpty) {
       emit(state.copyWith(loopStatus: LoopsStatus.success));
     }
 
@@ -183,7 +182,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
 
       final loops = await databaseRepository.getUserLoops(
         visitedUser.id,
-        limit: 10,
+        // limit: 10,
         lastLoopId: state.userLoops.last.id,
       );
       loops.isEmpty

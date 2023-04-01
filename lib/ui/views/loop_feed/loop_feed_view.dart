@@ -7,7 +7,7 @@ import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
 import 'package:intheloopapp/ui/views/loop_feed/loop_feed_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container.dart';
 
-class LoopFeedView extends StatefulWidget {
+class LoopFeedView extends StatelessWidget {
   const LoopFeedView({
     required this.sourceFunction,
     required this.sourceStream,
@@ -25,25 +25,15 @@ class LoopFeedView extends StatefulWidget {
   }) sourceStream;
 
   @override
-  State<LoopFeedView> createState() => _LoopFeedViewState();
-}
-
-class _LoopFeedViewState extends State<LoopFeedView>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
   Widget build(BuildContext context) {
-    super.build(context);
     return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
       selector: (state) => state as Onboarded,
-      builder: (context, state) {
+      builder: (context, userState) {
         return BlocProvider(
           create: (context) => LoopFeedCubit(
-            currentUserId: state.currentUser.id,
-            sourceFunction: widget.sourceFunction,
-            sourceStream: widget.sourceStream,
+            currentUserId: userState.currentUser.id,
+            sourceFunction: sourceFunction,
+            sourceStream: sourceStream,
           )..initLoops(),
           child: Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,

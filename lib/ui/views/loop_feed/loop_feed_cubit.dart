@@ -47,17 +47,12 @@ class LoopFeedCubit extends Cubit<LoopFeedState> {
       emit(state.copyWith(status: LoopFeedStatus.success));
     }
 
-    loopListener = sourceStream(currentUserId)
-        .listen((Loop event) {
+    loopListener = sourceStream(currentUserId).listen((Loop event) {
       // print('loop { ${event.id} : ${event.title} }');
       emit(
         state.copyWith(
           status: LoopFeedStatus.success,
-          loops: List.of(state.loops)
-            ..insert(0, event)
-            ..sort(
-              (a, b) => b.timestamp.compareTo(a.timestamp),
-            ),
+          loops: List.of(state.loops)..add(event),
         ),
       );
     });

@@ -42,7 +42,7 @@ class LoopContainer extends StatelessWidget {
           future: databaseRepository.getUserById(loop.userId),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return const SizedBox.shrink();
+              return SkeletonListTile();
             }
 
             final loopUser = snapshot.data;

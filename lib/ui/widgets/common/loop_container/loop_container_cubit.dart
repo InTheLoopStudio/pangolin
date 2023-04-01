@@ -42,7 +42,7 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
   }
 
   void initAudio() {
-    state.audioController.setLoopMode(LoopMode.one);
+    state.audioController.setLoopMode(LoopMode.all);
   }
 
   Future<void> checkVerified() async {
@@ -90,7 +90,6 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
 
   @override
   Future<void> close() async {
-    await state.audioController.dispose();
     await super.close();
   }
 }
