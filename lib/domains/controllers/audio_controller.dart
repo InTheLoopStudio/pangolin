@@ -8,6 +8,8 @@ import 'package:just_audio/just_audio.dart';
 
 AudioController? currentController;
 
+CacheManager myCacheManager = DefaultCacheManager();
+
 class AudioController {
   AudioController._({
     required this.audioRepo,
@@ -49,7 +51,7 @@ class AudioController {
     String? image,
     String? artist,
   }) async {
-    final File file = await DefaultCacheManager().getSingleFile(url);
+    final File file = await myCacheManager.getSingleFile(url);
     final duration = await AudioPlayer().setFilePath(file.path);
 
     return AudioController._(

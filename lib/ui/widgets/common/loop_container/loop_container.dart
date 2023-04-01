@@ -79,10 +79,7 @@ class LoopContainer extends StatelessWidget {
                           motion: const ScrollMotion(),
                           children: [
                             if (currentUser.id == loop.userId)
-                              BlocBuilder<LoopContainerCubit,
-                                  LoopContainerState>(
-                                builder: (context, state) {
-                                  return SlidableAction(
+                              SlidableAction(
                                     onPressed: (context) {
                                       context
                                           .read<LoopContainerCubit>()
@@ -92,8 +89,6 @@ class LoopContainer extends StatelessWidget {
                                     foregroundColor: Colors.white,
                                     icon: Icons.delete,
                                     label: 'Delete',
-                                  );
-                                },
                               )
                             else
                               const SizedBox.shrink(),

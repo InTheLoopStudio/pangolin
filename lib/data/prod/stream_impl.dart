@@ -1,11 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 final _functions = FirebaseFunctions.instance;
-final _fireStore = FirebaseFirestore.instance;
+final _fireStore = firestore.FirebaseFirestore.instance;
 
 final _usersRef = _fireStore.collection('users');
 
