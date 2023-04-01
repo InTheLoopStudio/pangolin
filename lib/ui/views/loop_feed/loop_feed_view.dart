@@ -81,12 +81,8 @@ class _LoopFeedViewState extends State<LoopFeedView>
                         // shrinkWrap: true,
                         physics: const ClampingScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
-                          return Column(
-                            children: [
-                              LoopContainer(
-                                loop: state.loops[index],
-                              ),
-                            ],
+                          return LoopContainer(
+                            loop: state.loops[index],
                           );
                         },
                         itemCount: state.loops.length,

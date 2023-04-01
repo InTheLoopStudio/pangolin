@@ -13,6 +13,7 @@ import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils.dart';
+import 'package:quiver/strings.dart';
 import 'package:rxdart/rxdart.dart';
 
 final _storage = FirebaseStorage.instance.ref();
@@ -143,8 +144,23 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<UserModel?> getUserById(String userId) async {
-    final userSnapshot = await _usersRef.doc(userId).get();
+  Future<UserModel?> getUserById(
+    String userId, {
+    bool ignoreCache = false,
+  }) async {
+    DocumentSnapshot<Map<String, dynamic>>? userSnapshot;
+    if (!ignoreCache) {
+      try {
+        userSnapshot = await _usersRef.doc(userId).get(
+              const GetOptions(source: Source.cache),
+            );
+      } on FirebaseException {
+        userSnapshot = await _usersRef.doc(userId).get();
+      }
+    }
+
+    userSnapshot ??= await _usersRef.doc(userId).get();
+
     if (!userSnapshot.exists) {
       return null;
     }
@@ -245,8 +261,22 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<Loop> getLoopById(String loopId) async {
-    final loopSnapshot = await _loopsRef.doc(loopId).get();
+  Future<Loop> getLoopById(
+    String loopId, {
+    bool ignoreCache = false,
+  }) async {
+    DocumentSnapshot<Map<String, dynamic>>? loopSnapshot;
+    if (!ignoreCache) {
+      try {
+        loopSnapshot = await _loopsRef.doc(loopId).get(
+              const GetOptions(source: Source.cache),
+            );
+      } on FirebaseException {
+        loopSnapshot = await _usersRef.doc(loopId).get();
+      }
+    }
+
+    loopSnapshot ??= await _loopsRef.doc(loopId).get();
 
     final loop = Loop.fromDoc(loopSnapshot);
 
@@ -502,7 +532,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     int limit = 100,
     String? lastLoopId,
   }) async {
-
     if (lastLoopId != null) {
       final documentSnapshot = await _loopsRef.doc(lastLoopId).get();
 
@@ -546,7 +575,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String currentUserId, {
     int limit = 100,
   }) async* {
-
     final userFeedLoopsSnapshotObserver = _feedRefs
         .doc(currentUserId)
         .collection(feedSubcollection)
@@ -817,7 +845,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String rootId, {
     int limit = 100,
   }) async {
-
     final commentsSnapshot = await _commentsRef
         .doc(rootId)
         .collection(commentsSubcollection)
@@ -836,7 +863,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String rootId, {
     int limit = 100,
   }) async* {
-
     final commentsSnapshotObserver = _commentsRef
         .doc(rootId)
         .collection(commentsSubcollection)
@@ -866,7 +892,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String rootId,
     String commentId,
   ) async {
-
     final commentSnapshot = await _commentsRef
         .doc(rootId)
         .collection(commentsSubcollection)

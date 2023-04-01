@@ -15,6 +15,7 @@ import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_seek_bar.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/play_pause_button.dart';
+import 'package:linkify_text/linkify_text.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -207,11 +208,9 @@ class LoopContainer extends StatelessWidget {
                                 if (loop.description.isNotEmpty)
                                   Column(
                                     children: [
-                                      Text(
+                                      LinkifyText(
                                         loop.description,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                        ),
+                                        fontSize: 14,
                                       ),
                                       const SizedBox(height: 14),
                                     ],

@@ -17,6 +17,7 @@ import 'package:intheloopapp/ui/widgets/comments/comments_list.dart';
 import 'package:intheloopapp/ui/widgets/comments/comments_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/play_pause_button.dart';
 import 'package:intheloopapp/ui/widgets/loop_view/loop_seek_bar.dart';
+import 'package:linkify_text/linkify_text.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class LoopViewNew extends StatelessWidget {
@@ -191,11 +192,9 @@ class LoopViewNew extends StatelessWidget {
                                         ),
                                       ),
                                     const SizedBox(height: 14),
-                                    Text(
+                                    LinkifyText(
                                       loop.description,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                      ),
+                                      fontSize: 14,
                                     ),
                                     const SizedBox(height: 14),
                                     Row(
