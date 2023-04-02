@@ -36,6 +36,7 @@ class CreateBookingView extends StatelessWidget {
       selector: (state) => state as Onboarded,
       builder: (context, state) {
         final currentUser = state.currentUser;
+
         return FutureBuilder<double>(
           future: remote.getBookingFee(),
           builder: (context, snapshot) {

@@ -21,6 +21,7 @@ class ControlButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     final dynamic = context.read<DynamicLinkRepository>();
     final database = context.read<DatabaseRepository>();
+
     return FutureBuilder<bool>(
       future: database.isLiked(currentUserId, loopId),
       builder: (context, snapshot) {
@@ -34,6 +35,7 @@ class ControlButtons extends StatelessWidget {
 
         return BlocBuilder<LoopContainerCubit, LoopContainerState>(
           builder: (context, state) {
+
             return Row(
               children: [
                 GestureDetector(
@@ -55,7 +57,7 @@ class ControlButtons extends StatelessWidget {
                 Text(
                   '${state.likeCount}',
                   style: TextStyle(
-                    color: state.isLiked ? Colors.red : const Color(0xFF757575),
+                    color: isLiked ? Colors.red : const Color(0xFF757575),
                   ),
                 ),
                 const SizedBox(width: 12),
