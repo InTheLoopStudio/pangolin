@@ -4,14 +4,14 @@ part of 'loop_container_cubit.dart';
 class LoopContainerState extends Equatable {
   const LoopContainerState({
     required this.loop,
-    required this.audioController,
+    this.audioController,
     this.likeCount = 0,
     this.commentCount = 0,
     this.isLiked = false,
     this.isVerified = false,
   });
 
-  final AudioController audioController;
+  final AudioController? audioController;
   final Loop loop;
   final int likeCount;
   final int commentCount;
@@ -19,7 +19,7 @@ class LoopContainerState extends Equatable {
   final bool isVerified;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         loop,
         audioController,
         likeCount,
@@ -34,14 +34,15 @@ class LoopContainerState extends Equatable {
     int? commentCount,
     bool? isLiked,
     bool? isVerified,
+    AudioController? audioController,
   }) {
     return LoopContainerState(
       loop: loop ?? this.loop,
-      audioController: audioController,
       likeCount: likeCount ?? this.likeCount,
       commentCount: commentCount ?? this.commentCount,
       isLiked: isLiked ?? this.isLiked,
       isVerified: isVerified ?? this.isVerified,
+      audioController: audioController ?? this.audioController,
     );
   }
 }

@@ -1,31 +1,30 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/controllers/audio_controller.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:just_audio/just_audio.dart';
 
 part 'loop_container_state.dart';
 
 class LoopContainerCubit extends Cubit<LoopContainerState> {
   LoopContainerCubit({
     required this.databaseRepository,
-    required this.audioController,
+    required this.audioRepo,
     required this.loop,
     required this.currentUser,
   }) : super(
           LoopContainerState(
             loop: loop,
-            audioController: audioController,
           ),
         );
 
   final Loop loop;
+  final AudioRepository audioRepo;
   final DatabaseRepository databaseRepository;
   final UserModel currentUser;
-  final AudioController audioController;
 
   Future<void> initLoopLikes() async {
     final isLiked = await databaseRepository.isLiked(
@@ -33,16 +32,14 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
       loop.id,
     );
 
-    emit(
-      state.copyWith(
-        isLiked: isLiked,
-        likeCount: state.loop.likeCount,
-      ),
-    );
-  }
-
-  void initAudio() {
-    state.audioController.setLoopMode(LoopMode.all);
+    if (!isClosed) {
+      emit(
+        state.copyWith(
+          isLiked: isLiked,
+          likeCount: state.loop.likeCount,
+        ),
+      );
+    }
   }
 
   void deleteLoop() {
@@ -81,7 +78,7 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
 
   @override
   Future<void> close() async {
-    await state.audioController.dispose();
+    await state.audioController?.dispose();
     await super.close();
   }
 }

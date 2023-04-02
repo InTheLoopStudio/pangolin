@@ -10,6 +10,8 @@ class TitleText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (title.isEmpty) return const SizedBox.shrink();
+
     return Column(
       children: [
         const SizedBox(height: 14),

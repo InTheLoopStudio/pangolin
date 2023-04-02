@@ -6,45 +6,44 @@ import 'package:intheloopapp/ui/widgets/common/seek_bar.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LoopSeekBar extends StatelessWidget {
-  const LoopSeekBar({super.key});
+  const LoopSeekBar({
+    required this.audioController,
+    super.key,
+  });
+
+  final AudioController audioController;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoopContainerCubit, LoopContainerState>(
-      builder: (context, state) {
-        return StreamBuilder<Duration?>(
-          stream: state.audioController.durationStream,
+    return StreamBuilder<Duration?>(
+      stream: audioController.durationStream,
+      builder: (context, snapshot) {
+        final duration = snapshot.data ?? Duration.zero;
+        return StreamBuilder<PositionData>(
+          stream: Rx.combineLatest2<Duration, Duration, PositionData>(
+            audioController.positionStream,
+            audioController.bufferedPositionStream,
+            PositionData.new,
+          ),
           builder: (context, snapshot) {
-            final duration = snapshot.data ?? Duration.zero;
-            return StreamBuilder<PositionData>(
-              stream: Rx.combineLatest2<Duration, Duration, PositionData>(
-                state.audioController.positionStream,
-                state.audioController.bufferedPositionStream,
-                PositionData.new,
-              ),
-              builder: (context, snapshot) {
-                final positionData = snapshot.data ??
-                    PositionData(
-                      Duration.zero,
-                      Duration.zero,
-                    );
-                var position = positionData.position;
-                if (position > duration) {
-                  position = duration;
-                }
-                var bufferedPosition = positionData.bufferedPosition;
-                if (bufferedPosition > duration) {
-                  bufferedPosition = duration;
-                }
-                return SeekBar(
-                  duration: duration,
-                  position: position,
-                  bufferedPosition: bufferedPosition,
-                  onChangeEnd: (newPosition) {
-                    state.audioController.seek(newPosition);
-                  },
+            final positionData = snapshot.data ??
+                PositionData(
+                  Duration.zero,
+                  Duration.zero,
                 );
-              },
+            var position = positionData.position;
+            if (position > duration) {
+              position = duration;
+            }
+            var bufferedPosition = positionData.bufferedPosition;
+            if (bufferedPosition > duration) {
+              bufferedPosition = duration;
+            }
+            return SeekBar(
+              duration: duration,
+              position: position,
+              bufferedPosition: bufferedPosition,
+              onChangeEnd: audioController.seek,
             );
           },
         );
