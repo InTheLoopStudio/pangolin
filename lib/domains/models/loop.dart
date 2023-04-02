@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/utils.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 part 'loop.g.dart';
 
@@ -30,7 +31,7 @@ class Loop extends Equatable {
 
   /// Creates a [Loop] with default values
   factory Loop.empty() => Loop(
-        id: '',
+        id: const Uuid().v4(),
         userId: '',
         title: '',
         description: '',
