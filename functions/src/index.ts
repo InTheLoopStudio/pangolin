@@ -803,7 +803,7 @@ export const incrementLoopCommentCountOnComment = functions.firestore
     }
 
     await loopsRef
-      .doc(loop.id)
+      .doc(context.params.loopId)
       .update({ likeCount: FieldValue.increment(1) });
   });
 
