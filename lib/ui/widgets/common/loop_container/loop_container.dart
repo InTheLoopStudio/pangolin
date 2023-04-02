@@ -8,6 +8,7 @@ import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
+import 'package:intheloopapp/ui/views/common/loading/loading_container.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/audio_controls.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/control_buttons.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container_cubit.dart';
@@ -28,21 +29,24 @@ class LoopContainer extends StatelessWidget {
     final navigationBloc = context.read<NavigationBloc>();
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
+
     return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
       selector: (state) => state as Onboarded,
       builder: (context, authState) {
         final currentUser = authState.currentUser;
+
         return FutureBuilder<UserModel?>(
           future: databaseRepository.getUserById(loop.userId),
           builder: (context, userSnapshot) {
             if (!userSnapshot.hasData) {
-              return SkeletonListTile();
+              return const LoadingContainer();
             }
 
             final loopUser = userSnapshot.data;
             if (loopUser == null) {
-              return SkeletonListTile();
+              return const LoadingContainer();
             }
+
             return BlocProvider<LoopContainerCubit>(
               create: (context) => LoopContainerCubit(
                 databaseRepository: databaseRepository,

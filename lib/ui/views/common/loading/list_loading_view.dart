@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intheloopapp/ui/views/common/loading/loading_container.dart';
 import 'package:skeleton_text/skeleton_text.dart';
+import 'package:skeletons/skeletons.dart';
 
 class ListLoadingView extends StatelessWidget {
   const ListLoadingView({super.key});
@@ -7,42 +9,18 @@ class ListLoadingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: 15,
-      itemBuilder: (BuildContext context, int index) {
-        return ListTile(
-          leading: const CircleAvatar(
-            radius: 25,
-            backgroundImage: AssetImage('assets/default_avatar.png'),
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: 5,
+      itemBuilder: (context, index) => Padding(
+        padding: const EdgeInsets.all(8),
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.background,
           ),
-          title: SizedBox(
-            height: 10,
-            child: SkeletonAnimation(
-              shimmerColor: Colors.grey,
-              borderRadius: BorderRadius.circular(20),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-            ),
-          ),
-          subtitle: SizedBox(
-            height: 10,
-            child: SkeletonAnimation(
-              shimmerColor: Colors.grey,
-              borderRadius: BorderRadius.circular(20),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-            ),
-          ),
-          trailing: const Text(''),
-        );
-      },
+          child: const LoadingContainer(),
+        ),
+      ),
     );
   }
 }

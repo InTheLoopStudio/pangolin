@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
+import 'package:intheloopapp/ui/views/common/loading/list_loading_view.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
 import 'package:intheloopapp/ui/views/loop_feed/loop_feed_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container.dart';
+import 'package:skeletons/skeletons.dart';
 
 class LoopFeedView extends StatefulWidget {
   const LoopFeedView({
@@ -38,6 +40,7 @@ class _LoopFeedViewState extends State<LoopFeedView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
     return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
       selector: (state) => state as Onboarded,
       builder: (context, userState) {
@@ -53,7 +56,7 @@ class _LoopFeedViewState extends State<LoopFeedView>
               builder: (context, state) {
                 switch (state.status) {
                   case LoopFeedStatus.initial:
-                    return const LoadingView();
+                    return const ListLoadingView();
                   case LoopFeedStatus.success:
                     if (state.loops.isEmpty) {
                       return const Center(
