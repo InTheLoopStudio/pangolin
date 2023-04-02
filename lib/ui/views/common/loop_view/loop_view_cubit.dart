@@ -16,7 +16,7 @@ class LoopViewCubit extends Cubit<LoopViewState> {
     required this.currentUser,
     required this.loop,
     required this.user,
-    required this.audioController,
+    this.audioController,
     this.showComments = false,
     this.autoPlay = true,
     this.pageController,
@@ -27,7 +27,6 @@ class LoopViewCubit extends Cubit<LoopViewState> {
             feedId: feedId,
             user: user,
             showComments: showComments,
-            audioController: audioController,
           ),
         );
 
@@ -40,17 +39,17 @@ class LoopViewCubit extends Cubit<LoopViewState> {
   final bool autoPlay;
   final PageController? pageController;
 
-  final AudioController audioController;
+  final AudioController? audioController;
 
   @override
   Future<void> close() async {
-    await state.audioController.dispose();
+    await state.audioController?.dispose();
     await super.close();
   }
 
   void nextLoop() {
     if (pageController != null) {
-      state.audioController.pause();
+      state.audioController?.pause();
       pageController?.nextPage(
         duration: const Duration(milliseconds: 400),
         curve: Curves.easeInOut,
@@ -72,17 +71,17 @@ class LoopViewCubit extends Cubit<LoopViewState> {
   }
 
   void togglePlaying() {
-    if (state.audioController.isPlaying) {
-      state.audioController.pause();
+    if (state.audioController?.isPlaying ?? true) {
+      state.audioController?.pause();
     } else {
-      state.audioController.play();
+      state.audioController?.play();
     }
   }
 
   void initAudio() {
     // _player.setLoopMode(LoopMode.one);
     if (autoPlay == true) {
-      state.audioController.play();
+      state.audioController?.play();
     }
   }
 

@@ -8,10 +8,16 @@ import 'package:intheloopapp/ui/widgets/common/loop_container/play_pause_button.
 class AudioControls extends StatelessWidget {
   const AudioControls({
     required this.audioPath,
+    required this.title,
+    required this.artist,
+    required this.profilePicture,
     super.key,
   });
 
   final String audioPath;
+  final String title;
+  final String artist;
+  final String profilePicture;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +29,9 @@ class AudioControls extends StatelessWidget {
       future: AudioController.fromUrl(
         audioRepo: RepositoryProvider.of<AudioRepository>(context),
         url: audioPath,
+        title: title,
+        artist: artist,
+        image: profilePicture,
       ),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {

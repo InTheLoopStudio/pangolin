@@ -5,7 +5,7 @@ class LoopViewState extends Equatable {
   const LoopViewState({
     required this.loop,
     required this.user,
-    required this.audioController,
+    this.audioController,
     this.showComments = false,
     this.loadingLoop = false,
     this.feedId,
@@ -27,7 +27,7 @@ class LoopViewState extends Equatable {
   final int commentsCount;
   final int likeCount;
 
-  final AudioController audioController;
+  final AudioController? audioController;
 
   @override
   List<Object> get props => [
@@ -52,9 +52,10 @@ class LoopViewState extends Equatable {
     bool? isVerified,
     int? commentsCount,
     int? likeCount,
+    AudioController? audioController,
   }) {
     return LoopViewState(
-      audioController: audioController,
+      audioController: audioController ?? this.audioController,
       loop: loop ?? this.loop,
       user: user ?? this.user,
       feedId: feedId ?? this.feedId,

@@ -105,6 +105,9 @@ class LoopContainer extends StatelessWidget {
                               const SizedBox.shrink(),
                             AudioControls(
                               audioPath: loop.audioPath,
+                              title: loop.title,
+                              artist: loopUser.displayName,
+                              profilePicture: loopUser.profilePicture,
                             ),
                             const ControlButtons(),
                             const SizedBox(height: 8),
