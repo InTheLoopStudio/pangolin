@@ -419,13 +419,13 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<void> addLoop(Loop loop) async {
     await _analytics.logEvent(
-      name: 'upload_loop',
+      name: 'create_loop',
       parameters: {
         'user_id': loop.userId,
         'loop_id': loop.id,
       },
     );
-    await _loopsRef.add(loop.toMap());
+    await _loopsRef.doc(loop.id).set(loop.toMap());
   }
 
   @override
