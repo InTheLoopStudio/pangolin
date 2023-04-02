@@ -35,7 +35,7 @@ import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 /// link all necessary repository interfaces
 /// with their respective implementations
-List<RepositoryProvider<dynamic>> buildRepositories({
+List<RepositoryProvider<Object>> buildRepositories({
   required StreamChatClient streamChatClient,
 }) {
   return [

@@ -14,7 +14,7 @@ class AppThemeCubit extends HydratedCubit<bool> {
   /// changes the app theme to be either dark mode
   /// with [isDarkMode] being `true` or
   /// light mode with [isDarkMode] being `false`
-  Future<void> updateTheme({required bool isDarkMode}) async {
+  void updateTheme({required bool isDarkMode}) {
     emit(isDarkMode);
   }
 
