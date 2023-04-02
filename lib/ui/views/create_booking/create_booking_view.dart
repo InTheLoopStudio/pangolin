@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -32,6 +31,7 @@ class CreateBookingView extends StatelessWidget {
   Widget build(BuildContext context) {
     final database = RepositoryProvider.of<DatabaseRepository>(context);
     final remote = RepositoryProvider.of<RemoteConfigRepository>(context);
+
     return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
       selector: (state) => state as Onboarded,
       builder: (context, state) {

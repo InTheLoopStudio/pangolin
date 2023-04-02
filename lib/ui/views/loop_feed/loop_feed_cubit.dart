@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 
 part 'loop_feed_state.dart';
@@ -21,10 +20,12 @@ class LoopFeedCubit extends Cubit<LoopFeedState> {
     String currentUserId, {
     int limit,
     String? lastLoopId,
+    bool ignoreCache,
   }) sourceFunction;
   final Stream<Loop> Function(
     String currentUserId, {
     int limit,
+    bool ignoreCache,
   }) sourceStream;
   StreamSubscription<Loop>? loopListener;
 
@@ -48,14 +49,19 @@ class LoopFeedCubit extends Cubit<LoopFeedState> {
       emit(state.copyWith(status: LoopFeedStatus.success));
     }
 
-    loopListener = sourceStream(currentUserId).listen((Loop event) {
+    loopListener = sourceStream(
+      currentUserId,
+      ignoreCache: true,
+    ).listen((Loop event) {
       // print('loop { ${event.id} : ${event.title} }');
       emit(
         state.copyWith(
           status: LoopFeedStatus.success,
-          loops: List.of(state.loops)..add(event)..sort(
-                (a, b) => b.timestamp.compareTo(a.timestamp),
-          ),
+          loops: List.of(state.loops)
+            ..add(event)
+            ..sort(
+              (a, b) => b.timestamp.compareTo(a.timestamp),
+            ),
         ),
       );
     });

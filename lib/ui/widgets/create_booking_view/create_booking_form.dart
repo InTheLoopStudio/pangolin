@@ -1,8 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:formz/formz.dart';
 import 'package:intheloopapp/ui/views/create_booking/create_booking_cubit.dart';
 import 'package:intheloopapp/ui/widgets/create_booking_view/booking_name_text_field.dart';
 import 'package:intheloopapp/ui/widgets/create_booking_view/booking_note_text_field.dart';

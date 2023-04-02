@@ -13,7 +13,6 @@ import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils.dart';
-import 'package:quiver/strings.dart';
 import 'package:rxdart/rxdart.dart';
 
 final _storage = FirebaseStorage.instance.ref();
@@ -531,6 +530,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String currentUserId, {
     int limit = 100,
     String? lastLoopId,
+    bool ignoreCache = false,
   }) async {
     if (lastLoopId != null) {
       final documentSnapshot = await _loopsRef.doc(lastLoopId).get();
@@ -545,7 +545,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       final followingLoops = await Future.wait(
         userFeedLoops.docs.map((doc) async {
-          final loop = await getLoopById(doc.id);
+          final loop = await getLoopById(doc.id, ignoreCache: ignoreCache);
           return loop;
         }),
       );
@@ -561,7 +561,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       final followingLoops = await Future.wait(
         userFeedLoops.docs.map((doc) async {
-          final loop = await getLoopById(doc.id);
+          final loop = await getLoopById(doc.id, ignoreCache: ignoreCache);
           return loop;
         }),
       );
@@ -574,6 +574,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   Stream<Loop> followingLoopsObserver(
     String currentUserId, {
     int limit = 100,
+    bool ignoreCache = false,
   }) async* {
     final userFeedLoopsSnapshotObserver = _feedRefs
         .doc(currentUserId)
@@ -589,7 +590,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
             element.type == DocumentChangeType.added,
       )
           .map((DocumentChange<Map<String, dynamic>> element) async {
-        final loop = await getLoopById(element.doc.id);
+        final loop = await getLoopById(
+          element.doc.id,
+          ignoreCache: ignoreCache,
+        );
         return loop;
         // if (element.type == DocumentChangeType.modified) {}
         // if (element.type == DocumentChangeType.removed) {}
@@ -605,6 +609,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<Loop>> getAllLoops(
     String currentUserId, {
+    bool ignoreCache = false,
     int limit = 100,
     String? lastLoopId,
   }) async {
@@ -646,6 +651,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   Stream<Loop> allLoopsObserver(
     String currentUserId, {
     int limit = 100,
+    bool ignoreCache = false,
   }) async* {
     final allLoopsSnapshotObserver = _loopsRef
         .orderBy('timestamp', descending: true)

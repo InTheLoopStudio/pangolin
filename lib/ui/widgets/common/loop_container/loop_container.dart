@@ -41,7 +41,7 @@ class LoopContainer extends StatelessWidget {
 
             final loopUser = userSnapshot.data;
             if (loopUser == null) {
-              return const SizedBox.shrink();
+              return SkeletonListTile();
             }
             return BlocProvider<LoopContainerCubit>(
               create: (context) => LoopContainerCubit(
@@ -49,8 +49,7 @@ class LoopContainer extends StatelessWidget {
                 loop: loop,
                 currentUser: currentUser,
                 audioRepo: context.read<AudioRepository>(),
-              )
-                ..initLoopLikes(),
+              ),
               child: BlocBuilder<LoopContainerCubit, LoopContainerState>(
                 builder: (context, state) {
                   return Slidable(
@@ -109,7 +108,10 @@ class LoopContainer extends StatelessWidget {
                               artist: loopUser.displayName,
                               profilePicture: loopUser.profilePicture,
                             ),
-                            const ControlButtons(),
+                            ControlButtons(
+                              loopId: loop.id,
+                              currentUserId: currentUser.id,
+                            ),
                             const SizedBox(height: 8),
                           ],
                         ),

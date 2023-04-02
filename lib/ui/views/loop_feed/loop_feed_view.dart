@@ -7,7 +7,7 @@ import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
 import 'package:intheloopapp/ui/views/loop_feed/loop_feed_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container.dart';
 
-class LoopFeedView extends StatelessWidget {
+class LoopFeedView extends StatefulWidget {
   const LoopFeedView({
     required this.sourceFunction,
     required this.sourceStream,
@@ -18,48 +18,60 @@ class LoopFeedView extends StatelessWidget {
     String currentUserId, {
     int limit,
     String? lastLoopId,
+    bool ignoreCache,
   }) sourceFunction;
   final Stream<Loop> Function(
     String currentUserId, {
     int limit,
+    bool ignoreCache,
   }) sourceStream;
 
   @override
+  State<LoopFeedView> createState() => _LoopFeedViewState();
+}
+
+class _LoopFeedViewState extends State<LoopFeedView>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
       selector: (state) => state as Onboarded,
       builder: (context, userState) {
         return BlocProvider(
           create: (context) => LoopFeedCubit(
             currentUserId: userState.currentUser.id,
-            sourceFunction: sourceFunction,
-            sourceStream: sourceStream,
+            sourceFunction: widget.sourceFunction,
+            sourceStream: widget.sourceStream,
           )..initLoops(),
           child: Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,
-            body: RefreshIndicator(
-              displacement: 20,
-              onRefresh: () async {
-                await context
-                    .read<LoopFeedCubit>()
-                    .initLoops(clearLoops: false);
-              },
-              child: BlocBuilder<LoopFeedCubit, LoopFeedState>(
-                builder: (context, state) {
-                  switch (state.status) {
-                    case LoopFeedStatus.initial:
-                      return const LoadingView();
-                    case LoopFeedStatus.success:
-                      if (state.loops.isEmpty) {
-                        return const Center(
-                          child: EasterEggPlaceholder(
-                            text: 'No Loops',
-                            color: Colors.white,
-                          ),
-                        );
-                      }
+            body: BlocBuilder<LoopFeedCubit, LoopFeedState>(
+              builder: (context, state) {
+                switch (state.status) {
+                  case LoopFeedStatus.initial:
+                    return const LoadingView();
+                  case LoopFeedStatus.success:
+                    if (state.loops.isEmpty) {
+                      return const Center(
+                        child: EasterEggPlaceholder(
+                          text: 'No Loops',
+                          color: Colors.white,
+                        ),
+                      );
+                    }
 
-                      return ListView.builder(
+                    return RefreshIndicator(
+                      displacement: 20,
+                      onRefresh: () async {
+                        await context
+                            .read<LoopFeedCubit>()
+                            .initLoops(clearLoops: false);
+                      },
+                      child: ListView.builder(
                         // shrinkWrap: true,
                         // physics: const ClampingScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
@@ -68,18 +80,18 @@ class LoopFeedView extends StatelessWidget {
                           );
                         },
                         itemCount: state.loops.length,
-                      );
+                      ),
+                    );
 
-                    case LoopFeedStatus.failure:
-                      return const Center(
-                        child: EasterEggPlaceholder(
-                          text: 'Error Fetching Loops :(',
-                          color: Colors.white,
-                        ),
-                      );
-                  }
-                },
-              ),
+                  case LoopFeedStatus.failure:
+                    return const Center(
+                      child: EasterEggPlaceholder(
+                        text: 'Error Fetching Loops :(',
+                        color: Colors.white,
+                      ),
+                    );
+                }
+              },
             ),
           ),
         );

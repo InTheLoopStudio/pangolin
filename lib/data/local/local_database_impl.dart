@@ -23,12 +23,17 @@ class LocalDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<UserModel> getUserById(String userId) async {
+  Future<UserModel> getUserById(String userId, {
+    bool ignoreCache = false,
+  }) async {
     return UserModel.empty();
   }
 
   @override
-  Future<Loop> getLoopById(String loopId) async {
+  Future<Loop> getLoopById(
+    String loopId, {
+    bool ignoreCache = false,
+  }) async {
     return Loop.empty();
   }
 
@@ -108,6 +113,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     String currentUserId, {
     int limit = 0,
     String? lastLoopId,
+    bool ignoreCache = false,
   }) async {
     return [];
   }
@@ -116,6 +122,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
   Stream<Loop> followingLoopsObserver(
     String currentUserId, {
     int limit = 20,
+    bool ignoreCache = false,
   }) async* {}
 
   @override
@@ -123,6 +130,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     String currentUserId, {
     int limit = 0,
     String? lastLoopId,
+    bool ignoreCache = false,
   }) async {
     return [];
   }
@@ -131,6 +139,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
   Stream<Loop> allLoopsObserver(
     String currentUserId, {
     int limit = 20,
+    bool ignoreCache = false,
   }) async* {}
 
   @override

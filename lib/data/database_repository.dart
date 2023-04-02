@@ -11,7 +11,9 @@ abstract class DatabaseRepository {
   Future<bool> userEmailExists(String email);
   Future<void> createUser(UserModel user);
   Future<UserModel?> getUserByUsername(String? username);
-  Future<UserModel?> getUserById(String userId);
+  Future<UserModel?> getUserById(String userId, {
+    bool ignoreCache = false,
+  });
   Future<List<UserModel>> searchUsersByLocation({
     required double lat,
     required double lng,
@@ -23,7 +25,9 @@ abstract class DatabaseRepository {
   Future<bool> checkUsernameAvailability(String username, String userid);
 
   // Loop related stuff
-  Future<Loop> getLoopById(String loopId);
+  Future<Loop> getLoopById(String loopId, {
+    bool ignoreCache = false,
+  });
   Future<void> addLoop(Loop loop);
   Future<void> deleteLoop(Loop loop);
   Future<List<Loop>> getUserLoops(
@@ -39,19 +43,23 @@ abstract class DatabaseRepository {
     String currentUserId, {
     int limit = 100,
     String? lastLoopId,
+    bool ignoreCache = false,
   });
   Stream<Loop> followingLoopsObserver(
     String currentUserId, {
     int limit = 100,
+    bool ignoreCache = false,
   });
   Future<List<Loop>> getAllLoops(
     String currentUserId, {
     int limit = 100,
     String? lastLoopId,
+    bool ignoreCache = false,
   });
   Stream<Loop> allLoopsObserver(
     String currentUserId, {
     int limit = 100,
+    bool ignoreCache = false,
   });
 
   // Liking related stuff
