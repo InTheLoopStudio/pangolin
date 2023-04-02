@@ -6,13 +6,14 @@ import 'package:intheloopapp/domains/models/payment_user.dart';
 final _functions = FirebaseFunctions.instance;
 final _stripe = Stripe.instance;
 
-const _publishableTestKey =
-    'pk_test_51MjqoRIdnJ3C1QPEjac68utViyu6vQcJfRfEyNesdoi9eKZP5hKnxbuyHCcSFVH8mBjYAxN0qyMdn2P8ZQb5OuZo00Bfy49Ebc';
+// const _publishableTestKey =
+    // 'pk_test_51MjqoRIdnJ3C1QPEjac68utViyu6vQcJfRfEyNesdoi9eKZP5hKnxbuyHCcSFVH8mBjYAxN0qyMdn2P8ZQb5OuZo00Bfy49Ebc';
+const _publishableKey = 'pk_live_51MjqoRIdnJ3C1QPEjW2tlrF663G7QXTjZN0de769CrMXhaGMjw8fxwKOOo0k72nYZcmNI211knjPHTxIDLlvqDx800rdRODGrz';
 
 class StripePaymentImpl implements PaymentRepository {
   @override
   Future<void> initPayments() async {
-    Stripe.publishableKey = _publishableTestKey;
+    Stripe.publishableKey = _publishableKey;
     Stripe.merchantIdentifier = 'merchant.com.intheloopstudio';
     await _stripe.applySettings();
   }

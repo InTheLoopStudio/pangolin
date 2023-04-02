@@ -51,25 +51,17 @@ class LoopFeedView extends StatelessWidget {
                       return const LoadingView();
                     case LoopFeedStatus.success:
                       if (state.loops.isEmpty) {
-                        return const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                EasterEggPlaceholder(
-                                  text: 'No Loops',
-                                  color: Colors.white,
-                                ),
-                              ],
-                            ),
-                          ],
+                        return const Center(
+                          child: EasterEggPlaceholder(
+                            text: 'No Loops',
+                            color: Colors.white,
+                          ),
                         );
                       }
 
                       return ListView.builder(
                         // shrinkWrap: true,
-                        physics: const ClampingScrollPhysics(),
+                        // physics: const ClampingScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
                           return LoopContainer(
                             loop: state.loops[index],
@@ -79,19 +71,11 @@ class LoopFeedView extends StatelessWidget {
                       );
 
                     case LoopFeedStatus.failure:
-                      return const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              EasterEggPlaceholder(
-                                text: 'Error Fetching Loops :(',
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
-                        ],
+                      return const Center(
+                        child: EasterEggPlaceholder(
+                          text: 'Error Fetching Loops :(',
+                          color: Colors.white,
+                        ),
                       );
                   }
                 },

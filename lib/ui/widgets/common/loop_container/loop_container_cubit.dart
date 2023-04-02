@@ -45,15 +45,6 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
     state.audioController.setLoopMode(LoopMode.all);
   }
 
-  Future<void> checkVerified() async {
-    final verified = await databaseRepository.isVerified(loop.userId);
-    emit(
-      state.copyWith(
-        isVerified: verified,
-      ),
-    );
-  }
-
   void deleteLoop() {
     databaseRepository.deleteLoop(loop);
   }
@@ -90,6 +81,7 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
 
   @override
   Future<void> close() async {
+    await state.audioController.dispose();
     await super.close();
   }
 }
