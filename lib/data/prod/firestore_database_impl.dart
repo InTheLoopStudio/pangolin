@@ -37,11 +37,6 @@ const commentsSubcollection = 'loopComments';
 const likesSubcollection = 'loopLikes';
 const feedSubcollection = 'userFeed';
 
-class HandleAlreadyExistsException implements Exception {
-  HandleAlreadyExistsException(this.cause);
-  String cause;
-}
-
 /// Database implementation using Firebase's FirestoreDB
 class FirestoreDatabaseImpl extends DatabaseRepository {
   String _getFileFromURL(String fileURL) {
@@ -1223,4 +1218,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     );
     await _bookingsRef.doc(booking.id).set(booking.toMap());
   }
+}
+class HandleAlreadyExistsException implements Exception {
+  HandleAlreadyExistsException(this.cause);
+  String cause;
 }

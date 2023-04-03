@@ -14,7 +14,6 @@ import 'package:intheloopapp/ui/widgets/common/loop_container/control_buttons.da
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/title_text.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/user_info.dart';
-import 'package:skeletons/skeletons.dart';
 
 class LoopContainer extends StatelessWidget {
   const LoopContainer({
@@ -23,6 +22,59 @@ class LoopContainer extends StatelessWidget {
   });
 
   final Loop loop;
+
+  Widget _loopContainer({
+    required NavigationBloc navigationBloc,
+    required UserModel loopUser,
+    required String currentUserId,
+  }) =>
+      GestureDetector(
+        onTap: () => navigationBloc.add(
+          PushLoop(loop),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 8,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              UserInfo(
+                loopUser: loopUser,
+                timestamp: loop.timestamp,
+              ),
+              TitleText(title: loop.title),
+              const SizedBox(height: 14),
+              if (loop.description.isNotEmpty)
+                Column(
+                  children: [
+                    Linkify(
+                      text: loop.description,
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                  ],
+                )
+              else
+                const SizedBox.shrink(),
+              AudioControls(
+                audioPath: loop.audioPath,
+                title: loop.title,
+                artist: loopUser.displayName,
+                profilePicture: loopUser.profilePicture,
+              ),
+              ControlButtons(
+                loopId: loop.id,
+                currentUserId: currentUserId,
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -56,71 +108,37 @@ class LoopContainer extends StatelessWidget {
               ),
               child: BlocBuilder<LoopContainerCubit, LoopContainerState>(
                 builder: (context, state) {
-                  return Slidable(
-                    startActionPane: ActionPane(
-                      motion: const ScrollMotion(),
-                      children: [
-                        if (currentUser.id == loop.userId)
-                          SlidableAction(
-                            onPressed: (context) {
-                              context.read<LoopContainerCubit>().deleteLoop();
-                            },
-                            backgroundColor: Colors.red[600]!,
-                            foregroundColor: Colors.white,
-                            icon: Icons.delete,
-                            label: 'Delete',
-                          )
-                        else
-                          const SizedBox.shrink(),
-                      ],
-                    ),
-                    child: GestureDetector(
-                      onTap: () => navigationBloc.add(
-                        PushLoop(loop),
+                  if (currentUser.id == loop.userId) {
+                    return Slidable(
+                      startActionPane: ActionPane(
+                        motion: const ScrollMotion(),
+                        children: [
+                          if (currentUser.id == loop.userId)
+                            SlidableAction(
+                              onPressed: (context) {
+                                context.read<LoopContainerCubit>().deleteLoop();
+                              },
+                              backgroundColor: Colors.red[600]!,
+                              foregroundColor: Colors.white,
+                              icon: Icons.delete,
+                              label: 'Delete',
+                            )
+                          else
+                            const SizedBox.shrink(),
+                        ],
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 8,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            UserInfo(
-                              loopUser: loopUser,
-                              timestamp: loop.timestamp,
-                            ),
-                            TitleText(title: loop.title),
-                            const SizedBox(height: 14),
-                            if (loop.description.isNotEmpty)
-                              Column(
-                                children: [
-                                  Linkify(
-                                    text: loop.description,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 14),
-                                ],
-                              )
-                            else
-                              const SizedBox.shrink(),
-                            AudioControls(
-                              audioPath: loop.audioPath,
-                              title: loop.title,
-                              artist: loopUser.displayName,
-                              profilePicture: loopUser.profilePicture,
-                            ),
-                            ControlButtons(
-                              loopId: loop.id,
-                              currentUserId: currentUser.id,
-                            ),
-                            const SizedBox(height: 8),
-                          ],
-                        ),
+                      child: _loopContainer(
+                        navigationBloc: navigationBloc,
+                        loopUser: loopUser,
+                        currentUserId: currentUser.id,
                       ),
-                    ),
+                    );
+                  }
+
+                  return _loopContainer(
+                    navigationBloc: navigationBloc,
+                    loopUser: loopUser,
+                    currentUserId: currentUser.id,
                   );
                 },
               ),
