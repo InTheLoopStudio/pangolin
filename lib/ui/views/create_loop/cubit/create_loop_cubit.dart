@@ -53,6 +53,26 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
     );
   }
 
+  Future<String> getAudioPath() async {
+    if (state.pickedAudio == null) {
+      return '';
+    }
+
+    final audioDuration = await AudioController.getDuration(state.pickedAudio);
+
+    final tooLarge = audioDuration.compareTo(_maxDuration) >= 0;
+    if (tooLarge) {
+      throw Exception('Audio is too large, must be under 10 minutes');
+    }
+
+    final audioPath = await storageRepository.uploadLoop(
+      currentUser.id,
+      state.pickedAudio!,
+    );
+
+    return audioPath;
+  }
+
   /// opens a user's gallery to upload audio
   Future<void> handleAudioFromFiles() async {
     try {
@@ -106,18 +126,9 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
       );
 
       // Just settings the audio to get the duration
-      final audioDuration =
-          await AudioController.getDuration(state.pickedAudio);
-
-      final tooLarge = audioDuration.compareTo(_maxDuration) >= 0;
-      if (tooLarge) {
-        throw Exception('Audio is too large, must be under 10 minutes');
-      }
-
-      final audioPath = await storageRepository.uploadLoop(
-        currentUser.id,
-        state.pickedAudio!,
-      );
+      final audioPath = state.pickedAudio != null
+          ? await getAudioPath()
+          : '';
 
       final loop = Loop.empty().copyWith(
         title: state.title.value,
