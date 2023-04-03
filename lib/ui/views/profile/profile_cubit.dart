@@ -183,7 +183,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
       final loops = await databaseRepository.getUserLoops(
         visitedUser.id,
         // limit: 10,
-        lastLoopId: state.userLoops.last.id,
+        lastLoopId: state.userLoops.first.id,
       );
       loops.isEmpty
           ? emit(state.copyWith(hasReachedMaxLoops: true))
@@ -210,7 +210,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
       final badges = await databaseRepository.getUserBadges(
         visitedUser.id,
         limit: 10,
-        lastBadgeId: state.userBadges.last.id,
+        lastBadgeId: state.userBadges.first.id,
       );
       badges.isEmpty
           ? emit(state.copyWith(hasReachedMaxBadges: true))
@@ -237,7 +237,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
       final badges = await databaseRepository.getUserCreatedBadges(
         visitedUser.id,
         limit: 10,
-        lastBadgeId: state.userBadges.last.id,
+        lastBadgeId: state.userBadges.first.id,
       );
       badges.isEmpty
           ? emit(state.copyWith(hasReachedMaxUserCreatedBadges: true))

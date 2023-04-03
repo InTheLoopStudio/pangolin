@@ -80,7 +80,7 @@ class LoopViewCubit extends Cubit<LoopViewState> {
 
   void initAudio() {
     // _player.setLoopMode(LoopMode.one);
-    if (autoPlay == true) {
+    if (autoPlay) {
       state.audioController?.play();
     }
   }
@@ -136,8 +136,8 @@ class LoopViewCubit extends Cubit<LoopViewState> {
     final isVerified = await databaseRepository.isVerified(loop.userId);
     emit(state.copyWith(isVerified: isVerified));
   }
-
-  Future<void> initLoopComments() async {
+  
+  void initLoopComments() {
     emit(state.copyWith(commentsCount: loop.commentCount));
   }
 

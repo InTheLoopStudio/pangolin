@@ -624,7 +624,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       );
 
       return allLoopsList
-          .where((e) => e.userId != currentUserId && e.deleted != true)
+          .where((e) => e.userId != currentUserId && !e.deleted)
           .toList();
     } else {
       final allLoopsDocs = await _loopsRef
