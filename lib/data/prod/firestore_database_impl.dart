@@ -145,7 +145,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<UserModel?> getUserById(
     String userId, {
-    bool ignoreCache = false,
+    bool ignoreCache = true,
   }) async {
     DocumentSnapshot<Map<String, dynamic>>? userSnapshot;
     if (!ignoreCache) {
@@ -262,7 +262,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<Loop> getLoopById(
     String loopId, {
-    bool ignoreCache = false,
+    bool ignoreCache = true,
   }) async {
     DocumentSnapshot<Map<String, dynamic>>? loopSnapshot;
     if (!ignoreCache) {
@@ -531,7 +531,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String currentUserId, {
     int limit = 100,
     String? lastLoopId,
-    bool ignoreCache = false,
+    bool ignoreCache = true,
   }) async {
     if (lastLoopId != null) {
       final documentSnapshot = await _loopsRef.doc(lastLoopId).get();
@@ -575,7 +575,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   Stream<Loop> followingLoopsObserver(
     String currentUserId, {
     int limit = 100,
-    bool ignoreCache = false,
+    bool ignoreCache = true,
   }) async* {
     final userFeedLoopsSnapshotObserver = _feedRefs
         .doc(currentUserId)
@@ -601,7 +601,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       });
     }).flatMap(
       (value) =>
-          Stream.fromFutures(value).where((loop) => loop.deleted != true),
+          Stream.fromFutures(value).where((loop) => !loop.deleted),
     );
 
     yield* userFeedLoopsObserver;
@@ -610,7 +610,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<Loop>> getAllLoops(
     String currentUserId, {
-    bool ignoreCache = false,
+    bool ignoreCache = true,
     int limit = 100,
     String? lastLoopId,
   }) async {
@@ -652,7 +652,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   Stream<Loop> allLoopsObserver(
     String currentUserId, {
     int limit = 100,
-    bool ignoreCache = false,
+    bool ignoreCache = true,
   }) async* {
     final allLoopsSnapshotObserver = _loopsRef
         .orderBy('timestamp', descending: true)

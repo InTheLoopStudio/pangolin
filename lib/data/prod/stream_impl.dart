@@ -54,6 +54,7 @@ class StreamImpl extends StreamRepository {
         },
       ),
     );
+
     return chatUsers;
   }
 
