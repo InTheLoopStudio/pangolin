@@ -29,6 +29,7 @@ class BadgesListState extends State<BadgesList> {
 
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.offset;
+
     return currentScroll >= (maxScroll * 0.9);
   }
 
@@ -65,7 +66,7 @@ class BadgesListState extends State<BadgesList> {
             return const Center(child: Text('failed to fetch badges'));
 
           case BadgesStatus.success:
-            if (state.userBadges.isEmpty || state.visitedUser.deleted == true) {
+            if (state.userBadges.isEmpty || state.visitedUser.deleted) {
               return const EasterEggPlaceholder(text: 'No Badges Yet');
             }
 

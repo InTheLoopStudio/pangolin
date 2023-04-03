@@ -4,15 +4,14 @@ import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
 import 'package:intheloopapp/ui/views/common/loading/list_loading_view.dart';
-import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
 import 'package:intheloopapp/ui/views/loop_feed/loop_feed_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container.dart';
-import 'package:skeletons/skeletons.dart';
 
 class LoopFeedView extends StatefulWidget {
   const LoopFeedView({
     required this.sourceFunction,
     required this.sourceStream,
+    required this.feedKey,
     super.key,
   });
 
@@ -27,6 +26,7 @@ class LoopFeedView extends StatefulWidget {
     int limit,
     bool ignoreCache,
   }) sourceStream;
+  final String feedKey;
 
   @override
   State<LoopFeedView> createState() => _LoopFeedViewState();
@@ -74,15 +74,30 @@ class _LoopFeedViewState extends State<LoopFeedView>
                             .read<LoopFeedCubit>()
                             .initLoops(clearLoops: false);
                       },
-                      child: ListView.builder(
-                        // shrinkWrap: true,
-                        // physics: const ClampingScrollPhysics(),
-                        itemBuilder: (BuildContext context, int index) {
-                          return LoopContainer(
-                            loop: state.loops[index],
-                          );
-                        },
-                        itemCount: state.loops.length,
+                      child: CustomScrollView(
+                        key: PageStorageKey<String>(widget.feedKey),
+                        slivers: [
+                          SliverOverlapInjector(
+                            // This is the flip side of the SliverOverlapAbsorber
+                            handle:
+                                NestedScrollView.sliverOverlapAbsorberHandleFor(
+                                    context),
+                          ),
+                          SliverPadding(
+                            padding: const EdgeInsets.all(8),
+                            sliver: SliverList(
+                              // itemExtent: 100,
+                              delegate: SliverChildBuilderDelegate(
+                                (BuildContext context, int index) {
+                                  return LoopContainer(
+                                    loop: state.loops[index],
+                                  );
+                                },
+                                childCount: state.loops.length,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     );
 

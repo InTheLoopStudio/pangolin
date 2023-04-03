@@ -68,11 +68,7 @@ class _ProfileViewState extends State<ProfileView> {
     _scrollController = ScrollController();
   }
 
-  List<Widget> _profileTabBar(
-    bool showVenueDashboard,
-    int badgesCount,
-    int loopsCount,
-  ) {
+  List<Widget> _profileTabBar() {
     final tabs = [
       const Tab(
         text: 'BADGES',
@@ -95,7 +91,7 @@ class _ProfileViewState extends State<ProfileView> {
   Widget _loopsTab() => AllLoopsList(scrollController: _scrollController);
   Widget _bookingsTab() => const Center(child: Text('Coming Soon'),);
 
-  List<Widget> _profileTabs(bool showVenueDashboard) {
+  List<Widget> _profileTabs() {
     final tabs = [
       _badgesTab(),
       _loopsTab(),
@@ -128,13 +124,8 @@ class _ProfileViewState extends State<ProfileView> {
           ..initPlace(),
         child: BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, state) {
-            final showVenueDashboard = currentUser.id == visitedUser.id &&
-                currentUser.accountType == AccountType.venue;
-            final tabs = _profileTabBar(
-              showVenueDashboard,
-              visitedUser.badgesCount,
-              visitedUser.loopsCount,
-            );
+            final tabs = _profileTabBar();
+
             return BlocListener<OnboardingBloc, OnboardingState>(
               listener: (context, userState) {
                 if (userState is Onboarded) {
@@ -296,7 +287,7 @@ class _ProfileViewState extends State<ProfileView> {
                       ];
                     },
                     body: TabBarView(
-                      children: _profileTabs(showVenueDashboard),
+                      children: _profileTabs(),
                     ),
                   ),
                 ),
@@ -311,6 +302,7 @@ class _ProfileViewState extends State<ProfileView> {
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
     final places = RepositoryProvider.of<PlacesRepository>(context);
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
@@ -319,6 +311,7 @@ class _ProfileViewState extends State<ProfileView> {
         },
         builder: (context, state) {
           final currentUser = state.currentUser;
+
           return currentUser.id != visitedUserId
               ? FutureBuilder(
                   future: databaseRepository.getUserById(visitedUserId),
@@ -331,6 +324,7 @@ class _ProfileViewState extends State<ProfileView> {
                     }
 
                     final visitedUser = snapshot.data!;
+
                     return _profilePage(
                       currentUser,
                       visitedUser,

@@ -30,6 +30,7 @@ class AllLoopsListState extends State<AllLoopsList>
 
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.offset;
+
     return currentScroll >= (maxScroll * 0.9);
   }
 
@@ -62,7 +63,7 @@ class AllLoopsListState extends State<AllLoopsList>
         return const Center(child: Text('failed to fetch loops'));
 
       case LoopsStatus.success:
-        if (state.userLoops.isEmpty || state.visitedUser.deleted == true) {
+        if (state.userLoops.isEmpty || state.visitedUser.deleted) {
           return const EasterEggPlaceholder(text: 'No loops yet...');
         }
 
@@ -94,7 +95,7 @@ class AllLoopsListState extends State<AllLoopsList>
                   childCount: state.userLoops.length,
                 ),
               ),
-            )
+            ),
           ],
         );
     }
@@ -106,6 +107,7 @@ class AllLoopsListState extends State<AllLoopsList>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: loopsList,
     );

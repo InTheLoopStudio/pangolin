@@ -13,14 +13,15 @@ class LoopFeedsListView extends StatelessWidget {
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
 
-    // TODO(loading): Initialize feeds in initial loading screen
     final followingFeed = LoopFeedView(
       sourceFunction: databaseRepository.getFollowingLoops,
       sourceStream: databaseRepository.followingLoopsObserver,
+      feedKey: 'following-feed',
     );
     final forYourFeed = LoopFeedView(
       sourceFunction: databaseRepository.getAllLoops,
       sourceStream: databaseRepository.allLoopsObserver,
+      feedKey: 'for-you-feed',
     );
 
     return Scaffold(

@@ -518,8 +518,9 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         // if (element.type == DocumentChangeType.removed) {}
       });
     }).flatMap(
-      (value) =>
-          Stream.fromIterable(value).where((loop) => loop.deleted != true),
+      (value) => Stream.fromIterable(value).where(
+        (loop) => !loop.deleted,
+      ),
     );
 
     yield* userLoopsObserver;
