@@ -21,6 +21,7 @@ class CreateLoopView extends StatelessWidget {
       selector: (state) => state as Onboarded,
       builder: (context, userState) {
         final currentUser = userState.currentUser;
+
         return BlocProvider(
           create: (context) => CreateLoopCubit(
             currentUser: currentUser,

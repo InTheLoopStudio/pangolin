@@ -12,7 +12,18 @@ class SubmitLoopButton extends StatelessWidget {
       builder: (context, state) {
         return FloatingActionButton.extended(
           // color: tappedAccent,
-          onPressed: () => context.read<CreateLoopCubit>().createLoop(),
+          onPressed: () {
+            try {
+              context.read<CreateLoopCubit>().createLoop();
+            } on Exception {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  backgroundColor: Colors.red,
+                  content: Text('Error Uploading Loop'),
+                ),
+              );
+            }
+          },
           icon: const Icon(
             Icons.edit_outlined,
           ),
