@@ -62,14 +62,14 @@ class Loop extends Equatable {
       description: doc.getOrElse('description', '') as String,
       audioPath: doc.getOrElse('audioPath', '') as String,
       imagePaths: List.from(
-        doc.getOrElse('imagePaths', <dynamic>[]) as Iterable<dynamic>,
+        doc.getOrElse('imagePaths', <String>[]) as Iterable<String>,
       ),
       timestamp: tmpTimestamp.toDate(),
       likeCount: doc.getOrElse('likeCount', 0) as int,
       commentCount: doc.getOrElse('commentCount', 0) as int,
       shareCount: doc.getOrElse('shareCount', 0) as int,
       tags: List.from(
-        doc.getOrElse('tags', <dynamic>[]) as Iterable<dynamic>,
+        doc.getOrElse('tags', <String>[]) as Iterable<String>,
       ),
       deleted: doc.getOrElse('deleted', false) as bool,
     );

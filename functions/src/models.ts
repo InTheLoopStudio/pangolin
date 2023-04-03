@@ -45,11 +45,11 @@ export type Loop = {
   id: string;
   userId: string;
   title: string;
-  audio: string;
-  likes: number;
+  audioPath: string;
+  likeCount: number;
   downloads: number;
-  comments: number;
-  shares: number;
+  commentCount: number;
+  shareCount: number;
   tags: Array<string>;
   deleted: boolean;
 };
