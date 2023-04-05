@@ -10,7 +10,12 @@ import 'package:intheloopapp/ui/widgets/search_view/by_username_results_list.dar
 import 'package:intheloopapp/ui/widgets/search_view/search_bar.dart';
 
 class SearchView extends StatefulWidget {
-  const SearchView({super.key});
+  const SearchView({
+    required this.searchFocusNode,
+    super.key,
+  });
+
+  final FocusNode searchFocusNode;
 
   @override
   // ignore: library_private_types_in_public_api
@@ -55,7 +60,9 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
           centerTitle: true,
           elevation: 0.5,
           backgroundColor: theme.colorScheme.background,
-          title: const SearchBar(),
+          title: SearchBar(
+            searchFocusNode: widget.searchFocusNode,
+          ),
           bottom: TabBar(
             controller: tabController,
             indicatorColor: tappedAccent,

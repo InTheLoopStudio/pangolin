@@ -9,13 +9,32 @@ import 'package:intheloopapp/ui/views/profile/profile_view.dart';
 import 'package:intheloopapp/ui/views/search/search_view.dart';
 import 'package:intheloopapp/ui/widgets/shell_view/bottom_toolbar.dart';
 
-class ShellView extends StatelessWidget {
+class ShellView extends StatefulWidget {
   const ShellView({
     super.key,
     this.initialTab = 0,
   });
 
   final int initialTab;
+
+  @override
+  State<ShellView> createState() => _ShellViewState();
+}
+
+class _ShellViewState extends State<ShellView> {
+  late final FocusNode searchFocusNode;
+
+  @override 
+  void initState() {
+    searchFocusNode = FocusNode();
+    super.initState();
+  }
+
+  @override 
+  void dispose() {
+    searchFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +50,9 @@ class ShellView extends StatelessWidget {
                 index: state.selectedTab,
                 children: [
                   const LoopFeedsListView(), // getstream.io activity feed?h
-                  const SearchView(),
+                  SearchView(
+                    searchFocusNode: searchFocusNode,
+                  ),
                   const BookingsView(),
                   const MessagingChannelListView(),
                   ProfileView(visitedUserId: currentUser.id),
@@ -39,6 +60,7 @@ class ShellView extends StatelessWidget {
               ),
               bottomNavigationBar: BottomToolbar(
                 user: currentUser,
+                searchFocusNode: searchFocusNode,
               ),
             );
           },

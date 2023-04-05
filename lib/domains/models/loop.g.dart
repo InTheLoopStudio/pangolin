@@ -19,7 +19,6 @@ Loop _$LoopFromJson(Map<String, dynamic> json) => Loop(
       likeCount: json['likeCount'] as int,
       commentCount: json['commentCount'] as int,
       shareCount: json['shareCount'] as int,
-      tags: (json['tags'] as List<dynamic>).map((e) => e as String).toList(),
       deleted: json['deleted'] as bool,
     );
 
@@ -34,6 +33,5 @@ Map<String, dynamic> _$LoopToJson(Loop instance) => <String, dynamic>{
       'likeCount': instance.likeCount,
       'commentCount': instance.commentCount,
       'shareCount': instance.shareCount,
-      'tags': instance.tags,
       'deleted': instance.deleted,
     };

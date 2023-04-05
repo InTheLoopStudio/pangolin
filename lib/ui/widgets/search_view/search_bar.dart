@@ -4,13 +4,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/views/search/search_cubit.dart';
 
 class SearchBar extends StatelessWidget {
-  const SearchBar({super.key});
+  const SearchBar({
+    required this.searchFocusNode,
+    super.key,
+  });
+
+  final FocusNode searchFocusNode;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
         return CupertinoSearchTextField(
+          focusNode: searchFocusNode,
           style: const TextStyle(
             color: Colors.white,
           ),

@@ -25,7 +25,7 @@ class Loop extends Equatable {
     required this.likeCount,
     required this.commentCount,
     required this.shareCount,
-    required this.tags,
+    // required this.tags,
     required this.deleted,
   });
 
@@ -41,7 +41,7 @@ class Loop extends Equatable {
         likeCount: 0,
         commentCount: 0,
         shareCount: 0,
-        tags: const [],
+        // tags: const [],
         deleted: false,
       );
 
@@ -68,9 +68,9 @@ class Loop extends Equatable {
       likeCount: doc.getOrElse('likeCount', 0) as int,
       commentCount: doc.getOrElse('commentCount', 0) as int,
       shareCount: doc.getOrElse('shareCount', 0) as int,
-      tags: List.from(
-        doc.getOrElse('tags', <String>[]) as Iterable<String>,
-      ),
+      // tags: List.from(
+      //   doc.getOrElse('tags', <dynamic>[]) as Iterable<dynamic>,
+      // ),
       deleted: doc.getOrElse('deleted', false) as bool,
     );
   }
@@ -94,7 +94,7 @@ class Loop extends Equatable {
         'likeCount': likeCount,
         'commentCount': commentCount,
         'shareCount': shareCount,
-        'tags': tags,
+        // 'tags': tags,
         'deleted': deleted,
       };
 
@@ -129,7 +129,7 @@ class Loop extends Equatable {
   final int shareCount;
 
   /// The tags associated with this [Loop]
-  final List<String> tags;
+  // final List<String> tags;
 
   /// Whether this [Loop] was deleted
   final bool deleted;
@@ -145,7 +145,7 @@ class Loop extends Equatable {
         likeCount,
         commentCount,
         shareCount,
-        tags,
+        // tags,
         deleted,
       ];
 
@@ -171,7 +171,7 @@ class Loop extends Equatable {
     int? likeCount,
     int? commentCount,
     int? shareCount,
-    List<String>? tags,
+    // List<String>? tags,
     bool? deleted,
   }) {
     return Loop(
@@ -185,7 +185,7 @@ class Loop extends Equatable {
       likeCount: likeCount ?? this.likeCount,
       commentCount: commentCount ?? this.commentCount,
       shareCount: shareCount ?? this.shareCount,
-      tags: tags ?? this.tags,
+      // tags: tags ?? this.tags,
       deleted: deleted ?? this.deleted,
     );
   }

@@ -18,6 +18,8 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
   }) : super(
           LoopContainerState(
             loop: loop,
+            likeCount: loop.likeCount,
+            commentCount: loop.commentCount,
           ),
         );
 
@@ -25,22 +27,6 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
   final AudioRepository audioRepo;
   final DatabaseRepository databaseRepository;
   final UserModel currentUser;
-
-  Future<void> initLoopLikes() async {
-    final isLiked = await databaseRepository.isLiked(
-      currentUser.id,
-      loop.id,
-    );
-
-    if (!isClosed) {
-      emit(
-        state.copyWith(
-          isLiked: isLiked,
-          likeCount: state.loop.likeCount,
-        ),
-      );
-    }
-  }
 
   void deleteLoop() {
     databaseRepository.deleteLoop(loop);

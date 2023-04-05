@@ -7,21 +7,29 @@ import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 
 class BottomToolbar extends StatelessWidget {
-  const BottomToolbar({
+  BottomToolbar({
     required this.user,
+    required this.searchFocusNode,
     super.key,
   });
 
   final UserModel user;
+  final FocusNode searchFocusNode;
+
+  final cupertinoTabController = CupertinoTabController();
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return BlocBuilder<NavigationBloc, NavigationState>(
       builder: (context, state) {
         return CupertinoTabBar(
-          onTap: (index) =>
-              context.read<NavigationBloc>().add(ChangeTab(selectedTab: index)),
+          onTap: (index) {
+            context.read<NavigationBloc>().add(
+                  ChangeTab(selectedTab: index),
+                );
+          },
           activeColor: theme.primaryColor,
           inactiveColor:
               theme.bottomNavigationBarTheme.unselectedItemColor ?? Colors.grey,
@@ -38,7 +46,12 @@ class BottomToolbar extends StatelessWidget {
                 CupertinoIcons.waveform,
               ),
             ),
-            const BottomNavigationBarItem(icon: Icon(CupertinoIcons.search)),
+            BottomNavigationBarItem(
+              icon: GestureDetector(
+                onDoubleTap: searchFocusNode.requestFocus,
+                child: const Icon(CupertinoIcons.search),
+              ),
+            ),
             const BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.tickets),
             ),
