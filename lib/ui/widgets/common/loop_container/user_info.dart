@@ -21,6 +21,7 @@ class UserInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final navigationBloc = context.read<NavigationBloc>();
     final database = context.read<DatabaseRepository>();
+
     return FutureBuilder<bool>(
       future: database.isVerified(loopUser.id),
       builder: (context, snapshot) {
@@ -73,7 +74,7 @@ class UserInfo extends StatelessWidget {
                             Icons.verified,
                             size: 14,
                             color: tappedAccent,
-                          )
+                          ),
                       ],
                     )
                   else

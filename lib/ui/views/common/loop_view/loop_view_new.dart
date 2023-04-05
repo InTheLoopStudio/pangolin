@@ -30,10 +30,12 @@ class LoopViewNew extends StatelessWidget {
     final navigationBloc = context.read<NavigationBloc>();
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
+
     return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
       selector: (state) => state as Onboarded,
       builder: (context, authState) {
         final currentUser = authState.currentUser;
+
         return FutureBuilder<UserModel?>(
           future: databaseRepository.getUserById(loop.userId),
           builder: (context, snapshot) {
@@ -68,6 +70,7 @@ class LoopViewNew extends StatelessWidget {
                       if (user == null) {
                         return const SizedBox.shrink();
                       }
+                      
                       return Scaffold(
                         backgroundColor:
                             Theme.of(context).colorScheme.background,
@@ -114,9 +117,9 @@ class LoopViewNew extends StatelessWidget {
                                         if (state.isVerified)
                                           const Icon(
                                             Icons.verified,
-                                            size: 8,
+                                            size: 14,
                                             color: tappedAccent,
-                                          )
+                                          ),
                                       ],
                                     ),
                                     Text(

@@ -62,7 +62,7 @@ class Loop extends Equatable {
       description: doc.getOrElse('description', '') as String,
       audioPath: doc.getOrElse('audioPath', '') as String,
       imagePaths: List.from(
-        doc.getOrElse('imagePaths', <String>[]) as Iterable<String>,
+        doc.getOrElse('imagePaths', <dynamic>[]) as Iterable<dynamic>,
       ),
       timestamp: tmpTimestamp.toDate(),
       likeCount: doc.getOrElse('likeCount', 0) as int,
