@@ -979,7 +979,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<void> sendBadge(String badgeId, String receiverId) async {
-    await _analytics.logEvent(name: 'create_badge');
+    await _analytics.logEvent(name: 'send_badge');
 
     await _badgesSentRef.doc(receiverId).collection('badges').doc(badgeId).set({
       'timestamp': Timestamp.now(),
@@ -1136,7 +1136,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   Future<void> createBooking(
     Booking booking,
   ) async {
-    await _analytics.logEvent(name: 'booking_request_created');
+    await _analytics.logEvent(name: 'booking_created');
     await _bookingsRef.doc(booking.id).set(booking.toMap());
   }
 

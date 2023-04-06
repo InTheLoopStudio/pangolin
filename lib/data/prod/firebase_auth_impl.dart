@@ -19,6 +19,7 @@ String _generateNonce([int length = 32]) {
   const charset =
       '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
   final random = Random.secure();
+
   return List.generate(length, (_) => charset[random.nextInt(charset.length)])
       .join();
 }
@@ -27,6 +28,7 @@ String _generateNonce([int length = 32]) {
 String _sha256ofString(String input) {
   final bytes = utf8.encode(input);
   final digest = sha256.convert(bytes);
+
   return digest.toString();
 }
 
@@ -42,6 +44,7 @@ class FirebaseAuthImpl extends AuthRepository {
   @override
   Future<bool> isSignedIn() async {
     final currentUser = _auth.currentUser;
+
     return currentUser != null;
   }
 
@@ -65,7 +68,14 @@ class FirebaseAuthImpl extends AuthRepository {
       password: password,
     );
 
-    return user.user?.uid;
+    final uid = user.user?.uid;
+
+    await _analytics.setUserId(id: uid);
+    await _analytics.logEvent(
+      name: 'sign_in',
+    );
+
+    return uid;
   }
 
   @override
@@ -90,7 +100,14 @@ class FirebaseAuthImpl extends AuthRepository {
       password: password,
     );
 
-    return user.user?.uid;
+    final uid = user.user?.uid;
+
+    await _analytics.setUserId(id: uid);
+    await _analytics.logEvent(
+      name: 'sign_in',
+    );
+
+    return uid;
   }
 
   @override
@@ -113,11 +130,12 @@ class FirebaseAuthImpl extends AuthRepository {
     final signedInUser = authResult.user;
 
     if (signedInUser != null) {
+      await _analytics.setUserId(id: signedInUser.uid);
       await _analytics.logEvent(
         name: 'sign_in',
         parameters: {'provider': 'Google'},
       );
-      await _analytics.setUserId(id: signedInUser.uid);
+
       return signedInUser.uid;
     }
 
@@ -179,9 +197,12 @@ class FirebaseAuthImpl extends AuthRepository {
     final signedInUser = authResult.user;
 
     if (signedInUser != null) {
-      await _analytics
-          .logEvent(name: 'sign_in', parameters: {'provider': 'Apple'});
       await _analytics.setUserId(id: signedInUser.uid);
+      await _analytics.logEvent(
+        name: 'sign_in',
+        parameters: {'provider': 'Apple'},
+      );
+
       return signedInUser.uid;
     }
 

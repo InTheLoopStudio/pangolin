@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_container.dart';
-import 'package:skeleton_text/skeleton_text.dart';
-import 'package:skeletons/skeletons.dart';
 
 class ListLoadingView extends StatelessWidget {
   const ListLoadingView({super.key});
