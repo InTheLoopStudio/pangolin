@@ -72,16 +72,16 @@ class _LoopFeedViewState extends State<LoopFeedView>
                       onRefresh: () async {
                         await context
                             .read<LoopFeedCubit>()
-                            .initLoops(clearLoops: false);
+                            .fetchMoreLoops();
                       },
                       child: CustomScrollView(
                         key: PageStorageKey<String>(widget.feedKey),
                         slivers: [
                           SliverOverlapInjector(
-                            // This is the flip side of the SliverOverlapAbsorber
+                          // This is the flip side of the SliverOverlapAbsorber
                             handle:
                                 NestedScrollView.sliverOverlapAbsorberHandleFor(
-                                    context),
+                                    context,),
                           ),
                           SliverPadding(
                             padding: const EdgeInsets.all(8),

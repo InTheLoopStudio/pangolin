@@ -74,7 +74,7 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
       final activities = await databaseRepository.getActivities(
         currentUserId,
         limit: 10,
-        lastActivityId: state.activities.first.id,
+        lastActivityId: state.activities.last.id,
       );
 
       activities.isEmpty

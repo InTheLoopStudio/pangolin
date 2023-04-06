@@ -77,7 +77,7 @@ class LoopFeedCubit extends Cubit<LoopFeedState> {
 
       final loops = await sourceFunction(
         currentUserId,
-        lastLoopId: state.loops.first.id,
+        lastLoopId: state.loops.last.id,
       );
       loops.isEmpty
           ? emit(state.copyWith(hasReachedMax: true))

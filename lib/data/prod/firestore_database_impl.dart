@@ -542,11 +542,12 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       final followingLoops = await Future.wait(
         userFeedLoops.docs.map((doc) async {
           final loop = await getLoopById(doc.id, ignoreCache: ignoreCache);
+
           return loop;
         }),
       );
 
-      return followingLoops.where((loop) => loop.deleted != true).toList();
+      return followingLoops.where((loop) => !loop.deleted).toList();
     } else {
       final userFeedLoops = await _feedRefs
           .doc(currentUserId)
@@ -558,11 +559,12 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       final followingLoops = await Future.wait(
         userFeedLoops.docs.map((doc) async {
           final loop = await getLoopById(doc.id, ignoreCache: ignoreCache);
+
           return loop;
         }),
       );
 
-      return followingLoops.where((loop) => loop.deleted != true).toList();
+      return followingLoops.where((loop) => !loop.deleted).toList();
     }
   }
 
@@ -595,8 +597,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         // if (element.type == DocumentChangeType.removed) {}
       });
     }).flatMap(
-      (value) =>
-          Stream.fromFutures(value).where((loop) => !loop.deleted),
+      (value) => Stream.fromFutures(value).where((loop) => !loop.deleted),
     );
 
     yield* userFeedLoopsObserver;
@@ -1219,6 +1220,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     await _bookingsRef.doc(booking.id).set(booking.toMap());
   }
 }
+
 class HandleAlreadyExistsException implements Exception {
   HandleAlreadyExistsException(this.cause);
   String cause;
