@@ -91,7 +91,6 @@ class CommentsCubit extends Cubit<CommentsState> {
         state.copyWith(
           loading: false,
           commentsCount: state.commentsCount + 1,
-          comments: state.comments..add(comment),
         ),
       );
     }
