@@ -835,7 +835,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     await _analytics.logEvent(
       name: 'activity_read',
       parameters: {
-        'activity': activity.id,
+        'activity_id': activity.id,
       },
     );
     await _activitiesRef.doc(activity.id).update({
@@ -967,7 +967,13 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<void> createBadge(Badge badge) async {
-    await _analytics.logEvent(name: 'create_badge');
+    await _analytics.logEvent(
+      name: 'create_badge',
+      parameters: {
+        'badge_id': badge.id,
+        'creator_id': badge.creatorId,
+      },
+    );
     await _badgesRef.doc(badge.id).set({
       'name': badge.name,
       'description': badge.description,
@@ -979,7 +985,13 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<void> sendBadge(String badgeId, String receiverId) async {
-    await _analytics.logEvent(name: 'send_badge');
+    await _analytics.logEvent(
+      name: 'send_badge',
+      parameters: {
+        'badge_id': badgeId,
+        'receiver_id': receiverId,
+      },
+    );
 
     await _badgesSentRef.doc(receiverId).collection('badges').doc(badgeId).set({
       'timestamp': Timestamp.now(),
@@ -1136,7 +1148,16 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   Future<void> createBooking(
     Booking booking,
   ) async {
-    await _analytics.logEvent(name: 'booking_created');
+    await _analytics.logEvent(
+      name: 'booking_created',
+      parameters: {
+        'requester_id': booking.requesterId,
+        'requestee_id': booking.requesteeId,
+        'rate': booking.rate,
+        'total': booking.totalCost,
+        'booking_id': booking.id,
+      },
+    );
     await _bookingsRef.doc(booking.id).set(booking.toMap());
   }
 

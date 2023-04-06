@@ -4,6 +4,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -15,6 +16,8 @@ class ActivityTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final navigationBloc = context.read<NavigationBloc>();
+
     return BlocBuilder<ActivityBloc, ActivityState>(
       builder: (context, state) {
         final databaseRepository = context.read<DatabaseRepository>();
@@ -33,7 +36,7 @@ class ActivityTile extends StatelessWidget {
             } else {
               final user = snapshot.data!;
 
-              if (user.deleted == true) {
+              if (user.deleted) {
                 return const SizedBox.shrink();
               }
 
@@ -41,13 +44,7 @@ class ActivityTile extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute<ProfileView>(
-                          builder: (context) => ProfileView(
-                            visitedUserId: user.id,
-                          ),
-                        ),
-                      );
+                      navigationBloc.add(PushProfile(user.id));
                     },
                     child: ListTile(
                       leading: UserAvatar(

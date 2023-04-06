@@ -74,6 +74,7 @@ class TappedApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     initializeDateFormatting('en-US');
+
     return MultiRepositoryProvider(
       providers: buildRepositories(streamChatClient: _client),
       child: MultiBlocProvider(
@@ -84,6 +85,7 @@ class TappedApp extends StatelessWidget {
                 isDarkSnapshot ? Themes.themeDark : Themes.themeLight;
             final defaultStreamTheme = StreamChatThemeData.fromTheme(appTheme);
             final streamTheme = defaultStreamTheme;
+
             return MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'Tapped',

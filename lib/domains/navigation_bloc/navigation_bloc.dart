@@ -34,6 +34,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<PushLoop>((event, emit) {
       navigationKey.currentState?.push(
         MaterialPageRoute<LoopViewNew>(
+          settings: RouteSettings(name: '/loop/${event.loop.id}'),
           builder: (context) => Material(
             child: LoopViewNew(
               loop: event.loop,
@@ -46,6 +47,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<PushBadge>((event, emit) {
       navigationKey.currentState?.push(
         MaterialPageRoute<BadgeView>(
+          settings: RouteSettings(name: '/badge/${event.badge.id}'),
           builder: (context) => Material(
             child: BadgeView(
               badge: event.badge,
@@ -58,6 +60,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<PushProfile>((event, emit) {
       navigationKey.currentState?.push(
         MaterialPageRoute<ProfileView>(
+          settings: const RouteSettings(name: '/profile'),
           builder: (context) => ProfileView(visitedUserId: event.userId),
         ),
       );
@@ -74,9 +77,8 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<PushActivity>((event, emit) {
       navigationKey.currentState?.push(
         MaterialPageRoute<ActivityView>(
-          builder: (context) => const Material(
-            child: ActivityView(),
-          ),
+          settings: const RouteSettings(name: '/activities'),
+          builder: (context) => const ActivityView(),
         ),
       );
       emit(state);
@@ -84,9 +86,8 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<PushForgotPassword>((event, emit) {
       navigationKey.currentState?.push(
         MaterialPageRoute<ForgotPasswordView>(
-          builder: (context) => const Material(
-            child: ForgotPasswordView(),
-          ),
+          settings: const RouteSettings(name: '/forgot-password'),
+          builder: (context) => const ForgotPasswordView(),
         ),
       );
       emit(state);
@@ -94,9 +95,8 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<PushSignUp>((event, emit) {
       navigationKey.currentState?.push(
         MaterialPageRoute<SignUpView>(
-          builder: (context) => const Material(
-            child: SignUpView(),
-          ),
+          settings: const RouteSettings(name: '/sign-up'),
+          builder: (context) => const SignUpView(),
         ),
       );
       emit(state);
@@ -104,6 +104,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<PushOnboarding>((event, emit) {
       navigationKey.currentState?.push(
         MaterialPageRoute<OnboardingView>(
+          settings: const RouteSettings(name: '/onboarding'),
           builder: (context) => const OnboardingView(),
         ),
       );
@@ -113,6 +114,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<PushLikes>((event, emit) {
       navigationKey.currentState?.push(
         MaterialPageRoute<PushLikes>(
+          settings: RouteSettings(name: '/likes/${event.loop.id}'),
           builder: (context) => LikesView(loop: event.loop),
         ),
       );
@@ -122,6 +124,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<PushCreateLoop>((event, emit) {
       navigationKey.currentState?.push(
         MaterialPageRoute<CreateLoopView>(
+          settings: const RouteSettings(name: '/create-loop'),
           builder: (context) => const CreateLoopView(),
         ),
       );
@@ -131,6 +134,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<PushStreamChannel>((event, emit) {
       navigationKey.currentState?.push(
         MaterialPageRoute<StreamChannel>(
+          settings: RouteSettings(name: '/channel/${event.channel.id}'),
           builder: (context) => StreamChannel(
             channel: event.channel,
             child: const ChannelView(),
@@ -143,6 +147,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<PushCreateBooking>((event, emit) {
       navigationKey.currentState?.push(
         MaterialPageRoute<CreateBookingView>(
+          settings: const RouteSettings(name: '/create-booking'),
           builder: (context) => CreateBookingView(
             requesteeId: event.requesteeId,
             requesteeStripeConnectedAccountId:
@@ -157,6 +162,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<PushBooking>((event, emit) {
       navigationKey.currentState?.push(
         MaterialPageRoute<BookingView>(
+          settings: RouteSettings(name: '/booking/${event.booking.id}'),
           builder: (context) => BookingView(
             booking: event.booking,
           ),
@@ -168,6 +174,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<PushLocationForm>((event, emit) {
       navigationKey.currentState?.push(
         MaterialPageRoute<LocationFormView>(
+          settings: const RouteSettings(name: '/location-form'),
           builder: (context) => LocationFormView(
             initialPlaceId: event.initialPlaceId,
             initialPlace: event.initialPlace,

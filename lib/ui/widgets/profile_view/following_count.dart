@@ -15,6 +15,7 @@ class FollowingCount extends StatelessWidget {
           onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute<FollowRelationshipView>(
+                settings: RouteSettings(name: '/following/${state.visitedUser.username}'),
                 builder: (context) => FollowRelationshipView(
                   visitedUserId: state.visitedUser.id,
                   initialIndex: 1,

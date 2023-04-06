@@ -2,6 +2,7 @@ import 'package:cancelable_retry/cancelable_retry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
 import 'package:intheloopapp/ui/views/messaging/channel_preview.dart';
@@ -14,6 +15,8 @@ class ChannelListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final navigationBloc = context.read<NavigationBloc>();
+
     return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
       selector: (state) => state as Onboarded,
       builder: (context, userState) {
@@ -21,7 +24,7 @@ class ChannelListView extends StatelessWidget {
 
         final future = CancelableRetry(
           () => context.read<StreamRepository>().connectUser(currentUser.id),
-          retryIf: (result) => result == false,
+          retryIf: (result) => !result,
         );
 
         return FutureBuilder<bool>(
@@ -52,16 +55,7 @@ class ChannelListView extends StatelessWidget {
                 return ChannelPreview(channel: channel);
               },
               onChannelTap: (channel) {
-                Navigator.of(context).push(
-                  MaterialPageRoute<StreamChannel>(
-                    builder: (context) {
-                      return StreamChannel(
-                        channel: channel,
-                        child: const ChannelView(),
-                      );
-                    },
-                  ),
-                );
+                navigationBloc.add(PushStreamChannel(channel));
               },
             );
           },

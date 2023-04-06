@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view_cubit.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
@@ -17,6 +18,8 @@ class AudioDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final navigationBloc = context.read<NavigationBloc>();
+
     return BlocBuilder<LoopViewCubit, LoopViewState>(
       builder: (context, state) {
         return Container(
@@ -29,13 +32,7 @@ class AudioDescription extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute<ProfileView>(
-                      builder: (context) => ProfileView(
-                        visitedUserId: user.id,
-                      ),
-                    ),
-                  );
+                  navigationBloc.add(PushProfile(user.id));
                 },
                 child: Row(
                   children: [
@@ -55,7 +52,7 @@ class AudioDescription extends StatelessWidget {
                         color: tappedAccent,
                       )
                     else
-                      const SizedBox.shrink()
+                      const SizedBox.shrink(),
                   ],
                 ),
               ),
