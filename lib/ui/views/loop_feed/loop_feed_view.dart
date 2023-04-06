@@ -72,7 +72,7 @@ class _LoopFeedViewState extends State<LoopFeedView>
                       onRefresh: () async {
                         await context
                             .read<LoopFeedCubit>()
-                            .fetchMoreLoops();
+                            .initLoops();
                       },
                       child: CustomScrollView(
                         key: PageStorageKey<String>(widget.feedKey),
