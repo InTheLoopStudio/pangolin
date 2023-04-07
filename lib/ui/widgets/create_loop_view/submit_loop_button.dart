@@ -28,7 +28,9 @@ class SubmitLoopButton extends StatelessWidget {
             Icons.edit_outlined,
           ),
           label: state.status.isInProgress
-              ? const CircularProgressIndicator()
+              ? const CircularProgressIndicator(
+                color: Colors.white,
+              )
               : const Text('Create Loop'),
         );
       },

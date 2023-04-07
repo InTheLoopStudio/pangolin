@@ -7,10 +7,10 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/create_loop/cubit/create_loop_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
+import 'package:intheloopapp/ui/widgets/create_loop_view/attachments.dart';
 import 'package:intheloopapp/ui/widgets/create_loop_view/loop_description_text_field.dart';
 import 'package:intheloopapp/ui/widgets/create_loop_view/loop_title_text_field.dart';
 import 'package:intheloopapp/ui/widgets/create_loop_view/submit_loop_button.dart';
-import 'package:intheloopapp/ui/widgets/create_loop_view/upload_audio_button.dart';
 
 class CreateLoopView extends StatelessWidget {
   const CreateLoopView({super.key});
@@ -78,7 +78,7 @@ class CreateLoopView extends StatelessWidget {
                     SizedBox(
                       height: 24,
                     ),
-                    UploadAudioButton(),
+                    Attachments(),
                   ],
                 ),
               ),

@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
 import 'package:uuid/uuid.dart';
 
 final storageRef = FirebaseStorage.instance.ref();
@@ -37,17 +38,35 @@ class FirebaseStorageImpl extends StorageRepository {
       '$path/img_$photoId.jpg',
       quality: 70,
     );
+
     return compressedImage!;
   }
 
   @override
-  Future<String> uploadLoop(String userId, File audioFile) async {
-    final prefix = userId.isEmpty ? 'audio/loops' : 'audio/loops/$userId';
+  Future<String> uploadAudioAttachment(File audioFile) async {
+    final extension = p.extension(audioFile.path);
+    const prefix = 'audio/loops';
 
     final uniqueAudioId = const Uuid().v4();
 
     final uploadTask =
-        storageRef.child('$prefix/loop_$uniqueAudioId.mp3').putFile(audioFile);
+        storageRef.child('$prefix/loop_$uniqueAudioId.$extension').putFile(audioFile);
+
+    final taskSnapshot = await uploadTask.whenComplete(() => null);
+    final downloadUrl = await taskSnapshot.ref.getDownloadURL();
+
+    return downloadUrl;
+  }
+
+  @override
+  Future<String> uploadImageAttachment(File imageFile) async {
+    final extension = p.extension(imageFile.path);
+    const prefix = 'images/loops';
+    final uniqueImageId = const Uuid().v4();
+
+    final uploadTask = storageRef
+        .child('$prefix/loop_$uniqueImageId.$extension')
+        .putFile(imageFile);
 
     final taskSnapshot = await uploadTask.whenComplete(() => null);
     final downloadUrl = await taskSnapshot.ref.getDownloadURL();

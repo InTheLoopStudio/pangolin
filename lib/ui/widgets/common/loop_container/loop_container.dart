@@ -9,6 +9,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_container.dart';
+import 'package:intheloopapp/ui/widgets/common/loop_container/attachments.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/audio_controls.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/control_buttons.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container_cubit.dart';
@@ -60,11 +61,9 @@ class LoopContainer extends StatelessWidget {
                 )
               else
                 const SizedBox.shrink(),
-              AudioControls(
-                audioPath: loop.audioPath,
-                title: loop.title,
-                artist: loopUser.displayName,
-                profilePicture: loopUser.profilePicture,
+              Attachments(
+                loop: loop,
+                loopUser: loopUser,
               ),
               ControlButtons(
                 loopId: loop.id,

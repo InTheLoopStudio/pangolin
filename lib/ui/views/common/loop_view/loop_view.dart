@@ -13,12 +13,13 @@ import 'package:intheloopapp/ui/views/common/loading/loop_loading_view.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view_cubit.dart';
 import 'package:intheloopapp/ui/widgets/comments/comments_list.dart';
 import 'package:intheloopapp/ui/widgets/comments/comments_text_field.dart';
+import 'package:intheloopapp/ui/widgets/common/loop_container/attachments.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/audio_controls.dart';
 import 'package:linkify_text/linkify_text.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class LoopViewNew extends StatelessWidget {
-  const LoopViewNew({
+class LoopView extends StatelessWidget {
+  const LoopView({
     required this.loop,
     super.key,
   });
@@ -70,7 +71,7 @@ class LoopViewNew extends StatelessWidget {
                       if (user == null) {
                         return const SizedBox.shrink();
                       }
-                      
+
                       return Scaffold(
                         backgroundColor:
                             Theme.of(context).colorScheme.background,
@@ -176,11 +177,9 @@ class LoopViewNew extends StatelessWidget {
                                   fontSize: 14,
                                 ),
                                 const SizedBox(height: 14),
-                                AudioControls(
-                                  audioPath: loop.audioPath,
-                                  artist: user.displayName,
-                                  title: loop.title,
-                                  profilePicture: user.profilePicture,
+                                Attachments(
+                                  loop: loop,
+                                  loopUser: user,
                                 ),
                                 Row(
                                   children: [

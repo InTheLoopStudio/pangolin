@@ -65,20 +65,30 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
       throw Exception('Audio is too large, must be under 10 minutes');
     }
 
-    final audioPath = await storageRepository.uploadLoop(
-      currentUser.id,
+    final audioPath = await storageRepository.uploadAudioAttachment(
       state.pickedAudio!,
     );
 
     return audioPath;
   }
 
+  Future<String> getImagePath() async {
+    if (state.pickedImage == null) {
+      return '';
+    }
+
+    final imagePath = await storageRepository.uploadImageAttachment(
+      state.pickedImage!,
+    );
+
+    return imagePath;
+  }
+
   /// opens a user's gallery to upload audio
   Future<void> handleAudioFromFiles() async {
     try {
       final audioFileResult = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['mp3'],
+        type: FileType.audio,
       );
       if (audioFileResult != null) {
         final pickedAudioName =
@@ -111,6 +121,30 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
     }
   }
 
+  /// opens a user's gallery to upload image
+  Future<void> handleImageFromFiles() async {
+    try {
+      final fileResult = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+      );
+      if (fileResult != null) {
+        final pickedImage = File(fileResult.files.single.path!);
+
+        emit(
+          state.copyWith(
+            pickedImage: pickedImage,
+          ),
+        );
+      }
+    } catch (error) {
+      emit(
+        state.copyWith(
+          status: FormzSubmissionStatus.failure,
+        ),
+      );
+    }
+  }
+
   Future<void> createLoop() async {
     try {
       if (state.status.isInProgress) return;
@@ -126,14 +160,16 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
       );
 
       // Just settings the audio to get the duration
-      final audioPath = state.pickedAudio != null
-          ? await getAudioPath()
-          : '';
+      final audioPath = state.pickedAudio != null ? await getAudioPath() : '';
+
+      // Just settings the audio to get the duration
+      final imagePath = state.pickedImage != null ? await getImagePath() : '';
 
       final loop = Loop.empty().copyWith(
         title: state.title.value,
         description: state.description.value,
         audioPath: audioPath,
+        imagePaths: [imagePath],
         userId: currentUser.id,
         // tags: state.selectedTags.map((tag) => tag.value).toList(),
       );
