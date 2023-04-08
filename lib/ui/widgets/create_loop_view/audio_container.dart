@@ -67,7 +67,7 @@ class _AudioContainerState extends State<AudioContainer>
                                     height: 48,
                                     child: const CircularProgressIndicator(),
                                   );
-                                } else if (playing != true) {
+                                } else if (!playing) {
                                   return IconButton(
                                     icon: const Icon(Icons.play_arrow),
                                     iconSize: 48,

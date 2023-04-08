@@ -14,6 +14,7 @@ class CommentContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
+
     return FutureBuilder<UserModel?>(
       future: databaseRepository.getUserById(comment.userId),
       builder: (context, snapshot) {

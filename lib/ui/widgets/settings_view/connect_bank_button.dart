@@ -40,7 +40,7 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
           // create connected account
           final res = await payments.createConnectedAccount();
 
-          if (res.success != true) {
+          if (!res.success) {
             // show error
           }
 
@@ -68,6 +68,7 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
   @override
   Widget build(BuildContext context) {
     final payments = RepositoryProvider.of<PaymentRepository>(context);
+
     return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
       selector: (state) => state as Onboarded,
       builder: (context, state) {

@@ -25,6 +25,7 @@ class _ActivityListState extends State<ActivityList> {
 
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.offset;
+
     return currentScroll >= (maxScroll * 0.9);
   }
 
@@ -83,6 +84,7 @@ class _ActivityListState extends State<ActivityList> {
                         SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (BuildContext context, int index) {
+
                               return index >= state.activities.length
                                   ? const Center(
                                       child: SizedBox(
@@ -107,6 +109,7 @@ class _ActivityListState extends State<ActivityList> {
             ),
           );
         }
+
         return const ListLoadingView();
       },
     );
