@@ -36,6 +36,7 @@ class LoopFeedsListView extends StatelessWidget {
         length: 2,
         initialIndex: 1,
         child: NestedScrollView(
+          physics: const ClampingScrollPhysics(),
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
               const SliverAppBar(

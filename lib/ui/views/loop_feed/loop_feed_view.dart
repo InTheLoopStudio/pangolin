@@ -75,6 +75,7 @@ class _LoopFeedViewState extends State<LoopFeedView>
                             .initLoops();
                       },
                       child: CustomScrollView(
+                        physics: const ClampingScrollPhysics(),
                         key: PageStorageKey<String>(widget.feedKey),
                         slivers: [
                           SliverOverlapInjector(
