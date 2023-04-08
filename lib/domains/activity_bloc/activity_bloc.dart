@@ -57,7 +57,7 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
     await for (final activity in activityStream) {
       emit(
         ActivitySuccess(
-          activities: List.of(state.activities)..add(activity),
+          activities: List.of(state.activities)..insert(0, activity),
         ),
       );
     }

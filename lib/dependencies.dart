@@ -116,7 +116,7 @@ List<BlocProvider> buildBlocs({
       create: (context) => ActivityBloc(
         databaseRepository: context.read<DatabaseRepository>(),
         authenticationBloc: context.read<AuthenticationBloc>(),
-      )..add(InitListenerEvent()),
+      ),
     ),
   ];
 }
