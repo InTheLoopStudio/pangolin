@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:intheloopapp/data/dynamic_link_repository.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
 final _dynamicLinks = FirebaseDynamicLinks.instance;
+final _analytics = FirebaseAnalytics.instance;
 
 /// The Firebase dynamic link implementation for Dynamic Link
 ///
@@ -24,14 +26,14 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
     }
 
     _dynamicLinks.onLink
-        .listen((PendingDynamicLinkData? dynamicLinkData) async {
+        .listen((PendingDynamicLinkData? dynamicLinkData) {
       final redirect = _handleDeepLink(dynamicLinkData);
 
       if (redirect != null) {
         dynamicLinkStream.add(redirect);
       }
     }).onError(
-      (error) async {},
+      (error) {},
     );
 
     yield* dynamicLinkStream.stream;
@@ -114,6 +116,12 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
     final shortDynamicLink = await _dynamicLinks.buildShortLink(parameters);
     final shortUrl = shortDynamicLink.shortUrl;
 
+    await _analytics.logShare(
+      contentType: 'loop',
+      itemId: loop.id,
+      method: 'dynamic_link',
+    );
+
     return shortUrl.toString();
   }
 
@@ -137,6 +145,12 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
 
     final shortDynamicLink = await _dynamicLinks.buildShortLink(parameters);
     final shortUrl = shortDynamicLink.shortUrl;
+
+    await _analytics.logShare(
+      contentType: 'user',
+      itemId: user.id,
+      method: 'dynamic_link',
+    );
 
     return shortUrl.toString();
   }
