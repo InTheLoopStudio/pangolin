@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:intheloopapp/firebase_options.dart';
 import 'package:intheloopapp/data/notification_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/dependencies.dart';
@@ -32,7 +33,9 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background,
   // such as Firestore, make sure you call
   // `initializeApp` before using other Firebase services.
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
 
 Future<void> main() async {
@@ -44,7 +47,15 @@ Future<void> main() async {
         : await getTemporaryDirectory(),
   );
 
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
 
   // Keep the app in portrait mode (no landscape)
   await SystemChrome.setPreferredOrientations([

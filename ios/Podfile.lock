@@ -685,6 +685,9 @@ PODS:
   - Firebase/Messaging (10.7.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 10.7.0)
+  - Firebase/Performance (10.7.0):
+    - Firebase/CoreOnly
+    - FirebasePerformance (~> 10.7.0)
   - Firebase/RemoteConfig (10.7.0):
     - Firebase/CoreOnly
     - FirebaseRemoteConfig (~> 10.7.0)
@@ -712,6 +715,10 @@ PODS:
     - Flutter
   - firebase_messaging (14.4.0):
     - Firebase/Messaging (= 10.7.0)
+    - firebase_core
+    - Flutter
+  - firebase_performance (0.9.1):
+    - Firebase/Performance (= 10.7.0)
     - firebase_core
     - Flutter
   - firebase_remote_config (4.0.0):
@@ -803,6 +810,16 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 7.8)
     - nanopb (< 2.30910.0, >= 2.30908.0)
   - FirebaseMessagingInterop (10.7.0)
+  - FirebasePerformance (10.7.0):
+    - FirebaseCore (~> 10.5)
+    - FirebaseInstallations (~> 10.0)
+    - FirebaseRemoteConfig (~> 10.0)
+    - FirebaseSessions (~> 10.5)
+    - GoogleDataTransport (~> 9.2)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/ISASwizzler (~> 7.8)
+    - GoogleUtilities/MethodSwizzler (~> 7.8)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
   - FirebaseRemoteConfig (10.7.0):
     - FirebaseABTesting (~> 10.0)
     - FirebaseCore (~> 10.0)
@@ -876,6 +893,7 @@ PODS:
     - GoogleUtilities/Network
   - GoogleUtilities/Environment (7.11.0):
     - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/ISASwizzler (7.11.0)
   - GoogleUtilities/Logger (7.11.0):
     - GoogleUtilities/Environment
   - GoogleUtilities/MethodSwizzler (7.11.0):
@@ -1060,6 +1078,7 @@ DEPENDENCIES:
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - firebase_dynamic_links (from `.symlinks/plugins/firebase_dynamic_links/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
+  - firebase_performance (from `.symlinks/plugins/firebase_performance/ios`)
   - firebase_remote_config (from `.symlinks/plugins/firebase_remote_config/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
@@ -1105,6 +1124,7 @@ SPEC REPOS:
     - FirebaseInstallations
     - FirebaseMessaging
     - FirebaseMessagingInterop
+    - FirebasePerformance
     - FirebaseRemoteConfig
     - FirebaseSessions
     - FirebaseSharedSwift
@@ -1166,6 +1186,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_dynamic_links/ios"
   firebase_messaging:
     :path: ".symlinks/plugins/firebase_messaging/ios"
+  firebase_performance:
+    :path: ".symlinks/plugins/firebase_performance/ios"
   firebase_remote_config:
     :path: ".symlinks/plugins/firebase_remote_config/ios"
   firebase_storage:
@@ -1229,6 +1251,7 @@ SPEC CHECKSUMS:
   firebase_crashlytics: 4c90334dc536ffa73b92f3e978426a0d1e339c74
   firebase_dynamic_links: eb6716a5419a7b1ad5ef4860c84290c48a30be91
   firebase_messaging: 45c0514ca78426630338a42fb7b55af962c7ccd2
+  firebase_performance: 5f227f9d3c97ede796821299aabbe75e42dc3629
   firebase_remote_config: 1d886366a02d15bdca4e1997b38e502722e8dc39
   firebase_storage: 3419feab3ca832a07bdff5307477e0b9d20eb5f8
   FirebaseABTesting: 76c8297fd026074e0366dc941d265d1be80a56d5
@@ -1246,6 +1269,7 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 59c0e4c7a816a0f76710d83f77e5369b3e45eb96
   FirebaseMessaging: ac9062bcc35ed56e15a0241d8fd317022499baf8
   FirebaseMessagingInterop: c49e2766f4059ea4ef9e7c7764ed741a14aaeded
+  FirebasePerformance: 8281bbaf08aad194001018b932115b7d58a6f00b
   FirebaseRemoteConfig: d5de62211e2eaa2152d8ee85a23c301b70887a74
   FirebaseSessions: 34e5c084da010ef3802cbc062b822e513c9e6318
   FirebaseSharedSwift: 993e46657e34f14fe497c4a43c1f9608dabfb2e5

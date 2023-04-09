@@ -17,11 +17,12 @@ extension DefaultValue<V> on DocumentSnapshot<Map<String, dynamic>> {
   /// a custom migration script doesn't need to be made every time
   /// and can instead just set its default client-side
   V getOrElse(String key, V defaultValue) {
-    if (data() != null && data()!.containsKey(key)) {
-      return (data()![key] ?? defaultValue) as V;
-    } else {
-      return defaultValue;
-    }
+
+    final data = this.data();
+
+    return data != null && data.containsKey(key)
+        ? (data[key] ?? defaultValue) as V
+        : defaultValue;
   }
 }
 
@@ -38,11 +39,9 @@ String formatDate(DateTime date) {
 String formatDateSameWeek(DateTime date) {
   DateFormat dateFormat;
 
-  if (date.day == DateTime.now().day) {
-    dateFormat = DateFormat('hh:mm a');
-  } else {
-    dateFormat = DateFormat('EEEE, hh:mm a');
-  }
+  dateFormat = date.day == DateTime.now().day
+      ? DateFormat('hh:mm a')
+      : DateFormat('EEEE, hh:mm a');
 
   return dateFormat.format(date);
 }
@@ -69,6 +68,7 @@ String geocodeEncode({
 
 LatLng geocodeDecode(String geohash) {
   final decoded = georange.decode(geohash);
+
   return LatLng(
     lng: decoded.longitude,
     lat: decoded.latitude,
