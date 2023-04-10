@@ -51,13 +51,12 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
       emit(const ActivitySuccess());
     }
 
-    final activityStream =
-        databaseRepository.activitiesObserver(currentUserId);
+    final activityStream = databaseRepository.activitiesObserver(currentUserId);
 
     await for (final activity in activityStream) {
       emit(
         ActivitySuccess(
-          activities: List.of(state.activities)..insert(0, activity),
+          activities: List.of(state.activities)..add(activity),
         ),
       );
     }
@@ -73,7 +72,6 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
 
       final activities = await databaseRepository.getActivities(
         currentUserId,
-        limit: 10,
         lastActivityId: state.activities.last.id,
       );
 

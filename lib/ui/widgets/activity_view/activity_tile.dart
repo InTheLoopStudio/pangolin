@@ -17,17 +17,10 @@ class ActivityTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final navigationBloc = context.read<NavigationBloc>();
+    final databaseRepository = context.read<DatabaseRepository>();
 
     return BlocBuilder<ActivityBloc, ActivityState>(
       builder: (context, state) {
-        final databaseRepository = context.read<DatabaseRepository>();
-
-        if (!activity.markedRead) {
-          context
-              .read<ActivityBloc>()
-              .add(MarkActivityAsReadEvent(activity: activity));
-        }
-
         return FutureBuilder(
           future: databaseRepository.getUserById(activity.fromUserId),
           builder: (BuildContext context, AsyncSnapshot<UserModel?> snapshot) {
@@ -38,6 +31,12 @@ class ActivityTile extends StatelessWidget {
 
               if (user.deleted) {
                 return const SizedBox.shrink();
+              }
+
+              if (!activity.markedRead) {
+                context
+                    .read<ActivityBloc>()
+                    .add(MarkActivityAsReadEvent(activity: activity));
               }
 
               return Column(

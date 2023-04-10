@@ -9,6 +9,7 @@ dependencies:
   algolia: ^1.0.1
   animations: ^2.0.1
   audio_service: ^0.18.9
+  badges: ^3.0.3
   bloc: ^8.1.0
   bloc_test: ^9.1.0
   cached_network_image: ^3.1.0
