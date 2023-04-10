@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/dynamic_link_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/ui/widgets/common/loop_container/like_button.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container_cubit.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -38,27 +39,10 @@ class ControlButtons extends StatelessWidget {
 
             return Row(
               children: [
-                GestureDetector(
-                  onTap: () =>
-                      context.read<LoopContainerCubit>().toggleLoopLike(),
-                  child: isLiked!
-                      ? const Icon(
-                          CupertinoIcons.heart_fill,
-                          size: 18,
-                          color: Colors.red,
-                        )
-                      : const Icon(
-                          CupertinoIcons.heart,
-                          size: 18,
-                          color: Color(0xFF757575),
-                        ),
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  '${state.likeCount}',
-                  style: TextStyle(
-                    color: isLiked ? Colors.red : const Color(0xFF757575),
-                  ),
+                LikeButton(
+                  isLiked: isLiked,
+                  likeCount: state.likeCount,
+                  onLike: context.read<LoopContainerCubit>().toggleLoopLike,
                 ),
                 const SizedBox(width: 12),
                 GestureDetector(

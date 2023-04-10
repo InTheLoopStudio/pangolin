@@ -1,6 +1,6 @@
+import 'package:badges/badges.dart' as badges;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:badges/badges.dart' as badges;
 import 'package:intheloopapp/ui/themes.dart';
 
 class UserAvatar extends StatelessWidget {

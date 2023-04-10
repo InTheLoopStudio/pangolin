@@ -6,6 +6,7 @@ import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
 import 'package:intheloopapp/ui/views/common/loading/list_loading_view.dart';
 import 'package:intheloopapp/ui/widgets/activity_view/activity_tile.dart';
+import 'package:skeletons/skeletons.dart';
 
 class ActivityList extends StatefulWidget {
   const ActivityList({super.key});
@@ -54,7 +55,7 @@ class _ActivityListState extends State<ActivityList> {
     return BlocBuilder<ActivityBloc, ActivityState>(
       builder: (context, state) {
         if (state is ActivityInitial) {
-          return const ListLoadingView();
+          return SkeletonListView();
         }
         if (state is ActivityFailure) {
           return const Center(child: Text('failed to fetch activities'));
