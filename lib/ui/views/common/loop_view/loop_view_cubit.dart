@@ -27,6 +27,8 @@ class LoopViewCubit extends Cubit<LoopViewState> {
             feedId: feedId,
             user: user,
             showComments: showComments,
+            commentsCount: loop.commentCount,
+            likeCount: loop.likeCount,
           ),
         );
 
@@ -45,16 +47,6 @@ class LoopViewCubit extends Cubit<LoopViewState> {
   Future<void> close() async {
     await state.audioController?.dispose();
     await super.close();
-  }
-
-  void nextLoop() {
-    if (pageController != null) {
-      state.audioController?.pause();
-      pageController?.nextPage(
-        duration: const Duration(milliseconds: 400),
-        curve: Curves.easeInOut,
-      );
-    }
   }
 
   Future<void> checkVerified() async {
@@ -129,16 +121,12 @@ class LoopViewCubit extends Cubit<LoopViewState> {
       currentUser.id,
       loop.id,
     );
-    emit(state.copyWith(isLiked: isLiked, likeCount: loop.likeCount));
-  }
-
-  Future<void> checkIsVerified() async {
-    final isVerified = await databaseRepository.isVerified(loop.userId);
-    emit(state.copyWith(isVerified: isVerified));
-  }
-  
-  void initLoopComments() {
-    emit(state.copyWith(commentsCount: loop.commentCount));
+    emit(
+      state.copyWith(
+        isLiked: isLiked,
+        likeCount: loop.likeCount,
+      ),
+    );
   }
 
   Future<void> toggleLikeLoop() async {

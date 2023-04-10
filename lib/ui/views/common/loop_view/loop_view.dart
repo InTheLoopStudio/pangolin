@@ -14,7 +14,7 @@ import 'package:intheloopapp/ui/views/common/loop_view/loop_view_cubit.dart';
 import 'package:intheloopapp/ui/widgets/comments/comments_list.dart';
 import 'package:intheloopapp/ui/widgets/comments/comments_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/attachments.dart';
-import 'package:intheloopapp/ui/widgets/common/loop_container/audio_controls.dart';
+import 'package:intheloopapp/ui/widgets/common/loop_container/like_button.dart';
 import 'package:linkify_text/linkify_text.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -183,30 +183,12 @@ class LoopView extends StatelessWidget {
                                 ),
                                 Row(
                                   children: [
-                                    GestureDetector(
-                                      onTap: () => context
+                                    LikeButton(
+                                      onLike: () => context
                                           .read<LoopViewCubit>()
-                                          .toggleLikeLoop(),
-                                      child: state.isLiked
-                                          ? const Icon(
-                                              CupertinoIcons.heart_fill,
-                                              size: 18,
-                                              color: Colors.red,
-                                            )
-                                          : const Icon(
-                                              CupertinoIcons.heart,
-                                              size: 18,
-                                              color: Color(0xFF757575),
-                                            ),
-                                    ),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      '${state.likeCount}',
-                                      style: TextStyle(
-                                        color: state.isLiked
-                                            ? Colors.red
-                                            : const Color(0xFF757575),
-                                      ),
+                                          .toggleLikeLoop,
+                                      likeCount: state.likeCount,
+                                      isLiked: state.isLiked,
                                     ),
                                     const SizedBox(width: 12),
                                     const Icon(
