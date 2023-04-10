@@ -1,6 +1,8 @@
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
@@ -41,9 +43,17 @@ class BottomToolbar extends StatelessWidget {
             // const BottomNavigationBarItem(
             //   icon: Icon(CupertinoIcons.waveform),
             // ),
-            const BottomNavigationBarItem(
-              icon: Icon(
-                CupertinoIcons.waveform,
+            BottomNavigationBarItem(
+              icon: BlocBuilder<ActivityBloc, ActivityState>(
+                builder: (context, state) {
+                  return badges.Badge(
+                    position: badges.BadgePosition.topEnd(top: 0, end: 0),
+                    showBadge: state.unreadActivities,
+                    child: const Icon(
+                      CupertinoIcons.waveform,
+                    ),
+                  );
+                },
               ),
             ),
             BottomNavigationBarItem(

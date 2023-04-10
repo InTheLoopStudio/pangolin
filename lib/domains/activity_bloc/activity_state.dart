@@ -8,6 +8,10 @@ abstract class ActivityState extends Equatable {
   /// The activities or notifications on the app
   final List<Activity> activities;
 
+  bool get unreadActivities => activities.any((elem) => !elem.markedRead);
+  int get unreadActivitiesCount =>
+      activities.where((elem) => !elem.markedRead).length;
+
   @override
   List<Object> get props => [activities];
 }

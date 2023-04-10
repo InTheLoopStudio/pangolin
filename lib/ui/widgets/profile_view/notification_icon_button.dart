@@ -16,10 +16,8 @@ class NotificationIconButton extends StatelessWidget {
           child: badges.Badge(
             onTap: () =>
                 context.read<NavigationBloc>().add(const PushActivity()),
-            badgeContent: Text('${state.activities.where(
-                  (elem) => !elem.markedRead,
-                ).length}'),
-            showBadge: state.activities.any((elem) => !elem.markedRead),
+            badgeContent: Text('${state.unreadActivitiesCount}'),
+            showBadge: state.unreadActivities,
             child: Icon(
               Icons.notifications,
               color: Theme.of(context).colorScheme.outline,
