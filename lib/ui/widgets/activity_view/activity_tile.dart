@@ -21,9 +21,9 @@ class ActivityTile extends StatelessWidget {
 
     return BlocBuilder<ActivityBloc, ActivityState>(
       builder: (context, state) {
-        return FutureBuilder(
+        return FutureBuilder<UserModel?>(
           future: databaseRepository.getUserById(activity.fromUserId),
-          builder: (BuildContext context, AsyncSnapshot<UserModel?> snapshot) {
+          builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const SizedBox.shrink();
             } else {
@@ -39,53 +39,61 @@ class ActivityTile extends StatelessWidget {
                     .add(MarkActivityAsReadEvent(activity: activity));
               }
 
-              return Column(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      navigationBloc.add(PushProfile(user.id));
-                    },
-                    child: ListTile(
-                      leading: UserAvatar(
-                        radius: 20,
-                        backgroundImageUrl: user.profilePicture,
-                      ),
-                      trailing: Text(
-                        timeago.format(
-                          activity.timestamp,
-                          locale: 'en_short',
+              return FutureBuilder<bool>(
+                future: databaseRepository.isVerified(user.id),
+                builder: (context, snapshot) {
+                  final isVerified = snapshot.data ?? false;                  
+
+                  return Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          navigationBloc.add(PushProfile(user.id));
+                        },
+                        child: ListTile(
+                          leading: UserAvatar(
+                            radius: 20,
+                            backgroundImageUrl: user.profilePicture,
+                            verified: isVerified,
+                          ),
+                          trailing: Text(
+                            timeago.format(
+                              activity.timestamp,
+                              locale: 'en_short',
+                            ),
+                            style: const TextStyle(
+                              color: Colors.grey,
+                            ),
+                          ),
+                          title: Text(
+                            user.displayName,
+                          ),
+                          subtitle: () {
+                            switch (activity.type) {
+                              case ActivityType.follow:
+                                return const Text('followed you 🤝');
+                              case ActivityType.like:
+                                return const Text('liked your loop ❤️');
+                              case ActivityType.comment:
+                                return const Text('commented on your loop 💬');
+                              case ActivityType.bookingRequest:
+                                return const Text('sent you a booking request 📩');
+                              case ActivityType.bookingUpdate:
+                                return const Text('updated your booking 📩');
+                            }
+                          }(),
                         ),
-                        style: const TextStyle(
-                          color: Colors.grey,
-                        ),
                       ),
-                      title: Text(
-                        user.displayName,
-                      ),
-                      subtitle: () {
-                        switch (activity.type) {
-                          case ActivityType.follow:
-                            return const Text('followed you 🤝');
-                          case ActivityType.like:
-                            return const Text('liked your loop ❤️');
-                          case ActivityType.comment:
-                            return const Text('commented on your loop 💬');
-                          case ActivityType.bookingRequest:
-                            return const Text('sent you a booking request 📩');
-                          case ActivityType.bookingUpdate:
-                            return const Text('updated your booking 📩');
-                        }
-                      }(),
-                    ),
-                  ),
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 15),
-                  //   child: Divider(
-                  //     color: Colors.deepPurple,
-                  //     thickness: 1,
-                  //   ),
-                  // ),
-                ],
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 15),
+                      //   child: Divider(
+                      //     color: Colors.deepPurple,
+                      //     thickness: 1,
+                      //   ),
+                      // ),
+                    ],
+                  );
+                },
               );
             }
           },

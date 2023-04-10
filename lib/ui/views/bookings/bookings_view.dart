@@ -17,6 +17,7 @@ class BookingsView extends StatelessWidget {
       selector: (state) => state as Onboarded,
       builder: (context, onboardState) {
         final currentUser = onboardState.currentUser;
+
         return BlocProvider(
           create: (context) => BookingsCubit(
             currentUserId: currentUser.id,

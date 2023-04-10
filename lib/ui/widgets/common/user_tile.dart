@@ -35,46 +35,56 @@ class _UserTileState extends State<UserTile> {
       selector: (state) => state as Onboarded,
       builder: (context, state) {
         final currentUser = state.currentUser;
-        return ListTile(
-          leading: UserAvatar(
-            radius: 25,
-            backgroundImageUrl: widget.user.profilePicture,
-          ),
-          title: Text(widget.user.displayName),
-          subtitle: Text(
-            widget.user.bio,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          trailing: (currentUser.id != widget.user.id) &&
-                  widget.showFollowButton
-              ? FutureBuilder<bool>(
-                  future:
-                      database.isFollowingUser(currentUser.id, widget.user.id),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) return const SizedBox.shrink();
 
-                    final isFollowing = snapshot.data ?? false;
-                    return CupertinoButton(
-                      onPressed: (!isFollowing && !followingOverride)
-                          ? () async {
-                              await database.followUser(
-                                currentUser.id,
-                                widget.user.id,
-                              );
-                              setState(() {
-                                followingOverride = true;
-                              });
-                            }
-                          : null,
-                      child: (!isFollowing && !followingOverride)
-                          ? const Text('Follow')
-                          : const Text('Following'),
-                    );
-                  },
-                )
-              : const SizedBox.shrink(),
-          onTap: () => navigationBloc.add(PushProfile(widget.user.id)),
+        return FutureBuilder<bool>(
+          future: database.isVerified(widget.user.id),
+          builder: (context, snapshot) {
+            final verified = snapshot.data ?? false;
+
+            return ListTile(
+              leading: UserAvatar(
+                radius: 25,
+                backgroundImageUrl: widget.user.profilePicture,
+                verified: verified,
+              ),
+              title: Text(widget.user.displayName),
+              subtitle: Text(
+                widget.user.bio,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              trailing: (currentUser.id != widget.user.id) &&
+                      widget.showFollowButton
+                  ? FutureBuilder<bool>(
+                      future:
+                          database.isFollowingUser(currentUser.id, widget.user.id),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) return const SizedBox.shrink();
+
+                        final isFollowing = snapshot.data ?? false;
+
+                        return CupertinoButton(
+                          onPressed: (!isFollowing && !followingOverride)
+                              ? () async {
+                                  await database.followUser(
+                                    currentUser.id,
+                                    widget.user.id,
+                                  );
+                                  setState(() {
+                                    followingOverride = true;
+                                  });
+                                }
+                              : null,
+                          child: (!isFollowing && !followingOverride)
+                              ? const Text('Follow')
+                              : const Text('Following'),
+                        );
+                      },
+                    )
+                  : const SizedBox.shrink(),
+              onTap: () => navigationBloc.add(PushProfile(widget.user.id)),
+            );
+          },
         );
       },
     );

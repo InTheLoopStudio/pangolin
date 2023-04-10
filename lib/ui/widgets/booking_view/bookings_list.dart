@@ -12,6 +12,7 @@ class BookingsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeColor = Theme.of(context).primaryIconTheme.color ?? Colors.black;
+
     return BlocBuilder<BookingsCubit, BookingsState>(
       builder: (context, state) {
         return bookings.isEmpty

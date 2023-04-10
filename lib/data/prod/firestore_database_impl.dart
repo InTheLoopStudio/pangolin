@@ -955,14 +955,29 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<bool> isVerified(String userId) async {
-    final verifiedBadgeSentDoc = await _badgesSentRef
-        .doc(userId)
-        .collection('badges')
-        .doc(verifiedBadgeId)
-        .get();
+  Future<bool> isVerified(
+    String userId, {
+    bool ignoreCache = true,
+  }) async {
+    final options = ignoreCache
+        ? const GetOptions(source: Source.server)
+        : const GetOptions(source: Source.cache);
 
-    return verifiedBadgeSentDoc.exists;
+    try {
+      final verifiedBadgeSentDoc = await _badgesSentRef
+          .doc(userId)
+          .collection('badges')
+          .doc(verifiedBadgeId)
+          .get(
+            options,
+          );
+
+      final isVerified = verifiedBadgeSentDoc.exists;
+
+      return isVerified;
+    } on FirebaseException {
+      return false;
+    }
   }
 
   @override

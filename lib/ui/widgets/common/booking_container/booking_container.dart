@@ -35,40 +35,48 @@ class BookingContainer extends StatelessWidget {
             return SkeletonListTile();
           }
 
-          return ListTile(
-            onTap: () {
-              context.read<NavigationBloc>().add(PushBooking(booking));
+          return FutureBuilder<bool>(
+            future: database.isVerified(requestee.id),
+            builder: (context, snapshot) {
+              final isVerified = snapshot.data ?? false;
+
+              return ListTile(
+                onTap: () {
+                  context.read<NavigationBloc>().add(PushBooking(booking));
+                },
+                enabled: booking.status != BookingStatus.canceled,
+                leading: UserAvatar(
+                  radius: 20,
+                  backgroundImageUrl: requestee.profilePicture,
+                  verified: isVerified,
+                ),
+                title: Text(requestee.displayName),
+                subtitle: Text(
+                  timeago.format(
+                    booking.startTime,
+                    allowFromNow: true,
+                  ),
+                  style: const TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+                trailing: Text(
+                  EnumToString.convertToString(booking.status),
+                  style: TextStyle(
+                    color: () {
+                      switch (booking.status) {
+                        case BookingStatus.pending:
+                          return Colors.orange[300];
+                        case BookingStatus.confirmed:
+                          return Colors.green[300];
+                        case BookingStatus.canceled:
+                          return Colors.red[300];
+                      }
+                    }(),
+                  ),
+                ),
+              );
             },
-            enabled: booking.status != BookingStatus.canceled,
-            leading: UserAvatar(
-              radius: 20,
-              backgroundImageUrl: requestee.profilePicture,
-            ),
-            title: Text(requestee.displayName),
-            subtitle: Text(
-              timeago.format(
-                booking.startTime,
-                allowFromNow: true,
-              ),
-              style: const TextStyle(
-                color: Colors.grey,
-              ),
-            ),
-            trailing: Text(
-              EnumToString.convertToString(booking.status),
-              style: TextStyle(
-                color: () {
-                  switch (booking.status) {
-                    case BookingStatus.pending:
-                      return Colors.orange[300];
-                    case BookingStatus.confirmed:
-                      return Colors.green[300];
-                    case BookingStatus.canceled:
-                      return Colors.red[300];
-                  }
-                }(),
-              ),
-            ),
           );
         },
       );
@@ -85,61 +93,69 @@ class BookingContainer extends StatelessWidget {
             return SkeletonListTile();
           }
 
-          return ListTile(
-            onTap: () {
-              context.read<NavigationBloc>().add(PushBooking(booking));
+          return FutureBuilder<bool>(
+            future: database.isVerified(requester.id),
+            builder: (context, snapshot) {
+              final isVerified = snapshot.data ?? false;
+
+              return ListTile(
+                onTap: () {
+                  context.read<NavigationBloc>().add(PushBooking(booking));
+                },
+                leading: UserAvatar(
+                  radius: 20,
+                  backgroundImageUrl: requester.profilePicture,
+                  verified: isVerified,
+                ),
+                title: Text(requester.displayName),
+                subtitle: Text(
+                  timeago.format(
+                    booking.startTime,
+                    allowFromNow: true,
+                  ),
+                  style: const TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+                trailing: booking.status == BookingStatus.pending
+                    ? GestureDetector(
+                        child: const Icon(CupertinoIcons.ellipsis),
+                        onTap: () => showCupertinoModalPopup<void>(
+                          context: context,
+                          builder: (BuildContext context) => CupertinoActionSheet(
+                            title: const Text('Booking Request'),
+                            message: const Text('Accept or Deny the request'),
+                            actions: <CupertinoActionSheetAction>[
+                              CupertinoActionSheetAction(
+                                onPressed: () {
+                                  final updated = booking.copyWith(
+                                    status: BookingStatus.confirmed,
+                                  );
+                                  database.updateBooking(updated);
+                                  onConfirm?.call(updated);
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Accept'),
+                              ),
+                              CupertinoActionSheetAction(
+                                isDestructiveAction: true,
+                                onPressed: () {
+                                  final updated = booking.copyWith(
+                                    status: BookingStatus.canceled,
+                                  );
+                                  database.updateBooking(updated);
+                                  onDeny?.call(updated);
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Deny'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : Text(EnumToString.convertToString(booking.status)),
+              );
             },
-            leading: UserAvatar(
-              radius: 20,
-              backgroundImageUrl: requester.profilePicture,
-            ),
-            title: Text(requester.displayName),
-            subtitle: Text(
-              timeago.format(
-                booking.startTime,
-                allowFromNow: true,
-              ),
-              style: const TextStyle(
-                color: Colors.grey,
-              ),
-            ),
-            trailing: booking.status == BookingStatus.pending
-                ? GestureDetector(
-                    child: const Icon(CupertinoIcons.ellipsis),
-                    onTap: () => showCupertinoModalPopup<void>(
-                      context: context,
-                      builder: (BuildContext context) => CupertinoActionSheet(
-                        title: const Text('Booking Request'),
-                        message: const Text('Accept or Deny the request'),
-                        actions: <CupertinoActionSheetAction>[
-                          CupertinoActionSheetAction(
-                            onPressed: () {
-                              final updated = booking.copyWith(
-                                status: BookingStatus.confirmed,
-                              );
-                              database.updateBooking(updated);
-                              onConfirm?.call(updated);
-                              Navigator.pop(context);
-                            },
-                            child: const Text('Accept'),
-                          ),
-                          CupertinoActionSheetAction(
-                            isDestructiveAction: true,
-                            onPressed: () {
-                              final updated = booking.copyWith(
-                                status: BookingStatus.canceled,
-                              );
-                              database.updateBooking(updated);
-                              onDeny?.call(updated);
-                              Navigator.pop(context);
-                            },
-                            child: const Text('Deny'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                : Text(EnumToString.convertToString(booking.status)),
           );
         },
       );
@@ -148,15 +164,15 @@ class BookingContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
+
     return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
       selector: (state) => state as Onboarded,
       builder: (context, state) {
         final currentUser = state.currentUser;
-        if (currentUser.id == booking.requesterId) {
-          return venueTile(databaseRepository);
-        } else {
-          return freeTile(databaseRepository);
-        }
+
+        return currentUser.id == booking.requesterId
+            ? venueTile(databaseRepository)
+            : freeTile(databaseRepository);
       },
     );
   }
