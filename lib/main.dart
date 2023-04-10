@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:intheloopapp/firebase_options.dart';
 import 'package:intheloopapp/data/notification_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/dependencies.dart';
@@ -17,6 +17,7 @@ import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dar
 import 'package:intheloopapp/domains/down_for_maintenance_bloc/down_for_maintenance_bloc.dart';
 import 'package:intheloopapp/domains/dynamic_link_bloc/dynamic_link_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
+import 'package:intheloopapp/firebase_options.dart';
 import 'package:intheloopapp/simple_bloc_observer.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:intheloopapp/ui/themes.dart';
@@ -54,6 +55,7 @@ Future<void> main() async {
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   PlatformDispatcher.instance.onError = (error, stack) {
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+
       return true;
     };
 
