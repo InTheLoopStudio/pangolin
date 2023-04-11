@@ -15,13 +15,22 @@ import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container_cub
 import 'package:intheloopapp/ui/widgets/common/loop_container/title_text.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/user_info.dart';
 
-class LoopContainer extends StatelessWidget {
+class LoopContainer extends StatefulWidget {
   const LoopContainer({
     required this.loop,
     super.key,
   });
 
   final Loop loop;
+
+  @override
+  State<LoopContainer> createState() => _LoopContainerState();
+}
+
+class _LoopContainerState extends State<LoopContainer>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
 
   Widget _loopContainer({
     required NavigationBloc navigationBloc,
@@ -30,7 +39,7 @@ class LoopContainer extends StatelessWidget {
   }) =>
       GestureDetector(
         onTap: () => navigationBloc.add(
-          PushLoop(loop),
+          PushLoop(widget.loop),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -42,15 +51,15 @@ class LoopContainer extends StatelessWidget {
             children: [
               UserInfo(
                 loopUser: loopUser,
-                timestamp: loop.timestamp,
+                timestamp: widget.loop.timestamp,
               ),
-              TitleText(title: loop.title),
+              TitleText(title: widget.loop.title),
               const SizedBox(height: 14),
-              if (loop.description.isNotEmpty)
+              if (widget.loop.description.isNotEmpty)
                 Column(
                   children: [
                     Linkify(
-                      text: loop.description,
+                      text: widget.loop.description,
                       style: const TextStyle(
                         fontSize: 14,
                       ),
@@ -61,11 +70,11 @@ class LoopContainer extends StatelessWidget {
               else
                 const SizedBox.shrink(),
               Attachments(
-                loop: loop,
+                loop: widget.loop,
                 loopUser: loopUser,
               ),
               ControlButtons(
-                loopId: loop.id,
+                loopId: widget.loop.id,
                 currentUserId: currentUserId,
               ),
               const SizedBox(height: 8),
@@ -86,7 +95,7 @@ class LoopContainer extends StatelessWidget {
         final currentUser = authState.currentUser;
 
         return FutureBuilder<UserModel?>(
-          future: databaseRepository.getUserById(loop.userId),
+          future: databaseRepository.getUserById(widget.loop.userId),
           builder: (context, userSnapshot) {
             if (!userSnapshot.hasData) {
               return const LoadingContainer();
@@ -100,18 +109,18 @@ class LoopContainer extends StatelessWidget {
             return BlocProvider<LoopContainerCubit>(
               create: (context) => LoopContainerCubit(
                 databaseRepository: databaseRepository,
-                loop: loop,
+                loop: widget.loop,
                 currentUser: currentUser,
                 audioRepo: context.read<AudioRepository>(),
               ),
               child: BlocBuilder<LoopContainerCubit, LoopContainerState>(
                 builder: (context, state) {
-                  if (currentUser.id == loop.userId) {
+                  if (currentUser.id == widget.loop.userId) {
                     return Slidable(
                       startActionPane: ActionPane(
                         motion: const ScrollMotion(),
                         children: [
-                          if (currentUser.id == loop.userId)
+                          if (currentUser.id == widget.loop.userId)
                             SlidableAction(
                               onPressed: (context) {
                                 context.read<LoopContainerCubit>().deleteLoop();
