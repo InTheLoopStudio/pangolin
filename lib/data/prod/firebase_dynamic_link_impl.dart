@@ -25,8 +25,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
       dynamicLinkStream.add(redirect);
     }
 
-    _dynamicLinks.onLink
-        .listen((PendingDynamicLinkData? dynamicLinkData) {
+    _dynamicLinks.onLink.listen((PendingDynamicLinkData? dynamicLinkData) {
       final redirect = _handleDeepLink(dynamicLinkData);
 
       if (redirect != null) {
@@ -110,6 +109,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
         title: 'Tapped Network | ${loop.title}',
         description:
             '''Tapped Network - The online platform tailored for producers and creators to share their loops to the world, get feedback on their music, and join the world-wide community of artists to collaborate with''',
+        imageUrl: Uri.parse(loop.imagePaths[0]),
       ),
     );
 
@@ -140,6 +140,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
         title: '${user.displayName} on Tapped',
         description:
             '''Tapped Network - The online platform tailored for producers and creators to share their loops to the world, get feedback on their music, and join the world-wide community of artists to collaborate with''',
+        imageUrl: Uri.parse(user.profilePicture),
       ),
     );
 
