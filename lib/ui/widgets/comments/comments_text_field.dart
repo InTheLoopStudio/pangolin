@@ -28,27 +28,28 @@ class CommentsTextFieldState extends State<CommentsTextField> {
           children: [
             SizedBox(
               width: 300,
-              height: 20,
+              height: 40,
               child: TextField(
                 onChanged: (value) =>
                     context.read<CommentsCubit>().changeComment(value),
                 controller: _textEditingController,
                 textCapitalization: TextCapitalization.sentences,
-                decoration: const InputDecoration(
+                maxLines: 3,
+                minLines: 3,
+                decoration: const InputDecoration.collapsed(
+                  // border: OutlineInputBorder(),
                   hintText: 'Add Comment...',
                 ),
               ),
             ),
-            const SizedBox(width: 10,),
-            FloatingActionButton(
+            IconButton(
               onPressed: () async {
                 await context.read<CommentsCubit>().addComment();
                 _textEditingController.clear();
               },
-              backgroundColor: tappedAccent,
-              child: state.loading
-                  ? const CircularProgressIndicator(color: Colors.white)
-                  : const Icon(Icons.comment),
+              icon: state.loading
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : const Icon(Icons.send),
             ),
           ],
         );

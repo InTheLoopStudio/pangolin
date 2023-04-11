@@ -5,6 +5,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
+import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class UserInfo extends StatelessWidget {
@@ -38,15 +39,10 @@ class UserInfo extends StatelessWidget {
               Column(
                 children: [
                   // + User Avatar
-                  CircleAvatar(
+                  UserAvatar(
                     radius: 24,
-                    backgroundImage: loopUser.profilePicture.isEmpty
-                        ? const AssetImage(
-                            'assets/default_avatar.png',
-                          ) as ImageProvider
-                        : CachedNetworkImageProvider(
-                            loopUser.profilePicture,
-                          ),
+                    backgroundImageUrl: loopUser.profilePicture,
+                    verified: verified,
                   ),
                 ],
               ),
@@ -57,28 +53,13 @@ class UserInfo extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (loopUser.artistName.isNotEmpty)
-                    Row(
-                      children: [
-                        Text(
+                    Text(
                           loopUser.artistName,
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(
-                          width: 2,
-                        ),
-                        if (verified)
-                          const Icon(
-                            Icons.verified,
-                            size: 14,
-                            color: tappedAccent,
-                          ),
-                      ],
-                    )
-                  else
-                    const SizedBox.shrink(),
                   Text(
                     '@${loopUser.username}',
                     style: const TextStyle(

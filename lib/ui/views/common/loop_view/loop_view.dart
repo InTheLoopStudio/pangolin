@@ -15,6 +15,7 @@ import 'package:intheloopapp/ui/widgets/comments/comments_list.dart';
 import 'package:intheloopapp/ui/widgets/comments/comments_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/attachments.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/like_button.dart';
+import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 import 'package:linkify_text/linkify_text.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -84,16 +85,10 @@ class LoopView extends StatelessWidget {
                                 Column(
                                   children: [
                                     // + User Avatar
-                                    CircleAvatar(
+                                    UserAvatar(
                                       radius: 24,
-                                      backgroundImage:
-                                          user.profilePicture.isEmpty
-                                              ? const AssetImage(
-                                                  'assets/default_avatar.png',
-                                                ) as ImageProvider
-                                              : CachedNetworkImageProvider(
-                                                  user.profilePicture,
-                                                ),
+                                      backgroundImageUrl: user.profilePicture,
+                                      verified: state.isVerified,
                                     ),
                                   ],
                                 ),
@@ -103,25 +98,12 @@ class LoopView extends StatelessWidget {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          user.artistName,
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 2,
-                                        ),
-                                        if (state.isVerified)
-                                          const Icon(
-                                            Icons.verified,
-                                            size: 14,
-                                            color: tappedAccent,
-                                          ),
-                                      ],
+                                    Text(
+                                      user.artistName,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                     Text(
                                       '@${user.username}',
@@ -153,71 +135,74 @@ class LoopView extends StatelessWidget {
                             loop: loop,
                             loopViewCubit: context.read<LoopViewCubit>(),
                           )..initComments(),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 8,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                if (loop.title.isNotEmpty)
-                                  const SizedBox(height: 14),
-                                if (loop.title.isNotEmpty)
-                                  Text(
-                                    loop.title,
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                          child: CustomScrollView(
+                            slivers: [
+                              SliverToBoxAdapter(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 8,
                                   ),
-                                const SizedBox(height: 14),
-                                LinkifyText(
-                                  loop.description,
-                                  fontSize: 14,
-                                ),
-                                const SizedBox(height: 14),
-                                Attachments(
-                                  loop: loop,
-                                  loopUser: user,
-                                ),
-                                Row(
-                                  children: [
-                                    LikeButton(
-                                      onLike: () => context
-                                          .read<LoopViewCubit>()
-                                          .toggleLikeLoop,
-                                      likeCount: state.likeCount,
-                                      isLiked: state.isLiked,
-                                    ),
-                                    const SizedBox(width: 12),
-                                    const Icon(
-                                      CupertinoIcons.bubble_middle_bottom,
-                                      size: 18,
-                                      color: Color(0xFF757575),
-                                    ),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      '${state.commentsCount}',
-                                      style: const TextStyle(
-                                        color: Color(0xFF757575),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      if (loop.title.isNotEmpty)
+                                        const SizedBox(height: 14),
+                                      if (loop.title.isNotEmpty)
+                                        Text(
+                                          loop.title,
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      const SizedBox(height: 14),
+                                      LinkifyText(
+                                        loop.description,
+                                        fontSize: 14,
                                       ),
-                                    ),
-                                  ],
+                                      const SizedBox(height: 14),
+                                      Attachments(
+                                        loop: loop,
+                                        loopUser: user,
+                                      ),
+                                      Row(
+                                        children: [
+                                          LikeButton(
+                                            onLike: () => context
+                                                .read<LoopViewCubit>()
+                                                .toggleLikeLoop,
+                                            likeCount: state.likeCount,
+                                            isLiked: state.isLiked,
+                                          ),
+                                          const SizedBox(width: 12),
+                                          const Icon(
+                                            CupertinoIcons.bubble_middle_bottom,
+                                            size: 18,
+                                            color: Color(0xFF757575),
+                                          ),
+                                          const SizedBox(width: 6),
+                                          Text(
+                                            '${state.commentsCount}',
+                                            style: const TextStyle(
+                                              color: Color(0xFF757575),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                const SizedBox(height: 8),
-                                const Divider(
-                                  color: Color(0xFF757575),
-                                  height: 10,
-                                  thickness: 1,
-                                ),
-                                CommentsList(
-                                  scrollController: ScrollController(),
-                                ),
-                                const CommentsTextField(),
-                                const SizedBox(height: 20),
-                              ],
-                            ),
+                              ),
+                              const SliverToBoxAdapter(
+                                child: SizedBox(height: 8),
+                              ),
+                              const SliverToBoxAdapter(
+                                child: CommentsTextField(),
+                              ),
+                              const CommentsList(),
+                            ],
                           ),
                         ),
                       );
