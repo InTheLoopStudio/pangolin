@@ -24,31 +24,39 @@ class CommentContainer extends StatelessWidget {
 
         final user = snapshot.data!;
 
-        return Container(
-          margin: const EdgeInsets.symmetric(
-            horizontal: 10,
-          ),
-          child: ListTile(
-            leading: UserAvatar(
-              radius: 20,
-              backgroundImageUrl: user.profilePicture,
-            ),
-            trailing: Text(
-              timeago.format(
-                comment.timestamp.toDate(),
-                locale: 'en_short',
+        return FutureBuilder<bool>(
+          future: databaseRepository.isVerified(comment.userId),
+          builder: (context, snapshot) {
+            final isVerified = snapshot.data ?? false;
+
+            return Container(
+              margin: const EdgeInsets.symmetric(
+                horizontal: 10,
               ),
-              style: const TextStyle(
-                color: Colors.grey,
+              child: ListTile(
+                leading: UserAvatar(
+                  radius: 20,
+                  backgroundImageUrl: user.profilePicture,
+                  verified: isVerified,
+                ),
+                trailing: Text(
+                  timeago.format(
+                    comment.timestamp.toDate(),
+                    locale: 'en_short',
+                  ),
+                  style: const TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+                title: Text(
+                  user.displayName,
+                ),
+                subtitle: Text(
+                  comment.content,
+                ),
               ),
-            ),
-            title: Text(
-              user.displayName,
-            ),
-            subtitle: Text(
-              comment.content,
-            ),
-          ),
+            );
+          },
         );
       },
     );
