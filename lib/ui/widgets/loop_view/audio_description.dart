@@ -5,7 +5,6 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view_cubit.dart';
-import 'package:intheloopapp/ui/views/profile/profile_view.dart';
 
 class AudioDescription extends StatelessWidget {
   const AudioDescription({

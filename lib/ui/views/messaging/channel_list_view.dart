@@ -6,7 +6,6 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
 import 'package:intheloopapp/ui/views/messaging/channel_preview.dart';
-import 'package:intheloopapp/ui/views/messaging/channel_view.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart'
     hide ChannelName, ChannelPreview;
 

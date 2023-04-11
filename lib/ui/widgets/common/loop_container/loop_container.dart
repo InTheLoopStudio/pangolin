@@ -10,7 +10,6 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_container.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/attachments.dart';
-import 'package:intheloopapp/ui/widgets/common/loop_container/audio_controls.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/control_buttons.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/title_text.dart';
