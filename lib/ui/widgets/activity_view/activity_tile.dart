@@ -18,6 +18,8 @@ class ActivityTile extends StatelessWidget {
     final navigationBloc = context.read<NavigationBloc>();
     final databaseRepository = context.read<DatabaseRepository>();
 
+    var markedRead = activity.markedRead;
+
     return BlocBuilder<ActivityBloc, ActivityState>(
       builder: (context, state) {
         return FutureBuilder<UserModel?>(
@@ -32,16 +34,17 @@ class ActivityTile extends StatelessWidget {
                 return const SizedBox.shrink();
               }
 
-              if (!activity.markedRead) {
+              if (!markedRead) {
                 context
                     .read<ActivityBloc>()
                     .add(MarkActivityAsReadEvent(activity: activity));
+                markedRead = true;
               }
 
               return FutureBuilder<bool>(
                 future: databaseRepository.isVerified(user.id),
                 builder: (context, snapshot) {
-                  final isVerified = snapshot.data ?? false;                  
+                  final isVerified = snapshot.data ?? false;
 
                   return Column(
                     children: [
@@ -50,6 +53,7 @@ class ActivityTile extends StatelessWidget {
                           navigationBloc.add(PushProfile(user.id));
                         },
                         child: ListTile(
+                          tileColor: markedRead ? null : Colors.grey[900],
                           leading: UserAvatar(
                             radius: 20,
                             backgroundImageUrl: user.profilePicture,
@@ -60,27 +64,36 @@ class ActivityTile extends StatelessWidget {
                               activity.timestamp,
                               locale: 'en_short',
                             ),
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: Colors.grey,
+                              fontWeight: markedRead ? null : FontWeight.bold,
                             ),
                           ),
                           title: Text(
                             user.displayName,
+                            style: TextStyle(
+                              fontWeight: markedRead ? null : FontWeight.bold,
+                            ),
                           ),
-                          subtitle: () {
-                            switch (activity.type) {
-                              case ActivityType.follow:
-                                return const Text('followed you 🤝');
-                              case ActivityType.like:
-                                return const Text('liked your loop ❤️');
-                              case ActivityType.comment:
-                                return const Text('commented on your loop 💬');
-                              case ActivityType.bookingRequest:
-                                return const Text('sent you a booking request 📩');
-                              case ActivityType.bookingUpdate:
-                                return const Text('updated your booking 📩');
-                            }
-                          }(),
+                          subtitle: Text(
+                            () {
+                              switch (activity.type) {
+                                case ActivityType.follow:
+                                  return 'followed you 🤝';
+                                case ActivityType.like:
+                                  return 'liked your loop ❤️';
+                                case ActivityType.comment:
+                                  return 'commented on your loop 💬';
+                                case ActivityType.bookingRequest:
+                                  return 'sent you a booking request 📩';
+                                case ActivityType.bookingUpdate:
+                                  return 'updated your booking 📩';
+                              }
+                            }(),
+                            style: TextStyle(
+                              fontWeight: markedRead ? null : FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                       // Padding(

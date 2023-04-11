@@ -61,6 +61,7 @@ class _ActivityListState extends State<ActivityList> {
           return const Center(child: Text('failed to fetch activities'));
         }
         if (state is ActivitySuccess || state is ActivityEnd) {
+          context.read<ActivityBloc>().add(const MarkAllAsReadEvent());
           return Center(
             child: RefreshIndicator(
               onRefresh: () async =>
@@ -85,7 +86,6 @@ class _ActivityListState extends State<ActivityList> {
                         SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (BuildContext context, int index) {
-
                               return index >= state.activities.length
                                   ? const Center(
                                       child: SizedBox(

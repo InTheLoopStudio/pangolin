@@ -32,3 +32,10 @@ class MarkActivityAsReadEvent extends ActivityEvent {
   @override
   List<Object> get props => [activity];
 }
+
+class MarkAllAsReadEvent extends ActivityEvent {
+  const MarkAllAsReadEvent() : super();
+
+  @override
+  List<Object> get props => [];
+}

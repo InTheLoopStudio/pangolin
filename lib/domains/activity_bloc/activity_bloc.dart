@@ -31,6 +31,16 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
     on<MarkActivityAsReadEvent>(
       (event, emit) => _mapMarkActivityAsReadEventToState(emit, event.activity),
     );
+    on<MarkAllAsReadEvent>(
+      (event, emit) {
+        if (state is ActivitySuccess) {
+          final activities = (state as ActivitySuccess).activities;
+          for (final activity in activities) {
+            _mapMarkActivityAsReadEventToState(emit, activity);
+          }
+        }
+      },
+    );
   }
   DatabaseRepository databaseRepository;
   AuthenticationBloc authenticationBloc;
