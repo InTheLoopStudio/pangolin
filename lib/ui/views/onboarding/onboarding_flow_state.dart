@@ -72,7 +72,7 @@ class OnboardingFlowState extends Equatable {
         followingJohannes,
         followingChris,
         followingIlias,
-        formKey
+        formKey,
       ];
 
   OnboardingFlowState copyWith({

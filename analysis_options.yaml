@@ -26,7 +26,6 @@ dart_code_metrics:
     - avoid-unrelated-type-assertions
     - avoid-unused-parameters
     - avoid-nested-conditional-expressions
-    - newline-before-return
     - no-boolean-literal-compare
     - no-empty-block
     - prefer-trailing-comma

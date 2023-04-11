@@ -39,18 +39,11 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
       'VWj4qT2JMIhjjEYYFnbvebIazfB3',
       '8yYVxpQ7cURSzNfBsaBGF7A7kkv2',
       'wHpU3xj2yUSuz2rLFKC6J87HTLu1',
-      'n4zIL6bOuPTqRC3dtsl6gyEBPQl1'
+      'n4zIL6bOuPTqRC3dtsl6gyEBPQl1',
     ]) {
-      var isFollowing = false;
-
-      if (userId == currentUserId) {
-        isFollowing = true;
-      } else {
-        isFollowing = await databaseRepository.isFollowingUser(
-          currentUserId,
-          userId,
-        );
-      }
+      final isFollowing = userId == currentUserId
+          ? true
+          : await databaseRepository.isFollowingUser(currentUserId, userId);
 
       switch (userId) {
         case 'VWj4qT2JMIhjjEYYFnbvebIazfB3':

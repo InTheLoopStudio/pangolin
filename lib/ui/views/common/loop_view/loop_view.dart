@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +6,6 @@ import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
-import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/common/comments/comments_cubit.dart';
 import 'package:intheloopapp/ui/views/common/loading/loop_loading_view.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view_cubit.dart';
