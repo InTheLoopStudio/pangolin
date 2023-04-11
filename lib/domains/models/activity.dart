@@ -41,7 +41,7 @@ class Activity extends Equatable {
             doc.getOrElse('type', 'free') as String,
           ) ??
           ActivityType.like,
-      markedRead: doc.getOrElse('markedRead', true) as bool,
+      markedRead: doc.getOrElse('markedRead', false) as bool,
     );
   }
   final String id;
