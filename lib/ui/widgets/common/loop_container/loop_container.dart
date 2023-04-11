@@ -85,6 +85,7 @@ class _LoopContainerState extends State<LoopContainer>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final navigationBloc = context.read<NavigationBloc>();
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
