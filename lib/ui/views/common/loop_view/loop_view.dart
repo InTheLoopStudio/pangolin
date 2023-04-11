@@ -202,6 +202,9 @@ class LoopView extends StatelessWidget {
                                 child: CommentsTextField(),
                               ),
                               const CommentsList(),
+                              const SliverToBoxAdapter(
+                                child: SizedBox(height: 50),
+                              ),
                             ],
                           ),
                         ),
