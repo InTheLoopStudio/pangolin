@@ -438,6 +438,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       'likeCount': FieldValue.delete(),
       'tags': FieldValue.delete(),
       'timestamp': FieldValue.delete(),
+      'imagePaths': FieldValue.delete(),
       'title': '*deleted*',
       'deleted': true,
     });
@@ -446,8 +447,17 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       'loopsCount': FieldValue.increment(-1),
     });
 
-    // *delete loops keyed at refFromURL(loop.audioPath)*
-    await _storage.child(_getFileFromURL(loop.audioPath)).delete();
+    if (loop.audioPath.isNotEmpty) {
+      // *delete loops keyed at refFromURL(loop.audioPath)*
+      await _storage.child(_getFileFromURL(loop.audioPath)).delete();
+    }
+
+    for (final imagePath in loop.imagePaths) {
+      // *delete images keyed at refFromURL(imagePath)*
+      if (imagePath.isNotEmpty) {
+        await _storage.child(_getFileFromURL(imagePath)).delete();
+      }
+    }
   }
 
   @override
