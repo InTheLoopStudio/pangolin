@@ -94,9 +94,10 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
 
   @override
   Future<String> getShareLoopDynamicLink(Loop loop) async {
-    final imageUri = loop.imagePaths.isEmpty
-        ? Uri.parse('https://tapped.jonaylor.xyz/images/tapped_reverse.png')
-        : Uri.parse(loop.imagePaths[0]);
+    final imageUri = (loop.imagePaths.isNotEmpty &&
+            loop.imagePaths[0].isNotEmpty)
+        ? Uri.parse(loop.imagePaths[0])
+        : Uri.parse('https://tapped.jonaylor.xyz/images/tapped_reverse.png');
 
     final parameters = DynamicLinkParameters(
       uriPrefix: 'https://tappednetwork.page.link',
