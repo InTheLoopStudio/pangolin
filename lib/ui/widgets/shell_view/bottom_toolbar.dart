@@ -58,7 +58,12 @@ class BottomToolbar extends StatelessWidget {
             ),
             BottomNavigationBarItem(
               icon: GestureDetector(
-                onDoubleTap: searchFocusNode.requestFocus,
+                onDoubleTap: () {
+                  context.read<NavigationBloc>().add(
+                        const ChangeTab(selectedTab: 1),
+                      );
+                  searchFocusNode.requestFocus();
+                },
                 child: const Icon(CupertinoIcons.search),
               ),
             ),
