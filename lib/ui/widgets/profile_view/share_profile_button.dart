@@ -13,17 +13,16 @@ class ShareProfileButton extends StatelessWidget {
         RepositoryProvider.of<DynamicLinkRepository>(context);
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.only(left: 3),
-          child: GestureDetector(
-            onTap: () async {
-              final link =
-                  await dynamicLinkRepository.getShareProfileDynamicLink(
-                state.visitedUser,
-              );
-              await Share.share('Check out this profile on Tapped $link');
-            },
-            child: const Icon(Icons.ios_share_outlined),
+        return IconButton(
+          onPressed: () async {
+            final link =
+                await dynamicLinkRepository.getShareProfileDynamicLink(
+              state.visitedUser,
+            );
+            await Share.share('Check out this profile on Tapped $link');
+          },
+          icon: const Icon(
+            Icons.ios_share_outlined,
           ),
         );
       },

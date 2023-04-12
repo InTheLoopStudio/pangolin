@@ -17,6 +17,7 @@ import 'package:intheloopapp/ui/widgets/profile_view/following_count.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/request_to_book.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/share_profile_button.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/social_media_icons.dart';
+import 'package:intheloopapp/utils.dart';
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   _SliverAppBarDelegate(this._tabBar);
@@ -89,7 +90,9 @@ class _ProfileViewState extends State<ProfileView> {
 
   Widget _badgesTab() => BadgesList(scrollController: _scrollController);
   Widget _loopsTab() => AllLoopsList(scrollController: _scrollController);
-  Widget _bookingsTab() => const Center(child: Text('Coming Soon'),);
+  Widget _bookingsTab() => const Center(
+        child: Text('Coming Soon'),
+      );
 
   List<Widget> _profileTabs() {
     final tabs = [
@@ -216,43 +219,64 @@ class _ProfileViewState extends State<ProfileView> {
                             ),
                           ),
                         ),
-                        const SliverToBoxAdapter(
+                        SliverToBoxAdapter(
                           child: Padding(
-                            padding: EdgeInsets.only(top: 8),
+                            padding: const EdgeInsets.only(
+                              top: 8,
+                            ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                FollowerCount(),
-                                FollowingCount(),
-                                ShareProfileButton(),
-                                FollowButton(),
+                                Text(
+                                  '@${visitedUser.username}',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.normal,
+                                    // color: Color(0xFF757575),
+                                  ),
+                                ),
+                                const ShareProfileButton(),
+                                const FollowButton(),
                               ],
                             ),
                           ),
                         ),
-                        // SliverToBoxAdapter(
-                        //   child: Padding(
-                        //     padding: const EdgeInsets.symmetric(vertical: 12),
-                        //     child: Row(
-                        //       children: [
-                        //         Text('@${state.visitedUser.username}'),
-                        //         Text(
-                        //           formattedAddress(
-                        //             state.place.addressComponents,
-                        //           ),
-                        //           overflow: TextOverflow.ellipsis,
-                        //           style: const TextStyle(
-                        //             fontSize: 18,
-                        //           ),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ),
-                        // ),
                         const SliverToBoxAdapter(
                           child: Padding(
                             padding: EdgeInsets.only(bottom: 8),
                             child: SocialMediaIcons(),
+                          ),
+                        ),
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                const FollowerCount(),
+                                const FollowingCount(),
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      CupertinoIcons.location,
+                                      color: tappedAccent,
+                                      size: 16,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      formattedAddress(
+                                        state.place.addressComponents,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color: tappedAccent,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         const SliverToBoxAdapter(
