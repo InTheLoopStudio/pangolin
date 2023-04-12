@@ -14,7 +14,7 @@ import 'package:intheloopapp/ui/widgets/comments/comments_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/attachments.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/like_button.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
-import 'package:linkify_text/linkify_text.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class LoopView extends StatelessWidget {
@@ -156,9 +156,11 @@ class LoopView extends StatelessWidget {
                                           ),
                                         ),
                                       const SizedBox(height: 14),
-                                      LinkifyText(
-                                        loop.description,
+                                      Linkify(
+                                        text: loop.description,
+                                        style: const TextStyle(
                                         fontSize: 14,
+                                        ),
                                       ),
                                       const SizedBox(height: 14),
                                       Attachments(

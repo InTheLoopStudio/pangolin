@@ -4,6 +4,7 @@ import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/review.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
 class LocalDatabaseImpl extends DatabaseRepository {
@@ -23,7 +24,8 @@ class LocalDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<UserModel> getUserById(String userId, {
+  Future<UserModel> getUserById(
+    String userId, {
     bool ignoreCache = false,
   }) async {
     return UserModel.empty();
@@ -346,5 +348,41 @@ class LocalDatabaseImpl extends DatabaseRepository {
     String? lastUserId,
   }) async {
     return [];
+  }
+
+  @override
+  Future<void> createReview(Review review) async {}
+
+  @override
+  Future<List<Review>> getReviewsByReviewee(
+    String revieweeId, {
+    int limit = 100,
+    String? lastReviewId,
+  }) async {
+    return [];
+  }
+
+  @override
+  Future<List<Review>> getReviewsByReviewer(
+    String reviewerId, {
+    int limit = 100,
+    String? lastReviewId,
+  }) async {
+    return [];
+  }
+
+  @override
+  Future<List<Review>> getReviewsForBooking(
+    Booking booking,
+  ) async {
+    return [];
+  }
+
+  @override
+  Future<bool> hasUserReviewedBooking(
+    String userId,
+    Booking booking,
+  ) async {
+    return false;
   }
 }

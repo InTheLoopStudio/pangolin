@@ -11,6 +11,7 @@ import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/review.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils.dart';
 import 'package:rxdart/rxdart.dart';
@@ -30,12 +31,14 @@ final _commentsRef = _firestore.collection('comments');
 final _badgesRef = _firestore.collection('badges');
 final _badgesSentRef = _firestore.collection('badgesSent');
 final _bookingsRef = _firestore.collection('bookings');
+final _reviewsRef = _firestore.collection('reviews');
 
 const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
 
 const commentsSubcollection = 'loopComments';
 const likesSubcollection = 'loopLikes';
 const feedSubcollection = 'userFeed';
+const reviewsSubcollection = 'userReviews';
 
 /// Database implementation using Firebase's FirestoreDB
 class FirestoreDatabaseImpl extends DatabaseRepository {
@@ -1264,6 +1267,52 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       },
     );
     await _bookingsRef.doc(booking.id).set(booking.toMap());
+  }
+
+  @override
+  Future<void> createReview(Review review) async {
+    await _reviewsRef
+        .doc(review.revieweeId)
+        .collection(reviewsSubcollection)
+        .doc(review.bookingId)
+        .set(review.toMap());
+  }
+
+  @override
+  Future<List<Review>> getReviewsByReviewee(
+    String revieweeId, {
+    int limit = 100,
+    String? lastReviewId,
+  }) async {
+    // TODO: implement getReviewsByReviewee
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Review>> getReviewsByReviewer(
+    String reviewerId, {
+    int limit = 100,
+    String? lastReviewId,
+  }) async {
+    // TODO: implement getReviewsByReviewer
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Review>> getReviewsForBooking(
+    Booking booking,
+  ) async {
+    // TODO: implement getReviewsForBooking
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> hasUserReviewedBooking(
+    String userId,
+    Booking booking,
+  ) async {
+    // TODO: implement hasUserReviewedBooking
+    throw UnimplementedError();
   }
 }
 
