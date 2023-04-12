@@ -25,8 +25,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
       dynamicLinkStream.add(redirect);
     }
 
-    _dynamicLinks.onLink
-        .listen((PendingDynamicLinkData? dynamicLinkData) {
+    _dynamicLinks.onLink.listen((PendingDynamicLinkData? dynamicLinkData) {
       final redirect = _handleDeepLink(dynamicLinkData);
 
       if (redirect != null) {
@@ -95,6 +94,11 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
 
   @override
   Future<String> getShareLoopDynamicLink(Loop loop) async {
+    final imageUri = (loop.imagePaths.isNotEmpty &&
+            loop.imagePaths[0].isNotEmpty)
+        ? Uri.parse(loop.imagePaths[0])
+        : Uri.parse('https://tapped.jonaylor.xyz/images/tapped_reverse.png');
+
     final parameters = DynamicLinkParameters(
       uriPrefix: 'https://tappednetwork.page.link',
       link: Uri.parse(
@@ -110,6 +114,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
         title: 'Tapped Network | ${loop.title}',
         description:
             '''Tapped Network - The online platform tailored for producers and creators to share their loops to the world, get feedback on their music, and join the world-wide community of artists to collaborate with''',
+        imageUrl: imageUri,
       ),
     );
 
@@ -127,6 +132,10 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
 
   @override
   Future<String> getShareProfileDynamicLink(UserModel user) async {
+    final imageUri = user.profilePicture.isEmpty
+        ? Uri.parse('https://tapped.jonaylor.xyz/images/tapped_reverse.png')
+        : Uri.parse(user.profilePicture);
+
     final parameters = DynamicLinkParameters(
       uriPrefix: 'https://tappednetwork.page.link',
       link: Uri.parse('https://tappednetwork.page.link/user?id=${user.id}'),
@@ -140,6 +149,7 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
         title: '${user.displayName} on Tapped',
         description:
             '''Tapped Network - The online platform tailored for producers and creators to share their loops to the world, get feedback on their music, and join the world-wide community of artists to collaborate with''',
+        imageUrl: imageUri,
       ),
     );
 
