@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:intheloopapp/utils.dart';
 
 class Review extends Equatable {
   const Review({
@@ -6,6 +8,14 @@ class Review extends Equatable {
     required this.reviewerId,
     required this.revieweeId,
   });
+
+  factory Review.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
+    return Review(
+      bookingId: doc.getOrElse('bookingId', '') as String,
+      reviewerId: doc.getOrElse('reviewerId', '') as String,
+      revieweeId: doc.getOrElse('revieweeId', '') as String,
+    );
+  }
 
   final String bookingId;
   final String reviewerId;

@@ -39,6 +39,7 @@ const commentsSubcollection = 'loopComments';
 const likesSubcollection = 'loopLikes';
 const feedSubcollection = 'userFeed';
 const reviewsSubcollection = 'userReviews';
+const reviewersSubcollection = 'userCreatedReviews';
 
 /// Database implementation using Firebase's FirestoreDB
 class FirestoreDatabaseImpl extends DatabaseRepository {
@@ -1203,9 +1204,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   Future<List<Booking>> getBookingsByRequesterRequestee(
     String requesterId,
     String requesteeId, {
-    int limit = 20,
+    int limit = 100,
     String? lastBookingRequestId,
   }) async {
+    // TODO add pagination
     final bookingSnapshot = await _bookingsRef
         .where(
           'requesterId',
@@ -1225,9 +1227,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<Booking>> getBookingsByRequester(
     String userId, {
-    int limit = 20,
+    int limit = 100,
     String? lastBookingRequestId,
   }) async {
+    // TODO add pagination
     final bookingSnapshot = await _bookingsRef
         .where(
           'requesterId',
@@ -1243,9 +1246,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<Booking>> getBookingsByRequestee(
     String userId, {
-    int limit = 20,
+    int limit = 100,
     String? lastBookingRequestId,
   }) async {
+    // TODO add pagination
     final bookingSnapshot = await _bookingsRef
         .where(
           'requesteeId',
@@ -1272,8 +1276,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<void> createReview(Review review) async {
     await _reviewsRef
-        .doc(review.revieweeId)
-        .collection(reviewsSubcollection)
+        .doc(review.reviewerId)
+        .collection(reviewersSubcollection)
         .doc(review.bookingId)
         .set(review.toMap());
   }
@@ -1284,8 +1288,15 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     int limit = 100,
     String? lastReviewId,
   }) async {
-    // TODO: implement getReviewsByReviewee
-    throw UnimplementedError();
+    // TODO: add pagination
+    final reviewsSnapshot = await _reviewsRef
+        .doc(revieweeId)
+        .collection(reviewsSubcollection)
+        .get();
+
+    final reviews = reviewsSnapshot.docs.map(Review.fromDoc).toList();
+
+    return reviews;
   }
 
   @override
@@ -1294,16 +1305,38 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     int limit = 100,
     String? lastReviewId,
   }) async {
-    // TODO: implement getReviewsByReviewer
-    throw UnimplementedError();
+    // TODO: add pagination
+    final reviewsSnapshot = await _reviewsRef
+        .doc(reviewerId)
+        .collection(reviewersSubcollection)
+        .get();
+
+    final reviews = reviewsSnapshot.docs.map(Review.fromDoc).toList();
+
+    return reviews;
   }
 
   @override
   Future<List<Review>> getReviewsForBooking(
     Booking booking,
   ) async {
-    // TODO: implement getReviewsForBooking
-    throw UnimplementedError();
+    final firstReviewSnapshot = await _reviewsRef
+        .doc(booking.requesteeId)
+        .collection(reviewsSubcollection)
+        .doc(booking.id)
+        .get();
+
+    final firstReview = Review.fromDoc(firstReviewSnapshot);
+
+    final secondReviewSnapshot = await _reviewsRef
+        .doc(booking.requesterId)
+        .collection(reviewersSubcollection)
+        .doc(booking.id)
+        .get();
+
+    final secondReview = Review.fromDoc(secondReviewSnapshot);
+
+    return [firstReview, secondReview];
   }
 
   @override
@@ -1311,8 +1344,13 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String userId,
     Booking booking,
   ) async {
-    // TODO: implement hasUserReviewedBooking
-    throw UnimplementedError();
+    final reviewSnapshot = await _reviewsRef
+        .doc(userId)
+        .collection(reviewersSubcollection)
+        .doc(booking.id)
+        .get();
+
+    return reviewSnapshot.exists;
   }
 }
 

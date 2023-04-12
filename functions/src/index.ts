@@ -45,6 +45,7 @@ const feedsRef = db.collection("feeds");
 // const badgesRef = db.collection("badges");
 // const badgesSentRef = db.collection("badgesSent");
 const tokensRef = db.collection("device_tokens")
+const reviewsRef = db.collection("reviews");
 
 // const loopLikesSubcollection = "loopLikes";
 // const loopCommentsSubcollection = "loopComments";
@@ -874,3 +875,23 @@ export const getAccountById = functions
     _authenticated(context);
     return _getAccountById(data);
   });
+
+export const syncReviewsOnReview = functions.firestore
+  .document("reviews/{userId}/userCreatedReviews/{bookingId}")
+  .onCreate(async (snapshot, context) => {
+    const review = snapshot.data();
+
+    await reviewsRef
+      .doc(review.revieweeId)
+      .collection("reviews")
+      .doc(context.params.bookingId)
+      .set(review);
+
+    // TODO: create activity for review
+    // Maybe in another cloud function?
+    // _addActivity({
+    //   toUserId: loop.userId,
+    //   fromUserId: comment.userId,
+    //   type: "review",
+    // });
+  })

@@ -75,3 +75,9 @@ export type Booking = {
   endTime: firestore.Timestamp;
   timestamp: firestore.Timestamp;
 }
+
+export type Review = {
+  bookingId: string;
+  reviewerId: string;
+  revieweeId: string;
+}
