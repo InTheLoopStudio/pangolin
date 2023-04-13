@@ -5,6 +5,8 @@ class SettingsState extends Equatable {
     this.username = '',
     this.artistName = '',
     this.bio = '',
+    this.genres = const [],
+
     this.placeId = '',
     this.twitterHandle = '',
     this.instagramHandle = '',
@@ -34,6 +36,8 @@ class SettingsState extends Equatable {
 
   final String username;
   final String artistName;
+  final List<Genre> genres;
+
   final String bio;
   final String placeId;
   final String twitterHandle;
@@ -65,6 +69,8 @@ class SettingsState extends Equatable {
         username,
         artistName,
         bio,
+        genres,
+
         place,
         placeId,
         twitterHandle,
@@ -90,6 +96,8 @@ class SettingsState extends Equatable {
     String? username,
     String? artistName,
     String? bio,
+    List<Genre>? genres,
+
     Place? place,
     String? placeId,
     String? twitterHandle,
@@ -114,6 +122,7 @@ class SettingsState extends Equatable {
       username: username ?? this.username,
       artistName: artistName ?? this.artistName,
       bio: bio ?? this.bio,
+      genres: genres ?? this.genres,
       place: place ?? this.place,
       placeId: placeId ?? this.placeId,
       twitterHandle: twitterHandle ?? this.twitterHandle,

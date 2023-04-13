@@ -52,7 +52,7 @@ class SettingsForm extends StatelessWidget {
                         context.read<SettingsCubit>().changeBio(value ?? ''),
                     initialValue: state.bio,
                   ),
-                  GenreSelection(),
+                  const GenreSelection(),
                   LocationTextField(
                     onChanged: (place, placeId) => context
                         .read<SettingsCubit>()

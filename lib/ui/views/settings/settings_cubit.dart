@@ -11,6 +11,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
+import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/models/username.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -46,6 +47,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         username: currentUser.username.toString(),
         artistName: currentUser.artistName,
         bio: currentUser.bio,
+        genres: currentUser.genres,
         placeId: currentUser.placeId,
         twitterHandle: currentUser.twitterHandle,
         instagramHandle: currentUser.instagramHandle,
@@ -89,6 +91,17 @@ class SettingsCubit extends Cubit<SettingsState> {
       state.copyWith(
         place: place,
         placeId: placeId,
+      ),
+    );
+  }
+
+  void changeGenres(List<Genre> genres) => emit(
+        state.copyWith(genres: genres),
+      );
+  void removeGenre(Genre genre) {
+    emit(
+      state.copyWith(
+        genres: state.genres..remove(genre),
       ),
     );
   }
