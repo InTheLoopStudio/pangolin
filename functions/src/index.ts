@@ -591,6 +591,7 @@ export const createStreamUserOnUserCreated = functions
     await streamClient.upsertUser({
       id: user.id,
       name: user.artistName,
+      handle: user.username,
       username: user.username,
       email: user.email,
       image: user.profilePicture,
@@ -612,6 +613,7 @@ export const updateStreamUserOnUserUpdate = functions
       id: user.id,
       set: {
         name: user.artistName,
+        handle: user.username,
         username: user.username,
         email: user.email,
         image: user.profilePicture,

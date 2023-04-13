@@ -12,18 +12,20 @@ final _usersRef = _fireStore.collection('users');
 /// Stream implementation using the stream api
 class StreamImpl extends StreamRepository {
   /// clients must provide a stream client to create this impl
-  StreamImpl(this._client);
+  StreamImpl(
+    this._chatClient,
+  );
 
-  final StreamChatClient _client;
+  final StreamChatClient _chatClient;
   bool _connected = false;
 
   @override
   Future<bool> connectUser(String userId) async {
     if (!_connected) {
       try {
-        await _client.disconnectUser();
+        await _chatClient.disconnectUser();
         final token = await getToken();
-        await _client.connectUser(
+        await _chatClient.connectUser(
           User(
             id: userId,
           ),
@@ -41,10 +43,10 @@ class StreamImpl extends StreamRepository {
 
   @override
   Future<List<UserModel>> getChatUsers() async {
-    final result = await _client.queryUsers();
+    final result = await _chatClient.queryUsers();
     final chatUsers = await Future.wait(
       result.users
-          .where((element) => element.id != _client.state.currentUser!.id)
+          .where((element) => element.id != _chatClient.state.currentUser!.id)
           .map(
         (User e) async {
           final userSnapshot = await _usersRef.doc(e.id).get();
@@ -81,16 +83,16 @@ class StreamImpl extends StreamRepository {
     List<String?>? members, {
     String? image,
   }) async {
-    var channel = _client.channel('messaging');
+    var channel = _chatClient.channel('messaging');
 
-    final res = await _client.queryChannelsOnline(
+    final res = await _chatClient.queryChannelsOnline(
       state: false,
       watch: false,
       filter: Filter.raw(
         value: {
           'members': [
             ...members!,
-            _client.state.currentUser!.id,
+            _chatClient.state.currentUser!.id,
           ],
           'distinct': true,
         },
@@ -106,14 +108,14 @@ class StreamImpl extends StreamRepository {
       channel = res.first;
       await channel.watch();
     } else {
-      channel = _client.channel(
+      channel = _chatClient.channel(
         'messaging',
         extraData: {
           'name': name,
           'image': image,
           'members': [
             ...members,
-            _client.state.currentUser!.id,
+            _chatClient.state.currentUser!.id,
           ],
         },
       );
@@ -125,9 +127,9 @@ class StreamImpl extends StreamRepository {
 
   @override
   Future<Channel> createSimpleChat(String? friendId) async {
-    var channel = _client.channel('messaging');
+    var channel = _chatClient.channel('messaging');
 
-    final res = await _client.queryChannelsOnline(
+    final res = await _chatClient.queryChannelsOnline(
       state: false,
       watch: false,
       filter: Filter.raw(
@@ -135,7 +137,7 @@ class StreamImpl extends StreamRepository {
           'members': [
             // ..._selectedUsers.map((e) => e.id),
             friendId,
-            _client.state.currentUser!.id,
+            _chatClient.state.currentUser!.id,
           ],
           'distinct': true,
         },
@@ -151,13 +153,13 @@ class StreamImpl extends StreamRepository {
       channel = res.first;
       await channel.watch();
     } else {
-      channel = _client.channel(
+      channel = _chatClient.channel(
         'messaging',
         extraData: {
           'members': [
             // ..._selectedUsers.map((e) => e.id),
             friendId,
-            _client.state.currentUser!.id,
+            _chatClient.state.currentUser!.id,
           ],
         },
       );
@@ -169,7 +171,7 @@ class StreamImpl extends StreamRepository {
 
   @override
   Future<void> logout() async {
-    return _client.disconnectUser();
+    return _chatClient.disconnectUser();
   }
 
   // @override

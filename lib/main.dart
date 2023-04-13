@@ -29,6 +29,7 @@ import 'package:intheloopapp/ui/views/shell/shell_view.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
+import 'package:stream_feed_flutter_core/stream_feed_flutter_core.dart' as feed;
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background,
@@ -54,10 +55,10 @@ Future<void> main() async {
 
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   PlatformDispatcher.instance.onError = (error, stack) {
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
 
-      return true;
-    };
+    return true;
+  };
 
   // Keep the app in portrait mode (no landscape)
   await SystemChrome.setPreferredOrientations([
@@ -82,14 +83,15 @@ class TappedApp extends StatelessWidget {
 
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey();
 
-  final _client = StreamChatClient('xyk6dwdsp422');
+  final _chatClient = StreamChatClient('xyk6dwdsp422');
+  final _feedClient = feed.StreamFeedClient('xyk6dwdsp422');
 
   @override
   Widget build(BuildContext context) {
     initializeDateFormatting('en-US');
 
     return MultiRepositoryProvider(
-      providers: buildRepositories(streamChatClient: _client),
+      providers: buildRepositories(streamChatClient: _chatClient),
       child: MultiBlocProvider(
         providers: buildBlocs(navigatorKey: _navigatorKey),
         child: BlocBuilder<AppThemeCubit, bool>(
@@ -107,9 +109,14 @@ class TappedApp extends StatelessWidget {
               navigatorKey: _navigatorKey,
               builder: (context, widget) {
                 return StreamChat(
-                  client: _client,
+                  client: _chatClient,
                   streamChatThemeData: streamTheme,
-                  child: widget,
+                  child: feed.FeedProvider(
+                    bloc: feed.FeedBloc(
+                      client: _feedClient,
+                    ),
+                    child: widget!,
+                  ),
                 );
               },
               home:
@@ -135,6 +142,9 @@ class TappedApp extends StatelessWidget {
                         context
                             .read<StreamRepository>()
                             .connectUser(authState.currentUserId);
+
+                        
+
                         context
                             .read<NotificationRepository>()
                             .saveDeviceToken(userId: authState.currentUserId);

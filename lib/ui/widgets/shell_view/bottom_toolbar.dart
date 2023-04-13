@@ -40,9 +40,12 @@ class BottomToolbar extends StatelessWidget {
           // inactiveColor: Colors.white,
           currentIndex: state.selectedTab,
           items: [
-            // const BottomNavigationBarItem(
-            //   icon: Icon(CupertinoIcons.waveform),
-            // ),
+            const BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.news),
+            ),
+            const BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.person),
+            ),
             BottomNavigationBarItem(
               icon: BlocBuilder<ActivityBloc, ActivityState>(
                 builder: (context, state) {
