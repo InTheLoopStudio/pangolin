@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
+import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/models/username.dart';
 import 'package:intheloopapp/utils.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -31,6 +33,7 @@ class UserModel extends Equatable {
     required this.artistName,
     required this.profilePicture,
     required this.bio,
+    required this.genres,
     required this.placeId,
     required this.geohash,
     required this.lat,
@@ -64,6 +67,7 @@ class UserModel extends Equatable {
         artistName: '',
         profilePicture: '',
         bio: '',
+        genres: const [],
 
         // PlaceId for Richmond, Virginia, USA
         placeId: rvaPlaceId,
@@ -116,6 +120,14 @@ class UserModel extends Equatable {
       artistName: doc.getOrElse('artistName', '') as String,
       profilePicture: doc.getOrElse('profilePicture', '') as String,
       bio: doc.getOrElse('bio', '') as String,
+      genres: (doc.getOrElse('genres', <dynamic>[]) as List<dynamic>)
+          .map(
+            (dynamic e) =>
+                EnumToString.fromString<Genre>(Genre.values, e as String),
+          )
+          .where((element) => element != null)
+          .whereType<Genre>()
+          .toList(),
 
       // PlaceId for Richmond, Virginia, USA
       placeId: doc.getOrElse('placeId', rvaPlaceId) as String,
@@ -160,6 +172,8 @@ class UserModel extends Equatable {
   final String artistName;
   final String profilePicture;
   final String bio;
+  final List<Genre> genres;
+
   final String placeId;
   final String geohash;
   final double lat;
@@ -198,6 +212,7 @@ class UserModel extends Equatable {
         artistName,
         profilePicture,
         bio,
+        genres,
         placeId,
         geohash,
         lat,
@@ -241,6 +256,7 @@ class UserModel extends Equatable {
     String? artistName,
     String? profilePicture,
     String? bio,
+    List<Genre>? genres,
     String? placeId,
     String? geohash,
     double? lat,
@@ -273,6 +289,7 @@ class UserModel extends Equatable {
       artistName: artistName ?? this.artistName,
       profilePicture: profilePicture ?? this.profilePicture,
       bio: bio ?? this.bio,
+      genres: genres ?? this.genres,
       placeId: placeId ?? this.placeId,
       geohash: geohash ?? this.geohash,
       lat: lat ?? this.lat,
@@ -315,6 +332,7 @@ class UserModel extends Equatable {
       'username': username.toString(),
       'artistName': artistName,
       'bio': bio,
+      'genres': genres.map((e) => e.toString()).toList(),
       'profilePicture': profilePicture,
       'placeId': placeId,
       'geohash': geohash,

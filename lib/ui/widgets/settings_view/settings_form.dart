@@ -13,6 +13,7 @@ import 'package:intheloopapp/ui/widgets/common/forms/tiktok_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/twitter_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/username_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/youtube_text_field.dart';
+import 'package:intheloopapp/ui/widgets/settings_view/genre_selection.dart';
 import 'package:intheloopapp/ui/widgets/settings_view/theme_switch.dart';
 
 class SettingsForm extends StatelessWidget {
@@ -51,6 +52,7 @@ class SettingsForm extends StatelessWidget {
                         context.read<SettingsCubit>().changeBio(value ?? ''),
                     initialValue: state.bio,
                   ),
+                  GenreSelection(),
                   LocationTextField(
                     onChanged: (place, placeId) => context
                         .read<SettingsCubit>()

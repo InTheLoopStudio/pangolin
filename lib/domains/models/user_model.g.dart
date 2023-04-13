@@ -13,6 +13,9 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       artistName: json['artistName'] as String,
       profilePicture: json['profilePicture'] as String,
       bio: json['bio'] as String,
+      genres: (json['genres'] as List<dynamic>)
+          .map((e) => $enumDecode(_$GenreEnumMap, e))
+          .toList(),
       placeId: json['placeId'] as String,
       geohash: json['geohash'] as String,
       lat: (json['lat'] as num).toDouble(),
@@ -49,6 +52,7 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'artistName': instance.artistName,
       'profilePicture': instance.profilePicture,
       'bio': instance.bio,
+      'genres': instance.genres.map((e) => _$GenreEnumMap[e]!).toList(),
       'placeId': instance.placeId,
       'geohash': instance.geohash,
       'lat': instance.lat,
@@ -75,6 +79,27 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'stripeConnectedAccountId': instance.stripeConnectedAccountId,
       'stripeCustomerId': instance.stripeCustomerId,
     };
+
+const _$GenreEnumMap = {
+  Genre.pop: 'pop',
+  Genre.rock: 'rock',
+  Genre.hiphop: 'hiphop',
+  Genre.rnb: 'rnb',
+  Genre.country: 'country',
+  Genre.edm: 'edm',
+  Genre.jazz: 'jazz',
+  Genre.latin: 'latin',
+  Genre.classical: 'classical',
+  Genre.reggae: 'reggae',
+  Genre.blues: 'blues',
+  Genre.soul: 'soul',
+  Genre.funk: 'funk',
+  Genre.metal: 'metal',
+  Genre.punk: 'punk',
+  Genre.indie: 'indie',
+  Genre.folk: 'folk',
+  Genre.other: 'other',
+};
 
 const _$AccountTypeEnumMap = {
   AccountType.venue: 'venue',
