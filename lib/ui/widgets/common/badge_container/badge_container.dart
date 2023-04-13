@@ -22,13 +22,16 @@ class BadgeContainer extends StatelessWidget {
                 PushBadge(badge),
               ),
           child: ListTile(
-            leading: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: CachedNetworkImage(
-                imageUrl: badge.imageUrl,
-                height: 50,
-                width: 50,
-                fit: BoxFit.fill,
+            leading: Hero(
+              tag: badge.id,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: CachedNetworkImage(
+                  imageUrl: badge.imageUrl,
+                  height: 50,
+                  width: 50,
+                  fit: BoxFit.fill,
+                ),
               ),
             ),
             title: Text(badge.name),

@@ -38,9 +38,12 @@ class BadgeView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 30),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: CachedNetworkImage(imageUrl: badge.imageUrl),
+              Hero(
+                tag: badge.id,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: CachedNetworkImage(imageUrl: badge.imageUrl),
+                ),
               ),
               const SizedBox(height: 30),
               const Text(
