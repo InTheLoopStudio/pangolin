@@ -332,7 +332,7 @@ class UserModel extends Equatable {
       'username': username.toString(),
       'artistName': artistName,
       'bio': bio,
-      'genres': genres.map((e) => e.toString()).toList(),
+      'genres': genres.map((e) => e.name).toList(),
       'profilePicture': profilePicture,
       'placeId': placeId,
       'geohash': geohash,
