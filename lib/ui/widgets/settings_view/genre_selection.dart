@@ -16,7 +16,6 @@ class GenreSelection extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsCubit, SettingsState>(
       builder: (context, state) {
-        print('ahhhhhh ${state.genres}');
         return Column(
           children: [
             const SizedBox(height: 6),
