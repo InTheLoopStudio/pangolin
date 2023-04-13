@@ -16,12 +16,14 @@ class GenreSelection extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsCubit, SettingsState>(
       builder: (context, state) {
+        print('ahhhhhh ${state.genres}');
         return Column(
           children: [
             const SizedBox(height: 6),
             MultiSelectBottomSheetField<Genre?>(
               initialChildSize: 0.4,
               listType: MultiSelectListType.CHIP,
+              initialValue: state.genres,
               searchable: true,
               buttonText: const Text(
                 'Select Genres',
