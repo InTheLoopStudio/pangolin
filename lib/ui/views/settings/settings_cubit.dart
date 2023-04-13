@@ -184,6 +184,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         username: Username.fromString(state.username),
         artistName: state.artistName,
         bio: state.bio,
+        genres: state.genres,
         placeId: state.placeId,
         geohash: geohash,
         lat: lat,
