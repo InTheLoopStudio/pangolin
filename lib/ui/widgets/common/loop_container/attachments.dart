@@ -1,7 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/audio_controls.dart';
 
 class Attachments extends StatelessWidget {
@@ -34,10 +37,36 @@ class Attachments extends StatelessWidget {
     if (imagePath.isNotEmpty) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 14),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: CachedNetworkImage(
-            imageUrl: imagePath,
+        child: GestureDetector(
+          onTap: () {
+            context.read<NavigationBloc>().add(
+                  PushPhotoView(
+                    imageUrl: imagePath,
+                  ),
+                );
+          },
+          child: Hero(
+            tag: imagePath,
+            child: CachedNetworkImage(
+              imageUrl: imagePath,
+              imageBuilder: (context, imageProvider) => Container(
+                height: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              placeholder: (context, url) => const CircularProgressIndicator(
+                color: tappedAccent,
+              ),
+              errorWidget: (context, url, error) => const Icon(
+                Icons.error,
+                color: Colors.red,
+              ),
+            ),
           ),
         ),
       );

@@ -7,7 +7,7 @@ import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/search/search_cubit.dart';
 import 'package:intheloopapp/ui/widgets/search_view/by_location_results_list.dart';
 import 'package:intheloopapp/ui/widgets/search_view/by_username_results_list.dart';
-import 'package:intheloopapp/ui/widgets/search_view/search_bar.dart';
+import 'package:intheloopapp/ui/widgets/search_view/search_bar.dart' as search;
 
 class SearchView extends StatefulWidget {
   const SearchView({
@@ -60,7 +60,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
           centerTitle: true,
           elevation: 0.5,
           backgroundColor: theme.colorScheme.background,
-          title: SearchBar(
+          title: search.SearchBar(
             searchFocusNode: widget.searchFocusNode,
           ),
           bottom: TabBar(

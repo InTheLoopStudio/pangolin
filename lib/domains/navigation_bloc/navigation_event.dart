@@ -14,6 +14,20 @@ class Pop extends NavigationEvent {
   List<Object> get props => [];
 }
 
+class PushPhotoView extends NavigationEvent {
+  const PushPhotoView({
+    required this.imageUrl,
+  });
+
+  final String imageUrl;
+
+  @override
+  String toString() => 'PushPhotoView { imageUrl: $imageUrl }';
+
+  @override
+  List<Object> get props => [imageUrl];
+}
+
 class PushProfile extends NavigationEvent {
   const PushProfile(this.userId);
 
