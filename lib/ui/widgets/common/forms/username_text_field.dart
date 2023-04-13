@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 
-class UsernameTextField extends StatefulWidget {
+class UsernameTextField extends StatelessWidget {
   const UsernameTextField({
     required this.currentUserId,
     super.key,
@@ -20,24 +20,12 @@ class UsernameTextField extends StatefulWidget {
   final bool validateUniqueness;
 
   @override
-  State<UsernameTextField> createState() => _UsernameTextFieldState();
-}
-
-class _UsernameTextFieldState extends State<UsernameTextField> {
-  bool _usernameTaken = false;
-
-  String get _currentUserId => widget.currentUserId;
-  bool get _validateUniqueness => widget.validateUniqueness;
-  void Function(String?)? get _onSaved => widget.onSaved;
-  void Function(String?)? get _onChanged => widget.onChanged;
-
-  @override
   Widget build(BuildContext context) {
     return TextFormField(
       inputFormatters: [
         FilteringTextInputFormatter.allow(RegExp(r'[a-z0-9_\.\-\$]')),
       ],
-      initialValue: widget.initialValue,
+      initialValue: initialValue,
       decoration: const InputDecoration(
         prefixIcon: Icon(Icons.person),
         labelText: 'Handle',
@@ -48,44 +36,19 @@ class _UsernameTextFieldState extends State<UsernameTextField> {
           return 'please enter a valid handle';
         }
 
-        if (_usernameTaken) {
-          return 'handle already in use';
-        }
-
         return null;
       },
-      onSaved: (input) async {
+      onSaved: (input) {
         if (input == null || input.isEmpty) return;
 
         input = input.trim().toLowerCase();
-        // DatabaseRepository databaseRepo =
-        //     RepositoryProvider.of<DatabaseRepository>(context);
-        // bool available =
-        // await databaseRepo.checkUsernameAvailability(input, _currentUserId);
-        // setState(() {
-        //   _usernameTaken = !available;
-        // });
-
-        _onSaved?.call(input);
+        onSaved?.call(input);
       },
-      onChanged: (input) async {
+      onChanged: (input) {
         if (input.isEmpty) return;
 
         input = input.trim().toLowerCase();
-
-        if (_validateUniqueness) {
-          final databaseRepo =
-              RepositoryProvider.of<DatabaseRepository>(context);
-          final available = await databaseRepo.checkUsernameAvailability(
-            input,
-            _currentUserId,
-          );
-          setState(() {
-            _usernameTaken = !available;
-          });
-        }
-
-        _onChanged?.call(input);
+        onChanged?.call(input);
       },
     );
   }

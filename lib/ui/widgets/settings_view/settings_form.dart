@@ -34,7 +34,7 @@ class SettingsForm extends StatelessWidget {
                 children: [
                   UsernameTextField(
                     initialValue: state.username,
-                    onSaved: (input) {
+                    onChanged: (input) {
                       if (input != null) {
                         context.read<SettingsCubit>().changeUsername(input);
                       }

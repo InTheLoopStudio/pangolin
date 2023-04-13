@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
+import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
@@ -168,6 +169,15 @@ class SettingsCubit extends Cubit<SettingsState> {
     if (state.formKey.currentState!.validate() && !state.status.isInProgress) {
       emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
 
+      final available = await databaseRepository.checkUsernameAvailability(
+        state.username,
+        currentUser.id,
+      );
+
+      if (!available) {
+        throw HandleAlreadyExistsException('Username already exists');
+      }
+
       final profilePictureUrl = state.profileImage != null
           ? await storageRepository.uploadProfilePicture(
               currentUser.id,
@@ -205,6 +215,8 @@ class SettingsCubit extends Cubit<SettingsState> {
         bookingRate: state.rate,
         // stripeConnectedAccountId: state.stripeConnectedAccountId,
       );
+
+      print(user);
 
       onboardingBloc.add(UpdateOnboardedUser(user: user));
       emit(state.copyWith(status: FormzSubmissionStatus.success));
