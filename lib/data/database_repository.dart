@@ -206,6 +206,6 @@ abstract class DatabaseRepository {
   );
   Future<bool> hasUserReviewedBooking(
     String userId,
-    Booking booking,
+    String bookingId,
   );
 }

@@ -1342,12 +1342,12 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<bool> hasUserReviewedBooking(
     String userId,
-    Booking booking,
+    String bookingId,
   ) async {
     final reviewSnapshot = await _reviewsRef
         .doc(userId)
         .collection(reviewersSubcollection)
-        .doc(booking.id)
+        .doc(bookingId)
         .get();
 
     return reviewSnapshot.exists;

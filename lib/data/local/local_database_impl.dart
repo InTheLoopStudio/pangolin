@@ -381,7 +381,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
   @override
   Future<bool> hasUserReviewedBooking(
     String userId,
-    Booking booking,
+    String bookingId,
   ) async {
     return false;
   }

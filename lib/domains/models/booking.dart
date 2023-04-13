@@ -102,7 +102,10 @@ class Booking {
   bool get isConfirmed => status == BookingStatus.confirmed;
   bool get isCancaled => status == BookingStatus.canceled;
 
+  bool get isExpired => endTime.isBefore(DateTime.now());
+
   Duration get duration => endTime.difference(startTime);
+
 
   int get totalCost =>
       ((rate / 60) * duration.inMinutes).toInt();

@@ -60,20 +60,43 @@ class BookingContainer extends StatelessWidget {
                     color: Colors.grey,
                   ),
                 ),
-                trailing: Text(
-                  EnumToString.convertToString(booking.status),
-                  style: TextStyle(
-                    color: () {
-                      switch (booking.status) {
-                        case BookingStatus.pending:
-                          return Colors.orange[300];
-                        case BookingStatus.confirmed:
-                          return Colors.green[300];
-                        case BookingStatus.canceled:
-                          return Colors.red[300];
-                      }
-                    }(),
+                trailing: FutureBuilder<bool>(
+                  future: database.hasUserReviewedBooking(
+                    requestee.id,
+                    booking.id,
                   ),
+                  builder: (context, snapshot) {
+                    final hasReviewed = snapshot.data ?? true;
+
+                    if (booking.isExpired &&
+                        booking.isConfirmed &&
+                        !hasReviewed) {
+                      return FilledButton(
+                        onPressed: () {
+                          context.read<NavigationBloc>().add(
+                                PushCreateReview(booking),
+                              );
+                        },
+                        child: const Text('Review'),
+                      );
+                    }
+
+                    return Text(
+                      EnumToString.convertToString(booking.status),
+                      style: TextStyle(
+                        color: () {
+                          switch (booking.status) {
+                            case BookingStatus.pending:
+                              return Colors.orange[300];
+                            case BookingStatus.confirmed:
+                              return Colors.green[300];
+                            case BookingStatus.canceled:
+                              return Colors.red[300];
+                          }
+                        }(),
+                      ),
+                    );
+                  },
                 ),
               );
             },
@@ -117,43 +140,68 @@ class BookingContainer extends StatelessWidget {
                     color: Colors.grey,
                   ),
                 ),
-                trailing: booking.status == BookingStatus.pending
-                    ? GestureDetector(
-                        child: const Icon(CupertinoIcons.ellipsis),
-                        onTap: () => showCupertinoModalPopup<void>(
-                          context: context,
-                          builder: (BuildContext context) => CupertinoActionSheet(
-                            title: const Text('Booking Request'),
-                            message: const Text('Accept or Deny the request'),
-                            actions: <CupertinoActionSheetAction>[
-                              CupertinoActionSheetAction(
-                                onPressed: () {
-                                  final updated = booking.copyWith(
-                                    status: BookingStatus.confirmed,
-                                  );
-                                  database.updateBooking(updated);
-                                  onConfirm?.call(updated);
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Accept'),
+                trailing: FutureBuilder<bool>(
+                  future: database.hasUserReviewedBooking(
+                    requester.id,
+                    booking.id,
+                  ),
+                  builder: (context, snapshot) {
+                    final hasReviewed = snapshot.data ?? true;
+
+                    if (booking.isExpired &&
+                        booking.isConfirmed &&
+                        !hasReviewed) {
+                      return FilledButton(
+                        onPressed: () {
+                          context.read<NavigationBloc>().add(
+                                PushCreateReview(booking),
+                              );
+                        },
+                        child: const Text('Review'),
+                      );
+                    }
+
+                    return booking.status == BookingStatus.pending
+                        ? GestureDetector(
+                            child: const Icon(CupertinoIcons.ellipsis),
+                            onTap: () => showCupertinoModalPopup<void>(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  CupertinoActionSheet(
+                                title: const Text('Booking Request'),
+                                message:
+                                    const Text('Accept or Deny the request'),
+                                actions: <CupertinoActionSheetAction>[
+                                  CupertinoActionSheetAction(
+                                    onPressed: () {
+                                      final updated = booking.copyWith(
+                                        status: BookingStatus.confirmed,
+                                      );
+                                      database.updateBooking(updated);
+                                      onConfirm?.call(updated);
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('Accept'),
+                                  ),
+                                  CupertinoActionSheetAction(
+                                    isDestructiveAction: true,
+                                    onPressed: () {
+                                      final updated = booking.copyWith(
+                                        status: BookingStatus.canceled,
+                                      );
+                                      database.updateBooking(updated);
+                                      onDeny?.call(updated);
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('Deny'),
+                                  ),
+                                ],
                               ),
-                              CupertinoActionSheetAction(
-                                isDestructiveAction: true,
-                                onPressed: () {
-                                  final updated = booking.copyWith(
-                                    status: BookingStatus.canceled,
-                                  );
-                                  database.updateBooking(updated);
-                                  onDeny?.call(updated);
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Deny'),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    : Text(EnumToString.convertToString(booking.status)),
+                            ),
+                          )
+                        : Text(EnumToString.convertToString(booking.status));
+                  },
+                ),
               );
             },
           );

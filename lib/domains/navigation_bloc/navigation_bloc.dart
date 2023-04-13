@@ -11,6 +11,7 @@ import 'package:intheloopapp/ui/views/common/booking_view/booking_view.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view.dart';
 import 'package:intheloopapp/ui/views/create_booking/create_booking_view.dart';
 import 'package:intheloopapp/ui/views/create_loop/create_loop_view.dart';
+import 'package:intheloopapp/ui/views/create_review/create_review_view.dart';
 import 'package:intheloopapp/ui/views/likes/likes_view.dart';
 import 'package:intheloopapp/ui/views/login/forgot_password_view.dart';
 import 'package:intheloopapp/ui/views/login/signup_view.dart';
@@ -179,6 +180,18 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
             initialPlaceId: event.initialPlaceId,
             initialPlace: event.initialPlace,
             onSelected: event.onSelected,
+          ),
+        ),
+      );
+
+      emit(state);
+    });
+    on<PushCreateReview>((event, emit) {
+      navigationKey.currentState?.push(
+        MaterialPageRoute<CreateReviewView>(
+          settings: RouteSettings(name: '/create-review/${event.booking.id}'),
+          builder: (context) => CreateReviewView(
+            booking: event.booking,
           ),
         ),
       );
