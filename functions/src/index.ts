@@ -16,7 +16,7 @@ import { defineSecret } from "firebase-functions/params";
 import { HttpsError } from "firebase-functions/v1/auth";
 
 import Stripe from "stripe";
-import { Booking } from "./models";
+import { Booking, Loop } from "./models";
 
 const app = initializeApp();
 
@@ -681,7 +681,28 @@ export const incrementLoopCountOnUpload = functions.firestore
       .doc(loop.userId)
       .update({ loopsCount: FieldValue.increment(1) });
   })
+export const notifyMentionsOnLoopUpload = functions.firestore
+  .document("loops/{loopId}")
+  .onCreate(async (snapshot) => {
+    const loop = snapshot.data() as Loop;
+    const description = loop.description;
+    const userTagRegex = /^(.*?)(?<![\w@])@([\w@]+(?:[.!][\w@]+)*)/;
 
+    description.match(userTagRegex)?.forEach(async (match: string) => {
+      const username = match.replace("@", "");
+      const userDoc = await usersRef.where("username", "==", username).get();
+      if (userDoc.empty) {
+        return;
+      }
+
+      const user = userDoc.docs[0].data();
+      await _addActivity({
+        toUserId: user.id,
+        fromUserId: loop.userId,
+        type: "mention",
+      });
+    });
+  })
 export const sendLoopToFollowers = functions.firestore
   .document("loops/{loopId}")
   .onCreate(async (snapshot) => {

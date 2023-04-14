@@ -960,14 +960,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.13.0"
-  flutter_linkify:
-    dependency: "direct main"
-    description:
-      name: flutter_linkify
-      sha256: c89fe74de985ec22f23d3538d2249add085a4f37ac1c29fd79e1a207efb81d63
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.0.2"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -1371,21 +1363,13 @@ packages:
     source: hosted
     version: "2.0.5"
   linkify:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: linkify
       sha256: bdfbdafec6cdc9cd0ebb333a868cafc046714ad508e48be8095208c54691d959
       url: "https://pub.dev"
     source: hosted
     version: "4.1.0"
-  linkify_text:
-    dependency: "direct main"
-    description:
-      name: linkify_text
-      sha256: e9a75df545b04ac933d8d7baecc2c5e71fbc11337b388289842c0020a664a61e
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.9"
   lints:
     dependency: transitive
     description:
@@ -2119,6 +2103,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.1"
+  transparent_pointer:
+    dependency: "direct main"
+    description:
+      name: transparent_pointer
+      sha256: "27f5a7a63e517b6a56962bd473bbfcdcacce13fc996a264d6665da9a24650eb9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   typed_data:
     dependency: transitive
     description:

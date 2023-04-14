@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
@@ -8,6 +7,7 @@ import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
+import 'package:intheloopapp/linkify.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_container.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/attachments.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/control_buttons.dart';

@@ -45,11 +45,13 @@ export type Loop = {
   id: string;
   userId: string;
   title: string;
+  description: string;
   audioPath: string;
   likeCount: number;
   downloads: number;
   commentCount: number;
   shareCount: number;
+  imagePaths: Array<string>;
   tags: Array<string>;
   deleted: boolean;
 };

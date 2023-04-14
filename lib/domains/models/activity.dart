@@ -89,4 +89,5 @@ enum ActivityType {
   comment,
   bookingRequest,
   bookingUpdate,
+  mention,
 }

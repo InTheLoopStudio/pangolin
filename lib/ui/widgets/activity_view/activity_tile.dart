@@ -88,6 +88,8 @@ class ActivityTile extends StatelessWidget {
                                   return 'sent you a booking request 📩';
                                 case ActivityType.bookingUpdate:
                                   return 'updated your booking 📩';
+                                case ActivityType.mention:
+                                  return 'mentioned you in a loop 📣';
                               }
                             }(),
                             style: TextStyle(

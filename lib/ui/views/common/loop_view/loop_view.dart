@@ -6,6 +6,7 @@ import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
+import 'package:intheloopapp/linkify.dart';
 import 'package:intheloopapp/ui/views/common/comments/comments_cubit.dart';
 import 'package:intheloopapp/ui/views/common/loading/loop_loading_view.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view_cubit.dart';
@@ -14,7 +15,6 @@ import 'package:intheloopapp/ui/widgets/comments/comments_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/attachments.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/like_button.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
-import 'package:linkify_text/linkify_text.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class LoopView extends StatelessWidget {
@@ -156,9 +156,11 @@ class LoopView extends StatelessWidget {
                                           ),
                                         ),
                                       const SizedBox(height: 14),
-                                      LinkifyText(
-                                        loop.description,
-                                        fontSize: 14,
+                                      Linkify(
+                                        text: loop.description,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                        ),
                                       ),
                                       const SizedBox(height: 14),
                                       Attachments(

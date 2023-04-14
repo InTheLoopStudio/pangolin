@@ -30,4 +30,5 @@ const _$ActivityTypeEnumMap = {
   ActivityType.comment: 'comment',
   ActivityType.bookingRequest: 'bookingRequest',
   ActivityType.bookingUpdate: 'bookingUpdate',
+  ActivityType.mention: 'mention',
 };
