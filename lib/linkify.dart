@@ -158,7 +158,6 @@ class Linkify extends StatelessWidget {
             ?.merge(style)
             .copyWith(
               color: Colors.blueAccent,
-              decoration: TextDecoration.underline,
             )
             .merge(linkStyle),
       ),
@@ -322,7 +321,6 @@ class SelectableLinkify extends StatelessWidget {
             ?.merge(style)
             .copyWith(
               color: Colors.blueAccent,
-              decoration: TextDecoration.underline,
             )
             .merge(linkStyle),
       ),
