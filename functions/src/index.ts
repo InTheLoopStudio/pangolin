@@ -16,7 +16,7 @@ import { defineSecret } from "firebase-functions/params";
 import { HttpsError } from "firebase-functions/v1/auth";
 
 import Stripe from "stripe";
-import { Booking, Loop } from "./models";
+import { Booking, Loop, Comment } from "./models";
 
 const app = initializeApp();
 
@@ -696,6 +696,8 @@ export const notifyMentionsOnLoopUpload = functions.firestore
       }
 
       const user = userDoc.docs[0].data();
+
+      functions.logger.info(`new mention ${user.id} by ${loop.userId}`)
       await _addActivity({
         toUserId: user.id,
         fromUserId: loop.userId,
@@ -826,6 +828,31 @@ export const incrementLoopCommentCountOnComment = functions.firestore
     await loopsRef
       .doc(context.params.loopId)
       .update({ commentCount: FieldValue.increment(1) });
+  });
+export const notifyMentionsOnComment = functions.firestore
+  .document("comments/{loopId}/loopComments/{commentId}")
+  .onCreate(async (snapshot) => {
+    const comment = snapshot.data() as Comment;
+
+    const text = comment.content;
+    const userTagRegex = /^(.*?)(?<![\w@])@([\w@]+(?:[.!][\w@]+)*)/;
+
+    text.match(userTagRegex)?.forEach(async (match: string) => {
+      const username = match.replace("@", "");
+      const userDoc = await usersRef.where("username", "==", username).get();
+      if (userDoc.empty) {
+        return;
+      }
+
+      const user = userDoc.docs[0].data();
+
+      functions.logger.info(`new mention ${user.id} by ${comment.userId}`)
+      await _addActivity({
+        toUserId: user.id,
+        fromUserId: comment.userId,
+        type: "mention",
+      });
+    });
   });
 
 export const addActivityOnLoopComment = functions.firestore

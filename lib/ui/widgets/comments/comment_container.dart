@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/linkify.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -52,8 +53,8 @@ class CommentContainer extends StatelessWidget {
                 title: Text(
                   user.displayName,
                 ),
-                subtitle: Text(
-                  comment.content,
+                subtitle: Linkify(
+                  text: comment.content,
                 ),
               ),
             );
