@@ -26,31 +26,40 @@ class PlayPauseButton extends StatelessWidget {
         final playing = playerState.playing;
         if (processingState == ProcessingState.loading ||
             processingState == ProcessingState.buffering) {
-          return Container(
-            margin: const EdgeInsets.all(8),
-            width: 20,
-            height: 20,
-            child: const CircularProgressIndicator(),
+          return const FloatingActionButton(
+            onPressed: null,
+            shape: CircleBorder(),
+            child: Icon(
+              Icons.play_arrow,
+              size: 32,
+            ),
           );
         } else if (playing != true) {
-          return IconButton(
-            icon: const Icon(Icons.play_arrow),
-            iconSize: 32,
+          return FloatingActionButton(
             onPressed: audioController.play,
+            shape: const CircleBorder(),
+            child: const Icon(
+              Icons.play_arrow,
+              size: 32,
+            ),
           );
         } else if (processingState != ProcessingState.completed) {
-          return IconButton(
-            icon: const Icon(Icons.pause),
-            iconSize: 32,
+          return FloatingActionButton(
             onPressed: audioController.pause,
+            child: const Icon(
+              Icons.pause,
+              size: 32,
+            ),
           );
         } else {
-          return IconButton(
-            icon: const Icon(Icons.replay),
-            iconSize: 24,
+          return FloatingActionButton(
             onPressed: () => audioController.seek(
               Duration.zero,
               index: audioController.effectiveIndices!.first,
+            ),
+            child: const Icon(
+              Icons.replay,
+              size: 24,
             ),
           );
         }

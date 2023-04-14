@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -83,6 +84,71 @@ class _LoopContainerState extends State<LoopContainer>
         ),
       );
 
+  Widget _audioLoopContainer({
+    required NavigationBloc navigationBloc,
+    required UserModel loopUser,
+    required String currentUserId,
+  }) =>
+      GestureDetector(
+        onTap: () => navigationBloc.add(
+          PushLoop(widget.loop),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25),
+              image: DecorationImage(
+                image: CachedNetworkImageProvider(
+                  loopUser.profilePicture,
+                ),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 8,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  UserInfo(
+                    loopUser: loopUser,
+                    timestamp: widget.loop.timestamp,
+                  ),
+                  TitleText(title: widget.loop.title),
+                  const SizedBox(height: 14),
+                  if (widget.loop.description.isNotEmpty)
+                    Column(
+                      children: [
+                        Linkify(
+                          text: widget.loop.description,
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                      ],
+                    )
+                  else
+                    const SizedBox.shrink(),
+                  Attachments(
+                    loop: widget.loop,
+                    loopUser: loopUser,
+                  ),
+                  ControlButtons(
+                    loopId: widget.loop.id,
+                    currentUserId: currentUserId,
+                  ),
+                  const SizedBox(height: 8),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -140,6 +206,15 @@ class _LoopContainerState extends State<LoopContainer>
                         loopUser: loopUser,
                         currentUserId: currentUser.id,
                       ),
+                    );
+                  }
+
+                  if (widget.loop.audioPath.isNotEmpty &&
+                      loopUser.profilePicture.isNotEmpty) {
+                    return _audioLoopContainer(
+                      navigationBloc: navigationBloc,
+                      loopUser: loopUser,
+                      currentUserId: currentUser.id,
                     );
                   }
 

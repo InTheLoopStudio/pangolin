@@ -197,7 +197,6 @@ class SelectableLinkify extends StatelessWidget {
     this.strutStyle,
     this.showCursor = false,
     this.autofocus = false,
-    this.toolbarOptions,
     this.cursorWidth = 2.0,
     this.cursorRadius,
     this.cursorColor,
@@ -266,9 +265,6 @@ class SelectableLinkify extends StatelessWidget {
   /// Whether this text field should focus itself if nothing else is already focused.
   final bool autofocus;
 
-  /// Configuration of toolbar options
-  final ToolbarOptions? toolbarOptions;
-
   /// How thick the cursor will be
   final double cursorWidth;
 
@@ -333,7 +329,6 @@ class SelectableLinkify extends StatelessWidget {
       showCursor: showCursor,
       textScaleFactor: textScaleFactor,
       autofocus: autofocus,
-      toolbarOptions: toolbarOptions,
       cursorWidth: cursorWidth,
       cursorRadius: cursorRadius,
       cursorColor: cursorColor,
