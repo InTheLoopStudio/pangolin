@@ -133,8 +133,9 @@ class Linkify extends StatelessWidget {
                   );
                   await launchUrl(url);
                 } else if (link is UserTagElement) {
+                  final username = link.userTag.replaceFirst('@', '');
                   final user = await database.getUserByUsername(
-                    link.userTag,
+                    username,
                   );
                   if (user == null) {
                     throw Exception('User not found');
@@ -145,7 +146,7 @@ class Linkify extends StatelessWidget {
               } on Exception {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Something went wrong'),
+                    content: Text('something went wrong'),
                   ),
                 );
               }
