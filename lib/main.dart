@@ -54,10 +54,10 @@ Future<void> main() async {
 
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   PlatformDispatcher.instance.onError = (error, stack) {
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
 
-      return true;
-    };
+    return true;
+  };
 
   // Keep the app in portrait mode (no landscape)
   await SystemChrome.setPreferredOrientations([
@@ -130,14 +130,15 @@ class TappedApp extends StatelessWidget {
                             .read<DynamicLinkBloc>()
                             .add(MonitorDynamicLinks());
                         context.read<OnboardingBloc>().add(
-                              OnboardingCheck(userId: authState.currentUserId),
+                              OnboardingCheck(
+                                  userId: authState.currentAuthUser.uid),
                             );
                         context
                             .read<StreamRepository>()
-                            .connectUser(authState.currentUserId);
-                        context
-                            .read<NotificationRepository>()
-                            .saveDeviceToken(userId: authState.currentUserId);
+                            .connectUser(authState.currentAuthUser.uid);
+                        context.read<NotificationRepository>().saveDeviceToken(
+                              userId: authState.currentAuthUser.uid,
+                            );
 
                         context.read<ActivityBloc>().add(InitListenerEvent());
 
