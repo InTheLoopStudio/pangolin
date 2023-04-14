@@ -402,7 +402,6 @@ const _createPaymentIntent = async (data: {
 
   const bookingFee = parseFloat(weirdTSError);
 
-  // Set the application fee to be 10%
   const application_fee = data.amount * bookingFee;
 
   const paymentIntent = await stripe.paymentIntents.create({

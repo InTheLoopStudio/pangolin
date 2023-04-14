@@ -51,11 +51,19 @@ class StripePaymentImpl implements PaymentRepository {
     required String payeeConnectedAccountId,
     required int amount,
   }) async {
-
-    await _analytics.logBeginCheckout(
-      currency: 'USD',
-      value: amount.toDouble(),
-    );
+    await Future.wait([
+      _analytics.logBeginCheckout(
+        currency: 'USD',
+        value: amount.toDouble(),
+      ),
+      _analytics.logEvent(
+        name: 'init_payment_sheet',
+        parameters: {
+          'currency': 'USD',
+          'value': amount.toDouble(),
+        },
+      ),
+    ]);
 
     // 1. create payment intent on the server
     final intent = await _createPaymentSheet(
