@@ -21,73 +21,65 @@ class Stage1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<AuthenticationBloc, AuthenticationState, Authenticated>(
-      selector: (state) => state as Authenticated,
-      builder: (context, userState) {
-        final currentUserId = userState.currentUserId;
-
-        return BlocBuilder<OnboardingFlowCubit, OnboardingFlowState>(
-          builder: (context, state) {
-            return Form(
-              key: state.formKey,
-              child: Align(
-                alignment: const Alignment(0, -1 / 3),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
+    return BlocBuilder<OnboardingFlowCubit, OnboardingFlowState>(
+      builder: (context, state) {
+        return Form(
+          key: state.formKey,
+          child: Align(
+            alignment: const Alignment(0, -1 / 3),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(height: 100),
-                          Text(
-                            'Complete Your Profile',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 25,
-                            ),
-                          ),
-                        ],
+                      SizedBox(height: 100),
+                      Text(
+                        'Complete Your Profile',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25,
+                        ),
                       ),
-                      const SizedBox(height: 50),
-                      UsernameTextField(
-                        onChanged: (input) => context
-                            .read<OnboardingFlowCubit>()
-                            .usernameChange(input ?? ''),
-                        initialValue: state.username,
-                        currentUserId: currentUserId,
-                      ),
-                      const SizedBox(height: 20),
-                      ArtistNameTextField(
-                        onChanged: (input) => context
-                            .read<OnboardingFlowCubit>()
-                            .aristNameChange(input ?? ''),
-                        initialValue: state.artistName,
-                      ),
-                      const SizedBox(height: 20),
-                      LocationTextField(
-                        initialPlaceId: rvaPlaceId,
-                        initialPlace: initialPlace,
-                        onChanged: (place, placeId) => context
-                            .read<OnboardingFlowCubit>()
-                            .locationChange(place, placeId),
-                      ),
-                      const SizedBox(height: 20),
-                      BioTextField(
-                        initialValue: state.bio,
-                        onChanged: (input) => context
-                            .read<OnboardingFlowCubit>()
-                            .bioChange(input ?? ''),
-                      ),
-                      const SizedBox(height: 50),
-                      const ProfilePictureUploader(),
                     ],
                   ),
-                ),
+                  const SizedBox(height: 50),
+                  UsernameTextField(
+                    onChanged: (input) => context
+                        .read<OnboardingFlowCubit>()
+                        .usernameChange(input ?? ''),
+                    initialValue: state.username,
+                  ),
+                  const SizedBox(height: 20),
+                  ArtistNameTextField(
+                    onChanged: (input) => context
+                        .read<OnboardingFlowCubit>()
+                        .aristNameChange(input ?? ''),
+                    initialValue: state.artistName,
+                  ),
+                  const SizedBox(height: 20),
+                  LocationTextField(
+                    initialPlaceId: rvaPlaceId,
+                    initialPlace: initialPlace,
+                    onChanged: (place, placeId) => context
+                        .read<OnboardingFlowCubit>()
+                        .locationChange(place, placeId),
+                  ),
+                  const SizedBox(height: 20),
+                  BioTextField(
+                    initialValue: state.bio,
+                    onChanged: (input) => context
+                        .read<OnboardingFlowCubit>()
+                        .bioChange(input ?? ''),
+                  ),
+                  const SizedBox(height: 50),
+                  const ProfilePictureUploader(),
+                ],
               ),
-            );
-          },
+            ),
+          ),
         );
       },
     );

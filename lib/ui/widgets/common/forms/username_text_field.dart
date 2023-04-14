@@ -5,7 +5,6 @@ import 'package:intheloopapp/data/database_repository.dart';
 
 class UsernameTextField extends StatelessWidget {
   const UsernameTextField({
-    required this.currentUserId,
     super.key,
     this.onSaved,
     this.onChanged,
@@ -16,7 +15,6 @@ class UsernameTextField extends StatelessWidget {
   final void Function(String?)? onSaved;
   final void Function(String?)? onChanged;
   final String? initialValue;
-  final String currentUserId;
   final bool validateUniqueness;
 
   @override

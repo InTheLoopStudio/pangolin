@@ -62,7 +62,17 @@ class ControlButtons extends StatelessWidget {
                     stage: state.onboardingStage,
                     onFinish: () =>
                         context.read<OnboardingFlowCubit>().finishOnboarding(),
-                    onNext: () => context.read<OnboardingFlowCubit>().next(),
+                    onNext: () {
+                      try {
+                        context.read<OnboardingFlowCubit>().next();
+                      } on Exception catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(e.toString()),
+                          ),
+                        );
+                      }
+                    },
                   ),
                 ],
               ),

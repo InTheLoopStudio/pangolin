@@ -21,82 +21,74 @@ class SettingsForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
-      selector: (state) => state as Onboarded,
-      builder: (context, userState) {
-        final currentUser = userState.currentUser;
-
-        return BlocBuilder<SettingsCubit, SettingsState>(
-          builder: (context, state) {
-            return Form(
-              key: state.formKey,
-              child: Column(
-                children: [
-                  UsernameTextField(
-                    initialValue: state.username,
-                    onChanged: (input) {
-                      if (input != null) {
-                        context.read<SettingsCubit>().changeUsername(input);
-                      }
-                    },
-                    currentUserId: currentUser.id,
-                  ),
-                  ArtistNameTextField(
-                    onChanged: (input) => context
-                        .read<SettingsCubit>()
-                        .changeArtistName(input ?? ''),
-                    initialValue: state.artistName,
-                  ),
-                  BioTextField(
-                    onChanged: (value) =>
-                        context.read<SettingsCubit>().changeBio(value ?? ''),
-                    initialValue: state.bio,
-                  ),
-                  const GenreSelection(),
-                  LocationTextField(
-                    onChanged: (place, placeId) => context
-                        .read<SettingsCubit>()
-                        .changePlace(place, placeId),
-                    initialPlace: state.place,
-                    initialPlaceId: state.placeId,
-                  ),
-                  TwitterTextField(
-                    initialValue: state.twitterHandle,
-                    onChanged: (value) =>
-                        context.read<SettingsCubit>().changeTwitter(value),
-                  ),
-                  InstagramTextField(
-                    initialValue: state.instagramHandle,
-                    onChanged: (value) =>
-                        context.read<SettingsCubit>().changeInstagram(value),
-                  ),
-                  TikTokTextField(
-                    initialValue: state.tiktokHandle,
-                    onChanged: (value) =>
-                        context.read<SettingsCubit>().changeTikTik(value),
-                  ),
-                  SoundcloudTextField(
-                    initialValue: state.soundcloudHandle,
-                    onChanged: (value) =>
-                        context.read<SettingsCubit>().changeSoundcloud(value),
-                  ),
-                  YoutubeTextField(
-                    initialValue: state.youtubeChannelId,
-                    onChanged: (value) =>
-                        context.read<SettingsCubit>().changeYoutube(value),
-                  ),
-                  const SizedBox(height: 15),
-                  const ThemeSwitch(),
-                  if (state.status.isInProgress)
-                    const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation(tappedAccent),
-                    )
-                  else
-                    const SizedBox.shrink(),
-                ],
+    return BlocBuilder<SettingsCubit, SettingsState>(
+      builder: (context, state) {
+        return Form(
+          key: state.formKey,
+          child: Column(
+            children: [
+              UsernameTextField(
+                initialValue: state.username,
+                onChanged: (input) {
+                  if (input != null) {
+                    context.read<SettingsCubit>().changeUsername(input);
+                  }
+                },
               ),
-            );
-          },
+              ArtistNameTextField(
+                onChanged: (input) => context
+                    .read<SettingsCubit>()
+                    .changeArtistName(input ?? ''),
+                initialValue: state.artistName,
+              ),
+              BioTextField(
+                onChanged: (value) =>
+                    context.read<SettingsCubit>().changeBio(value ?? ''),
+                initialValue: state.bio,
+              ),
+              const GenreSelection(),
+              LocationTextField(
+                onChanged: (place, placeId) => context
+                    .read<SettingsCubit>()
+                    .changePlace(place, placeId),
+                initialPlace: state.place,
+                initialPlaceId: state.placeId,
+              ),
+              TwitterTextField(
+                initialValue: state.twitterHandle,
+                onChanged: (value) =>
+                    context.read<SettingsCubit>().changeTwitter(value),
+              ),
+              InstagramTextField(
+                initialValue: state.instagramHandle,
+                onChanged: (value) =>
+                    context.read<SettingsCubit>().changeInstagram(value),
+              ),
+              TikTokTextField(
+                initialValue: state.tiktokHandle,
+                onChanged: (value) =>
+                    context.read<SettingsCubit>().changeTikTik(value),
+              ),
+              SoundcloudTextField(
+                initialValue: state.soundcloudHandle,
+                onChanged: (value) =>
+                    context.read<SettingsCubit>().changeSoundcloud(value),
+              ),
+              YoutubeTextField(
+                initialValue: state.youtubeChannelId,
+                onChanged: (value) =>
+                    context.read<SettingsCubit>().changeYoutube(value),
+              ),
+              const SizedBox(height: 15),
+              const ThemeSwitch(),
+              if (state.status.isInProgress)
+                const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(tappedAccent),
+                )
+              else
+                const SizedBox.shrink(),
+            ],
+          ),
         );
       },
     );

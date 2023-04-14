@@ -7,6 +7,7 @@ import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -113,7 +114,7 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
     }
   }
 
-  void next() {
+  Future<void> next() async {
     if (state.onboardingStage == OnboardingStage.stage1) {
       if (state.formKey.currentState == null) {
         return;
@@ -123,6 +124,16 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
       if (state.formKey.currentState!.validate() &&
           state.status != FormzSubmissionStatus.inProgress) {
         emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+
+        // Check if username is available
+        final available = await databaseRepository.checkUsernameAvailability(
+          state.username,
+          currentUserId,
+        );
+
+        if (!available) {
+          throw HandleAlreadyExistsException('Username already exists');
+        }
 
         // Write data to db
         emit(state.copyWith(status: FormzSubmissionStatus.success));

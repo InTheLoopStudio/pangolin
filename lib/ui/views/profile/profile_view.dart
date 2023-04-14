@@ -232,7 +232,7 @@ class _ProfileViewState extends State<ProfileView> {
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.normal,
-                                    // color: Color(0xFF757575),
+                                    color: Color(0xFF757575),
                                   ),
                                 ),
                                 const ShareProfileButton(),
@@ -241,6 +241,23 @@ class _ProfileViewState extends State<ProfileView> {
                             ),
                           ),
                         ),
+                        if (visitedUser.bio.isNotEmpty)
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 8,
+                                horizontal: 16,
+                              ),
+                              child: Text(
+                                visitedUser.bio,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.normal,
+                                  // color: Color(0xFF757575),
+                                ),
+                              ),
+                            ),
+                          ),
                         const SliverToBoxAdapter(
                           child: Padding(
                             padding: EdgeInsets.only(bottom: 8),
