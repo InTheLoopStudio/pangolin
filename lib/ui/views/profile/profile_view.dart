@@ -6,6 +6,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
+import 'package:intheloopapp/linkify.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
@@ -248,8 +249,8 @@ class _ProfileViewState extends State<ProfileView> {
                                 vertical: 8,
                                 horizontal: 16,
                               ),
-                              child: Text(
-                                visitedUser.bio,
+                              child: Linkify(
+                                text: visitedUser.bio,
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.normal,
