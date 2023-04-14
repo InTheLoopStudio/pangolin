@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
 
@@ -14,14 +15,14 @@ class AuthenticationBloc
     required AuthRepository authRepository,
   })  : _authRepository = authRepository,
         super(Uninitialized()) {
-    _userSubscription = authRepository.userId.listen(_onUserChanged);
+    _userSubscription = authRepository.user.listen(_onUserChanged);
 
     on<AppStarted>((event, emit) async {
       try {
         final isSignedIn = await _authRepository.isSignedIn();
         if (isSignedIn) {
-          final uid = await _authRepository.getAuthUserId();
-          emit(Authenticated(uid));
+          final user = await _authRepository.getAuthUser();
+          emit(Authenticated(user!));
         } else {
           emit(Unauthenticated());
         }
@@ -30,8 +31,8 @@ class AuthenticationBloc
       }
     });
     on<LoggedIn>((event, emit) async {
-      final uid = await _authRepository.getAuthUserId();
-      emit(Authenticated(uid));
+      final user = await _authRepository.getAuthUser();
+      emit(Authenticated(user!));
     });
     on<LoggedOut>((event, emit) {
       emit(Unauthenticated());
@@ -40,11 +41,11 @@ class AuthenticationBloc
   }
 
   final AuthRepository _authRepository;
-  late final StreamSubscription<String> _userSubscription;
+  late final StreamSubscription<User?> _userSubscription;
 
-  void _onUserChanged(String userId) {
-    if (userId.isNotEmpty && state is! Authenticated) {
-      add(LoggedIn(userId: userId));
+  void _onUserChanged(User? user) {
+    if (user != null && state is! Authenticated) {
+      add(LoggedIn(user: user));
     }
   }
 

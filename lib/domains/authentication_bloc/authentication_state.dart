@@ -14,14 +14,14 @@ class Uninitialized extends AuthenticationState {
 }
 
 class Authenticated extends AuthenticationState {
-  const Authenticated(this.currentUserId) : super();
-  final String currentUserId;
+  const Authenticated(this.currentAuthUser) : super();
+  final User currentAuthUser;
 
   @override
-  String toString() => 'Authenticated { id: $currentUserId }';
+  String toString() => 'Authenticated { id: $currentAuthUser }';
 
   @override
-  List<Object> get props => [currentUserId];
+  List<Object> get props => [currentAuthUser];
 }
 
 class Unauthenticated extends AuthenticationState {

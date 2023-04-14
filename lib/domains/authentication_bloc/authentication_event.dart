@@ -14,14 +14,14 @@ class AppStarted extends AuthenticationEvent {
 }
 
 class LoggedIn extends AuthenticationEvent {
-  const LoggedIn({this.userId});
-  final String? userId;
+  const LoggedIn({this.user});
+  final User? user;
 
   @override
-  String toString() => 'LoggedIn { user: ${userId ?? ''} }';
+  String toString() => 'LoggedIn { user: ${user ?? ''} }';
 
   @override
-  List<Object?> get props => [userId];
+  List<Object?> get props => [user];
 }
 
 class LoggedOut extends AuthenticationEvent {

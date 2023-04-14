@@ -14,7 +14,8 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
     required this.databaseRepository,
     required this.authenticationBloc,
   }) : super(const ActivityInitial()) {
-    currentUserId = (authenticationBloc.state as Authenticated).currentUserId;
+    currentUserId =
+        (authenticationBloc.state as Authenticated).currentAuthUser.uid;
     on<AddActivityEvent>(
       (event, emit) => emit(
         ActivitySuccess(

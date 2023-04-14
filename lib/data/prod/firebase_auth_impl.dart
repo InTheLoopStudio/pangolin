@@ -33,13 +33,12 @@ String _sha256ofString(String input) {
 }
 
 class FirebaseAuthImpl extends AuthRepository {
-  @override
-  Stream<String> get userId =>
-      _auth.authStateChanges().asyncMap((firebaseUser) async {
-        final userId = firebaseUser == null ? '' : firebaseUser.uid;
+  Stream<String?> get userId => _auth.authStateChanges().map(
+        (user) => user?.uid,
+      );
 
-        return userId;
-      });
+  @override
+  Stream<User?> get user => _auth.authStateChanges();
 
   @override
   Future<bool> isSignedIn() async {
@@ -56,6 +55,11 @@ class FirebaseAuthImpl extends AuthRepository {
     }
 
     return '';
+  }
+
+  @override
+  Future<User?> getAuthUser() async {
+    return _auth.currentUser;
   }
 
   @override

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:formz/formz.dart';
@@ -20,20 +21,20 @@ part 'onboarding_flow_state.dart';
 
 class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
   OnboardingFlowCubit({
-    required this.currentUserId,
+    required this.currentAuthUser,
     required this.onboardingBloc,
     required this.navigationBloc,
     required this.authenticationBloc,
     required this.storageRepository,
     required this.databaseRepository,
-  }) : super(OnboardingFlowState(currentUserId: currentUserId));
+  }) : super(OnboardingFlowState(currentUserId: currentAuthUser.uid));
 
   final OnboardingBloc onboardingBloc;
   final NavigationBloc navigationBloc;
   final AuthenticationBloc authenticationBloc;
   final StorageRepository storageRepository;
   final DatabaseRepository databaseRepository;
-  String currentUserId;
+  final User currentAuthUser;
 
   Future<void> initFollowRecommendations() async {
     for (final userId in [
@@ -42,9 +43,9 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
       'wHpU3xj2yUSuz2rLFKC6J87HTLu1',
       'n4zIL6bOuPTqRC3dtsl6gyEBPQl1',
     ]) {
-      final isFollowing = userId == currentUserId
+      final isFollowing = userId == currentAuthUser.uid
           ? true
-          : await databaseRepository.isFollowingUser(currentUserId, userId);
+          : await databaseRepository.isFollowingUser(currentAuthUser.uid, userId);
 
       switch (userId) {
         case 'VWj4qT2JMIhjjEYYFnbvebIazfB3':
@@ -84,7 +85,7 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
     }
 
     await databaseRepository.followUser(
-      currentUserId,
+      currentAuthUser.uid,
       userId,
     );
   }
@@ -128,7 +129,7 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
         // Check if username is available
         final available = await databaseRepository.checkUsernameAvailability(
           state.username,
-          currentUserId,
+          currentAuthUser.uid,
         );
 
         if (!available) {
@@ -157,7 +158,7 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
 
       final profilePictureUrl = state.pickedPhoto != null
           ? await storageRepository.uploadProfilePicture(
-              currentUserId,
+              currentAuthUser.uid,
               state.pickedPhoto!,
             )
           : '';
@@ -168,7 +169,8 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
 
       final emptyUser = UserModel.empty();
       final currentUser = emptyUser.copyWith(
-        id: currentUserId,
+        id: currentAuthUser.uid,
+        email: currentAuthUser.email,
         username: Username.fromString(state.username),
         artistName: state.artistName,
         profilePicture: profilePictureUrl,

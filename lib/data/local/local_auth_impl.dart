@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
 
 class LocalAuthImpl extends AuthRepository {
-  @override
   Stream<String> get userId => const Stream.empty();
+
+  @override
+  Stream<User?> get user => const Stream.empty();
 
   @override
   Future<bool> isSignedIn() async {
@@ -14,6 +17,11 @@ class LocalAuthImpl extends AuthRepository {
   Future<String> getAuthUserId() async {
     await Future<void>.delayed(const Duration(seconds: 2));
     return '1';
+  }
+
+  @override
+  Future<User?> getAuthUser() async {
+    return null;
   }
 
   @override
