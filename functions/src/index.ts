@@ -202,12 +202,12 @@ const _addActivity = async (data: {
       "The function argument 'fromUserId' cannot be empty"
     );
   }
-  if (![ "follow", "like", "comment", "bookingRequest", "bookingUpdate", ].includes(data.type)) {
+  if (![ "follow", "like", "comment", "bookingRequest", "bookingUpdate", "mention" ].includes(data.type)) {
     // Throwing an HttpsError so that the client gets the error details.
     throw new functions.https.HttpsError(
       "invalid-argument",
       "The function argument 'type' must be either " +
-      "'follow', 'like', 'comment', 'bookingRequest', or 'bookingUpdate'"
+      "'follow', 'like', 'comment', 'bookingRequest', 'bookingUpdate', or 'mention'"
     );
   }
 
