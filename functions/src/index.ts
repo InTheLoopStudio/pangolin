@@ -692,6 +692,7 @@ export const notifyMentionsOnLoopUpload = functions.firestore
       const username = match.replace("@", "");
       const userDoc = await usersRef.where("username", "==", username).get();
       if (userDoc.empty) {
+        functions.logger.error(`user ${username} not found`)
         return;
       }
 

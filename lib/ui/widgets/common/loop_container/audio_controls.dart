@@ -4,6 +4,8 @@ import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:intheloopapp/domains/controllers/audio_controller.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_seek_bar.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/play_pause_button.dart';
+import 'package:skeleton_animation/skeleton_animation.dart';
+import 'package:skeletons/skeletons.dart';
 
 class AudioControls extends StatelessWidget {
   const AudioControls({
@@ -35,7 +37,7 @@ class AudioControls extends StatelessWidget {
       ),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return const SizedBox.shrink();
+          return SkeletonListTile();
         }
 
         final audioController = snapshot.data;
