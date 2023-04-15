@@ -202,7 +202,6 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
         MaterialPageRoute<LocationFormView>(
           settings: const RouteSettings(name: '/location-form'),
           builder: (context) => LocationFormView(
-            initialPlaceId: event.initialPlaceId,
             initialPlace: event.initialPlace,
             onSelected: event.onSelected,
           ),

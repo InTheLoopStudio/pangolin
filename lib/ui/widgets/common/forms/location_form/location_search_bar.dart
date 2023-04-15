@@ -11,14 +11,16 @@ class LocationSearchBar extends StatelessWidget {
     super.key,
   });
 
-  final Place initialPlace;
+  final Place? initialPlace;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LocationCubit, LocationState>(
       builder: (context, state) {
         return CupertinoSearchTextField(
-          placeholder: formattedAddress(initialPlace.addressComponents),
+          placeholder: initialPlace != null 
+            ? formattedAddress(initialPlace?.addressComponents)
+            : 'Search for a location',
           style: const TextStyle(
             color: Colors.white,
           ),

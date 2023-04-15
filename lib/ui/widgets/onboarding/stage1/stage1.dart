@@ -9,12 +9,12 @@ import 'package:intheloopapp/ui/widgets/common/forms/location_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/username_text_field.dart';
 import 'package:intheloopapp/ui/widgets/onboarding/stage1/profile_picture_uploader.dart';
 
-const rvaPlaceId = 'ChIJ7cmZVwkRsYkRxTxC4m0-2L8';
-const rvaLat = 37.5407246;
-const rvaLng = -77.43604809999999;
-const initialPlace = Place(
-  latLng: LatLng(lat: rvaLat, lng: rvaLng),
-);
+// const rvaPlaceId = 'ChIJ7cmZVwkRsYkRxTxC4m0-2L8';
+// const rvaLat = 37.5407246;
+// const rvaLng = -77.43604809999999;
+// const initialPlace = Place(
+//   latLng: LatLng(lat: rvaLat, lng: rvaLng),
+// );
 
 class Stage1 extends StatelessWidget {
   const Stage1({super.key});
@@ -61,8 +61,8 @@ class Stage1 extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   LocationTextField(
-                    initialPlaceId: rvaPlaceId,
-                    initialPlace: initialPlace,
+                    initialPlaceId: null,
+                    initialPlace: null,
                     onChanged: (place, placeId) => context
                         .read<OnboardingFlowCubit>()
                         .locationChange(place, placeId),

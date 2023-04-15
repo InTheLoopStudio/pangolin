@@ -52,21 +52,19 @@ class PushSettings extends NavigationEvent {
 
 class PushLocationForm extends NavigationEvent {
   const PushLocationForm({
-    required this.initialPlaceId,
     required this.initialPlace,
     required this.onSelected,
   });
 
-  final String initialPlaceId;
-  final Place initialPlace;
+  final Place? initialPlace;
   final void Function(Place?, String) onSelected;
 
   @override
-  String toString() => 'PushLocationForm { initialPlaceId : $initialPlaceId }';
+  String toString() => 'PushLocationForm { initialPlace: $initialPlace }';
 
   @override
-  List<Object> get props => [
-        initialPlaceId,
+  List<Object?> get props => [
+        initialPlace,
         onSelected,
       ];
 }

@@ -9,14 +9,12 @@ import 'package:intheloopapp/ui/widgets/common/forms/location_form/location_sear
 
 class LocationFormView extends StatelessWidget {
   const LocationFormView({
-    required this.initialPlaceId,
     required this.initialPlace,
     required this.onSelected,
     super.key,
   });
 
-  final String initialPlaceId;
-  final Place initialPlace;
+  final Place? initialPlace;
   final void Function(Place?, String) onSelected;
 
   @override
@@ -25,7 +23,6 @@ class LocationFormView extends StatelessWidget {
     final places = RepositoryProvider.of<PlacesRepository>(context);
     return BlocProvider(
       create: (context) => LocationCubit(
-        initialPlace: initialPlace,
         places: places,
         onSelected: onSelected,
         navigationBloc: context.read<NavigationBloc>(),

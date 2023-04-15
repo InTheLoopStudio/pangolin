@@ -10,13 +10,11 @@ part 'location_state.dart';
 
 class LocationCubit extends Cubit<LocationState> {
   LocationCubit({
-    required this.initialPlace,
     required this.places,
     required this.navigationBloc,
     required this.onSelected,
   }) : super(const LocationState());
 
-  final Place initialPlace;
   final PlacesRepository places;
   final void Function(Place?, String) onSelected;
 

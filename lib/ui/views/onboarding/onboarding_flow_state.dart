@@ -11,7 +11,7 @@ class OnboardingFlowState extends Equatable {
     this.onboardingStage = OnboardingStage.stage1,
     this.username = '',
     this.artistName = '',
-    this.placeId = rvaPlaceId,
+    this.placeId = '',
     this.bio = '',
     // this.musicianType = const [],
     this.pickedPhoto,
@@ -21,19 +21,12 @@ class OnboardingFlowState extends Equatable {
     this.followingJohannes = false,
     this.followingChris = false,
     this.followingIlias = false,
-    Place? place,
+    this.place,
     ImagePicker? picker,
     GlobalKey<FormState>? formKey,
   }) {
     this.picker = picker ?? ImagePicker();
     this.formKey = formKey ?? GlobalKey<FormState>(debugLabel: 'onboarding');
-    this.place = place ??
-        const Place(
-          latLng: LatLng(
-            lat: rvaLat,
-            lng: rvaLng,
-          ),
-        );
   }
 
   final String currentUserId;
@@ -48,7 +41,7 @@ class OnboardingFlowState extends Equatable {
   final FormzSubmissionStatus status;
   late final ImagePicker picker;
   late final GlobalKey<FormState> formKey;
-  late final Place place;
+  late final Place? place;
 
   final bool followingInfamous;
   final bool followingJohannes;

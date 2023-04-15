@@ -14,8 +14,8 @@ class LocationTextField extends StatelessWidget {
   });
 
   final void Function(Place?, String) onChanged;
-  final Place initialPlace;
-  final String initialPlaceId;
+  final Place? initialPlace;
+  final String? initialPlaceId;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,6 @@ class LocationTextField extends StatelessWidget {
       onTap: () {
         navigationBloc.add(
           PushLocationForm(
-            initialPlaceId: initialPlaceId,
             initialPlace: initialPlace,
             onSelected: onChanged,
           ),
@@ -44,7 +43,9 @@ class LocationTextField extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  formattedAddress(initialPlace.addressComponents),
+                  initialPlace != null
+                      ? formattedAddress(initialPlace?.addressComponents)
+                      : 'Tap to select a city',
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     color: tappedAccent,
