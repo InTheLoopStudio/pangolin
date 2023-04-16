@@ -20,16 +20,16 @@ class LoopDescriptionTextField extends StatelessWidget {
                 hintText: "What's on your mind?",
               ),
               style: const TextStyle(
-                  letterSpacing: 0,
-                  color: Colors.transparent,
-                ),
+                letterSpacing: 0,
+                color: Colors.transparent,
+              ),
               maxLength: 256,
               minLines: 6,
               validator: (value) =>
                   value!.isEmpty ? 'Description cannot be empty' : null,
               onChanged: (input) =>
                   context.read<CreateLoopCubit>().onDescriptionChange(
-                        input,
+                        input.trim(),
                       ),
             ),
             TransparentPointer(

@@ -21,7 +21,7 @@ class LoopTitleTextField extends StatelessWidget {
           ),
           maxLength: 56,
           onChanged: (input) => context.read<CreateLoopCubit>().onTitleChange(
-                input,
+                input.trim(),
               ),
         );
       },

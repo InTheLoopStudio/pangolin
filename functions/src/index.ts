@@ -36,7 +36,7 @@ const remote = getRemoteConfig(app);
 const usersRef = db.collection("users");
 const loopsRef = db.collection("loops");
 const activitiesRef = db.collection("activities");
-// const followingRef = db.collection("following");
+const followingRef = db.collection("following");
 const followersRef = db.collection("followers");
 // const likesRef = db.collection("likes");
 const commentsRef = db.collection("comments");
@@ -601,7 +601,28 @@ export const createStreamUserOnUserCreated = functions
       image: user.profilePicture,
     });
   })
+export const autoFollowUsersOnUserCreated = functions
+  .firestore
+  .document("users/{userId}")
+  .onCreate(async (snapshot, context) => {
+    const userId = context.params.userId;
+    const userIdsToAutoFollow = [
+      "VWj4qT2JMIhjjEYYFnbvebIazfB3",
+      "8yYVxpQ7cURSzNfBsaBGF7A7kkv2",
+      "wHpU3xj2yUSuz2rLFKC6J87HTLu1",
+      "n4zIL6bOuPTqRC3dtsl6gyEBPQl1",
+    ];
 
+    for (const userIdToAutoFollow of userIdsToAutoFollow) {
+      await followingRef
+        .doc(userId)
+        .collection("Following")
+        .doc(userIdToAutoFollow)
+        .set({});
+    }
+  })
+
+  
 export const updateStreamUserOnUserUpdate = functions
   .runWith({ secrets: [ streamKey, streamSecret ] })
   .firestore

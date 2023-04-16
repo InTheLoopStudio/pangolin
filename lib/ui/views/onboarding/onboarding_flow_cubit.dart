@@ -36,60 +36,6 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
   final DatabaseRepository databaseRepository;
   final User currentAuthUser;
 
-  Future<void> initFollowRecommendations() async {
-    for (final userId in [
-      'VWj4qT2JMIhjjEYYFnbvebIazfB3',
-      '8yYVxpQ7cURSzNfBsaBGF7A7kkv2',
-      'wHpU3xj2yUSuz2rLFKC6J87HTLu1',
-      'n4zIL6bOuPTqRC3dtsl6gyEBPQl1',
-    ]) {
-      final isFollowing = userId == currentAuthUser.uid
-          ? true
-          : await databaseRepository.isFollowingUser(currentAuthUser.uid, userId);
-
-      switch (userId) {
-        case 'VWj4qT2JMIhjjEYYFnbvebIazfB3':
-          emit(state.copyWith(followingInfamous: isFollowing));
-          break;
-        case '8yYVxpQ7cURSzNfBsaBGF7A7kkv2':
-          emit(state.copyWith(followingJohannes: isFollowing));
-          break;
-        case 'wHpU3xj2yUSuz2rLFKC6J87HTLu1':
-          emit(state.copyWith(followingChris: isFollowing));
-          break;
-        case 'n4zIL6bOuPTqRC3dtsl6gyEBPQl1':
-          emit(state.copyWith(followingIlias: isFollowing));
-          break;
-        default:
-          break;
-      }
-    }
-  }
-
-  Future<void> followRecommendation(String userId) async {
-    switch (userId) {
-      case 'VWj4qT2JMIhjjEYYFnbvebIazfB3':
-        emit(state.copyWith(followingInfamous: true));
-        break;
-      case '8yYVxpQ7cURSzNfBsaBGF7A7kkv2':
-        emit(state.copyWith(followingJohannes: true));
-        break;
-      case 'wHpU3xj2yUSuz2rLFKC6J87HTLu1':
-        emit(state.copyWith(followingChris: true));
-        break;
-      case 'n4zIL6bOuPTqRC3dtsl6gyEBPQl1':
-        emit(state.copyWith(followingIlias: true));
-        break;
-      default:
-        break;
-    }
-
-    await databaseRepository.followUser(
-      currentAuthUser.uid,
-      userId,
-    );
-  }
-
   void usernameChange(String input) => emit(state.copyWith(username: input));
   void aristNameChange(String input) => emit(state.copyWith(artistName: input));
   void locationChange(Place? place, String placeId) {
@@ -115,43 +61,6 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
     }
   }
 
-  Future<void> next() async {
-    if (state.onboardingStage == OnboardingStage.stage1) {
-      if (state.formKey.currentState == null) {
-        return;
-      }
-
-      state.formKey.currentState!.save();
-      if (state.formKey.currentState!.validate() &&
-          state.status != FormzSubmissionStatus.inProgress) {
-        emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
-
-        // Check if username is available
-        final available = await databaseRepository.checkUsernameAvailability(
-          state.username,
-          currentAuthUser.uid,
-        );
-
-        if (!available) {
-          throw HandleAlreadyExistsException('Username already exists');
-        }
-
-        // Write data to db
-        emit(state.copyWith(status: FormzSubmissionStatus.success));
-        emit(state.copyWith(onboardingStage: OnboardingStage.stage2));
-      }
-    } else if (state.onboardingStage == OnboardingStage.stage2) {
-      // Write data to db
-      navigationBloc.add(const Pop());
-    }
-  }
-
-  void previous() {
-    if (state.onboardingStage == OnboardingStage.stage2) {
-      emit(state.copyWith(onboardingStage: OnboardingStage.stage1));
-    }
-  }
-
   Future<void> finishOnboarding() async {
     if (!state.loading) {
       emit(state.copyWith(loading: true));
@@ -165,9 +74,8 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
 
       final lat = state.place?.latLng?.lat;
       final lng = state.place?.latLng?.lng;
-      final geohash = (lat != null && lng != null) 
-        ? geocodeEncode(lat: lat, lng: lng)
-        : '';
+      final geohash =
+          (lat != null && lng != null) ? geocodeEncode(lat: lat, lng: lng) : '';
 
       final emptyUser = UserModel.empty();
       final currentUser = emptyUser.copyWith(
