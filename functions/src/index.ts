@@ -611,6 +611,7 @@ export const autoFollowUsersOnUserCreated = functions
       "8yYVxpQ7cURSzNfBsaBGF7A7kkv2",
       "wHpU3xj2yUSuz2rLFKC6J87HTLu1",
       "n4zIL6bOuPTqRC3dtsl6gyEBPQl1",
+      "kNVsCCnDkFdYAxebMspLpnEudwq1",
     ];
 
     for (const userIdToAutoFollow of userIdsToAutoFollow) {
