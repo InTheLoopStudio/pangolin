@@ -5,6 +5,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:intheloopapp/data/notification_repository.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
+import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
+
 final fcm = FirebaseMessaging.instance;
 final _fireStore = FirebaseFirestore.instance;
 final tokensRef = _fireStore.collection('device_tokens');

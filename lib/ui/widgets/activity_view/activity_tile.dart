@@ -8,22 +8,33 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class ActivityTile extends StatelessWidget {
+class ActivityTile extends StatefulWidget {
   const ActivityTile({required this.activity, super.key});
 
   final Activity activity;
 
   @override
+  State<ActivityTile> createState() => _ActivityTileState();
+}
+
+class _ActivityTileState extends State<ActivityTile>
+    with AutomaticKeepAliveClientMixin {
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final navigationBloc = context.read<NavigationBloc>();
     final databaseRepository = context.read<DatabaseRepository>();
 
-    var markedRead = activity.markedRead;
+    var markedRead = widget.activity.markedRead;
 
     return BlocBuilder<ActivityBloc, ActivityState>(
       builder: (context, state) {
         return FutureBuilder<UserModel?>(
-          future: databaseRepository.getUserById(activity.fromUserId),
+          future: databaseRepository.getUserById(widget.activity.fromUserId),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const SizedBox.shrink();
@@ -37,7 +48,7 @@ class ActivityTile extends StatelessWidget {
               if (!markedRead) {
                 context
                     .read<ActivityBloc>()
-                    .add(MarkActivityAsReadEvent(activity: activity));
+                    .add(MarkActivityAsReadEvent(activity: widget.activity));
                 markedRead = true;
               }
 
@@ -61,7 +72,7 @@ class ActivityTile extends StatelessWidget {
                           ),
                           trailing: Text(
                             timeago.format(
-                              activity.timestamp,
+                              widget.activity.timestamp,
                               locale: 'en_short',
                             ),
                             style: TextStyle(
@@ -77,7 +88,7 @@ class ActivityTile extends StatelessWidget {
                           ),
                           subtitle: Text(
                             () {
-                              switch (activity.type) {
+                              switch (widget.activity.type) {
                                 case ActivityType.follow:
                                   return 'followed you 🤝';
                                 case ActivityType.like:

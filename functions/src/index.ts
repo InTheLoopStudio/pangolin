@@ -498,7 +498,9 @@ export const sendToDevice = functions.firestore
 
     const userDoc = await usersRef.doc(activity["toUserId"]).get();
     const user = userDoc.data();
-    if (user !== null) return;
+    if (user !== null) {
+      throw new Error("User not found");
+    }
 
     const activityType = activity["type"];
 
@@ -570,11 +572,15 @@ export const sendToDevice = functions.firestore
       .get();
 
     const tokens: string[] = querySnapshot.docs.map((snap) => snap.id);
-    if (tokens.length != 0) {
-      return fcm.sendToDevice(tokens, payload);
+    if (tokens.length == 0) {
+      functions.logger.debug("No tokens to send to");
     }
+    
+    const resp = await fcm.sendToDevice(tokens, payload);
 
-    return null;
+    if (resp.failureCount > 0) {
+      functions.logger.warn(`Failed to send message to some devices: ${resp.failureCount}`);
+    }
   });
 export const createStreamUserOnUserCreated = functions
   .runWith({ secrets: [ streamKey, streamSecret ] })
