@@ -18,8 +18,17 @@ class UploadAudioButton extends StatelessWidget {
                   shape: CircleBorder(),
                 ),
                 child: IconButton(
-                  onPressed: () =>
-                      context.read<CreateLoopCubit>().handleAudioFromFiles(),
+                  onPressed: () {
+                    try {
+                      context.read<CreateLoopCubit>().handleAudioFromFiles();
+                    } on Exception catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(e.toString()),
+                        ),
+                      );
+                    }
+                  },
                   icon: const Icon(
                     Icons.audio_file_outlined,
                     color: Colors.white,

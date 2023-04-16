@@ -35,19 +35,19 @@ class CreateLoopState extends Equatable with FormzMixin {
       ];
 
   CreateLoopState copyWith({
+    required File? pickedAudio,
+    required File? pickedImage,
     LoopTitle? title,
     LoopDescription? description,
     FormzSubmissionStatus? status,
-    File? pickedAudio,
-    File? pickedImage,
     AudioController? audioController,
   }) {
     return CreateLoopState(
+      pickedAudio: pickedAudio,
+      pickedImage: pickedImage,
       title: title ?? this.title,
       description: description ?? this.description,
       status: status ?? this.status,
-      pickedAudio: pickedAudio ?? this.pickedAudio,
-      pickedImage: pickedImage ?? this.pickedImage,
       audioController: audioController ?? this.audioController,
     );
   }

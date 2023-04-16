@@ -17,7 +17,15 @@ class UploadImageButton extends StatelessWidget {
           ),
           child: IconButton(
             onPressed: () {
+              try {
                 context.read<CreateLoopCubit>().handleImageFromFiles();
+              } on Exception catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(e.toString()),
+                  ),
+                );
+              }
             },
             icon: const Icon(
               Icons.image_outlined,

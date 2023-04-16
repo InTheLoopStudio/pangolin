@@ -40,7 +40,11 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
   void onTitleChange(String input) {
     final title = LoopTitle.dirty(input);
     emit(
-      state.copyWith(title: title),
+      state.copyWith(
+        pickedAudio: state.pickedAudio,
+        pickedImage: state.pickedImage,
+        title: title,
+      ),
     );
   }
 
@@ -48,6 +52,8 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
     final description = LoopDescription.dirty(input);
     emit(
       state.copyWith(
+        pickedAudio: state.pickedAudio,
+        pickedImage: state.pickedImage,
         description: description,
       ),
     );
@@ -97,6 +103,7 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
 
         emit(
           state.copyWith(
+            pickedImage: state.pickedImage,
             pickedAudio: pickedAudio,
             title: LoopTitle.dirty(pickedAudioName),
           ),
@@ -115,6 +122,8 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
     } catch (error) {
       emit(
         state.copyWith(
+          pickedAudio: state.pickedAudio,
+          pickedImage: state.pickedImage,
           status: FormzSubmissionStatus.failure,
         ),
       );
@@ -127,22 +136,45 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
       final fileResult = await FilePicker.platform.pickFiles(
         type: FileType.image,
       );
+
       if (fileResult != null) {
         final pickedImage = File(fileResult.files.single.path!);
 
         emit(
           state.copyWith(
+            pickedAudio: state.pickedAudio,
             pickedImage: pickedImage,
           ),
         );
       }
-    } catch (error) {
+    } on Exception {
       emit(
         state.copyWith(
+          pickedAudio: state.pickedAudio,
+          pickedImage: state.pickedImage,
           status: FormzSubmissionStatus.failure,
         ),
       );
+      rethrow;
     }
+  }
+
+  void removeImage() {
+    emit(
+      state.copyWith(
+        pickedAudio: state.pickedAudio,
+        pickedImage: null,
+      ),
+    );
+  }
+
+  void removeAudio() {
+    emit(
+      state.copyWith(
+        pickedAudio: null,
+        pickedImage: state.pickedImage,
+      ),
+    );
   }
 
   Future<void> createLoop() async {
@@ -155,6 +187,8 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
 
       emit(
         state.copyWith(
+          pickedAudio: state.pickedAudio,
+          pickedImage: state.pickedImage,
           status: FormzSubmissionStatus.inProgress,
         ),
       );
@@ -178,6 +212,8 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
 
       emit(
         state.copyWith(
+          pickedAudio: null,
+          pickedImage: null,
           title: const LoopTitle.pure(),
           description: const LoopDescription.pure(),
           status: FormzSubmissionStatus.success,
@@ -197,6 +233,8 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
     } on Exception {
       emit(
         state.copyWith(
+          pickedAudio: state.pickedAudio,
+          pickedImage: state.pickedImage,
           status: FormzSubmissionStatus.failure,
         ),
       );

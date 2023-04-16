@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/views/create_loop/cubit/create_loop_cubit.dart';
@@ -17,9 +18,23 @@ class Attachments extends StatelessWidget {
         }
 
         if (state.pickedImage != null) {
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Image.file(state.pickedImage!),
+          return badges.Badge(
+            onTap: context.read<CreateLoopCubit>().removeImage,
+            badgeStyle: const badges.BadgeStyle(
+              badgeColor: Color.fromARGB(255, 47, 47, 47),
+            ),
+            badgeContent: const Icon(
+              Icons.close_outlined,
+              color: Colors.white,
+              size: 25,
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.file(
+                state.pickedImage!,
+                height: 200,
+              ),
+            ),
           );
         }
 
