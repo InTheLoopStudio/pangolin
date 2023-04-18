@@ -132,9 +132,9 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
 
   @override
   Future<String> getShareProfileDynamicLink(UserModel user) async {
-    final imageUri = user.profilePicture.isEmpty
+    final imageUri = user.profilePicture == null
         ? Uri.parse('https://tapped.jonaylor.xyz/images/tapped_reverse.png')
-        : Uri.parse(user.profilePicture);
+        : Uri.parse(user.profilePicture!);
 
     final parameters = DynamicLinkParameters(
       uriPrefix: 'https://tappednetwork.page.link',

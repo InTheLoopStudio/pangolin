@@ -100,7 +100,7 @@ class _LoopContainerState extends State<LoopContainer>
               borderRadius: BorderRadius.circular(25),
               image: DecorationImage(
                 image: CachedNetworkImageProvider(
-                  loopUser.profilePicture,
+                  loopUser.profilePicture!,
                 ),
                 fit: BoxFit.cover,
               ),
@@ -210,7 +210,7 @@ class _LoopContainerState extends State<LoopContainer>
                   }
 
                   if (widget.loop.audioPath.isNotEmpty &&
-                      loopUser.profilePicture.isNotEmpty) {
+                      loopUser.profilePicture != null) {
                     return _audioLoopContainer(
                       navigationBloc: navigationBloc,
                       loopUser: loopUser,

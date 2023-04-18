@@ -34,6 +34,8 @@ class UserModel extends Equatable {
     required this.profilePicture,
     required this.bio,
     required this.genres,
+    required this.occupations,
+    required this.label,
     required this.placeId,
     required this.geohash,
     required this.lat,
@@ -65,16 +67,15 @@ class UserModel extends Equatable {
         email: '',
         username: Username.fromString('anonymous'),
         artistName: '',
-        profilePicture: '',
         bio: '',
         genres: const [],
-
-        // PlaceId for Richmond, Virginia, USA
+        occupations: const [],
+        label: null,
+        profilePicture: null,
         placeId: null,
         geohash: null,
         lat: null,
         lng: null,
-
         loopsCount: 0,
         badgesCount: 0,
         deleted: false,
@@ -92,7 +93,6 @@ class UserModel extends Equatable {
         pushNotificationsITLUpdates: true,
         emailNotificationsAppReleases: true,
         emailNotificationsITLUpdates: true,
-
         bookingRate: 0,
         stripeConnectedAccountId: '',
         stripeCustomerId: '',
@@ -118,7 +118,7 @@ class UserModel extends Equatable {
       username:
           Username.fromString(doc.getOrElse('username', 'anonymous') as String),
       artistName: doc.getOrElse('artistName', '') as String,
-      profilePicture: doc.getOrElse('profilePicture', '') as String,
+      profilePicture: doc.getOrElse('profilePicture', null) as String?,
       bio: doc.getOrElse('bio', '') as String,
       genres: (doc.getOrElse('genres', <dynamic>[]) as List<dynamic>)
           .map(
@@ -128,8 +128,8 @@ class UserModel extends Equatable {
           .where((element) => element != null)
           .whereType<Genre>()
           .toList(),
-
-      // PlaceId for Richmond, Virginia, USA
+      occupations: doc.getOrElse('occupations', <dynamic>[]) as List<String>,
+      label: doc.getOrElse('label', null) as String?,
       placeId: doc.getOrElse('placeId', null) as String?,
       geohash: doc.getOrElse('geohash', null) as String?,
       lat: doc.getOrElse('lat', null) as double?,
@@ -170,9 +170,12 @@ class UserModel extends Equatable {
   final String email;
   final Username username;
   final String artistName;
-  final String profilePicture;
   final String bio;
   final List<Genre> genres;
+  final List<String> occupations;
+  final String? label;
+
+  final String? profilePicture;
 
   final String? placeId;
   final String? geohash;
@@ -214,6 +217,8 @@ class UserModel extends Equatable {
         profilePicture,
         bio,
         genres,
+        occupations,
+        label,
         placeId,
         geohash,
         lat,
@@ -258,6 +263,8 @@ class UserModel extends Equatable {
     String? profilePicture,
     String? bio,
     List<Genre>? genres,
+    List<String>? occupations,
+    String? label,
     String? placeId,
     String? geohash,
     double? lat,
@@ -291,6 +298,8 @@ class UserModel extends Equatable {
       profilePicture: profilePicture ?? this.profilePicture,
       bio: bio ?? this.bio,
       genres: genres ?? this.genres,
+      occupations: occupations ?? this.occupations,
+      label: label ?? this.label,
       placeId: placeId ?? this.placeId,
       geohash: geohash ?? this.geohash,
       lat: lat ?? this.lat,

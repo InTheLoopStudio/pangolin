@@ -44,7 +44,9 @@ void main() {
         bookingRate: 0,
         stripeConnectedAccountId: '',
         stripeCustomerId: '', 
-        genres: const [],
+        genres: const [], 
+        occupations: const [],
+        label: null,
       ),
     );
   });
@@ -81,14 +83,16 @@ void main() {
       bookingRate: 0,
       stripeConnectedAccountId: '',
       stripeCustomerId: '',
-        genres: const [],
+        genres: const [], 
+        label: null, 
+        occupations: const [],
     );
 
     expect(emptyUser.isEmpty, true);
     expect(emptyUser.isNotEmpty, false);
   });
 
-  test('non-empty UserModels shuold be verified using isEmpty and isNotEmpty',
+  test('non-empty UserModels should be verified using isEmpty and isNotEmpty',
       () {
     final emptyUser = UserModel(
       id: '1234',
@@ -121,12 +125,14 @@ void main() {
       bookingRate: 0,
       stripeConnectedAccountId: '',
       stripeCustomerId: '',
-        genres: const [],
+      genres: const [], 
+      label: '', 
+      occupations: const [],
     );
 
     expect(emptyUser.isEmpty, false);
     expect(emptyUser.isNotEmpty, true);
-  });
+  },);
 
   test('UserModels should be able to convert to Maps', () {
     final userMap = UserModel.empty().toMap();
@@ -233,7 +239,9 @@ void main() {
         bookingRate: 0,
         stripeConnectedAccountId: '',
         stripeCustomerId: '',
-        genres: const [],
+        genres: const [], 
+        label: null, 
+        occupations: const [],
       ),
     );
   });

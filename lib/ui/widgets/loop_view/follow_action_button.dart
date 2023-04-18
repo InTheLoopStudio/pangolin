@@ -42,11 +42,11 @@ class FollowActionButton extends StatelessWidget {
                         ),
                         child: CircleAvatar(
                           radius: 45,
-                          backgroundImage: state.user.profilePicture.isEmpty
+                          backgroundImage: state.user.profilePicture == null
                               ? const AssetImage('assets/default_avatar.png')
                                   as ImageProvider
                               : CachedNetworkImageProvider(
-                                  state.user.profilePicture,
+                                  state.user.profilePicture!,
                                 ),
                         ),
                       ),

@@ -11,10 +11,10 @@ class ChangeProfileImage extends StatelessWidget {
 
   ImageProvider displayProfileImage(
     File? newProfileImage,
-    String currentProfileImage,
+    String? currentProfileImage,
   ) {
     if (newProfileImage == null) {
-      if (currentProfileImage.isEmpty) {
+      if (currentProfileImage == null) {
         return const AssetImage('assets/default_avatar.png');
       } else {
         return CachedNetworkImageProvider(currentProfileImage);

@@ -19,7 +19,7 @@ class AudioControls extends StatelessWidget {
   final String audioPath;
   final String title;
   final String artist;
-  final String profilePicture;
+  final String? profilePicture;
 
   @override
   Widget build(BuildContext context) {

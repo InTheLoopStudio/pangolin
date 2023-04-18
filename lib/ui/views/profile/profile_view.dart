@@ -208,12 +208,12 @@ class _ProfileViewState extends State<ProfileView> {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: (visitedUser.profilePicture.isEmpty)
+                                  image: (visitedUser.profilePicture == null)
                                       ? const AssetImage(
                                           'assets/default_avatar.png',
                                         ) as ImageProvider
                                       : CachedNetworkImageProvider(
-                                          visitedUser.profilePicture,
+                                          visitedUser.profilePicture!,
                                         ),
                                 ),
                               ),
