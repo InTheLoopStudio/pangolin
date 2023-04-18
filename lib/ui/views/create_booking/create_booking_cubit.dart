@@ -78,6 +78,7 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
       );
 
   Future<void> createBooking() async {
+
     final booking = Booking(
       id: const Uuid().v4(),
       name: state.name.value,

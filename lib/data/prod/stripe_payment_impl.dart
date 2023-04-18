@@ -22,7 +22,7 @@ class StripePaymentImpl implements PaymentRepository {
   }
 
   Future<PaymentIntentResponse> _createPaymentSheet({
-    required String payerCustomerId,
+    required String? payerCustomerId,
     required String payeeConnectedAccountId,
     required int amount,
   }) async {
@@ -47,7 +47,7 @@ class StripePaymentImpl implements PaymentRepository {
 
   @override
   Future<PaymentIntentResponse> initPaymentSheet({
-    required String payerCustomerId,
+    required String? payerCustomerId,
     required String payeeConnectedAccountId,
     required int amount,
   }) async {

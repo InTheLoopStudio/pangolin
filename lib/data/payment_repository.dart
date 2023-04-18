@@ -3,7 +3,7 @@ import 'package:intheloopapp/domains/models/payment_user.dart';
 abstract class PaymentRepository {
   Future<void> initPayments();
   Future<PaymentIntentResponse> initPaymentSheet({
-    required String payerCustomerId,
+    required String? payerCustomerId,
     required String payeeConnectedAccountId,
     required int amount,
   });

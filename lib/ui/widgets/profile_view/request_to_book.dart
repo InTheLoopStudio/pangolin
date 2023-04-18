@@ -21,12 +21,12 @@ class RequestToBookButton extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: FutureBuilder<PaymentUser?>(
                   future: () async {
-                    if (state.visitedUser.stripeConnectedAccountId.isEmpty) {
+                    if (state.visitedUser.stripeConnectedAccountId == null) {
                       return null;
                     }
 
                     return payments.getAccountById(
-                      state.visitedUser.stripeConnectedAccountId,
+                      state.visitedUser.stripeConnectedAccountId!,
                     );
                   }(),
                   builder: (context, snapshot) {
@@ -38,7 +38,7 @@ class RequestToBookButton extends StatelessWidget {
 
                     final enabled = paymentUser != null &&
                         paymentUser.payoutsEnabled &&
-                        state.visitedUser.stripeConnectedAccountId.isNotEmpty;
+                        state.visitedUser.stripeConnectedAccountId != null;
 
                     return FilledButton(
                       onPressed: enabled
@@ -47,7 +47,7 @@ class RequestToBookButton extends StatelessWidget {
                                 PushCreateBooking(
                                   requesteeId: state.visitedUser.id,
                                   requesteeStripeConnectedAccountId: state
-                                      .visitedUser.stripeConnectedAccountId,
+                                      .visitedUser.stripeConnectedAccountId!,
                                   requesteeBookingRate:
                                       state.visitedUser.bookingRate,
                                 ),

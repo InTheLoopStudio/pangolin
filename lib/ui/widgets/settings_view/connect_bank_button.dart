@@ -25,8 +25,8 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
       CupertinoButton.filled(
         child: loading
             ? const CircularProgressIndicator(
-              color: Colors.white,
-            )
+                color: Colors.white,
+              )
             : const Text('Connect Bank Account'),
         onPressed: () async {
           if (loading) {
@@ -73,7 +73,7 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
       selector: (state) => state as Onboarded,
       builder: (context, state) {
         final currentUser = state.currentUser;
-        if (currentUser.stripeConnectedAccountId.isEmpty) {
+        if (currentUser.stripeConnectedAccountId == null) {
           return _connectBankAccountButton(
             payments: payments,
             currentUser: currentUser,
@@ -82,7 +82,9 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
         }
 
         return FutureBuilder<PaymentUser?>(
-          future: payments.getAccountById(currentUser.stripeConnectedAccountId),
+          future: payments.getAccountById(
+            currentUser.stripeConnectedAccountId!,
+          ),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const CircularProgressIndicator();

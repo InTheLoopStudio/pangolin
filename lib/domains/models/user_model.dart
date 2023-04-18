@@ -8,11 +8,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'user_model.g.dart';
 
-// const rvaPlaceId = 'ChIJ7cmZVwkRsYkRxTxC4m0-2L8';
-// const rvaGeoHash = 'dq8vtfhf9639';
-// const rvaLat = 37.5407246;
-// const rvaLng = -77.43604809999999;
-
 /// The different account types for a user
 enum AccountType {
   /// Venue users
@@ -81,11 +76,11 @@ class UserModel extends Equatable {
         deleted: false,
         shadowBanned: false,
         accountType: AccountType.free,
-        youtubeChannelId: '',
-        soundcloudHandle: '',
-        tiktokHandle: '',
-        instagramHandle: '',
-        twitterHandle: '',
+        youtubeChannelId: null,
+        soundcloudHandle: null,
+        tiktokHandle: null,
+        instagramHandle: null,
+        twitterHandle: null,
         pushNotificationsLikes: true,
         pushNotificationsComments: true,
         pushNotificationsFollows: true,
@@ -94,8 +89,8 @@ class UserModel extends Equatable {
         emailNotificationsAppReleases: true,
         emailNotificationsITLUpdates: true,
         bookingRate: 0,
-        stripeConnectedAccountId: '',
-        stripeCustomerId: '',
+        stripeConnectedAccountId: null,
+        stripeCustomerId: null,
       );
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -139,11 +134,11 @@ class UserModel extends Equatable {
       deleted: doc.getOrElse('deleted', false) as bool,
       shadowBanned: doc.getOrElse('shadowBanned', false) as bool,
       accountType: accountType,
-      youtubeChannelId: doc.getOrElse('youtubeChannelId', '') as String,
-      soundcloudHandle: doc.getOrElse('soundcloudHandle', '') as String,
-      tiktokHandle: doc.getOrElse('tiktokHandle', '') as String,
-      instagramHandle: doc.getOrElse('instagramHandle', '') as String,
-      twitterHandle: doc.getOrElse('twitterHandle', '') as String,
+      youtubeChannelId: doc.getOrElse('youtubeChannelId', null) as String?,
+      soundcloudHandle: doc.getOrElse('soundcloudHandle', null) as String?,
+      tiktokHandle: doc.getOrElse('tiktokHandle', null) as String?,
+      instagramHandle: doc.getOrElse('instagramHandle', null) as String?,
+      twitterHandle: doc.getOrElse('twitterHandle', null) as String?,
       pushNotificationsLikes:
           doc.getOrElse('pushNotificationsLikes', true) as bool,
       pushNotificationsComments:
@@ -161,9 +156,9 @@ class UserModel extends Equatable {
       bookingRate: doc.getOrElse('bookingRate', 0) as int,
       stripeConnectedAccountId: doc.getOrElse(
         'stripeConnectedAccountId',
-        '',
-      ) as String,
-      stripeCustomerId: doc.getOrElse('stripeCustomerId', '') as String,
+        null,
+      ) as String?,
+      stripeCustomerId: doc.getOrElse('stripeCustomerId', null) as String?,
     );
   }
   final String id;
@@ -188,11 +183,11 @@ class UserModel extends Equatable {
   final bool shadowBanned;
   final AccountType accountType;
 
-  final String youtubeChannelId;
-  final String soundcloudHandle;
-  final String tiktokHandle;
-  final String instagramHandle;
-  final String twitterHandle;
+  final String? youtubeChannelId;
+  final String? soundcloudHandle;
+  final String? tiktokHandle;
+  final String? instagramHandle;
+  final String? twitterHandle;
 
   final bool pushNotificationsLikes;
   final bool pushNotificationsComments;
@@ -205,8 +200,8 @@ class UserModel extends Equatable {
 
   // booking rate in cents (USD)
   final int bookingRate;
-  final String stripeConnectedAccountId;
-  final String stripeCustomerId;
+  final String? stripeConnectedAccountId;
+  final String? stripeCustomerId;
 
   @override
   List<Object?> get props => [

@@ -33,7 +33,7 @@ class SocialMediaIcons extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _socialMediaIcon(
-                state.visitedUser.twitterHandle.isNotEmpty,
+                state.visitedUser.twitterHandle != null,
                 icon: const Icon(
                   FontAwesomeIcons.twitter,
                 ),
@@ -47,7 +47,7 @@ class SocialMediaIcons extends StatelessWidget {
                 },
               ),
               _socialMediaIcon(
-                state.visitedUser.instagramHandle.isNotEmpty,
+                state.visitedUser.instagramHandle != null,
                 icon: const Icon(
                   FontAwesomeIcons.instagram,
                 ),
@@ -62,7 +62,7 @@ class SocialMediaIcons extends StatelessWidget {
                 },
               ),
               _socialMediaIcon(
-                state.visitedUser.tiktokHandle.isNotEmpty,
+                state.visitedUser.tiktokHandle != null,
                 icon: const Icon(FontAwesomeIcons.tiktok),
                 onTap: () {
                   launchUrl(
@@ -74,7 +74,7 @@ class SocialMediaIcons extends StatelessWidget {
                 },
               ),
               _socialMediaIcon(
-                state.visitedUser.soundcloudHandle.isNotEmpty,
+                state.visitedUser.soundcloudHandle != null,
                 icon: const Icon(FontAwesomeIcons.soundcloud),
                 onTap: () {
                   launchUrl(
@@ -87,7 +87,7 @@ class SocialMediaIcons extends StatelessWidget {
                 },
               ),
               _socialMediaIcon(
-                state.visitedUser.youtubeChannelId.isNotEmpty,
+                state.visitedUser.youtubeChannelId != null,
                 icon: const Icon(FontAwesomeIcons.youtube),
                 onTap: () {
                   launchUrl(
