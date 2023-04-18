@@ -65,7 +65,7 @@ class UserModel extends Equatable {
         bio: '',
         genres: const [],
         occupations: const [],
-        label: null,
+        label: 'None',
         profilePicture: null,
         placeId: null,
         geohash: null,
@@ -124,7 +124,7 @@ class UserModel extends Equatable {
           .whereType<Genre>()
           .toList(),
       occupations: doc.getOrElse('occupations', <String>[]) as List<String>,
-      label: doc.getOrElse('label', null) as String?,
+      label: doc.getOrElse('label', 'None') as String,
       placeId: doc.getOrElse('placeId', null) as String?,
       geohash: doc.getOrElse('geohash', null) as String?,
       lat: doc.getOrElse('lat', null) as double?,
@@ -168,7 +168,7 @@ class UserModel extends Equatable {
   final String bio;
   final List<Genre> genres;
   final List<String> occupations;
-  final String? label;
+  final String label;
 
   final String? profilePicture;
 

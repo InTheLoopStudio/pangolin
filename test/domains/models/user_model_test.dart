@@ -46,7 +46,7 @@ void main() {
         stripeCustomerId: '', 
         genres: const [], 
         occupations: const [],
-        label: null,
+        label: 'None',
       ),
     );
   });
@@ -84,7 +84,7 @@ void main() {
       stripeConnectedAccountId: '',
       stripeCustomerId: '',
         genres: const [], 
-        label: null, 
+        label: 'None', 
         occupations: const [],
     );
 
@@ -240,7 +240,7 @@ void main() {
         stripeConnectedAccountId: '',
         stripeCustomerId: '',
         genres: const [], 
-        label: null, 
+        label: 'None', 
         occupations: const [],
       ),
     );
