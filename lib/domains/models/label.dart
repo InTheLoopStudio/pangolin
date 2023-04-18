@@ -1,5 +1,6 @@
 
 final List<String> labels = [
+  'Independent',
   'Death Row Records',
   'Blank Kanvaz',
   'Universal Music Group',
