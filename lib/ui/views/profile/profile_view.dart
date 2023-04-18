@@ -271,7 +271,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.normal,
-                                  // color: Color(0xFF757575),
+                                  color: tappedAccent,
                                 ),
                               ),
                             ),
