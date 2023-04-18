@@ -47,7 +47,7 @@ class _LabelFormViewState extends State<LabelFormView> {
             });
             widget.onChange.call(value);
           },
-          items: labels..add('None'),
+          items: labels,
           itemBuilder: RadioButtonBuilder.new,
         ),
       ),
