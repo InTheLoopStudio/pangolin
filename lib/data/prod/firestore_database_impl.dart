@@ -197,10 +197,14 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       final users = usersWithFP
           .map((user) {
+            if (user.lat == null || user.lng == null) {
+              return null;
+            }
+
             // We have to filter out a few false positives due to GeoHash
             // accuracy, but most will match
             final distanceInKm = geoDistance(
-              Point(latitude: user.lat, longitude: user.lng),
+              Point(latitude: user.lat!, longitude: user.lng!),
               Point(latitude: lat, longitude: lng),
             );
 
@@ -232,10 +236,14 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       final users = usersWithFP
           .map((user) {
+            if (user.lat == null || user.lng == null) {
+              return null;
+            }
+
             // We have to filter out a few false positives due to GeoHash
             // accuracy, but most will match
             final distanceInKm = geoDistance(
-              Point(latitude: user.lat, longitude: user.lng),
+              Point(latitude: user.lat!, longitude: user.lng!),
               Point(latitude: lat, longitude: lng),
             );
 

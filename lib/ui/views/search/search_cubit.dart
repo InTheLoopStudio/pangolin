@@ -123,8 +123,8 @@ class SearchCubit extends Cubit<SearchState> {
 
     // TODO(jonaylor89): In the future, this should be paginated
     final searchRes = await database.searchUsersByLocation(
-      lat: place?.latLng?.lat ?? rvaLat,
-      lng: place?.latLng?.lng ?? rvaLng,
+      lat: place?.latLng?.lat ?? 0,
+      lng: place?.latLng?.lng ?? 0,
     );
     emit(
       state.copyWith(

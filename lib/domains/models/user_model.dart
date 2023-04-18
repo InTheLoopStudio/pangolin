@@ -8,10 +8,10 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'user_model.g.dart';
 
-const rvaPlaceId = 'ChIJ7cmZVwkRsYkRxTxC4m0-2L8';
-const rvaGeoHash = 'dq8vtfhf9639';
-const rvaLat = 37.5407246;
-const rvaLng = -77.43604809999999;
+// const rvaPlaceId = 'ChIJ7cmZVwkRsYkRxTxC4m0-2L8';
+// const rvaGeoHash = 'dq8vtfhf9639';
+// const rvaLat = 37.5407246;
+// const rvaLng = -77.43604809999999;
 
 /// The different account types for a user
 enum AccountType {
@@ -70,10 +70,10 @@ class UserModel extends Equatable {
         genres: const [],
 
         // PlaceId for Richmond, Virginia, USA
-        placeId: rvaPlaceId,
-        geohash: rvaGeoHash,
-        lat: rvaLat,
-        lng: rvaLng,
+        placeId: null,
+        geohash: null,
+        lat: null,
+        lng: null,
 
         loopsCount: 0,
         badgesCount: 0,
@@ -130,10 +130,10 @@ class UserModel extends Equatable {
           .toList(),
 
       // PlaceId for Richmond, Virginia, USA
-      placeId: doc.getOrElse('placeId', rvaPlaceId) as String,
-      geohash: doc.getOrElse('geohash', rvaGeoHash) as String,
-      lat: doc.getOrElse('lat', rvaLat) as double,
-      lng: doc.getOrElse('lng', rvaLng) as double,
+      placeId: doc.getOrElse('placeId', null) as String?,
+      geohash: doc.getOrElse('geohash', null) as String?,
+      lat: doc.getOrElse('lat', null) as double?,
+      lng: doc.getOrElse('lng', null) as double?,
       loopsCount: doc.getOrElse('loopsCount', 0) as int,
       badgesCount: doc.getOrElse('badgesCount', 0) as int,
       deleted: doc.getOrElse('deleted', false) as bool,
@@ -174,10 +174,11 @@ class UserModel extends Equatable {
   final String bio;
   final List<Genre> genres;
 
-  final String placeId;
-  final String geohash;
-  final double lat;
-  final double lng;
+  final String? placeId;
+  final String? geohash;
+  final double? lat;
+  final double? lng;
+
   final int loopsCount;
   final int badgesCount;
   final bool deleted;
@@ -205,7 +206,7 @@ class UserModel extends Equatable {
   final String stripeCustomerId;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         id,
         email,
         username,

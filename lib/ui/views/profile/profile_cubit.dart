@@ -168,7 +168,9 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
   }
 
   Future<void> initPlace() async {
-    final place = await places.getPlaceById(visitedUser.placeId);
+    final place = visitedUser.placeId != null 
+      ? await places.getPlaceById(visitedUser.placeId!)
+      : null;
     emit(state.copyWith(place: place));
   }
 
