@@ -109,6 +109,19 @@ class SettingsCubit extends Cubit<SettingsState> {
     );
   }
 
+  void changeOccupations(List<String> value) => emit(
+        state.copyWith(occupations: value),
+      );
+  void removeOccupation(String occupation) {
+    emit(
+      state.copyWith(
+        occupations: state.occupations..remove(occupation),
+      ),
+    );
+  }
+
+  void changeLabel(String? value) => emit(state.copyWith(label: value));
+
   void changeRate(int value) => emit(state.copyWith(rate: value));
 
   void updateEmail(String? input) => emit(
@@ -187,9 +200,11 @@ class SettingsCubit extends Cubit<SettingsState> {
             )
           : currentUser.profilePicture;
 
-      final lat = state.place.latLng?.lat ?? 0;
-      final lng = state.place.latLng?.lng ?? 0;
-      final geohash = geocodeEncode(lat: lat, lng: lng);
+      final lat = state.place?.latLng?.lat ?? null;
+      final lng = state.place?.latLng?.lng ?? null;
+      final geohash = (lat != null && lng != null)
+          ? geocodeEncode(lat: lat, lng: lng)
+          : null;
 
       // placeId => geohash
       final user = currentUser.copyWith(
@@ -217,8 +232,6 @@ class SettingsCubit extends Cubit<SettingsState> {
         bookingRate: state.rate,
         // stripeConnectedAccountId: state.stripeConnectedAccountId,
       );
-
-      print(user);
 
       onboardingBloc.add(UpdateOnboardedUser(user: user));
       emit(state.copyWith(status: FormzSubmissionStatus.success));

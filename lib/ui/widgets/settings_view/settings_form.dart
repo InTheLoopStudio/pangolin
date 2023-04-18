@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/settings/settings_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/artist_name_text_field.dart';
@@ -14,6 +13,8 @@ import 'package:intheloopapp/ui/widgets/common/forms/twitter_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/username_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/youtube_text_field.dart';
 import 'package:intheloopapp/ui/widgets/settings_view/genre_selection.dart';
+import 'package:intheloopapp/ui/widgets/settings_view/label_selection.dart';
+import 'package:intheloopapp/ui/widgets/settings_view/occupation_selection.dart';
 import 'package:intheloopapp/ui/widgets/settings_view/theme_switch.dart';
 
 class SettingsForm extends StatelessWidget {
@@ -36,9 +37,8 @@ class SettingsForm extends StatelessWidget {
                 },
               ),
               ArtistNameTextField(
-                onChanged: (input) => context
-                    .read<SettingsCubit>()
-                    .changeArtistName(input ?? ''),
+                onChanged: (input) =>
+                    context.read<SettingsCubit>().changeArtistName(input ?? ''),
                 initialValue: state.artistName,
               ),
               BioTextField(
@@ -46,11 +46,12 @@ class SettingsForm extends StatelessWidget {
                     context.read<SettingsCubit>().changeBio(value ?? ''),
                 initialValue: state.bio,
               ),
+              const OccupationSelection(),
+              const LabelSelection(),
               const GenreSelection(),
               LocationTextField(
-                onChanged: (place, placeId) => context
-                    .read<SettingsCubit>()
-                    .changePlace(place, placeId),
+                onChanged: (place, placeId) =>
+                    context.read<SettingsCubit>().changePlace(place, placeId),
                 initialPlace: state.place,
                 initialPlaceId: state.placeId,
               ),

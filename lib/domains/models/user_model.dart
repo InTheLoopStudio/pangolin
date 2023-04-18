@@ -123,7 +123,7 @@ class UserModel extends Equatable {
           .where((element) => element != null)
           .whereType<Genre>()
           .toList(),
-      occupations: doc.getOrElse('occupations', <dynamic>[]) as List<String>,
+      occupations: doc.getOrElse('occupations', <String>[]) as List<String>,
       label: doc.getOrElse('label', null) as String?,
       placeId: doc.getOrElse('placeId', null) as String?,
       geohash: doc.getOrElse('geohash', null) as String?,

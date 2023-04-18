@@ -48,7 +48,7 @@ class FollowButton extends StatelessWidget {
                   color: Colors.white,
                 ),
                 label: const Text(
-                  'Edit',
+                  'Settings',
                   style: TextStyle(
                     color: Colors.white,
                   ),

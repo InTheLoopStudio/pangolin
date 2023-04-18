@@ -6,13 +6,14 @@ class SettingsState extends Equatable {
     this.artistName = '',
     this.bio = '',
     this.genres = const [],
-
-    this.placeId = '',
-    this.twitterHandle = '',
-    this.instagramHandle = '',
-    this.soundcloudHandle = '',
-    this.tiktokHandle = '',
-    this.youtubeChannelId = '',
+    this.label,
+    this.occupations = const [],
+    this.placeId,
+    this.twitterHandle,
+    this.instagramHandle,
+    this.soundcloudHandle,
+    this.tiktokHandle,
+    this.youtubeChannelId,
     this.profileImage,
     this.status = FormzSubmissionStatus.initial,
     this.pushNotificationsLikes = true,
@@ -37,17 +38,22 @@ class SettingsState extends Equatable {
   final String username;
   final String artistName;
   final List<Genre> genres;
+  final List<String> occupations;
+  final String? label;
 
   final String bio;
-  final String placeId;
-  final String twitterHandle;
-  final String instagramHandle;
-  final String soundcloudHandle;
-  final String tiktokHandle;
-  final String youtubeChannelId;
+
+  final String? twitterHandle;
+  final String? instagramHandle;
+  final String? soundcloudHandle;
+  final String? tiktokHandle;
+  final String? youtubeChannelId;
   final File? profileImage;
   final FormzSubmissionStatus status;
-  late final Place place;
+
+  final String? placeId;
+  late final Place? place;
+
   late final ImagePicker picker;
   late final GlobalKey<FormState> formKey;
 
@@ -70,7 +76,8 @@ class SettingsState extends Equatable {
         artistName,
         bio,
         genres,
-
+        label,
+        occupations,
         place,
         placeId,
         twitterHandle,
@@ -97,7 +104,8 @@ class SettingsState extends Equatable {
     String? artistName,
     String? bio,
     List<Genre>? genres,
-
+    List<String>? occupations,
+    String? label,
     Place? place,
     String? placeId,
     String? twitterHandle,
@@ -123,6 +131,8 @@ class SettingsState extends Equatable {
       artistName: artistName ?? this.artistName,
       bio: bio ?? this.bio,
       genres: genres ?? this.genres,
+      occupations: occupations ?? this.occupations,
+      label: label ?? this.label,
       place: place ?? this.place,
       placeId: placeId ?? this.placeId,
       twitterHandle: twitterHandle ?? this.twitterHandle,
