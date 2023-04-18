@@ -35,9 +35,6 @@ class LoopDescriptionTextField extends StatelessWidget {
             TransparentPointer(
               child: SelectableLinkify(
                 text: state.description.value,
-                style: const TextStyle(
-                  letterSpacing: 0,
-                ),
                 options: const LinkifyOptions(humanize: false),
               ),
             ),

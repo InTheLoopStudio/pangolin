@@ -30,15 +30,10 @@ class RequestToBookButton extends StatelessWidget {
                     );
                   }(),
                   builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const SkeletonText(height: 40);
-                    }
-
                     final paymentUser = snapshot.data;
 
-                    final enabled = paymentUser != null &&
-                        paymentUser.payoutsEnabled &&
-                        state.visitedUser.stripeConnectedAccountId != null;
+                    final enabled =
+                        paymentUser != null && paymentUser.payoutsEnabled;
 
                     return FilledButton(
                       onPressed: enabled
