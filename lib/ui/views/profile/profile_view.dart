@@ -170,7 +170,7 @@ class _ProfileViewState extends State<ProfileView> {
                     headerSliverBuilder: (context, innerBoxIsScrolled) {
                       return <Widget>[
                         SliverAppBar(
-                          expandedHeight: 200,
+                          expandedHeight: 300,
                           pinned: true,
                           flexibleSpace: FlexibleSpaceBar(
                             titlePadding: const EdgeInsets.symmetric(
@@ -228,13 +228,30 @@ class _ProfileViewState extends State<ProfileView> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                Text(
-                                  '@${visitedUser.username}',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.normal,
-                                    color: Color(0xFF757575),
-                                  ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '@${visitedUser.username}',
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.normal,
+                                        color: Color(0xFF757575),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    if (visitedUser.label != 'None')
+                                      Text(
+                                        visitedUser.label,
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.normal,
+                                          color: Color(0xFF757575),
+                                        ),
+                                      ),
+                                  ],
                                 ),
                                 const ShareProfileButton(),
                                 const FollowButton(),
@@ -242,6 +259,23 @@ class _ProfileViewState extends State<ProfileView> {
                             ),
                           ),
                         ),
+                        if (visitedUser.occupations.isNotEmpty)
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 8,
+                                horizontal: 16,
+                              ),
+                              child: Text(
+                                visitedUser.occupations.join(', '),
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.normal,
+                                  // color: Color(0xFF757575),
+                                ),
+                              ),
+                            ),
+                          ),
                         if (visitedUser.bio.isNotEmpty)
                           SliverToBoxAdapter(
                             child: Padding(

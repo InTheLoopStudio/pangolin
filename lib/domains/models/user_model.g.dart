@@ -19,7 +19,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       occupations: (json['occupations'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
-      label: json['label'] as String?,
+      label: json['label'] as String,
       placeId: json['placeId'] as String?,
       geohash: json['geohash'] as String?,
       lat: (json['lat'] as num?)?.toDouble(),
