@@ -29,11 +29,11 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       deleted: json['deleted'] as bool,
       shadowBanned: json['shadowBanned'] as bool,
       accountType: $enumDecode(_$AccountTypeEnumMap, json['accountType']),
-      youtubeChannelId: json['youtubeChannelId'] as String,
-      soundcloudHandle: json['soundcloudHandle'] as String,
-      tiktokHandle: json['tiktokHandle'] as String,
-      instagramHandle: json['instagramHandle'] as String,
-      twitterHandle: json['twitterHandle'] as String,
+      youtubeChannelId: json['youtubeChannelId'] as String?,
+      soundcloudHandle: json['soundcloudHandle'] as String?,
+      tiktokHandle: json['tiktokHandle'] as String?,
+      instagramHandle: json['instagramHandle'] as String?,
+      twitterHandle: json['twitterHandle'] as String?,
       pushNotificationsLikes: json['pushNotificationsLikes'] as bool,
       pushNotificationsComments: json['pushNotificationsComments'] as bool,
       pushNotificationsFollows: json['pushNotificationsFollows'] as bool,
@@ -45,8 +45,8 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       emailNotificationsITLUpdates:
           json['emailNotificationsITLUpdates'] as bool,
       bookingRate: json['bookingRate'] as int,
-      stripeConnectedAccountId: json['stripeConnectedAccountId'] as String,
-      stripeCustomerId: json['stripeCustomerId'] as String,
+      stripeConnectedAccountId: json['stripeConnectedAccountId'] as String?,
+      stripeCustomerId: json['stripeCustomerId'] as String?,
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
