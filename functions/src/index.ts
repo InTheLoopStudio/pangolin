@@ -614,6 +614,8 @@ export const autoFollowUsersOnUserCreated = functions
       "kNVsCCnDkFdYAxebMspLpnEudwq1",
     ];
 
+    functions.logger.debug(`auto following users for ${userId}`)
+
     for (const userIdToAutoFollow of userIdsToAutoFollow) {
       await followingRef
         .doc(userId)
