@@ -3,6 +3,7 @@ final List<String> labels = [
   'Independent',
   'Death Row Records',
   'Blank Kanvaz',
+  'Playmakr Entertainment',
   'Universal Music Group',
   'Sony Music Entertainment',
   'Warner Music Group',
