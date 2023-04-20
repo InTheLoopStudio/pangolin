@@ -142,6 +142,10 @@ class _ProfileViewState extends State<ProfileView> {
               },
               child: RefreshIndicator(
                 displacement: 20,
+                notificationPredicate: (notification) {
+                  // with NestedScrollView local(depth == 2) OverscrollNotification are not sent
+                  return notification.depth == 2;
+                },
                 onRefresh: () async {
                   context.read<ProfileCubit>()
                     // ignore: unawaited_futures
