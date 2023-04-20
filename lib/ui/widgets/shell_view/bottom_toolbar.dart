@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
+import 'package:intheloopapp/domains/loop_feed_list_bloc/loop_feed_list_bloc.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -43,14 +44,28 @@ class BottomToolbar extends StatelessWidget {
           currentIndex: state.selectedTab,
           items: [
             BottomNavigationBarItem(
-              icon: BlocBuilder<ActivityBloc, ActivityState>(
+              icon: BlocBuilder<LoopFeedListBloc, LoopFeedListState>(
                 builder: (context, state) {
-                  return badges.Badge(
-                    position: badges.BadgePosition.topEnd(top: 0, end: 0),
-                    showBadge: state.unreadActivities,
-                    child: const Icon(
-                      CupertinoIcons.waveform,
-                    ),
+                  return BlocBuilder<ActivityBloc, ActivityState>(
+                    builder: (context, state) {
+                      return GestureDetector(
+                        onDoubleTap: () {
+                          context.read<NavigationBloc>().add(
+                                const ChangeTab(selectedTab: 0),
+                              );
+                          context.read<LoopFeedListBloc>().add(
+                                ScrollToTop(),
+                              );
+                        },
+                        child: badges.Badge(
+                          position: badges.BadgePosition.topEnd(top: 0, end: 0),
+                          showBadge: state.unreadActivities,
+                          child: const Icon(
+                            CupertinoIcons.waveform,
+                          ),
+                        ),
+                      );
+                    },
                   );
                 },
               ),

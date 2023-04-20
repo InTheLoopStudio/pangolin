@@ -29,6 +29,7 @@ import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dar
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/down_for_maintenance_bloc/down_for_maintenance_bloc.dart';
 import 'package:intheloopapp/domains/dynamic_link_bloc/dynamic_link_bloc.dart';
+import 'package:intheloopapp/domains/loop_feed_list_bloc/loop_feed_list_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
@@ -123,6 +124,29 @@ List<BlocProvider> buildBlocs({
       create: (context) => BookingsBloc(
         database: context.read<DatabaseRepository>(),
         authenticationBloc: context.read<AuthenticationBloc>(),
+      ),
+    ),
+    BlocProvider<LoopFeedListBloc>(
+      create: (context) => LoopFeedListBloc(
+        initialIndex: 1,
+        feedParamsList: [
+          FeedParams(
+            sourceFunction:
+                context.read<DatabaseRepository>().getFollowingLoops,
+            sourceStream:
+                context.read<DatabaseRepository>().followingLoopsObserver,
+            tabTitle: 'Following',
+            feedKey: 'following-feed',
+            scrollController: ScrollController(),
+          ),
+          FeedParams(
+            sourceFunction: context.read<DatabaseRepository>().getAllLoops,
+            sourceStream: context.read<DatabaseRepository>().allLoopsObserver,
+            tabTitle: 'For You',
+            feedKey: 'for-you-feed',
+            scrollController: ScrollController(),
+          ),
+        ],
       ),
     ),
   ];
