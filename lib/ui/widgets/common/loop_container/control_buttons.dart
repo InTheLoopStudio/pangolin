@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/dynamic_link_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -26,7 +28,7 @@ class ControlButtons extends StatelessWidget {
       future: database.isLiked(currentUserId, loopId),
       builder: (context, snapshot) {
         bool? isLiked;
-         
+
         if (snapshot.hasData) {
           isLiked = snapshot.data ?? false;
         }
@@ -35,15 +37,14 @@ class ControlButtons extends StatelessWidget {
 
         return BlocBuilder<LoopContainerCubit, LoopContainerState>(
           builder: (context, state) {
-
             return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 LikeButton(
                   isLiked: isLiked,
                   likeCount: state.likeCount,
                   onLike: context.read<LoopContainerCubit>().toggleLoopLike,
                 ),
-                const SizedBox(width: 12),
                 GestureDetector(
                   onTap: () => context.read<NavigationBloc>().add(
                         PushLoop(
@@ -52,20 +53,42 @@ class ControlButtons extends StatelessWidget {
                           autoPlay: false,
                         ),
                       ),
-                  child: const Icon(
-                    CupertinoIcons.bubble_middle_bottom,
-                    size: 18,
-                    color: Color(0xFF757575),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        CupertinoIcons.bubble_middle_bottom,
+                        size: 18,
+                        color: Color(0xFF757575),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        '${state.commentCount}',
+                        style: const TextStyle(
+                          color: Color(0xFF757575),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(width: 6),
-                Text(
-                  '${state.commentCount}',
-                  style: const TextStyle(
-                    color: Color(0xFF757575),
+                GestureDetector(
+                  // onTap: null,
+                  child: const Row(
+                    children: [
+                      Icon(
+                        CupertinoIcons.arrow_2_squarepath,
+                        color: Color(0xFF444444),
+                        size: 18,
+                      ),
+                      SizedBox(width: 6),
+                      Text(
+                        'soon',
+                        style: TextStyle(
+                          color: Color(0xFF444444),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(width: 12),
                 GestureDetector(
                   onTap: () async {
                     await context.read<LoopContainerCubit>().incrementShares();
