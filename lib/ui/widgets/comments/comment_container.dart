@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/linkify.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 import 'package:skeletons/skeletons.dart';
@@ -16,6 +17,7 @@ class CommentContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
+    final navigationBloc = RepositoryProvider.of<NavigationBloc>(context);
 
     return FutureBuilder<UserModel?>(
       future: databaseRepository.getUserById(comment.userId),
@@ -36,6 +38,7 @@ class CommentContainer extends StatelessWidget {
                 horizontal: 10,
               ),
               child: ListTile(
+                onTap: () => navigationBloc.add(PushProfile(user.id)),
                 leading: UserAvatar(
                   radius: 20,
                   backgroundImageUrl: user.profilePicture,
