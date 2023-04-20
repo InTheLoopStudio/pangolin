@@ -612,6 +612,8 @@ export const autoFollowUsersOnUserCreated = functions
       "wHpU3xj2yUSuz2rLFKC6J87HTLu1",
       "n4zIL6bOuPTqRC3dtsl6gyEBPQl1",
       "kNVsCCnDkFdYAxebMspLpnEudwq1",
+      "xfxTCUerCyZCUB85likg7THcUGD2",
+      "EczWgsPTL1ROJ6EU93Q5vs0Osfx2",
     ];
 
     functions.logger.debug(`auto following users for ${userId}`)
