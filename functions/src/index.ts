@@ -575,7 +575,7 @@ export const sendToDevice = functions.firestore
     if (tokens.length == 0) {
       functions.logger.debug("No tokens to send to");
     }
-    
+
     const resp = await fcm.sendToDevice(tokens, payload);
 
     if (resp.failureCount > 0) {
@@ -627,7 +627,7 @@ export const autoFollowUsersOnUserCreated = functions
     }
   })
 
-  
+
 export const updateStreamUserOnUserUpdate = functions
   .runWith({ secrets: [ streamKey, streamSecret ] })
   .firestore
@@ -954,3 +954,29 @@ export const getAccountById = functions
     _authenticated(context);
     return _getAccountById(data);
   });
+
+exports.transformLoopPayloadForSearch = functions.https
+  .onCall((data) => {
+
+    const objectID = data.objectID;
+    const lat = data.lat;
+    const lng = data.lng;
+    const artistName = data.artistName ?? "";
+    const username = data.username ?? "";
+    const email = data.email ?? "";
+    const bio = data.bio ?? "";
+
+    const payload: Record<string, any> = {
+      objectID,
+      artistName,
+      username,
+      email,
+      bio,
+    }
+
+    if (lat !== undefined && lat !== null && lng !== undefined && lng !== null) {
+      payload._geoloc = { lat, lng }
+    }
+
+    return payload;
+  })

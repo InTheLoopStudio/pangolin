@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -144,7 +146,11 @@ class _ProfileViewState extends State<ProfileView> {
                 displacement: 20,
                 notificationPredicate: (notification) {
                   // with NestedScrollView local(depth == 2) OverscrollNotification are not sent
-                  return notification.depth == 2;
+                  if (notification is OverscrollNotification ||
+                      Platform.isIOS) {
+                    return notification.depth == 2;
+                  }
+                  return notification.depth == 0;
                 },
                 onRefresh: () async {
                   context.read<ProfileCubit>()
