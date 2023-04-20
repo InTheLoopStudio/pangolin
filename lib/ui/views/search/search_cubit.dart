@@ -7,6 +7,7 @@ import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/search_repository.dart';
+import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
 part 'search_state.dart';
@@ -45,6 +46,9 @@ class SearchCubit extends Cubit<SearchState> {
       case 1:
         searchLocations(query);
         break;
+      case 2:
+        searchLoops(query);
+        break;
     }
   }
 
@@ -66,7 +70,46 @@ class SearchCubit extends Cubit<SearchState> {
         }
       });
     } else {
-      emit(state.copyWith(loading: false, searchTerm: '', searchResults: []));
+      emit(
+        state.copyWith(
+          loading: false,
+          searchTerm: '',
+          searchResults: [],
+        ),
+      );
+    }
+  }
+
+  void searchLoops(String input) {
+    if (input.isNotEmpty) {
+      emit(state.copyWith(loading: true, searchTerm: input));
+      const duration = Duration(milliseconds: 500);
+      Timer(duration, () async {
+        if (input.isNotEmpty && input == state.searchTerm) {
+          // input hasn't changed in the last 500 milliseconds..
+          // you can start search
+          // print('Now !!! search term : ${state.searchTerm}');
+          final searchRes = await searchRepository.queryLoops(state.searchTerm);
+          // print('RESULTS: $searchRes');
+          emit(
+            state.copyWith(
+              loopSearchResults: searchRes,
+              loading: false,
+            ),
+          );
+        } else {
+          //wait.. Because user still writing..        print('Not Now');
+          // print('Not Now');
+        }
+      });
+    } else {
+      emit(
+        state.copyWith(
+          loading: false,
+          searchTerm: '',
+          loopSearchResults: [],
+        ),
+      );
     }
   }
 

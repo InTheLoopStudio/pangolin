@@ -29,8 +29,6 @@ class AlgoliaSearchImpl extends SearchRepository {
     return loop;
   }
 
-
-
   @override
   Future<List<UserModel>> queryUsers(String input) async {
     var results = <AlgoliaObjectSnapshot>[];
@@ -58,7 +56,7 @@ class AlgoliaSearchImpl extends SearchRepository {
     return userResults;
   }
 
-    @override
+  @override
   Future<List<Loop>> queryLoops(String input) async {
     var results = <AlgoliaObjectSnapshot>[];
 
@@ -82,6 +80,6 @@ class AlgoliaSearchImpl extends SearchRepository {
       }),
     );
 
-    return loopResults;
+    return loopResults.where((element) => !element.deleted).toList();
   }
 }

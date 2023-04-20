@@ -6,6 +6,7 @@ class SearchState extends Equatable {
     this.searchResults = const [],
     this.searchResultsByLocation = const [],
     this.locationResults = const [],
+    this.loopSearchResults = const [],
     this.searchTerm = '',
     this.lastRememberedSearchTerm = '',
     this.loading = false,
@@ -15,6 +16,7 @@ class SearchState extends Equatable {
   }
 
   final List<UserModel> searchResults;
+  final List<Loop> loopSearchResults;
   final List<UserModel> searchResultsByLocation;
   final List<AutocompletePrediction> locationResults;
   final String searchTerm;
@@ -29,6 +31,7 @@ class SearchState extends Equatable {
         searchResults,
         searchResultsByLocation,
         locationResults,
+        loopSearchResults,
         searchTerm,
         lastRememberedSearchTerm,
         loading,
@@ -36,6 +39,7 @@ class SearchState extends Equatable {
 
   SearchState copyWith({
     List<UserModel>? searchResults,
+    List<Loop>? loopSearchResults,
     List<UserModel>? searchResultsByLocation,
     List<AutocompletePrediction>? locationResults,
     String? searchTerm,
@@ -45,6 +49,7 @@ class SearchState extends Equatable {
     return SearchState(
       tabController: tabController,
       locationResults: locationResults ?? this.locationResults,
+      loopSearchResults: loopSearchResults ?? this.loopSearchResults,
       searchResults: searchResults ?? this.searchResults,
       searchResultsByLocation:
           searchResultsByLocation ?? this.searchResultsByLocation,

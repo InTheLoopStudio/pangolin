@@ -6,6 +6,7 @@ import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/search/search_cubit.dart';
 import 'package:intheloopapp/ui/widgets/search_view/by_location_results_list.dart';
+import 'package:intheloopapp/ui/widgets/search_view/by_loop_results_list.dart';
 import 'package:intheloopapp/ui/widgets/search_view/by_username_results_list.dart';
 import 'package:intheloopapp/ui/widgets/search_view/tapped_search_bar.dart';
 
@@ -27,7 +28,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     tabController = TabController(
-      length: 2,
+      length: 3,
       vsync: this,
     );
   }
@@ -70,6 +71,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
             tabs: const [
               Tab(child: Text('Username')),
               Tab(child: Text('Location')),
+              Tab(child: Text('Loop')),
             ],
           ),
         ),
@@ -81,6 +83,9 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
             ),
             Center(
               child: ByLocationResultsList(),
+            ),
+            Center(
+              child: ByLoopResultsList(),
             ),
           ],
         ),
