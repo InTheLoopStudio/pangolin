@@ -14,6 +14,7 @@ import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/dependencies.dart';
 import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
+import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/down_for_maintenance_bloc/down_for_maintenance_bloc.dart';
 import 'package:intheloopapp/domains/dynamic_link_bloc/dynamic_link_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
@@ -133,7 +134,8 @@ class TappedApp extends StatelessWidget {
                             .add(MonitorDynamicLinks());
                         context.read<OnboardingBloc>().add(
                               OnboardingCheck(
-                                  userId: authState.currentAuthUser.uid),
+                                userId: authState.currentAuthUser.uid,
+                              ),
                             );
                         context
                             .read<StreamRepository>()
@@ -143,6 +145,8 @@ class TappedApp extends StatelessWidget {
                             );
 
                         context.read<ActivityBloc>().add(InitListenerEvent());
+
+                        context.read<BookingsBloc>().add(FetchBookings());
 
                         return BlocBuilder<OnboardingBloc, OnboardingState>(
                           builder: (context, onboardState) {

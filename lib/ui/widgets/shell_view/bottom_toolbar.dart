@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
+import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
+import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
@@ -40,9 +42,6 @@ class BottomToolbar extends StatelessWidget {
           // inactiveColor: Colors.white,
           currentIndex: state.selectedTab,
           items: [
-            // const BottomNavigationBarItem(
-            //   icon: Icon(CupertinoIcons.waveform),
-            // ),
             BottomNavigationBarItem(
               icon: BlocBuilder<ActivityBloc, ActivityState>(
                 builder: (context, state) {
@@ -58,12 +57,32 @@ class BottomToolbar extends StatelessWidget {
             ),
             BottomNavigationBarItem(
               icon: GestureDetector(
-                onDoubleTap: searchFocusNode.requestFocus,
+                onDoubleTap: () {
+                  context.read<NavigationBloc>().add(
+                        const ChangeTab(selectedTab: 1),
+                      );
+                  searchFocusNode.requestFocus();
+                },
                 child: const Icon(CupertinoIcons.search),
               ),
             ),
-            const BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.tickets),
+            BottomNavigationBarItem(
+              icon: BlocBuilder<BookingsBloc, BookingsState>(
+                builder: (context, state) {
+                  final pendingBookings = state.bookings.where((booking) {
+                    return (booking.status == BookingStatus.pending) &&
+                        (user.id == booking.requesteeId);
+                  }).toList();
+                  return badges.Badge(
+                    position: badges.BadgePosition.topEnd(top: -4, end: -5),
+                    showBadge: pendingBookings.isNotEmpty,
+                    badgeContent: Text(pendingBookings.length.toString()),
+                    child: const Icon(
+                      CupertinoIcons.tickets,
+                    ),
+                  );
+                },
+              ),
             ),
             const BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.bubble_right),

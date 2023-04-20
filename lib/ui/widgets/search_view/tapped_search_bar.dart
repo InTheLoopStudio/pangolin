@@ -2,9 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/views/search/search_cubit.dart';
+import 'package:intheloopapp/ui/widgets/messaing_view/search_bar.dart';
 
-class SearchBar extends StatelessWidget {
-  const SearchBar({
+class TappedSearchBar extends StatelessWidget {
+  const TappedSearchBar({
     required this.searchFocusNode,
     super.key,
   });

@@ -26,6 +26,7 @@ import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
+import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/down_for_maintenance_bloc/down_for_maintenance_bloc.dart';
 import 'package:intheloopapp/domains/dynamic_link_bloc/dynamic_link_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -115,6 +116,12 @@ List<BlocProvider> buildBlocs({
     BlocProvider<ActivityBloc>(
       create: (context) => ActivityBloc(
         databaseRepository: context.read<DatabaseRepository>(),
+        authenticationBloc: context.read<AuthenticationBloc>(),
+      ),
+    ),
+    BlocProvider<BookingsBloc>(
+      create: (context) => BookingsBloc(
+        database: context.read<DatabaseRepository>(),
         authenticationBloc: context.read<AuthenticationBloc>(),
       ),
     ),
