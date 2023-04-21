@@ -20,7 +20,7 @@ class LoopFeedListBloc extends Bloc<LoopFeedListEvent, LoopFeedListState> {
       final tabIndex = state.index;
       feedParamsList[tabIndex].scrollController.animateTo(
             0,
-            duration: const Duration(milliseconds: 1500),
+            duration: const Duration(milliseconds: 500),
             curve: Curves.linear,
           );
     });
