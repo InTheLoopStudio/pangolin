@@ -958,21 +958,9 @@ export const getAccountById = functions
 exports.transformLoopPayloadForSearch = functions.https
   .onCall((data) => {
 
-    const objectID = data.objectID;
-    const lat = data.lat;
-    const lng = data.lng;
-    const artistName = data.artistName ?? "";
-    const username = data.username ?? "";
-    const email = data.email ?? "";
-    const bio = data.bio ?? "";
+    const { lat, lng, ...rest } = data;
 
-    const payload: Record<string, any> = {
-      objectID,
-      artistName,
-      username,
-      email,
-      bio,
-    }
+    const payload: Record<string, any> = rest;
 
     if (lat !== undefined && lat !== null && lng !== undefined && lng !== null) {
       payload._geoloc = { lat, lng }
