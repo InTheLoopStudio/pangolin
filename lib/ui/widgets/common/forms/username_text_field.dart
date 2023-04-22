@@ -26,12 +26,12 @@ class UsernameTextField extends StatelessWidget {
       initialValue: initialValue,
       decoration: const InputDecoration(
         prefixIcon: Icon(Icons.person),
-        labelText: 'Handle',
+        labelText: 'Username',
         hintText: 'tapped_network',
       ),
       validator: (input) {
         if (input!.trim().length < 2) {
-          return 'please enter a valid handle';
+          return 'please enter a valid username';
         }
 
         return null;
