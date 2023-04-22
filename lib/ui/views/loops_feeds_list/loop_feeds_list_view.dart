@@ -59,11 +59,14 @@ class _LoopFeedsListViewState extends State<LoopFeedsListView>
                 ),
           ),
           body: NestedScrollView(
-            physics: const ClampingScrollPhysics(),
+            // physics: const ClampingScrollPhysics(),
+            floatHeaderSlivers: true,
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
-                const SliverAppBar(
-                  title: Row(
+                SliverAppBar(
+                  floating: true,
+                  forceElevated: innerBoxIsScrolled,
+                  title: const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
@@ -76,7 +79,6 @@ class _LoopFeedsListViewState extends State<LoopFeedsListView>
                       NotificationIconButton(),
                     ],
                   ),
-                  pinned: true,
                 ),
                 SliverOverlapAbsorber(
                   // This widget takes the overlapping behavior of the
@@ -95,6 +97,7 @@ class _LoopFeedsListViewState extends State<LoopFeedsListView>
                     context,
                   ),
                   sliver: SliverPersistentHeader(
+                    floating: true,
                     pinned: true,
                     delegate: _SliverAppBarDelegate(
                       TabBar(

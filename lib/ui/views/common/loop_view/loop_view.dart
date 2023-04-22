@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/data/dynamic_link_repository.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -15,6 +16,7 @@ import 'package:intheloopapp/ui/widgets/comments/comments_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/attachments.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/like_button.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class LoopView extends StatelessWidget {
@@ -30,6 +32,7 @@ class LoopView extends StatelessWidget {
     final navigationBloc = context.read<NavigationBloc>();
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
+    final dynamic = RepositoryProvider.of<DynamicLinkRepository>(context);
 
     return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
       selector: (state) => state as Onboarded,
@@ -168,6 +171,8 @@ class LoopView extends StatelessWidget {
                                         loopUser: user,
                                       ),
                                       Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
                                         children: [
                                           LikeButton(
                                             onLike: () => context
@@ -176,16 +181,61 @@ class LoopView extends StatelessWidget {
                                             likeCount: state.likeCount,
                                             isLiked: state.isLiked,
                                           ),
-                                          const SizedBox(width: 12),
-                                          const Icon(
-                                            CupertinoIcons.bubble_middle_bottom,
-                                            size: 18,
-                                            color: Color(0xFF757575),
+                                          Row(
+                                            children: [
+                                              const Icon(
+                                                CupertinoIcons
+                                                    .bubble_middle_bottom,
+                                                size: 18,
+                                                color: Color(0xFF757575),
+                                              ),
+                                              const SizedBox(width: 6),
+                                              Text(
+                                                '${state.commentsCount}',
+                                                style: const TextStyle(
+                                                  color: Color(0xFF757575),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          const SizedBox(width: 6),
-                                          Text(
-                                            '${state.commentsCount}',
-                                            style: const TextStyle(
+                                          GestureDetector(
+                                            // onTap: null,
+                                            child: const Row(
+                                              children: [
+                                                Icon(
+                                                  CupertinoIcons
+                                                      .arrow_2_squarepath,
+                                                  color: Color(0xFF444444),
+                                                  size: 18,
+                                                ),
+                                                SizedBox(width: 6),
+                                                Text(
+                                                  'soon',
+                                                  style: TextStyle(
+                                                    color: Color(0xFF444444),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () async {
+                                              await context
+                                                  .read<LoopViewCubit>()
+                                                  .incrementShares();
+
+                                              final link = await dynamic
+                                                  .getShareLoopDynamicLink(
+                                                state.loop,
+                                              );
+
+                                              await Share.share(
+                                                'Check out this loop on Tapped $link',
+                                              );
+                                            },
+                                            child: const Icon(
+                                              CupertinoIcons.share,
+                                              size: 18,
                                               color: Color(0xFF757575),
                                             ),
                                           ),
