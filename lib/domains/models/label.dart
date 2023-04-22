@@ -19,5 +19,6 @@ final List<String> labels = [
   'Def Jam Recordings',
   'Epic Records',
   'Virgin Records',
+  'Other',
   'None',
 ];
