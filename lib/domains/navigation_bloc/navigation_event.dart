@@ -222,3 +222,13 @@ class PushBooking extends NavigationEvent {
   @override
   List<Object> get props => [booking];
 }
+
+class PushAdvancedSearch extends NavigationEvent {
+  const PushAdvancedSearch();
+
+  @override
+  String toString() => 'PushAdvancedSearch { }';
+
+  @override
+  List<Object> get props => [];
+}

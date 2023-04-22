@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/widgets/search_view/by_location_results_list.dart';
@@ -63,7 +64,11 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              context.read<NavigationBloc>().add(
+                    const PushAdvancedSearch(),
+                  );
+            },
             icon: const Icon(CupertinoIcons.doc_text_search),
             color: tappedAccent,
           ),

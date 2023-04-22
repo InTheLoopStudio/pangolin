@@ -7,6 +7,7 @@ import 'package:intheloopapp/domains/models/badge.dart' as badge_model;
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/ui/views/activity/activity_view.dart';
+import 'package:intheloopapp/ui/views/advanced_search/advanced_search_view.dart';
 import 'package:intheloopapp/ui/views/badge/badge_view.dart';
 import 'package:intheloopapp/ui/views/common/booking_view/booking_view.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view.dart';
@@ -61,7 +62,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
               ),
               body: PhotoView(
                 imageProvider: CachedNetworkImageProvider(event.imageUrl),
-                  heroAttributes: PhotoViewHeroAttributes(tag: event.imageUrl),
+                heroAttributes: PhotoViewHeroAttributes(tag: event.imageUrl),
               ),
             ),
           ),
@@ -192,6 +193,16 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
           builder: (context) => BookingView(
             booking: event.booking,
           ),
+        ),
+      );
+
+      emit(state);
+    });
+    on<PushAdvancedSearch>((event, emit) {
+      navigationKey.currentState?.push(
+        MaterialPageRoute<AdvancedSearchView>(
+          settings: const RouteSettings(name: '/advanced-search'),
+          builder: (context) => const AdvancedSearchView(),
         ),
       );
 
