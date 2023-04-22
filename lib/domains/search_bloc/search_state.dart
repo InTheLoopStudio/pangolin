@@ -1,8 +1,8 @@
-part of 'search_cubit.dart';
+part of 'search_bloc.dart';
 
 class SearchState extends Equatable {
-  SearchState({
-    required this.tabController,
+  const SearchState({
+    required this.tabIndex,
     this.searchResults = const [],
     this.searchResultsByLocation = const [],
     this.locationResults = const [],
@@ -10,10 +10,7 @@ class SearchState extends Equatable {
     this.searchTerm = '',
     this.lastRememberedSearchTerm = '',
     this.loading = false,
-    TextEditingController? textController,
-  }) {
-    this.textController = textController ?? TextEditingController();
-  }
+  });
 
   final List<UserModel> searchResults;
   final List<Loop> loopSearchResults;
@@ -21,13 +18,13 @@ class SearchState extends Equatable {
   final List<AutocompletePrediction> locationResults;
   final String searchTerm;
   final String lastRememberedSearchTerm;
-  late final TextEditingController textController;
-  late final TabController tabController;
+
+  final int tabIndex;
   final bool loading;
 
   @override
   List<Object> get props => [
-        tabController,
+        tabIndex,
         searchResults,
         searchResultsByLocation,
         locationResults,
@@ -44,10 +41,11 @@ class SearchState extends Equatable {
     List<AutocompletePrediction>? locationResults,
     String? searchTerm,
     String? lastRememberedSearchTerm,
+    int? tabIndex,
     bool? loading,
   }) {
     return SearchState(
-      tabController: tabController,
+      tabIndex: tabIndex ?? this.tabIndex,
       locationResults: locationResults ?? this.locationResults,
       loopSearchResults: loopSearchResults ?? this.loopSearchResults,
       searchResults: searchResults ?? this.searchResults,
@@ -57,7 +55,6 @@ class SearchState extends Equatable {
       lastRememberedSearchTerm:
           lastRememberedSearchTerm ?? this.lastRememberedSearchTerm,
       loading: loading ?? this.loading,
-      textController: textController,
     );
   }
 }

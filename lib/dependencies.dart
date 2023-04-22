@@ -32,6 +32,7 @@ import 'package:intheloopapp/domains/dynamic_link_bloc/dynamic_link_bloc.dart';
 import 'package:intheloopapp/domains/loop_feed_list_bloc/loop_feed_list_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
+import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -147,6 +148,14 @@ List<BlocProvider> buildBlocs({
             scrollController: ScrollController(),
           ),
         ],
+      ),
+    ),
+    BlocProvider<SearchBloc>(
+      create: (context) => SearchBloc(
+        initialIndex: 0,
+        database: context.read<DatabaseRepository>(),
+        searchRepository: context.read<SearchRepository>(),
+        places: context.read<PlacesRepository>(),
       ),
     ),
   ];

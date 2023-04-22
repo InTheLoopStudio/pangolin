@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
@@ -10,52 +9,61 @@ import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
+part 'search_event.dart';
 part 'search_state.dart';
 
-class SearchCubit extends Cubit<SearchState> {
-  SearchCubit({
+class SearchBloc extends Bloc<SearchEvent, SearchState> {
+  SearchBloc({
+    required int initialIndex,
     required this.searchRepository,
     required this.database,
     required this.places,
-    required this.tabController,
-  }) : super(SearchState(tabController: tabController));
-
-  final SearchRepository searchRepository;
-  final DatabaseRepository database;
-  final PlacesRepository places;
-  final TabController tabController;
-
-  void initTabController() {
-    tabController.addListener(() {
+  }) : super(
+          SearchState(
+            tabIndex: initialIndex,
+          ),
+        ) {
+    on<ChangeSearchTab>((event, emit) async {
+      emit(state.copyWith(tabIndex: event.index));
       if (state.lastRememberedSearchTerm != state.searchTerm) {
         emit(
           state.copyWith(
             lastRememberedSearchTerm: state.searchTerm,
           ),
         );
-        search(state.searchTerm);
+        await _search(state.searchTerm, emit);
       }
+    });
+    on<Search>((event, emit) async {
+      await _search(event.query, emit);
+    });
+    on<SearchUsersByPrediction>((event, emit) async {
+      await _searchUsersByPrediction(event.prediction, emit);
     });
   }
 
-  void search(String query) {
-    switch (tabController.index) {
+  Future<void> _search(String query, Emitter<SearchState> emit) async {
+    switch (state.tabIndex) {
       case 0:
-        searchUsersByUsername(query);
+        await _searchUsersByUsername(query, emit);
         break;
       case 1:
-        searchLocations(query);
+        await _searchLocations(query, emit);
         break;
       case 2:
-        searchLoops(query);
+        await _searchLoops(query, emit);
         break;
     }
   }
 
-  void searchUsersByUsername(String input) {
+  Future<void> _searchUsersByUsername(
+    String input,
+    Emitter<SearchState> emit,
+  ) async {
     if (input.isNotEmpty) {
       emit(state.copyWith(loading: true, searchTerm: input));
       const duration = Duration(milliseconds: 500);
+      final completer = Completer<void>();
       Timer(duration, () async {
         if (input.isNotEmpty && input == state.searchTerm) {
           // input hasn't changed in the last 500 milliseconds..
@@ -68,7 +76,9 @@ class SearchCubit extends Cubit<SearchState> {
           //wait.. Because user still writing..        print('Not Now');
           // print('Not Now');
         }
+        completer.complete();
       });
+      await completer.future;
     } else {
       emit(
         state.copyWith(
@@ -80,10 +90,14 @@ class SearchCubit extends Cubit<SearchState> {
     }
   }
 
-  void searchLoops(String input) {
+  Future<void> _searchLoops(
+    String input,
+    Emitter<SearchState> emit,
+  ) async {
     if (input.isNotEmpty) {
       emit(state.copyWith(loading: true, searchTerm: input));
       const duration = Duration(milliseconds: 500);
+      final completer = Completer<void>();
       Timer(duration, () async {
         if (input.isNotEmpty && input == state.searchTerm) {
           // input hasn't changed in the last 500 milliseconds..
@@ -101,7 +115,9 @@ class SearchCubit extends Cubit<SearchState> {
           //wait.. Because user still writing..        print('Not Now');
           // print('Not Now');
         }
+        completer.complete();
       });
+      await completer.future;
     } else {
       emit(
         state.copyWith(
@@ -113,7 +129,10 @@ class SearchCubit extends Cubit<SearchState> {
     }
   }
 
-  void searchLocations(String query) {
+  Future<void> _searchLocations(
+    String query,
+    Emitter<SearchState> emit,
+  ) async {
     if (query.isNotEmpty) {
       emit(
         state.copyWith(
@@ -123,6 +142,7 @@ class SearchCubit extends Cubit<SearchState> {
         ),
       );
       const duration = Duration(milliseconds: 500);
+      final completer = Completer<void>();
       Timer(duration, () async {
         if (query.isNotEmpty && query == state.searchTerm) {
           // input hasn't changed in the last 500 milliseconds..
@@ -140,7 +160,9 @@ class SearchCubit extends Cubit<SearchState> {
           //wait.. Because user still writing..        print('Not Now');
           // print('Not Now');
         }
+        completer.complete();
       });
+      await completer.future;
     } else {
       emit(
         state.copyWith(
@@ -152,15 +174,13 @@ class SearchCubit extends Cubit<SearchState> {
     }
   }
 
-  Future<void> searchUsersByPrediction(
+  Future<void> _searchUsersByPrediction(
     AutocompletePrediction prediction,
+    Emitter<SearchState> emit,
   ) async {
     final placeId = prediction.placeId;
     final mainText = prediction.primaryText;
     emit(state.copyWith(loading: true, searchTerm: mainText));
-    // input hasn't changed in the last 500 milliseconds..
-    // you can start search
-    // print('Now !!! search term : ${state.searchTerm}');
 
     final place = await places.getPlaceById(placeId);
 
@@ -177,4 +197,8 @@ class SearchCubit extends Cubit<SearchState> {
       ),
     );
   }
+
+  final PlacesRepository places;
+  final DatabaseRepository database;
+  final SearchRepository searchRepository;
 }

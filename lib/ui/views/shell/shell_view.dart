@@ -49,7 +49,7 @@ class _ShellViewState extends State<ShellView> {
               body: IndexedStack(
                 index: state.selectedTab,
                 children: [
-                  const LoopFeedsListView(), // getstream.io activity feed?h
+                  const LoopFeedsListView(), // getstream.io activity feed?
                   SearchView(
                     searchFocusNode: searchFocusNode,
                   ),
