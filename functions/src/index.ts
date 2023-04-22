@@ -607,13 +607,11 @@ export const autoFollowUsersOnUserCreated = functions
   .onCreate(async (snapshot, context) => {
     const userId = context.params.userId;
     const userIdsToAutoFollow = [
-      "VWj4qT2JMIhjjEYYFnbvebIazfB3",
-      "8yYVxpQ7cURSzNfBsaBGF7A7kkv2",
-      "wHpU3xj2yUSuz2rLFKC6J87HTLu1",
-      "n4zIL6bOuPTqRC3dtsl6gyEBPQl1",
-      "kNVsCCnDkFdYAxebMspLpnEudwq1",
-      "xfxTCUerCyZCUB85likg7THcUGD2",
-      "EczWgsPTL1ROJ6EU93Q5vs0Osfx2",
+      "8yYVxpQ7cURSzNfBsaBGF7A7kkv2", // Johannes
+      "n4zIL6bOuPTqRC3dtsl6gyEBPQl1", // Ilias
+      "kNVsCCnDkFdYAxebMspLpnEudwq1", // Jayduhhhh
+      "xfxTCUerCyZCUB85likg7THcUGD2", // Yung Smilez
+      "EczWgsPTL1ROJ6EU93Q5vs0Osfx2", // Akimi
     ];
 
     functions.logger.debug(`auto following users for ${userId}`)
