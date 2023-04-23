@@ -53,6 +53,7 @@ class _LoopFeedsListViewState extends State<LoopFeedsListView>
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.background,
           floatingActionButton: FloatingActionButton(
+            heroTag: 'pushCreateLoopButton',
             child: const Icon(Icons.edit_outlined),
             onPressed: () => context.read<NavigationBloc>().add(
                   const PushCreateLoop(),

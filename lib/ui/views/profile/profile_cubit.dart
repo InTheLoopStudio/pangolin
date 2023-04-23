@@ -197,7 +197,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
               ),
             );
     } on Exception {
-      emit(state.copyWith(loopStatus: LoopsStatus.failure));
+      // emit(state.copyWith(loopStatus: LoopsStatus.failure));
     }
   }
 
@@ -224,7 +224,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
               ),
             );
     } on Exception {
-      emit(state.copyWith(badgeStatus: BadgesStatus.failure));
+      // emit(state.copyWith(badgeStatus: BadgesStatus.failure));
     }
   }
 
@@ -252,11 +252,11 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
               ),
             );
     } on Exception {
-      emit(
-        state.copyWith(
-          userCreatedBadgeStatus: UserCreatedBadgesStatus.failure,
-        ),
-      );
+      // emit(
+      //   state.copyWith(
+      //     userCreatedBadgeStatus: UserCreatedBadgesStatus.failure,
+      //   ),
+      // );
     }
   }
 

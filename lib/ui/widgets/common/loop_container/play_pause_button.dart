@@ -26,16 +26,18 @@ class PlayPauseButton extends StatelessWidget {
         final playing = playerState.playing;
         if (processingState == ProcessingState.loading ||
             processingState == ProcessingState.buffering) {
-          return const FloatingActionButton(
+          return FloatingActionButton(
+            heroTag: 'playPauseButton-${audioController.title}',
             onPressed: null,
-            shape: CircleBorder(),
-            child: Icon(
+            shape: const CircleBorder(),
+            child: const Icon(
               Icons.play_arrow,
               size: 32,
             ),
           );
-        } else if (playing != true) {
+        } else if (!playing) {
           return FloatingActionButton(
+            heroTag: 'playPauseButton-${audioController.title}',
             onPressed: audioController.play,
             shape: const CircleBorder(),
             child: const Icon(
@@ -45,6 +47,7 @@ class PlayPauseButton extends StatelessWidget {
           );
         } else if (processingState != ProcessingState.completed) {
           return FloatingActionButton(
+            heroTag: 'playPauseButton-${audioController.title}',
             onPressed: audioController.pause,
             child: const Icon(
               Icons.pause,
@@ -53,6 +56,7 @@ class PlayPauseButton extends StatelessWidget {
           );
         } else {
           return FloatingActionButton(
+            heroTag: 'playPauseButton-${audioController.title}',
             onPressed: () => audioController.seek(
               Duration.zero,
               index: audioController.effectiveIndices!.first,

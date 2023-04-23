@@ -79,6 +79,7 @@ class CreateBookingView extends StatelessWidget {
                     BlocBuilder<CreateBookingCubit, CreateBookingState>(
                   builder: (context, state) {
                     return FloatingActionButton.extended(
+                      heroTag: 'createBookingButton',
                       onPressed: () async {
                         try {
                           await context

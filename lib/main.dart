@@ -39,7 +39,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  print(message.data);
+  // print(message.data);
 }
 
 Future<void> main() async {
@@ -57,7 +57,11 @@ Future<void> main() async {
 
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   PlatformDispatcher.instance.onError = (error, stack) {
-    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    try {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    } on Exception  {
+      // print('Failed to report error to Firebase Crashlytics: $e');
+    } 
 
     return true;
   };

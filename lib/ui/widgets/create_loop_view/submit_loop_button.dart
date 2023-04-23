@@ -12,6 +12,7 @@ class SubmitLoopButton extends StatelessWidget {
       builder: (context, state) {
         return FloatingActionButton.extended(
           // color: tappedAccent,
+          heroTag: 'submitLoopButton',
           onPressed: () {
             try {
               context.read<CreateLoopCubit>().createLoop();

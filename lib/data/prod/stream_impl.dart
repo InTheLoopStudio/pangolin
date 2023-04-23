@@ -41,21 +41,24 @@ class StreamImpl extends StreamRepository {
 
   @override
   Future<List<UserModel>> getChatUsers() async {
-    final result = await _client.queryUsers();
-    final chatUsers = await Future.wait(
-      result.users
-          .where((element) => element.id != _client.state.currentUser!.id)
-          .map(
-        (User e) async {
-          final userSnapshot = await _usersRef.doc(e.id).get();
-          final user = UserModel.fromDoc(userSnapshot);
+    try {
+      final result = await _client.queryUsers();
+      final chatUsers = await Future.wait(
+        result.users
+            .where((element) => element.id != _client.state.currentUser!.id)
+            .map(
+          (User e) async {
+            final userSnapshot = await _usersRef.doc(e.id).get();
+            final user = UserModel.fromDoc(userSnapshot);
 
-          return user;
-        },
-      ),
-    );
-
-    return chatUsers;
+            return user;
+          },
+        ),
+      );
+      return chatUsers;
+    } on Exception {
+      return [];
+    }
   }
 
   @override
