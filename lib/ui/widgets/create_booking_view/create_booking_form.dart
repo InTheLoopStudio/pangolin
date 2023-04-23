@@ -136,9 +136,9 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
               ),
               _FormItem(
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 22),
-                    child: Text('Booking Fee (10%)'),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 22),
+                    child: Text('Booking Fee (${state.bookingFee * 100}%)'),
                   ),
                   Text(
                     state.formattedApplicationFee,

@@ -103,7 +103,7 @@ class CreateBookingState extends Equatable with FormzMixin {
 
   int get applicationFee {
     final total = artistCost;
-    final fee = (total * 0.1).toInt();
+    final fee = (total * bookingFee).toInt();
     return fee;
   }
 

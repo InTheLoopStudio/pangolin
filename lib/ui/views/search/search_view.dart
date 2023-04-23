@@ -80,7 +80,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
           tabs: const [
             Tab(child: Text('Username')),
             Tab(child: Text('Location')),
-            Tab(child: Text('Loop')),
+            Tab(child: Text('Loops')),
           ],
         ),
       ),

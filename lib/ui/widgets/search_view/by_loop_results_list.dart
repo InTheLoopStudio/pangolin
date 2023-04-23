@@ -31,7 +31,7 @@ class ByLoopResultsList extends StatelessWidget {
                   color: Color(0xFF757575),
                 ),
                 Text(
-                  'Search Loop',
+                  'Search Loops',
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w400,

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
+import 'package:intheloopapp/data/remote_config_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -78,7 +79,6 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
       );
 
   Future<void> createBooking() async {
-
     final booking = Booking(
       id: const Uuid().v4(),
       name: state.name.value,
