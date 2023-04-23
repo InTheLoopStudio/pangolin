@@ -40,7 +40,7 @@ class LoginView extends StatelessWidget {
                   onPressed: () => launchUrl(
                     Uri(
                       scheme: 'https',
-                      path: 'intheloopstudio.com/privacy',
+                      path: 'tapped.jonaylor.xyz/privacy',
                     ),
                   ),
                 ),

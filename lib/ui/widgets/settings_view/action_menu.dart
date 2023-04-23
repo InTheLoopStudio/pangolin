@@ -61,7 +61,7 @@ class ActionMenu extends StatelessWidget {
               onTap: () => launchUrl(
                 Uri(
                   scheme: 'https',
-                  path: 'intheloopstudio.com/privacy',
+                  path: 'tapped.jonaylor.xyz/privacy',
                 ),
               ),
             ),
