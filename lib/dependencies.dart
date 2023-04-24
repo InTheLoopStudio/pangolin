@@ -27,6 +27,7 @@ import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
+import 'package:intheloopapp/domains/confirm_email_bloc/confirm_email_bloc.dart';
 import 'package:intheloopapp/domains/down_for_maintenance_bloc/down_for_maintenance_bloc.dart';
 import 'package:intheloopapp/domains/dynamic_link_bloc/dynamic_link_bloc.dart';
 import 'package:intheloopapp/domains/loop_feed_list_bloc/loop_feed_list_bloc.dart';
@@ -93,6 +94,11 @@ List<BlocProvider> buildBlocs({
       create: (context) => AuthenticationBloc(
         authRepository: context.read<AuthRepository>(),
       )..add(AppStarted()),
+    ),
+    BlocProvider<ConfirmEmailBloc>(
+      create: (context) => ConfirmEmailBloc(
+        authRepository: context.read<AuthRepository>(),
+      ),
     ),
     BlocProvider<NavigationBloc>(
       create: (_) => NavigationBloc(navigationKey: navigatorKey),

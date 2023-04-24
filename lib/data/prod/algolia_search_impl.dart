@@ -30,38 +30,12 @@ class AlgoliaSearchImpl extends SearchRepository {
   }
 
   @override
-  Future<List<UserModel>> queryUsers(String input) async {
-    var results = <AlgoliaObjectSnapshot>[];
-
-    try {
-      final query = _algolia.index('prod_users').query(input);
-
-      final snap = await query.getObjects();
-
-      await _analytics.logSearch(searchTerm: input);
-
-      results = snap.hits;
-    } on AlgoliaError {
-      // print(e.error);
-      rethrow;
-    }
-
-    final userResults = await Future.wait(
-      results.map((res) async {
-        final user = await _getUser(res.objectID);
-        return user;
-      }),
-    );
-
-    return userResults;
-  }
-
-  @override
   Future<List<Loop>> queryLoops(String input) async {
     var results = <AlgoliaObjectSnapshot>[];
 
     try {
-      final query = _algolia.index('prod_loops').query(input);
+      final query = _algolia.index('prod_loops').query(input)
+        ..filters('deleted:false');
 
       final snap = await query.getObjects();
 
@@ -81,5 +55,63 @@ class AlgoliaSearchImpl extends SearchRepository {
     );
 
     return loopResults.where((element) => !element.deleted).toList();
+  }
+
+  @override
+  Future<List<UserModel>> queryUsers(
+    String input, {
+    List<String>? labels,
+    List<String>? genres,
+    List<String>? occupations,
+    double? lat,
+    double? lng,
+    int radius = 50000,
+  }) async {
+    var results = <AlgoliaObjectSnapshot>[];
+
+    const formattedIsDeletedFilter = 'deleted:false';
+    final formattedLabelFilter =
+        ' AND (${labels?.map((e) => 'label:$e').join(' OR ')})';
+    final formattedGenreFilter =
+        ' AND (${genres?.map((e) => 'genres:$e').join(' OR ')})';
+    final formattedOccupationFilter =
+        ' AND (${occupations?.map((e) => 'occupations:$e').join(' OR ')})';
+
+    final formattedLocationFilter =
+        (lat != null && lng != null) ? '$lat, $lng' : null;
+
+    try {
+      var query = _algolia.index('prod_users').query(input)
+        ..filters(
+          '$formattedLabelFilter'
+          '$formattedGenreFilter'
+          '$formattedOccupationFilter'
+          '$formattedIsDeletedFilter',
+        );
+
+      if (formattedLocationFilter != null) {
+        query = query
+          ..setAroundLatLng(formattedLocationFilter)
+          ..setAroundRadius(radius);
+      }
+
+      final snap = await query.getObjects();
+
+      await _analytics.logSearch(searchTerm: input);
+
+      results = snap.hits;
+    } on AlgoliaError {
+      // print(e.error);
+      rethrow;
+    }
+
+    final userResults = await Future.wait(
+      results.map((res) async {
+        final user = await _getUser(res.objectID);
+        return user;
+      }),
+    );
+
+    return userResults;
   }
 }

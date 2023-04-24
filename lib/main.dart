@@ -154,7 +154,7 @@ class TappedApp extends StatelessWidget {
 
                         return BlocBuilder<OnboardingBloc, OnboardingState>(
                           builder: (context, onboardState) {
-                            if (onboardState is Onboarded) {
+                          if (onboardState is Onboarded) {
                               return const ShellView();
                             } else if (onboardState is Onboarding) {
                               return const OnboardingView();
