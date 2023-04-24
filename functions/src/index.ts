@@ -701,7 +701,6 @@ export const deteteFollowersEntryOnUnfollow = functions.firestore
     doc.ref.delete()
   });
 
-
 export const incrementLoopCountOnUpload = functions.firestore
   .document("loops/{loopId}")
   .onCreate(async (snapshot) => {

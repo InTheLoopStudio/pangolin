@@ -11,23 +11,14 @@ class AdvancedSearchView extends StatelessWidget {
       appBar: const TappedAppBar(
         title: 'Advanced Search',
       ),
-      body: const Center(
-        child: Text('Advanced Search'),
+      body: const Column(
+        children: [
+          Text('occupation'),
+          Text('genre if occupation is artist/DJ'),
+          Text('location'),
+          Text('has a label?'),
+        ],
       ),
-      // body: const Column(
-      //   children: [
-      //     Text('occupation'),
-      //     Text('genre if occupation is artist/DJ'),
-      //     Text('location'),
-      //     Text('price range'),
-      //     Text('has a label?'),
-      //     Text('is verified?'),
-      //     Text('is "super-artist" (basically like a superhost on airbnb)'),
-      //     Text('number of previous shows?'),
-      //     Text('has worked with person X before?'),
-      //     Text('is available in on day X in the time range Y?'),
-      //   ],
-      // ),
     );
   }
 }

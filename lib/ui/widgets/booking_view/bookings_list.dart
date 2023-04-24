@@ -25,7 +25,7 @@ class BookingsList extends StatelessWidget {
                       child: Text(
                         'Nothing Yet',
                         style: TextStyle(
-                          fontSize: 22,
+                          fontSize: 16,
                           fontWeight: FontWeight.w400,
                           color: themeColor,
                         ),
