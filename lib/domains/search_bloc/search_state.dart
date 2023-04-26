@@ -10,6 +10,11 @@ class SearchState extends Equatable {
     this.searchTerm = '',
     this.lastRememberedSearchTerm = '',
     this.loading = false,
+    this.occupations = const [],
+    this.genres = const [],
+    this.labels = const [],
+    this.place,
+    this.placeId,
   });
 
   final List<UserModel> searchResults;
@@ -19,11 +24,18 @@ class SearchState extends Equatable {
   final String searchTerm;
   final String lastRememberedSearchTerm;
 
+  final List<String> occupations;
+  final List<Genre> genres;
+  final List<String> labels;
+
+  final Place? place;
+  final String? placeId;
+
   final int tabIndex;
   final bool loading;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         tabIndex,
         searchResults,
         searchResultsByLocation,
@@ -32,6 +44,11 @@ class SearchState extends Equatable {
         searchTerm,
         lastRememberedSearchTerm,
         loading,
+        occupations,
+        genres,
+        labels,
+        place,
+        placeId,
       ];
 
   SearchState copyWith({
@@ -41,6 +58,11 @@ class SearchState extends Equatable {
     List<AutocompletePrediction>? locationResults,
     String? searchTerm,
     String? lastRememberedSearchTerm,
+    List<String>? occupations,
+    List<Genre>? genres,
+    List<String>? labels,
+    Place? place,
+    String? placeId,
     int? tabIndex,
     bool? loading,
   }) {
@@ -54,6 +76,11 @@ class SearchState extends Equatable {
       searchTerm: searchTerm ?? this.searchTerm,
       lastRememberedSearchTerm:
           lastRememberedSearchTerm ?? this.lastRememberedSearchTerm,
+      occupations: occupations ?? this.occupations,
+      genres: genres ?? this.genres,
+      labels: labels ?? this.labels,
+      place: place ?? this.place,
+      placeId: placeId ?? this.placeId,
       loading: loading ?? this.loading,
     );
   }

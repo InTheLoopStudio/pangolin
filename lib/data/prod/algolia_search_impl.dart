@@ -70,29 +70,39 @@ class AlgoliaSearchImpl extends SearchRepository {
     var results = <AlgoliaObjectSnapshot>[];
 
     const formattedIsDeletedFilter = 'deleted:false';
-    final formattedLabelFilter =
-        ' AND (${labels?.map((e) => 'label:$e').join(' OR ')})';
-    final formattedGenreFilter =
-        ' AND (${genres?.map((e) => 'genres:$e').join(' OR ')})';
-    final formattedOccupationFilter =
-        ' AND (${occupations?.map((e) => 'occupations:$e').join(' OR ')})';
+    final formattedLabelFilter = labels != null
+        ? '(${labels.map((e) => "label:'$e'").join(' OR ')})'
+        : null;
+    final formattedGenreFilter = genres != null
+        ? '(${genres.map((e) => "genres:'$e'").join(' OR ')})'
+        : null;
+    final formattedOccupationFilter = occupations != null
+        ? '(${occupations.map((e) => "occupations:'$e'").join(' OR ')})'
+        : null;
+
+    final filters = [
+      formattedIsDeletedFilter,
+      formattedLabelFilter,
+      formattedGenreFilter,
+      formattedOccupationFilter,
+    ]..removeWhere((element) => element == null);
 
     final formattedLocationFilter =
         (lat != null && lng != null) ? '$lat, $lng' : null;
 
     try {
-      var query = _algolia.index('prod_users').query(input)
-        ..filters(
-          '$formattedLabelFilter'
-          '$formattedGenreFilter'
-          '$formattedOccupationFilter'
-          '$formattedIsDeletedFilter',
-        );
+      print(filters.join(' AND '));
+
+      var query = _algolia.index('prod_users').query(input).filters(
+            filters.join(' AND '),
+          );
 
       if (formattedLocationFilter != null) {
-        query = query
-          ..setAroundLatLng(formattedLocationFilter)
-          ..setAroundRadius(radius);
+        query = query.setAroundLatLng(formattedLocationFilter);
+      }
+
+      if (radius != null) {
+        query = query.setAroundRadius(radius);
       }
 
       final snap = await query.getObjects();

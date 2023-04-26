@@ -6,6 +6,7 @@ import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/search_repository.dart';
+import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
@@ -40,6 +41,18 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     on<SearchUsersByPrediction>((event, emit) async {
       await _searchUsersByPrediction(event.prediction, emit);
     });
+    on<SetAdvancedSearchFilters>((event, emit) async {
+      emit(
+        state.copyWith(
+          occupations: event.occupations,
+          genres: event.genres,
+          labels: event.labels,
+          place: event.place,
+          placeId: event.placeId,
+        ),
+      );
+      await _search(state.searchTerm, emit);
+    });
   }
 
   Future<void> _search(String query, Emitter<SearchState> emit) async {
@@ -60,18 +73,43 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     String input,
     Emitter<SearchState> emit,
   ) async {
-    if (input.isNotEmpty) {
+    if (input.isNotEmpty ||
+        state.occupations.isNotEmpty ||
+        state.genres.isNotEmpty ||
+        state.labels.isNotEmpty ||
+        state.place != null ||
+        state.placeId != null) {
       emit(state.copyWith(loading: true, searchTerm: input));
       const duration = Duration(milliseconds: 500);
       final completer = Completer<void>();
       Timer(duration, () async {
-        if (input.isNotEmpty && input == state.searchTerm) {
+        if ((input.isNotEmpty ||
+                state.occupations.isNotEmpty ||
+                state.genres.isNotEmpty ||
+                state.labels.isNotEmpty ||
+                state.place != null ||
+                state.placeId != null) &&
+            input == state.searchTerm) {
           // input hasn't changed in the last 500 milliseconds..
           // you can start search
           // print('Now !!! search term : ${state.searchTerm}');
-          final searchRes = await searchRepository.queryUsers(state.searchTerm);
+          final latLng = state.place?.latLng;
+          final searchRes = await searchRepository.queryUsers(
+            state.searchTerm,
+            occupations:
+                state.occupations.isNotEmpty ? state.occupations : null,
+            genres: state.genres.isNotEmpty
+                ? state.genres.map((e) => e.name).toList()
+                : null,
+            labels: state.labels.isNotEmpty ? state.labels : null,
+            lat: latLng?.lat,
+            lng: latLng?.lng,
+          );
           // print('RESULTS: $searchRes');
-          emit(state.copyWith(searchResults: searchRes, loading: false));
+          emit(state.copyWith(
+            searchResults: searchRes,
+            loading: false,
+          ));
         } else {
           //wait.. Because user still writing..        print('Not Now');
           // print('Not Now');

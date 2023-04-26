@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/settings/settings_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/artist_name_text_field.dart';
@@ -46,9 +47,33 @@ class SettingsForm extends StatelessWidget {
                     context.read<SettingsCubit>().changeBio(value ?? ''),
                 initialValue: state.bio,
               ),
-              const OccupationSelection(),
+              OccupationSelection(
+                initialValue: state.occupations,
+                onConfirm: (values) {
+                  context.read<SettingsCubit>().changeOccupations(
+                        values
+                            .where(
+                              (element) => element != null,
+                            )
+                            .whereType<String>()
+                            .toList(),
+                      );
+                },
+              ),
               const LabelSelection(),
-              const GenreSelection(),
+              GenreSelection(
+                initialValue: state.genres,
+                onConfirm: (values) {
+                  context.read<SettingsCubit>().changeGenres(
+                        values
+                            .where(
+                              (element) => element != null,
+                            )
+                            .whereType<Genre>()
+                            .toList(),
+                      );
+                },
+              ),
               LocationTextField(
                 onChanged: (place, placeId) =>
                     context.read<SettingsCubit>().changePlace(place, placeId),
