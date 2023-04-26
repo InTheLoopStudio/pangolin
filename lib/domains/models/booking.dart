@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/utils.dart';
 
 enum BookingStatus {
@@ -8,8 +9,8 @@ enum BookingStatus {
   canceled,
 }
 
-class Booking {
-  Booking({
+class Booking extends Equatable {
+  const Booking({
     required this.id,
     required this.name,
     required this.note,
@@ -17,6 +18,10 @@ class Booking {
     required this.requesteeId,
     required this.status,
     required this.rate,
+    required this.placeId,
+    required this.geohash,
+    required this.lat,
+    required this.lng,
     required this.startTime,
     required this.endTime,
     required this.timestamp,
@@ -40,22 +45,50 @@ class Booking {
             doc.getOrElse('status', '') as String,
           ) ??
           BookingStatus.pending,
+      placeId: doc.getOrElse('placeId', null) as String?,
+      geohash: doc.getOrElse('geohash', null) as String?,
+      lat: doc.getOrElse('lat', null) as double?,
+      lng: doc.getOrElse('lng', null) as double?,
       startTime: tmpStartTime.toDate(),
       endTime: tmpEndTime.toDate(),
       timestamp: tmpTimestamp.toDate(),
     );
   }
 
-  String id;
-  String name;
-  String note;
-  String requesterId;
-  String requesteeId;
-  BookingStatus status;
-  int rate;
-  DateTime startTime;
-  DateTime endTime;
-  DateTime timestamp;
+  final String id;
+  final String name;
+  final String note;
+  final String requesterId;
+  final String requesteeId;
+  final BookingStatus status;
+  final int rate;
+
+  final String? placeId;
+  final String? geohash;
+  final double? lat;
+  final double? lng;
+
+  final DateTime startTime;
+  final DateTime endTime;
+  final DateTime timestamp;
+
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        note,
+        requesterId,
+        requesteeId,
+        status,
+        rate,
+        placeId,
+        geohash,
+        lat,
+        lng,
+        startTime,
+        endTime,
+        timestamp,
+      ];
 
   Map<String, dynamic> toMap() {
     return {
@@ -66,6 +99,10 @@ class Booking {
       'requesteeId': requesteeId,
       'rate': rate,
       'status': EnumToString.convertToString(status),
+      'placeId': placeId,
+      'geohash': geohash,
+      'lat': lat,
+      'lng': lng,
       'timestamp': Timestamp.fromDate(timestamp),
       'startTime': Timestamp.fromDate(startTime),
       'endTime': Timestamp.fromDate(endTime),
@@ -79,6 +116,10 @@ class Booking {
     String? requesterId,
     String? requesteeId,
     int? rate,
+    Option<String>? placeId,
+    Option<String>? geohash,
+    Option<double>? lat,
+    Option<double>? lng,
     DateTime? startTime,
     DateTime? endTime,
     DateTime? timestamp,
@@ -91,6 +132,10 @@ class Booking {
       rate: rate ?? this.rate,
       requesterId: requesterId ?? this.requesterId,
       requesteeId: requesteeId ?? this.requesteeId,
+      placeId: placeId != null ? placeId.value : this.placeId,
+      geohash: geohash != null ? geohash.value : this.geohash,
+      lat: lat != null ? lat.value : this.lat,
+      lng: lng != null ? lng.value : this.lng,
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       timestamp: timestamp ?? this.timestamp,
@@ -104,6 +149,5 @@ class Booking {
 
   Duration get duration => endTime.difference(startTime);
 
-  int get totalCost =>
-      ((rate / 60) * duration.inMinutes).toInt();
+  int get totalCost => ((rate / 60) * duration.inMinutes).toInt();
 }

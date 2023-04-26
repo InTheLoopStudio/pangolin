@@ -85,10 +85,10 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
         artistName: state.artistName,
         profilePicture: profilePictureUrl,
         bio: state.bio,
-        placeId: state.placeId,
-        geohash: geohash,
-        lat: lat,
-        lng: lng,
+        placeId: Option(state.placeId),
+        geohash: Option(geohash),
+        lat: Option(lat),
+        lng: Option(lng),
       );
 
       await databaseRepository.createUser(currentUser);

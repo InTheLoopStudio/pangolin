@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
-import 'package:intheloopapp/data/remote_config_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -87,6 +86,10 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
       requesteeId: state.requesteeId,
       rate: state.requesteeBookingRate,
       status: BookingStatus.pending,
+      placeId: null,
+      geohash: null,
+      lat: null,
+      lng: null,
       startTime: state.startTime.value,
       endTime: state.endTime.value,
       timestamp: DateTime.now(),
