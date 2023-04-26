@@ -42,3 +42,5 @@ class SetAdvancedSearchFilters extends SearchEvent {
   final Place? place;
   final String? placeId;
 }
+
+class ClearFilters extends SearchEvent {}

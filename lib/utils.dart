@@ -3,6 +3,8 @@ import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:georange/georange.dart';
 import 'package:intl/intl.dart';
 
+const undefined = '__undefined__';
+
 final georange = GeoRange();
 
 const latPerKm = 0.009090909090909; // degrees latitude per Km
@@ -17,7 +19,6 @@ extension DefaultValue<V> on DocumentSnapshot<Map<String, dynamic>> {
   /// a custom migration script doesn't need to be made every time
   /// and can instead just set its default client-side
   V getOrElse(String key, V defaultValue) {
-
     final data = this.data();
 
     return data != null && data.containsKey(key)

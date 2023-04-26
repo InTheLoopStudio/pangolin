@@ -47,11 +47,22 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           occupations: event.occupations,
           genres: event.genres,
           labels: event.labels,
-          place: event.place,
-          placeId: event.placeId,
+          place: () => event.place,
+          placeId: () => event.placeId,
         ),
       );
       await _search(state.searchTerm, emit);
+    });
+    on<ClearFilters>((event, emit) {
+      emit(
+        state.copyWith(
+          occupations: [],
+          genres: [],
+          labels: [],
+          place: () => null,
+          placeId: () => null,
+        ),
+      );
     });
   }
 

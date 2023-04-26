@@ -61,8 +61,8 @@ class SearchState extends Equatable {
     List<String>? occupations,
     List<Genre>? genres,
     List<String>? labels,
-    Place? place,
-    String? placeId,
+    Place? Function()? place,
+    String? Function()? placeId,
     int? tabIndex,
     bool? loading,
   }) {
@@ -79,8 +79,8 @@ class SearchState extends Equatable {
       occupations: occupations ?? this.occupations,
       genres: genres ?? this.genres,
       labels: labels ?? this.labels,
-      place: place ?? this.place,
-      placeId: placeId ?? this.placeId,
+      place: place != null ? place() : this.place,
+      placeId: placeId != null ? placeId() : this.placeId,
       loading: loading ?? this.loading,
     );
   }

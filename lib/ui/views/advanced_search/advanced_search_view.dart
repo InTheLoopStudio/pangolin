@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/ui/views/common/tapped_app_bar.dart';
+import 'package:intheloopapp/ui/widgets/advanced_search_view/clear_filters_button.dart';
 import 'package:intheloopapp/ui/widgets/advanced_search_view/genre_filter.dart';
 import 'package:intheloopapp/ui/widgets/advanced_search_view/label_filter.dart';
 import 'package:intheloopapp/ui/widgets/advanced_search_view/location_filter.dart';
@@ -41,6 +42,10 @@ class AdvancedSearchView extends StatelessWidget {
                   height: 20,
                 ),
                 SearchButton(),
+                SizedBox(
+                  height: 20,
+                ),
+                ClearFiltersButton(),
               ],
             ),
           ),
