@@ -18,7 +18,7 @@ class BookingNoteTextField extends StatelessWidget {
           controller: controller,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
-            hintText: 'Add a booking note for the band',
+            hintText: 'Add a booking note for the performer',
           ),
           textInputAction: TextInputAction.newline,
           keyboardType: TextInputType.multiline,
