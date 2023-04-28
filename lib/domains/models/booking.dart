@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/utils.dart';
 
 enum BookingStatus {
@@ -132,10 +133,10 @@ class Booking extends Equatable {
       rate: rate ?? this.rate,
       requesterId: requesterId ?? this.requesterId,
       requesteeId: requesteeId ?? this.requesteeId,
-      placeId: placeId != null ? placeId.value : this.placeId,
-      geohash: geohash != null ? geohash.value : this.geohash,
-      lat: lat != null ? lat.value : this.lat,
-      lng: lng != null ? lng.value : this.lng,
+      placeId: placeId != null ? placeId.asNullable() : this.placeId,
+      geohash: geohash != null ? geohash.asNullable() : this.geohash,
+      lat: lat != null ? lat.asNullable() : this.lat,
+      lng: lng != null ? lng.asNullable() : this.lng,
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       timestamp: timestamp ?? this.timestamp,
