@@ -46,10 +46,18 @@ class Booking extends Equatable {
             doc.getOrElse('status', '') as String,
           ) ??
           BookingStatus.pending,
-      placeId: doc.getOrElse('placeId', null) as String?,
-      geohash: doc.getOrElse('geohash', null) as String?,
-      lat: doc.getOrElse('lat', null) as double?,
-      lng: doc.getOrElse('lng', null) as double?,
+      placeId: Option.fromNullable(
+        doc.getOrElse('placeId', null) as String?,
+      ),
+      geohash: Option.fromNullable(
+        doc.getOrElse('geohash', null) as String?,
+      ),
+      lat: Option.fromNullable(
+        doc.getOrElse('lat', null) as double?,
+      ),
+      lng: Option.fromNullable(
+        doc.getOrElse('lng', null) as double?,
+      ),
       startTime: tmpStartTime.toDate(),
       endTime: tmpEndTime.toDate(),
       timestamp: tmpTimestamp.toDate(),
@@ -64,10 +72,10 @@ class Booking extends Equatable {
   final BookingStatus status;
   final int rate;
 
-  final String? placeId;
-  final String? geohash;
-  final double? lat;
-  final double? lng;
+  final Option<String> placeId;
+  final Option<String> geohash;
+  final Option<double> lat;
+  final Option<double> lng;
 
   final DateTime startTime;
   final DateTime endTime;
@@ -100,10 +108,10 @@ class Booking extends Equatable {
       'requesteeId': requesteeId,
       'rate': rate,
       'status': EnumToString.convertToString(status),
-      'placeId': placeId,
-      'geohash': geohash,
-      'lat': lat,
-      'lng': lng,
+      'placeId': placeId.asNullable(),
+      'geohash': geohash.asNullable(),
+      'lat': lat.asNullable(),
+      'lng': lng.asNullable(),
       'timestamp': Timestamp.fromDate(timestamp),
       'startTime': Timestamp.fromDate(startTime),
       'endTime': Timestamp.fromDate(endTime),
@@ -133,10 +141,10 @@ class Booking extends Equatable {
       rate: rate ?? this.rate,
       requesterId: requesterId ?? this.requesterId,
       requesteeId: requesteeId ?? this.requesteeId,
-      placeId: placeId != null ? placeId.asNullable() : this.placeId,
-      geohash: geohash != null ? geohash.asNullable() : this.geohash,
-      lat: lat != null ? lat.asNullable() : this.lat,
-      lng: lng != null ? lng.asNullable() : this.lng,
+      placeId: placeId ?? this.placeId,
+      geohash: geohash ?? this.geohash,
+      lat: lat ?? this.lat,
+      lng: lng ?? this.lng,
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       timestamp: timestamp ?? this.timestamp,

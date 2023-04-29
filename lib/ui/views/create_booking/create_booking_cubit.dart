@@ -6,6 +6,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
@@ -86,10 +87,10 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
       requesteeId: state.requesteeId,
       rate: state.requesteeBookingRate,
       status: BookingStatus.pending,
-      placeId: null,
-      geohash: null,
-      lat: null,
-      lng: null,
+      placeId: const Option.none(),
+      geohash: const Option.none(),
+      lat: const Option.none(),
+      lng: const Option.none(),
       startTime: state.startTime.value,
       endTime: state.endTime.value,
       timestamp: DateTime.now(),
