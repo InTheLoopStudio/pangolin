@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/username.dart';
 import 'package:intheloopapp/utils.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -297,10 +298,10 @@ class UserModel extends Equatable {
       genres: genres ?? this.genres,
       occupations: occupations ?? this.occupations,
       label: label ?? this.label,
-      placeId: placeId != null ? placeId.value : this.placeId,
-      geohash: geohash != null ? geohash.value : this.geohash,
-      lat: lat != null ? lat.value : this.lat,
-      lng: lng != null ? lng.value : this.lng,
+      placeId: placeId != null ? placeId.asNullable() : this.placeId,
+      geohash: geohash != null ? geohash.asNullable() : this.geohash,
+      lat: lat != null ? lat.asNullable() : this.lat,
+      lng: lng != null ? lng.asNullable() : this.lng,
       loopsCount: loopsCount ?? this.loopsCount,
       badgesCount: badgesCount ?? this.badgesCount,
       deleted: deleted ?? this.deleted,

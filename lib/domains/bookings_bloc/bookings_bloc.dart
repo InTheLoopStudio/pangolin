@@ -33,11 +33,32 @@ class BookingsBloc extends Bloc<BookingsEvent, BookingsState> {
         ),
       );
     });
-    on<ConfirmBooking>((event, emit) {
-      emit(const BookingsState());
+    on<ConfirmBooking>((event, emit) async {
+      final newBooking = event.booking.copyWith(
+        status: BookingStatus.confirmed,
+      );
+      final newBookings = state.bookings;
+      newBookings[newBookings.indexOf(event.booking)] = newBooking;
+      await database.updateBooking(newBooking);
+      emit(
+        BookingsState(
+          bookings: newBookings,
+        ),
+      );
     });
-    on<DenyBooking>((event, emit) {
-      emit(const BookingsState());
+    on<DenyBooking>((event, emit) async {
+      final newBooking = event.booking.copyWith(
+        status: BookingStatus.canceled,
+      );
+      state.bookings[state.bookings.indexOf(event.booking)] = newBooking;
+      final newBookings = state.bookings;
+      newBookings[newBookings.indexOf(event.booking)] = newBooking;
+      await database.updateBooking(newBooking);
+      emit(
+        BookingsState(
+          bookings: newBookings,
+        ),
+      );
     });
   }
 

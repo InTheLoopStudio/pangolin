@@ -13,6 +13,7 @@ import 'package:intheloopapp/data/prod/firestore_database_impl.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/models/username.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -216,10 +217,10 @@ class SettingsCubit extends Cubit<SettingsState> {
         genres: state.genres,
         label: state.label,
         occupations: state.occupations,
-        placeId: Option(state.placeId),
-        geohash: Option(geohash),
-        lat: Option(lat),
-        lng: Option(lng),
+        placeId: Option.fromNullable(state.placeId),
+        geohash: Option.fromNullable(geohash),
+        lat: Option.fromNullable(lat),
+        lng: Option.fromNullable(lng),
         twitterHandle: state.twitterHandle,
         instagramHandle: state.instagramHandle,
         tiktokHandle: state.tiktokHandle,

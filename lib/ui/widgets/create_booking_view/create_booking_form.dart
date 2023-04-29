@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/views/create_booking/create_booking_cubit.dart';
+import 'package:intheloopapp/ui/widgets/common/forms/location_text_field.dart';
 import 'package:intheloopapp/ui/widgets/create_booking_view/booking_name_text_field.dart';
 import 'package:intheloopapp/ui/widgets/create_booking_view/booking_note_text_field.dart';
 
@@ -48,6 +50,16 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
             children: [
               BookingNameTextField(
                 controller: bookingNameController,
+              ),
+              LocationTextField(
+                initialPlaceId: null,
+                initialPlace: null,
+                onChanged: (place, placeId) {
+                  context.read<CreateBookingCubit>().updatePlace(
+                    place: Option.fromNullable(place), 
+                    placeId: Option.fromNullable(placeId),
+                  );
+                },
               ),
               _FormItem(
                 children: [

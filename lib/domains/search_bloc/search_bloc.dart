@@ -8,8 +8,8 @@ import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/search_repository.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:intheloopapp/utils.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';
@@ -48,8 +48,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           occupations: event.occupations,
           genres: event.genres,
           labels: event.labels,
-          place: Option(event.place),
-          placeId: Option(event.placeId),
+          place: Option.fromNullable(event.place),
+          placeId: Option.fromNullable(event.placeId),
         ),
       );
       await _search(state.searchTerm, emit);
@@ -60,8 +60,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           occupations: [],
           genres: [],
           labels: [],
-          place: const Option(null),
-          placeId: const Option(null),
+          place: const Option.none(),
+          placeId: const Option.none(),
         ),
       );
     });

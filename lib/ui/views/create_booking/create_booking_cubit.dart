@@ -1,11 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:formz/formz.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
@@ -13,6 +15,7 @@ import 'package:intheloopapp/ui/widgets/create_booking_view/booking_end_time.dar
 import 'package:intheloopapp/ui/widgets/create_booking_view/booking_name.dart';
 import 'package:intheloopapp/ui/widgets/create_booking_view/booking_note.dart';
 import 'package:intheloopapp/ui/widgets/create_booking_view/booking_start_time.dart';
+import 'package:intheloopapp/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -77,7 +80,27 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
         ),
       );
 
+  void updatePlace({
+    required Option<Place> place,
+    required Option<String> placeId,
+  }) =>
+      emit(
+        state.copyWith(
+          place: place,
+          placeId: placeId,
+        ),
+      );
+
   Future<void> createBooking() async {
+
+    final nullablePlace = state.place.asNullable();
+
+      final lat = nullablePlace?.latLng?.lat ?? null;
+      final lng = nullablePlace?.latLng?.lng ?? null;
+      final geohash = (lat != null && lng != null)
+          ? geocodeEncode(lat: lat, lng: lng)
+          : null;
+
     final booking = Booking(
       id: const Uuid().v4(),
       name: state.name.value,
@@ -86,10 +109,10 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
       requesteeId: state.requesteeId,
       rate: state.requesteeBookingRate,
       status: BookingStatus.pending,
-      placeId: null,
-      geohash: null,
-      lat: null,
-      lng: null,
+      placeId: state.placeId,
+      geohash: Option.fromNullable(geohash),
+      lat: Option.fromNullable(lat),
+      lng: Option.fromNullable(lng),
       startTime: state.startTime.value,
       endTime: state.endTime.value,
       timestamp: DateTime.now(),

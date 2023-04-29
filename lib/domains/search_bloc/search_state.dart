@@ -79,8 +79,8 @@ class SearchState extends Equatable {
       occupations: occupations ?? this.occupations,
       genres: genres ?? this.genres,
       labels: labels ?? this.labels,
-      place: place != null ? place.value : this.place,
-      placeId: placeId != null ? placeId.value : this.placeId,
+      place: place != null ? place.asNullable() : this.place,
+      placeId: placeId != null ? placeId.asNullable() : this.placeId,
       loading: loading ?? this.loading,
     );
   }

@@ -9,6 +9,8 @@ class CreateBookingState extends Equatable with FormzMixin {
     this.name = const BookingName.pure(),
     this.note = const BookingNote.pure(),
     this.status = FormzSubmissionStatus.initial,
+    this.place = const None(),
+    this.placeId = const None(),
     BookingStartTime? startTime,
     BookingEndTime? endTime,
     GlobalKey<FormState>? formKey,
@@ -29,6 +31,9 @@ class CreateBookingState extends Equatable with FormzMixin {
   late final BookingEndTime endTime;
   late final GlobalKey<FormState> formKey;
 
+  final Option<Place> place;
+  final Option<String> placeId;
+
   @override
   List<Object?> get props => [
         currentUserId,
@@ -41,6 +46,8 @@ class CreateBookingState extends Equatable with FormzMixin {
         startTime,
         endTime,
         formKey,
+        place,
+        placeId,
       ];
 
   @override
@@ -61,6 +68,8 @@ class CreateBookingState extends Equatable with FormzMixin {
     BookingStartTime? startTime,
     BookingEndTime? endTime,
     FormzSubmissionStatus? status,
+    Option<Place>? place,
+    Option<String>? placeId,
   }) {
     return CreateBookingState(
       formKey: formKey,
@@ -73,6 +82,8 @@ class CreateBookingState extends Equatable with FormzMixin {
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       status: status ?? this.status,
+      place: place ?? this.place,
+      placeId: placeId ?? this.placeId,
     );
   }
 
