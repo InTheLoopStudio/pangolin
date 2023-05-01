@@ -6,6 +6,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/data/remote_config_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
+import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
@@ -17,13 +18,13 @@ import 'package:skeletons/skeletons.dart';
 
 class CreateBookingView extends StatelessWidget {
   const CreateBookingView({
-    required this.requesteeId,
+    required this.service,
     required this.requesteeStripeConnectedAccountId,
     required this.requesteeBookingRate,
     super.key,
   });
 
-  final String requesteeId;
+  final Service service;
   final String requesteeStripeConnectedAccountId;
   final int requesteeBookingRate;
 
@@ -49,7 +50,7 @@ class CreateBookingView extends StatelessWidget {
             return BlocProvider(
               create: (context) => CreateBookingCubit(
                 currentUser: currentUser,
-                requesteeId: requesteeId,
+                service: service,
                 requesteeStripeConnectedAccountId:
                     requesteeStripeConnectedAccountId,
                 requesteeBookingRate: requesteeBookingRate,
@@ -127,7 +128,7 @@ class CreateBookingView extends StatelessWidget {
                         ],
                       ),
                       FutureBuilder<UserModel?>(
-                        future: database.getUserById(requesteeId),
+                        future: database.getUserById(service.userId),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
                             return SkeletonListTile();

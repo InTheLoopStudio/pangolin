@@ -3,7 +3,7 @@ part of 'create_booking_cubit.dart';
 class CreateBookingState extends Equatable with FormzMixin {
   CreateBookingState({
     required this.currentUserId,
-    required this.requesteeId,
+    required this.service,
     required this.requesteeBookingRate,
     required this.bookingFee,
     this.name = const BookingName.pure(),
@@ -20,10 +20,10 @@ class CreateBookingState extends Equatable with FormzMixin {
     this.formKey = formKey ?? GlobalKey<FormState>(debugLabel: 'settings');
   }
 
+  final String currentUserId;
   final BookingName name;
   final BookingNote note;
-  final String currentUserId;
-  final String requesteeId;
+  final Service service;
   final int requesteeBookingRate;
   final double bookingFee;
   final FormzSubmissionStatus status;
@@ -37,7 +37,7 @@ class CreateBookingState extends Equatable with FormzMixin {
   @override
   List<Object?> get props => [
         currentUserId,
-        requesteeId,
+        service,
         requesteeBookingRate,
         bookingFee,
         name,
@@ -60,7 +60,7 @@ class CreateBookingState extends Equatable with FormzMixin {
 
   CreateBookingState copyWith({
     String? currentUserId,
-    String? requesteeId,
+    Service? service,
     int? requesteeBookingRate,
     double? bookingFee,
     BookingName? name,
@@ -74,7 +74,7 @@ class CreateBookingState extends Equatable with FormzMixin {
     return CreateBookingState(
       formKey: formKey,
       currentUserId: currentUserId ?? this.currentUserId,
-      requesteeId: requesteeId ?? this.requesteeId,
+      service: service ?? this.service,
       requesteeBookingRate: requesteeBookingRate ?? this.requesteeBookingRate,
       bookingFee: bookingFee ?? this.bookingFee,
       name: name ?? this.name,
