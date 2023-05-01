@@ -14,8 +14,7 @@ class RequestToBookButton extends StatelessWidget {
     final payments = context.read<PaymentRepository>();
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        return (state.currentUser.id != state.visitedUser.id &&
-                state.currentUser.isVenue)
+        return (state.currentUser.id != state.visitedUser.id)
             ? Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: FutureBuilder<PaymentUser?>(
