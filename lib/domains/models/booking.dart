@@ -4,15 +4,10 @@ import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/utils.dart';
 
-enum BookingStatus {
-  pending,
-  confirmed,
-  canceled,
-}
-
 class Booking extends Equatable {
   const Booking({
     required this.id,
+    required this.serviceId,
     required this.name,
     required this.note,
     required this.requesterId,
@@ -36,6 +31,7 @@ class Booking extends Equatable {
     final tmpEndTime = doc.getOrElse('endTime', Timestamp.now()) as Timestamp;
     return Booking(
       id: doc.id,
+      serviceId: doc.getOrElse('serviceId', '') as String,
       name: doc.getOrElse('name', '') as String,
       note: doc.getOrElse('note', '') as String,
       requesterId: doc.getOrElse('requesterId', '') as String,
@@ -65,6 +61,7 @@ class Booking extends Equatable {
   }
 
   final String id;
+  final String serviceId;
   final String name;
   final String note;
   final String requesterId;
@@ -84,6 +81,7 @@ class Booking extends Equatable {
   @override
   List<Object?> get props => [
         id,
+        serviceId,
         name,
         note,
         requesterId,
@@ -102,6 +100,7 @@ class Booking extends Equatable {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'serviceId': serviceId,
       'name': name,
       'note': note,
       'requesterId': requesterId,
@@ -120,6 +119,7 @@ class Booking extends Equatable {
 
   Booking copyWith({
     String? id,
+    String? serviceId,
     String? name,
     String? note,
     String? requesterId,
@@ -136,6 +136,7 @@ class Booking extends Equatable {
   }) {
     return Booking(
       id: id ?? this.id,
+      serviceId: serviceId ?? this.serviceId,
       name: name ?? this.name,
       note: note ?? this.note,
       rate: rate ?? this.rate,
@@ -159,4 +160,10 @@ class Booking extends Equatable {
   Duration get duration => endTime.difference(startTime);
 
   int get totalCost => ((rate / 60) * duration.inMinutes).toInt();
+}
+
+enum BookingStatus {
+  pending,
+  confirmed,
+  canceled,
 }
