@@ -3,15 +3,16 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i5;
+import 'dart:async' as _i6;
 
-import 'package:intheloopapp/data/database_repository.dart' as _i4;
-import 'package:intheloopapp/domains/models/activity.dart' as _i7;
-import 'package:intheloopapp/domains/models/badge.dart' as _i8;
-import 'package:intheloopapp/domains/models/booking.dart' as _i9;
+import 'package:intheloopapp/data/database_repository.dart' as _i5;
+import 'package:intheloopapp/domains/models/activity.dart' as _i8;
+import 'package:intheloopapp/domains/models/badge.dart' as _i9;
+import 'package:intheloopapp/domains/models/booking.dart' as _i10;
 import 'package:intheloopapp/domains/models/comment.dart' as _i3;
 import 'package:intheloopapp/domains/models/loop.dart' as _i2;
-import 'package:intheloopapp/domains/models/user_model.dart' as _i6;
+import 'package:intheloopapp/domains/models/service.dart' as _i4;
+import 'package:intheloopapp/domains/models/user_model.dart' as _i7;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -45,43 +46,53 @@ class _FakeComment_1 extends _i1.SmartFake implements _i3.Comment {
         );
 }
 
+class _FakeService_2 extends _i1.SmartFake implements _i4.Service {
+  _FakeService_2(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [DatabaseRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockDatabaseRepository extends _i1.Mock
-    implements _i4.DatabaseRepository {
+    implements _i5.DatabaseRepository {
   MockDatabaseRepository() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i5.Future<bool> userEmailExists(String? email) => (super.noSuchMethod(
+  _i6.Future<bool> userEmailExists(String? email) => (super.noSuchMethod(
         Invocation.method(
           #userEmailExists,
           [email],
         ),
-        returnValue: _i5.Future<bool>.value(false),
-      ) as _i5.Future<bool>);
+        returnValue: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
   @override
-  _i5.Future<void> createUser(_i6.UserModel? user) => (super.noSuchMethod(
+  _i6.Future<void> createUser(_i7.UserModel? user) => (super.noSuchMethod(
         Invocation.method(
           #createUser,
           [user],
         ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
   @override
-  _i5.Future<_i6.UserModel?> getUserByUsername(String? username) =>
+  _i6.Future<_i7.UserModel?> getUserByUsername(String? username) =>
       (super.noSuchMethod(
         Invocation.method(
           #getUserByUsername,
           [username],
         ),
-        returnValue: _i5.Future<_i6.UserModel?>.value(),
-      ) as _i5.Future<_i6.UserModel?>);
+        returnValue: _i6.Future<_i7.UserModel?>.value(),
+      ) as _i6.Future<_i7.UserModel?>);
   @override
-  _i5.Future<_i6.UserModel?> getUserById(
+  _i6.Future<_i7.UserModel?> getUserById(
     String? userId, {
     bool? ignoreCache = false,
   }) =>
@@ -91,10 +102,10 @@ class MockDatabaseRepository extends _i1.Mock
           [userId],
           {#ignoreCache: ignoreCache},
         ),
-        returnValue: _i5.Future<_i6.UserModel?>.value(),
-      ) as _i5.Future<_i6.UserModel?>);
+        returnValue: _i6.Future<_i7.UserModel?>.value(),
+      ) as _i6.Future<_i7.UserModel?>);
   @override
-  _i5.Future<List<_i6.UserModel>> searchUsersByLocation({
+  _i6.Future<List<_i7.UserModel>> searchUsersByLocation({
     required double? lat,
     required double? lng,
     int? radiusInMeters = 50000,
@@ -113,19 +124,19 @@ class MockDatabaseRepository extends _i1.Mock
             #lastUserId: lastUserId,
           },
         ),
-        returnValue: _i5.Future<List<_i6.UserModel>>.value(<_i6.UserModel>[]),
-      ) as _i5.Future<List<_i6.UserModel>>);
+        returnValue: _i6.Future<List<_i7.UserModel>>.value(<_i7.UserModel>[]),
+      ) as _i6.Future<List<_i7.UserModel>>);
   @override
-  _i5.Future<void> updateUserData(_i6.UserModel? user) => (super.noSuchMethod(
+  _i6.Future<void> updateUserData(_i7.UserModel? user) => (super.noSuchMethod(
         Invocation.method(
           #updateUserData,
           [user],
         ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
   @override
-  _i5.Future<bool> checkUsernameAvailability(
+  _i6.Future<bool> checkUsernameAvailability(
     String? username,
     String? userid,
   ) =>
@@ -137,10 +148,10 @@ class MockDatabaseRepository extends _i1.Mock
             userid,
           ],
         ),
-        returnValue: _i5.Future<bool>.value(false),
-      ) as _i5.Future<bool>);
+        returnValue: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
   @override
-  _i5.Future<_i2.Loop> getLoopById(
+  _i6.Future<_i2.Loop> getLoopById(
     String? loopId, {
     bool? ignoreCache = false,
   }) =>
@@ -150,7 +161,7 @@ class MockDatabaseRepository extends _i1.Mock
           [loopId],
           {#ignoreCache: ignoreCache},
         ),
-        returnValue: _i5.Future<_i2.Loop>.value(_FakeLoop_0(
+        returnValue: _i6.Future<_i2.Loop>.value(_FakeLoop_0(
           this,
           Invocation.method(
             #getLoopById,
@@ -158,27 +169,27 @@ class MockDatabaseRepository extends _i1.Mock
             {#ignoreCache: ignoreCache},
           ),
         )),
-      ) as _i5.Future<_i2.Loop>);
+      ) as _i6.Future<_i2.Loop>);
   @override
-  _i5.Future<void> addLoop(_i2.Loop? loop) => (super.noSuchMethod(
+  _i6.Future<void> addLoop(_i2.Loop? loop) => (super.noSuchMethod(
         Invocation.method(
           #addLoop,
           [loop],
         ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
   @override
-  _i5.Future<void> deleteLoop(_i2.Loop? loop) => (super.noSuchMethod(
+  _i6.Future<void> deleteLoop(_i2.Loop? loop) => (super.noSuchMethod(
         Invocation.method(
           #deleteLoop,
           [loop],
         ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
   @override
-  _i5.Future<List<_i2.Loop>> getUserLoops(
+  _i6.Future<List<_i2.Loop>> getUserLoops(
     String? userId, {
     int? limit = 100,
     String? lastLoopId,
@@ -192,10 +203,10 @@ class MockDatabaseRepository extends _i1.Mock
             #lastLoopId: lastLoopId,
           },
         ),
-        returnValue: _i5.Future<List<_i2.Loop>>.value(<_i2.Loop>[]),
-      ) as _i5.Future<List<_i2.Loop>>);
+        returnValue: _i6.Future<List<_i2.Loop>>.value(<_i2.Loop>[]),
+      ) as _i6.Future<List<_i2.Loop>>);
   @override
-  _i5.Stream<_i2.Loop> userLoopsObserver(
+  _i6.Stream<_i2.Loop> userLoopsObserver(
     String? userId, {
     int? limit = 100,
   }) =>
@@ -205,10 +216,10 @@ class MockDatabaseRepository extends _i1.Mock
           [userId],
           {#limit: limit},
         ),
-        returnValue: _i5.Stream<_i2.Loop>.empty(),
-      ) as _i5.Stream<_i2.Loop>);
+        returnValue: _i6.Stream<_i2.Loop>.empty(),
+      ) as _i6.Stream<_i2.Loop>);
   @override
-  _i5.Future<List<_i2.Loop>> getFollowingLoops(
+  _i6.Future<List<_i2.Loop>> getFollowingLoops(
     String? currentUserId, {
     int? limit = 100,
     String? lastLoopId,
@@ -224,10 +235,10 @@ class MockDatabaseRepository extends _i1.Mock
             #ignoreCache: ignoreCache,
           },
         ),
-        returnValue: _i5.Future<List<_i2.Loop>>.value(<_i2.Loop>[]),
-      ) as _i5.Future<List<_i2.Loop>>);
+        returnValue: _i6.Future<List<_i2.Loop>>.value(<_i2.Loop>[]),
+      ) as _i6.Future<List<_i2.Loop>>);
   @override
-  _i5.Stream<_i2.Loop> followingLoopsObserver(
+  _i6.Stream<_i2.Loop> followingLoopsObserver(
     String? currentUserId, {
     int? limit = 100,
     bool? ignoreCache = false,
@@ -241,10 +252,10 @@ class MockDatabaseRepository extends _i1.Mock
             #ignoreCache: ignoreCache,
           },
         ),
-        returnValue: _i5.Stream<_i2.Loop>.empty(),
-      ) as _i5.Stream<_i2.Loop>);
+        returnValue: _i6.Stream<_i2.Loop>.empty(),
+      ) as _i6.Stream<_i2.Loop>);
   @override
-  _i5.Future<List<_i2.Loop>> getAllLoops(
+  _i6.Future<List<_i2.Loop>> getAllLoops(
     String? currentUserId, {
     int? limit = 100,
     String? lastLoopId,
@@ -260,10 +271,10 @@ class MockDatabaseRepository extends _i1.Mock
             #ignoreCache: ignoreCache,
           },
         ),
-        returnValue: _i5.Future<List<_i2.Loop>>.value(<_i2.Loop>[]),
-      ) as _i5.Future<List<_i2.Loop>>);
+        returnValue: _i6.Future<List<_i2.Loop>>.value(<_i2.Loop>[]),
+      ) as _i6.Future<List<_i2.Loop>>);
   @override
-  _i5.Stream<_i2.Loop> allLoopsObserver(
+  _i6.Stream<_i2.Loop> allLoopsObserver(
     String? currentUserId, {
     int? limit = 100,
     bool? ignoreCache = false,
@@ -277,10 +288,10 @@ class MockDatabaseRepository extends _i1.Mock
             #ignoreCache: ignoreCache,
           },
         ),
-        returnValue: _i5.Stream<_i2.Loop>.empty(),
-      ) as _i5.Stream<_i2.Loop>);
+        returnValue: _i6.Stream<_i2.Loop>.empty(),
+      ) as _i6.Stream<_i2.Loop>);
   @override
-  _i5.Future<void> addLike(
+  _i6.Future<void> addLike(
     String? currentUserId,
     String? loopId,
   ) =>
@@ -292,11 +303,11 @@ class MockDatabaseRepository extends _i1.Mock
             loopId,
           ],
         ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
   @override
-  _i5.Future<void> deleteLike(
+  _i6.Future<void> deleteLike(
     String? currentUserId,
     String? loopId,
   ) =>
@@ -308,11 +319,11 @@ class MockDatabaseRepository extends _i1.Mock
             loopId,
           ],
         ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
   @override
-  _i5.Future<bool> isLiked(
+  _i6.Future<bool> isLiked(
     String? currentUserId,
     String? loopId,
   ) =>
@@ -324,19 +335,19 @@ class MockDatabaseRepository extends _i1.Mock
             loopId,
           ],
         ),
-        returnValue: _i5.Future<bool>.value(false),
-      ) as _i5.Future<bool>);
+        returnValue: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
   @override
-  _i5.Future<List<_i6.UserModel>> getLikes(String? loopId) =>
+  _i6.Future<List<_i7.UserModel>> getLikes(String? loopId) =>
       (super.noSuchMethod(
         Invocation.method(
           #getLikes,
           [loopId],
         ),
-        returnValue: _i5.Future<List<_i6.UserModel>>.value(<_i6.UserModel>[]),
-      ) as _i5.Future<List<_i6.UserModel>>);
+        returnValue: _i6.Future<List<_i7.UserModel>>.value(<_i7.UserModel>[]),
+      ) as _i6.Future<List<_i7.UserModel>>);
   @override
-  _i5.Future<List<_i3.Comment>> getComments(
+  _i6.Future<List<_i3.Comment>> getComments(
     String? rootId, {
     int? limit = 100,
   }) =>
@@ -346,10 +357,10 @@ class MockDatabaseRepository extends _i1.Mock
           [rootId],
           {#limit: limit},
         ),
-        returnValue: _i5.Future<List<_i3.Comment>>.value(<_i3.Comment>[]),
-      ) as _i5.Future<List<_i3.Comment>>);
+        returnValue: _i6.Future<List<_i3.Comment>>.value(<_i3.Comment>[]),
+      ) as _i6.Future<List<_i3.Comment>>);
   @override
-  _i5.Stream<_i3.Comment> commentsObserver(
+  _i6.Stream<_i3.Comment> commentsObserver(
     String? rootId, {
     int? limit = 100,
   }) =>
@@ -359,10 +370,10 @@ class MockDatabaseRepository extends _i1.Mock
           [rootId],
           {#limit: limit},
         ),
-        returnValue: _i5.Stream<_i3.Comment>.empty(),
-      ) as _i5.Stream<_i3.Comment>);
+        returnValue: _i6.Stream<_i3.Comment>.empty(),
+      ) as _i6.Stream<_i3.Comment>);
   @override
-  _i5.Future<_i3.Comment> getComment(
+  _i6.Future<_i3.Comment> getComment(
     String? rootId,
     String? commentId,
   ) =>
@@ -374,7 +385,7 @@ class MockDatabaseRepository extends _i1.Mock
             commentId,
           ],
         ),
-        returnValue: _i5.Future<_i3.Comment>.value(_FakeComment_1(
+        returnValue: _i6.Future<_i3.Comment>.value(_FakeComment_1(
           this,
           Invocation.method(
             #getComment,
@@ -384,43 +395,43 @@ class MockDatabaseRepository extends _i1.Mock
             ],
           ),
         )),
-      ) as _i5.Future<_i3.Comment>);
+      ) as _i6.Future<_i3.Comment>);
   @override
-  _i5.Future<void> addComment(_i3.Comment? comment) => (super.noSuchMethod(
+  _i6.Future<void> addComment(_i3.Comment? comment) => (super.noSuchMethod(
         Invocation.method(
           #addComment,
           [comment],
         ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
   @override
-  _i5.Future<void> shareLoop(_i2.Loop? loop) => (super.noSuchMethod(
+  _i6.Future<void> shareLoop(_i2.Loop? loop) => (super.noSuchMethod(
         Invocation.method(
           #shareLoop,
           [loop],
         ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
   @override
-  _i5.Future<int> followersNum(String? userid) => (super.noSuchMethod(
+  _i6.Future<int> followersNum(String? userid) => (super.noSuchMethod(
         Invocation.method(
           #followersNum,
           [userid],
         ),
-        returnValue: _i5.Future<int>.value(0),
-      ) as _i5.Future<int>);
+        returnValue: _i6.Future<int>.value(0),
+      ) as _i6.Future<int>);
   @override
-  _i5.Future<int> followingNum(String? userid) => (super.noSuchMethod(
+  _i6.Future<int> followingNum(String? userid) => (super.noSuchMethod(
         Invocation.method(
           #followingNum,
           [userid],
         ),
-        returnValue: _i5.Future<int>.value(0),
-      ) as _i5.Future<int>);
+        returnValue: _i6.Future<int>.value(0),
+      ) as _i6.Future<int>);
   @override
-  _i5.Future<void> followUser(
+  _i6.Future<void> followUser(
     String? currentUserId,
     String? visitedUserId,
   ) =>
@@ -432,11 +443,11 @@ class MockDatabaseRepository extends _i1.Mock
             visitedUserId,
           ],
         ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
   @override
-  _i5.Future<void> unfollowUser(
+  _i6.Future<void> unfollowUser(
     String? currentUserId,
     String? visitedUserId,
   ) =>
@@ -448,11 +459,11 @@ class MockDatabaseRepository extends _i1.Mock
             visitedUserId,
           ],
         ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
   @override
-  _i5.Future<bool> isFollowingUser(
+  _i6.Future<bool> isFollowingUser(
     String? currentUserId,
     String? visitedUserId,
   ) =>
@@ -464,28 +475,28 @@ class MockDatabaseRepository extends _i1.Mock
             visitedUserId,
           ],
         ),
-        returnValue: _i5.Future<bool>.value(false),
-      ) as _i5.Future<bool>);
+        returnValue: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
   @override
-  _i5.Future<List<_i6.UserModel>> getFollowing(String? currentUserId) =>
+  _i6.Future<List<_i7.UserModel>> getFollowing(String? currentUserId) =>
       (super.noSuchMethod(
         Invocation.method(
           #getFollowing,
           [currentUserId],
         ),
-        returnValue: _i5.Future<List<_i6.UserModel>>.value(<_i6.UserModel>[]),
-      ) as _i5.Future<List<_i6.UserModel>>);
+        returnValue: _i6.Future<List<_i7.UserModel>>.value(<_i7.UserModel>[]),
+      ) as _i6.Future<List<_i7.UserModel>>);
   @override
-  _i5.Future<List<_i6.UserModel>> getFollowers(String? currentUserId) =>
+  _i6.Future<List<_i7.UserModel>> getFollowers(String? currentUserId) =>
       (super.noSuchMethod(
         Invocation.method(
           #getFollowers,
           [currentUserId],
         ),
-        returnValue: _i5.Future<List<_i6.UserModel>>.value(<_i6.UserModel>[]),
-      ) as _i5.Future<List<_i6.UserModel>>);
+        returnValue: _i6.Future<List<_i7.UserModel>>.value(<_i7.UserModel>[]),
+      ) as _i6.Future<List<_i7.UserModel>>);
   @override
-  _i5.Future<List<_i7.Activity>> getActivities(
+  _i6.Future<List<_i8.Activity>> getActivities(
     String? userId, {
     int? limit = 100,
     String? lastActivityId,
@@ -499,10 +510,10 @@ class MockDatabaseRepository extends _i1.Mock
             #lastActivityId: lastActivityId,
           },
         ),
-        returnValue: _i5.Future<List<_i7.Activity>>.value(<_i7.Activity>[]),
-      ) as _i5.Future<List<_i7.Activity>>);
+        returnValue: _i6.Future<List<_i8.Activity>>.value(<_i8.Activity>[]),
+      ) as _i6.Future<List<_i8.Activity>>);
   @override
-  _i5.Stream<_i7.Activity> activitiesObserver(
+  _i6.Stream<_i8.Activity> activitiesObserver(
     String? userId, {
     int? limit = 100,
   }) =>
@@ -512,13 +523,13 @@ class MockDatabaseRepository extends _i1.Mock
           [userId],
           {#limit: limit},
         ),
-        returnValue: _i5.Stream<_i7.Activity>.empty(),
-      ) as _i5.Stream<_i7.Activity>);
+        returnValue: _i6.Stream<_i8.Activity>.empty(),
+      ) as _i6.Stream<_i8.Activity>);
   @override
-  _i5.Future<void> addActivity({
+  _i6.Future<void> addActivity({
     required String? currentUserId,
     required String? visitedUserId,
-    required _i7.ActivityType? type,
+    required _i8.ActivityType? type,
     _i2.Loop? loop,
   }) =>
       (super.noSuchMethod(
@@ -532,38 +543,38 @@ class MockDatabaseRepository extends _i1.Mock
             #loop: loop,
           },
         ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
   @override
-  _i5.Future<void> markActivityAsRead(_i7.Activity? activity) =>
+  _i6.Future<void> markActivityAsRead(_i8.Activity? activity) =>
       (super.noSuchMethod(
         Invocation.method(
           #markActivityAsRead,
           [activity],
         ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
   @override
-  _i5.Future<bool> isVerified(String? userId) => (super.noSuchMethod(
+  _i6.Future<bool> isVerified(String? userId) => (super.noSuchMethod(
         Invocation.method(
           #isVerified,
           [userId],
         ),
-        returnValue: _i5.Future<bool>.value(false),
-      ) as _i5.Future<bool>);
+        returnValue: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
   @override
-  _i5.Future<void> createBadge(_i8.Badge? badge) => (super.noSuchMethod(
+  _i6.Future<void> createBadge(_i9.Badge? badge) => (super.noSuchMethod(
         Invocation.method(
           #createBadge,
           [badge],
         ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
   @override
-  _i5.Future<void> sendBadge(
+  _i6.Future<void> sendBadge(
     String? badgeId,
     String? receiverId,
   ) =>
@@ -575,11 +586,11 @@ class MockDatabaseRepository extends _i1.Mock
             receiverId,
           ],
         ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
   @override
-  _i5.Stream<_i8.Badge> userCreatedBadgesObserver(
+  _i6.Stream<_i9.Badge> userCreatedBadgesObserver(
     String? userId, {
     int? limit = 100,
   }) =>
@@ -589,10 +600,10 @@ class MockDatabaseRepository extends _i1.Mock
           [userId],
           {#limit: limit},
         ),
-        returnValue: _i5.Stream<_i8.Badge>.empty(),
-      ) as _i5.Stream<_i8.Badge>);
+        returnValue: _i6.Stream<_i9.Badge>.empty(),
+      ) as _i6.Stream<_i9.Badge>);
   @override
-  _i5.Future<List<_i8.Badge>> getUserCreatedBadges(
+  _i6.Future<List<_i9.Badge>> getUserCreatedBadges(
     String? userId, {
     int? limit = 100,
     String? lastBadgeId,
@@ -606,10 +617,10 @@ class MockDatabaseRepository extends _i1.Mock
             #lastBadgeId: lastBadgeId,
           },
         ),
-        returnValue: _i5.Future<List<_i8.Badge>>.value(<_i8.Badge>[]),
-      ) as _i5.Future<List<_i8.Badge>>);
+        returnValue: _i6.Future<List<_i9.Badge>>.value(<_i9.Badge>[]),
+      ) as _i6.Future<List<_i9.Badge>>);
   @override
-  _i5.Stream<_i8.Badge> userBadgesObserver(
+  _i6.Stream<_i9.Badge> userBadgesObserver(
     String? userId, {
     int? limit = 100,
   }) =>
@@ -619,10 +630,10 @@ class MockDatabaseRepository extends _i1.Mock
           [userId],
           {#limit: limit},
         ),
-        returnValue: _i5.Stream<_i8.Badge>.empty(),
-      ) as _i5.Stream<_i8.Badge>);
+        returnValue: _i6.Stream<_i9.Badge>.empty(),
+      ) as _i6.Stream<_i9.Badge>);
   @override
-  _i5.Future<List<_i8.Badge>> getUserBadges(
+  _i6.Future<List<_i9.Badge>> getUserBadges(
     String? userId, {
     int? limit = 100,
     String? lastBadgeId,
@@ -636,28 +647,28 @@ class MockDatabaseRepository extends _i1.Mock
             #lastBadgeId: lastBadgeId,
           },
         ),
-        returnValue: _i5.Future<List<_i8.Badge>>.value(<_i8.Badge>[]),
-      ) as _i5.Future<List<_i8.Badge>>);
+        returnValue: _i6.Future<List<_i9.Badge>>.value(<_i9.Badge>[]),
+      ) as _i6.Future<List<_i9.Badge>>);
   @override
-  _i5.Future<void> createBooking(_i9.Booking? booking) => (super.noSuchMethod(
+  _i6.Future<void> createBooking(_i10.Booking? booking) => (super.noSuchMethod(
         Invocation.method(
           #createBooking,
           [booking],
         ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
   @override
-  _i5.Future<_i9.Booking?> getBookingById(String? bookRequestId) =>
+  _i6.Future<_i10.Booking?> getBookingById(String? bookRequestId) =>
       (super.noSuchMethod(
         Invocation.method(
           #getBookingById,
           [bookRequestId],
         ),
-        returnValue: _i5.Future<_i9.Booking?>.value(),
-      ) as _i5.Future<_i9.Booking?>);
+        returnValue: _i6.Future<_i10.Booking?>.value(),
+      ) as _i6.Future<_i10.Booking?>);
   @override
-  _i5.Future<List<_i9.Booking>> getBookingsByRequesterRequestee(
+  _i6.Future<List<_i10.Booking>> getBookingsByRequesterRequestee(
     String? requesterId,
     String? requesteeId, {
     int? limit = 20,
@@ -675,10 +686,10 @@ class MockDatabaseRepository extends _i1.Mock
             #lastBookingRequestId: lastBookingRequestId,
           },
         ),
-        returnValue: _i5.Future<List<_i9.Booking>>.value(<_i9.Booking>[]),
-      ) as _i5.Future<List<_i9.Booking>>);
+        returnValue: _i6.Future<List<_i10.Booking>>.value(<_i10.Booking>[]),
+      ) as _i6.Future<List<_i10.Booking>>);
   @override
-  _i5.Future<List<_i9.Booking>> getBookingsByRequester(
+  _i6.Future<List<_i10.Booking>> getBookingsByRequester(
     String? userId, {
     int? limit = 20,
     String? lastBookingRequestId,
@@ -692,10 +703,10 @@ class MockDatabaseRepository extends _i1.Mock
             #lastBookingRequestId: lastBookingRequestId,
           },
         ),
-        returnValue: _i5.Future<List<_i9.Booking>>.value(<_i9.Booking>[]),
-      ) as _i5.Future<List<_i9.Booking>>);
+        returnValue: _i6.Future<List<_i10.Booking>>.value(<_i10.Booking>[]),
+      ) as _i6.Future<List<_i10.Booking>>);
   @override
-  _i5.Future<List<_i9.Booking>> getBookingsByRequestee(
+  _i6.Future<List<_i10.Booking>> getBookingsByRequestee(
     String? userId, {
     int? limit = 20,
     String? lastBookingRequestId,
@@ -709,15 +720,82 @@ class MockDatabaseRepository extends _i1.Mock
             #lastBookingRequestId: lastBookingRequestId,
           },
         ),
-        returnValue: _i5.Future<List<_i9.Booking>>.value(<_i9.Booking>[]),
-      ) as _i5.Future<List<_i9.Booking>>);
+        returnValue: _i6.Future<List<_i10.Booking>>.value(<_i10.Booking>[]),
+      ) as _i6.Future<List<_i10.Booking>>);
   @override
-  _i5.Future<void> updateBooking(_i9.Booking? booking) => (super.noSuchMethod(
+  _i6.Future<void> updateBooking(_i10.Booking? booking) => (super.noSuchMethod(
         Invocation.method(
           #updateBooking,
           [booking],
         ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+  @override
+  _i6.Future<void> createService(_i4.Service? service) => (super.noSuchMethod(
+        Invocation.method(
+          #createService,
+          [service],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+  @override
+  _i6.Future<void> updateService(_i4.Service? service) => (super.noSuchMethod(
+        Invocation.method(
+          #updateService,
+          [service],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+  @override
+  _i6.Future<_i4.Service> getServiceById(
+    String? userId,
+    String? serviceId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getServiceById,
+          [
+            userId,
+            serviceId,
+          ],
+        ),
+        returnValue: _i6.Future<_i4.Service>.value(_FakeService_2(
+          this,
+          Invocation.method(
+            #getServiceById,
+            [
+              userId,
+              serviceId,
+            ],
+          ),
+        )),
+      ) as _i6.Future<_i4.Service>);
+  @override
+  _i6.Future<List<_i4.Service>> getUserServices(String? userId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getUserServices,
+          [userId],
+        ),
+        returnValue: _i6.Future<List<_i4.Service>>.value(<_i4.Service>[]),
+      ) as _i6.Future<List<_i4.Service>>);
+  @override
+  _i6.Future<void> deleteService(
+    String? userId,
+    String? serviceId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #deleteService,
+          [
+            userId,
+            serviceId,
+          ],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
 }
