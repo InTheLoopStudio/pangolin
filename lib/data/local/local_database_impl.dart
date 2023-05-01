@@ -4,6 +4,7 @@ import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
 class LocalDatabaseImpl extends DatabaseRepository {
@@ -23,7 +24,8 @@ class LocalDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<UserModel> getUserById(String userId, {
+  Future<UserModel> getUserById(
+    String userId, {
     bool ignoreCache = false,
   }) async {
     return UserModel.empty();
@@ -346,5 +348,30 @@ class LocalDatabaseImpl extends DatabaseRepository {
     String? lastUserId,
   }) async {
     return [];
+  }
+
+  @override
+  Future<void> createService(Service service) async {
+    return;
+  }
+
+  @override
+  Future<void> deleteService(String userId, String serviceId) async {
+    return;
+  }
+
+  @override
+  Future<Service?> getServiceById(String userId, String serviceId) async {
+    return null;
+  }
+
+  @override
+  Future<List<Service>> getUserServices(String userId) async {
+    return [];
+  }
+
+  @override
+  Future<void> updateService(Service service) async {
+    return;
   }
 }

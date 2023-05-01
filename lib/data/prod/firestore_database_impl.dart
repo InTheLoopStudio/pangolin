@@ -11,6 +11,7 @@ import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils.dart';
 import 'package:rxdart/rxdart.dart';
@@ -30,6 +31,7 @@ final _commentsRef = _firestore.collection('comments');
 final _badgesRef = _firestore.collection('badges');
 final _badgesSentRef = _firestore.collection('badgesSent');
 final _bookingsRef = _firestore.collection('bookings');
+final _servicesRef = _firestore.collection('services');
 
 const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
 
@@ -1272,6 +1274,70 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       },
     );
     await _bookingsRef.doc(booking.id).set(booking.toMap());
+  }
+
+  @override
+  Future<void> createService(Service service) async {
+    await _analytics.logEvent(
+      name: 'service_created',
+      parameters: service.toJson(),
+    );
+    await _servicesRef
+        .doc(service.userId)
+        .collection('userServices')
+        .doc(service.id)
+        .set(service.toJson());
+  }
+
+  @override
+  Future<void> deleteService(String userId, String serviceId) async {
+    await _analytics.logEvent(
+      name: 'service_deleted',
+    );
+    await _servicesRef
+        .doc(userId)
+        .collection('userServices')
+        .doc(serviceId)
+        .set({
+      'deleted': true,
+    });
+    return;
+  }
+
+  @override
+  Future<Service?> getServiceById(String userId, String serviceId) async {
+    final serviceSnapshot = await _servicesRef
+        .doc(userId)
+        .collection('userServices')
+        .doc(serviceId)
+        .get();
+
+    final service = Service.fromDoc(serviceSnapshot);
+
+    return service;
+  }
+
+  @override
+  Future<List<Service>> getUserServices(String userId) async {
+    final userServicesSnapshot =
+        await _servicesRef.doc(userId).collection('userServices').get();
+
+    final services = userServicesSnapshot.docs.map(Service.fromDoc).toList();
+
+    return services;
+  }
+
+  @override
+  Future<void> updateService(Service service) async {
+    await _analytics.logEvent(
+      name: 'service_updated',
+      parameters: service.toJson(),
+    );
+    await _servicesRef
+        .doc(service.userId)
+        .collection('userServices')
+        .doc(service.id)
+        .set(service.toJson());
   }
 }
 
