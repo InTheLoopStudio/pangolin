@@ -52,8 +52,8 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                 controller: bookingNameController,
               ),
               LocationTextField(
-                initialPlaceId: null,
-                initialPlace: null,
+                initialPlaceId: state.placeId.asNullable(),
+                initialPlace: state.place.asNullable(),
                 onChanged: (place, placeId) {
                   context.read<CreateBookingCubit>().updatePlace(
                     place: Option.fromNullable(place), 
