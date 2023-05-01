@@ -1,12 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/widgets/common/user_tile.dart';
+import 'package:intheloopapp/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -140,6 +144,34 @@ class BookingView extends StatelessWidget {
                 SliverToBoxAdapter(
                   child: Text(
                     '\$${(booking.rate / 100).toStringAsFixed(2)} / hour',
+                  ),
+                ),
+                const SliverToBoxAdapter(
+                  child: Text(
+                    'Location',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: FutureBuilder<Place?>(
+                    future: context.read<PlacesRepository>().getPlaceById(
+                          booking.placeId.unwrapOr(''),
+                        ),
+                    builder: (context, snapshot) {
+                      final place = snapshot.data;
+                      return Text(
+                        formattedAddress(
+                          place?.addressComponents,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 16,
+                        ),
+                      );
+                    },
                   ),
                 ),
                 const SliverToBoxAdapter(

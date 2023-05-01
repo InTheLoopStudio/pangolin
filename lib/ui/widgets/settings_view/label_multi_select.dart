@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/models/label.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';

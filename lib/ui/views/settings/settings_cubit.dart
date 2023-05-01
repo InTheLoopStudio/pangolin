@@ -203,8 +203,8 @@ class SettingsCubit extends Cubit<SettingsState> {
             )
           : currentUser.profilePicture;
 
-      final lat = state.place?.latLng?.lat ?? null;
-      final lng = state.place?.latLng?.lng ?? null;
+      final lat = state.place?.latLng?.lat;
+      final lng = state.place?.latLng?.lng;
       final geohash = (lat != null && lng != null)
           ? geocodeEncode(lat: lat, lng: lng)
           : null;

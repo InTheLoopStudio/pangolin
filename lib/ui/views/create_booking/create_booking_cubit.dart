@@ -95,8 +95,8 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
 
     final nullablePlace = state.place.asNullable();
 
-      final lat = nullablePlace?.latLng?.lat ?? null;
-      final lng = nullablePlace?.latLng?.lng ?? null;
+      final lat = nullablePlace?.latLng?.lat;
+      final lng = nullablePlace?.latLng?.lng;
       final geohash = (lat != null && lng != null)
           ? geocodeEncode(lat: lat, lng: lng)
           : null;

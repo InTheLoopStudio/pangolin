@@ -101,9 +101,7 @@ class AlgoliaSearchImpl extends SearchRepository {
         query = query.setAroundLatLng(formattedLocationFilter);
       }
 
-      if (radius != null) {
-        query = query.setAroundRadius(radius);
-      }
+      query = query.setAroundRadius(radius);
 
       final snap = await query.getObjects();
 

@@ -70,7 +70,7 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
               currentAuthUser.uid,
               state.pickedPhoto!,
             )
-          : '';
+          : null;
 
       final lat = state.place?.latLng?.lat;
       final lng = state.place?.latLng?.lng;

@@ -4,7 +4,6 @@ import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/domains/models/payment_user.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
-import 'package:skeleton_animation/skeleton_animation.dart';
 
 class RequestToBookButton extends StatelessWidget {
   const RequestToBookButton({super.key});

@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -9,15 +8,15 @@ import 'package:url_launcher/url_launcher.dart';
 
 export 'package:linkify/linkify.dart'
     show
+        EmailElement,
+        EmailLinkifier,
+        LinkableElement,
+        Linkifier,
         LinkifyElement,
         LinkifyOptions,
-        LinkableElement,
         TextElement,
-        Linkifier,
         UrlElement,
-        UrlLinkifier,
-        EmailElement,
-        EmailLinkifier;
+        UrlLinkifier;
 
 /// Callback clicked link
 typedef LinkCallback = void Function(LinkableElement link);
@@ -119,7 +118,7 @@ class Linkify extends StatelessWidget {
     return Text.rich(
       buildTextSpan(
         elements,
-        style: Theme.of(context).textTheme.bodyText2?.merge(style),
+        style: Theme.of(context).textTheme.bodyMedium?.merge(style),
         onOpen: onOpen ??
             (link) async {
               try {
@@ -154,7 +153,7 @@ class Linkify extends StatelessWidget {
         useMouseRegion: true,
         linkStyle: Theme.of(context)
             .textTheme
-            .bodyText2
+            .bodyMedium
             ?.merge(style)
             .copyWith(
               color: Colors.blueAccent,
@@ -309,11 +308,11 @@ class SelectableLinkify extends StatelessWidget {
     return SelectableText.rich(
       buildTextSpan(
         elements,
-        style: Theme.of(context).textTheme.bodyText2?.merge(style),
+        style: Theme.of(context).textTheme.bodyMedium?.merge(style),
         onOpen: onOpen,
         linkStyle: Theme.of(context)
             .textTheme
-            .bodyText2
+            .bodyMedium
             ?.merge(style)
             .copyWith(
               color: Colors.blueAccent,

@@ -121,7 +121,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           emit(state.copyWith(
             searchResults: searchRes,
             loading: false,
-          ));
+          ),);
         } else {
           //wait.. Because user still writing..        print('Not Now');
           // print('Not Now');
