@@ -91,7 +91,7 @@ class AlgoliaSearchImpl extends SearchRepository {
         (lat != null && lng != null) ? '$lat, $lng' : null;
 
     try {
-      print(filters.join(' AND '));
+      // print(filters.join(' AND '));
 
       var query = _algolia.index('prod_users').query(input).filters(
             filters.join(' AND '),

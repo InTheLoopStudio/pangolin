@@ -27,7 +27,6 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
     required this.currentUser,
     required this.service,
     required this.requesteeStripeConnectedAccountId,
-    required this.requesteeBookingRate,
     required this.navigationBloc,
     required this.onboardingBloc,
     required this.database,
@@ -38,7 +37,6 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
           CreateBookingState(
             currentUserId: currentUser.id,
             service: service,
-            requesteeBookingRate: requesteeBookingRate,
             bookingFee: bookingFee,
           ),
         );
@@ -46,7 +44,6 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
   final UserModel currentUser;
   final Service service;
   final String requesteeStripeConnectedAccountId;
-  final int requesteeBookingRate;
   final double bookingFee;
   final NavigationBloc navigationBloc;
   final OnboardingBloc onboardingBloc;
@@ -109,7 +106,7 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
       serviceId: state.service.id,
       requesterId: state.currentUserId,
       requesteeId: state.service.userId,
-      rate: state.requesteeBookingRate,
+      rate: state.service.rate,
       status: BookingStatus.pending,
       placeId: state.placeId,
       geohash: Option.fromNullable(geohash),

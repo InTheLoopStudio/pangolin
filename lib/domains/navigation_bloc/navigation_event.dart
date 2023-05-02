@@ -190,24 +190,21 @@ class PushStreamChannel extends NavigationEvent {
 
 class PushCreateBooking extends NavigationEvent {
   const PushCreateBooking({
-    required this.requesteeId,
+    required this.service,
     required this.requesteeStripeConnectedAccountId,
-    required this.requesteeBookingRate,
   });
 
-  final String requesteeId;
+  final Service service;
   final String requesteeStripeConnectedAccountId;
-  final int requesteeBookingRate;
 
   @override
   String toString() =>
-      '''PushCreateBooking { requestee: $requesteeId, requesteeStripeConnectedAccountId: $requesteeStripeConnectedAccountId, requesteeBookingRate: $requesteeBookingRate }''';
+      '''PushCreateBooking { service: $service, requesteeStripeConnectedAccountId: $requesteeStripeConnectedAccountId }''';
 
   @override
   List<Object> get props => [
-        requesteeId,
+        service,
         requesteeStripeConnectedAccountId,
-        requesteeBookingRate,
       ];
 }
 
@@ -231,4 +228,24 @@ class PushAdvancedSearch extends NavigationEvent {
 
   @override
   List<Object> get props => [];
+}
+
+class PushServiceSelection extends NavigationEvent {
+  const PushServiceSelection({
+    required this.userId,
+    required this.requesteeStripeConnectedAccountId,
+  });
+
+  final String userId;
+  final String requesteeStripeConnectedAccountId;
+
+  @override
+  String toString() =>
+      'PushServiceSelection { userId: $userId, requesteeStripeConnectedAccountId: $requesteeStripeConnectedAccountId }';
+
+  @override
+  List<Object> get props => [
+    userId,
+    requesteeStripeConnectedAccountId,
+  ];
 }

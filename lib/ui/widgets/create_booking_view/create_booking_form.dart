@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/option.dart';
+import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/ui/views/create_booking/create_booking_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/location_text_field.dart';
 import 'package:intheloopapp/ui/widgets/create_booking_view/booking_name_text_field.dart';
@@ -56,9 +57,9 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                 initialPlace: state.place.asNullable(),
                 onChanged: (place, placeId) {
                   context.read<CreateBookingCubit>().updatePlace(
-                    place: Option.fromNullable(place), 
-                    placeId: Option.fromNullable(placeId),
-                  );
+                        place: Option.fromNullable(place),
+                        placeId: Option.fromNullable(placeId),
+                      );
                 },
               ),
               _FormItem(
@@ -135,7 +136,7 @@ class _CreateBookingFormState extends State<CreateBookingForm> {
                     padding: const EdgeInsets.symmetric(vertical: 22),
                     child: Text(
                       // ignore: lines_longer_than_80_chars
-                      'Artist Rate (\$${(state.requesteeBookingRate / 100).toStringAsFixed(2)})',
+                      'Artist Rate (\$${(state.service.rate / 100).toStringAsFixed(2)}${state.service.rateType == RateType.hourly ? '/hr' : ''})',
                     ),
                   ),
                   Text(

@@ -20,13 +20,11 @@ class CreateBookingView extends StatelessWidget {
   const CreateBookingView({
     required this.service,
     required this.requesteeStripeConnectedAccountId,
-    required this.requesteeBookingRate,
     super.key,
   });
 
   final Service service;
   final String requesteeStripeConnectedAccountId;
-  final int requesteeBookingRate;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +51,6 @@ class CreateBookingView extends StatelessWidget {
                 service: service,
                 requesteeStripeConnectedAccountId:
                     requesteeStripeConnectedAccountId,
-                requesteeBookingRate: requesteeBookingRate,
                 bookingFee: bookingFee,
                 navigationBloc: context.read<NavigationBloc>(),
                 onboardingBloc: context.read<OnboardingBloc>(),

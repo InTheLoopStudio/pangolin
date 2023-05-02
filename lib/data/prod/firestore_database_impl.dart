@@ -1319,12 +1319,17 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<List<Service>> getUserServices(String userId) async {
-    final userServicesSnapshot =
-        await _servicesRef.doc(userId).collection('userServices').get();
+    try {
+      final userServicesSnapshot =
+          await _servicesRef.doc(userId).collection('userServices').get();
 
-    final services = userServicesSnapshot.docs.map(Service.fromDoc).toList();
+      final services = userServicesSnapshot.docs.map(Service.fromDoc).toList();
 
-    return services;
+      return services;
+    } on Exception {
+      // print(e);
+      return [];
+    }
   }
 
   @override

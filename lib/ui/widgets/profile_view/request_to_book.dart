@@ -33,23 +33,24 @@ class RequestToBookButton extends StatelessWidget {
                     final enabled =
                         paymentUser != null && paymentUser.payoutsEnabled;
 
+                    if (!enabled) {
+                      return const FilledButton(
+                        onPressed: null,
+                        child: Text('Artist Payment Info not Connected'),
+                      );
+                    }
+
                     return FilledButton(
-                      onPressed: enabled
-                          ? () {
-                              navigationBloc.add(
-                                PushCreateBooking(
-                                  requesteeId: state.visitedUser.id,
-                                  requesteeStripeConnectedAccountId: state
-                                      .visitedUser.stripeConnectedAccountId!,
-                                  requesteeBookingRate:
-                                      state.visitedUser.bookingRate,
-                                ),
-                              );
-                            }
-                          : null,
-                      child: !enabled
-                          ? const Text('Artist Payment Info not Connected')
-                          : const Text('Request to Book'),
+                      onPressed: () {
+                        navigationBloc.add(
+                          PushServiceSelection(
+                            userId: state.visitedUser.id,
+                            requesteeStripeConnectedAccountId:
+                                state.visitedUser.stripeConnectedAccountId!,
+                          ),
+                        );
+                      },
+                      child: const Text('Request to Book'),
                     );
                   },
                 ),

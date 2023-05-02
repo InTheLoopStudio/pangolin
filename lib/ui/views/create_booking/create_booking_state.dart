@@ -4,7 +4,6 @@ class CreateBookingState extends Equatable with FormzMixin {
   CreateBookingState({
     required this.currentUserId,
     required this.service,
-    required this.requesteeBookingRate,
     required this.bookingFee,
     this.name = const BookingName.pure(),
     this.note = const BookingNote.pure(),
@@ -24,7 +23,6 @@ class CreateBookingState extends Equatable with FormzMixin {
   final BookingName name;
   final BookingNote note;
   final Service service;
-  final int requesteeBookingRate;
   final double bookingFee;
   final FormzSubmissionStatus status;
   late final BookingStartTime startTime;
@@ -38,7 +36,6 @@ class CreateBookingState extends Equatable with FormzMixin {
   List<Object?> get props => [
         currentUserId,
         service,
-        requesteeBookingRate,
         bookingFee,
         name,
         note,
@@ -61,7 +58,6 @@ class CreateBookingState extends Equatable with FormzMixin {
   CreateBookingState copyWith({
     String? currentUserId,
     Service? service,
-    int? requesteeBookingRate,
     double? bookingFee,
     BookingName? name,
     BookingNote? note,
@@ -75,7 +71,6 @@ class CreateBookingState extends Equatable with FormzMixin {
       formKey: formKey,
       currentUserId: currentUserId ?? this.currentUserId,
       service: service ?? this.service,
-      requesteeBookingRate: requesteeBookingRate ?? this.requesteeBookingRate,
       bookingFee: bookingFee ?? this.bookingFee,
       name: name ?? this.name,
       note: note ?? this.note,
@@ -105,8 +100,12 @@ class CreateBookingState extends Equatable with FormzMixin {
   }
 
   int get artistCost {
+    if (service.rateType == RateType.fixed) {
+      return service.rate;
+    }
+
     final d = endTime.value.difference(startTime.value);
-    final rateInMinutes = requesteeBookingRate / 60;
+    final rateInMinutes = service.rate / 60;
     final total = d.inMinutes * rateInMinutes;
 
     return total.toInt();
