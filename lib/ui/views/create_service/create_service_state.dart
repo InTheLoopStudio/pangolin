@@ -1,20 +1,20 @@
 part of 'create_service_cubit.dart';
 
-class CreateServiceState extends Equatable {
+class CreateServiceState extends Equatable with FormzMixin  {
   const CreateServiceState({
-    this.title = '',
-    this.description = '',
+    this.title = const ServiceTitle.pure(),
+    this.description = const ServiceDescription.pure(),
     this.rate = 0,
     this.rateType = RateType.hourly,
-    this.loading = false,
+    this.status = FormzSubmissionStatus.initial,
   });
 
-  final String title;
-  final String description;
+  final ServiceTitle title;
+  final ServiceDescription description;
   final int rate;
   final RateType rateType;
 
-  final bool loading;
+  final FormzSubmissionStatus status;
 
   @override
   List<Object> get props => [
@@ -22,22 +22,28 @@ class CreateServiceState extends Equatable {
         description,
         rate,
         rateType,
-        loading,
+        status,
   ];
 
   CreateServiceState copyWith({
-    String? title,
-    String? description,
+    ServiceTitle? title,
+    ServiceDescription? description,
     int? rate,
     RateType? rateType,
-    bool? loading,
+    FormzSubmissionStatus? status,
   }) {
     return CreateServiceState(
       title: title ?? this.title,
       description: description ?? this.description,
       rate: rate ?? this.rate,
       rateType: rateType ?? this.rateType,
-      loading: loading ?? this.loading,
+      status: status ?? this.status,
     );
   }
+  
+  @override
+  List<FormzInput> get inputs => [
+    title,
+    description,
+  ];
 }

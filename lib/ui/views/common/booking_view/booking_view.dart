@@ -55,24 +55,13 @@ class BookingView extends StatelessWidget {
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.background,
           appBar: AppBar(
-            title: Row(
+            title: const Row(
               children: [
-                const Text(
+                Text(
                   'Booking',
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute<MessagingChannelListView>(
-                      builder: (_) => const MessagingChannelListView(),
-                    ),
-                  ),
-                  icon: const Icon(
-                    CupertinoIcons.bubble_right,
                   ),
                 ),
               ],

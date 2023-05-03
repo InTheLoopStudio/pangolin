@@ -18,7 +18,6 @@ class ServicesList extends StatelessWidget {
       builder: (context, state) {
         return Column(
           children: [
-            const Text('Services Offered (edit)'),
             Container(
               margin: const EdgeInsets.symmetric(vertical: 20),
               height: 200,

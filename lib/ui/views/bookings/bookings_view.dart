@@ -1,10 +1,12 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
+import 'package:intheloopapp/ui/views/messaging/messaging_view.dart';
 import 'package:intheloopapp/ui/widgets/booking_view/bookings_list.dart';
 
 class BookingsView extends StatelessWidget {
@@ -42,13 +44,26 @@ class BookingsView extends StatelessWidget {
                           ),
                         ),
                       ),
-                      title: const Row(
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             'Bookings',
                             style: TextStyle(
                               fontSize: 32,
                               fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute<MessagingChannelListView>(
+                                builder: (_) =>
+                                    const MessagingChannelListView(),
+                              ),
+                            ),
+                            icon: const Icon(
+                              CupertinoIcons.bubble_right,
                             ),
                           ),
                         ],

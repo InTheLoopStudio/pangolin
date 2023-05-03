@@ -1,8 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:formz/formz.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
+import 'package:intheloopapp/ui/widgets/create_service_view/service_description.dart';
+import 'package:intheloopapp/ui/widgets/create_service_view/service_title.dart';
 
 part 'create_service_state.dart';
 
@@ -20,12 +23,13 @@ class CreateServiceCubit extends Cubit<CreateServiceState> {
 
   void onTitleChange(String title) => emit(
         state.copyWith(
-          title: title.trim(),
+          title: ServiceTitle.dirty(title.trim()),
         ),
       );
+
   void onDescriptionChange(String description) => emit(
         state.copyWith(
-          description: description.trim(),
+          description: ServiceDescription.dirty(description.trim()),
         ),
       );
   void onRateChange(int rate) => emit(
@@ -44,8 +48,8 @@ class CreateServiceCubit extends Cubit<CreateServiceState> {
 
     final service = Service.empty().copyWith(
       userId: currentUserId,
-      title: state.title,
-      description: state.description,
+      title: state.title.value,
+      description: state.description.value,
       rate: state.rate,
       rateType: state.rateType,
     );
