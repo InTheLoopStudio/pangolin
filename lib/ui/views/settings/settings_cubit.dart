@@ -74,7 +74,7 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   Future<void> initPlace() async {
     final place = currentUser.placeId != null
-        ? await places.getPlaceById(currentUser.placeId!)
+        ? await places.getPlaceById(currentUser.placeId ?? '')
         : null;
     emit(state.copyWith(place: place));
   }
