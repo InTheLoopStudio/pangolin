@@ -59,9 +59,9 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
     );
   }
 
-  Future<String> getAudioPath() async {
+  Future<String?> getAudioPath() async {
     if (state.pickedAudio == null) {
-      return '';
+      return null;
     }
 
     final audioDuration = await AudioController.getDuration(state.pickedAudio);
@@ -80,7 +80,7 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
 
   Future<String> getImagePath() async {
     if (state.pickedImage == null) {
-      return '';
+      return null;
     }
 
     final imagePath = await storageRepository.uploadImageAttachment(

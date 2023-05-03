@@ -689,7 +689,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       });
     }).flatMap(
       (value) => Stream.fromIterable(value).where(
-        (loop) => loop.userId != currentUserId && loop.deleted != true,
+        (loop) => loop.userId != currentUserId && !loop.deleted,
       ),
     );
 
