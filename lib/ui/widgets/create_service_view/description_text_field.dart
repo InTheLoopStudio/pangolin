@@ -20,7 +20,7 @@ class DescriptionTextField extends StatelessWidget {
           ),
           maxLength: 1024,
           minLines: 12,
-          initialValue: state.description,
+          initialValue: state.description.value,
           validator: (value) =>
               value!.isEmpty ? 'Description cannot be empty' : null,
           onChanged: (input) =>

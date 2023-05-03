@@ -14,7 +14,7 @@ class TitleTextField extends StatelessWidget {
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
-          initialValue: state.title,
+          initialValue: state.title.value,
           decoration: const InputDecoration.collapsed(
             // prefixIcon: Icon(Icons.title),
             // labelText: 'Title (optional)',
