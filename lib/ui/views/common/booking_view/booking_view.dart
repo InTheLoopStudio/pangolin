@@ -9,6 +9,7 @@ import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
+import 'package:intheloopapp/ui/views/messaging/messaging_view.dart';
 import 'package:intheloopapp/ui/widgets/common/user_tile.dart';
 import 'package:intheloopapp/utils.dart';
 import 'package:intl/intl.dart';
@@ -54,13 +55,24 @@ class BookingView extends StatelessWidget {
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.background,
           appBar: AppBar(
-            title: const Row(
+            title: Row(
               children: [
-                Text(
+                const Text(
                   'Booking',
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute<MessagingChannelListView>(
+                      builder: (_) => const MessagingChannelListView(),
+                    ),
+                  ),
+                  icon: const Icon(
+                    CupertinoIcons.bubble_right,
                   ),
                 ),
               ],

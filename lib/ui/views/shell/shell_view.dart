@@ -54,7 +54,6 @@ class _ShellViewState extends State<ShellView> {
                     searchFocusNode: searchFocusNode,
                   ),
                   const BookingsView(),
-                  const MessagingChannelListView(),
                   ProfileView(visitedUserId: currentUser.id),
                 ],
               ),

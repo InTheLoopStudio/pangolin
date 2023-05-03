@@ -99,9 +99,6 @@ class BottomToolbar extends StatelessWidget {
                 },
               ),
             ),
-            const BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.bubble_right),
-            ),
             // BottomNavigationBarItem(icon: Icon(Icons.person)),
             BottomNavigationBarItem(
               activeIcon: Container(

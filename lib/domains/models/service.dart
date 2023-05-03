@@ -73,6 +73,28 @@ class Service extends Equatable {
         count,
         deleted,
       ];
+
+  Service copyWith({
+    String? id,
+    String? userId,
+    String? title,
+    String? description,
+    int? rate,
+    RateType? rateType,
+    int? count,
+    bool? deleted,
+  }) {
+    return Service(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      rate: rate ?? this.rate,
+      rateType: rateType ?? this.rateType,
+      count: count ?? this.count,
+      deleted: deleted ?? this.deleted,
+    );
+  }
 }
 
 enum RateType {

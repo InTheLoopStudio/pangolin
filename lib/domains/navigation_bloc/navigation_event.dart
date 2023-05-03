@@ -245,7 +245,23 @@ class PushServiceSelection extends NavigationEvent {
 
   @override
   List<Object> get props => [
-    userId,
-    requesteeStripeConnectedAccountId,
-  ];
+        userId,
+        requesteeStripeConnectedAccountId,
+      ];
+}
+
+class PushCreateService extends NavigationEvent {
+  const PushCreateService({
+    required this.onCreated,
+  });
+
+  final void Function(Service) onCreated;
+
+  @override
+  String toString() => 'PushCreateService { onCreated: $onCreated }';
+
+  @override
+  List<Object> get props => [
+        onCreated,
+      ];
 }

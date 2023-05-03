@@ -1,31 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/linkify.dart';
-import 'package:intheloopapp/ui/views/create_loop/cubit/create_loop_cubit.dart';
-import 'package:transparent_pointer/transparent_pointer.dart';
+import 'package:intheloopapp/ui/views/create_service/create_service_cubit.dart';
 
-class LoopDescriptionTextField extends StatelessWidget {
-  const LoopDescriptionTextField({super.key});
+class DescriptionTextField extends StatelessWidget {
+  const DescriptionTextField({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreateLoopCubit, CreateLoopState>(
+    return BlocBuilder<CreateServiceCubit, CreateServiceState>(
       builder: (context, state) {
         return TextFormField(
           keyboardType: TextInputType.multiline,
           maxLines: null,
           decoration: const InputDecoration.collapsed(
-            hintText: "What's on your mind?",
+            hintText: 'Describe the service...',
           ),
           style: const TextStyle(
             letterSpacing: 0,
           ),
-          maxLength: 256,
-          minLines: 6,
+          maxLength: 1024,
+          minLines: 12,
+          initialValue: state.description,
           validator: (value) =>
               value!.isEmpty ? 'Description cannot be empty' : null,
           onChanged: (input) =>
-              context.read<CreateLoopCubit>().onDescriptionChange(
+              context.read<CreateServiceCubit>().onDescriptionChange(
                     input.trim(),
                   ),
         );

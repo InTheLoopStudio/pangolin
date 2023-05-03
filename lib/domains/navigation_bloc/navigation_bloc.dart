@@ -14,6 +14,7 @@ import 'package:intheloopapp/ui/views/common/booking_view/booking_view.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view.dart';
 import 'package:intheloopapp/ui/views/create_booking/create_booking_view.dart';
 import 'package:intheloopapp/ui/views/create_loop/create_loop_view.dart';
+import 'package:intheloopapp/ui/views/create_service/create_service_view.dart';
 import 'package:intheloopapp/ui/views/likes/likes_view.dart';
 import 'package:intheloopapp/ui/views/login/forgot_password_view.dart';
 import 'package:intheloopapp/ui/views/login/signup_view.dart';
@@ -217,6 +218,18 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
             userId: event.userId,
             requesteeStripeConnectedAccountId:
                 event.requesteeStripeConnectedAccountId,
+          ),
+        ),
+      );
+
+      emit(state);
+    });
+    on<PushCreateService>((event, emit) {
+      navigationKey.currentState?.push(
+        MaterialPageRoute<CreateServiceView>(
+          settings: const RouteSettings(name: '/create-service'),
+          builder: (context) => CreateServiceView(
+            onCreated: event.onCreated,
           ),
         ),
       );

@@ -1280,7 +1280,14 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   Future<void> createService(Service service) async {
     await _analytics.logEvent(
       name: 'service_created',
-      parameters: service.toJson(),
+      parameters: {
+        'service_id': service.id,
+        'user_id': service.userId,
+        'title': service.title,
+        'description': service.description,
+        'rate': service.rate,
+        'rate_type': service.rateType.name,
+      },
     );
     await _servicesRef
         .doc(service.userId)
