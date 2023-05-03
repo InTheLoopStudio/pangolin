@@ -78,7 +78,7 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
     return audioPath;
   }
 
-  Future<String> getImagePath() async {
+  Future<String?> getImagePath() async {
     if (state.pickedImage == null) {
       return null;
     }
@@ -197,13 +197,13 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
       final audioPath = state.pickedAudio != null ? await getAudioPath() : '';
 
       // Just settings the audio to get the duration
-      final imagePath = state.pickedImage != null ? await getImagePath() : '';
+      final imagePath = state.pickedImage != null ? await getImagePath() : null;
 
       final loop = Loop.empty().copyWith(
         title: state.title.value,
         description: state.description.value,
         audioPath: audioPath,
-        imagePaths: [imagePath],
+        imagePaths: imagePath != null ? [imagePath] : [],
         userId: currentUser.id,
         // tags: state.selectedTags.map((tag) => tag.value).toList(),
       );

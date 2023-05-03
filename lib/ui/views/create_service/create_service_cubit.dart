@@ -45,18 +45,28 @@ class CreateServiceCubit extends Cubit<CreateServiceState> {
 
   Future<void> submit(void Function(Service) onCreated) async {
     // add validation
+    try {
+      if (state.status.isInProgress) return;
 
-    final service = Service.empty().copyWith(
-      userId: currentUserId,
-      title: state.title.value,
-      description: state.description.value,
-      rate: state.rate,
-      rateType: state.rateType,
-    );
-    await database.createService(service);
+      if (!state.isValid) {
+        throw Exception('Invalid form');
+      }
 
-    onCreated.call(service);
+      final service = Service.empty().copyWith(
+        userId: currentUserId,
+        title: state.title.value,
+        description: state.description.value,
+        rate: state.rate,
+        rateType: state.rateType,
+      );
+      await database.createService(service);
 
-    nav.add(const Pop());
+      onCreated.call(service);
+
+      nav.add(const Pop());
+    } catch (e) {
+      emit(state.copyWith(status: FormzSubmissionStatus.failure));
+      rethrow;
+    }
   }
 }
