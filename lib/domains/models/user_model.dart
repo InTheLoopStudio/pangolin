@@ -6,19 +6,9 @@ import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/username.dart';
 import 'package:intheloopapp/utils.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:uuid/uuid.dart';
 
 part 'user_model.g.dart';
-
-/// The different account types for a user
-enum AccountType {
-  /// Venue users
-  @JsonValue('venue')
-  venue,
-
-  /// Users with free accounts
-  @JsonValue('free')
-  free,
-}
 
 @JsonSerializable()
 class UserModel extends Equatable {
@@ -59,7 +49,7 @@ class UserModel extends Equatable {
   });
 
   factory UserModel.empty() => UserModel(
-        id: '',
+        id: const Uuid().v4(),
         email: '',
         username: Username.fromString('anonymous'),
         artistName: '',
@@ -370,4 +360,15 @@ class UserModel extends Equatable {
       'stripeCustomerId': stripeCustomerId,
     };
   }
+}
+
+/// The different account types for a user
+enum AccountType {
+  /// Venue users
+  @JsonValue('venue')
+  venue,
+
+  /// Users with free accounts
+  @JsonValue('free')
+  free,
 }

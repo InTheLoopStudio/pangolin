@@ -8,6 +8,7 @@ import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/option.dart';
+import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
@@ -24,9 +25,8 @@ part 'create_booking_state.dart';
 class CreateBookingCubit extends Cubit<CreateBookingState> {
   CreateBookingCubit({
     required this.currentUser,
-    required this.requesteeId,
+    required this.service,
     required this.requesteeStripeConnectedAccountId,
-    required this.requesteeBookingRate,
     required this.navigationBloc,
     required this.onboardingBloc,
     required this.database,
@@ -36,16 +36,14 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
   }) : super(
           CreateBookingState(
             currentUserId: currentUser.id,
-            requesteeId: requesteeId,
-            requesteeBookingRate: requesteeBookingRate,
+            service: service,
             bookingFee: bookingFee,
           ),
         );
 
   final UserModel currentUser;
-  final String requesteeId;
+  final Service service;
   final String requesteeStripeConnectedAccountId;
-  final int requesteeBookingRate;
   final double bookingFee;
   final NavigationBloc navigationBloc;
   final OnboardingBloc onboardingBloc;
@@ -105,9 +103,10 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
       id: const Uuid().v4(),
       name: state.name.value,
       note: state.note.value,
+      serviceId: state.service.id,
       requesterId: state.currentUserId,
-      requesteeId: state.requesteeId,
-      rate: state.requesteeBookingRate,
+      requesteeId: state.service.userId,
+      rate: state.service.rate,
       status: BookingStatus.pending,
       placeId: state.placeId,
       geohash: Option.fromNullable(geohash),
@@ -143,7 +142,7 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
         await payments.confirmPaymentSheetPayment();
       }
 
-      final channel = await streamRepo.createSimpleChat(state.requesteeId);
+      final channel = await streamRepo.createSimpleChat(state.service.userId);
       await channel.sendMessage(
         Message(
           text: state.note.value,

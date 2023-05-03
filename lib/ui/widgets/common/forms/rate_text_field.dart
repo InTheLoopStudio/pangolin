@@ -24,7 +24,7 @@ class RateTextField extends StatelessWidget {
       initialValue: _formatter.format(initialValue.toString()),
       decoration: const InputDecoration(
         prefixIcon: Icon(Icons.attach_money),
-        labelText: 'Hourly Rate',
+        labelText: 'Price',
         prefixText: r'$ ',
       ),
       inputFormatters: <TextInputFormatter>[_formatter],

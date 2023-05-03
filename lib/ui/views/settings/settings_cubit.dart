@@ -14,6 +14,7 @@ import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/genre.dart';
 import 'package:intheloopapp/domains/models/option.dart';
+import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/models/username.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -67,7 +68,6 @@ class SettingsCubit extends Cubit<SettingsState> {
         emailNotificationsAppReleases:
             currentUser.emailNotificationsAppReleases,
         emailNotificationsITLUpdates: currentUser.emailNotificationsITLUpdates,
-        rate: currentUser.bookingRate,
       ),
     );
   }
@@ -81,6 +81,11 @@ class SettingsCubit extends Cubit<SettingsState> {
     } on Exception {
       emit(state.copyWith(place: null));
     }
+  }
+
+  Future<void> initServices() async {
+    final services = await databaseRepository.getUserServices(currentUser.id);
+    emit(state.copyWith(services: services));
   }
 
   void changeBio(String value) => emit(state.copyWith(bio: value));
@@ -129,8 +134,6 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   void changeLabel(String? value) => emit(state.copyWith(label: value));
 
-  void changeRate(int value) => emit(state.copyWith(rate: value));
-
   void updateEmail(String? input) => emit(
         state.copyWith(email: input),
       );
@@ -169,6 +172,14 @@ class SettingsCubit extends Cubit<SettingsState> {
           emailNotificationsITLUpdates: selected,
         ),
       );
+
+  void onServiceCreated(Service service) {
+    emit(
+      state.copyWith(
+        services: List.of(state.services)..insert(0, service),
+      ),
+    );
+  }
 
   Future<void> handleImageFromGallery() async {
     try {
@@ -238,7 +249,6 @@ class SettingsCubit extends Cubit<SettingsState> {
         pushNotificationsITLUpdates: state.pushNotificationsITLUpdates,
         emailNotificationsAppReleases: state.emailNotificationsAppReleases,
         emailNotificationsITLUpdates: state.emailNotificationsITLUpdates,
-        bookingRate: state.rate,
         // stripeConnectedAccountId: state.stripeConnectedAccountId,
       );
 

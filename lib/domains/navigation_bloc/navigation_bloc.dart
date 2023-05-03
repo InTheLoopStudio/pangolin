@@ -6,6 +6,7 @@ import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/domains/models/badge.dart' as badge_model;
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/ui/views/activity/activity_view.dart';
 import 'package:intheloopapp/ui/views/advanced_search/advanced_search_view.dart';
 import 'package:intheloopapp/ui/views/badge/badge_view.dart';
@@ -13,6 +14,7 @@ import 'package:intheloopapp/ui/views/common/booking_view/booking_view.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view.dart';
 import 'package:intheloopapp/ui/views/create_booking/create_booking_view.dart';
 import 'package:intheloopapp/ui/views/create_loop/create_loop_view.dart';
+import 'package:intheloopapp/ui/views/create_service/create_service_view.dart';
 import 'package:intheloopapp/ui/views/likes/likes_view.dart';
 import 'package:intheloopapp/ui/views/login/forgot_password_view.dart';
 import 'package:intheloopapp/ui/views/login/signup_view.dart';
@@ -21,6 +23,7 @@ import 'package:intheloopapp/ui/views/onboarding/onboarding_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
 import 'package:intheloopapp/ui/views/settings/settings_view.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/location_form/location_form_view.dart';
+import 'package:intheloopapp/ui/widgets/profile_view/service_selection_view.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -176,10 +179,9 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
         MaterialPageRoute<CreateBookingView>(
           settings: const RouteSettings(name: '/create-booking'),
           builder: (context) => CreateBookingView(
-            requesteeId: event.requesteeId,
+            service: event.service,
             requesteeStripeConnectedAccountId:
                 event.requesteeStripeConnectedAccountId,
-            requesteeBookingRate: event.requesteeBookingRate,
           ),
         ),
       );
@@ -203,6 +205,32 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
         MaterialPageRoute<AdvancedSearchView>(
           settings: const RouteSettings(name: '/advanced-search'),
           builder: (context) => const AdvancedSearchView(),
+        ),
+      );
+
+      emit(state);
+    });
+    on<PushServiceSelection>((event, emit) {
+      navigationKey.currentState?.push(
+        MaterialPageRoute<ServiceSelectionView>(
+          settings: const RouteSettings(name: '/service-selection'),
+          builder: (context) => ServiceSelectionView(
+            userId: event.userId,
+            requesteeStripeConnectedAccountId:
+                event.requesteeStripeConnectedAccountId,
+          ),
+        ),
+      );
+
+      emit(state);
+    });
+    on<PushCreateService>((event, emit) {
+      navigationKey.currentState?.push(
+        MaterialPageRoute<CreateServiceView>(
+          settings: const RouteSettings(name: '/create-service'),
+          builder: (context) => CreateServiceView(
+            onCreated: event.onCreated,
+          ),
         ),
       );
 

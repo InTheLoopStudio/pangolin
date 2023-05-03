@@ -3,6 +3,7 @@ import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/service.dart';
 // import 'package:intheloopapp/domains/models/tag.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
@@ -11,7 +12,8 @@ abstract class DatabaseRepository {
   Future<bool> userEmailExists(String email);
   Future<void> createUser(UserModel user);
   Future<UserModel?> getUserByUsername(String? username);
-  Future<UserModel?> getUserById(String userId, {
+  Future<UserModel?> getUserById(
+    String userId, {
     bool ignoreCache = false,
   });
   Future<List<UserModel>> searchUsersByLocation({
@@ -25,7 +27,8 @@ abstract class DatabaseRepository {
   Future<bool> checkUsernameAvailability(String username, String userid);
 
   // Loop related stuff
-  Future<Loop> getLoopById(String loopId, {
+  Future<Loop> getLoopById(
+    String loopId, {
     bool ignoreCache = false,
   });
   Future<void> addLoop(Loop loop);
@@ -185,4 +188,11 @@ abstract class DatabaseRepository {
     String? lastBookingRequestId,
   });
   Future<void> updateBooking(Booking booking);
+
+  // Service related stuff
+  Future<void> createService(Service service);
+  Future<void> updateService(Service service);
+  Future<Service?> getServiceById(String userId, String serviceId);
+  Future<List<Service>> getUserServices(String userId);
+  Future<void> deleteService(String userId, String serviceId);
 }

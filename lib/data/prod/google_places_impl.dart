@@ -21,7 +21,7 @@ class GooglePlacesImpl implements PlacesRepository {
       );
 
       return result.place;
-    } on Exception {
+    } catch (e) {
       return null;
     }
   }

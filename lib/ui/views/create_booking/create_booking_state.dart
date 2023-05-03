@@ -3,8 +3,7 @@ part of 'create_booking_cubit.dart';
 class CreateBookingState extends Equatable with FormzMixin {
   CreateBookingState({
     required this.currentUserId,
-    required this.requesteeId,
-    required this.requesteeBookingRate,
+    required this.service,
     required this.bookingFee,
     this.name = const BookingName.pure(),
     this.note = const BookingNote.pure(),
@@ -20,11 +19,10 @@ class CreateBookingState extends Equatable with FormzMixin {
     this.formKey = formKey ?? GlobalKey<FormState>(debugLabel: 'settings');
   }
 
+  final String currentUserId;
   final BookingName name;
   final BookingNote note;
-  final String currentUserId;
-  final String requesteeId;
-  final int requesteeBookingRate;
+  final Service service;
   final double bookingFee;
   final FormzSubmissionStatus status;
   late final BookingStartTime startTime;
@@ -37,8 +35,7 @@ class CreateBookingState extends Equatable with FormzMixin {
   @override
   List<Object?> get props => [
         currentUserId,
-        requesteeId,
-        requesteeBookingRate,
+        service,
         bookingFee,
         name,
         note,
@@ -60,8 +57,7 @@ class CreateBookingState extends Equatable with FormzMixin {
 
   CreateBookingState copyWith({
     String? currentUserId,
-    String? requesteeId,
-    int? requesteeBookingRate,
+    Service? service,
     double? bookingFee,
     BookingName? name,
     BookingNote? note,
@@ -74,8 +70,7 @@ class CreateBookingState extends Equatable with FormzMixin {
     return CreateBookingState(
       formKey: formKey,
       currentUserId: currentUserId ?? this.currentUserId,
-      requesteeId: requesteeId ?? this.requesteeId,
-      requesteeBookingRate: requesteeBookingRate ?? this.requesteeBookingRate,
+      service: service ?? this.service,
       bookingFee: bookingFee ?? this.bookingFee,
       name: name ?? this.name,
       note: note ?? this.note,
@@ -105,8 +100,12 @@ class CreateBookingState extends Equatable with FormzMixin {
   }
 
   int get artistCost {
+    if (service.rateType == RateType.fixed) {
+      return service.rate;
+    }
+
     final d = endTime.value.difference(startTime.value);
-    final rateInMinutes = requesteeBookingRate / 60;
+    final rateInMinutes = service.rate / 60;
     final total = d.inMinutes * rateInMinutes;
 
     return total.toInt();

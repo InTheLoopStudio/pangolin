@@ -11,7 +11,7 @@ class ActivityView extends StatelessWidget {
         title: const Row(
           children: [
             Text(
-              'Activities',
+              'Notifications',
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,

@@ -145,7 +145,7 @@ class Linkify extends StatelessWidget {
               } on Exception {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('something went wrong'),
+                    content: Text('User not found'),
                   ),
                 );
               }

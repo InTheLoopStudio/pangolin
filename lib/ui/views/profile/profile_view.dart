@@ -295,6 +295,7 @@ class _ProfileViewState extends State<ProfileView> {
                               ),
                               child: Linkify(
                                 text: visitedUser.bio,
+                                maxLines: 6,
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.normal,
