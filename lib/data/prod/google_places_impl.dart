@@ -7,6 +7,9 @@ final _places = FlutterGooglePlacesSdk(_placesKey);
 class GooglePlacesImpl implements PlacesRepository {
   @override
   Future<Place?> getPlaceById(String placeId) async {
+
+    if (placeId.isEmpty) return null;
+
     try {
       final result = await _places.fetchPlace(
         placeId,
