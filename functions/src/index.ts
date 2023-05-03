@@ -45,6 +45,7 @@ const feedsRef = db.collection("feeds");
 // const badgesRef = db.collection("badges");
 // const badgesSentRef = db.collection("badgesSent");
 const tokensRef = db.collection("device_tokens")
+const servicesRef = db.collection("services");
 
 // const loopLikesSubcollection = "loopLikes";
 // const loopCommentsSubcollection = "loopComments";
@@ -952,7 +953,25 @@ export const getAccountById = functions
     return _getAccountById(data);
   });
 
-exports.transformLoopPayloadForSearch = functions.https
+export const incrementServiceCountOnBooking = functions
+  .firestore
+  .document("bookings/{bookingId}")
+  .onCreate(async (snapshot, context) => {
+    const booking = snapshot.data() as Booking;
+    if (booking === undefined) {
+      throw new HttpsError("failed-precondition", `booking ${context.params.bookingId} does not exist`,);
+    }
+
+    if (booking.serviceId === undefined) {
+      throw new HttpsError("failed-precondition", `booking ${context.params.bookingId} does not have a serviceId`,);
+    }
+
+    await servicesRef
+      .doc(booking.serviceId)
+      .update({ bookingCount: FieldValue.increment(1) });
+  });
+
+export const transformLoopPayloadForSearch = functions.https
   .onCall((data) => {
 
     const { lat, lng, ...rest } = data;

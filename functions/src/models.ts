@@ -67,6 +67,7 @@ export type Comment = {
 
 export type Booking = {
   id: string;
+  serviceId: string;
   name: string;
   note: string;
   requesterId: string;

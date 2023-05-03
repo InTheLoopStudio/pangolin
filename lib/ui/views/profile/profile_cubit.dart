@@ -168,10 +168,14 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
   }
 
   Future<void> initPlace() async {
-    final place = visitedUser.placeId != null 
-      ? await places.getPlaceById(visitedUser.placeId ?? '')
-      : null;
-    emit(state.copyWith(place: place));
+    try {
+      final place = visitedUser.placeId != null
+          ? await places.getPlaceById(visitedUser.placeId!)
+          : null;
+      emit(state.copyWith(place: place));
+    } on Exception {
+      emit(state.copyWith(place: null));
+    }
   }
 
   Future<void> fetchMoreLoops() async {
