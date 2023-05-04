@@ -59,14 +59,13 @@ Future<void> main() async {
   PlatformDispatcher.instance.onError = (error, stack) {
     try {
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-    } on Exception {
+    } catch (e) {
       // print('Failed to report error to Firebase Crashlytics: $e');
     }
 
     return true;
   };
 
-  bool weWantFatalErrorRecording = true;
   // Keep the app in portrait mode (no landscape)
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
