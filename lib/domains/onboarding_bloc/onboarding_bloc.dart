@@ -12,13 +12,18 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
     required this.databaseRepository,
   }) : super(Unonboarded()) {
     on<OnboardingCheck>((event, emit) async {
-      final userId = event.userId;
+      try {
+        final userId = event.userId;
 
-      final user = await databaseRepository.getUserById(userId);
-      if (user == null) {
+        final user = await databaseRepository.getUserById(userId);
+        if (user == null) {
+          emit(Onboarding());
+        } else {
+          emit(Onboarded(user));
+        }
+      } catch (e, s) {
+        await FirebaseCrashlytics.instance.recordError(e, s);
         emit(Onboarding());
-      } else {
-        emit(Onboarded(user));
       }
     });
     on<FinishOnboarding>((event, emit) {
