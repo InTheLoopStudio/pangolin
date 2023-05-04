@@ -41,7 +41,7 @@ class CloudMessagingImpl extends NotificationRepository {
             'token': token,
             'platform': Platform.operatingSystem,
           });
-        } on Exception {
+        } catch (e) {
           // print('Saving device token failed');
         }
       }
