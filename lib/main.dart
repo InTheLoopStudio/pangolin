@@ -62,9 +62,13 @@ Future<void> main() async {
     } catch (e) {
       // print('Failed to report error to Firebase Crashlytics: $e');
     }
-
     return true;
   };
+
+  if (kDebugMode) {
+    // Force disable Crashlytics collection while doing every day development.
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+  }
 
   // Keep the app in portrait mode (no landscape)
   await SystemChrome.setPreferredOrientations([

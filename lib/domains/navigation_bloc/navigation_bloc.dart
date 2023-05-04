@@ -65,7 +65,9 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
               ),
               body: PhotoView(
                 imageProvider: CachedNetworkImageProvider(event.imageUrl),
-                heroAttributes: PhotoViewHeroAttributes(tag: event.imageUrl),
+                heroAttributes: PhotoViewHeroAttributes(
+                  tag: event.heroTag,
+                ),
               ),
             ),
           ),

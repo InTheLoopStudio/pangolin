@@ -6,6 +6,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/audio_controls.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class Attachments extends StatelessWidget {
   const Attachments({
@@ -19,6 +20,9 @@ class Attachments extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final randomId = const Uuid().v4();
+    final heroTag = 'loop-${loop.id}-$randomId';
+
     if (loop.audioPath.isNotEmpty) {
       return AudioControls(
         audioPath: loop.audioPath,
@@ -40,13 +44,11 @@ class Attachments extends StatelessWidget {
         child: GestureDetector(
           onTap: () {
             context.read<NavigationBloc>().add(
-                  PushPhotoView(
-                    imageUrl: imagePath,
-                  ),
+                  PushPhotoView(imageUrl: imagePath, heroTag: heroTag),
                 );
           },
           child: Hero(
-            tag: imagePath,
+            tag: heroTag,
             child: CachedNetworkImage(
               imageUrl: imagePath,
               imageBuilder: (context, imageProvider) => Container(
