@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:georange/georange.dart';
 import 'package:intheloopapp/data/database_repository.dart';
@@ -152,9 +153,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
             );
       } on FirebaseException {
         userSnapshot = await _usersRef.doc(userId).get();
-      } catch (e, s) {
-        
-      }
+      } catch (e, s) {}
     }
 
     userSnapshot ??= await _usersRef.doc(userId).get();
@@ -267,26 +266,31 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<Loop> getLoopById(
+  Future<Loop?> getLoopById(
     String loopId, {
     bool ignoreCache = true,
   }) async {
     DocumentSnapshot<Map<String, dynamic>>? loopSnapshot;
-    if (!ignoreCache) {
-      try {
-        loopSnapshot = await _loopsRef.doc(loopId).get(
-              const GetOptions(source: Source.cache),
-            );
-      } on FirebaseException {
-        loopSnapshot = await _usersRef.doc(loopId).get();
+    try {
+      if (!ignoreCache) {
+        try {
+          loopSnapshot = await _loopsRef.doc(loopId).get(
+                const GetOptions(source: Source.cache),
+              );
+        } on FirebaseException {
+          loopSnapshot = await _usersRef.doc(loopId).get();
+        }
       }
+
+      loopSnapshot ??= await _loopsRef.doc(loopId).get();
+
+      final loop = Loop.fromDoc(loopSnapshot);
+
+      return loop;
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+      return null;
     }
-
-    loopSnapshot ??= await _loopsRef.doc(loopId).get();
-
-    final loop = Loop.fromDoc(loopSnapshot);
-
-    return loop;
   }
 
   @override
@@ -563,7 +567,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         }),
       );
 
-      return followingLoops.where((loop) => !loop.deleted).toList();
+      return followingLoops
+          .where((loop) => loop != null && !loop.deleted)
+          .whereType<Loop>()
+          .toList();
     } else {
       final userFeedLoops = await _feedRefs
           .doc(currentUserId)
@@ -580,7 +587,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         }),
       );
 
-      return followingLoops.where((loop) => !loop.deleted).toList();
+      return followingLoops
+          .where((loop) => loop != null && !loop.deleted)
+          .whereType<Loop>()
+          .toList();
     }
   }
 
@@ -597,24 +607,28 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         .limit(limit)
         .snapshots();
 
-    final userFeedLoopsObserver = userFeedLoopsSnapshotObserver.map((event) {
-      return event.docChanges
-          .where(
-        (DocumentChange<Map<String, dynamic>> element) =>
-            element.type == DocumentChangeType.added,
-      )
-          .map((DocumentChange<Map<String, dynamic>> element) async {
-        final loop = await getLoopById(
-          element.doc.id,
-          ignoreCache: ignoreCache,
-        );
-        return loop;
-        // if (element.type == DocumentChangeType.modified) {}
-        // if (element.type == DocumentChangeType.removed) {}
-      });
-    }).flatMap(
-      (value) => Stream.fromFutures(value).where((loop) => !loop.deleted),
-    );
+    final userFeedLoopsObserver = userFeedLoopsSnapshotObserver
+        .map((event) {
+          return event.docChanges
+              .where(
+            (DocumentChange<Map<String, dynamic>> element) =>
+                element.type == DocumentChangeType.added,
+          )
+              .map((DocumentChange<Map<String, dynamic>> element) async {
+            final loop = await getLoopById(
+              element.doc.id,
+              ignoreCache: ignoreCache,
+            );
+            return loop;
+            // if (element.type == DocumentChangeType.modified) {}
+            // if (element.type == DocumentChangeType.removed) {}
+          });
+        })
+        .flatMap(
+          (value) => Stream.fromFutures(value)
+              .where((loop) => loop != null && !loop.deleted),
+        )
+        .whereType<Loop>();
 
     yield* userFeedLoopsObserver;
   }
@@ -626,38 +640,43 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     int limit = 100,
     String? lastLoopId,
   }) async {
-    if (lastLoopId != null) {
-      final documentSnapshot = await _loopsRef.doc(lastLoopId).get();
+    try {
+      if (lastLoopId != null) {
+        final documentSnapshot = await _loopsRef.doc(lastLoopId).get();
 
-      final allLoopsDocs = await _loopsRef
-          .where('deleted', isNotEqualTo: true)
-          .orderBy('deleted', descending: true)
-          .orderBy('timestamp', descending: true)
-          .limit(limit)
-          .startAfterDocument(documentSnapshot)
-          .get();
+        final allLoopsDocs = await _loopsRef
+            .where('deleted', isNotEqualTo: true)
+            .orderBy('deleted', descending: true)
+            .orderBy('timestamp', descending: true)
+            .limit(limit)
+            .startAfterDocument(documentSnapshot)
+            .get();
 
-      final allLoopsList = await Future.wait(
-        allLoopsDocs.docs.map((doc) async => Loop.fromDoc(doc)).toList(),
-      );
+        final allLoopsList = await Future.wait(
+          allLoopsDocs.docs.map((doc) async => Loop.fromDoc(doc)).toList(),
+        );
 
-      return allLoopsList
-          .where((e) => e.userId != currentUserId && !e.deleted)
-          .toList();
-    } else {
-      final allLoopsDocs = await _loopsRef
-          .orderBy('timestamp', descending: true)
-          // .where('deleted', isNotEqualTo: true)
-          .limit(limit)
-          .get();
+        return allLoopsList
+            .where((e) => e.userId != currentUserId && !e.deleted)
+            .toList();
+      } else {
+        final allLoopsDocs = await _loopsRef
+            .orderBy('timestamp', descending: true)
+            // .where('deleted', isNotEqualTo: true)
+            .limit(limit)
+            .get();
 
-      final allLoopsList = await Future.wait(
-        allLoopsDocs.docs.map((doc) async => Loop.fromDoc(doc)).toList(),
-      );
+        final allLoopsList = await Future.wait(
+          allLoopsDocs.docs.map((doc) async => Loop.fromDoc(doc)).toList(),
+        );
 
-      return allLoopsList
-          .where((e) => e.userId != currentUserId && e.deleted != true)
-          .toList();
+        return allLoopsList
+            .where((e) => e.userId != currentUserId && !e.deleted)
+            .toList();
+      }
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+      return [];
     }
   }
 

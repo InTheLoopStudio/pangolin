@@ -27,7 +27,9 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
               final shareLoop = await databaseRepository.getLoopById(
                 event.id ?? '',
               );
-              navigationBloc.add(PushLoop(shareLoop));
+              if (shareLoop != null) {
+                navigationBloc.add(PushLoop(shareLoop));
+              }
             }
             break;
           case DynamicLinkType.shareProfile:

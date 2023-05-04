@@ -27,7 +27,7 @@ abstract class DatabaseRepository {
   Future<bool> checkUsernameAvailability(String username, String userid);
 
   // Loop related stuff
-  Future<Loop> getLoopById(
+  Future<Loop?> getLoopById(
     String loopId, {
     bool ignoreCache = false,
   });
