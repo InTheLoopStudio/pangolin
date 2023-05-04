@@ -74,7 +74,7 @@ class LoginCubit extends Cubit<LoginState> {
           status: FormzSubmissionStatus.failure,
         ),
       );
-      return;
+      throw Exception('Passwords do not match');
     }
     try {
       final uid = await authRepository.signUpWithCredentials(
@@ -93,13 +93,8 @@ class LoginCubit extends Cubit<LoginState> {
       emit(
         state.copyWith(status: FormzSubmissionStatus.failure),
       );
-      return;
+      rethrow;
       // ignore: avoid_catching_errors
-    } on NoSuchMethodError {
-      emit(
-        state.copyWith(status: FormzSubmissionStatus.initial),
-      );
-      return;
     }
     emit(
       state.copyWith(status: FormzSubmissionStatus.success),

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/views/login/login_cubit.dart';
 
@@ -11,7 +12,17 @@ class ConfirmSignUpButton extends StatelessWidget {
       builder: (context, state) {
         return CupertinoButton.filled(
           child: const Text('Sign Up'),
-          onPressed: () => context.read<LoginCubit>().signUpWithCredentials(),
+          onPressed: () {
+            try {
+              context.read<LoginCubit>().signUpWithCredentials();
+            } catch (e) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(e.toString()),
+                ),
+              );
+            }
+          },
         );
       },
     );
