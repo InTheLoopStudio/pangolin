@@ -21,7 +21,7 @@ class UploadAudioButton extends StatelessWidget {
                   onPressed: () {
                     try {
                       context.read<CreateLoopCubit>().handleAudioFromFiles();
-                    } on Exception catch (e) {
+                    } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(e.toString()),

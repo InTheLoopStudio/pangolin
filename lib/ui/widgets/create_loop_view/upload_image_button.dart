@@ -19,7 +19,7 @@ class UploadImageButton extends StatelessWidget {
             onPressed: () {
               try {
                 context.read<CreateLoopCubit>().handleImageFromFiles();
-              } on Exception catch (e) {
+              } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(e.toString()),

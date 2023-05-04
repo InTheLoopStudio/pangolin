@@ -32,7 +32,7 @@ class GooglePlacesImpl implements PlacesRepository {
     try {
       final predictions = await _places.findAutocompletePredictions(query);
       return predictions.predictions;
-    } on Exception catch (e, s) {
+    } catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);
       return [];
     }

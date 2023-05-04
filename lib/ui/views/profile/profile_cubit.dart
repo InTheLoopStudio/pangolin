@@ -174,7 +174,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
           ? await places.getPlaceById(visitedUser.placeId!)
           : null;
       emit(state.copyWith(place: place));
-    } on Exception catch (e, s) {
+    } catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);
       emit(state.copyWith(place: null));
     }

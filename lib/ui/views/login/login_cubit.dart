@@ -47,20 +47,14 @@ class LoginCubit extends Cubit<LoginState> {
         emit(
           state.copyWith(status: FormzSubmissionStatus.failure),
         );
-        return;
+        throw Exception('Failed to sign in');
       }
     } catch (e) {
       // print(e);
       emit(
         state.copyWith(status: FormzSubmissionStatus.failure),
       );
-      return;
-      // ignore: avoid_catching_errors
-    } on NoSuchMethodError {
-      emit(
-        state.copyWith(status: FormzSubmissionStatus.initial),
-      );
-      return;
+      rethrow;
     }
     emit(
       state.copyWith(status: FormzSubmissionStatus.success),
@@ -115,13 +109,7 @@ class LoginCubit extends Cubit<LoginState> {
       emit(
         state.copyWith(status: FormzSubmissionStatus.failure),
       );
-      return;
-      // ignore: avoid_catching_errors
-    } on NoSuchMethodError {
-      emit(
-        state.copyWith(status: FormzSubmissionStatus.initial),
-      );
-      return;
+      rethrow;
     }
   }
 
@@ -134,16 +122,11 @@ class LoginCubit extends Cubit<LoginState> {
       emit(
         state.copyWith(status: FormzSubmissionStatus.success),
       );
-    } on Exception catch (e) {
-      print(e);
+    } catch (e) {
       emit(
         state.copyWith(status: FormzSubmissionStatus.failure),
       );
-      // ignore: avoid_catching_errors
-    } on NoSuchMethodError {
-      emit(
-        state.copyWith(status: FormzSubmissionStatus.initial),
-      );
+      rethrow;
     }
   }
 
