@@ -17,7 +17,7 @@ class ThemeSwitch extends StatelessWidget {
           // backgroundColor: Colors.grey[300]!,
           backgroundColor: Theme.of(context).colorScheme.background,
           thumbColor: const Color.fromARGB(255, 197, 228, 255),
-          onValueChanged: (value) {
+          onValueChanged: (bool? value) {
             context
                 .read<AppThemeCubit>()
                 .updateTheme(isDarkMode: value ?? true);

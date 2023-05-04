@@ -52,6 +52,8 @@ class CreateServiceCubit extends Cubit<CreateServiceState> {
         throw Exception('Invalid form');
       }
 
+      emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+
       final service = Service.empty().copyWith(
         userId: currentUserId,
         title: state.title.value,
@@ -62,6 +64,8 @@ class CreateServiceCubit extends Cubit<CreateServiceState> {
       await database.createService(service);
 
       onCreated.call(service);
+
+      emit(state.copyWith(status: FormzSubmissionStatus.success));
 
       nav.add(const Pop());
     } catch (e) {

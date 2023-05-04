@@ -3,7 +3,8 @@ version: 1.1.34+45
 publish_to: none
 description: Mobile app for Tapped.
 environment: 
-  sdk: '>=3.0.0-417.3.beta'
+  sdk: '>=2.17.0 <3.0.0'
+  # sdk: '>=3.0.0-417.3.beta'
 
 dependencies: 
   algolia: ^1.0.1

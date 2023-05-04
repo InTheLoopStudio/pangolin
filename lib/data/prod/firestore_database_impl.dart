@@ -327,16 +327,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         'followee': visitedUserId,
       },
     );
-    final followingDoc = await _followingRef
-        .doc(currentUserId)
-        .collection('Following')
-        .doc(visitedUserId)
-        .get();
-
-    if (followingDoc.exists) {
-      return;
-    }
-
     await _followingRef
         .doc(currentUserId)
         .collection('Following')
@@ -375,10 +365,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String visitedUserId,
   ) async {
     try {
-      final followingDoc = await _followersRef
-          .doc(visitedUserId)
-          .collection('Followers')
+      final followingDoc = await _followingRef
           .doc(currentUserId)
+          .collection('Following')
+          .doc(visitedUserId)
           .get();
       return followingDoc.exists;
     } on Exception {

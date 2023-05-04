@@ -23,7 +23,7 @@ class ChannelListView extends StatelessWidget {
 
         final future = CancelableRetry(
           () => context.read<StreamRepository>().connectUser(currentUser.id),
-          retryIf: (result) => !result,
+          retryIf: (bool result) => !result,
         );
 
         return FutureBuilder<bool>(
