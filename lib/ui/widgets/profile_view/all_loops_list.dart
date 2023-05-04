@@ -57,14 +57,14 @@ class AllLoopsListState extends State<AllLoopsList>
   Widget loopsList(BuildContext context, ProfileState state) {
     switch (state.loopStatus) {
       case LoopsStatus.initial:
-        return const EasterEggPlaceholder(text: 'Waiting for New Loops...');
+        return const Text('Waiting for New Loops...');
 
       case LoopsStatus.failure:
         return const Center(child: Text('failed to fetch loops'));
 
       case LoopsStatus.success:
         if (state.userLoops.isEmpty || state.visitedUser.deleted) {
-          return const EasterEggPlaceholder(text: 'No loops yet...');
+          return const Text('No loops yet...');
         }
 
         return CustomScrollView(
