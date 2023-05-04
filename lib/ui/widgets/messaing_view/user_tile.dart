@@ -17,7 +17,7 @@ class UserTile extends StatelessWidget {
 
     return ListTile(
       leading: UserAvatar(
-        backgroundImageUrl: user.profilePicture,
+        imageUrl: user.profilePicture,
         radius: 20,
       ),
       title: Text(user.username.toString()),

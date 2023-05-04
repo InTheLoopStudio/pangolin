@@ -88,7 +88,7 @@ class LoopView extends StatelessWidget {
                                     // + User Avatar
                                     UserAvatar(
                                       radius: 24,
-                                      backgroundImageUrl: user.profilePicture,
+                                      imageUrl: user.profilePicture,
                                       verified: state.isVerified,
                                     ),
                                   ],

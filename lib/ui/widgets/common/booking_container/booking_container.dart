@@ -47,7 +47,7 @@ class BookingContainer extends StatelessWidget {
                 enabled: booking.status != BookingStatus.canceled,
                 leading: UserAvatar(
                   radius: 20,
-                  backgroundImageUrl: requestee.profilePicture,
+                  imageUrl: requestee.profilePicture,
                   verified: isVerified,
                 ),
                 title: Text(requestee.displayName),
@@ -104,7 +104,7 @@ class BookingContainer extends StatelessWidget {
                 },
                 leading: UserAvatar(
                   radius: 20,
-                  backgroundImageUrl: requester.profilePicture,
+                  imageUrl: requester.profilePicture,
                   verified: isVerified,
                 ),
                 title: Text(requester.displayName),
@@ -122,7 +122,8 @@ class BookingContainer extends StatelessWidget {
                         child: const Icon(CupertinoIcons.ellipsis),
                         onTap: () => showCupertinoModalPopup<void>(
                           context: context,
-                          builder: (BuildContext context) => CupertinoActionSheet(
+                          builder: (BuildContext context) =>
+                              CupertinoActionSheet(
                             title: const Text('Booking Request'),
                             message: const Text('Accept or Deny the request'),
                             actions: <CupertinoActionSheetAction>[

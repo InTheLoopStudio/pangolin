@@ -6,14 +6,14 @@ import 'package:intheloopapp/ui/themes.dart';
 class UserAvatar extends StatelessWidget {
   const UserAvatar({
     super.key,
-    this.backgroundImageUrl,
+    this.imageUrl,
     this.verified,
     this.radius,
     this.minRadius,
     this.maxRadius,
   });
 
-  final String? backgroundImageUrl;
+  final String? imageUrl;
   final bool? verified;
   final double? radius;
   final double? minRadius;
@@ -37,15 +37,15 @@ class UserAvatar extends StatelessWidget {
         radius: radius,
         minRadius: minRadius,
         maxRadius: maxRadius,
-        foregroundImage:
-            (backgroundImageUrl == null || backgroundImageUrl!.isEmpty)
-                ? const AssetImage('assets/default_avatar.png') as ImageProvider
-                : CachedNetworkImageProvider(
-                    backgroundImageUrl!,
-                    errorListener: () {
-                      return;
-                    },
-                  ),
+        foregroundImage: (imageUrl == null || imageUrl!.isEmpty)
+            ? const AssetImage('assets/default_avatar.png') as ImageProvider
+            : CachedNetworkImageProvider(
+                imageUrl!,
+                errorListener: () {
+                  return;
+                },
+              ),
+        backgroundImage: const AssetImage('assets/default_avatar.png'),
       ),
     );
   }

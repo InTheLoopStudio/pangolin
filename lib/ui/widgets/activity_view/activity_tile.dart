@@ -19,7 +19,6 @@ class ActivityTile extends StatefulWidget {
 
 class _ActivityTileState extends State<ActivityTile>
     with AutomaticKeepAliveClientMixin {
-
   @override
   bool get wantKeepAlive => true;
 
@@ -67,7 +66,7 @@ class _ActivityTileState extends State<ActivityTile>
                           tileColor: markedRead ? null : Colors.grey[900],
                           leading: UserAvatar(
                             radius: 20,
-                            backgroundImageUrl: user.profilePicture,
+                            imageUrl: user.profilePicture,
                             verified: isVerified,
                           ),
                           trailing: Text(

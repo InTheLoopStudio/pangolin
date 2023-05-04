@@ -39,7 +39,7 @@ class UserInfo extends StatelessWidget {
                   // + User Avatar
                   UserAvatar(
                     radius: 24,
-                    backgroundImageUrl: loopUser.profilePicture,
+                    imageUrl: loopUser.profilePicture,
                     verified: verified,
                   ),
                 ],
@@ -52,12 +52,12 @@ class UserInfo extends StatelessWidget {
                 children: [
                   if (loopUser.artistName.isNotEmpty)
                     Text(
-                          loopUser.artistName,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                      loopUser.artistName,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   Text(
                     '@${loopUser.username}',
                     style: const TextStyle(

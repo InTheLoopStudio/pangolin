@@ -44,7 +44,7 @@ class _UserTileState extends State<UserTile> {
             return ListTile(
               leading: UserAvatar(
                 radius: 25,
-                backgroundImageUrl: widget.user.profilePicture,
+                imageUrl: widget.user.profilePicture,
                 verified: verified,
               ),
               title: Text(widget.user.displayName),
@@ -56,8 +56,8 @@ class _UserTileState extends State<UserTile> {
               trailing: (currentUser.id != widget.user.id) &&
                       widget.showFollowButton
                   ? FutureBuilder<bool>(
-                      future:
-                          database.isFollowingUser(currentUser.id, widget.user.id),
+                      future: database.isFollowingUser(
+                          currentUser.id, widget.user.id),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) return const SizedBox.shrink();
 

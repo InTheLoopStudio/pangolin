@@ -41,7 +41,7 @@ class CommentContainer extends StatelessWidget {
                 onTap: () => navigationBloc.add(PushProfile(user.id)),
                 leading: UserAvatar(
                   radius: 20,
-                  backgroundImageUrl: user.profilePicture,
+                  imageUrl: user.profilePicture,
                   verified: isVerified,
                 ),
                 trailing: Text(
