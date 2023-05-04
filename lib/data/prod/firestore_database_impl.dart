@@ -1252,16 +1252,22 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     int limit = 20,
     String? lastBookingRequestId,
   }) async {
-    final bookingSnapshot = await _bookingsRef
-        .where(
-          'requesterId',
-          isEqualTo: userId,
-        )
-        .get();
+    try {
+      final bookingSnapshot = await _bookingsRef
+          .where(
+            'requesterId',
+            isEqualTo: userId,
+          )
+          .get();
 
-    final bookingRequests = bookingSnapshot.docs.map(Booking.fromDoc).toList();
+      final bookingRequests =
+          bookingSnapshot.docs.map(Booking.fromDoc).toList();
 
-    return bookingRequests;
+      return bookingRequests;
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+      return [];
+    }
   }
 
   @override
@@ -1270,75 +1276,97 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     int limit = 20,
     String? lastBookingRequestId,
   }) async {
-    final bookingSnapshot = await _bookingsRef
-        .where(
-          'requesteeId',
-          isEqualTo: userId,
-        )
-        .get();
+    try {
+      final bookingSnapshot = await _bookingsRef
+          .where(
+            'requesteeId',
+            isEqualTo: userId,
+          )
+          .get();
 
-    final bookingRequests = bookingSnapshot.docs.map(Booking.fromDoc).toList();
+      final bookingRequests =
+          bookingSnapshot.docs.map(Booking.fromDoc).toList();
 
-    return bookingRequests;
+      return bookingRequests;
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+      return [];
+    }
   }
 
   @override
   Future<void> updateBooking(Booking booking) async {
-    await _analytics.logEvent(
-      name: 'update_booking',
-      parameters: {
-        'status': EnumToString.convertToString(booking.status),
-      },
-    );
-    await _bookingsRef.doc(booking.id).set(booking.toMap());
+    try {
+      await _analytics.logEvent(
+        name: 'update_booking',
+        parameters: {
+          'status': EnumToString.convertToString(booking.status),
+        },
+      );
+      await _bookingsRef.doc(booking.id).set(booking.toMap());
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
   }
 
   @override
   Future<void> createService(Service service) async {
-    await _analytics.logEvent(
-      name: 'service_created',
-      parameters: {
-        'service_id': service.id,
-        'user_id': service.userId,
-        'title': service.title,
-        'description': service.description,
-        'rate': service.rate,
-        'rate_type': service.rateType.name,
-      },
-    );
-    await _servicesRef
-        .doc(service.userId)
-        .collection('userServices')
-        .doc(service.id)
-        .set(service.toJson());
+    try {
+      await _analytics.logEvent(
+        name: 'service_created',
+        parameters: {
+          'service_id': service.id,
+          'user_id': service.userId,
+          'title': service.title,
+          'description': service.description,
+          'rate': service.rate,
+          'rate_type': service.rateType.name,
+        },
+      );
+      await _servicesRef
+          .doc(service.userId)
+          .collection('userServices')
+          .doc(service.id)
+          .set(service.toJson());
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
   }
 
   @override
   Future<void> deleteService(String userId, String serviceId) async {
-    await _analytics.logEvent(
-      name: 'service_deleted',
-    );
-    await _servicesRef
-        .doc(userId)
-        .collection('userServices')
-        .doc(serviceId)
-        .set({
-      'deleted': true,
-    });
-    return;
+    try {
+      await _analytics.logEvent(
+        name: 'service_deleted',
+      );
+      await _servicesRef
+          .doc(userId)
+          .collection('userServices')
+          .doc(serviceId)
+          .set({
+        'deleted': true,
+      });
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
   }
 
   @override
   Future<Service?> getServiceById(String userId, String serviceId) async {
-    final serviceSnapshot = await _servicesRef
-        .doc(userId)
-        .collection('userServices')
-        .doc(serviceId)
-        .get();
+    try {
+      final serviceSnapshot = await _servicesRef
+          .doc(userId)
+          .collection('userServices')
+          .doc(serviceId)
+          .get();
 
-    final service = Service.fromDoc(serviceSnapshot);
+      final service = Service.fromDoc(serviceSnapshot);
 
-    return service;
+      return service;
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+      return null;
+    }
   }
 
   @override
@@ -1351,22 +1379,25 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       return services;
     } catch (e) {
-      // print(e);
       return [];
     }
   }
 
   @override
   Future<void> updateService(Service service) async {
-    await _analytics.logEvent(
-      name: 'service_updated',
-      parameters: service.toJson(),
-    );
-    await _servicesRef
-        .doc(service.userId)
-        .collection('userServices')
-        .doc(service.id)
-        .set(service.toJson());
+    try {
+      await _analytics.logEvent(
+        name: 'service_updated',
+        parameters: service.toJson(),
+      );
+      await _servicesRef
+          .doc(service.userId)
+          .collection('userServices')
+          .doc(service.id)
+          .set(service.toJson());
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
   }
 }
 
