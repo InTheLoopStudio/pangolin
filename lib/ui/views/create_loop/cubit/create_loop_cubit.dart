@@ -147,7 +147,7 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
           ),
         );
       }
-    } on Exception {
+    } catch (e) {
       emit(
         state.copyWith(
           pickedAudio: state.pickedAudio,
@@ -230,7 +230,7 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
       navigationBloc
         ..add(const ChangeTab(selectedTab: 0))
         ..add(const Pop());
-    } on Exception {
+    } catch (e) {
       emit(
         state.copyWith(
           pickedAudio: state.pickedAudio,

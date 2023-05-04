@@ -56,7 +56,7 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
       if (imageFile != null) {
         emit(state.copyWith(pickedPhoto: File(imageFile.path)));
       }
-    } on Exception {
+    } catch (e) {
       // print(error);
     }
   }

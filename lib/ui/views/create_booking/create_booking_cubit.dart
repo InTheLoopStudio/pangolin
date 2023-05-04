@@ -90,14 +90,12 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
       );
 
   Future<void> createBooking() async {
-
     final nullablePlace = state.place.asNullable();
 
-      final lat = nullablePlace?.latLng?.lat;
-      final lng = nullablePlace?.latLng?.lng;
-      final geohash = (lat != null && lng != null)
-          ? geocodeEncode(lat: lat, lng: lng)
-          : null;
+    final lat = nullablePlace?.latLng?.lat;
+    final lng = nullablePlace?.latLng?.lng;
+    final geohash =
+        (lat != null && lng != null) ? geocodeEncode(lat: lat, lng: lng) : null;
 
     final booking = Booking(
       id: const Uuid().v4(),
@@ -151,7 +149,7 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
       await database.createBooking(booking);
       emit(state.copyWith(status: FormzSubmissionStatus.success));
       navigationBloc.add(const Pop());
-    } on Exception {
+    } catch (e) {
       emit(state.copyWith(status: FormzSubmissionStatus.failure));
       rethrow;
     }

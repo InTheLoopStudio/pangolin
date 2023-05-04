@@ -49,7 +49,7 @@ class LoginCubit extends Cubit<LoginState> {
         );
         return;
       }
-    } on Exception {
+    } catch (e) {
       // print(e);
       emit(
         state.copyWith(status: FormzSubmissionStatus.failure),
@@ -88,7 +88,7 @@ class LoginCubit extends Cubit<LoginState> {
         );
         return;
       }
-    } on Exception {
+    } catch (e) {
       // print(e);
       emit(
         state.copyWith(status: FormzSubmissionStatus.failure),
@@ -116,7 +116,7 @@ class LoginCubit extends Cubit<LoginState> {
       emit(
         state.copyWith(status: FormzSubmissionStatus.success),
       );
-    } on Exception {
+    } catch (e) {
       // print(e);
       emit(
         state.copyWith(status: FormzSubmissionStatus.failure),

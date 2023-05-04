@@ -16,7 +16,7 @@ class SubmitLoopButton extends StatelessWidget {
           onPressed: () {
             try {
               context.read<CreateLoopCubit>().createLoop();
-            } on Exception {
+            } catch (e) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   backgroundColor: Colors.red,
@@ -30,8 +30,8 @@ class SubmitLoopButton extends StatelessWidget {
           ),
           label: state.status.isInProgress
               ? const CircularProgressIndicator(
-                color: Colors.white,
-              )
+                  color: Colors.white,
+                )
               : const Text('Create Loop'),
         );
       },

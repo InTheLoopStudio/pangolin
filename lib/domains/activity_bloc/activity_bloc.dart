@@ -93,7 +93,7 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
                 activities: List.of(state.activities)..addAll(activities),
               ),
             );
-    } on Exception {
+    } catch (e) {
       emit(const ActivityFailure());
     }
   }

@@ -277,7 +277,7 @@ class FirebaseAuthImpl extends AuthRepository {
     try {
       await _analytics.logEvent(name: 'delete_user');
       await _auth.currentUser?.delete();
-    } on Exception {
+    } catch(e) {
       // print(e);
       rethrow;
     }

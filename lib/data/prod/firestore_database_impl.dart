@@ -371,7 +371,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .doc(visitedUserId)
           .get();
       return followingDoc.exists;
-    } on Exception {
+    } catch (e) {
       return false;
     }
   }
@@ -1329,7 +1329,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       final services = userServicesSnapshot.docs.map(Service.fromDoc).toList();
 
       return services;
-    } on Exception {
+    } catch (e) {
       // print(e);
       return [];
     }

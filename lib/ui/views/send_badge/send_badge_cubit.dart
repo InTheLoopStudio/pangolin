@@ -55,8 +55,7 @@ class SendBadgeCubit extends Cubit<SendBadgeState> {
 
     state.formKey.currentState!.save();
 
-    if (state.formKey.currentState!.validate() &&
-        !state.status.isInProgress) {
+    if (state.formKey.currentState!.validate() && !state.status.isInProgress) {
       emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
 
       // Send badgeImage to storage
@@ -94,7 +93,7 @@ class SendBadgeCubit extends Cubit<SendBadgeState> {
         await databaseRepository.createBadge(badge);
         await databaseRepository.sendBadge(badgeId, badgeReceiver.id);
         emit(state.copyWith(status: FormzSubmissionStatus.success));
-      } on Exception {
+      } catch (e) {
         emit(state.copyWith(status: FormzSubmissionStatus.success));
       } finally {
         navigationBloc.add(const Pop());

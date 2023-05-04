@@ -202,7 +202,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
                 hasReachedMaxLoops: false,
               ),
             );
-    } on Exception {
+    } catch (e) {
       // emit(state.copyWith(loopStatus: LoopsStatus.failure));
     }
   }
@@ -229,7 +229,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
                 hasReachedMaxBadges: false,
               ),
             );
-    } on Exception {
+    } catch (e) {
       // emit(state.copyWith(badgeStatus: BadgesStatus.failure));
     }
   }
@@ -257,7 +257,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
                 hasReachedMaxUserCreatedBadges: false,
               ),
             );
-    } on Exception {
+    } catch (e) {
       // emit(
       //   state.copyWith(
       //     userCreatedBadgeStatus: UserCreatedBadgesStatus.failure,

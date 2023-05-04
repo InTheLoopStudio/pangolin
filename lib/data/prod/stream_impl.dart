@@ -31,7 +31,7 @@ class StreamImpl extends StreamRepository {
           // user.streamChatToken,
         );
         _connected = true;
-      } on Exception {
+      } catch (e) {
         _connected = false;
       }
     }
@@ -56,7 +56,7 @@ class StreamImpl extends StreamRepository {
         ),
       );
       return chatUsers;
-    } on Exception {
+    } catch (e) {
       return [];
     }
   }

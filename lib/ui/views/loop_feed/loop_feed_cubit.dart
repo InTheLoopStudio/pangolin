@@ -92,7 +92,7 @@ class LoopFeedCubit extends Cubit<LoopFeedState> {
                 hasReachedMax: false,
               ),
             );
-    } on Exception {
+    } catch (e) {
       emit(state.copyWith(status: LoopFeedStatus.failure));
     }
   }

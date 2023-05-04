@@ -78,7 +78,7 @@ class SettingsCubit extends Cubit<SettingsState> {
           ? await places.getPlaceById(currentUser.placeId!)
           : null;
       emit(state.copyWith(place: place));
-    } on Exception {
+    } catch (e) {
       emit(state.copyWith(place: null));
     }
   }
@@ -188,7 +188,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       if (imageFile != null) {
         emit(state.copyWith(profileImage: File(imageFile.path)));
       }
-    } on Exception {
+    } catch (e) {
       // print(error);
     }
   }
@@ -274,7 +274,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       emit(
         state.copyWith(status: FormzSubmissionStatus.success),
       );
-    } on Exception {
+    } catch (e) {
       // print(e);
       emit(
         state.copyWith(status: FormzSubmissionStatus.failure),
@@ -297,7 +297,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       emit(
         state.copyWith(status: FormzSubmissionStatus.success),
       );
-    } on Exception {
+    } catch (e) {
       // print(e);
       emit(
         state.copyWith(status: FormzSubmissionStatus.failure),
@@ -323,7 +323,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       emit(
         state.copyWith(status: FormzSubmissionStatus.success),
       );
-    } on Exception {
+    } catch (e) {
       // print(e);
       emit(
         state.copyWith(status: FormzSubmissionStatus.failure),

@@ -94,7 +94,7 @@ class UserModel extends Equatable {
         _$AccountTypeEnumMap,
         doc.getOrElse('accountType', 'free'),
       );
-    } on Exception {
+    } catch (e) {
       accountType = AccountType.free;
     }
 

@@ -142,7 +142,7 @@ class Linkify extends StatelessWidget {
 
                   nav.add(PushProfile(user.id));
                 }
-              } on Exception {
+              } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('User not found'),
