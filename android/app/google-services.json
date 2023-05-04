@@ -38,6 +38,14 @@
           }
         },
         {
+          "client_id": "269420857313-iu0c8s1bg6f3846eh6k23gj87fdvflgq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.intheloopstudio",
+            "certificate_hash": "d63982bf2ccabc50329c90727222ae58f9206b1b"
+          }
+        },
+        {
           "client_id": "269420857313-nata1skq9ma5122b8gqqhdk3p30hrd49.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
