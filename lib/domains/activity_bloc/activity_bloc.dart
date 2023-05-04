@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
@@ -52,24 +53,30 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
   ) async {
     emit(const ActivityInitial());
 
-    final activitiesAvailable = (await databaseRepository.getActivities(
-      currentUserId,
-      limit: 1,
-    ))
-        .isNotEmpty;
+    try {
+      final activitiesAvailable = (await databaseRepository.getActivities(
+        currentUserId,
+        limit: 1,
+      ))
+          .isNotEmpty;
 
-    if (!activitiesAvailable) {
-      emit(const ActivitySuccess());
-    }
+      if (!activitiesAvailable) {
+        emit(const ActivitySuccess());
+      }
 
-    final activityStream = databaseRepository.activitiesObserver(currentUserId);
+      final activityStream =
+          databaseRepository.activitiesObserver(currentUserId);
 
-    await for (final activity in activityStream) {
-      emit(
-        ActivitySuccess(
-          activities: List.of(state.activities)..add(activity),
-        ),
-      );
+      await for (final activity in activityStream) {
+        emit(
+          ActivitySuccess(
+            activities: List.of(state.activities)..add(activity),
+          ),
+        );
+      }
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+      emit(const ActivityFailure());
     }
   }
 
@@ -93,7 +100,8 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
                 activities: List.of(state.activities)..addAll(activities),
               ),
             );
-    } catch (e) {
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
       emit(const ActivityFailure());
     }
   }
@@ -102,19 +110,22 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
     Emitter<ActivityState> emit,
     Activity activity,
   ) async {
-    final idx = state.activities.indexOf(activity);
-    final updatedActivity = activity.copyWith(markedRead: true);
+    try {
+      final idx = state.activities.indexOf(activity);
+      final updatedActivity = activity.copyWith(markedRead: true);
 
-    if (idx != -1) {
-      emit(
-        ActivitySuccess(
-          activities: state.activities..[idx] = updatedActivity,
-        ),
-      );
+      if (idx != -1) {
+        emit(
+          ActivitySuccess(
+            activities: state.activities..[idx] = updatedActivity,
+          ),
+        );
+      }
+
+      await databaseRepository.markActivityAsRead(updatedActivity);
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+      emit(const ActivityFailure());
     }
-
-    await databaseRepository.markActivityAsRead(updatedActivity);
-
-    return;
   }
 }
