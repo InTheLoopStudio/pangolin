@@ -470,21 +470,24 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       final documentSnapshot = await _loopsRef.doc(lastLoopId).get();
 
       final userLoopsSnapshot = await _loopsRef
+          .where('deleted', isNotEqualTo: true)
+          .orderBy('deleted', descending: true)
           .orderBy('timestamp', descending: true)
           .where('userId', isEqualTo: userId)
-          // .where('deleted', isNotEqualTo: true)
           .limit(limit)
           .startAfterDocument(documentSnapshot)
           .get();
 
       final userLoops = userLoopsSnapshot.docs
           .map(Loop.fromDoc)
-          .where((loop) => loop.deleted != true)
+          .where((loop) => !loop.deleted)
           .toList();
 
       return userLoops;
     } else {
       final userLoopsSnapshot = await _loopsRef
+          .where('deleted', isNotEqualTo: true)
+          .orderBy('deleted', descending: true)
           .orderBy('timestamp', descending: true)
           .where('userId', isEqualTo: userId)
           .limit(limit)
@@ -492,7 +495,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       final userLoops = userLoopsSnapshot.docs
           .map(Loop.fromDoc)
-          .where((loop) => loop.deleted != true)
+          .where((loop) => !loop.deleted)
           .toList();
 
       return userLoops;
@@ -505,9 +508,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     int limit = 100,
   }) async* {
     final userLoopsSnapshotObserver = _loopsRef
+        .where('deleted', isNotEqualTo: true)
+        .orderBy('deleted', descending: true)
         .where('userId', isEqualTo: userId)
         .orderBy('timestamp', descending: true)
-        // .where('deleted', isNotEqualTo: true)
         .limit(limit)
         .snapshots();
 
@@ -624,8 +628,9 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       final documentSnapshot = await _loopsRef.doc(lastLoopId).get();
 
       final allLoopsDocs = await _loopsRef
+          .where('deleted', isNotEqualTo: true)
+          .orderBy('deleted', descending: true)
           .orderBy('timestamp', descending: true)
-          // .where('deleted', isNotEqualTo: true)
           .limit(limit)
           .startAfterDocument(documentSnapshot)
           .get();
@@ -661,8 +666,9 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     bool ignoreCache = true,
   }) async* {
     final allLoopsSnapshotObserver = _loopsRef
+        .where('deleted', isNotEqualTo: true)
+        .orderBy('deleted', descending: true)
         .orderBy('timestamp', descending: true)
-        // .where('deleted', isNotEqualTo: true)
         .limit(limit)
         .snapshots();
 

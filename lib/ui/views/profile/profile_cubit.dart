@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
@@ -173,7 +174,8 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
           ? await places.getPlaceById(visitedUser.placeId!)
           : null;
       emit(state.copyWith(place: place));
-    } on Exception {
+    } on Exception catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
       emit(state.copyWith(place: null));
     }
   }
