@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
@@ -116,31 +117,36 @@ class FirebaseAuthImpl extends AuthRepository {
 
   @override
   Future<String> signInWithGoogle() async {
-    // Trigger the authentication flow
-    final googleUser = await GoogleSignIn().signIn();
+    try {
+      // Trigger the authentication flow
+      final googleUser = await GoogleSignIn().signIn();
 
-    // Obtain the auth details from the request
-    final googleAuth = await googleUser!.authentication;
+      // Obtain the auth details from the request
+      final googleAuth = await googleUser?.authentication;
 
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    // Once signed in, return the UserCredential
-    final authResult = await _auth.signInWithCredential(credential);
-
-    final signedInUser = authResult.user;
-
-    if (signedInUser != null) {
-      await _analytics.setUserId(id: signedInUser.uid);
-      await _analytics.logEvent(
-        name: 'sign_in',
-        parameters: {'provider': 'Google'},
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
       );
 
-      return signedInUser.uid;
+      // Once signed in, return the UserCredential
+      final authResult = await _auth.signInWithCredential(credential);
+
+      final signedInUser = authResult.user;
+
+      if (signedInUser != null) {
+        await _analytics.setUserId(id: signedInUser.uid);
+        await _analytics.logEvent(
+          name: 'sign_in',
+          parameters: {'provider': 'Google'},
+        );
+
+        return signedInUser.uid;
+      }
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+      rethrow;
     }
 
     return '';
@@ -148,20 +154,25 @@ class FirebaseAuthImpl extends AuthRepository {
 
   @override
   Future<void> reauthenticateWithGoogle() async {
-    // Trigger the authentication flow
-    final googleUser = await GoogleSignIn().signIn();
+    try {
+      // Trigger the authentication flow
+      final googleUser = await GoogleSignIn().signIn();
 
-    // Obtain the auth details from the request
-    final googleAuth = await googleUser!.authentication;
+      // Obtain the auth details from the request
+      final googleAuth = await googleUser?.authentication;
 
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
 
-    // Reauthenticate
-    await _auth.currentUser?.reauthenticateWithCredential(credential);
+      // Reauthenticate
+      await _auth.currentUser?.reauthenticateWithCredential(credential);
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+      rethrow;
+    }
   }
 
   @override
