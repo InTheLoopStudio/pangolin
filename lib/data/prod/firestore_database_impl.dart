@@ -153,7 +153,9 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
             );
       } on FirebaseException {
         userSnapshot = await _usersRef.doc(userId).get();
-      } catch (e, s) {}
+      } catch (e, s) {
+        await FirebaseCrashlytics.instance.recordError(e, s);
+      }
     }
 
     userSnapshot ??= await _usersRef.doc(userId).get();
@@ -295,30 +297,46 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<int> followersNum(String userid) async {
-    final followersSnapshot =
-        await _followersRef.doc(userid).collection('Followers').get();
+    try {
+      final followersSnapshot =
+          await _followersRef.doc(userid).collection('Followers').get();
 
-    return followersSnapshot.docs.length;
+      return followersSnapshot.docs.length;
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+      return 0;
+    }
   }
 
   @override
   Future<int> followingNum(String userid) async {
-    final followingSnapshot =
-        await _followingRef.doc(userid).collection('Following').get();
+    try {
+      final followingSnapshot =
+          await _followingRef.doc(userid).collection('Following').get();
 
-    return followingSnapshot.docs.length;
+      return followingSnapshot.docs.length;
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+      return 0;
+    }
   }
 
   @override
   Future<void> updateUserData(UserModel user) async {
-    await _analytics.logEvent(name: 'user_data_update');
-    final isUsernameAvailable =
-        await checkUsernameAvailability(user.username.toString(), user.id);
-    if (!isUsernameAvailable) {
-      throw HandleAlreadyExistsException('username availability check failed');
-    }
+    try {
+      await _analytics.logEvent(name: 'user_data_update');
+      final isUsernameAvailable =
+          await checkUsernameAvailability(user.username.toString(), user.id);
+      if (!isUsernameAvailable) {
+        throw HandleAlreadyExistsException(
+          'username availability check failed',
+        );
+      }
 
-    await _usersRef.doc(user.id).set(user.toMap());
+      await _usersRef.doc(user.id).set(user.toMap());
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
   }
 
   @override
@@ -326,18 +344,22 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String currentUserId,
     String visitedUserId,
   ) async {
-    await _analytics.logEvent(
-      name: 'follow_user',
-      parameters: {
-        'follower': currentUserId,
-        'followee': visitedUserId,
-      },
-    );
-    await _followingRef
-        .doc(currentUserId)
-        .collection('Following')
-        .doc(visitedUserId)
-        .set({});
+    try {
+      await _analytics.logEvent(
+        name: 'follow_user',
+        parameters: {
+          'follower': currentUserId,
+          'followee': visitedUserId,
+        },
+      );
+      await _followingRef
+          .doc(currentUserId)
+          .collection('Following')
+          .doc(visitedUserId)
+          .set({});
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
   }
 
   @override
@@ -345,24 +367,28 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String currentUserId,
     String visitedUserId,
   ) async {
-    await _analytics.logEvent(
-      name: 'unfollow_user',
-      parameters: {
-        'follower': currentUserId,
-        'followed': visitedUserId,
-      },
-    );
-    final doc = await _followingRef
-        .doc(currentUserId)
-        .collection('Following')
-        .doc(visitedUserId)
-        .get();
+    try {
+      await _analytics.logEvent(
+        name: 'unfollow_user',
+        parameters: {
+          'follower': currentUserId,
+          'followed': visitedUserId,
+        },
+      );
+      final doc = await _followingRef
+          .doc(currentUserId)
+          .collection('Following')
+          .doc(visitedUserId)
+          .get();
 
-    if (!doc.exists) {
-      return;
+      if (!doc.exists) {
+        return;
+      }
+
+      await doc.reference.delete();
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
     }
-
-    await doc.reference.delete();
   }
 
   @override
