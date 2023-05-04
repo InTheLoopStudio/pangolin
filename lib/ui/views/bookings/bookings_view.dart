@@ -63,7 +63,7 @@ class BookingsView extends StatelessWidget {
                               ),
                             ),
                             icon: const Icon(
-                              CupertinoIcons.bubble_right,
+                              CupertinoIcons.bubble_right_fill,
                             ),
                           ),
                         ],

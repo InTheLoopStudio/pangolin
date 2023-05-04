@@ -59,8 +59,13 @@ Future<void> main() async {
   PlatformDispatcher.instance.onError = (error, stack) {
     try {
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-    } catch (e) {
-      // print('Failed to report error to Firebase Crashlytics: $e');
+    } catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(
+        e,
+        s,
+        reason: 'PlatformDispatcher.instance.onError',
+      );
+      print('Failed to report error to Firebase Crashlytics: $e');
     }
     return true;
   };
