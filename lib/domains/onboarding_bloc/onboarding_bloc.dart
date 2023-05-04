@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
@@ -20,7 +21,10 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
         emit(Onboarded(user));
       }
     });
-    on<FinishOnboarding>((event, emit) => emit(Onboarded(event.user)));
+    on<FinishOnboarding>((event, emit) {
+      FirebaseCrashlytics.instance.setUserIdentifier(event.user.id);
+      emit(Onboarded(event.user));
+    });
     on<UpdateOnboardedUser>((event, emit) async {
       // emit new user in state
       emit(Onboarded(event.user));

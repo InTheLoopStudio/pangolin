@@ -59,13 +59,14 @@ Future<void> main() async {
   PlatformDispatcher.instance.onError = (error, stack) {
     try {
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-    } on Exception  {
+    } on Exception {
       // print('Failed to report error to Firebase Crashlytics: $e');
-    } 
+    }
 
     return true;
   };
 
+  bool weWantFatalErrorRecording = true;
   // Keep the app in portrait mode (no landscape)
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -154,7 +155,7 @@ class TappedApp extends StatelessWidget {
 
                         return BlocBuilder<OnboardingBloc, OnboardingState>(
                           builder: (context, onboardState) {
-                          if (onboardState is Onboarded) {
+                            if (onboardState is Onboarded) {
                               return const ShellView();
                             } else if (onboardState is Onboarding) {
                               return const OnboardingView();
