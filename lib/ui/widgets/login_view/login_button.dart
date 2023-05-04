@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/views/login/login_cubit.dart';
 
@@ -10,7 +11,17 @@ class LoginButton extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
         return CupertinoButton.filled(
-          onPressed: () => context.read<LoginCubit>().signInWithCredentials(),
+          onPressed: () async {
+            try {
+              await context.read<LoginCubit>().signInWithCredentials();
+            } catch (e) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(e.toString()),
+                ),
+              );
+            }
+          },
           child: const Text('Login'),
         );
       },

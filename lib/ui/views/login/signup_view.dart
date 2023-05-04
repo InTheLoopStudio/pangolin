@@ -40,9 +40,8 @@ class SignUpView extends StatelessWidget {
                       ),
                       const SizedBox(height: 50),
                       EmailTextField(
-                        onChanged: (input) => context
-                            .read<LoginCubit>()
-                            .updateEmail(input ?? ''),
+                        onChanged: (input) =>
+                            context.read<LoginCubit>().updateEmail(input ?? ''),
                       ),
                       const SizedBox(
                         height: 10,
@@ -56,7 +55,7 @@ class SignUpView extends StatelessWidget {
                         height: 10,
                       ),
                       PasswordTextField(
-                        labelText: 'Confirm Password', 
+                        labelText: 'Confirm Password',
                         onChanged: (input) => context
                             .read<LoginCubit>()
                             .updateConfirmPassword(input ?? ''),
@@ -72,14 +71,32 @@ class SignUpView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           GoogleLoginButton(
-                            onPressed:
-                                context.read<LoginCubit>().signInWithGoogle,
+                            onPressed: () async {
+                              try {
+                                await context.read<LoginCubit>().signInWithGoogle();
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(e.toString()),
+                                  ),
+                                );
+                              }
+                            },
                           ),
                           const SizedBox(width: 20),
                           if (Platform.isIOS)
                             AppleLoginButton(
-                              onPressed:
-                                  context.read<LoginCubit>().signInWithApple,
+                              onPressed: () async {
+                                try {
+                                  await context.read<LoginCubit>().signInWithApple();
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(e.toString()),
+                                    ),
+                                  );
+                                }
+                              },
                             )
                           else
                             const SizedBox.shrink(),

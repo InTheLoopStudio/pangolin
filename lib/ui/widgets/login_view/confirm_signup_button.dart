@@ -12,9 +12,9 @@ class ConfirmSignUpButton extends StatelessWidget {
       builder: (context, state) {
         return CupertinoButton.filled(
           child: const Text('Sign Up'),
-          onPressed: () {
+          onPressed: () async {
             try {
-              context.read<LoginCubit>().signUpWithCredentials();
+              await context.read<LoginCubit>().signUpWithCredentials();
             } catch (e) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(

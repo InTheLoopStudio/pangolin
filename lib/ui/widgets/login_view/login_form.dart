@@ -54,12 +54,38 @@ class LoginFormState extends State<LoginForm> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GoogleLoginButton(
-                      onPressed: context.read<LoginCubit>().signInWithGoogle,
+                      onPressed: () async {
+                        try {
+                          await context.read<LoginCubit>().signInWithGoogle();
+                        } catch (e) {
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(
+                              const SnackBar(
+                                backgroundColor: Colors.redAccent,
+                                content: Text('Authentication Failure'),
+                              ),
+                            );
+                        }
+                      },
                     ),
                     const SizedBox(width: 20),
                     if (Platform.isIOS)
                       AppleLoginButton(
-                        onPressed: context.read<LoginCubit>().signInWithApple,
+                        onPressed: () async {
+                          try {
+                            await context.read<LoginCubit>().signInWithApple();
+                          } catch (e) {
+                            ScaffoldMessenger.of(context)
+                              ..hideCurrentSnackBar()
+                              ..showSnackBar(
+                                const SnackBar(
+                                  backgroundColor: Colors.redAccent,
+                                  content: Text('Authentication Failure'),
+                                ),
+                              );
+                          }
+                        },
                       )
                     else
                       const SizedBox.shrink(),
