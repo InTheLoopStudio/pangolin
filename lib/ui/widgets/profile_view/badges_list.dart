@@ -59,15 +59,13 @@ class BadgesListState extends State<BadgesList> {
       builder: (context, state) {
         switch (state.badgeStatus) {
           case BadgesStatus.initial:
-            return const EasterEggPlaceholder(
-              text: 'Waiting for new badges...',
-            );
+            return const Text('Waiting for new badges...');
           case BadgesStatus.failure:
             return const Center(child: Text('failed to fetch badges'));
 
           case BadgesStatus.success:
             if (state.userBadges.isEmpty || state.visitedUser.deleted) {
-              return const EasterEggPlaceholder(text: 'No Badges Yet');
+              return const  Text('No Badges Yet');
             }
 
             return CustomScrollView(
