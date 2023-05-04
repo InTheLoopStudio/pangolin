@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 // ignore: unused_import
 import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -41,7 +42,8 @@ class CloudMessagingImpl extends NotificationRepository {
             'token': token,
             'platform': Platform.operatingSystem,
           });
-        } catch (e) {
+        } catch (e, s) {
+          await FirebaseCrashlytics.instance.recordError(e, s);
           // print('Saving device token failed');
         }
       }
