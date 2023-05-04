@@ -79,7 +79,7 @@ class DeleteAccountButton extends StatelessWidget {
                 TextButton(
                   onPressed: Navigator.of(context).pop,
                   child: const Text('Cancel'),
-                )
+                ),
               ],
             ),
           ),

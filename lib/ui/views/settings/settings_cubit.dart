@@ -270,7 +270,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     );
     try {
       await authRepository.reauthenticateWithGoogle();
-      deleteUser();
+      await deleteUser();
       emit(
         state.copyWith(status: FormzSubmissionStatus.success),
       );
@@ -293,7 +293,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     );
     try {
       await authRepository.reauthenticateWithApple();
-      deleteUser();
+      await deleteUser();
       emit(
         state.copyWith(status: FormzSubmissionStatus.success),
       );
@@ -319,7 +319,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         state.email,
         state.password,
       );
-      deleteUser();
+      await deleteUser();
       emit(
         state.copyWith(status: FormzSubmissionStatus.success),
       );
@@ -336,8 +336,8 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
   }
 
-  void deleteUser() {
-    authRepository.deleteUser();
+  Future<void> deleteUser() async {
+    await authRepository.deleteUser();
     authenticationBloc.add(LoggedOut());
     navigationBloc
       ..add(const Pop())
