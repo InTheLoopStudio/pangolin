@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
@@ -118,10 +119,12 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
             lng: latLng?.lng,
           );
           // print('RESULTS: $searchRes');
-          emit(state.copyWith(
-            searchResults: searchRes,
-            loading: false,
-          ),);
+          emit(
+            state.copyWith(
+              searchResults: searchRes,
+              loading: false,
+            ),
+          );
         } else {
           //wait.. Because user still writing..        print('Not Now');
           // print('Not Now');
@@ -153,14 +156,19 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           // input hasn't changed in the last 500 milliseconds..
           // you can start search
           // print('Now !!! search term : ${state.searchTerm}');
-          final searchRes = await searchRepository.queryLoops(state.searchTerm);
-          // print('RESULTS: $searchRes');
-          emit(
-            state.copyWith(
-              loopSearchResults: searchRes,
-              loading: false,
-            ),
-          );
+          try {
+            final searchRes =
+                await searchRepository.queryLoops(state.searchTerm);
+            // print('RESULTS: $searchRes');
+            emit(
+              state.copyWith(
+                loopSearchResults: searchRes,
+                loading: false,
+              ),
+            );
+          } catch (e, s) {
+            await FirebaseCrashlytics.instance.recordError(e, s);
+          }
         } else {
           //wait.. Because user still writing..        print('Not Now');
           // print('Not Now');

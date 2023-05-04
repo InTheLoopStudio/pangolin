@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
@@ -30,41 +31,45 @@ class LoopFeedCubit extends Cubit<LoopFeedState> {
   StreamSubscription<Loop>? loopListener;
 
   Future<void> initLoops({bool clearLoops = true}) async {
-    await loopListener?.cancel();
-    if (clearLoops) {
-      emit(
-        state.copyWith(
-          status: LoopFeedStatus.initial,
-          loops: [],
-          hasReachedMax: false,
-        ),
-      );
-    }
+    try {
+      await loopListener?.cancel();
+      if (clearLoops) {
+        emit(
+          state.copyWith(
+            status: LoopFeedStatus.initial,
+            loops: [],
+            hasReachedMax: false,
+          ),
+        );
+      }
 
-    final loopsAvailable = await sourceFunction(
-      currentUserId,
-      limit: 1,
-    );
-    if (loopsAvailable.isEmpty) {
-      emit(state.copyWith(status: LoopFeedStatus.success));
-    }
-
-    loopListener = sourceStream(
-      currentUserId,
-      ignoreCache: true,
-    ).listen((Loop event) {
-      // print('loop { ${event.id} : ${event.title} }');
-      emit(
-        state.copyWith(
-          status: LoopFeedStatus.success,
-          loops: List.of(state.loops)
-            ..add(event)
-            ..sort(
-              (a, b) => b.timestamp.compareTo(a.timestamp),
-            ),
-        ),
+      final loopsAvailable = await sourceFunction(
+        currentUserId,
+        limit: 1,
       );
-    });
+      if (loopsAvailable.isEmpty) {
+        emit(state.copyWith(status: LoopFeedStatus.success));
+      }
+
+      loopListener = sourceStream(
+        currentUserId,
+        ignoreCache: true,
+      ).listen((Loop event) {
+        // print('loop { ${event.id} : ${event.title} }');
+        emit(
+          state.copyWith(
+            status: LoopFeedStatus.success,
+            loops: List.of(state.loops)
+              ..add(event)
+              ..sort(
+                (a, b) => b.timestamp.compareTo(a.timestamp),
+              ),
+          ),
+        );
+      });
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
   }
 
   Future<void> fetchMoreLoops() async {

@@ -279,11 +279,6 @@ class SettingsCubit extends Cubit<SettingsState> {
       emit(
         state.copyWith(status: FormzSubmissionStatus.failure),
       );
-      // ignore: avoid_catching_errors
-    } on NoSuchMethodError {
-      emit(
-        state.copyWith(status: FormzSubmissionStatus.initial),
-      );
     }
   }
 
@@ -301,11 +296,6 @@ class SettingsCubit extends Cubit<SettingsState> {
       // print(e);
       emit(
         state.copyWith(status: FormzSubmissionStatus.failure),
-      );
-      // ignore: avoid_catching_errors
-    } on NoSuchMethodError {
-      emit(
-        state.copyWith(status: FormzSubmissionStatus.initial),
       );
     }
   }
@@ -327,11 +317,6 @@ class SettingsCubit extends Cubit<SettingsState> {
       // print(e);
       emit(
         state.copyWith(status: FormzSubmissionStatus.failure),
-      );
-      // ignore: avoid_catching_errors
-    } on NoSuchMethodError {
-      emit(
-        state.copyWith(status: FormzSubmissionStatus.initial),
       );
     }
   }

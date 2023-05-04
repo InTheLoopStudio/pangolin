@@ -152,6 +152,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
             );
       } on FirebaseException {
         userSnapshot = await _usersRef.doc(userId).get();
+      } catch (e, s) {
+        
       }
     }
 

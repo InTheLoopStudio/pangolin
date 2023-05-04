@@ -57,115 +57,131 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
       };
 
   Future<void> refetchVisitedUser({UserModel? newUserData}) async {
-    if (newUserData == null) {
-      final refreshedVisitedUser =
-          await databaseRepository.getUserById(state.visitedUser.id);
-      emit(state.copyWith(visitedUser: refreshedVisitedUser));
-    } else {
-      emit(state.copyWith(visitedUser: newUserData));
+    try {
+      if (newUserData == null) {
+        final refreshedVisitedUser =
+            await databaseRepository.getUserById(state.visitedUser.id);
+        emit(state.copyWith(visitedUser: refreshedVisitedUser));
+      } else {
+        emit(state.copyWith(visitedUser: newUserData));
+      }
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
     }
   }
 
   Future<void> initLoops({bool clearLoops = true}) async {
-    await loopListener?.cancel();
-    if (clearLoops) {
-      emit(
-        state.copyWith(
-          loopStatus: LoopsStatus.initial,
-          userLoops: [],
-          hasReachedMaxLoops: false,
-        ),
-      );
-    }
+    try {
+      await loopListener?.cancel();
+      if (clearLoops) {
+        emit(
+          state.copyWith(
+            loopStatus: LoopsStatus.initial,
+            userLoops: [],
+            hasReachedMaxLoops: false,
+          ),
+        );
+      }
 
-    final userLoops =
-        await databaseRepository.getUserLoops(visitedUser.id, limit: 1);
-    if (userLoops.isEmpty) {
-      emit(state.copyWith(loopStatus: LoopsStatus.success));
-    }
+      final userLoops =
+          await databaseRepository.getUserLoops(visitedUser.id, limit: 1);
+      if (userLoops.isEmpty) {
+        emit(state.copyWith(loopStatus: LoopsStatus.success));
+      }
 
-    loopListener = databaseRepository
-        .userLoopsObserver(visitedUser.id)
-        .listen((Loop event) {
-      // print('loop { ${event.id} : ${event.title} }');
-      emit(
-        state.copyWith(
-          loopStatus: LoopsStatus.success,
-          userLoops: List.of(state.userLoops)..add(event),
-        ),
-      );
-    });
+      loopListener = databaseRepository
+          .userLoopsObserver(visitedUser.id)
+          .listen((Loop event) {
+        // print('loop { ${event.id} : ${event.title} }');
+        emit(
+          state.copyWith(
+            loopStatus: LoopsStatus.success,
+            userLoops: List.of(state.userLoops)..add(event),
+          ),
+        );
+      });
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
   }
 
   Future<void> initBadges({bool clearBadges = true}) async {
-    await badgeListener?.cancel();
-    if (clearBadges) {
-      emit(
-        state.copyWith(
-          badgeStatus: BadgesStatus.initial,
-          userBadges: [],
-          hasReachedMaxBadges: false,
-        ),
-      );
-    }
+    try {
+      await badgeListener?.cancel();
+      if (clearBadges) {
+        emit(
+          state.copyWith(
+            badgeStatus: BadgesStatus.initial,
+            userBadges: [],
+            hasReachedMaxBadges: false,
+          ),
+        );
+      }
 
-    final badgesAvailable =
-        (await databaseRepository.getUserBadges(visitedUser.id, limit: 1))
-            .isNotEmpty;
-    if (!badgesAvailable) {
-      emit(state.copyWith(badgeStatus: BadgesStatus.success));
-    }
+      final badgesAvailable =
+          (await databaseRepository.getUserBadges(visitedUser.id, limit: 1))
+              .isNotEmpty;
+      if (!badgesAvailable) {
+        emit(state.copyWith(badgeStatus: BadgesStatus.success));
+      }
 
-    badgeListener = databaseRepository
-        .userBadgesObserver(visitedUser.id)
-        .listen((Badge event) {
-      // print('badge { ${event.id} : ${event.title} }');
-      emit(
-        state.copyWith(
-          badgeStatus: BadgesStatus.success,
-          userBadges: List.of(state.userBadges)..add(event),
-          hasReachedMaxBadges: state.userBadges.length < 10,
-        ),
-      );
-    });
+      badgeListener = databaseRepository
+          .userBadgesObserver(visitedUser.id)
+          .listen((Badge event) {
+        // print('badge { ${event.id} : ${event.title} }');
+        emit(
+          state.copyWith(
+            badgeStatus: BadgesStatus.success,
+            userBadges: List.of(state.userBadges)..add(event),
+            hasReachedMaxBadges: state.userBadges.length < 10,
+          ),
+        );
+      });
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
   }
 
   Future<void> initUserCreatedBadges({bool clearBadges = true}) async {
-    await userCreatedBadgeListener?.cancel();
+    try {
+      await userCreatedBadgeListener?.cancel();
 
-    if (clearBadges) {
-      emit(
-        state.copyWith(
-          userCreatedBadgeStatus: UserCreatedBadgesStatus.initial,
-          userCreatedBadges: [],
-          hasReachedMaxUserCreatedBadges: false,
-        ),
-      );
+      if (clearBadges) {
+        emit(
+          state.copyWith(
+            userCreatedBadgeStatus: UserCreatedBadgesStatus.initial,
+            userCreatedBadges: [],
+            hasReachedMaxUserCreatedBadges: false,
+          ),
+        );
+      }
+
+      final badgesAvailable = (await databaseRepository
+              .getUserCreatedBadges(visitedUser.id, limit: 1))
+          .isNotEmpty;
+      if (!badgesAvailable) {
+        emit(
+          state.copyWith(
+            userCreatedBadgeStatus: UserCreatedBadgesStatus.success,
+          ),
+        );
+      }
+
+      badgeListener = databaseRepository
+          .userCreatedBadgesObserver(visitedUser.id)
+          .listen((Badge event) {
+        // print('loop { ${event.id} : ${event.title} }');
+        emit(
+          state.copyWith(
+            userCreatedBadgeStatus: UserCreatedBadgesStatus.success,
+            userCreatedBadges: List.of(state.userCreatedBadges)..add(event),
+            hasReachedMaxUserCreatedBadges: state.userCreatedBadges.length < 10,
+          ),
+        );
+      });
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
     }
-
-    final badgesAvailable = (await databaseRepository
-            .getUserCreatedBadges(visitedUser.id, limit: 1))
-        .isNotEmpty;
-    if (!badgesAvailable) {
-      emit(
-        state.copyWith(
-          userCreatedBadgeStatus: UserCreatedBadgesStatus.success,
-        ),
-      );
-    }
-
-    badgeListener = databaseRepository
-        .userCreatedBadgesObserver(visitedUser.id)
-        .listen((Badge event) {
-      // print('loop { ${event.id} : ${event.title} }');
-      emit(
-        state.copyWith(
-          userCreatedBadgeStatus: UserCreatedBadgesStatus.success,
-          userCreatedBadges: List.of(state.userCreatedBadges)..add(event),
-          hasReachedMaxUserCreatedBadges: state.userCreatedBadges.length < 10,
-        ),
-      );
-    });
   }
 
   Future<void> initPlace() async {
@@ -176,7 +192,6 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
       emit(state.copyWith(place: place));
     } catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);
-      emit(state.copyWith(place: null));
     }
   }
 
@@ -202,7 +217,8 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
                 hasReachedMaxLoops: false,
               ),
             );
-    } catch (e) {
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
       // emit(state.copyWith(loopStatus: LoopsStatus.failure));
     }
   }
@@ -229,7 +245,8 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
                 hasReachedMaxBadges: false,
               ),
             );
-    } catch (e) {
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
       // emit(state.copyWith(badgeStatus: BadgesStatus.failure));
     }
   }
@@ -257,7 +274,8 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
                 hasReachedMaxUserCreatedBadges: false,
               ),
             );
-    } catch (e) {
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
       // emit(
       //   state.copyWith(
       //     userCreatedBadgeStatus: UserCreatedBadgesStatus.failure,
@@ -275,69 +293,95 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
   }
 
   Future<void> follow(String currentUserId, String visitedUserId) async {
-    emit(
-      state.copyWith(
-        followerCount: state.followerCount + 1,
-        isFollowing: true,
-      ),
-    );
-    await databaseRepository.followUser(currentUserId, visitedUserId);
+    try {
+      emit(
+        state.copyWith(
+          followerCount: state.followerCount + 1,
+          isFollowing: true,
+        ),
+      );
+      await databaseRepository.followUser(currentUserId, visitedUserId);
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
   }
 
   Future<void> unfollow(String currentUserId, String visitedUserId) async {
-    emit(
-      state.copyWith(
-        followerCount: state.followerCount - 1,
-        isFollowing: false,
-      ),
-    );
-    await databaseRepository.unfollowUser(currentUserId, visitedUserId);
+    try {
+      emit(
+        state.copyWith(
+          followerCount: state.followerCount - 1,
+          isFollowing: false,
+        ),
+      );
+      await databaseRepository.unfollowUser(currentUserId, visitedUserId);
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
   }
 
   Future<void> loadFollowing(String visitedUserId) async {
-    final followingCount = await databaseRepository.followingNum(visitedUserId);
+    try {
+      final followingCount =
+          await databaseRepository.followingNum(visitedUserId);
 
-    emit(
-      state.copyWith(
-        followingCount: followingCount,
-      ),
-    );
+      emit(
+        state.copyWith(
+          followingCount: followingCount,
+        ),
+      );
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
   }
 
   Future<void> loadFollower(String visitedUserId) async {
-    final followerCount = await databaseRepository.followersNum(visitedUserId);
+    try {
+      final followerCount =
+          await databaseRepository.followersNum(visitedUserId);
 
-    emit(
-      state.copyWith(
-        followerCount: followerCount,
-      ),
-    );
+      emit(
+        state.copyWith(
+          followerCount: followerCount,
+        ),
+      );
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
   }
 
   Future<void> loadIsFollowing(
     String currentUserId,
     String visitedUserId,
   ) async {
-    final isFollowing = await databaseRepository.isFollowingUser(
-      currentUserId,
-      visitedUserId,
-    );
+    try {
+      final isFollowing = await databaseRepository.isFollowingUser(
+        currentUserId,
+        visitedUserId,
+      );
 
-    emit(
-      state.copyWith(
-        isFollowing: isFollowing,
-      ),
-    );
+      emit(
+        state.copyWith(
+          isFollowing: isFollowing,
+        ),
+      );
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
   }
 
   Future<void> loadIsVerified(String visitedUserId) async {
-    final isVerified = await databaseRepository.isVerified(visitedUserId);
+    try {
+      final isVerified = await databaseRepository.isVerified(visitedUserId);
 
-    emit(
-      state.copyWith(
-        isVerified: isVerified,
-      ),
-    );
+      emit(
+        state.copyWith(
+          isVerified: isVerified,
+        ),
+      );
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
   }
 
   void deleteLoop(Loop loop) {
