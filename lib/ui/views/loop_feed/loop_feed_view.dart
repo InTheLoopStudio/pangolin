@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
 import 'package:intheloopapp/ui/views/common/loading/list_loading_view.dart';
@@ -46,12 +47,18 @@ class _LoopFeedViewState extends State<LoopFeedView>
   Widget build(BuildContext context) {
     super.build(context);
 
-    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
-      selector: (state) => state as Onboarded,
-      builder: (context, userState) {
+    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
+      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+      builder: (context, currentUser) {
+        if (currentUser == null) {
+          return const Center(
+            child: Text('An error has occured :/'),
+          );
+        }
+
         return BlocProvider(
           create: (context) => LoopFeedCubit(
-            currentUserId: userState.currentUser.id,
+            currentUserId: currentUser.id,
             sourceFunction: widget.sourceFunction,
             sourceStream: widget.sourceStream,
           )..initLoops(),

@@ -166,10 +166,14 @@ class BookingContainer extends StatelessWidget {
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
 
-    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
-      selector: (state) => state as Onboarded,
-      builder: (context, state) {
-        final currentUser = state.currentUser;
+    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
+      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+      builder: (context, currentUser) {
+        if (currentUser == null) {
+          return const Center(
+            child: Text('An error has occured :/'),
+          );
+        }
 
         return currentUser.id == booking.requesterId
             ? venueTile(databaseRepository)

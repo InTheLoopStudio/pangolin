@@ -392,12 +392,14 @@ class _ProfileViewState extends State<ProfileView> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
-        selector: (state) {
-          return state as Onboarded;
-        },
-        builder: (context, state) {
-          final currentUser = state.currentUser;
+      body: BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
+        selector: (state) => (state is Onboarded) ? state.currentUser : null,
+        builder: (context, currentUser) {
+          if (currentUser == null) {
+            return const Center(
+              child: Text('An error has occured :/'),
+            );
+          }
 
           return currentUser.id != visitedUserId
               ? FutureBuilder(

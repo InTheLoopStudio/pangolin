@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view_cubit.dart';
 import 'package:intheloopapp/ui/widgets/loop_view/follow_icon.dart';
@@ -15,10 +16,14 @@ class FollowActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
-      selector: (state) => state as Onboarded,
-      builder: (context, userState) {
-        final currentUser = userState.currentUser;
+    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
+      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+      builder: (context, currentUser) {
+        if (currentUser == null) {
+          return const Center(
+            child: Text('An error has occured :/'),
+          );
+        }
 
         return BlocBuilder<LoopViewCubit, LoopViewState>(
           builder: (context, state) {

@@ -31,10 +31,14 @@ class _UserTileState extends State<UserTile> {
 
     if (widget.user.deleted) return const SizedBox.shrink();
 
-    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
-      selector: (state) => state as Onboarded,
-      builder: (context, state) {
-        final currentUser = state.currentUser;
+    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
+      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+      builder: (context, currentUser) {
+        if (currentUser == null) {
+          return const Center(
+            child: Text('An error has occured :/'),
+          );
+        }
 
         return FutureBuilder<bool>(
           future: database.isVerified(widget.user.id),

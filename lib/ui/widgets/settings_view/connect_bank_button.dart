@@ -69,10 +69,15 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
   Widget build(BuildContext context) {
     final payments = RepositoryProvider.of<PaymentRepository>(context);
 
-    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
-      selector: (state) => state as Onboarded,
-      builder: (context, state) {
-        final currentUser = state.currentUser;
+    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
+      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+      builder: (context, currentUser) {
+        if (currentUser == null) {
+          return const Center(
+            child: Text('An error has occured :/'),
+          );
+        }
+
         if (currentUser.stripeConnectedAccountId == null) {
           return _connectBankAccountButton(
             payments: payments,

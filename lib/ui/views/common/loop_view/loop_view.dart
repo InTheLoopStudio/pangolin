@@ -34,10 +34,14 @@ class LoopView extends StatelessWidget {
         RepositoryProvider.of<DatabaseRepository>(context);
     final dynamic = RepositoryProvider.of<DynamicLinkRepository>(context);
 
-    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
-      selector: (state) => state as Onboarded,
-      builder: (context, authState) {
-        final currentUser = authState.currentUser;
+    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
+      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+      builder: (context, currentUser) {
+        if (currentUser == null) {
+          return const Center(
+            child: Text('An error has occured :/'),
+          );
+        }
 
         return FutureBuilder<UserModel?>(
           future: databaseRepository.getUserById(loop.userId),

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/settings/settings_cubit.dart';
 
@@ -26,10 +27,14 @@ class ChangeProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
-      selector: (state) => state as Onboarded,
-      builder: (context, userState) {
-        final user = userState.currentUser;
+    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
+      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+      builder: (context, currentUser) {
+        if (currentUser == null) {
+          return const Center(
+            child: Text('An error has occured :/'),
+          );
+        }
 
         return BlocBuilder<SettingsCubit, SettingsState>(
           builder: (context, state) {
@@ -42,7 +47,7 @@ class ChangeProfileImage extends StatelessWidget {
                     radius: 45,
                     backgroundImage: displayProfileImage(
                       state.profileImage,
-                      user.profilePicture,
+                      currentUser.profilePicture,
                     ),
                   ),
                   const CircleAvatar(

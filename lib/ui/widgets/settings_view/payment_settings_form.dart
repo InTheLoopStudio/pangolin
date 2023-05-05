@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:intheloopapp/domains/models/service.dart';
+import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/settings/settings_cubit.dart';
@@ -15,25 +16,20 @@ class PaymentSettingsForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
-      selector: (state) => state as Onboarded,
-      builder: (context, userState) {
-        return BlocBuilder<SettingsCubit, SettingsState>(
-          builder: (context, state) {
-            return Column(
-              children: [
-                const ConnectBankButton(),
-                const SizedBox(height: 20),
-                const ServicesList(),
-                if (state.status.isInProgress)
-                  const CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation(tappedAccent),
-                  )
-                else
-                  const SizedBox.shrink(),
-              ],
-            );
-          },
+    return BlocBuilder<SettingsCubit, SettingsState>(
+      builder: (context, state) {
+        return Column(
+          children: [
+            const ConnectBankButton(),
+            const SizedBox(height: 20),
+            const ServicesList(),
+            if (state.status.isInProgress)
+              const CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(tappedAccent),
+              )
+            else
+              const SizedBox.shrink(),
+          ],
         );
       },
     );

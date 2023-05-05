@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/service.dart';
+import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/common/tapped_app_bar.dart';
@@ -24,14 +25,20 @@ class CreateServiceView extends StatelessWidget {
   Widget build(BuildContext context) {
     final database = context.read<DatabaseRepository>();
     final nav = context.read<NavigationBloc>();
-    return BlocSelector<OnboardingBloc, OnboardingState, Onboarded>(
-      selector: (state) => state as Onboarded,
-      builder: (context, state) {
+    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
+      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+      builder: (context, currentUser) {
+        if (currentUser == null) {
+          return const Center(
+            child: Text('An error has occured :/'),
+          );
+        }
+
         return BlocProvider<CreateServiceCubit>(
           create: (context) => CreateServiceCubit(
             database: database,
             nav: nav,
-            currentUserId: state.currentUser.id,
+            currentUserId: currentUser.id,
           ),
           child: Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,
