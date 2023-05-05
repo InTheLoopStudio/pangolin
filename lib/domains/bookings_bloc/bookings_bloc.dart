@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
@@ -16,49 +17,61 @@ class BookingsBloc extends Bloc<BookingsEvent, BookingsState> {
       emit(const BookingsState());
     });
     on<FetchBookings>((event, emit) async {
-      final currentUserId =
-          (authenticationBloc.state as Authenticated).currentAuthUser.uid;
+      try {
+        final currentUserId =
+            (authenticationBloc.state as Authenticated).currentAuthUser.uid;
 
-      final requesterBookings =
-          await database.getBookingsByRequester(currentUserId);
+        final requesterBookings =
+            await database.getBookingsByRequester(currentUserId);
 
-      final requesteeBookings =
-          await database.getBookingsByRequestee(currentUserId);
+        final requesteeBookings =
+            await database.getBookingsByRequestee(currentUserId);
 
-      final bookings = requesteeBookings..addAll(requesterBookings);
+        final bookings = requesteeBookings..addAll(requesterBookings);
 
-      emit(
-        BookingsState(
-          bookings: bookings,
-        ),
-      );
+        emit(
+          BookingsState(
+            bookings: bookings,
+          ),
+        );
+      } catch (e, s) {
+        await FirebaseCrashlytics.instance.recordError(e, s);
+      }
     });
     on<ConfirmBooking>((event, emit) async {
-      final newBooking = event.booking.copyWith(
-        status: BookingStatus.confirmed,
-      );
-      final newBookings = state.bookings;
-      newBookings[newBookings.indexOf(event.booking)] = newBooking;
-      await database.updateBooking(newBooking);
-      emit(
-        BookingsState(
-          bookings: newBookings,
-        ),
-      );
+      try {
+        final newBooking = event.booking.copyWith(
+          status: BookingStatus.confirmed,
+        );
+        final newBookings = state.bookings;
+        newBookings[newBookings.indexOf(event.booking)] = newBooking;
+        await database.updateBooking(newBooking);
+        emit(
+          BookingsState(
+            bookings: newBookings,
+          ),
+        );
+      } catch (e, s) {
+        await FirebaseCrashlytics.instance.recordError(e, s);
+      }
     });
     on<DenyBooking>((event, emit) async {
-      final newBooking = event.booking.copyWith(
-        status: BookingStatus.canceled,
-      );
-      state.bookings[state.bookings.indexOf(event.booking)] = newBooking;
-      final newBookings = state.bookings;
-      newBookings[newBookings.indexOf(event.booking)] = newBooking;
-      await database.updateBooking(newBooking);
-      emit(
-        BookingsState(
-          bookings: newBookings,
-        ),
-      );
+      try {
+        final newBooking = event.booking.copyWith(
+          status: BookingStatus.canceled,
+        );
+        state.bookings[state.bookings.indexOf(event.booking)] = newBooking;
+        final newBookings = state.bookings;
+        newBookings[newBookings.indexOf(event.booking)] = newBooking;
+        await database.updateBooking(newBooking);
+        emit(
+          BookingsState(
+            bookings: newBookings,
+          ),
+        );
+      } catch (e, s) {
+        await FirebaseCrashlytics.instance.recordError(e, s);
+      }
     });
   }
 
