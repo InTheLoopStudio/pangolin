@@ -108,22 +108,29 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<void> createUser(UserModel user) async {
-    await _analytics.logEvent(name: 'onboarding_user');
+    try {
+      await _analytics.logEvent(name: 'onboarding_user');
 
-    final userAlreadyExists = (await _usersRef.doc(user.id).get()).exists;
-    if (userAlreadyExists) {
-      return;
+      final userAlreadyExists = (await _usersRef.doc(user.id).get()).exists;
+      if (userAlreadyExists) {
+        return;
+      }
+
+      final usernameAvailable = await checkUsernameAvailability(
+        user.username.toString(),
+        user.id,
+      );
+      if (!usernameAvailable) {
+        throw HandleAlreadyExistsException(
+          'username availability check failed',
+        );
+      }
+
+      await _usersRef.doc(user.id).set(user.toMap());
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+      rethrow;
     }
-
-    final usernameAvailable = await checkUsernameAvailability(
-      user.username.toString(),
-      user.id,
-    );
-    if (!usernameAvailable) {
-      throw HandleAlreadyExistsException('username availability check failed');
-    }
-
-    await _usersRef.doc(user.id).set(user.toMap());
   }
 
   @override

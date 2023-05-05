@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:formz/formz.dart';
@@ -65,35 +66,41 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
     if (!state.loading) {
       emit(state.copyWith(loading: true));
 
-      final profilePictureUrl = state.pickedPhoto != null
-          ? await storageRepository.uploadProfilePicture(
-              currentAuthUser.uid,
-              state.pickedPhoto!,
-            )
-          : null;
+      try {
+        final profilePictureUrl = state.pickedPhoto != null
+            ? await storageRepository.uploadProfilePicture(
+                currentAuthUser.uid,
+                state.pickedPhoto!,
+              )
+            : null;
 
-      final lat = state.place?.latLng?.lat;
-      final lng = state.place?.latLng?.lng;
-      final geohash =
-          (lat != null && lng != null) ? geocodeEncode(lat: lat, lng: lng) : '';
+        final lat = state.place?.latLng?.lat;
+        final lng = state.place?.latLng?.lng;
+        final geohash = (lat != null && lng != null)
+            ? geocodeEncode(lat: lat, lng: lng)
+            : null;
 
-      final emptyUser = UserModel.empty();
-      final currentUser = emptyUser.copyWith(
-        id: currentAuthUser.uid,
-        email: currentAuthUser.email,
-        username: Username.fromString(state.username),
-        artistName: state.artistName,
-        profilePicture: profilePictureUrl,
-        bio: state.bio,
-        placeId: Option.fromNullable(state.placeId),
-        geohash: Option.fromNullable(geohash),
-        lat: Option.fromNullable(lat),
-        lng: Option.fromNullable(lng),
-      );
+        final emptyUser = UserModel.empty();
+        final currentUser = emptyUser.copyWith(
+          id: currentAuthUser.uid,
+          email: currentAuthUser.email,
+          username: Username.fromString(state.username),
+          artistName: state.artistName,
+          profilePicture: profilePictureUrl,
+          bio: state.bio,
+          placeId: Option.fromNullable(state.placeId),
+          geohash: Option.fromNullable(geohash),
+          lat: Option.fromNullable(lat),
+          lng: Option.fromNullable(lng),
+        );
 
-      await databaseRepository.createUser(currentUser);
+        await databaseRepository.createUser(currentUser);
 
-      onboardingBloc.add(FinishOnboarding(user: currentUser));
+        onboardingBloc.add(FinishOnboarding(user: currentUser));
+      } catch (e, s) {
+        await FirebaseCrashlytics.instance.recordError(e, s);
+        emit(state.copyWith(loading: false));
+      }
     }
   }
 }
