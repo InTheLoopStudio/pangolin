@@ -36,7 +36,7 @@ class _BadgeReceiverTextFieldState extends State<BadgeReceiverTextField> {
             StackTrace.current,
           ); 
           return const Center(
-            child: Text('An error has occured :/'),
+            child: Text('An error has occured :/ the developer has been notified'),
           );
         }
         
