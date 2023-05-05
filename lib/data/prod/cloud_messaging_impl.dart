@@ -19,34 +19,38 @@ class CloudMessagingImpl extends NotificationRepository {
 
   @override
   Future<void> saveDeviceToken({required String userId}) async {
-    final settings = await fcm.requestPermission();
+    try {
+      final settings = await fcm.requestPermission();
 
-    // print('User granted permission: ${settings.authorizationStatus}');
+      // print('User granted permission: ${settings.authorizationStatus}');
 
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      final token = await fcm.getToken();
+      if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+        final token = await fcm.getToken();
 
-      // print('Device Token: ' + (token ?? ''));
+        // print('Device Token: ' + (token ?? ''));
 
-      if (token != null) {
-        try {
-          if (Platform.isIOS) {
-            // register the device with APN (Apple only)
-            await _client.addDevice(token, PushProvider.apn);
-          } else if (Platform.isAndroid) {
-            // register the device with Firebase (Android only)
-            await _client.addDevice(token, PushProvider.firebase);
+        if (token != null) {
+          try {
+            if (Platform.isIOS) {
+              // register the device with APN (Apple only)
+              await _client.addDevice(token, PushProvider.apn);
+            } else if (Platform.isAndroid) {
+              // register the device with Firebase (Android only)
+              await _client.addDevice(token, PushProvider.firebase);
+            }
+
+            await tokensRef.doc(userId).collection('tokens').doc(token).set({
+              'token': token,
+              'platform': Platform.operatingSystem,
+            });
+          } catch (e, s) {
+            await FirebaseCrashlytics.instance.recordError(e, s);
+            // print('Saving device token failed');
           }
-
-          await tokensRef.doc(userId).collection('tokens').doc(token).set({
-            'token': token,
-            'platform': Platform.operatingSystem,
-          });
-        } catch (e, s) {
-          await FirebaseCrashlytics.instance.recordError(e, s);
-          // print('Saving device token failed');
         }
       }
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
     }
   }
 }
