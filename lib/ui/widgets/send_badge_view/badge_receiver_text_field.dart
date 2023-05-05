@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,6 +31,10 @@ class _BadgeReceiverTextFieldState extends State<BadgeReceiverTextField> {
       selector: (state) => (state is Onboarded) ? state.currentUser : null,
       builder: (context, currentUser) {
         if (currentUser == null) {
+          FirebaseCrashlytics.instance.recordError(
+            'currentUser is null',
+            StackTrace.current,
+          ); 
           return const Center(
             child: Text('An error has occured :/'),
           );

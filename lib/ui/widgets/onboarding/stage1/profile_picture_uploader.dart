@@ -13,15 +13,12 @@ class ProfilePictureUploader extends StatelessWidget {
     File? newProfileImage,
     String currentProfileImage,
   ) {
-    if (newProfileImage == null) {
-      if (currentProfileImage.isEmpty) {
-        return const AssetImage('assets/default_avatar.png');
-      } else {
-        return CachedNetworkImageProvider(currentProfileImage);
-      }
-    } else {
+    if (newProfileImage != null) {
       return FileImage(newProfileImage);
     }
+    return currentProfileImage.isEmpty
+        ? const AssetImage('assets/default_avatar.png') as ImageProvider
+        : CachedNetworkImageProvider(currentProfileImage);
   }
 
   @override
