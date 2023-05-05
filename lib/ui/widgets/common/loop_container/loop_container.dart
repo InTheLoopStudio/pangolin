@@ -15,6 +15,7 @@ import 'package:intheloopapp/ui/widgets/common/loop_container/control_buttons.da
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/title_text.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/user_info.dart';
+import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 
 class LoopContainer extends StatefulWidget {
   const LoopContainer({
@@ -160,8 +161,12 @@ class _LoopContainerState extends State<LoopContainer>
       selector: (state) => (state is Onboarded) ? state.currentUser : null,
       builder: (context, currentUser) {
         if (currentUser == null) {
-          return const Center(
-            child: Text('An error has occured :/'),
+          return const ListTile(
+            leading: UserAvatar(
+              radius: 25,
+            ),
+            title: Text('ERROR'),
+            subtitle: Text("something isn't working right :/"),
           );
         }
 

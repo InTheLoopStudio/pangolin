@@ -5,6 +5,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
 import 'package:intheloopapp/ui/views/common/loading/list_loading_view.dart';
+import 'package:intheloopapp/ui/views/error/error_view.dart';
 import 'package:intheloopapp/ui/views/loop_feed/loop_feed_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container.dart';
 
@@ -51,9 +52,7 @@ class _LoopFeedViewState extends State<LoopFeedView>
       selector: (state) => (state is Onboarded) ? state.currentUser : null,
       builder: (context, currentUser) {
         if (currentUser == null) {
-          return const Center(
-            child: Text('An error has occured :/'),
-          );
+          return const ErrorView();
         }
 
         return BlocProvider(
@@ -90,7 +89,7 @@ class _LoopFeedViewState extends State<LoopFeedView>
                         key: PageStorageKey<String>(widget.feedKey),
                         slivers: [
                           SliverOverlapInjector(
-                            // This is the flip side of the 
+                            // This is the flip side of the
                             // SliverOverlapAbsorber
                             handle:
                                 NestedScrollView.sliverOverlapAbsorberHandleFor(

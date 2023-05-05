@@ -73,7 +73,8 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
       selector: (state) => (state is Onboarded) ? state.currentUser : null,
       builder: (context, currentUser) {
         if (currentUser == null) {
-          return const Center(
+          return const CupertinoButton.filled(
+            onPressed: null,
             child: Text('An error has occured :/'),
           );
         }

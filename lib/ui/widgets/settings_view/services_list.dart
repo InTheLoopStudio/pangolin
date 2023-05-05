@@ -1,8 +1,7 @@
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/domains/models/service.dart';
-import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/views/settings/settings_cubit.dart';
 import 'package:intheloopapp/ui/widgets/settings_view/create_service_button.dart';
 import 'package:intheloopapp/ui/widgets/settings_view/service_card.dart';
@@ -29,8 +28,23 @@ class ServicesList extends StatelessWidget {
                     return const CreateServiceButton();
                   }
 
-                  return ServiceCard(
-                    service: state.services[index-1],
+                  final service = state.services[index - 1];
+
+                  return badges.Badge(
+                    onTap: () => context.read<SettingsCubit>().removeService(
+                          service,
+                        ),
+                    badgeStyle: const badges.BadgeStyle(
+                      badgeColor: Color.fromARGB(255, 47, 47, 47),
+                    ),
+                    badgeContent: const Icon(
+                      Icons.close_outlined,
+                      color: Colors.white,
+                      size: 25,
+                    ),
+                    child: ServiceCard(
+                      service: service,
+                    ),
                   );
                 },
               ),

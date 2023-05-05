@@ -170,8 +170,12 @@ class BookingContainer extends StatelessWidget {
       selector: (state) => (state is Onboarded) ? state.currentUser : null,
       builder: (context, currentUser) {
         if (currentUser == null) {
-          return const Center(
-            child: Text('An error has occured :/'),
+          return const ListTile(
+            leading: UserAvatar(
+              radius: 25,
+            ),
+            title: Text('ERROR'),
+            subtitle: Text("something isn't working right :/"),
           );
         }
 

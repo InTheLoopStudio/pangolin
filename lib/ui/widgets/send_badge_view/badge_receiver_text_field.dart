@@ -34,12 +34,12 @@ class _BadgeReceiverTextFieldState extends State<BadgeReceiverTextField> {
           FirebaseCrashlytics.instance.recordError(
             'currentUser is null',
             StackTrace.current,
-          ); 
-          return const Center(
-            child: Text('An error has occured :/ the developer has been notified'),
+          );
+          return const Text(
+            'An error has occured :/ the developer has been notified',
           );
         }
-        
+
         return TextFormField(
           inputFormatters: [
             FilteringTextInputFormatter.allow(RegExp(r'[a-z0-9_\.\-\$]')),

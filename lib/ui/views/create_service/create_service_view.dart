@@ -7,6 +7,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/common/tapped_app_bar.dart';
 import 'package:intheloopapp/ui/views/create_service/create_service_cubit.dart';
+import 'package:intheloopapp/ui/views/error/error_view.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/rate_text_field.dart';
 import 'package:intheloopapp/ui/widgets/create_service_view/description_text_field.dart';
 import 'package:intheloopapp/ui/widgets/create_service_view/rate_type_selector.dart';
@@ -29,9 +30,7 @@ class CreateServiceView extends StatelessWidget {
       selector: (state) => (state is Onboarded) ? state.currentUser : null,
       builder: (context, currentUser) {
         if (currentUser == null) {
-          return const Center(
-            child: Text('An error has occured :/'),
-          );
+          return const ErrorView();
         }
 
         return BlocProvider<CreateServiceCubit>(

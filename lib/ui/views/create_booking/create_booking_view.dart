@@ -12,6 +12,7 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
 import 'package:intheloopapp/ui/views/create_booking/create_booking_cubit.dart';
+import 'package:intheloopapp/ui/views/error/error_view.dart';
 import 'package:intheloopapp/ui/widgets/common/user_tile.dart';
 import 'package:intheloopapp/ui/widgets/create_booking_view/create_booking_form.dart';
 import 'package:skeletons/skeletons.dart';
@@ -35,9 +36,7 @@ class CreateBookingView extends StatelessWidget {
       selector: (state) => (state is Onboarded) ? state.currentUser : null,
       builder: (context, currentUser) {
         if (currentUser == null) {
-          return const Center(
-            child: Text('An error has occured :/'),
-          );
+          return const ErrorView();
         }
 
         return FutureBuilder<double>(

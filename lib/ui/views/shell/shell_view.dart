@@ -4,6 +4,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/bookings/bookings_view.dart';
+import 'package:intheloopapp/ui/views/error/error_view.dart';
 import 'package:intheloopapp/ui/views/loops_feeds_list/loop_feeds_list_view.dart';
 import 'package:intheloopapp/ui/views/messaging/messaging_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
@@ -25,13 +26,13 @@ class ShellView extends StatefulWidget {
 class _ShellViewState extends State<ShellView> {
   late final FocusNode searchFocusNode;
 
-  @override 
+  @override
   void initState() {
     searchFocusNode = FocusNode();
     super.initState();
   }
 
-  @override 
+  @override
   void dispose() {
     searchFocusNode.dispose();
     super.dispose();
@@ -43,9 +44,7 @@ class _ShellViewState extends State<ShellView> {
       selector: (state) => (state is Onboarded) ? state.currentUser : null,
       builder: (context, currentUser) {
         if (currentUser == null) {
-          return const Center(
-            child: Text('An error has occured :/'),
-          );
+          return const ErrorView();
         }
 
         return BlocBuilder<NavigationBloc, NavigationState>(

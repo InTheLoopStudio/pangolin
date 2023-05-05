@@ -181,6 +181,14 @@ class SettingsCubit extends Cubit<SettingsState> {
     );
   }
 
+  void removeService(Service service) {
+    emit(
+      state.copyWith(
+        services: List.of(state.services)..remove(service),
+      ),
+    );
+  }
+
   Future<void> handleImageFromGallery() async {
     try {
       final imageFile =

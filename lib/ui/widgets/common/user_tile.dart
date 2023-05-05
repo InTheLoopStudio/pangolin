@@ -35,8 +35,12 @@ class _UserTileState extends State<UserTile> {
       selector: (state) => (state is Onboarded) ? state.currentUser : null,
       builder: (context, currentUser) {
         if (currentUser == null) {
-          return const Center(
-            child: Text('An error has occured :/'),
+          return const ListTile(
+            leading: UserAvatar(
+              radius: 25,
+            ),
+            title: Text('ERROR'),
+            subtitle: Text("something isn't working right :/"),
           );
         }
 
@@ -61,7 +65,9 @@ class _UserTileState extends State<UserTile> {
                       widget.showFollowButton
                   ? FutureBuilder<bool>(
                       future: database.isFollowingUser(
-                          currentUser.id, widget.user.id),
+                        currentUser.id,
+                        widget.user.id,
+                      ),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) return const SizedBox.shrink();
 

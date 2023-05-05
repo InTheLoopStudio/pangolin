@@ -11,6 +11,7 @@ import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/linkify.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
+import 'package:intheloopapp/ui/views/error/error_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/all_loops_list.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/badges_list.dart';
@@ -145,7 +146,8 @@ class _ProfileViewState extends State<ProfileView> {
               child: RefreshIndicator(
                 displacement: 20,
                 notificationPredicate: (notification) {
-                  // with NestedScrollView local(depth == 2) OverscrollNotification are not sent
+                  // with NestedScrollView local(depth == 2)
+                  // OverscrollNotification are not sent
                   if (notification is OverscrollNotification ||
                       Platform.isIOS) {
                     return notification.depth == 2;
@@ -396,9 +398,7 @@ class _ProfileViewState extends State<ProfileView> {
         selector: (state) => (state is Onboarded) ? state.currentUser : null,
         builder: (context, currentUser) {
           if (currentUser == null) {
-            return const Center(
-              child: Text('An error has occured :/'),
-            );
+            return const ErrorView();
           }
 
           return currentUser.id != visitedUserId

@@ -11,6 +11,7 @@ import 'package:intheloopapp/linkify.dart';
 import 'package:intheloopapp/ui/views/common/comments/comments_cubit.dart';
 import 'package:intheloopapp/ui/views/common/loading/loop_loading_view.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view_cubit.dart';
+import 'package:intheloopapp/ui/views/error/error_view.dart';
 import 'package:intheloopapp/ui/widgets/comments/comments_list.dart';
 import 'package:intheloopapp/ui/widgets/comments/comments_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/attachments.dart';
@@ -38,9 +39,7 @@ class LoopView extends StatelessWidget {
       selector: (state) => (state is Onboarded) ? state.currentUser : null,
       builder: (context, currentUser) {
         if (currentUser == null) {
-          return const Center(
-            child: Text('An error has occured :/'),
-          );
+          return const ErrorView();
         }
 
         return FutureBuilder<UserModel?>(
