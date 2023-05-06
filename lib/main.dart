@@ -117,11 +117,16 @@ class TappedApp extends StatelessWidget {
               navigatorObservers: <NavigatorObserver>[_observer],
               navigatorKey: _navigatorKey,
               builder: (context, widget) {
-                return StreamChat(
-                  client: _client,
-                  streamChatThemeData: streamTheme,
-                  child: widget,
-                );
+                try {
+                  return StreamChat(
+                    client: _client,
+                    streamChatThemeData: streamTheme,
+                    child: widget,
+                  );
+                } catch (e, s) {
+                  FirebaseCrashlytics.instance.recordError(e, s);
+                  return widget ?? Container();
+                }
               },
               home:
                   BlocBuilder<DownForMaintenanceBloc, DownForMaintenanceState>(
