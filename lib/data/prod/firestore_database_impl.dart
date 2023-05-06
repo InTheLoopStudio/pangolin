@@ -1377,6 +1377,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .collection('userServices')
           .doc(serviceId)
           .set({
+        'userId': userId,
         'deleted': true,
       });
     } catch (e, s) {
@@ -1405,8 +1406,11 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<Service>> getUserServices(String userId) async {
     try {
-      final userServicesSnapshot =
-          await _servicesRef.doc(userId).collection('userServices').get();
+      final userServicesSnapshot = await _servicesRef
+          .doc(userId)
+          .collection('userServices')
+          .where('deleted', isNotEqualTo: true)
+          .get();
 
       final services = userServicesSnapshot.docs.map(Service.fromDoc).toList();
 

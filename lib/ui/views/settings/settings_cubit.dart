@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
@@ -181,12 +182,21 @@ class SettingsCubit extends Cubit<SettingsState> {
     );
   }
 
-  void removeService(Service service) {
-    emit(
-      state.copyWith(
-        services: List.of(state.services)..remove(service),
-      ),
-    );
+  Future<void> removeService(Service service) async {
+    try {
+      await databaseRepository.deleteService(
+        currentUser.id,
+        service.id,
+      );
+      emit(
+        state.copyWith(
+          services: List.of(state.services)..remove(service),
+        ),
+      );
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+      rethrow;
+    }
   }
 
   Future<void> handleImageFromGallery() async {

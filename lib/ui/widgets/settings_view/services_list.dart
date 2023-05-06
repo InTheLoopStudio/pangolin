@@ -31,9 +31,19 @@ class ServicesList extends StatelessWidget {
                   final service = state.services[index - 1];
 
                   return badges.Badge(
-                    onTap: () => context.read<SettingsCubit>().removeService(
-                          service,
-                        ),
+                    onTap: () {
+                      try {
+                        context.read<SettingsCubit>().removeService(
+                              service,
+                            );
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Error removing service'),
+                          ),
+                        );
+                      }
+                    },
                     badgeStyle: const badges.BadgeStyle(
                       badgeColor: Color.fromARGB(255, 47, 47, 47),
                     ),
