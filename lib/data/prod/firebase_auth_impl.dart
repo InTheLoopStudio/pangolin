@@ -8,6 +8,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -83,7 +84,11 @@ class FirebaseAuthImpl extends AuthRepository {
 
       return uid;
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error(
+        'Error signing in with credentials',
+        error: e,
+        stackTrace: s,
+      );
       return null;
     }
   }
@@ -120,7 +125,11 @@ class FirebaseAuthImpl extends AuthRepository {
 
       return uid;
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error(
+        'Error signing up with credentials',
+        error: e,
+        stackTrace: s,
+      );
       return null;
     }
   }
@@ -163,7 +172,11 @@ class FirebaseAuthImpl extends AuthRepository {
         return signedInUser.uid;
       }
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error(
+        'error signing in with google',
+        error: e,
+        stackTrace: s,
+      );
       rethrow;
     }
 
@@ -196,7 +209,11 @@ class FirebaseAuthImpl extends AuthRepository {
       // Reauthenticate
       await _auth.currentUser?.reauthenticateWithCredential(credential);
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error(
+        'error reauthenticating with google',
+        error: e,
+        stackTrace: s,
+      );
       rethrow;
     }
   }

@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/data/search_repository.dart';
@@ -167,7 +168,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
               ),
             );
           } catch (e, s) {
-            await FirebaseCrashlytics.instance.recordError(e, s);
+            logger.error(
+              'Error searching loops',
+              error: e,
+              stackTrace: s,
+            );
           }
         } else {
           //wait.. Because user still writing..        print('Not Now');

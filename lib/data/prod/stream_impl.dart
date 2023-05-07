@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
@@ -19,7 +20,9 @@ class StreamImpl extends StreamRepository {
 
   @override
   Future<bool> connectUser(String userId) async {
+    logger.debug('connecting user to stream: $userId');
     if (!_connected) {
+      logger.debug('user is not already connected to stream...connecting');
       try {
         await _client.disconnectUser();
         final token = await getToken();
@@ -42,6 +45,7 @@ class StreamImpl extends StreamRepository {
   @override
   Future<List<UserModel>> getChatUsers() async {
     try {
+      logger.debug('getting chat users');
       final result = await _client.queryUsers();
       final chatUsers = await Future.wait(
         result.users
@@ -56,13 +60,15 @@ class StreamImpl extends StreamRepository {
         ),
       );
       return chatUsers;
-    } catch (e) {
+    } catch (e, s) {
+      logger.error('getChatUser', error: e, stackTrace: s);
       return [];
     }
   }
 
   @override
   Future<String> getToken() async {
+    logger.debug('getting stream token');
     final callable =
         _functions.httpsCallable('ext-auth-chat-getStreamUserToken');
 
@@ -70,6 +76,7 @@ class StreamImpl extends StreamRepository {
     final token = results.data;
 
     // print('TOKEN ' + token);
+    logger.debug('got stream token $token');
 
     return token;
 
@@ -128,6 +135,9 @@ class StreamImpl extends StreamRepository {
 
   @override
   Future<Channel> createSimpleChat(String? friendId) async {
+    logger.debug(
+      'createSimpleChat: ${_client.state.currentUser!.id} + $friendId',
+    );
     var channel = _client.channel('messaging');
 
     final res = await _client.queryChannelsOnline(
@@ -172,6 +182,7 @@ class StreamImpl extends StreamRepository {
 
   @override
   Future<void> logout() async {
+    logger.debug('logout of stream');
     return _client.disconnectUser();
   }
 

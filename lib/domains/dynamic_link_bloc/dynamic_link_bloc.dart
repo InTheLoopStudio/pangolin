@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/dynamic_link_repository.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -16,6 +17,7 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
     required this.databaseRepository,
   }) : super(DynamicLinkInitial()) {
     on<MonitorDynamicLinks>((event, emit) {
+      logger.debug('monitoring dynamic links');
       dynamicLinkRepository.getDynamicLinks().listen((event) async {
         // print('new dynamic link');
         switch (event.type) {

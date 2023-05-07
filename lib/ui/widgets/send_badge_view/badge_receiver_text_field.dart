@@ -2,6 +2,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
@@ -31,10 +32,7 @@ class _BadgeReceiverTextFieldState extends State<BadgeReceiverTextField> {
       selector: (state) => (state is Onboarded) ? state.currentUser : null,
       builder: (context, currentUser) {
         if (currentUser == null) {
-          FirebaseCrashlytics.instance.recordError(
-            'currentUser is null',
-            StackTrace.current,
-          );
+          logger.error('currentUser is null', stackTrace: StackTrace.current);
           return const Text(
             'An error has occured :/ the developer has been notified',
           );

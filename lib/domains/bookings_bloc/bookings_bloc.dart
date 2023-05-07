@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
@@ -35,7 +36,11 @@ class BookingsBloc extends Bloc<BookingsEvent, BookingsState> {
           ),
         );
       } catch (e, s) {
-        await FirebaseCrashlytics.instance.recordError(e, s);
+        logger.error(
+          'Error fetching bookings',
+          error: e,
+          stackTrace: s,
+        );
       }
     });
     on<ConfirmBooking>((event, emit) async {
@@ -52,7 +57,11 @@ class BookingsBloc extends Bloc<BookingsEvent, BookingsState> {
           ),
         );
       } catch (e, s) {
-        await FirebaseCrashlytics.instance.recordError(e, s);
+        logger.error(
+          'error confirming booking',
+          error: e,
+          stackTrace: s,
+        );
       }
     });
     on<DenyBooking>((event, emit) async {
@@ -70,7 +79,11 @@ class BookingsBloc extends Bloc<BookingsEvent, BookingsState> {
           ),
         );
       } catch (e, s) {
-        await FirebaseCrashlytics.instance.recordError(e, s);
+        logger.error(
+          'error denying booking',
+          error: e,
+          stackTrace: s,
+        );
       }
     });
   }

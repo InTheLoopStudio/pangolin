@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
@@ -13,28 +14,34 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
   }) : super(Unonboarded()) {
     on<OnboardingCheck>((event, emit) async {
       try {
+        logger.debug('checking onboarding status');
         final userId = event.userId;
 
         final user = await databaseRepository.getUserById(userId);
         if (user == null) {
           emit(Onboarding());
         } else {
+          logger.setUserIdentifier(user.id);
           emit(Onboarded(user));
         }
       } catch (e, s) {
-        await FirebaseCrashlytics.instance.recordError(e, s);
+        logger.error(
+          'error checking onboarding status',
+          error: e,
+          stackTrace: s,
+        );
         emit(Onboarding());
       }
     });
     on<FinishOnboarding>((event, emit) {
-      FirebaseCrashlytics.instance.setUserIdentifier(event.user.id);
+      logger
+        ..debug('finishing onboarding')
+        ..setUserIdentifier(event.user.id);
       emit(Onboarded(event.user));
     });
     on<UpdateOnboardedUser>((event, emit) async {
-      // emit new user in state
+      logger.debug('updating onboarded user');
       emit(Onboarded(event.user));
-
-      // Update user in db
       await databaseRepository.updateUserData(event.user);
     });
   }

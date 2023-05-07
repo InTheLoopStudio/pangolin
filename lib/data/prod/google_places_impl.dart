@@ -1,5 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 
 const _placesKey = 'AIzaSyAh3GEqDEv4lfnAgeT19-7sgyF7JxLF34g';
@@ -22,7 +23,11 @@ class GooglePlacesImpl implements PlacesRepository {
 
       return result.place;
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error(
+        'Error fetching place by id: $placeId',
+        error: e,
+        stackTrace: s,
+      );
       return null;
     }
   }
@@ -33,7 +38,11 @@ class GooglePlacesImpl implements PlacesRepository {
       final predictions = await _places.findAutocompletePredictions(query);
       return predictions.predictions;
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error(
+        'Error searching place: $query',
+        error: e,
+        stackTrace: s,
+      );
       return [];
     }
   }

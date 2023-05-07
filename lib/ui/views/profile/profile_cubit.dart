@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
@@ -66,7 +67,11 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
         emit(state.copyWith(visitedUser: newUserData));
       }
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error(
+        'refetchVisitedUser error',
+        error: e,
+        stackTrace: s,
+      );
     }
   }
 
@@ -101,7 +106,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
         );
       });
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error('initLoops error', error: e, stackTrace: s);
     }
   }
 
@@ -138,7 +143,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
         );
       });
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error('initBadges error', error: e, stackTrace: s);
     }
   }
 
@@ -180,7 +185,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
         );
       });
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error('initUserCreatedBadges error', error: e, stackTrace: s);
     }
   }
 
@@ -191,7 +196,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
           : null;
       emit(state.copyWith(place: place));
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error('initPlace error', error: e, stackTrace: s);
     }
   }
 
@@ -218,7 +223,11 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
               ),
             );
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error(
+        'fetchMoreLoops error',
+        error: e,
+        stackTrace: s,
+      );
       // emit(state.copyWith(loopStatus: LoopsStatus.failure));
     }
   }
@@ -246,7 +255,11 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
               ),
             );
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error(
+        'fetchMoreBadges error',
+        error: e,
+        stackTrace: s,
+      );
       // emit(state.copyWith(badgeStatus: BadgesStatus.failure));
     }
   }
@@ -275,7 +288,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
               ),
             );
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error('fetchMoreUserCreatedBadges error', error: e, stackTrace: s);
       // emit(
       //   state.copyWith(
       //     userCreatedBadgeStatus: UserCreatedBadgesStatus.failure,
@@ -302,7 +315,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
       );
       await databaseRepository.followUser(currentUserId, visitedUserId);
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error('follow error', error: e, stackTrace: s);
     }
   }
 
@@ -316,7 +329,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
       );
       await databaseRepository.unfollowUser(currentUserId, visitedUserId);
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error('unfollow error', error: e, stackTrace: s);
     }
   }
 
@@ -331,7 +344,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
         ),
       );
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error('loadFollowing error', error: e, stackTrace: s);
     }
   }
 
@@ -346,7 +359,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
         ),
       );
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error('loadFollower error', error: e, stackTrace: s);
     }
   }
 
@@ -366,7 +379,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
         ),
       );
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error('loadIsFollowing error', error: e, stackTrace: s);
     }
   }
 
@@ -380,7 +393,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
         ),
       );
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error('loadIsVerified error', error: e, stackTrace: s);
     }
   }
 

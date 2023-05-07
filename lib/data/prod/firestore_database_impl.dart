@@ -6,6 +6,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:georange/georange.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
@@ -128,7 +129,11 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       await _usersRef.doc(user.id).set(user.toMap());
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error(
+        'createUser',
+        error: e,
+        stackTrace: s,
+      );
       rethrow;
     }
   }
@@ -161,7 +166,11 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       } on FirebaseException {
         userSnapshot = await _usersRef.doc(userId).get();
       } catch (e, s) {
-        await FirebaseCrashlytics.instance.recordError(e, s);
+        logger.error(
+          'getUserById',
+          error: e,
+          stackTrace: s,
+        );
       }
     }
 
@@ -297,7 +306,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       return loop;
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error('getLoopById', error: e, stackTrace: s);
       return null;
     }
   }
@@ -310,7 +319,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       return followersSnapshot.docs.length;
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error('followersNum', error: e, stackTrace: s);
       return 0;
     }
   }
@@ -323,7 +332,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       return followingSnapshot.docs.length;
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error('followingNum', error: e, stackTrace: s);
       return 0;
     }
   }
@@ -342,7 +351,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       await _usersRef.doc(user.id).set(user.toMap());
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error('updateUserData', error: e, stackTrace: s);
     }
   }
 
@@ -365,7 +374,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .doc(visitedUserId)
           .set({});
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error('followUser', error: e, stackTrace: s);
     }
   }
 
@@ -394,7 +403,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       await doc.reference.delete();
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error('unfollowUser', error: e, stackTrace: s);
     }
   }
 
@@ -708,7 +717,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
             .toList();
       }
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error('getAllLoops', error: e, stackTrace: s);
       return [];
     }
   }
@@ -1298,7 +1307,11 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       return bookingRequests;
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error(
+        'error getting bookings by requester',
+        error: e,
+        stackTrace: s,
+      );
       return [];
     }
   }
@@ -1322,7 +1335,11 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       return bookingRequests;
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error(
+        'error getting bookings by requestee',
+        error: e,
+        stackTrace: s,
+      );
       return [];
     }
   }
@@ -1338,7 +1355,11 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       );
       await _bookingsRef.doc(booking.id).set(booking.toMap());
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error(
+        'error updating booking',
+        error: e,
+        stackTrace: s,
+      );
     }
   }
 
@@ -1362,7 +1383,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .doc(service.id)
           .set(service.toJson());
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error('createService', error: e, stackTrace: s);
     }
   }
 
@@ -1381,7 +1402,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         'deleted': true,
       });
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error('deleteService', error: e, stackTrace: s);
     }
   }
 
@@ -1398,7 +1419,11 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       return service;
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error(
+        'getServiceById',
+        error: e,
+        stackTrace: s,
+      );
       return null;
     }
   }
@@ -1433,7 +1458,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .doc(service.id)
           .set(service.toJson());
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error('updateService', error: e, stackTrace: s);
     }
   }
 }

@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 
 part 'loop_feed_state.dart';
@@ -68,7 +69,11 @@ class LoopFeedCubit extends Cubit<LoopFeedState> {
         );
       });
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error(
+        'cannot init loops on loop feed',
+        error: e,
+        stackTrace: s,
+      );
     }
   }
 

@@ -2,6 +2,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/ui/views/common/tapped_app_bar.dart';
 
@@ -25,7 +26,11 @@ class ErrorView extends StatelessWidget {
                 try {
                   context.read<AuthenticationBloc>().add(LoggedOut());
                 } catch (e, s) {
-                  FirebaseCrashlytics.instance.recordError(e, s);
+                  logger.error(
+                    'error logging out',
+                    error: e,
+                    stackTrace: s,
+                  );
                 }
               },
               child: const Text('logout'),

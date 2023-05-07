@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
@@ -98,7 +99,7 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
 
         onboardingBloc.add(FinishOnboarding(user: currentUser));
       } catch (e, s) {
-        await FirebaseCrashlytics.instance.recordError(e, s);
+        logger.error('Error finishing onboarding', error: e, stackTrace: s);
         emit(state.copyWith(loading: false));
       }
     }

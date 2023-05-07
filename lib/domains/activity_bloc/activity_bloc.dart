@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
@@ -18,11 +19,13 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
     currentUserId =
         (authenticationBloc.state as Authenticated).currentAuthUser.uid;
     on<AddActivityEvent>(
-      (event, emit) => emit(
-        ActivitySuccess(
-          activities: List.of(state.activities)..add(event.activity),
-        ),
-      ),
+      (event, emit) {
+        emit(
+          ActivitySuccess(
+            activities: List.of(state.activities)..add(event.activity),
+          ),
+        );
+      },
     );
     on<InitListenerEvent>(
       (event, emit) => _mapInitListenerEventToState(emit),
@@ -75,7 +78,11 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
         );
       }
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error(
+        'Error initializing activity listener',
+        error: e,
+        stackTrace: s,
+      );
       emit(const ActivityFailure());
     }
   }
@@ -101,7 +108,11 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
               ),
             );
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error(
+        'error fetching activities',
+        error: e,
+        stackTrace: s,
+      );
       emit(const ActivityFailure());
     }
   }
@@ -124,7 +135,11 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
 
       await databaseRepository.markActivityAsRead(updatedActivity);
     } catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
+      logger.error(
+        'error marking activity as read',
+        error: e,
+        stackTrace: s,
+      );
       emit(const ActivityFailure());
     }
   }

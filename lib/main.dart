@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/notification_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
 import 'package:intheloopapp/dependencies.dart';
@@ -58,17 +59,17 @@ Future<void> main() async {
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   PlatformDispatcher.instance.onError = (error, stack) {
     try {
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      logger.error('error', error: error, stackTrace: stack, fatal: true);
     } catch (e) {
       // print('Failed to report error to Firebase Crashlytics: $e');
     }
     return true;
   };
 
-  // if (kDebugMode) {
-  //   // Force disable Crashlytics collection while doing every day development.
-  //   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
-  // }
+  if (kDebugMode) {
+    // Force disable Crashlytics collection while doing every day development.
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+  }
 
   // Keep the app in portrait mode (no landscape)
   await SystemChrome.setPreferredOrientations([
@@ -140,12 +141,16 @@ class TappedApp extends StatelessWidget {
                         (BuildContext context, AuthenticationState authState) {
                       try {
                         if (authState is Uninitialized) {
+                          logger.debug('auth uninitialized');
                           return const LoadingView();
                         }
                         if (authState is Authenticated) {
+                          logger.debug('auth initialized');
+
                           context
                               .read<DynamicLinkBloc>()
                               .add(MonitorDynamicLinks());
+
                           context.read<OnboardingBloc>().add(
                                 OnboardingCheck(
                                   userId: authState.currentAuthUser.uid,
