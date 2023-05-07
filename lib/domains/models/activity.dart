@@ -3,6 +3,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/utils.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:uuid/uuid.dart';
 
 part 'activity.g.dart';
 
@@ -17,7 +18,7 @@ class Activity extends Equatable {
     required this.markedRead,
   });
   factory Activity.empty() => Activity(
-        id: '',
+        id: const Uuid().v4(),
         fromUserId: '',
         toUserId: '',
         timestamp: DateTime.now(),
