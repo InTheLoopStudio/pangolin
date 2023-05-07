@@ -123,7 +123,7 @@ class _ProfileViewState extends State<ProfileView> {
         )
           ..initLoops()
           ..initBadges()
-          ..initUserCreatedBadges()
+          // ..initUserCreatedBadges()
           ..loadFollower(visitedUser.id)
           ..loadFollowing(visitedUser.id)
           ..loadIsFollowing(currentUser.id, visitedUser.id)
@@ -161,7 +161,7 @@ class _ProfileViewState extends State<ProfileView> {
                     // ignore: unawaited_futures
                     ..initBadges()
                     // ignore: unawaited_futures
-                    ..initUserCreatedBadges()
+                    // ..initUserCreatedBadges()
                     // ignore: unawaited_futures
                     ..refetchVisitedUser()
                     // ignore: unawaited_futures

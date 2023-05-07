@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:intheloopapp/app_logger.dart';
@@ -35,16 +34,24 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
 
   @override
   ProfileState fromJson(Map<String, dynamic> json) {
-    return ProfileState(
-      followerCount: json['followerCount'] as int,
-      followingCount: json['followingCount'] as int,
-      isFollowing: json['isFollowing'] as bool,
-      // userLoops: json['userLoops'],
-      visitedUser: visitedUser,
-      currentUser: currentUser,
-      // visitedUser: UserModel.fromJson(json['visitedUser']),
-      // currentUser: UserModel.fromJson(json['currentUser']),
-    );
+    try {
+      return ProfileState(
+        followerCount: json['followerCount'] as int,
+        followingCount: json['followingCount'] as int,
+        isFollowing: json['isFollowing'] as bool,
+        // userLoops: json['userLoops'],
+        visitedUser: visitedUser,
+        currentUser: currentUser,
+        // visitedUser: UserModel.fromJson(json['visitedUser']),
+        // currentUser: UserModel.fromJson(json['currentUser']),
+      );
+    } catch (e, s) {
+      logger.error('fromJson error', error: e, stackTrace: s);
+      return ProfileState(
+        visitedUser: visitedUser,
+        currentUser: currentUser,
+      );
+    }
   }
 
   @override
@@ -59,6 +66,9 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
 
   Future<void> refetchVisitedUser({UserModel? newUserData}) async {
     try {
+      logger.debug(
+        'refetchVisitedUser ${state.visitedUser} : ${newUserData ?? "null"}',
+      );
       if (newUserData == null) {
         final refreshedVisitedUser =
             await databaseRepository.getUserById(state.visitedUser.id);
@@ -77,6 +87,9 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
 
   Future<void> initLoops({bool clearLoops = true}) async {
     try {
+      logger.debug(
+        'initLoops ${state.visitedUser}',
+      );
       await loopListener?.cancel();
       if (clearLoops) {
         emit(
@@ -112,6 +125,9 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
 
   Future<void> initBadges({bool clearBadges = true}) async {
     try {
+      logger.debug(
+        'initBadges ${state.visitedUser}',
+      );
       await badgeListener?.cancel();
       if (clearBadges) {
         emit(
@@ -147,50 +163,54 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
     }
   }
 
-  Future<void> initUserCreatedBadges({bool clearBadges = true}) async {
-    try {
-      await userCreatedBadgeListener?.cancel();
+  // Future<void> initUserCreatedBadges({bool clearBadges = true}) async {
+  //   try {
+  //     logger.debug(
+  //       'initUserCreatedBadges ${state.visitedUser}',
+  //     );
+  //     await userCreatedBadgeListener?.cancel();
 
-      if (clearBadges) {
-        emit(
-          state.copyWith(
-            userCreatedBadgeStatus: UserCreatedBadgesStatus.initial,
-            userCreatedBadges: [],
-            hasReachedMaxUserCreatedBadges: false,
-          ),
-        );
-      }
+  //     if (clearBadges) {
+  //       emit(
+  //         state.copyWith(
+  //           userCreatedBadgeStatus: UserCreatedBadgesStatus.initial,
+  //           userCreatedBadges: [],
+  //           hasReachedMaxUserCreatedBadges: false,
+  //         ),
+  //       );
+  //     }
 
-      final badgesAvailable = (await databaseRepository
-              .getUserCreatedBadges(visitedUser.id, limit: 1))
-          .isNotEmpty;
-      if (!badgesAvailable) {
-        emit(
-          state.copyWith(
-            userCreatedBadgeStatus: UserCreatedBadgesStatus.success,
-          ),
-        );
-      }
+  //     final badgesAvailable = (await databaseRepository
+  //             .getUserCreatedBadges(visitedUser.id, limit: 1))
+  //         .isNotEmpty;
+  //     if (!badgesAvailable) {
+  //       emit(
+  //         state.copyWith(
+  //           userCreatedBadgeStatus: UserCreatedBadgesStatus.success,
+  //         ),
+  //       );
+  //     }
 
-      badgeListener = databaseRepository
-          .userCreatedBadgesObserver(visitedUser.id)
-          .listen((Badge event) {
-        // print('loop { ${event.id} : ${event.title} }');
-        emit(
-          state.copyWith(
-            userCreatedBadgeStatus: UserCreatedBadgesStatus.success,
-            userCreatedBadges: List.of(state.userCreatedBadges)..add(event),
-            hasReachedMaxUserCreatedBadges: state.userCreatedBadges.length < 10,
-          ),
-        );
-      });
-    } catch (e, s) {
-      logger.error('initUserCreatedBadges error', error: e, stackTrace: s);
-    }
-  }
+  //     badgeListener = databaseRepository
+  //         .userCreatedBadgesObserver(visitedUser.id)
+  //         .listen((Badge event) {
+  //       // print('loop { ${event.id} : ${event.title} }');
+  //       emit(
+  //         state.copyWith(
+  //           userCreatedBadgeStatus: UserCreatedBadgesStatus.success,
+  //           userCreatedBadges: List.of(state.userCreatedBadges)..add(event),
+  //           hasReachedMaxUserCreatedBadges: state.userCreatedBadges.length < 10,
+  //         ),
+  //       );
+  //     });
+  //   } catch (e, s) {
+  //     logger.error('initUserCreatedBadges error', error: e, stackTrace: s);
+  //   }
+  // }
 
   Future<void> initPlace() async {
     try {
+      logger.debug('initPlace ${state.visitedUser}');
       final place = visitedUser.placeId != null
           ? await places.getPlaceById(visitedUser.placeId!)
           : null;
@@ -264,38 +284,38 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
     }
   }
 
-  Future<void> fetchMoreUserCreatedBadges() async {
-    if (state.hasReachedMaxUserCreatedBadges) return;
+  // Future<void> fetchMoreUserCreatedBadges() async {
+  //   if (state.hasReachedMaxUserCreatedBadges) return;
 
-    try {
-      if (state.userCreatedBadgeStatus == UserCreatedBadgesStatus.initial) {
-        await initUserCreatedBadges();
-      }
+  //   try {
+  //     if (state.userCreatedBadgeStatus == UserCreatedBadgesStatus.initial) {
+  //       await initUserCreatedBadges();
+  //     }
 
-      final badges = await databaseRepository.getUserCreatedBadges(
-        visitedUser.id,
-        limit: 10,
-        lastBadgeId: state.userBadges.last.id,
-      );
-      badges.isEmpty
-          ? emit(state.copyWith(hasReachedMaxUserCreatedBadges: true))
-          : emit(
-              state.copyWith(
-                userCreatedBadgeStatus: UserCreatedBadgesStatus.success,
-                userCreatedBadges: List.of(state.userCreatedBadges)
-                  ..addAll(badges),
-                hasReachedMaxUserCreatedBadges: false,
-              ),
-            );
-    } catch (e, s) {
-      logger.error('fetchMoreUserCreatedBadges error', error: e, stackTrace: s);
-      // emit(
-      //   state.copyWith(
-      //     userCreatedBadgeStatus: UserCreatedBadgesStatus.failure,
-      //   ),
-      // );
-    }
-  }
+  //     final badges = await databaseRepository.getUserCreatedBadges(
+  //       visitedUser.id,
+  //       limit: 10,
+  //       lastBadgeId: state.userBadges.last.id,
+  //     );
+  //     badges.isEmpty
+  //         ? emit(state.copyWith(hasReachedMaxUserCreatedBadges: true))
+  //         : emit(
+  //             state.copyWith(
+  //               userCreatedBadgeStatus: UserCreatedBadgesStatus.success,
+  //               userCreatedBadges: List.of(state.userCreatedBadges)
+  //                 ..addAll(badges),
+  //               hasReachedMaxUserCreatedBadges: false,
+  //             ),
+  //           );
+  //   } catch (e, s) {
+  //     logger.error('fetchMoreUserCreatedBadges error', error: e, stackTrace: s);
+  //     // emit(
+  //     //   state.copyWith(
+  //     //     userCreatedBadgeStatus: UserCreatedBadgesStatus.failure,
+  //     //   ),
+  //     // );
+  //   }
+  // }
 
   void toggleFollow(String currentUserId, String visitedUserId) {
     if (state.isFollowing) {
@@ -307,6 +327,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
 
   Future<void> follow(String currentUserId, String visitedUserId) async {
     try {
+      logger.debug('follow $visitedUserId');
       emit(
         state.copyWith(
           followerCount: state.followerCount + 1,
@@ -321,6 +342,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
 
   Future<void> unfollow(String currentUserId, String visitedUserId) async {
     try {
+      logger.debug('unfollow $visitedUserId');
       emit(
         state.copyWith(
           followerCount: state.followerCount - 1,
@@ -398,6 +420,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
   }
 
   void deleteLoop(Loop loop) {
+    logger.debug('deleteLoop ${loop.id}');
     final newLoops = List<Loop>.of(state.userLoops)
       ..removeWhere((element) => element.id == loop.id);
     emit(state.copyWith(userLoops: newLoops));
