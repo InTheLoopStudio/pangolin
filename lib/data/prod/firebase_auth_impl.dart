@@ -68,19 +68,24 @@ class FirebaseAuthImpl extends AuthRepository {
     String email,
     String password,
   ) async {
-    final user = await _auth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    try {
+      final user = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
-    final uid = user.user?.uid;
+      final uid = user.user?.uid;
 
-    await _analytics.setUserId(id: uid);
-    await _analytics.logEvent(
-      name: 'sign_in',
-    );
+      await _analytics.setUserId(id: uid);
+      await _analytics.logEvent(
+        name: 'sign_in',
+      );
 
-    return uid;
+      return uid;
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+      return null;
+    }
   }
 
   @override
@@ -100,19 +105,24 @@ class FirebaseAuthImpl extends AuthRepository {
     String email,
     String password,
   ) async {
-    final user = await _auth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    try {
+      final user = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
-    final uid = user.user?.uid;
+      final uid = user.user?.uid;
 
-    await _analytics.setUserId(id: uid);
-    await _analytics.logEvent(
-      name: 'sign_in',
-    );
+      await _analytics.setUserId(id: uid);
+      await _analytics.logEvent(
+        name: 'sign_in',
+      );
 
-    return uid;
+      return uid;
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+      return null;
+    }
   }
 
   @override
