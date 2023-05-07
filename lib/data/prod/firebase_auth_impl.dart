@@ -166,13 +166,21 @@ class FirebaseAuthImpl extends AuthRepository {
       // Trigger the authentication flow
       final googleUser = await GoogleSignIn().signIn();
 
+      if (googleUser == null) {
+        throw Exception('Google sign in failed');
+      }
+
       // Obtain the auth details from the request
-      final googleAuth = await googleUser?.authentication;
+      final googleAuth = await googleUser.authentication;
+
+      if (googleAuth.accessToken == null || googleAuth.idToken == null) {
+        throw Exception('Google sign in failed: accessToken or idToken null');
+      }
 
       // Create a new credential
       final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
       );
 
       // Reauthenticate
