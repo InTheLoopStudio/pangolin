@@ -44,9 +44,9 @@ dependencies:
     git:
       url: https://github.com/jonaylor89/flutter_google_places_sdk
       path: flutter_google_places_sdk
-  flutter_image_compress: ^1.0.0
+  flutter_image_compress: ^2.0.1
   flutter_native_splash: ^2.2.9
-  flutter_slidable: ^2.0.0
+  flutter_slidable: ^3.0.0
   flutter_spinkit: ^5.0.0
   flutter_stripe: ^9.0.0+1
   flutter_svg: ^2.0.4

@@ -39,7 +39,9 @@ class FirebaseStorageImpl extends StorageRepository {
       quality: 70,
     );
 
-    return compressedImage!;
+    if (compressedImage == null) return image;
+
+    return File(compressedImage.path);
   }
 
   @override

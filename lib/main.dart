@@ -65,10 +65,10 @@ Future<void> main() async {
     return true;
   };
 
-  if (kDebugMode) {
-    // Force disable Crashlytics collection while doing every day development.
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
-  }
+  // if (kDebugMode) {
+  //   // Force disable Crashlytics collection while doing every day development.
+  //   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+  // }
 
   // Keep the app in portrait mode (no landscape)
   await SystemChrome.setPreferredOrientations([
@@ -138,49 +138,60 @@ class TappedApp extends StatelessWidget {
                   return BlocBuilder<AuthenticationBloc, AuthenticationState>(
                     builder:
                         (BuildContext context, AuthenticationState authState) {
-                      if (authState is Uninitialized) {
+                      try {
+                        if (authState is Uninitialized) {
+                          return const LoadingView();
+                        }
+                        if (authState is Authenticated) {
+                          context
+                              .read<DynamicLinkBloc>()
+                              .add(MonitorDynamicLinks());
+                          context.read<OnboardingBloc>().add(
+                                OnboardingCheck(
+                                  userId: authState.currentAuthUser.uid,
+                                ),
+                              );
+                          context
+                              .read<StreamRepository>()
+                              .connectUser(authState.currentAuthUser.uid);
+                          context
+                              .read<NotificationRepository>()
+                              .saveDeviceToken(
+                                userId: authState.currentAuthUser.uid,
+                              );
+
+                          context.read<ActivityBloc>().add(InitListenerEvent());
+
+                          context.read<BookingsBloc>().add(FetchBookings());
+
+                          return BlocBuilder<OnboardingBloc, OnboardingState>(
+                            builder: (context, onboardState) {
+                              if (onboardState is Onboarded) {
+                                return const ShellView();
+                              } else if (onboardState is Onboarding) {
+                                return const OnboardingView();
+                              } else if (onboardState is Unonboarded) {
+                                return const LoadingView();
+                              } else {
+                                return const LoadingView();
+                              }
+                            },
+                          );
+                        }
+
+                        if (authState is Unauthenticated) {
+                          return const LoginView();
+                        }
+
+                        return const LoadingView();
+                      } catch (e, s) {
+                        FirebaseCrashlytics.instance.recordError(
+                          e,
+                          s,
+                          fatal: true,
+                        );
                         return const LoadingView();
                       }
-                      if (authState is Authenticated) {
-                        context
-                            .read<DynamicLinkBloc>()
-                            .add(MonitorDynamicLinks());
-                        context.read<OnboardingBloc>().add(
-                              OnboardingCheck(
-                                userId: authState.currentAuthUser.uid,
-                              ),
-                            );
-                        context
-                            .read<StreamRepository>()
-                            .connectUser(authState.currentAuthUser.uid);
-                        context.read<NotificationRepository>().saveDeviceToken(
-                              userId: authState.currentAuthUser.uid,
-                            );
-
-                        context.read<ActivityBloc>().add(InitListenerEvent());
-
-                        context.read<BookingsBloc>().add(FetchBookings());
-
-                        return BlocBuilder<OnboardingBloc, OnboardingState>(
-                          builder: (context, onboardState) {
-                            if (onboardState is Onboarded) {
-                              return const ShellView();
-                            } else if (onboardState is Onboarding) {
-                              return const OnboardingView();
-                            } else if (onboardState is Unonboarded) {
-                              return const LoadingView();
-                            } else {
-                              return const LoadingView();
-                            }
-                          },
-                        );
-                      }
-
-                      if (authState is Unauthenticated) {
-                        return const LoginView();
-                      }
-
-                      return const LoadingView();
                     },
                   );
                 },

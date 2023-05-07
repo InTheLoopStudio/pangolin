@@ -44,11 +44,11 @@ class LoginCubit extends Cubit<LoginState> {
       );
 
       if (uid == null) {
-        emit(
-          state.copyWith(status: FormzSubmissionStatus.failure),
-        );
         throw Exception('Failed to sign in');
       }
+      emit(
+        state.copyWith(status: FormzSubmissionStatus.success),
+      );
     } catch (e) {
       // print(e);
       emit(
@@ -56,9 +56,6 @@ class LoginCubit extends Cubit<LoginState> {
       );
       rethrow;
     }
-    emit(
-      state.copyWith(status: FormzSubmissionStatus.success),
-    );
   }
 
   Future<void> signUpWithCredentials() async {
