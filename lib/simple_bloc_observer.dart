@@ -8,7 +8,10 @@ class SimpleBlocObserver extends BlocObserver {
     logger.debug('bloc transition ${bloc.runtimeType}, $event');
   }
 
-  void onTransition(Bloc<dynamic, dynamic> bloc, Transition<dynamic, dynamic> transition) {
+  void onTransition(
+    Bloc<dynamic, dynamic> bloc,
+    Transition<dynamic, dynamic> transition,
+  ) {
     logger.debug('bloc transition ${bloc.runtimeType}');
   }
 
