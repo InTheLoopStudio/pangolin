@@ -33,6 +33,7 @@ class LoopFeedCubit extends Cubit<LoopFeedState> {
 
   Future<void> initLoops({bool clearLoops = true}) async {
     try {
+      logger.debug('init loops');
       await loopListener?.cancel();
       if (clearLoops) {
         emit(
@@ -79,6 +80,7 @@ class LoopFeedCubit extends Cubit<LoopFeedState> {
 
   Future<void> fetchMoreLoops() async {
     if (state.hasReachedMax) return;
+    logger.debug('fetch more loops');
 
     try {
       if (state.status == LoopFeedStatus.initial) {
