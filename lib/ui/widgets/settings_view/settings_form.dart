@@ -8,7 +8,6 @@ import 'package:intheloopapp/ui/widgets/common/forms/artist_name_text_field.dart
 import 'package:intheloopapp/ui/widgets/common/forms/bio_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/instagram_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/location_text_field.dart';
-import 'package:intheloopapp/ui/widgets/common/forms/soundcloud_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/tiktok_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/twitter_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/username_text_field.dart';
@@ -94,11 +93,6 @@ class SettingsForm extends StatelessWidget {
                 initialValue: state.tiktokHandle,
                 onChanged: (value) =>
                     context.read<SettingsCubit>().changeTikTik(value),
-              ),
-              SoundcloudTextField(
-                initialValue: state.soundcloudHandle,
-                onChanged: (value) =>
-                    context.read<SettingsCubit>().changeSoundcloud(value),
               ),
               YoutubeTextField(
                 initialValue: state.youtubeChannelId,

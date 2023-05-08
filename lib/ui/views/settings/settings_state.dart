@@ -11,7 +11,6 @@ class SettingsState extends Equatable {
     this.placeId,
     this.twitterHandle,
     this.instagramHandle,
-    this.soundcloudHandle,
     this.tiktokHandle,
     this.youtubeChannelId,
     this.profileImage,
@@ -45,7 +44,6 @@ class SettingsState extends Equatable {
 
   final String? twitterHandle;
   final String? instagramHandle;
-  final String? soundcloudHandle;
   final String? tiktokHandle;
   final String? youtubeChannelId;
   final File? profileImage;
@@ -83,7 +81,6 @@ class SettingsState extends Equatable {
         twitterHandle,
         instagramHandle,
         tiktokHandle,
-        soundcloudHandle,
         youtubeChannelId,
         profileImage,
         status,
@@ -111,7 +108,6 @@ class SettingsState extends Equatable {
     String? twitterHandle,
     String? instagramHandle,
     String? tiktokHandle,
-    String? soundcloudHandle,
     String? youtubeChannelId,
     File? profileImage,
     FormzSubmissionStatus? status,
@@ -138,7 +134,6 @@ class SettingsState extends Equatable {
       twitterHandle: twitterHandle ?? this.twitterHandle,
       instagramHandle: instagramHandle ?? this.instagramHandle,
       tiktokHandle: tiktokHandle ?? this.tiktokHandle,
-      soundcloudHandle: soundcloudHandle ?? this.soundcloudHandle,
       youtubeChannelId: youtubeChannelId ?? this.youtubeChannelId,
       profileImage: profileImage ?? this.profileImage,
       status: status ?? this.status,

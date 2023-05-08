@@ -32,7 +32,6 @@ class UserModel extends Equatable {
     required this.shadowBanned,
     required this.accountType,
     required this.youtubeChannelId,
-    required this.soundcloudHandle,
     required this.tiktokHandle,
     required this.instagramHandle,
     required this.twitterHandle,
@@ -68,7 +67,6 @@ class UserModel extends Equatable {
         shadowBanned: false,
         accountType: AccountType.free,
         youtubeChannelId: null,
-        soundcloudHandle: null,
         tiktokHandle: null,
         instagramHandle: null,
         twitterHandle: null,
@@ -128,7 +126,6 @@ class UserModel extends Equatable {
       shadowBanned: doc.getOrElse('shadowBanned', false) as bool,
       accountType: accountType,
       youtubeChannelId: doc.getOrElse('youtubeChannelId', null) as String?,
-      soundcloudHandle: doc.getOrElse('soundcloudHandle', null) as String?,
       tiktokHandle: doc.getOrElse('tiktokHandle', null) as String?,
       instagramHandle: doc.getOrElse('instagramHandle', null) as String?,
       twitterHandle: doc.getOrElse('twitterHandle', null) as String?,
@@ -177,7 +174,6 @@ class UserModel extends Equatable {
   final AccountType accountType;
 
   final String? youtubeChannelId;
-  final String? soundcloudHandle;
   final String? tiktokHandle;
   final String? instagramHandle;
   final String? twitterHandle;
@@ -217,7 +213,6 @@ class UserModel extends Equatable {
         shadowBanned,
         accountType,
         youtubeChannelId,
-        soundcloudHandle,
         tiktokHandle,
         instagramHandle,
         twitterHandle,
@@ -263,7 +258,6 @@ class UserModel extends Equatable {
     bool? shadowBanned,
     AccountType? accountType,
     String? youtubeChannelId,
-    String? soundcloudHandle,
     String? tiktokHandle,
     String? instagramHandle,
     String? twitterHandle,
@@ -298,7 +292,6 @@ class UserModel extends Equatable {
       shadowBanned: shadowBanned ?? this.shadowBanned,
       accountType: accountType ?? this.accountType,
       youtubeChannelId: youtubeChannelId ?? this.youtubeChannelId,
-      soundcloudHandle: soundcloudHandle ?? this.soundcloudHandle,
       tiktokHandle: tiktokHandle ?? this.tiktokHandle,
       instagramHandle: instagramHandle ?? this.instagramHandle,
       twitterHandle: twitterHandle ?? this.twitterHandle,
@@ -344,7 +337,6 @@ class UserModel extends Equatable {
       'shadowBanned': shadowBanned,
       'accountType': _$AccountTypeEnumMap[accountType],
       'youtubeChannelId': youtubeChannelId,
-      'soundcloudHandle': soundcloudHandle,
       'tiktokHandle': tiktokHandle,
       'instagramHandle': instagramHandle,
       'twitterHandle': twitterHandle,

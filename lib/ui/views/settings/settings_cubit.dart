@@ -59,7 +59,6 @@ class SettingsCubit extends Cubit<SettingsState> {
         twitterHandle: currentUser.twitterHandle,
         instagramHandle: currentUser.instagramHandle,
         tiktokHandle: currentUser.tiktokHandle,
-        soundcloudHandle: currentUser.soundcloudHandle,
         youtubeChannelId: currentUser.youtubeChannelId,
         pushNotificationsLikes: currentUser.pushNotificationsLikes,
         pushNotificationsComments: currentUser.pushNotificationsComments,
@@ -99,8 +98,6 @@ class SettingsCubit extends Cubit<SettingsState> {
   void changeInstagram(String value) =>
       emit(state.copyWith(instagramHandle: value));
   void changeTikTik(String value) => emit(state.copyWith(tiktokHandle: value));
-  void changeSoundcloud(String value) =>
-      emit(state.copyWith(soundcloudHandle: value));
   void changeYoutube(String value) =>
       emit(state.copyWith(youtubeChannelId: value));
   void changePlace(Place? place, String placeId) {
@@ -262,7 +259,6 @@ class SettingsCubit extends Cubit<SettingsState> {
         twitterHandle: state.twitterHandle,
         instagramHandle: state.instagramHandle,
         tiktokHandle: state.tiktokHandle,
-        soundcloudHandle: state.soundcloudHandle,
         youtubeChannelId: state.youtubeChannelId,
         profilePicture: profilePictureUrl,
         pushNotificationsLikes: state.pushNotificationsLikes,

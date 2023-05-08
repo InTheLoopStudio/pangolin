@@ -74,19 +74,6 @@ class SocialMediaIcons extends StatelessWidget {
                 },
               ),
               _socialMediaIcon(
-                state.visitedUser.soundcloudHandle != null,
-                icon: const Icon(FontAwesomeIcons.soundcloud),
-                onTap: () {
-                  launchUrl(
-                    Uri(
-                      scheme: 'https',
-                      path:
-                          'soundcloud.com/${state.visitedUser.soundcloudHandle}',
-                    ),
-                  );
-                },
-              ),
-              _socialMediaIcon(
                 state.visitedUser.youtubeChannelId != null,
                 icon: const Icon(FontAwesomeIcons.youtube),
                 onTap: () {
