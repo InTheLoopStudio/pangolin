@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
@@ -55,13 +56,17 @@ class CommentsCubit extends Cubit<CommentsState> {
       loop.id,
     )
         .listen((Comment event) {
-      // print('Comment { ${event.id} : ${event.content} }');
-      emit(
-        state.copyWith(
-          loading: false,
-          comments: List.of(state.comments)..add(event),
-        ),
-      );
+      try {
+        // print('Comment { ${event.id} : ${event.content} }');
+        emit(
+          state.copyWith(
+            loading: false,
+            comments: List.of(state.comments)..add(event),
+          ),
+        );
+      } catch (e, s) {
+        logger.error('error adding comment', error: e, stackTrace: s);
+      }
     });
   }
 

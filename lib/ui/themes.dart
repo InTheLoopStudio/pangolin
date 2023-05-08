@@ -7,9 +7,9 @@ const tappedAccent = Color(0xff0086CC);
 const primaryColor = tappedAccent;
 // const secondaryColor = Colors.deepPurple;
 const secondaryColor = tappedAccent;
-const backgroundLightColor = Color(0xFFFCFCFC);
+const backgroundLightColor = Color(0xfff8f6Fb);
 const backgroundDarkColor = Color(0xff070a0d);
-const navigationBarLightColor = Colors.white;
+const navigationBarLightColor = Color(0xfff8f6Fb);
 const navigationBarDarkColor = Color(0xff070a0d);
 
 class Themes {
@@ -40,7 +40,7 @@ class Themes {
     // switch active color
     canvasColor: backgroundLightColor,
     appBarTheme: const AppBarTheme(
-      backgroundColor: tappedAccent,
+      backgroundColor: backgroundLightColor,
       foregroundColor: Colors.black,
     ),
 

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/dynamic_link_repository.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -32,7 +33,9 @@ class FirebaseDynamicLinkImpl extends DynamicLinkRepository {
         dynamicLinkStream.add(redirect);
       }
     }).onError(
-      (error) {},
+      (Object? error, StackTrace? stack) {
+        logger.error('dynamic link error', error: error, stackTrace: stack);
+      },
     );
 
     yield* dynamicLinkStream.stream;

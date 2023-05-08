@@ -19,53 +19,57 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
     on<MonitorDynamicLinks>((event, emit) {
       logger.debug('monitoring dynamic links');
       dynamicLinkRepository.getDynamicLinks().listen((event) async {
-        // print('new dynamic link');
-        switch (event.type) {
-          case DynamicLinkType.createPost:
-            navigationBloc.add(const ChangeTab(selectedTab: 2));
-            break;
-          case DynamicLinkType.shareLoop:
-            if (event.id != null) {
-              final shareLoop = await databaseRepository.getLoopById(
-                event.id ?? '',
-              );
-              if (shareLoop != null) {
-                navigationBloc.add(PushLoop(shareLoop));
+        try {
+          // print('new dynamic link');
+          switch (event.type) {
+            case DynamicLinkType.createPost:
+              navigationBloc.add(const ChangeTab(selectedTab: 2));
+              break;
+            case DynamicLinkType.shareLoop:
+              if (event.id != null) {
+                final shareLoop = await databaseRepository.getLoopById(
+                  event.id ?? '',
+                );
+                if (shareLoop != null) {
+                  navigationBloc.add(PushLoop(shareLoop));
+                }
               }
-            }
-            break;
-          case DynamicLinkType.shareProfile:
-            if (event.id != null) {
-              navigationBloc.add(PushProfile(event.id!));
-            }
-            break;
-          case DynamicLinkType.connectStripeRedirect:
-            if (event.id == null || event.id == '') {
               break;
-            }
-            // add accountId to the users data
-            if (onboardingBloc.state is! Onboarded) {
+            case DynamicLinkType.shareProfile:
+              if (event.id != null) {
+                navigationBloc.add(PushProfile(event.id!));
+              }
               break;
-            }
+            case DynamicLinkType.connectStripeRedirect:
+              if (event.id == null || event.id == '') {
+                break;
+              }
+              // add accountId to the users data
+              if (onboardingBloc.state is! Onboarded) {
+                break;
+              }
 
-            final currentUser =
-                (onboardingBloc.state as Onboarded).currentUser.copyWith(
-                      stripeConnectedAccountId: event.id,
-                    );
+              final currentUser =
+                  (onboardingBloc.state as Onboarded).currentUser.copyWith(
+                        stripeConnectedAccountId: event.id,
+                      );
 
-            onboardingBloc.add(
-              UpdateOnboardedUser(
-                user: currentUser,
-              ),
-            );
+              onboardingBloc.add(
+                UpdateOnboardedUser(
+                  user: currentUser,
+                ),
+              );
 
-            navigationBloc.add(const PushSettings());
-            break;
-          case DynamicLinkType.connectStripeRefresh:
-            if (event.id != null) {
-              // resend the create account request?
-            }
-            break;
+              navigationBloc.add(const PushSettings());
+              break;
+            case DynamicLinkType.connectStripeRefresh:
+              if (event.id != null) {
+                // resend the create account request?
+              }
+              break;
+          }
+        } catch (e, s) {
+          logger.error('dynamic link error', error: e, stackTrace: s);
         }
       });
 
