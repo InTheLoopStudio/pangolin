@@ -86,6 +86,8 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
   }
 
   Future<void> initLoops({bool clearLoops = true}) async {
+    final trace = logger.createTrace('initLoops');
+    await trace.start();
     try {
       logger.debug(
         'initLoops ${state.visitedUser}',
@@ -124,10 +126,14 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
       });
     } catch (e, s) {
       logger.error('initLoops error', error: e, stackTrace: s);
+    } finally {
+      await trace.stop();
     }
   }
 
   Future<void> initBadges({bool clearBadges = true}) async {
+    final trace = logger.createTrace('initBadges');
+    await trace.start();
     try {
       logger.debug(
         'initBadges ${state.visitedUser}',
@@ -168,6 +174,8 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
       });
     } catch (e, s) {
       logger.error('initBadges error', error: e, stackTrace: s);
+    } finally {
+      await trace.stop();
     }
   }
 
@@ -217,6 +225,8 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
   // }
 
   Future<void> initPlace() async {
+    final trace = logger.createTrace('initPlace');
+    await trace.start();
     try {
       logger.debug('initPlace ${state.visitedUser}');
       final place = visitedUser.placeId != null
@@ -225,12 +235,16 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
       emit(state.copyWith(place: place));
     } catch (e, s) {
       logger.error('initPlace error', error: e, stackTrace: s);
+    } finally {
+      await trace.stop();
     }
   }
 
   Future<void> fetchMoreLoops() async {
     if (state.hasReachedMaxLoops) return;
 
+    final trace = logger.createTrace('fetchMoreLoops');
+    await trace.start();
     try {
       if (state.loopStatus == LoopsStatus.initial) {
         await initLoops();
@@ -257,12 +271,16 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
         stackTrace: s,
       );
       // emit(state.copyWith(loopStatus: LoopsStatus.failure));
+    } finally {
+      await trace.stop();
     }
   }
 
   Future<void> fetchMoreBadges() async {
     if (state.hasReachedMaxBadges) return;
 
+    final trace = logger.createTrace('fetchMoreBadges');
+    await trace.start();
     try {
       if (state.badgeStatus == BadgesStatus.initial) {
         await initBadges();
@@ -289,6 +307,8 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
         stackTrace: s,
       );
       // emit(state.copyWith(badgeStatus: BadgesStatus.failure));
+    } finally {
+      await trace.stop();
     }
   }
 

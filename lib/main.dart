@@ -70,6 +70,7 @@ Future<void> main() async {
     } catch (e) {
       // print('Failed to report error to Firebase Crashlytics: $e');
     }
+
     return true;
   };
 
