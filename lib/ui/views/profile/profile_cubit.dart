@@ -113,7 +113,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
           .userLoopsObserver(visitedUser.id)
           .listen((Loop event) {
         try {
-          // print('loop { ${event.id} : ${event.title} }');
+          logger.debug('loop { ${event.id} : ${event.title} }');
           emit(
             state.copyWith(
               loopStatus: LoopsStatus.success,
@@ -159,7 +159,7 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
       badgeListener = databaseRepository
           .userBadgesObserver(visitedUser.id)
           .listen((Badge event) {
-        // print('badge { ${event.id} : ${event.title} }');
+        logger.debug('badge { ${event.id} : ${event.name} }');
         try {
           emit(
             state.copyWith(
