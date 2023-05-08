@@ -59,16 +59,24 @@ class LoopFeedCubit extends Cubit<LoopFeedState> {
         ignoreCache: true,
       ).listen((Loop event) {
         // print('loop { ${event.id} : ${event.title} }');
-        emit(
-          state.copyWith(
-            status: LoopFeedStatus.success,
-            loops: List.of(state.loops)
-              ..add(event)
-              ..sort(
-                (a, b) => b.timestamp.compareTo(a.timestamp),
-              ),
-          ),
-        );
+        try {
+          emit(
+            state.copyWith(
+              status: LoopFeedStatus.success,
+              loops: List.of(state.loops)
+                ..add(event)
+                ..sort(
+                  (a, b) => b.timestamp.compareTo(a.timestamp),
+                ),
+            ),
+          );
+        } catch (e, s) {
+          logger.error(
+            'cannot add loop to loop feed',
+            error: e,
+            stackTrace: s,
+          );
+        }
       });
     } catch (e, s) {
       logger.error(
