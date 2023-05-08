@@ -499,7 +499,7 @@ export const sendToDevice = functions.firestore
 
     const userDoc = await usersRef.doc(activity["toUserId"]).get();
     const user = userDoc.data();
-    if (user !== null) {
+    if (user === null || user === undefined) {
       throw new Error("User not found");
     }
 
@@ -577,10 +577,14 @@ export const sendToDevice = functions.firestore
       functions.logger.debug("No tokens to send to");
     }
 
-    const resp = await fcm.sendToDevice(tokens, payload);
-
-    if (resp.failureCount > 0) {
-      functions.logger.warn(`Failed to send message to some devices: ${resp.failureCount}`);
+    try {
+      const resp = await fcm.sendToDevice(tokens, payload);
+      if (resp.failureCount > 0) {
+        functions.logger.warn(`Failed to send message to some devices: ${resp.failureCount}`);
+      }
+    } catch (e: any) {
+      functions.logger.error(`${user["id"]} : ${e}`);
+      throw new Error(`cannot send notification to device, userId: ${user["id"]}, ${e.message}`); 
     }
   });
 export const createStreamUserOnUserCreated = functions
