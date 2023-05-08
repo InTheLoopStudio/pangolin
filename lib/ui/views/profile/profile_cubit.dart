@@ -110,13 +110,17 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
       loopListener = databaseRepository
           .userLoopsObserver(visitedUser.id)
           .listen((Loop event) {
-        // print('loop { ${event.id} : ${event.title} }');
-        emit(
-          state.copyWith(
-            loopStatus: LoopsStatus.success,
-            userLoops: List.of(state.userLoops)..add(event),
-          ),
-        );
+        try {
+          // print('loop { ${event.id} : ${event.title} }');
+          emit(
+            state.copyWith(
+              loopStatus: LoopsStatus.success,
+              userLoops: List.of(state.userLoops)..add(event),
+            ),
+          );
+        } catch (e, s) {
+          logger.error('initLoops error', error: e, stackTrace: s);
+        }
       });
     } catch (e, s) {
       logger.error('initLoops error', error: e, stackTrace: s);
@@ -150,13 +154,17 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
           .userBadgesObserver(visitedUser.id)
           .listen((Badge event) {
         // print('badge { ${event.id} : ${event.title} }');
-        emit(
-          state.copyWith(
-            badgeStatus: BadgesStatus.success,
-            userBadges: List.of(state.userBadges)..add(event),
-            hasReachedMaxBadges: state.userBadges.length < 10,
-          ),
-        );
+        try {
+          emit(
+            state.copyWith(
+              badgeStatus: BadgesStatus.success,
+              userBadges: List.of(state.userBadges)..add(event),
+              hasReachedMaxBadges: state.userBadges.length < 10,
+            ),
+          );
+        } catch (e, s) {
+          logger.error('initBadges error', error: e, stackTrace: s);
+        }
       });
     } catch (e, s) {
       logger.error('initBadges error', error: e, stackTrace: s);
