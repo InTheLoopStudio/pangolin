@@ -48,7 +48,7 @@ dependencies:
   flutter_slidable: ^2.0.0
   flutter_spinkit: ^5.0.0
   flutter_stripe: ^9.0.0+1
-  flutter_svg: ^1.0.4
+  flutter_svg: ^2.0.4
   font_awesome_flutter: ^10.2.1
   formz: ^0.6.0
   georange: ^1.0.0
@@ -72,12 +72,16 @@ dependencies:
   photo_view: ^0.14.0
   quiver: ^3.0.1
   rxdart: ^0.27.5
-  share_plus: ^4.0.1
+  share_plus: ^6.3.1
   sign_in_with_apple: ^4.1.0
   skeleton_animation: ^0.1.4
   skeleton_text: ^3.0.0
   skeletons: ^0.0.3
-  stream_chat_flutter: ^5.2.0
+  stream_chat_flutter:
+    git:
+      url: https://github.com/jonaylor89/stream-chat-flutter
+      path: packages/stream_chat_flutter
+      ref: 58584d7f968625e4a5d7b9f5e2b6560fc08bc382
   timeago: ^3.1.0
   transparent_pointer: ^1.0.0
   url_launcher: ^6.0.9

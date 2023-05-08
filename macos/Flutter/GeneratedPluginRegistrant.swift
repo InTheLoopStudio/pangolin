@@ -23,7 +23,7 @@ import just_audio
 import package_info_plus
 import path_provider_foundation
 import photo_manager
-import share_plus_macos
+import share_plus
 import sign_in_with_apple
 import sqflite
 import thumblr_macos
