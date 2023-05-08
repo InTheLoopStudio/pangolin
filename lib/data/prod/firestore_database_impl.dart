@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:georange/georange.dart';
 import 'package:intheloopapp/app_logger.dart';
@@ -460,6 +459,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
   @override
   Future<void> addLoop(Loop loop) async {
+    logger.debug('addLoop $loop');
     await _analytics.logEvent(
       name: 'create_loop',
       parameters: {
@@ -514,39 +514,44 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     int limit = 100,
     String? lastLoopId,
   }) async {
-    if (lastLoopId != null) {
-      final documentSnapshot = await _loopsRef.doc(lastLoopId).get();
+    try {
+      if (lastLoopId != null) {
+        final documentSnapshot = await _loopsRef.doc(lastLoopId).get();
 
-      final userLoopsSnapshot = await _loopsRef
-          .where('deleted', isNotEqualTo: true)
-          .orderBy('deleted', descending: true)
-          .orderBy('timestamp', descending: true)
-          .where('userId', isEqualTo: userId)
-          .limit(limit)
-          .startAfterDocument(documentSnapshot)
-          .get();
+        final userLoopsSnapshot = await _loopsRef
+            .where('deleted', isNotEqualTo: true)
+            .orderBy('deleted', descending: true)
+            .orderBy('timestamp', descending: true)
+            .where('userId', isEqualTo: userId)
+            .limit(limit)
+            .startAfterDocument(documentSnapshot)
+            .get();
 
-      final userLoops = userLoopsSnapshot.docs
-          .map(Loop.fromDoc)
-          .where((loop) => !loop.deleted)
-          .toList();
+        final userLoops = userLoopsSnapshot.docs
+            .map(Loop.fromDoc)
+            .where((loop) => !loop.deleted)
+            .toList();
 
-      return userLoops;
-    } else {
-      final userLoopsSnapshot = await _loopsRef
-          .where('deleted', isNotEqualTo: true)
-          .orderBy('deleted', descending: true)
-          .orderBy('timestamp', descending: true)
-          .where('userId', isEqualTo: userId)
-          .limit(limit)
-          .get();
+        return userLoops;
+      } else {
+        final userLoopsSnapshot = await _loopsRef
+            .where('deleted', isNotEqualTo: true)
+            .orderBy('deleted', descending: true)
+            .orderBy('timestamp', descending: true)
+            .where('userId', isEqualTo: userId)
+            .limit(limit)
+            .get();
 
-      final userLoops = userLoopsSnapshot.docs
-          .map(Loop.fromDoc)
-          .where((loop) => !loop.deleted)
-          .toList();
+        final userLoops = userLoopsSnapshot.docs
+            .map(Loop.fromDoc)
+            .where((loop) => !loop.deleted)
+            .toList();
 
-      return userLoops;
+        return userLoops;
+      }
+    } catch (e, s) {
+      logger.error('getUserLoops', error: e, stackTrace: s);
+      return [];
     }
   }
 
@@ -570,14 +575,18 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
             element.type == DocumentChangeType.added,
       )
           .map((DocumentChange<Map<String, dynamic>> element) {
-        return Loop.fromDoc(element.doc);
+        try {
+          return Loop.fromDoc(element.doc);
+        } catch (e, s) {
+          logger.error('userLoopsObserver', error: e, stackTrace: s);
+        }
         // if (element.type == DocumentChangeType.modified) {}
         // if (element.type == DocumentChangeType.removed) {}
       });
     }).flatMap(
-      (value) => Stream.fromIterable(value).where(
-        (loop) => !loop.deleted,
-      ),
+      (value) => Stream.fromIterable(value).whereType<Loop>().where(
+            (loop) => !loop.deleted,
+          ),
     );
 
     yield* userLoopsObserver;
@@ -590,49 +599,54 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String? lastLoopId,
     bool ignoreCache = true,
   }) async {
-    if (lastLoopId != null) {
-      final documentSnapshot = await _loopsRef.doc(lastLoopId).get();
+    try {
+      if (lastLoopId != null) {
+        final documentSnapshot = await _loopsRef.doc(lastLoopId).get();
 
-      final userFeedLoops = await _feedRefs
-          .doc(currentUserId)
-          .collection(feedSubcollection)
-          .orderBy('timestamp', descending: true)
-          .limit(limit)
-          .startAfterDocument(documentSnapshot)
-          .get();
+        final userFeedLoops = await _feedRefs
+            .doc(currentUserId)
+            .collection(feedSubcollection)
+            .orderBy('timestamp', descending: true)
+            .limit(limit)
+            .startAfterDocument(documentSnapshot)
+            .get();
 
-      final followingLoops = await Future.wait(
-        userFeedLoops.docs.map((doc) async {
-          final loop = await getLoopById(doc.id, ignoreCache: ignoreCache);
+        final followingLoops = await Future.wait(
+          userFeedLoops.docs.map((doc) async {
+            final loop = await getLoopById(doc.id, ignoreCache: ignoreCache);
 
-          return loop;
-        }),
-      );
+            return loop;
+          }),
+        );
 
-      return followingLoops
-          .where((loop) => loop != null && !loop.deleted)
-          .whereType<Loop>()
-          .toList();
-    } else {
-      final userFeedLoops = await _feedRefs
-          .doc(currentUserId)
-          .collection(feedSubcollection)
-          .orderBy('timestamp', descending: true)
-          .limit(limit)
-          .get();
+        return followingLoops
+            .where((loop) => loop != null && !loop.deleted)
+            .whereType<Loop>()
+            .toList();
+      } else {
+        final userFeedLoops = await _feedRefs
+            .doc(currentUserId)
+            .collection(feedSubcollection)
+            .orderBy('timestamp', descending: true)
+            .limit(limit)
+            .get();
 
-      final followingLoops = await Future.wait(
-        userFeedLoops.docs.map((doc) async {
-          final loop = await getLoopById(doc.id, ignoreCache: ignoreCache);
+        final followingLoops = await Future.wait(
+          userFeedLoops.docs.map((doc) async {
+            final loop = await getLoopById(doc.id, ignoreCache: ignoreCache);
 
-          return loop;
-        }),
-      );
+            return loop;
+          }),
+        );
 
-      return followingLoops
-          .where((loop) => loop != null && !loop.deleted)
-          .whereType<Loop>()
-          .toList();
+        return followingLoops
+            .where((loop) => loop != null && !loop.deleted)
+            .whereType<Loop>()
+            .toList();
+      }
+    } catch (e, s) {
+      logger.error('getFollowingLoops', error: e, stackTrace: s);
+      return [];
     }
   }
 

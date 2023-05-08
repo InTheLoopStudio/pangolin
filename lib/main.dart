@@ -56,7 +56,14 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  FlutterError.onError = (errorDetails) {
+    logger.error(
+      errorDetails.exceptionAsString(),
+      error: errorDetails.exception,
+      stackTrace: errorDetails.stack,
+    );
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
   PlatformDispatcher.instance.onError = (error, stack) {
     try {
       logger.error('error', error: error, stackTrace: stack, fatal: true);

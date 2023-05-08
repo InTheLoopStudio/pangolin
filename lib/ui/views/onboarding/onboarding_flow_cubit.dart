@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:formz/formz.dart';
@@ -99,7 +98,7 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
 
         onboardingBloc.add(FinishOnboarding(user: currentUser));
       } catch (e, s) {
-        logger.error('Error finishing onboarding', error: e, stackTrace: s);
+        logger.error('error finishing onboarding', error: e, stackTrace: s);
         emit(state.copyWith(loading: false));
       }
     }

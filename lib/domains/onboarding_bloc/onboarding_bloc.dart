@@ -24,6 +24,7 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
           logger.setUserIdentifier(user.id);
           emit(Onboarded(user));
         }
+        await logger.reportPreviousSessionErrors();
       } catch (e, s) {
         logger.error(
           'error checking onboarding status',

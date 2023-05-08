@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:formz/formz.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
@@ -119,7 +120,12 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
         );
         await audioController?.attach();
       }
-    } catch (error) {
+    } catch (error, s) {
+      logger.error(
+        'error handling audio from files',
+        error: error,
+        stackTrace: s,
+      );
       emit(
         state.copyWith(
           pickedAudio: state.pickedAudio,
@@ -147,7 +153,8 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
           ),
         );
       }
-    } catch (e) {
+    } catch (e, s) {
+      logger.error('error picking image', error: e, stackTrace: s);
       emit(
         state.copyWith(
           pickedAudio: state.pickedAudio,
@@ -230,7 +237,8 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
       navigationBloc
         ..add(const ChangeTab(selectedTab: 0))
         ..add(const Pop());
-    } catch (e) {
+    } catch (e, s) {
+      logger.error('error creating loop', error: e, stackTrace: s);
       emit(
         state.copyWith(
           pickedAudio: state.pickedAudio,

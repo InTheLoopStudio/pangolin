@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
@@ -161,6 +162,7 @@ class _LoopContainerState extends State<LoopContainer>
       selector: (state) => (state is Onboarded) ? state.currentUser : null,
       builder: (context, currentUser) {
         if (currentUser == null) {
+          logger.error('currentUser is null', stackTrace: StackTrace.current);
           return const ListTile(
             leading: UserAvatar(
               radius: 25,
@@ -179,6 +181,10 @@ class _LoopContainerState extends State<LoopContainer>
 
             final loopUser = userSnapshot.data;
             if (loopUser == null) {
+              logger.error(
+                'loopUser is null',
+                stackTrace: StackTrace.current,
+              );
               return const LoadingContainer();
             }
 

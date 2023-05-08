@@ -32,8 +32,9 @@ class LoopFeedCubit extends Cubit<LoopFeedState> {
   StreamSubscription<Loop>? loopListener;
 
   Future<void> initLoops({bool clearLoops = true}) async {
+    final trace = logger.createTrace('init loops');
+    await trace.start();
     try {
-      logger.debug('init loops');
       await loopListener?.cancel();
       if (clearLoops) {
         emit(
@@ -75,12 +76,15 @@ class LoopFeedCubit extends Cubit<LoopFeedState> {
         error: e,
         stackTrace: s,
       );
+    } finally {
+      await trace.stop();
     }
   }
 
   Future<void> fetchMoreLoops() async {
     if (state.hasReachedMax) return;
-    logger.debug('fetch more loops');
+    final trace = logger.createTrace('fetch more loops');
+    await trace.start();
 
     try {
       if (state.status == LoopFeedStatus.initial) {
@@ -111,6 +115,8 @@ class LoopFeedCubit extends Cubit<LoopFeedState> {
         stackTrace: s,
       );
       emit(state.copyWith(status: LoopFeedStatus.failure));
+    } finally {
+      await trace.stop();
     }
   }
 
