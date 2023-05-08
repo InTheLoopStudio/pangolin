@@ -67,11 +67,11 @@ Future<void> main() async {
   PlatformDispatcher.instance.onError = (error, stack) {
     try {
       logger.error('error', error: error, stackTrace: stack, fatal: true);
+      return true;
     } catch (e) {
-      // print('Failed to report error to Firebase Crashlytics: $e');
+      logger.debug('Failed to report error to Firebase Crashlytics: $e');
+      return false;
     }
-
-    return true;
   };
 
   if (kDebugMode) {
