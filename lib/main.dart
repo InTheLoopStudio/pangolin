@@ -167,11 +167,6 @@ class TappedApp extends StatelessWidget {
                           context
                               .read<StreamRepository>()
                               .connectUser(authState.currentAuthUser.uid);
-                          context
-                              .read<NotificationRepository>()
-                              .saveDeviceToken(
-                                userId: authState.currentAuthUser.uid,
-                              );
 
                           context.read<ActivityBloc>().add(InitListenerEvent());
 
@@ -180,6 +175,12 @@ class TappedApp extends StatelessWidget {
                           return BlocBuilder<OnboardingBloc, OnboardingState>(
                             builder: (context, onboardState) {
                               if (onboardState is Onboarded) {
+                                context
+                                    .read<NotificationRepository>()
+                                    .saveDeviceToken(
+                                      userId: authState.currentAuthUser.uid,
+                                    );
+
                                 return const ShellView();
                               } else if (onboardState is Onboarding) {
                                 return const OnboardingView();
