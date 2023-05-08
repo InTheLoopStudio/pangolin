@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 // ignore: unused_import
 import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -33,6 +32,11 @@ class CloudMessagingImpl extends NotificationRepository {
 
         if (token != null) {
           try {
+            await tokensRef.doc(userId).collection('tokens').doc(token).set({
+              'token': token,
+              'platform': Platform.operatingSystem,
+            });
+
             if (Platform.isIOS) {
               // register the device with APN (Apple only)
               await _client.addDevice(token, PushProvider.apn);
@@ -40,11 +44,6 @@ class CloudMessagingImpl extends NotificationRepository {
               // register the device with Firebase (Android only)
               await _client.addDevice(token, PushProvider.firebase);
             }
-
-            await tokensRef.doc(userId).collection('tokens').doc(token).set({
-              'token': token,
-              'platform': Platform.operatingSystem,
-            });
           } catch (e, s) {
             logger.error(
               'Saving device token failed',
