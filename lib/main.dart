@@ -55,17 +55,6 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-  PlatformDispatcher.instance.onError = (error, stack) {
-    try {
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-    } on Exception  {
-      // print('Failed to report error to Firebase Crashlytics: $e');
-    } 
-
-    return true;
-  };
-
   // Keep the app in portrait mode (no landscape)
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
