@@ -57,7 +57,7 @@ class CommentsCubit extends Cubit<CommentsState> {
     )
         .listen((Comment event) {
       try {
-        // print('Comment { ${event.id} : ${event.content} }');
+        logger.debug('Comment { ${event.id} : ${event.content} }');
         emit(
           state.copyWith(
             loading: false,

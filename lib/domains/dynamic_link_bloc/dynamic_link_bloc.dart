@@ -20,7 +20,7 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
       logger.debug('monitoring dynamic links');
       dynamicLinkRepository.getDynamicLinks().listen((event) async {
         try {
-          // print('new dynamic link');
+          logger.debug('new dynamic link');
           switch (event.type) {
             case DynamicLinkType.createPost:
               navigationBloc.add(const ChangeTab(selectedTab: 2));

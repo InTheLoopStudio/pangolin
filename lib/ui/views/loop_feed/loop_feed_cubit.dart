@@ -58,7 +58,7 @@ class LoopFeedCubit extends Cubit<LoopFeedState> {
         currentUserId,
         ignoreCache: true,
       ).listen((Loop event) {
-        // print('loop { ${event.id} : ${event.title} }');
+        logger.debug('loop { ${event.id} : ${event.title} }');
         try {
           emit(
             state.copyWith(
