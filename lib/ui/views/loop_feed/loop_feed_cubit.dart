@@ -104,7 +104,12 @@ class LoopFeedCubit extends Cubit<LoopFeedState> {
                 hasReachedMax: false,
               ),
             );
-    } catch (e) {
+    } catch (e, s) {
+      logger.error(
+        'cannot fetch more loops on loop feed',
+        error: e,
+        stackTrace: s,
+      );
       emit(state.copyWith(status: LoopFeedStatus.failure));
     }
   }
