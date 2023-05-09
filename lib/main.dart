@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:isolate';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -44,56 +45,77 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  await runZonedGuarded<Future<void>>(
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
 
-  HydratedBloc.storage = await HydratedStorage.build(
-    storageDirectory: kIsWeb
-        ? HydratedStorage.webStorageDirectory
-        : await getTemporaryDirectory(),
-  );
-
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  FlutterError.onError = (errorDetails) {
-    try {
-      logger.error(
-        errorDetails.exceptionAsString(),
-        error: errorDetails.exception,
-        stackTrace: errorDetails.stack,
+      HydratedBloc.storage = await HydratedStorage.build(
+        storageDirectory: kIsWeb
+            ? HydratedStorage.webStorageDirectory
+            : await getTemporaryDirectory(),
       );
-      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-    } catch (e) {
-      logger.debug('Failed to report error to Firebase Crashlytics');
-    }
-  };
-  PlatformDispatcher.instance.onError = (error, stack) {
-    try {
+
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+
+      FlutterError.onError = (errorDetails) {
+        try {
+          logger.error(
+            errorDetails.exceptionAsString(),
+            error: errorDetails.exception,
+            stackTrace: errorDetails.stack,
+          );
+          FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+        } catch (e) {
+          logger.debug('Failed to report error to Firebase Crashlytics');
+        }
+      };
+      PlatformDispatcher.instance.onError = (error, stack) {
+        try {
+          logger.error('error', error: error, stackTrace: stack, fatal: true);
+          return true;
+        } catch (e) {
+          logger.debug('Failed to report error to Firebase Crashlytics: $e');
+          return false;
+        }
+      };
+
+      Isolate.current.addErrorListener(
+        RawReceivePort((List<dynamic> pair) {
+          final errorStackAndTrace = pair;
+          logger.error(
+            'isolate error',
+            error: errorStackAndTrace.first,
+            stackTrace: errorStackAndTrace.last as StackTrace,
+            fatal: true,
+          );
+        }).sendPort,
+      );
+
+      if (kDebugMode) {
+        // Force disable Crashlytics collection while doing every day development.
+        await FirebaseCrashlytics.instance
+            .setCrashlyticsCollectionEnabled(false);
+      }
+
+      // Keep the app in portrait mode (no landscape)
+      await SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
+
+      Bloc.observer = SimpleBlocObserver();
+
+      FirebaseMessaging.onBackgroundMessage(
+          _firebaseMessagingBackgroundHandler);
+
+      runApp(TappedApp());
+    },
+    (error, stack) {
       logger.error('error', error: error, stackTrace: stack, fatal: true);
-      return true;
-    } catch (e) {
-      logger.debug('Failed to report error to Firebase Crashlytics: $e');
-      return false;
-    }
-  };
-
-  if (kDebugMode) {
-    // Force disable Crashlytics collection while doing every day development.
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
-  }
-
-  // Keep the app in portrait mode (no landscape)
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-
-  Bloc.observer = SimpleBlocObserver();
-
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-  runApp(TappedApp());
+    },
+  );
 }
 
 /// The root widget for the app
