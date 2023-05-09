@@ -81,18 +81,6 @@ Future<void> main() async {
         }
       };
 
-      Isolate.current.addErrorListener(
-        RawReceivePort((List<dynamic> pair) {
-          final errorStackAndTrace = pair;
-          logger.error(
-            'isolate error',
-            error: errorStackAndTrace.first,
-            stackTrace: errorStackAndTrace.last as StackTrace,
-            fatal: true,
-          );
-        }).sendPort,
-      );
-
       if (kDebugMode) {
         // Force disable Crashlytics collection while doing every day development.
         await FirebaseCrashlytics.instance
