@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:formz/formz.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
@@ -117,6 +118,7 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
     final total = state.totalCost;
 
+    logger.debug('creating booking: $booking');
     try {
       if (total > 0) {
         final intent = await payments.initPaymentSheet(

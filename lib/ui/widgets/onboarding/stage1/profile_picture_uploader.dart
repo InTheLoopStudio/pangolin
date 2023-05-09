@@ -17,7 +17,9 @@ class ProfilePictureUploader extends StatelessWidget {
       return FileImage(newProfileImage);
     }
     return currentProfileImage.isEmpty
-        ? const AssetImage('assets/default_avatar.png') as ImageProvider
+        ? const AssetImage(
+            'assets/default_avatar.png',
+          ) as ImageProvider
         : CachedNetworkImageProvider(currentProfileImage);
   }
 

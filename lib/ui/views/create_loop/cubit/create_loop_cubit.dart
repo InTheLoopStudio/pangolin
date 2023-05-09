@@ -215,6 +215,8 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
         // tags: state.selectedTags.map((tag) => tag.value).toList(),
       );
 
+      logger.debug('creating loop: $loop');
+
       await databaseRepository.addLoop(loop);
 
       emit(
