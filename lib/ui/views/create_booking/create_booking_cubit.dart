@@ -106,7 +106,7 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
       id: const Uuid().v4(),
       name: state.name.value,
       note: state.note.value,
-      serviceId: state.service.id,
+      serviceId: Some(state.service.id),
       requesterId: state.currentUserId,
       requesteeId: state.service.userId,
       rate: state.service.rate,

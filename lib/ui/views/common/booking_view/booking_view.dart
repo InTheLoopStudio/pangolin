@@ -6,11 +6,13 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/option.dart';
+import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/error/error_view.dart';
 import 'package:intheloopapp/ui/widgets/common/user_tile.dart';
+import 'package:intheloopapp/ui/widgets/settings_view/service_card.dart';
 import 'package:intheloopapp/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:skeletons/skeletons.dart';
@@ -138,6 +140,46 @@ class BookingView extends StatelessWidget {
                 ),
                 const SliverToBoxAdapter(
                   child: Text(
+                    'Service',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: FutureBuilder<Service?>(
+                    future: booking.serviceId.isSome
+                        ? database.getServiceById(
+                            booking.requesteeId,
+                            booking.serviceId.unwrap,
+                          )
+                        : null,
+                    builder: (context, snapshot) {
+                      final service = snapshot.data;
+                      if (service == null) {
+                        return const Text('Unknown Service');
+                      }
+
+                      return ListTile(
+                        leading: const Icon(Icons.work),
+                        title: Text(service.title),
+                        subtitle: Text(service.description),
+                        trailing: Text(
+                          '\$${(service.rate / 100).toStringAsFixed(2)}${service.rateType == RateType.hourly ? '/hr' : ''}',
+                          style: const TextStyle(
+                            color: Colors.green,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const SliverToBoxAdapter(
+                  child: SizedBox(height: 20),
+                ),
+                const SliverToBoxAdapter(
+                  child: Text(
                     'Artist Rate Paid',
                     style: TextStyle(
                       fontSize: 28,
@@ -149,6 +191,9 @@ class BookingView extends StatelessWidget {
                   child: Text(
                     '\$${(booking.rate / 100).toStringAsFixed(2)} / hour',
                   ),
+                ),
+                const SliverToBoxAdapter(
+                  child: SizedBox(height: 20),
                 ),
                 const SliverToBoxAdapter(
                   child: Text(

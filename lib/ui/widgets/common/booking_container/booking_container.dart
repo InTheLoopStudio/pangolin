@@ -38,6 +38,7 @@ class BookingContainer extends StatelessWidget {
           return FutureBuilder<bool>(
             future: database.isVerified(requestee.id),
             builder: (context, snapshot) {
+
               final isVerified = snapshot.data ?? false;
 
               return ListTile(

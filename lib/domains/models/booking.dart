@@ -31,7 +31,9 @@ class Booking extends Equatable {
     final tmpEndTime = doc.getOrElse('endTime', Timestamp.now()) as Timestamp;
     return Booking(
       id: doc.id,
-      serviceId: doc.getOrElse('serviceId', '') as String,
+      serviceId: Option.fromNullable(
+        doc.getOrElse('serviceId', null) as String?,
+      ),
       name: doc.getOrElse('name', '') as String,
       note: doc.getOrElse('note', '') as String,
       requesterId: doc.getOrElse('requesterId', '') as String,
@@ -61,7 +63,7 @@ class Booking extends Equatable {
   }
 
   final String id;
-  final String serviceId;
+  final Option<String> serviceId;
   final String name;
   final String note;
   final String requesterId;
@@ -100,7 +102,7 @@ class Booking extends Equatable {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'serviceId': serviceId,
+      'serviceId': serviceId.asNullable(),
       'name': name,
       'note': note,
       'requesterId': requesterId,
@@ -119,7 +121,7 @@ class Booking extends Equatable {
 
   Booking copyWith({
     String? id,
-    String? serviceId,
+    Option<String>? serviceId,
     String? name,
     String? note,
     String? requesterId,
