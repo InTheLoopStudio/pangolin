@@ -22,10 +22,10 @@ class ByLocationResultsList extends StatelessWidget {
         }
 
         if (state.searchTerm.isEmpty) {
-          return const Center(
+          return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: const [
                 Icon(
                   Icons.search,
                   size: 200,

@@ -91,60 +91,60 @@ class SettingsView extends StatelessWidget {
                 Container(
                   transform: Matrix4.translationValues(0, -40, 0),
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: const Column(
+                  child: Column(
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
+                        children: const [
                           ChangeProfileImage(),
                           SaveButton(),
                         ],
                       ),
-                      SizedBox(height: 20),
-                      Text(
+                      const SizedBox(height: 20),
+                      const Text(
                         'Payments',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 22,
                         ),
                       ),
-                      SizedBox(height: 10),
-                      PaymentSettingsForm(),
-                      SizedBox(height: 20),
-                      Text(
+                      const SizedBox(height: 10),
+                      const PaymentSettingsForm(),
+                      const SizedBox(height: 20),
+                      const Text(
                         'Preferences',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 22,
                         ),
                       ),
-                      SizedBox(height: 10),
-                      SettingsForm(),
-                      SizedBox(height: 30),
-                      Text(
+                      const SizedBox(height: 10),
+                      const SettingsForm(),
+                      const SizedBox(height: 30),
+                      const Text(
                         'Notifications',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 22,
                         ),
                       ),
-                      SizedBox(height: 10),
-                      NotificationSettingsForm(),
-                      SizedBox(height: 30),
-                      Text(
+                      const SizedBox(height: 10),
+                      const NotificationSettingsForm(),
+                      const SizedBox(height: 30),
+                      const Text(
                         'More Options',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 22,
                         ),
                       ),
-                      SizedBox(height: 10),
-                      ActionMenu(),
-                      SizedBox(height: 20),
-                      DevInformation(),
-                      SizedBox(height: 40),
-                      DeleteAccountButton(),
+                      const SizedBox(height: 10),
+                      const ActionMenu(),
+                      const SizedBox(height: 20),
+                      const DevInformation(),
+                      const SizedBox(height: 40),
+                      const DeleteAccountButton(),
                     ],
                   ),
                 ),

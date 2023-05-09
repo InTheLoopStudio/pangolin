@@ -59,8 +59,8 @@ class LoadingContainer extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Row(
-                children: [
+              Row(
+                children: const [
                   SkeletonAvatar(
                     style: SkeletonAvatarStyle(width: 20, height: 20),
                   ),

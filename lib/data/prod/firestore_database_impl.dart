@@ -579,6 +579,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           return Loop.fromDoc(element.doc);
         } catch (e, s) {
           logger.error('userLoopsObserver', error: e, stackTrace: s);
+          return null;
         }
         // if (element.type == DocumentChangeType.modified) {}
         // if (element.type == DocumentChangeType.removed) {}
@@ -671,11 +672,20 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
                 element.type == DocumentChangeType.added,
           )
               .map((DocumentChange<Map<String, dynamic>> element) async {
-            final loop = await getLoopById(
-              element.doc.id,
-              ignoreCache: ignoreCache,
-            );
-            return loop;
+            try {
+              final loop = await getLoopById(
+                element.doc.id,
+                ignoreCache: ignoreCache,
+              );
+              return loop;
+            } catch (e, s) {
+              logger.error(
+                'followingLoopsObserver',
+                error: e,
+                stackTrace: s,
+              );
+              return null;
+            }
             // if (element.type == DocumentChangeType.modified) {}
             // if (element.type == DocumentChangeType.removed) {}
           });
@@ -756,14 +766,19 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
             element.type == DocumentChangeType.added,
       )
           .map((DocumentChange<Map<String, dynamic>> element) {
-        return Loop.fromDoc(element.doc);
+        try {
+          return Loop.fromDoc(element.doc);
+        } catch (e, s) {
+          logger.error('allLoopsObserver', error: e, stackTrace: s);
+          return null;
+        }
         // if (element.type == DocumentChangeType.modified) {}
         // if (element.type == DocumentChangeType.removed) {}
       });
     }).flatMap(
-      (value) => Stream.fromIterable(value).where(
-        (loop) => loop.userId != currentUserId && !loop.deleted,
-      ),
+      (value) => Stream.fromIterable(value).whereType<Loop>().where(
+            (loop) => loop.userId != currentUserId && !loop.deleted,
+          ),
     );
 
     yield* allLoopsObserver;
@@ -883,18 +898,26 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         .limit(limit)
         .snapshots();
 
-    final activitiesObserver = activitiesSnapshotObserver.map((event) {
-      return event.docChanges
-          .where(
-        (DocumentChange<Map<String, dynamic>> element) =>
-            element.type == DocumentChangeType.added,
-      )
-          .map((DocumentChange<Map<String, dynamic>> element) {
-        return Activity.fromDoc(element.doc);
-        // if (element.type == DocumentChangeType.modified) {}
-        // if (element.type == DocumentChangeType.removed) {}
-      });
-    }).flatMap(Stream.fromIterable);
+    final activitiesObserver = activitiesSnapshotObserver
+        .map((event) {
+          return event.docChanges
+              .where(
+            (DocumentChange<Map<String, dynamic>> element) =>
+                element.type == DocumentChangeType.added,
+          )
+              .map((DocumentChange<Map<String, dynamic>> element) {
+            try {
+              return Activity.fromDoc(element.doc);
+            } catch (e, s) {
+              logger.error('activitiesObserver', error: e, stackTrace: s);
+              return null;
+            }
+            // if (element.type == DocumentChangeType.modified) {}
+            // if (element.type == DocumentChangeType.removed) {}
+          });
+        })
+        .flatMap(Stream.fromIterable)
+        .whereType<Activity>();
 
     yield* activitiesObserver;
   }
@@ -967,18 +990,26 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         // .where('parentId', isNull: true) // Needed for threaded comments
         .snapshots();
 
-    final commentsObserver = commentsSnapshotObserver.map((event) {
-      return event.docChanges
-          .where(
-        (DocumentChange<Map<String, dynamic>> element) =>
-            element.type == DocumentChangeType.added,
-      )
-          .map((DocumentChange<Map<String, dynamic>> element) {
-        return Comment.fromDoc(element.doc);
-        // if (element.type == DocumentChangeType.modified) {}
-        // if (element.type == DocumentChangeType.removed) {}
-      });
-    }).flatMap(Stream.fromIterable);
+    final commentsObserver = commentsSnapshotObserver
+        .map((event) {
+          return event.docChanges
+              .where(
+            (DocumentChange<Map<String, dynamic>> element) =>
+                element.type == DocumentChangeType.added,
+          )
+              .map((DocumentChange<Map<String, dynamic>> element) {
+            try {
+              return Comment.fromDoc(element.doc);
+            } catch (e, s) {
+              logger.error('Error parsing comment', error: e, stackTrace: s);
+              return null;
+            }
+            // if (element.type == DocumentChangeType.modified) {}
+            // if (element.type == DocumentChangeType.removed) {}
+          });
+        })
+        .flatMap(Stream.fromIterable)
+        .whereType<Comment>();
 
     yield* commentsObserver;
   }
@@ -1121,17 +1152,24 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         .limit(limit)
         .snapshots();
 
-    final userCreatedBadgesObserver =
-        userCreatedBadgesSnapshotObserver.map((event) {
-      return event.docChanges
-          .where(
-        (DocumentChange<Map<String, dynamic>> element) =>
-            element.type == DocumentChangeType.added,
-      )
-          .map((DocumentChange<Map<String, dynamic>> element) {
-        return Badge.fromDoc(element.doc);
-      });
-    }).flatMap(Stream.fromIterable);
+    final userCreatedBadgesObserver = userCreatedBadgesSnapshotObserver
+        .map((event) {
+          return event.docChanges
+              .where(
+            (DocumentChange<Map<String, dynamic>> element) =>
+                element.type == DocumentChangeType.added,
+          )
+              .map((DocumentChange<Map<String, dynamic>> element) {
+            try {
+              return Badge.fromDoc(element.doc);
+            } catch (e, s) {
+              logger.error('Error parsing badge', error: e, stackTrace: s);
+              return null;
+            }
+          });
+        })
+        .flatMap(Stream.fromIterable)
+        .whereType<Badge>();
 
     yield* userCreatedBadgesObserver;
   }

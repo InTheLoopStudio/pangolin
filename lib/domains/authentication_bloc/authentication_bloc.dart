@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
 
 part 'authentication_event.dart';
@@ -31,8 +32,17 @@ class AuthenticationBloc
       }
     });
     on<LoggedIn>((event, emit) async {
-      final user = await _authRepository.getAuthUser();
-      emit(Authenticated(user!));
+      try {
+        final user = await _authRepository.getAuthUser();
+        emit(Authenticated(user!));
+      } catch (e, s) {
+        logger.error(
+          'error logging in',
+          error: e,
+          stackTrace: s,
+        );
+        emit(Unauthenticated());
+      }
     });
     on<LoggedOut>((event, emit) {
       emit(Unauthenticated());

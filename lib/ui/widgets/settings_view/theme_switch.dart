@@ -22,12 +22,12 @@ class ThemeSwitch extends StatelessWidget {
                 .read<AppThemeCubit>()
                 .updateTheme(isDarkMode: value ?? true);
           },
-          children: const {
+          children: {
             false: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
+                children: const [
                   Icon(
                     FontAwesomeIcons.solidSun,
                     color: tappedAccent,
@@ -43,10 +43,10 @@ class ThemeSwitch extends StatelessWidget {
               ),
             ),
             true: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
+                children: const [
                   Icon(
                     FontAwesomeIcons.solidMoon,
                     color: tappedAccent,

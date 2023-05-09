@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:intheloopapp/domains/models/service.dart';
-import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/settings/settings_cubit.dart';
-import 'package:intheloopapp/ui/widgets/common/forms/rate_text_field.dart';
 import 'package:intheloopapp/ui/widgets/settings_view/connect_bank_button.dart';
-import 'package:intheloopapp/ui/widgets/settings_view/service_card.dart';
 import 'package:intheloopapp/ui/widgets/settings_view/services_list.dart';
 
 class PaymentSettingsForm extends StatelessWidget {

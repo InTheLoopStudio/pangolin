@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/utils.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
@@ -30,20 +31,25 @@ class Activity extends Equatable {
       _$ActivityFromJson(json);
 
   factory Activity.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
-    final tmpTimestamp =
-        doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
-    return Activity(
-      id: doc.id,
-      fromUserId: doc.getOrElse('fromUserId', '') as String,
-      toUserId: doc.getOrElse('toUserId', '') as String,
-      timestamp: tmpTimestamp.toDate(),
-      type: EnumToString.fromString(
-            ActivityType.values,
-            doc.getOrElse('type', 'free') as String,
-          ) ??
-          ActivityType.like,
-      markedRead: doc.getOrElse('markedRead', false) as bool,
-    );
+    try {
+      final tmpTimestamp =
+          doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
+      return Activity(
+        id: doc.id,
+        fromUserId: doc.getOrElse('fromUserId', '') as String,
+        toUserId: doc.getOrElse('toUserId', '') as String,
+        timestamp: tmpTimestamp.toDate(),
+        type: EnumToString.fromString(
+              ActivityType.values,
+              doc.getOrElse('type', 'free') as String,
+            ) ??
+            ActivityType.like,
+        markedRead: doc.getOrElse('markedRead', false) as bool,
+      );
+    } catch (e, s) {
+      logger.error('Activity.fromDoc', error: e, stackTrace: s);
+      rethrow;
+    }
   }
   final String id;
   final String fromUserId;

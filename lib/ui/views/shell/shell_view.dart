@@ -6,7 +6,6 @@ import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/bookings/bookings_view.dart';
 import 'package:intheloopapp/ui/views/error/error_view.dart';
 import 'package:intheloopapp/ui/views/loops_feeds_list/loop_feeds_list_view.dart';
-import 'package:intheloopapp/ui/views/messaging/messaging_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
 import 'package:intheloopapp/ui/views/search/search_view.dart';
 import 'package:intheloopapp/ui/widgets/shell_view/bottom_toolbar.dart';

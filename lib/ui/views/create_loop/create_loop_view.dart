@@ -67,13 +67,13 @@ class CreateLoopView extends StatelessWidget {
                   ],
                 ),
               ),
-              body: const Padding(
-                padding: EdgeInsets.symmetric(
+              body: Padding(
+                padding: const EdgeInsets.symmetric(
                   horizontal: 40,
                   vertical: 40,
                 ),
                 child: Column(
-                  children: [
+                  children: const [
                     LoopTitleTextField(),
                     SizedBox(
                       height: 24,

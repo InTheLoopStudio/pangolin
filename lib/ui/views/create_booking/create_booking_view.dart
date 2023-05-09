@@ -64,8 +64,8 @@ class CreateBookingView extends StatelessWidget {
               child: Scaffold(
                 backgroundColor: Theme.of(context).colorScheme.background,
                 appBar: AppBar(
-                  title: const Row(
-                    children: [
+                  title: Row(
+                    children: const [
                       Text(
                         'Request to Book',
                         style: TextStyle(
@@ -116,8 +116,8 @@ class CreateBookingView extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: ListView(
                     children: [
-                      const Row(
-                        children: [
+                       Row(
+                        children: const [
                           Text(
                             'Performer',
                             style: TextStyle(

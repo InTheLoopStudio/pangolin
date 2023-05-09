@@ -203,8 +203,8 @@ class LoopView extends StatelessWidget {
                                           ),
                                           GestureDetector(
                                             // onTap: null,
-                                            child: const Row(
-                                              children: [
+                                            child: Row(
+                                              children: const [
                                                 Icon(
                                                   CupertinoIcons
                                                       .arrow_2_squarepath,

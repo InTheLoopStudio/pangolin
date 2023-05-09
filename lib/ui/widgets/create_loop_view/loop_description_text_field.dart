@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intheloopapp/linkify.dart';
 import 'package:intheloopapp/ui/views/create_loop/cubit/create_loop_cubit.dart';
-import 'package:transparent_pointer/transparent_pointer.dart';
 
 class LoopDescriptionTextField extends StatelessWidget {
   const LoopDescriptionTextField({super.key});
