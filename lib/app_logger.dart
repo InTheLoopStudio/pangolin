@@ -27,7 +27,9 @@ class AppLogger {
     final crashed =
         await FirebaseCrashlytics.instance.didCrashOnPreviousExecution();
     if (crashed) {
-      logger.warning('App crashed on previous execution');
+      warning('App crashed on previous execution');
+    } else {
+      debug('App did not crash on previous execution');
     }
   }
 
