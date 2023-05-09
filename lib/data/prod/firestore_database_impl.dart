@@ -1449,7 +1449,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .doc(userId)
           .collection('userServices')
           .doc(serviceId)
-          .set({
+          .update({
         'userId': userId,
         'deleted': true,
       });
