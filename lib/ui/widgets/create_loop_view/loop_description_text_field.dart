@@ -18,7 +18,7 @@ class LoopDescriptionTextField extends StatelessWidget {
           style: const TextStyle(
             letterSpacing: 0,
           ),
-          maxLength: 256,
+          maxLength: 512,
           minLines: 6,
           validator: (value) =>
               value!.isEmpty ? 'Description cannot be empty' : null,
