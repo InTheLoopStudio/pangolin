@@ -1,14 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/domains/models/payment_user.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ConnectBankButton extends StatefulWidget {
-  const ConnectBankButton({super.key});
+  const ConnectBankButton({
+    super.key,
+  });
 
   @override
   State<ConnectBankButton> createState() => _ConnectBankButtonState();
@@ -21,6 +25,7 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
     required PaymentRepository payments,
     required UserModel currentUser,
     required OnboardingBloc onboardingBloc,
+    required NavigationBloc navigationBloc,
   }) =>
       CupertinoButton.filled(
         child: loading
@@ -41,7 +46,7 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
           final res = await payments.createConnectedAccount();
 
           if (!res.success) {
-            // show error
+            logger.warning('create connected account failed');
           }
 
           final updatedUser = currentUser.copyWith(
@@ -53,6 +58,8 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
               user: updatedUser,
             ),
           );
+
+          navigationBloc.add(const Pop());
 
           await launchUrl(
             Uri.parse(res.url),
@@ -84,6 +91,7 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
             payments: payments,
             currentUser: currentUser,
             onboardingBloc: context.read<OnboardingBloc>(),
+            navigationBloc: context.read<NavigationBloc>(),
           );
         }
 
@@ -103,6 +111,7 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
                 payments: payments,
                 currentUser: currentUser,
                 onboardingBloc: context.read<OnboardingBloc>(),
+                navigationBloc: context.read<NavigationBloc>(),
               );
             }
 
@@ -111,6 +120,7 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
                 payments: payments,
                 currentUser: currentUser,
                 onboardingBloc: context.read<OnboardingBloc>(),
+                navigationBloc: context.read<NavigationBloc>(),
               );
             }
 
