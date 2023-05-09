@@ -57,12 +57,16 @@ Future<void> main() async {
   );
 
   FlutterError.onError = (errorDetails) {
-    logger.error(
-      errorDetails.exceptionAsString(),
-      error: errorDetails.exception,
-      stackTrace: errorDetails.stack,
-    );
-    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+    try {
+      logger.error(
+        errorDetails.exceptionAsString(),
+        error: errorDetails.exception,
+        stackTrace: errorDetails.stack,
+      );
+      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+    } catch (e) {
+      logger.debug('Failed to report error to Firebase Crashlytics');
+    }
   };
   PlatformDispatcher.instance.onError = (error, stack) {
     try {

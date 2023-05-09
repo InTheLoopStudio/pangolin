@@ -50,7 +50,15 @@ class AppLogger {
     bool fatal = false,
   }) {
     logger.severe(message, error, stackTrace);
-    FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: fatal);
+    try {
+      FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: fatal);
+    } catch (e, s) {
+      logger.severe(
+        'Failed to report error to Firebase Crashlytics',
+        e,
+        s,
+      );
+    }
   }
 
   Trace createTrace(String name) {
