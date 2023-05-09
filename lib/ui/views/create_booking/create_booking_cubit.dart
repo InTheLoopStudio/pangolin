@@ -91,6 +91,10 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
       );
 
   Future<void> createBooking() async {
+    if (!state.isValid) {
+      throw Exception('Form is not valid');
+    }
+
     final nullablePlace = state.place.asNullable();
 
     final lat = nullablePlace?.latLng?.lat;
@@ -150,7 +154,9 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
       );
       await database.createBooking(booking);
       emit(state.copyWith(status: FormzSubmissionStatus.success));
-      navigationBloc.add(const Pop());
+      navigationBloc
+        ..add(const Pop())
+        ..add(const Pop());
     } catch (e) {
       emit(state.copyWith(status: FormzSubmissionStatus.failure));
       rethrow;

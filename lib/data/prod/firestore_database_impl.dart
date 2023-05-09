@@ -189,7 +189,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     required double lat,
     required double lng,
     int radiusInMeters = 100 * 1000, // 100km
-    int limit = 100,
+    int limit = 30,
     String? lastUserId,
   }) async {
     final range = getGeohashRange(
@@ -511,7 +511,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<Loop>> getUserLoops(
     String userId, {
-    int limit = 100,
+    int limit = 30,
     String? lastLoopId,
   }) async {
     try {
@@ -558,7 +558,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Stream<Loop> userLoopsObserver(
     String userId, {
-    int limit = 100,
+    int limit = 30,
   }) async* {
     final userLoopsSnapshotObserver = _loopsRef
         .where('deleted', isNotEqualTo: true)
@@ -596,7 +596,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<Loop>> getFollowingLoops(
     String currentUserId, {
-    int limit = 100,
+    int limit = 30,
     String? lastLoopId,
     bool ignoreCache = true,
   }) async {
@@ -654,7 +654,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Stream<Loop> followingLoopsObserver(
     String currentUserId, {
-    int limit = 100,
+    int limit = 30,
     bool ignoreCache = true,
   }) async* {
     final userFeedLoopsSnapshotObserver = _feedRefs
@@ -703,7 +703,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   Future<List<Loop>> getAllLoops(
     String currentUserId, {
     bool ignoreCache = true,
-    int limit = 100,
+    int limit = 30,
     String? lastLoopId,
   }) async {
     try {
@@ -749,7 +749,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Stream<Loop> allLoopsObserver(
     String currentUserId, {
-    int limit = 100,
+    int limit = 30,
     bool ignoreCache = true,
   }) async* {
     final allLoopsSnapshotObserver = _loopsRef
@@ -858,7 +858,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<Activity>> getActivities(
     String userId, {
-    int limit = 100,
+    int limit = 30,
     String? lastActivityId,
   }) async {
     if (lastActivityId != null) {
@@ -890,7 +890,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Stream<Activity> activitiesObserver(
     String userId, {
-    int limit = 100,
+    int limit = 30,
   }) async* {
     final activitiesSnapshotObserver = _activitiesRef
         .orderBy('timestamp', descending: true)
@@ -962,7 +962,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<Comment>> getComments(
     String rootId, {
-    int limit = 100,
+    int limit = 30,
   }) async {
     final commentsSnapshot = await _commentsRef
         .doc(rootId)
@@ -980,7 +980,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Stream<Comment> commentsObserver(
     String rootId, {
-    int limit = 100,
+    int limit = 30,
   }) async* {
     final commentsSnapshotObserver = _commentsRef
         .doc(rootId)
@@ -1144,7 +1144,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Stream<Badge> userCreatedBadgesObserver(
     String userId, {
-    int limit = 100,
+    int limit = 30,
   }) async* {
     final userCreatedBadgesSnapshotObserver = _badgesRef
         .where('creatorId', isEqualTo: userId)
@@ -1177,7 +1177,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Stream<Badge> userBadgesObserver(
     String userId, {
-    int limit = 100,
+    int limit = 30,
   }) async* {
     final userBadgesSnapshotObserver = _badgesSentRef
         .doc(userId)
@@ -1212,7 +1212,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<Badge>> getUserCreatedBadges(
     String userId, {
-    int limit = 100,
+    int limit = 30,
     String? lastBadgeId,
   }) async {
     if (lastBadgeId != null) {
@@ -1245,7 +1245,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   @override
   Future<List<Badge>> getUserBadges(
     String userId, {
-    int limit = 100,
+    int limit = 30,
     String? lastBadgeId,
   }) async {
     if (lastBadgeId != null) {
