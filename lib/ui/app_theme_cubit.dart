@@ -1,4 +1,5 @@
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:intheloopapp/app_logger.dart';
 
 /// The Cubit responsible for changing the app's theme
 class AppThemeCubit extends HydratedCubit<bool> {
@@ -15,6 +16,7 @@ class AppThemeCubit extends HydratedCubit<bool> {
   /// with [isDarkMode] being `true` or
   /// light mode with [isDarkMode] being `false`
   void updateTheme({required bool isDarkMode}) {
+    logger.debug('updating dark theme to $isDarkMode');
     emit(isDarkMode);
   }
 

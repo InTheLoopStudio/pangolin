@@ -96,7 +96,8 @@ Future<void> main() async {
       Bloc.observer = SimpleBlocObserver();
 
       FirebaseMessaging.onBackgroundMessage(
-          _firebaseMessagingBackgroundHandler);
+        _firebaseMessagingBackgroundHandler,
+      );
 
       runApp(TappedApp());
     },
