@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
@@ -7,6 +9,7 @@ import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
 import 'package:intheloopapp/ui/views/common/loading/list_loading_view.dart';
 import 'package:intheloopapp/ui/views/error/error_view.dart';
 import 'package:intheloopapp/ui/views/loop_feed/loop_feed_cubit.dart';
+import 'package:intheloopapp/ui/views/loop_feed/loop_list.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container.dart';
 
 class LoopFeedView extends StatefulWidget {
@@ -44,7 +47,7 @@ class _LoopFeedViewState extends State<LoopFeedView>
   @override
   bool get wantKeepAlive => true;
 
-  @override
+   @override
   Widget build(BuildContext context) {
     super.build(context);
 
@@ -63,65 +66,9 @@ class _LoopFeedViewState extends State<LoopFeedView>
           )..initLoops(),
           child: Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,
-            body: BlocBuilder<LoopFeedCubit, LoopFeedState>(
-              builder: (context, state) {
-                switch (state.status) {
-                  case LoopFeedStatus.initial:
-                    return const ListLoadingView();
-                  case LoopFeedStatus.success:
-                    if (state.loops.isEmpty) {
-                      return const Center(
-                        child: EasterEggPlaceholder(
-                          text: 'No Loops',
-                          color: Colors.white,
-                        ),
-                      );
-                    }
-
-                    return RefreshIndicator(
-                      displacement: 20,
-                      onRefresh: () async {
-                        await context.read<LoopFeedCubit>().initLoops();
-                      },
-                      child: CustomScrollView(
-                        controller: widget.scrollController,
-                        physics: const ClampingScrollPhysics(),
-                        key: PageStorageKey<String>(widget.feedKey),
-                        slivers: [
-                          SliverOverlapInjector(
-                            // This is the flip side of the
-                            // SliverOverlapAbsorber
-                            handle:
-                                NestedScrollView.sliverOverlapAbsorberHandleFor(
-                              context,
-                            ),
-                          ),
-                          SliverPadding(
-                            padding: const EdgeInsets.all(8),
-                            sliver: SliverList(
-                              delegate: SliverChildBuilderDelegate(
-                                (BuildContext context, int index) {
-                                  return LoopContainer(
-                                    loop: state.loops[index],
-                                  );
-                                },
-                                childCount: state.loops.length,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-
-                  case LoopFeedStatus.failure:
-                    return const Center(
-                      child: EasterEggPlaceholder(
-                        text: 'Error Fetching Loops :(',
-                        color: Colors.white,
-                      ),
-                    );
-                }
-              },
+            body: LoopList(
+              feedKey: widget.feedKey,
+              scrollController: widget.scrollController,
             ),
           ),
         );
