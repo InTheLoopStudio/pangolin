@@ -28,22 +28,23 @@ class CloudMessagingImpl extends NotificationRepository {
       if (settings.authorizationStatus == AuthorizationStatus.authorized) {
         final token = await fcm.getToken();
 
-        // print('Device Token: ' + (token ?? ''));
+        logger.debug('Device Token: ${token ?? ''}');
 
         if (token != null) {
+          // final devices = await _client.getDevices();
+          // logger.debug('devices ${devices.devices.map((e) => e.id)}');
+
           try {
             await tokensRef.doc(userId).collection('tokens').doc(token).set({
               'token': token,
               'platform': Platform.operatingSystem,
             });
 
-            if (Platform.isIOS) {
-              // register the device with APN (Apple only)
-              await _client.addDevice(token, PushProvider.apn);
-            } else if (Platform.isAndroid) {
-              // register the device with Firebase (Android only)
-              await _client.addDevice(token, PushProvider.firebase);
-            }
+            await _client.addDevice(
+              token,
+              PushProvider.firebase,
+              pushProviderName: 'tapped_firebase',
+            );
           } catch (e, s) {
             logger.error(
               'Saving device token failed',
