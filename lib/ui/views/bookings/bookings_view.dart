@@ -16,7 +16,6 @@ class BookingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final unreadMessagesCount = StreamChat.of(context).client.state.totalUnreadCount;
     return RefreshIndicator(
       onRefresh: () async {
         context.read<BookingsBloc>().add(FetchBookings());
@@ -52,28 +51,45 @@ class BookingsView extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
-                      ),
-                      ),
-                      badges.Badge(
-                        showBadge: unreadMessagesCount >
-                            0,
-                        badgeContent: Text(
-                          unreadMessagesCount.toString(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
                         ),
-                        child: IconButton(
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute<MessagingChannelListView>(
-                              builder: (_) => const MessagingChannelListView(),
+                      ),
+                      StreamBuilder<int?>(
+                        stream: StreamChat.of(context)
+                            .client
+                            .on()
+                            .where((event) => event.unreadChannels != null)
+                            .map(
+                              (event) => event.unreadChannels,
                             ),
-                          ),
-                          icon: const Icon(
-                            CupertinoIcons.bubble_right_fill,
-                          ),
-                        ),
+                        builder: (context, snapshot) {
+                          final unreadMessagesCount = snapshot.data ?? 0;
+
+                          return badges.Badge(
+                            position: badges.BadgePosition.topEnd(
+                              top: 0,
+                              end: 0,
+                            ),
+                            showBadge: unreadMessagesCount > 0,
+                            badgeContent: Text(
+                              unreadMessagesCount.toString(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            child: IconButton(
+                              onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute<MessagingChannelListView>(
+                                  builder: (_) =>
+                                      const MessagingChannelListView(),
+                                ),
+                              ),
+                              icon: const Icon(
+                                CupertinoIcons.bubble_right_fill,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),

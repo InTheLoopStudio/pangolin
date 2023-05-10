@@ -27,9 +27,6 @@ class BottomToolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final unreadMessagesCount =
-        StreamChat.of(context).client.state.totalUnreadCount;
-
     return BlocBuilder<NavigationBloc, NavigationState>(
       builder: (context, state) {
         return CupertinoTabBar(
@@ -85,22 +82,35 @@ class BottomToolbar extends StatelessWidget {
               ),
             ),
             BottomNavigationBarItem(
-              icon: BlocBuilder<BookingsBloc, BookingsState>(
-                builder: (context, state) {
-                  final pendingBookings = state.bookings.where((booking) {
-                    return (booking.status == BookingStatus.pending) &&
-                        (user.id == booking.requesteeId);
-                  }).toList();
-                  return badges.Badge(
-                    position: badges.BadgePosition.topEnd(top: -4, end: -5),
-                    showBadge:
-                        pendingBookings.isNotEmpty || unreadMessagesCount > 0,
-                    badgeContent: Text(
-                      (pendingBookings.length + unreadMessagesCount).toString(),
+              icon: StreamBuilder<int?>(
+                stream: StreamChat.of(context)
+                    .client
+                    .on()
+                    .where((event) => event.unreadChannels != null)
+                    .map(
+                      (event) => event.unreadChannels,
                     ),
-                    child: const Icon(
-                      CupertinoIcons.tickets,
-                    ),
+                builder: (context, snapshot) {
+                  final unreadMessagesCount = snapshot.data ?? 0;
+                  return BlocBuilder<BookingsBloc, BookingsState>(
+                    builder: (context, state) {
+                      final pendingBookings = state.bookings.where((booking) {
+                        return (booking.status == BookingStatus.pending) &&
+                            (user.id == booking.requesteeId);
+                      }).toList();
+                      return badges.Badge(
+                        position: badges.BadgePosition.topEnd(top: -4, end: -5),
+                        showBadge: pendingBookings.isNotEmpty ||
+                            unreadMessagesCount > 0,
+                        badgeContent: Text(
+                          (pendingBookings.length + unreadMessagesCount)
+                              .toString(),
+                        ),
+                        child: const Icon(
+                          CupertinoIcons.tickets,
+                        ),
+                      );
+                    },
                   );
                 },
               ),
