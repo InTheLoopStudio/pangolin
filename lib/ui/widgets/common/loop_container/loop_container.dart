@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:card_banner/card_banner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -49,39 +50,43 @@ class _LoopContainerState extends State<LoopContainer>
             horizontal: 12,
             vertical: 8,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              UserInfo(
-                loopUser: loopUser,
-                timestamp: widget.loop.timestamp,
-              ),
-              TitleText(title: widget.loop.title),
-              const SizedBox(height: 14),
-              if (widget.loop.description.isNotEmpty)
-                Column(
-                  children: [
-                    Linkify(
-                      text: widget.loop.description,
-                      style: const TextStyle(
-                        fontSize: 14,
+          child: CardBanner(
+            text: 'tapped',
+            position: CardBannerPosition.TOPRIGHT,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                UserInfo(
+                  loopUser: loopUser,
+                  timestamp: widget.loop.timestamp,
+                ),
+                TitleText(title: widget.loop.title),
+                const SizedBox(height: 14),
+                if (widget.loop.description.isNotEmpty)
+                  Column(
+                    children: [
+                      Linkify(
+                        text: widget.loop.description,
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 14),
-                  ],
-                )
-              else
-                const SizedBox.shrink(),
-              Attachments(
-                loop: widget.loop,
-                loopUser: loopUser,
-              ),
-              ControlButtons(
-                loopId: widget.loop.id,
-                currentUserId: currentUserId,
-              ),
-              const SizedBox(height: 8),
-            ],
+                      const SizedBox(height: 14),
+                    ],
+                  )
+                else
+                  const SizedBox.shrink(),
+                Attachments(
+                  loop: widget.loop,
+                  loopUser: loopUser,
+                ),
+                ControlButtons(
+                  loop: widget.loop,
+                  currentUserId: currentUserId,
+                ),
+                const SizedBox(height: 8),
+              ],
+            ),
           ),
         ),
       );
@@ -140,7 +145,7 @@ class _LoopContainerState extends State<LoopContainer>
                     loopUser: loopUser,
                   ),
                   ControlButtons(
-                    loopId: widget.loop.id,
+                    loop: widget.loop,
                     currentUserId: currentUserId,
                   ),
                   const SizedBox(height: 8),
