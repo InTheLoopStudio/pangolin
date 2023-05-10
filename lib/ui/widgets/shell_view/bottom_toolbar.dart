@@ -94,7 +94,7 @@ class BottomToolbar extends StatelessWidget {
                   return badges.Badge(
                     position: badges.BadgePosition.topEnd(top: -4, end: -5),
                     showBadge:
-                        pendingBookings.isNotEmpty && unreadMessagesCount > 0,
+                        pendingBookings.isNotEmpty || unreadMessagesCount > 0,
                     badgeContent: Text(
                       (pendingBookings.length + unreadMessagesCount).toString(),
                     ),

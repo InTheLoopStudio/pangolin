@@ -838,12 +838,12 @@ export const addActivityOnBookingUpdate = functions.firestore
     Promise.all([
       _addActivity({
         fromUserId: booking.requesterId,
-        type: "bookingRequest",
+        type: "bookingUpdate",
         toUserId: booking.requesteeId,
       }),
       _addActivity({
         fromUserId: booking.requesteeId,
-        type: "bookingRequest",
+        type: "bookingUpdate",
         toUserId: booking.requesterId,
       }),
     ]);

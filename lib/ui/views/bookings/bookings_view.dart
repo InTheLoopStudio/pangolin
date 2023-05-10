@@ -52,7 +52,7 @@ class BookingsView extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
-                        ),
+                      ),
                       ),
                       badges.Badge(
                         showBadge: unreadMessagesCount >
