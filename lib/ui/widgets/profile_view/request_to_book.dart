@@ -36,7 +36,7 @@ class RequestToBookButton extends StatelessWidget {
                     if (!enabled) {
                       return const FilledButton(
                         onPressed: null,
-                        child: Text('Artist Payment Info not Connected'),
+                        child: Text('Payment Info not Connected'),
                       );
                     }
 
