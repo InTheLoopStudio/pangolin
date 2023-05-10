@@ -1,3 +1,4 @@
+import 'package:card_banner/card_banner.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -84,51 +85,56 @@ class LoopView extends StatelessWidget {
                           title: GestureDetector(
                             onTap: () =>
                                 navigationBloc.add(PushProfile(user.id)),
-                            child: Row(
-                              children: [
-                                Column(
-                                  children: [
-                                    // + User Avatar
-                                    UserAvatar(
-                                      radius: 24,
-                                      imageUrl: user.profilePicture,
-                                      verified: state.isVerified,
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  width: 28,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      user.artistName,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
+                            child: CardBanner(
+                              text: 'tapped',
+                              position: CardBannerPosition.TOPRIGHT,
+                              child: Row(
+                                children: [
+                                  Column(
+                                    children: [
+                                      // + User Avatar
+                                      UserAvatar(
+                                        radius: 24,
+                                        imageUrl: user.profilePicture,
+                                        verified: state.isVerified,
                                       ),
-                                    ),
-                                    Text(
-                                      '@${user.username}',
-                                      style: const TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 12,
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    width: 28,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        user.artistName,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      timeago.format(
-                                        loop.timestamp,
-                                        locale: 'en_short',
+                                      Text(
+                                        '@${user.username}',
+                                        style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 12,
+                                        ),
                                       ),
-                                      style: const TextStyle(
-                                        fontSize: 10,
-                                        color: Colors.grey,
+                                      Text(
+                                        timeago.format(
+                                          loop.timestamp,
+                                          locale: 'en_short',
+                                        ),
+                                        style: const TextStyle(
+                                          fontSize: 10,
+                                          color: Colors.grey,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
