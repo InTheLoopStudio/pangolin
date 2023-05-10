@@ -8,11 +8,15 @@ import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/ui/views/messaging/messaging_view.dart';
 import 'package:intheloopapp/ui/widgets/booking_view/bookings_list.dart';
 
+import 'package:badges/badges.dart' as badges;
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
+
 class BookingsView extends StatelessWidget {
   const BookingsView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final unreadMessagesCount = StreamChat.of(context).client.state.totalUnreadCount;
     return RefreshIndicator(
       onRefresh: () async {
         context.read<BookingsBloc>().add(FetchBookings());
@@ -50,15 +54,25 @@ class BookingsView extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      IconButton(
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute<MessagingChannelListView>(
-                            builder: (_) => const MessagingChannelListView(),
+                      badges.Badge(
+                        showBadge: unreadMessagesCount >
+                            0,
+                        badgeContent: Text(
+                          unreadMessagesCount.toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
                           ),
                         ),
-                        icon: const Icon(
-                          CupertinoIcons.bubble_right_fill,
+                        child: IconButton(
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute<MessagingChannelListView>(
+                              builder: (_) => const MessagingChannelListView(),
+                            ),
+                          ),
+                          icon: const Icon(
+                            CupertinoIcons.bubble_right_fill,
+                          ),
                         ),
                       ),
                     ],

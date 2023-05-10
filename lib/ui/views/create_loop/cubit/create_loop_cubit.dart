@@ -95,7 +95,6 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
   Future<void> handleAudioFromFiles() async {
     try {
       final audioFileResult = await FilePicker.platform.pickFiles(
-        type: FileType.audio,
       );
       if (audioFileResult != null) {
         final pickedAudioName =

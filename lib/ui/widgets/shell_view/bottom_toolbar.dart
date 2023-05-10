@@ -10,6 +10,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class BottomToolbar extends StatelessWidget {
   BottomToolbar({
@@ -26,6 +27,8 @@ class BottomToolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final unreadMessagesCount =
+        StreamChat.of(context).client.state.totalUnreadCount;
 
     return BlocBuilder<NavigationBloc, NavigationState>(
       builder: (context, state) {
@@ -90,8 +93,11 @@ class BottomToolbar extends StatelessWidget {
                   }).toList();
                   return badges.Badge(
                     position: badges.BadgePosition.topEnd(top: -4, end: -5),
-                    showBadge: pendingBookings.isNotEmpty,
-                    badgeContent: Text(pendingBookings.length.toString()),
+                    showBadge:
+                        pendingBookings.isNotEmpty && unreadMessagesCount > 0,
+                    badgeContent: Text(
+                      (pendingBookings.length + unreadMessagesCount).toString(),
+                    ),
                     child: const Icon(
                       CupertinoIcons.tickets,
                     ),
