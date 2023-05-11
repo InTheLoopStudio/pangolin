@@ -86,6 +86,18 @@ class SocialMediaIcons extends StatelessWidget {
                   );
                 },
               ),
+              _socialMediaIcon(
+                state.visitedUser.spotifyId != null,
+                icon: const Icon(FontAwesomeIcons.spotify),
+                onTap: () {
+                  launchUrl(
+                    Uri(
+                      scheme: 'https',
+                      path: 'open.spotify.com/artist/${state.visitedUser.spotifyId}',
+                    ),
+                  );
+                },
+              ),
             ].where((element) => element != null).whereType<Widget>().toList(),
           ),
         );

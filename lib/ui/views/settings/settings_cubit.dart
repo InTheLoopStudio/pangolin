@@ -21,6 +21,7 @@ import 'package:intheloopapp/domains/models/username.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/utils.dart';
+import 'package:path/path.dart';
 
 part 'settings_state.dart';
 
@@ -58,6 +59,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         twitterHandle: currentUser.twitterHandle,
         instagramHandle: currentUser.instagramHandle,
         tiktokHandle: currentUser.tiktokHandle,
+        spotifyId: currentUser.spotifyId,
         youtubeChannelId: currentUser.youtubeChannelId,
         pushNotificationsLikes: currentUser.pushNotificationsLikes,
         pushNotificationsComments: currentUser.pushNotificationsComments,
@@ -97,6 +99,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   void changeInstagram(String value) =>
       emit(state.copyWith(instagramHandle: value));
   void changeTikTik(String value) => emit(state.copyWith(tiktokHandle: value));
+  void changeSpotify(String value) => emit(state.copyWith(spotifyId: value));
   void changeYoutube(String value) =>
       emit(state.copyWith(youtubeChannelId: value));
   void changePlace(Place? place, String placeId) {
@@ -258,6 +261,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         twitterHandle: state.twitterHandle,
         instagramHandle: state.instagramHandle,
         tiktokHandle: state.tiktokHandle,
+        spotifyId: state.spotifyId,
         youtubeChannelId: state.youtubeChannelId,
         profilePicture: profilePictureUrl,
         pushNotificationsLikes: state.pushNotificationsLikes,

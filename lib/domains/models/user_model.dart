@@ -35,6 +35,7 @@ class UserModel extends Equatable {
     required this.tiktokHandle,
     required this.instagramHandle,
     required this.twitterHandle,
+    required this.spotifyId,
     required this.pushNotificationsLikes,
     required this.pushNotificationsComments,
     required this.pushNotificationsFollows,
@@ -70,6 +71,7 @@ class UserModel extends Equatable {
         tiktokHandle: null,
         instagramHandle: null,
         twitterHandle: null,
+        spotifyId: null,
         pushNotificationsLikes: true,
         pushNotificationsComments: true,
         pushNotificationsFollows: true,
@@ -129,6 +131,7 @@ class UserModel extends Equatable {
       tiktokHandle: doc.getOrElse('tiktokHandle', null) as String?,
       instagramHandle: doc.getOrElse('instagramHandle', null) as String?,
       twitterHandle: doc.getOrElse('twitterHandle', null) as String?,
+      spotifyId: doc.getOrElse('spotifyId', null) as String?,
       pushNotificationsLikes:
           doc.getOrElse('pushNotificationsLikes', true) as bool,
       pushNotificationsComments:
@@ -177,6 +180,7 @@ class UserModel extends Equatable {
   final String? tiktokHandle;
   final String? instagramHandle;
   final String? twitterHandle;
+  final String? spotifyId;
 
   final bool pushNotificationsLikes;
   final bool pushNotificationsComments;
@@ -216,6 +220,7 @@ class UserModel extends Equatable {
         tiktokHandle,
         instagramHandle,
         twitterHandle,
+        spotifyId,
         pushNotificationsLikes,
         pushNotificationsComments,
         pushNotificationsFollows,
@@ -261,6 +266,7 @@ class UserModel extends Equatable {
     String? tiktokHandle,
     String? instagramHandle,
     String? twitterHandle,
+    String? spotifyId,
     bool? pushNotificationsLikes,
     bool? pushNotificationsComments,
     bool? pushNotificationsFollows,
@@ -295,6 +301,7 @@ class UserModel extends Equatable {
       tiktokHandle: tiktokHandle ?? this.tiktokHandle,
       instagramHandle: instagramHandle ?? this.instagramHandle,
       twitterHandle: twitterHandle ?? this.twitterHandle,
+      spotifyId: spotifyId ?? this.spotifyId,
       pushNotificationsLikes:
           pushNotificationsLikes ?? this.pushNotificationsLikes,
       pushNotificationsComments:
@@ -339,6 +346,7 @@ class UserModel extends Equatable {
       'youtubeChannelId': youtubeChannelId,
       'tiktokHandle': tiktokHandle,
       'instagramHandle': instagramHandle,
+      'spotifyId': spotifyId,
       'twitterHandle': twitterHandle,
       'pushNotificationsLikes': pushNotificationsLikes,
       'pushNotificationsComments': pushNotificationsComments,
