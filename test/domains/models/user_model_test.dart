@@ -45,7 +45,8 @@ void main() {
         stripeCustomerId: '', 
         genres: const [], 
         occupations: const [],
-        label: 'None',
+        label: 'None', 
+        spotifyId: '',
       ),
     );
   });
@@ -84,6 +85,7 @@ void main() {
         genres: const [], 
         label: 'None', 
         occupations: const [],
+        spotifyId: '',
     );
 
     expect(emptyUser.isEmpty, true);
@@ -125,6 +127,7 @@ void main() {
       genres: const [], 
       label: '', 
       occupations: const [],
+        spotifyId: '',
     );
 
     expect(emptyUser.isEmpty, false);
