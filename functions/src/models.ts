@@ -78,3 +78,21 @@ export type Booking = {
   endTime: firestore.Timestamp;
   timestamp: firestore.Timestamp;
 }
+
+export type Activity = {
+  // id: string;
+  fromUserId: string;
+  toUserId: string;
+  // timestamp: firestore.Timestamp;
+  // markedRead: boolean;
+}
+
+export type FollowActivity = Activity & { type: "follow" }
+export type LikeActivity = Activity & { type: "like"; loopId: string }
+export type CommentActivity = Activity & { type: "comment", rootId: string, commentId: string }
+export type BookingRequestActivity = Activity & { type: "bookingRequest", bookingId: string }
+export type BookingUpdateActivity = Activity & { type: "bookingUpdate", bookingId: string, status: BookingStatus }
+export type LoopMentionActivity = Activity & { type: "loopMention", loopId: string }
+export type CommentMentionActivity = Activity & { type: "commentMention", rootId: string, commentId: string; }
+
+export type BookingStatus = "pending" | "confirmed" | "canceled"

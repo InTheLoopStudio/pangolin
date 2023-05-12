@@ -16,7 +16,7 @@ import { defineSecret } from "firebase-functions/params";
 import { HttpsError } from "firebase-functions/v1/auth";
 
 import Stripe from "stripe";
-import { Booking, Loop, Comment } from "./models";
+import { Booking, Loop, Comment, Activity, FollowActivity, LikeActivity, CommentActivity, BookingRequestActivity, BookingUpdateActivity, CommentMentionActivity, LoopMentionActivity, BookingStatus } from "./models";
 
 const app = initializeApp();
 
@@ -183,40 +183,51 @@ const _deleteUser = async (data: { id: string }) => {
   // TODO: delete stream info?
 };
 
-const _addActivity = async (data: {
-  toUserId: string;
-  fromUserId: string;
-  type: string;
-}) => {
-  // Checking attribute.
-  if (data.toUserId.length === 0) {
+const _addActivity = async (
+  activity: FollowActivity 
+    | LikeActivity 
+    | CommentActivity 
+    | BookingRequestActivity
+    | BookingUpdateActivity
+    | LoopMentionActivity
+    | CommentMentionActivity
+) => {
+  // Checking attribute.A
+  if (activity.toUserId.length === 0) {
     // Throwing an HttpsError so that the client gets the error details.
     throw new functions.https.HttpsError(
       "invalid-argument",
       "The function argument 'toUserId' cannot be empty"
     );
   }
-  if (data.fromUserId.length === 0) {
+  if (activity.fromUserId.length === 0) {
     // Throwing an HttpsError so that the client gets the error details.
     throw new functions.https.HttpsError(
       "invalid-argument",
       "The function argument 'fromUserId' cannot be empty"
     );
   }
-  if (![ "follow", "like", "comment", "bookingRequest", "bookingUpdate", "mention" ].includes(data.type)) {
+  if (![ 
+    "follow", 
+    "like", 
+    "comment", 
+    "bookingRequest", 
+    "bookingUpdate", 
+    "loopMention", 
+    "commentMention", 
+  ].includes(activity.type)) {
     // Throwing an HttpsError so that the client gets the error details.
     throw new functions.https.HttpsError(
       "invalid-argument",
       "The function argument 'type' must be either " +
-      "'follow', 'like', 'comment', 'bookingRequest', 'bookingUpdate', or 'mention'"
+      "'follow', 'like', 'comment', 'bookingRequest', 'bookingUpdate', 'loopMention', or 'commentMention'"
     );
   }
 
   const docRef = await activitiesRef.add({
-    toUserId: data.toUserId,
-    fromUserId: data.fromUserId,
+    ...activity,
     timestamp: Timestamp.now(),
-    type: data.type,
+    markedRead: false,
   });
 
   return { id: docRef.id };
@@ -614,6 +625,9 @@ export const autoFollowUsersOnUserCreated = functions
     const userIdsToAutoFollow = [
       "8yYVxpQ7cURSzNfBsaBGF7A7kkv2", // Johannes
       "n4zIL6bOuPTqRC3dtsl6gyEBPQl1", // Ilias
+      "ToPGEF6jP1e7R6XJDsOHYSyBpf22", // Amberay
+      "aDsHZs9v2BcUWJZYIRAPbX6KSMs2", // Phil
+      "7wEC1jNzsShn3wd8BWXC0w89aIF3" // Xypper
       // "kNVsCCnDkFdYAxebMspLpnEudwq1", // Jayduhhhh
       // "xfxTCUerCyZCUB85likg7THcUGD2", // Yung Smilez
       // "EczWgsPTL1ROJ6EU93Q5vs0Osfx2", // Akimi
@@ -735,7 +749,8 @@ export const notifyMentionsOnLoopUpload = functions.firestore
       await _addActivity({
         toUserId: user.id,
         fromUserId: loop.userId,
-        type: "mention",
+        type: "loopMention",
+        loopId: loop.id,
       });
     });
   })
@@ -801,6 +816,7 @@ export const addActivityOnLoopLike = functions.firestore
         fromUserId: context.params.userId,
         type: "like",
         toUserId: loop.userId,
+        loopId: context.params.loopId,
       });
     }
   });
@@ -825,6 +841,7 @@ export const addActivityOnBooking = functions.firestore
       fromUserId: booking.requesterId,
       type: "bookingRequest",
       toUserId: booking.requesteeId,
+      bookingId: context.params.bookingId,
     });
   });
 export const addActivityOnBookingUpdate = functions.firestore
@@ -835,16 +852,22 @@ export const addActivityOnBookingUpdate = functions.firestore
       throw new HttpsError("failed-precondition", `booking ${context.params.bookingId} does not exist`,);
     }
 
-    Promise.all([
+    const status = booking.status as BookingStatus;
+
+    await Promise.all([
       _addActivity({
         fromUserId: booking.requesterId,
         type: "bookingUpdate",
         toUserId: booking.requesteeId,
+        bookingId: context.params.bookingId,
+        status: status,
       }),
       _addActivity({
         fromUserId: booking.requesteeId,
         type: "bookingUpdate",
         toUserId: booking.requesterId,
+        bookingId: context.params.bookingId,
+        status: status,
       }),
     ]);
   });
@@ -865,7 +888,7 @@ export const incrementLoopCommentCountOnComment = functions.firestore
   });
 export const notifyMentionsOnComment = functions.firestore
   .document("comments/{loopId}/loopComments/{commentId}")
-  .onCreate(async (snapshot) => {
+  .onCreate(async (snapshot, context) => {
     const comment = snapshot.data() as Comment;
 
     const text = comment.content;
@@ -884,7 +907,9 @@ export const notifyMentionsOnComment = functions.firestore
       await _addActivity({
         toUserId: user.id,
         fromUserId: comment.userId,
-        type: "mention",
+        type: "commentMention",
+        rootId: context.params.loopId,
+        commentId: context.params.commentId,
       });
     });
   });
@@ -905,6 +930,8 @@ export const addActivityOnLoopComment = functions.firestore
         toUserId: loop.userId,
         fromUserId: comment.userId,
         type: "comment",
+        rootId: context.params.loopId,
+        commentId: context.params.commentId,
       });
     }
   });

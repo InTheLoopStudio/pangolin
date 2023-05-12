@@ -98,8 +98,10 @@ class _ActivityTileState extends State<ActivityTile>
                                   return 'sent you a booking request 📩';
                                 case ActivityType.bookingUpdate:
                                   return 'updated your booking 📩';
-                                case ActivityType.mention:
+                                case ActivityType.loopMention:
                                   return 'mentioned you in a loop 📣';
+                                case ActivityType.commentMention:
+                                  return 'mentioned you in a comment 📣';
                               }
                             }(),
                             style: TextStyle(

@@ -122,7 +122,7 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
   ) async {
     try {
       final idx = state.activities.indexOf(activity);
-      final updatedActivity = activity.copyWith(markedRead: true);
+      final updatedActivity = activity.copyAsRead();
 
       if (idx != -1) {
         emit(
