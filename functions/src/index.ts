@@ -16,7 +16,7 @@ import { defineSecret } from "firebase-functions/params";
 import { HttpsError } from "firebase-functions/v1/auth";
 
 import Stripe from "stripe";
-import { Booking, Loop, Comment, Activity, FollowActivity, LikeActivity, CommentActivity, BookingRequestActivity, BookingUpdateActivity, CommentMentionActivity, LoopMentionActivity, BookingStatus } from "./models";
+import { Booking, Loop, Comment, FollowActivity, LikeActivity, CommentActivity, BookingRequestActivity, BookingUpdateActivity, CommentMentionActivity, LoopMentionActivity, BookingStatus, } from "./models";
 
 const app = initializeApp();
 
