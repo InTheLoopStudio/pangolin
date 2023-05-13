@@ -30,12 +30,7 @@ class RateTextField extends StatelessWidget {
       inputFormatters: <TextInputFormatter>[_formatter],
       keyboardType: TextInputType.number,
       onChanged: (input) {
-        final value = double.tryParse(input);
-        if (value == null) {
-          onChanged?.call(0);
-          return;
-        }
-
+        final value = _formatter.getUnformattedValue().toDouble();
         final usdValue = (value * 100).toInt();
 
         onChanged?.call(usdValue);
