@@ -9,8 +9,7 @@ import 'package:flutter/foundation.dart';
 /// Adapted from Rust's `Option`, see more here:
 /// https://doc.rust-lang.org/std/option/index.html
 @immutable
-class Option<T> {
-// sealed class Option<T> {
+sealed class Option<T> {
   /// Base constructor for [Option]s.
   const Option();
 
@@ -27,8 +26,7 @@ class Option<T> {
 
 /// An [Option] that has a [value].
 @immutable
-class Some<T> extends Option<T> {
-// final class Some<T> extends Option<T> {
+final class Some<T> extends Option<T> {
   /// Creates an [Option] with the associated immutable [value].
   const Some(this.value);
 
@@ -47,8 +45,7 @@ class Some<T> extends Option<T> {
 
 /// An [Option] that does not have a value.
 @immutable
-class None<T> extends Option<T> {
-// final class None<T> extends Option<T> {
+final class None<T> extends Option<T> {
   /// Creates an [Option] that does not have a value.
   const None();
 
@@ -71,45 +68,29 @@ extension OptionConvenience<T> on Option<T> {
 
   /// Returns [Some.value] if `this` is a [Some].
   /// Otherwise, throws [StateError] (when [None]).
-  // T get unwrap {
-  //   return switch (this) {
-  //     Some(:final value) => value,
-  //     None() => throw StateError('Cannot unwrap a None'),
-  //   };
-  // }
-
   T get unwrap {
-    if (this is Some<T>) {
-      return (this as Some<T>).value;
-    } else {
-      throw StateError('Cannot unwrap a None');
-    }
+    return switch (this) {
+      Some(:final value) => value,
+      None() => throw StateError('Cannot unwrap a None'),
+    };
   }
 
   /// Returns [Some.value] if `this` is a [Some].
   /// Otherwise, returns [defaultValue] (when [None]).
-  // T unwrapOr(T defaultValue) {
-  //   return switch (this) {
-  //     Some(:final value) => value,
-  //     None() => defaultValue,
-  //   };
-  // }
-
   T unwrapOr(T defaultValue) {
-    return this is Some<T> ? (this as Some<T>).value : defaultValue;
+    return switch (this) {
+      Some(:final value) => value,
+      None() => defaultValue,
+    };
   }
 
   /// Returns [Some.value] if `this` is a [Some].
   /// Otherwise, calls and returns the result of [defaultFn] (when [None]).
-  // T unwrapOrElse(T Function() defaultFn) {
-  //   return switch (this) {
-  //     Some(:final value) => value,
-  //     None() => defaultFn(),
-  //   };
-  // }
-
   T unwrapOrElse(T Function() defaultFn) {
-    return this is Some<T> ? (this as Some<T>).value : defaultFn();
+    return switch (this) {
+      Some(:final value) => value,
+      None() => defaultFn(),
+    };
   }
 
   Option<R> map<R>(R Function(T) f) =>
@@ -137,14 +118,10 @@ extension OptionConvenience<T> on Option<T> {
   Option<T> not() => isSome ? const Option.none() : this;
 
   /// Returns [Some.value] or `null` for [None].
-  // T? asNullable() {
-  //   return switch (this) {
-  //     Some(:final value) => value,
-  //     None() => null,
-  //   };
-  // }
-
   T? asNullable() {
-    return this is Some<T> ? (this as Some<T>).value : null;
+    return switch (this) {
+      Some(:final value) => value,
+      None() => null,
+    };
   }
 }

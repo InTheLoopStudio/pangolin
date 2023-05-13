@@ -15,8 +15,6 @@ class Comments extends StatelessWidget {
           onTap: () => navigationBloc.add(
             PushLoop(
               state.loop,
-              showComments: true,
-              autoPlay: false,
             ),
           ),
           child: Row(
@@ -34,7 +32,7 @@ class Comments extends StatelessWidget {
                   fontSize: 10,
                   color: Color(0xFF757575),
                 ),
-              )
+              ),
             ],
           ),
         );

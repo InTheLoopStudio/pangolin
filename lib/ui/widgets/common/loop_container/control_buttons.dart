@@ -87,8 +87,6 @@ class ControlButtons extends StatelessWidget {
                   onTap: () => context.read<NavigationBloc>().add(
                         PushLoop(
                           state.loop,
-                          showComments: true,
-                          autoPlay: false,
                         ),
                       ),
                   child: Row(

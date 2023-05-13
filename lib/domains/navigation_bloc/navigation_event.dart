@@ -107,18 +107,13 @@ class PushSignUp extends NavigationEvent {
 
 class PushLoop extends NavigationEvent {
   const PushLoop(
-    this.loop, {
-    this.showComments = false,
-    this.autoPlay = true,
-  });
+    this.loop,
+  );
 
   final Loop loop;
-  final bool showComments;
-  final bool autoPlay;
 
   @override
-  String toString() =>
-      '''PushLoop { loop: $loop, showComments: $showComments, autoPlay: $autoPlay }''';
+  String toString() => '''PushLoop { loop: $loop }''';
 
   @override
   List<Object> get props => [loop];

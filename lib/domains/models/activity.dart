@@ -8,7 +8,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'activity.g.dart';
 
-abstract class Activity extends Equatable {
+sealed class Activity extends Equatable {
   const Activity({
     required this.id,
     required this.fromUserId,
@@ -58,7 +58,7 @@ abstract class Activity extends Equatable {
 }
 
 @JsonSerializable()
-class FollowActivity extends Activity {
+final class FollowActivity extends Activity {
   const FollowActivity({
     required super.id,
     required super.fromUserId,
@@ -109,7 +109,7 @@ class FollowActivity extends Activity {
 }
 
 @JsonSerializable()
-class LikeActivity extends Activity {
+final class LikeActivity extends Activity {
   const LikeActivity({
     required super.id,
     required super.fromUserId,
@@ -160,7 +160,7 @@ class LikeActivity extends Activity {
 }
 
 @JsonSerializable()
-class CommentActivity extends Activity {
+final class CommentActivity extends Activity {
   const CommentActivity({
     required super.id,
     required super.fromUserId,
@@ -215,7 +215,7 @@ class CommentActivity extends Activity {
 }
 
 @JsonSerializable()
-class BookingRequestActivity extends Activity {
+final class BookingRequestActivity extends Activity {
   const BookingRequestActivity({
     required super.id,
     required super.fromUserId,
@@ -268,7 +268,7 @@ class BookingRequestActivity extends Activity {
 }
 
 @JsonSerializable()
-class BookingUpdateActivity extends Activity {
+final class BookingUpdateActivity extends Activity {
   const BookingUpdateActivity({
     required super.id,
     required super.fromUserId,
@@ -325,7 +325,7 @@ class BookingUpdateActivity extends Activity {
 }
 
 @JsonSerializable()
-class LoopMentionActivity extends Activity {
+final class LoopMentionActivity extends Activity {
   const LoopMentionActivity({
     required super.id,
     required super.fromUserId,
@@ -378,7 +378,7 @@ class LoopMentionActivity extends Activity {
 }
 
 @JsonSerializable()
-class CommentMentionActivity extends Activity {
+final class CommentMentionActivity extends Activity {
   const CommentMentionActivity({
     required super.id,
     required super.fromUserId,

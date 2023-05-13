@@ -612,12 +612,12 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.24):
     - BoringSSL-GRPC/Interface (= 0.0.24)
   - BoringSSL-GRPC/Interface (0.0.24)
-  - cloud_firestore (4.6.0):
+  - cloud_firestore (4.7.0):
     - Firebase/Firestore (= 10.7.0)
     - firebase_core
     - Flutter
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - cloud_functions (4.2.0):
+  - cloud_functions (4.3.0):
     - Firebase/Functions (= 10.7.0)
     - firebase_core
     - Flutter
@@ -697,42 +697,42 @@ PODS:
   - Firebase/Storage (10.7.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 10.7.0)
-  - firebase_analytics (10.3.0):
+  - firebase_analytics (10.4.0):
     - Firebase/Analytics (= 10.7.0)
     - firebase_core
     - Flutter
-  - firebase_auth (4.5.0):
+  - firebase_auth (4.6.0):
     - Firebase/Auth (= 10.7.0)
     - firebase_core
     - Flutter
-  - firebase_core (2.11.0):
+  - firebase_core (2.12.0):
     - Firebase/CoreOnly (= 10.7.0)
     - Flutter
-  - firebase_crashlytics (3.2.0):
+  - firebase_crashlytics (3.3.0):
     - Firebase/Crashlytics (= 10.7.0)
     - firebase_core
     - Flutter
-  - firebase_dynamic_links (5.2.0):
+  - firebase_dynamic_links (5.3.0):
     - Firebase/DynamicLinks (= 10.7.0)
     - firebase_core
     - Flutter
-  - firebase_in_app_messaging (0.7.2):
+  - firebase_in_app_messaging (0.7.3):
     - Firebase/InAppMessaging (= 10.7.0)
     - firebase_core
     - Flutter
-  - firebase_messaging (14.5.0):
+  - firebase_messaging (14.6.0):
     - Firebase/Messaging (= 10.7.0)
     - firebase_core
     - Flutter
-  - firebase_performance (0.9.1-2):
+  - firebase_performance (0.9.2):
     - Firebase/Performance (= 10.7.0)
     - firebase_core
     - Flutter
-  - firebase_remote_config (4.1.0):
+  - firebase_remote_config (4.2.0):
     - Firebase/RemoteConfig (= 10.7.0)
     - firebase_core
     - Flutter
-  - firebase_storage (11.1.2):
+  - firebase_storage (11.2.0):
     - Firebase/Storage (= 10.7.0)
     - firebase_core
     - Flutter
@@ -1104,7 +1104,7 @@ DEPENDENCIES:
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - just_audio (from `.symlinks/plugins/just_audio/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
-  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/ios`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - photo_manager (from `.symlinks/plugins/photo_manager/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
@@ -1228,7 +1228,7 @@ EXTERNAL SOURCES:
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
-    :path: ".symlinks/plugins/path_provider_foundation/ios"
+    :path: ".symlinks/plugins/path_provider_foundation/darwin"
   photo_manager:
     :path: ".symlinks/plugins/photo_manager/ios"
   share_plus:
@@ -1254,24 +1254,24 @@ SPEC CHECKSUMS:
   audio_service: f509d65da41b9521a61f1c404dd58651f265a567
   audio_session: 4f3e461722055d21515cf3261b64c973c062f345
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
-  cloud_firestore: 3809dfc121ab99b81bba51eb84ac6ca3f9033325
-  cloud_functions: ea4b2c12cd82967947885ce40ed01f4adc00f8e2
+  cloud_firestore: 511b4d22a2b3c73d1d6f1974b1cf0971a034ea16
+  cloud_functions: 29f53dee7ad75258f99a4da8bc49e9250eb7cd11
   connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
   file_picker: ce3938a0df3cc1ef404671531facef740d03f920
   file_selector_ios: 8c25d700d625e1dcdd6599f2d927072f2254647b
   Firebase: 0219acf760880eeec8ce479895bd7767466d9f81
-  firebase_analytics: 216977fc8c05f54c2c4935181e3f1a368949c5cd
-  firebase_auth: 1eb69de8f57040c5c78bb3267412e9cb395fd08c
-  firebase_core: dee76ded6c693fdb38b8ea39aef7129e32e587a3
-  firebase_crashlytics: 450dc80dcb167d04714c147336dd04a7230d20e4
-  firebase_dynamic_links: 0c675fe7fc8e242572941e409bd6039166e846f2
-  firebase_in_app_messaging: 02c69d58d01f15cc32bc9fb404bc0c7248fdc9c7
-  firebase_messaging: 67fbcdaf6a7c81849590e542eff2409dc49d9fa5
-  firebase_performance: 6a92bbefc5286e6488629b1cc3c32a7a8a7032f2
-  firebase_remote_config: 9bca00455ced3cebe8bb40691c7b0b81d1f1963a
-  firebase_storage: f6fb3e54e886182b5ab5cf514da1d9ceb196fa2f
+  firebase_analytics: 843839cfcab326b37cca084009045a8fc287ef74
+  firebase_auth: 6608b43809305e8d82957dffd6419b04ee4a31e5
+  firebase_core: 312d0d81b346ec20540822c8498e626d6918ef48
+  firebase_crashlytics: 869c43dd16f650004bb312ff9eff8d068406b939
+  firebase_dynamic_links: 6910c165ebf7d30d8f3d5667668049b69a05ccbd
+  firebase_in_app_messaging: 9a9a9ad2f4317102b865ded74d8cc7f32694772f
+  firebase_messaging: 8432ce73100171cab1707fad998a89590276bb4d
+  firebase_performance: 2a0f7dcea97db730990e16a1e94eecc3280160a8
+  firebase_remote_config: e6b22eba96aba1a34d39c89fbc96917b8c2f680f
+  firebase_storage: d093441a28c685ff955d87f710588b83e1a4815f
   FirebaseABTesting: 005b70969e2817e2a1e631e8dba29134a04c0622
   FirebaseAnalytics: f8133442ee6f8512e28ff19e62ce15398bfaeace
   FirebaseAppCheckInterop: e69dde5cd51b88ee1b4339d6766b691272256f9b

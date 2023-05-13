@@ -8,32 +8,140 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class ActivityTile extends StatefulWidget {
+class ActivityTile extends StatelessWidget {
   const ActivityTile({required this.activity, super.key});
 
   final Activity activity;
 
-  @override
-  State<ActivityTile> createState() => _ActivityTileState();
-}
+  Future<void> onFollow(BuildContext context, String userId) {
+    context.read<NavigationBloc>().add(PushProfile(userId));
+    return Future(() => null);
+  }
 
-class _ActivityTileState extends State<ActivityTile>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
+  Future<void> onLike(
+    BuildContext context,
+    String? loopId,
+    String fromUserId,
+  ) async {
+    final nav = context.read<NavigationBloc>();
+    if (loopId == null) {
+      nav.add(PushProfile(fromUserId));
+      return;
+    }
+
+    final database = context.read<DatabaseRepository>();
+    final loop = await database.getLoopById(loopId);
+    if (loop == null) {
+      return;
+    }
+    nav.add(PushLoop(loop));
+  }
+
+  Future<void> onComment(
+    BuildContext context,
+    String? loopId,
+    String fromUserId,
+  ) async {
+    final nav = context.read<NavigationBloc>();
+    if (loopId == null) {
+      nav.add(PushProfile(fromUserId));
+      return;
+    }
+
+    final database = context.read<DatabaseRepository>();
+    final loop = await database.getLoopById(loopId);
+    if (loop == null) {
+      return;
+    }
+    nav.add(PushLoop(loop));
+  }
+
+  Future<void> onBookingRequest(
+    BuildContext context,
+    String? bookingId,
+    String fromUserId,
+  ) async {
+    final nav = context.read<NavigationBloc>();
+    if (bookingId == null) {
+      nav.add(PushProfile(fromUserId));
+      return;
+    }
+
+    final database = context.read<DatabaseRepository>();
+    final booking = await database.getBookingById(bookingId);
+    if (booking == null) {
+      return;
+    }
+
+    nav.add(PushBooking(booking));
+  }
+
+  Future<void> onBookingUpdate(
+    BuildContext context,
+    String? bookingId,
+    String fromUserId,
+  ) async {
+    final nav = context.read<NavigationBloc>();
+    if (bookingId == null) {
+      nav.add(PushProfile(fromUserId));
+      return;
+    }
+
+    final database = context.read<DatabaseRepository>();
+    final booking = await database.getBookingById(bookingId);
+    if (booking == null) {
+      return;
+    }
+
+    nav.add(PushBooking(booking));
+  }
+
+  Future<void> onLoopMention(
+    BuildContext context,
+    String? loopId,
+    String fromUserId,
+  ) async {
+    final nav = context.read<NavigationBloc>();
+    if (loopId == null) {
+      nav.add(PushProfile(fromUserId));
+      return;
+    }
+
+    final database = context.read<DatabaseRepository>();
+    final loop = await database.getLoopById(loopId);
+    if (loop == null) {
+      return;
+    }
+    nav.add(PushLoop(loop));
+  }
+
+  Future<void> onCommentMention(
+    BuildContext context,
+    String? loopId,
+  ) async {
+    final nav = context.read<NavigationBloc>();
+    if (loopId == null) {
+      return;
+    }
+
+    final database = context.read<DatabaseRepository>();
+    final loop = await database.getLoopById(loopId);
+    if (loop == null) {
+      return;
+    }
+    nav.add(PushLoop(loop));
+  }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    final navigationBloc = context.read<NavigationBloc>();
     final databaseRepository = context.read<DatabaseRepository>();
 
-    var markedRead = widget.activity.markedRead;
+    var markedRead = activity.markedRead;
 
     return BlocBuilder<ActivityBloc, ActivityState>(
       builder: (context, state) {
         return FutureBuilder<UserModel?>(
-          future: databaseRepository.getUserById(widget.activity.fromUserId),
+          future: databaseRepository.getUserById(activity.fromUserId),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const SizedBox.shrink();
@@ -47,7 +155,7 @@ class _ActivityTileState extends State<ActivityTile>
               if (!markedRead) {
                 context
                     .read<ActivityBloc>()
-                    .add(MarkActivityAsReadEvent(activity: widget.activity));
+                    .add(MarkActivityAsReadEvent(activity: activity));
                 markedRead = true;
               }
 
@@ -60,7 +168,56 @@ class _ActivityTileState extends State<ActivityTile>
                     children: [
                       GestureDetector(
                         onTap: () {
-                          navigationBloc.add(PushProfile(user.id));
+                          final _ = switch (activity) {
+                            FollowActivity(:final fromUserId) => onFollow(
+                                context,
+                                fromUserId,
+                              ),
+                            LikeActivity(:final loopId, :final fromUserId) =>
+                              onLike(
+                                context,
+                                loopId,
+                                fromUserId,
+                              ),
+                            CommentActivity(:final rootId, :final fromUserId) =>
+                              onComment(
+                                context,
+                                rootId,
+                                fromUserId,
+                              ),
+                            BookingRequestActivity(
+                              :final bookingId,
+                              :final fromUserId,
+                            ) =>
+                              onBookingRequest(
+                                context,
+                                bookingId,
+                                fromUserId,
+                              ),
+                            BookingUpdateActivity(
+                              :final bookingId,
+                              :final fromUserId,
+                            ) =>
+                              onBookingUpdate(
+                                context,
+                                bookingId,
+                                fromUserId,
+                              ),
+                            LoopMentionActivity(
+                              :final loopId,
+                              :final fromUserId,
+                            ) =>
+                              onLoopMention(
+                                context,
+                                loopId,
+                                fromUserId,
+                              ),
+                            CommentMentionActivity(:final rootId) =>
+                              onCommentMention(
+                                context,
+                                rootId,
+                              )
+                          };
                         },
                         child: ListTile(
                           tileColor: markedRead ? null : Colors.grey[900],
@@ -71,7 +228,7 @@ class _ActivityTileState extends State<ActivityTile>
                           ),
                           trailing: Text(
                             timeago.format(
-                              widget.activity.timestamp,
+                              activity.timestamp,
                               locale: 'en_short',
                             ),
                             style: TextStyle(
@@ -87,7 +244,7 @@ class _ActivityTileState extends State<ActivityTile>
                           ),
                           subtitle: Text(
                             () {
-                              switch (widget.activity.type) {
+                              switch (activity.type) {
                                 case ActivityType.follow:
                                   return 'followed you 🤝';
                                 case ActivityType.like:
