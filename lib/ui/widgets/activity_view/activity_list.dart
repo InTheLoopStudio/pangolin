@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
+import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
 import 'package:intheloopapp/ui/views/common/loading/list_loading_view.dart';
 import 'package:intheloopapp/ui/widgets/activity_view/activity_tile.dart';
@@ -50,68 +51,65 @@ class _ActivityListState extends State<ActivityList> {
     super.dispose();
   }
 
+  Widget _activityListBuilder(BuildContext context, List<Activity> activities) {
+    context.read<ActivityBloc>().add(const MarkAllAsReadEvent());
+    return CustomScrollView(
+      physics: const ClampingScrollPhysics(
+        parent: AlwaysScrollableScrollPhysics(),
+      ),
+      controller: _scrollController,
+      slivers: activities.isEmpty
+          ? <Widget>[
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  const SizedBox(height: 150),
+                  const EasterEggPlaceholder(
+                    text: 'No New Activities',
+                  ),
+                ]),
+              ),
+            ]
+          : <Widget>[
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return index >= activities.length
+                        ? const Center(
+                            child: SizedBox(
+                              height: 24,
+                              width: 24,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 1.5,
+                              ),
+                            ),
+                          )
+                        : ActivityTile(
+                            activity: activities[index],
+                          );
+                  },
+                  childCount: activities.length + 1,
+                ),
+              ),
+            ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ActivityBloc, ActivityState>(
       builder: (context, state) {
-        if (state is ActivityInitial) {
-          return SkeletonListView();
-        }
-        if (state is ActivityFailure) {
-          return const Center(child: Text('failed to fetch activities'));
-        }
-        if (state is ActivitySuccess || state is ActivityEnd) {
-          context.read<ActivityBloc>().add(const MarkAllAsReadEvent());
-          return Center(
-            child: RefreshIndicator(
-              onRefresh: () async =>
-                  context.read<ActivityBloc>().add(InitListenerEvent()),
-              child: CustomScrollView(
-                physics: const ClampingScrollPhysics(
-                  parent: AlwaysScrollableScrollPhysics(),
-                ),
-                controller: _scrollController,
-                slivers: state.activities.isEmpty
-                    ? <Widget>[
-                        SliverList(
-                          delegate: SliverChildListDelegate([
-                            const SizedBox(height: 150),
-                            const EasterEggPlaceholder(
-                              text: 'No New Activities',
-                            ),
-                          ]),
-                        ),
-                      ]
-                    : <Widget>[
-                        SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                            (BuildContext context, int index) {
-                              return index >= state.activities.length
-                                  ? const Center(
-                                      child: SizedBox(
-                                        height: 24,
-                                        width: 24,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 1.5,
-                                        ),
-                                      ),
-                                    )
-                                  : ActivityTile(
-                                      activity: state.activities[index],
-                                    );
-                            },
-                            childCount: state is ActivityEnd
-                                ? state.activities.length
-                                : state.activities.length + 1,
-                          ),
-                        ),
-                      ],
-              ),
-            ),
-          );
-        }
-
-        return const ListLoadingView();
+        return RefreshIndicator(
+          onRefresh: () async =>
+          context.read<ActivityBloc>().add(InitListenerEvent()),
+          child: switch (state) {
+            ActivityInitial() => SkeletonListView(),
+            ActivityFailure() =>
+              const Center(child: Text('failed to fetch activities')),
+            ActivitySuccess(:final activities) ||
+            ActivityEnd(:final activities) =>
+              _activityListBuilder(context, activities),
+          },
+        );
       },
     );
   }
