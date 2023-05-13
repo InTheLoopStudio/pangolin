@@ -27,6 +27,7 @@ class _ShellViewState extends State<ShellView> {
 
   @override
   void initState() {
+    
     searchFocusNode = FocusNode();
     super.initState();
   }

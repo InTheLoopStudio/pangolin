@@ -1,20 +1,20 @@
 part of 'onboarding_bloc.dart';
 
-abstract class OnboardingState extends Equatable {
+sealed class OnboardingState extends Equatable {
   const OnboardingState();
 }
 
-class Unonboarded extends OnboardingState {
+final class Unonboarded extends OnboardingState {
   @override
   List<Object> get props => [];
 }
 
-class Onboarding extends OnboardingState {
+final class Onboarding extends OnboardingState {
   @override
   List<Object> get props => [];
 }
 
-class Onboarded extends OnboardingState {
+final class Onboarded extends OnboardingState {
   const Onboarded(this.currentUser) : super();
   final UserModel currentUser;
 

@@ -102,7 +102,12 @@ Future<void> main() async {
       runApp(TappedApp());
     },
     (error, stack) {
-      logger.error('error', error: error, stackTrace: stack, fatal: true);
+      logger.error(
+        'error',
+        error: error,
+        stackTrace: stack,
+        fatal: true,
+      );
     },
   );
 }
@@ -118,6 +123,36 @@ class TappedApp extends StatelessWidget {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey();
 
   final _client = StreamChatClient('xyk6dwdsp422');
+
+  Widget _authenticated(
+    BuildContext context,
+    String currentAuthUserId,
+  ) {
+    context.read<OnboardingBloc>().add(
+          OnboardingCheck(
+            userId: currentAuthUserId,
+          ),
+        );
+    context.read<StreamRepository>().connectUser(currentAuthUserId);
+    context.read<ActivityBloc>().add(InitListenerEvent());
+    context.read<BookingsBloc>().add(FetchBookings());
+
+    return BlocBuilder<OnboardingBloc, OnboardingState>(
+      builder: (context, onboardState) {
+        return switch (onboardState) {
+          Onboarded() => () {
+              context.read<NotificationRepository>().saveDeviceToken(
+                    userId: currentAuthUserId,
+                  );
+
+              return const ShellView();
+            }(),
+          Onboarding() => const OnboardingView(),
+          Unonboarded() => const LoadingView(),
+        };
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -163,56 +198,16 @@ class TappedApp extends StatelessWidget {
                     builder:
                         (BuildContext context, AuthenticationState authState) {
                       try {
-                        if (authState is Uninitialized) {
-                          logger.debug('auth uninitialized');
-                          return const LoadingView();
-                        }
-                        if (authState is Authenticated) {
-                          logger.debug('auth initialized');
+                        return switch (authState) {
+                          Uninitialized() => const LoadingView(),
+                          Authenticated() => _authenticated(
+                              context,
+                              authState.currentAuthUser.uid,
+                            ),
+                          Unauthenticated() => const LoginView(),
+                        };
 
-                          context
-                              .read<DynamicLinkBloc>()
-                              .add(MonitorDynamicLinks());
-
-                          context.read<OnboardingBloc>().add(
-                                OnboardingCheck(
-                                  userId: authState.currentAuthUser.uid,
-                                ),
-                              );
-                          context
-                              .read<StreamRepository>()
-                              .connectUser(authState.currentAuthUser.uid);
-
-                          context.read<ActivityBloc>().add(InitListenerEvent());
-
-                          context.read<BookingsBloc>().add(FetchBookings());
-
-                          return BlocBuilder<OnboardingBloc, OnboardingState>(
-                            builder: (context, onboardState) {
-                              if (onboardState is Onboarded) {
-                                context
-                                    .read<NotificationRepository>()
-                                    .saveDeviceToken(
-                                      userId: authState.currentAuthUser.uid,
-                                    );
-
-                                return const ShellView();
-                              } else if (onboardState is Onboarding) {
-                                return const OnboardingView();
-                              } else if (onboardState is Unonboarded) {
-                                return const LoadingView();
-                              } else {
-                                return const LoadingView();
-                              }
-                            },
-                          );
-                        }
-
-                        if (authState is Unauthenticated) {
-                          return const LoginView();
-                        }
-
-                        return const LoadingView();
+                        if (authState is Authenticated) {}
                       } catch (e, s) {
                         FirebaseCrashlytics.instance.recordError(
                           e,

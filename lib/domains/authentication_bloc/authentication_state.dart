@@ -1,11 +1,11 @@
 part of 'authentication_bloc.dart';
 
 @immutable
-abstract class AuthenticationState extends Equatable {
+sealed class AuthenticationState extends Equatable {
   const AuthenticationState();
 }
 
-class Uninitialized extends AuthenticationState {
+final class Uninitialized extends AuthenticationState {
   @override
   String toString() => 'Uninitialized';
 
@@ -13,7 +13,7 @@ class Uninitialized extends AuthenticationState {
   List<Object> get props => [];
 }
 
-class Authenticated extends AuthenticationState {
+final class Authenticated extends AuthenticationState {
   const Authenticated(this.currentAuthUser) : super();
   final User currentAuthUser;
 
@@ -24,7 +24,7 @@ class Authenticated extends AuthenticationState {
   List<Object> get props => [currentAuthUser];
 }
 
-class Unauthenticated extends AuthenticationState {
+final class Unauthenticated extends AuthenticationState {
   @override
   String toString() => 'Unauthenticated';
 

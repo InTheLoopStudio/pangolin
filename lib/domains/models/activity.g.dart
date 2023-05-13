@@ -43,7 +43,7 @@ LikeActivity _$LikeActivityFromJson(Map<String, dynamic> json) => LikeActivity(
       timestamp: DateTime.parse(json['timestamp'] as String),
       type: $enumDecode(_$ActivityTypeEnumMap, json['type']),
       markedRead: json['markedRead'] as bool,
-      loopId: json['loopId'] as String,
+      loopId: json['loopId'] as String?,
     );
 
 Map<String, dynamic> _$LikeActivityToJson(LikeActivity instance) =>
@@ -65,8 +65,8 @@ CommentActivity _$CommentActivityFromJson(Map<String, dynamic> json) =>
       timestamp: DateTime.parse(json['timestamp'] as String),
       type: $enumDecode(_$ActivityTypeEnumMap, json['type']),
       markedRead: json['markedRead'] as bool,
-      rootId: json['rootId'] as String,
-      commentId: json['commentId'] as String,
+      rootId: json['rootId'] as String?,
+      commentId: json['commentId'] as String?,
     );
 
 Map<String, dynamic> _$CommentActivityToJson(CommentActivity instance) =>
@@ -90,7 +90,7 @@ BookingRequestActivity _$BookingRequestActivityFromJson(
       timestamp: DateTime.parse(json['timestamp'] as String),
       type: $enumDecode(_$ActivityTypeEnumMap, json['type']),
       markedRead: json['markedRead'] as bool,
-      bookingId: json['bookingId'] as String,
+      bookingId: json['bookingId'] as String?,
     );
 
 Map<String, dynamic> _$BookingRequestActivityToJson(
@@ -114,8 +114,8 @@ BookingUpdateActivity _$BookingUpdateActivityFromJson(
       timestamp: DateTime.parse(json['timestamp'] as String),
       type: $enumDecode(_$ActivityTypeEnumMap, json['type']),
       markedRead: json['markedRead'] as bool,
-      bookingId: json['bookingId'] as String,
-      status: $enumDecode(_$BookingStatusEnumMap, json['status']),
+      bookingId: json['bookingId'] as String?,
+      status: $enumDecodeNullable(_$BookingStatusEnumMap, json['status']),
     );
 
 Map<String, dynamic> _$BookingUpdateActivityToJson(
@@ -128,7 +128,7 @@ Map<String, dynamic> _$BookingUpdateActivityToJson(
       'type': _$ActivityTypeEnumMap[instance.type]!,
       'markedRead': instance.markedRead,
       'bookingId': instance.bookingId,
-      'status': _$BookingStatusEnumMap[instance.status]!,
+      'status': _$BookingStatusEnumMap[instance.status],
     };
 
 const _$BookingStatusEnumMap = {
@@ -145,7 +145,7 @@ LoopMentionActivity _$LoopMentionActivityFromJson(Map<String, dynamic> json) =>
       timestamp: DateTime.parse(json['timestamp'] as String),
       type: $enumDecode(_$ActivityTypeEnumMap, json['type']),
       markedRead: json['markedRead'] as bool,
-      loopId: json['loopId'] as String,
+      loopId: json['loopId'] as String?,
     );
 
 Map<String, dynamic> _$LoopMentionActivityToJson(
@@ -169,8 +169,8 @@ CommentMentionActivity _$CommentMentionActivityFromJson(
       timestamp: DateTime.parse(json['timestamp'] as String),
       type: $enumDecode(_$ActivityTypeEnumMap, json['type']),
       markedRead: json['markedRead'] as bool,
-      rootId: json['rootId'] as String,
-      commentId: json['commentId'] as String,
+      rootId: json['rootId'] as String?,
+      commentId: json['commentId'] as String?,
     );
 
 Map<String, dynamic> _$CommentMentionActivityToJson(

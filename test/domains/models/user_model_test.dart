@@ -241,6 +241,7 @@ void main() {
         genres: const [], 
         label: 'None', 
         occupations: const [],
+        spotifyId: '',
       ),
     );
   });
