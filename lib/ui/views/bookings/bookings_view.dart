@@ -63,28 +63,37 @@ class BookingsView extends StatelessWidget {
                         builder: (context, snapshot) {
                           final unreadMessagesCount = snapshot.data ?? 0;
 
-                          return badges.Badge(
-                            position: badges.BadgePosition.topEnd(
-                              top: 0,
-                              end: 0,
+                          return DecoratedBox(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.grey.withOpacity(0.2),
                             ),
-                            showBadge: unreadMessagesCount > 0,
-                            badgeContent: Text(
-                              unreadMessagesCount.toString(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                            child: IconButton(
-                              onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute<MessagingChannelListView>(
-                                  builder: (_) =>
-                                      const MessagingChannelListView(),
+                            child: Padding(
+                              padding: const EdgeInsets.all(1),
+                              child: badges.Badge(
+                                position: badges.BadgePosition.topEnd(
+                                  top: 0,
+                                  end: 0,
                                 ),
-                              ),
-                              icon: const Icon(
-                                CupertinoIcons.bubble_right_fill,
+                                showBadge: unreadMessagesCount > 0,
+                                badgeContent: Text(
+                                  unreadMessagesCount.toString(),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                child: IconButton(
+                                  onPressed: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute<MessagingChannelListView>(
+                                      builder: (_) =>
+                                          const MessagingChannelListView(),
+                                    ),
+                                  ),
+                                  icon: const Icon(
+                                    CupertinoIcons.bubble_right_fill,
+                                  ),
+                                ),
                               ),
                             ),
                           );
