@@ -83,7 +83,7 @@ class SettingsView extends StatelessWidget {
                     Container(
                       height: 75,
                       decoration: const BoxDecoration(
-                        color: tappedAccent,
+                        color: Colors.blue,
                       ),
                     ),
                   ],

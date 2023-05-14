@@ -20,7 +20,7 @@ class ServiceCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: tappedAccent,
+          color: Colors.blue.withOpacity(0.2),
         ),
         width: 180,
         child: Padding(
@@ -31,6 +31,7 @@ class ServiceCard extends StatelessWidget {
               const Icon(
                 Icons.work,
                 size: 50,
+                color: Colors.blue,
               ),
               Text(
                 service.title,
@@ -40,6 +41,7 @@ class ServiceCard extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
+                  color: Colors.blue,
                 ),
               ),
               Text(
@@ -47,9 +49,17 @@ class ServiceCard extends StatelessWidget {
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: Colors.blue,
+                  fontSize: 10,
+                ),
               ),
               Text(
                 '\$${(service.rate / 100).toStringAsFixed(2)}${service.rateType == RateType.hourly ? '/hr' : ''}',
+                style: const TextStyle(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.w300,
+                ),
               ),
             ],
           ),

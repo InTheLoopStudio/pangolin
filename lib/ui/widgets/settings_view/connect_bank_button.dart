@@ -27,12 +27,14 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
     required OnboardingBloc onboardingBloc,
     required NavigationBloc navigationBloc,
   }) =>
-      CupertinoButton.filled(
+      FilledButton(
         child: loading
             ? const CircularProgressIndicator(
                 color: Colors.white,
               )
-            : const Text('Connect Bank Account'),
+            : Text(
+                'Connect Bank Account',
+              ),
         onPressed: () async {
           if (loading) {
             return;
@@ -70,6 +72,7 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
             loading = false;
           });
         },
+
       );
 
   @override
