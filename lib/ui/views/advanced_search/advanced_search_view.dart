@@ -17,11 +17,11 @@ class AdvancedSearchView extends StatelessWidget {
       appBar: const TappedAppBar(
         title: 'Advanced Search',
       ),
-      body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+      body: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: SingleChildScrollView(
             child: Column(
-              children: const [
+              children: [
                 SizedBox(
                   height: 40,
                 ),

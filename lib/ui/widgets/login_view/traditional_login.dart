@@ -30,9 +30,9 @@ class TraditionalLogin extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 SignUpButton(),
                 LoginButton(),
               ],

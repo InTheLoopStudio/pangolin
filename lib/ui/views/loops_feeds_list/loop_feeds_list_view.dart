@@ -67,9 +67,9 @@ class _LoopFeedsListViewState extends State<LoopFeedsListView>
                 SliverAppBar(
                   floating: true,
                   forceElevated: innerBoxIsScrolled,
-                  title: Row(
+                  title: const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Text(
                         'Loops',
                         style: TextStyle(

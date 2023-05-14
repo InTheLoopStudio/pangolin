@@ -13,8 +13,8 @@ class NotificationSettingsForm extends StatelessWidget {
         return Column(
           children: [
             const SizedBox(height: 10),
-            Row(
-              children: const [
+            const Row(
+              children: [
                 Text(
                   'Push Notifications',
                   style: TextStyle(
@@ -77,8 +77,8 @@ class NotificationSettingsForm extends StatelessWidget {
                       ),
             ),
             const SizedBox(height: 10),
-            Row(
-              children: const [
+            const Row(
+              children: [
                 Text(
                   'Emails',
                   style: TextStyle(

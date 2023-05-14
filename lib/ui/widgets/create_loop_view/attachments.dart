@@ -38,9 +38,9 @@ class Attachments extends StatelessWidget {
           );
         }
 
-        return Row(
+        return const Row(
           mainAxisAlignment: MainAxisAlignment.end,
-          children: const [
+          children: [
             UploadAudioButton(),
             SizedBox(
               width: 12,

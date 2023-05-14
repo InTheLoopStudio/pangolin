@@ -21,7 +21,6 @@ import 'package:intheloopapp/domains/models/username.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/utils.dart';
-import 'package:path/path.dart';
 
 part 'settings_state.dart';
 

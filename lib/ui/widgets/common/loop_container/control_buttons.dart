@@ -108,8 +108,8 @@ class ControlButtons extends StatelessWidget {
                 ),
                 GestureDetector(
                   // onTap: null,
-                  child: Row(
-                    children: const [
+                  child: const Row(
+                    children: [
                       Icon(
                         CupertinoIcons.arrow_2_squarepath,
                         color: Color(0xFF444444),

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:isolate';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,7 +17,6 @@ import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/bookings_bloc/bookings_bloc.dart';
 import 'package:intheloopapp/domains/down_for_maintenance_bloc/down_for_maintenance_bloc.dart';
-import 'package:intheloopapp/domains/dynamic_link_bloc/dynamic_link_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/firebase_options.dart';
 import 'package:intheloopapp/simple_bloc_observer.dart';

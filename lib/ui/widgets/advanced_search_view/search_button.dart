@@ -13,9 +13,9 @@ class SearchButton extends StatelessWidget {
         context.read<SearchBloc>().add(const Search(query: ''));
         context.read<NavigationBloc>().add(const Pop());
       },
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           Icon(Icons.search),
           Text('Set Filters'),
         ],

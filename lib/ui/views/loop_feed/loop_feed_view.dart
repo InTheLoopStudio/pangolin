@@ -5,12 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
-import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
-import 'package:intheloopapp/ui/views/common/loading/list_loading_view.dart';
 import 'package:intheloopapp/ui/views/error/error_view.dart';
 import 'package:intheloopapp/ui/views/loop_feed/loop_feed_cubit.dart';
 import 'package:intheloopapp/ui/views/loop_feed/loop_list.dart';
-import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container.dart';
 
 class LoopFeedView extends StatefulWidget {
   LoopFeedView({

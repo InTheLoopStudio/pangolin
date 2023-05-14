@@ -12,7 +12,6 @@ import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/error/error_view.dart';
 import 'package:intheloopapp/ui/widgets/common/user_tile.dart';
-import 'package:intheloopapp/ui/widgets/settings_view/service_card.dart';
 import 'package:intheloopapp/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:skeletons/skeletons.dart';
@@ -60,8 +59,8 @@ class BookingView extends StatelessWidget {
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.background,
           appBar: AppBar(
-            title: Row(
-              children: const [
+            title: const Row(
+              children: [
                 Text(
                   'Booking',
                   style: TextStyle(

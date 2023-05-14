@@ -26,10 +26,10 @@ class ByUsernameResultsList extends StatelessWidget {
             state.labels.isEmpty &&
             state.place == null &&
             state.placeId == null) {
-          return Center(
+          return const Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Icon(
                   Icons.search,
                   size: 200,

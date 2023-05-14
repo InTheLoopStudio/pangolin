@@ -35,9 +35,9 @@ class ProfileHeader extends StatelessWidget {
               ),
             ),
             if (state.currentUser.id == state.visitedUser.id)
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: const [
+                children: [
                   Padding(
                     padding: EdgeInsets.symmetric(
                       vertical: 15,

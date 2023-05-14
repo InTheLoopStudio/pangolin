@@ -9,10 +9,10 @@ class ChannelView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const ChannelHeader(),
+    return const Scaffold(
+      appBar: ChannelHeader(),
       body: Column(
-        children: const [
+        children: [
           Expanded(
             child: StreamMessageListView(),
           ),

@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/activity_bloc/activity_bloc.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
-import 'package:intheloopapp/ui/views/common/loading/list_loading_view.dart';
 import 'package:intheloopapp/ui/widgets/activity_view/activity_tile.dart';
 import 'package:skeletons/skeletons.dart';
 
