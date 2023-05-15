@@ -195,7 +195,7 @@ class _LoopContainerState extends State<LoopContainer>
             logger.logAnalyticsEvent(name: 'loop_view', parameters: {
               'loop_id': widget.loop.id,
               'user_id': widget.loop.userId,
-            });
+            },);
 
             return BlocProvider<LoopContainerCubit>(
               create: (context) => LoopContainerCubit(
