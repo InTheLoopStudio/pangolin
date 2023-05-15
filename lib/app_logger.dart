@@ -1,8 +1,10 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_performance/firebase_performance.dart';
 import 'package:logging/logging.dart';
 
 final logger = AppLogger();
+final analytics = FirebaseAnalytics.instance;
 
 class AppLogger {
   AppLogger() {
@@ -61,6 +63,16 @@ class AppLogger {
         s,
       );
     }
+  }
+
+  Future<void> logAnalyticsEvent({
+    required String name,
+    Map<String, dynamic>? parameters,
+  }) async {
+    await analytics.logEvent(
+      name: name,
+      parameters: parameters,
+    );
   }
 
   Trace createTrace(String name) {

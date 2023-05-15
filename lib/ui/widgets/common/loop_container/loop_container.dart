@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_banner/card_banner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
@@ -193,6 +192,11 @@ class _LoopContainerState extends State<LoopContainer>
               return const LoadingContainer();
             }
 
+            logger.logAnalyticsEvent(name: 'loop_view', parameters: {
+              'loop_id': widget.loop.id,
+              'user_id': widget.loop.userId,
+            });
+
             return BlocProvider<LoopContainerCubit>(
               create: (context) => LoopContainerCubit(
                 databaseRepository: databaseRepository,
@@ -202,33 +206,6 @@ class _LoopContainerState extends State<LoopContainer>
               ),
               child: BlocBuilder<LoopContainerCubit, LoopContainerState>(
                 builder: (context, state) {
-                  if (currentUser.id == widget.loop.userId) {
-                    return Slidable(
-                      startActionPane: ActionPane(
-                        motion: const ScrollMotion(),
-                        children: [
-                          if (currentUser.id == widget.loop.userId)
-                            SlidableAction(
-                              onPressed: (context) {
-                                context.read<LoopContainerCubit>().deleteLoop();
-                              },
-                              backgroundColor: Colors.red[600]!,
-                              foregroundColor: Colors.white,
-                              icon: Icons.delete,
-                              label: 'Delete',
-                            )
-                          else
-                            const SizedBox.shrink(),
-                        ],
-                      ),
-                      child: _loopContainer(
-                        navigationBloc: navigationBloc,
-                        loopUser: loopUser,
-                        currentUserId: currentUser.id,
-                      ),
-                    );
-                  }
-
                   if (widget.loop.audioPath.isNotEmpty &&
                       loopUser.profilePicture != null) {
                     return _audioLoopContainer(

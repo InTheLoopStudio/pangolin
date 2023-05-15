@@ -76,16 +76,16 @@ class _ProfileViewState extends State<ProfileView> {
   List<Widget> _profileTabBar() {
     final tabs = [
       const Tab(
-        text: 'BADGES',
-        icon: Icon(Icons.shield),
-      ),
-      const Tab(
         text: 'LOOPS',
         icon: Icon(Icons.audiotrack),
       ),
       const Tab(
         text: 'BOOKINGS',
         icon: Icon(CupertinoIcons.tickets_fill),
+      ),
+      const Tab(
+        text: 'BADGES',
+        icon: Icon(Icons.shield),
       ),
     ];
 
@@ -100,9 +100,9 @@ class _ProfileViewState extends State<ProfileView> {
 
   List<Widget> _profileTabs() {
     final tabs = [
-      _badgesTab(),
       _loopsTab(),
       _bookingsTab(),
+      _badgesTab(),
     ];
 
     return tabs;
