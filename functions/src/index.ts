@@ -574,6 +574,24 @@ export const sendToDevice = functions.firestore
         },
       };
       break;
+    case "loopMention":
+      payload = {
+        notification: {
+          title: "Mention",
+          body: "Someone mentioned you in a loop",
+          clickAction: "FLUTTER_NOTIFICATION_CLICK",
+        },
+      };
+      break;
+    case "commentMention":
+      payload = {
+        notification: {
+          title: "Mention",
+          body: "Someone mentioned you in a comment",
+          clickAction: "FLUTTER_NOTIFICATION_CLICK",
+        },
+      };
+      break;
     default:
       return;
     }
