@@ -306,12 +306,6 @@ class _ProfileViewState extends State<ProfileView> {
                               ),
                             ),
                           ),
-                        const SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.only(bottom: 8),
-                            child: SocialMediaIcons(),
-                          ),
-                        ),
                         SliverToBoxAdapter(
                           child: Padding(
                             padding: const EdgeInsets.only(top: 8),
@@ -342,6 +336,12 @@ class _ProfileViewState extends State<ProfileView> {
                                 ),
                               ],
                             ),
+                          ),
+                        ),
+                        const SliverToBoxAdapter(
+                          child: Padding(
+                            padding: EdgeInsets.only(bottom: 8),
+                            child: SocialMediaIcons(),
                           ),
                         ),
                         const SliverToBoxAdapter(
