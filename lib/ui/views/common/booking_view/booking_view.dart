@@ -302,13 +302,13 @@ class BookingView extends StatelessWidget {
                   child:
                       booking.isPending && booking.requesteeId == currentUser.id
                           ? CupertinoButton.filled(
-                              onPressed: () {
+                              onPressed: () async {
                                 final updated = booking.copyWith(
                                   status: BookingStatus.confirmed,
                                 );
-                                database.updateBooking(updated);
+                                await database.updateBooking(updated);
                                 onConfirm?.call(updated);
-                                Navigator.pop(context);
+                                navigationBloc.add(const Pop());
                               },
                               child: const Text('Confirm Booking'),
                             )
@@ -317,11 +317,11 @@ class BookingView extends StatelessWidget {
                 if (booking.status != BookingStatus.canceled)
                   SliverToBoxAdapter(
                     child: CupertinoButton(
-                      onPressed: () {
+                      onPressed: () async {
                         final updated = booking.copyWith(
                           status: BookingStatus.canceled,
                         );
-                        database.updateBooking(updated);
+                        await database.updateBooking(updated);
                         onDeny?.call(updated);
                         navigationBloc.add(const Pop());
                       },
