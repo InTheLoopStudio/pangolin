@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:badges/badges.dart' as badges;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,8 +15,9 @@ class BookingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () async {
+      onRefresh: () {
         context.read<BookingsBloc>().add(FetchBookings());
+        return Future<void>(() => null);
       },
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
@@ -63,38 +63,31 @@ class BookingsView extends StatelessWidget {
                         builder: (context, snapshot) {
                           final unreadMessagesCount = snapshot.data ?? 0;
 
-                          return DecoratedBox(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.grey.withOpacity(0.2),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(1),
-                              child: badges.Badge(
-                                position: badges.BadgePosition.topEnd(
-                                  top: 0,
-                                  end: 0,
-                                ),
-                                showBadge: unreadMessagesCount > 0,
-                                badgeContent: Text(
-                                  unreadMessagesCount.toString(),
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                child: IconButton(
-                                  onPressed: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute<MessagingChannelListView>(
-                                      builder: (_) =>
-                                          const MessagingChannelListView(),
-                                    ),
-                                  ),
-                                  icon: const Icon(
-                                    CupertinoIcons.bubble_right_fill,
-                                  ),
-                                ),
+                          return FilledButton.icon(
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all<Color>(
+                                Colors.grey.withOpacity(0.1),
                               ),
+                              foregroundColor:
+                                  MaterialStateProperty.all<Color>(
+                                Colors.white,
+                              ),
+                              overlayColor:
+                                  MaterialStateProperty.all<Color>(
+                                Colors.transparent,
+                              ),
+                            ),
+                            onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute<MessagingChannelListView>(
+                                builder: (_) =>
+                                    const MessagingChannelListView(),
+                              ),
+                            ),
+                            label: Text('$unreadMessagesCount'),
+                            icon: const Icon(
+                              CupertinoIcons.bubble_left_fill,
                             ),
                           );
                         },
