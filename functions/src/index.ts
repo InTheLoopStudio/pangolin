@@ -184,9 +184,9 @@ const _deleteUser = async (data: { id: string }) => {
 };
 
 const _addActivity = async (
-  activity: FollowActivity 
-    | LikeActivity 
-    | CommentActivity 
+  activity: FollowActivity
+    | LikeActivity
+    | CommentActivity
     | BookingRequestActivity
     | BookingUpdateActivity
     | LoopMentionActivity
@@ -207,14 +207,14 @@ const _addActivity = async (
       "The function argument 'fromUserId' cannot be empty"
     );
   }
-  if (![ 
-    "follow", 
-    "like", 
-    "comment", 
-    "bookingRequest", 
-    "bookingUpdate", 
-    "loopMention", 
-    "commentMention", 
+  if (![
+    "follow",
+    "like",
+    "comment",
+    "bookingRequest",
+    "bookingUpdate",
+    "loopMention",
+    "commentMention",
   ].includes(activity.type)) {
     // Throwing an HttpsError so that the client gets the error details.
     throw new functions.https.HttpsError(
@@ -613,7 +613,7 @@ export const sendToDevice = functions.firestore
       }
     } catch (e: any) {
       functions.logger.error(`${user["id"]} : ${e}`);
-      throw new Error(`cannot send notification to device, userId: ${user["id"]}, ${e.message}`); 
+      throw new Error(`cannot send notification to device, userId: ${user["id"]}, ${e.message}`);
     }
   });
 export const createStreamUserOnUserCreated = functions
@@ -1033,3 +1033,69 @@ export const transformLoopPayloadForSearch = functions.https
 
     return payload;
   })
+export const notifyFoundersOnBookings = functions
+  .firestore
+  .document("bookings/{bookingId}")
+  .onCreate(async (data) => {
+
+    const founderIds = [
+      "8yYVxpQ7cURSzNfBsaBGF7A7kkv2", // Johannes
+      "n4zIL6bOuPTqRC3dtsl6gyEBPQl1", // Ilias
+    ];
+
+    const booking = data.data() as Booking;
+    if (booking === undefined) {
+      throw new HttpsError("failed-precondition", `booking ${data.id} does not exist`,);
+    }
+
+    if (booking.serviceId === undefined) {
+      throw new HttpsError("failed-precondition", `booking ${data.id} does not have a serviceId`,);
+    }
+
+    const serviceSnapshot = await servicesRef
+      .doc(booking.serviceId)
+      .get();
+
+    const service = serviceSnapshot.data();
+
+    const requesterSnapshot = await usersRef.doc(booking.requesterId).get();
+    const requester = requesterSnapshot.data();
+
+    const requesteeSnapshot = await usersRef.doc(booking.requesteeId).get();
+    const requestee = requesteeSnapshot.data();
+
+    const payload: messaging.MessagingPayload = {
+      notification: {
+        title: "NEW TAPPED BOOKING!!!",
+        body: `${requester?.artistName ?? "<UNKNOWN>"} booked ${requestee?.artistName ?? "UNKNOWN"} for service ${service?.title ?? "<UNKNOWN>"}}`,
+        clickAction: "FLUTTER_NOTIFICATION_CLICK",
+      },
+    };
+
+    const deviceTokens = (
+      await Promise.all(
+        founderIds.map(
+          async (founderId) => {
+
+            const querySnapshot = await tokensRef
+              .doc(founderId)
+              .collection("tokens")
+              .get();
+
+            const tokens: string[] = querySnapshot.docs.map((snap) => snap.id);
+
+            return tokens;
+          })
+      )
+    ).flat();
+
+    try {
+      const resp = await fcm.sendToDevice(deviceTokens, payload);
+      if (resp.failureCount > 0) {
+        functions.logger.warn(`Failed to send message to some devices: ${resp.failureCount}`);
+      }
+    } catch (e: any) {
+      functions.logger.error(`ERROR : ${e}`);
+      throw new Error(`cannot send notification to device ${e.message}`);
+    }
+  });

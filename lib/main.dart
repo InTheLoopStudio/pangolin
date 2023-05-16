@@ -43,8 +43,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 Future<void> main() async {
-  await runZonedGuarded<Future<void>>(
-    () async {
       WidgetsFlutterBinding.ensureInitialized();
 
       HydratedBloc.storage = await HydratedStorage.build(
@@ -98,16 +96,6 @@ Future<void> main() async {
       );
 
       runApp(TappedApp());
-    },
-    (error, stack) {
-      logger.error(
-        'error',
-        error: error,
-        stackTrace: stack,
-        fatal: true,
-      );
-    },
-  );
 }
 
 /// The root widget for the app
