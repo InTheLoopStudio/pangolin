@@ -1053,6 +1053,8 @@ export const notifyFoundersOnBookings = functions
     }
 
     const serviceSnapshot = await servicesRef
+      .doc(booking.requesteeId)
+      .collection("userServices")
       .doc(booking.serviceId)
       .get();
 
@@ -1067,7 +1069,7 @@ export const notifyFoundersOnBookings = functions
     const payload: messaging.MessagingPayload = {
       notification: {
         title: "NEW TAPPED BOOKING!!!",
-        body: `${requester?.artistName ?? "<UNKNOWN>"} booked ${requestee?.artistName ?? "UNKNOWN"} for service ${service?.title ?? "<UNKNOWN>"}}`,
+        body: `${requester?.artistName ?? "<UNKNOWN>"} booked ${requestee?.artistName ?? "<UNKNOWN>"} for service ${service?.title ?? "<UNKNOWN>"}`,
         clickAction: "FLUTTER_NOTIFICATION_CLICK",
       },
     };
