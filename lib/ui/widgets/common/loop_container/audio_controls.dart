@@ -39,14 +39,14 @@ class AudioControls extends StatelessWidget {
           return SkeletonListTile();
         }
 
-        final audioController = snapshot.data;
+        final audioController = snapshot.data!;
 
         return Column(
           children: [
             Row(
               children: [
                 PlayPauseButton(
-                  audioController: audioController!,
+                  audioController: audioController,
                 ),
                 Expanded(
                   child: LoopSeekBar(

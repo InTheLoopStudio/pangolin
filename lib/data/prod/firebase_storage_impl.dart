@@ -52,7 +52,7 @@ class FirebaseStorageImpl extends StorageRepository {
     final uniqueAudioId = const Uuid().v4();
 
     final uploadTask =
-        storageRef.child('$prefix/loop_$uniqueAudioId.$extension').putFile(audioFile);
+        storageRef.child('$prefix/loop_$uniqueAudioId$extension').putFile(audioFile);
 
     final taskSnapshot = await uploadTask.whenComplete(() => null);
     final downloadUrl = await taskSnapshot.ref.getDownloadURL();
