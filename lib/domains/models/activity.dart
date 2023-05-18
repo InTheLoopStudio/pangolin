@@ -153,7 +153,7 @@ final class LikeActivity extends Activity {
 
   final String? loopId;
 
-  @override 
+  @override
   LikeActivity copyAsRead() {
     return LikeActivity(
       id: id,
@@ -306,7 +306,10 @@ final class BookingUpdateActivity extends Activity {
             ActivityType.like,
         markedRead: doc.getOrElse('markedRead', false) as bool,
         bookingId: doc.getOrElse('bookingId', null) as String?,
-        status: doc.getOrElse('status', null) as BookingStatus?,
+        status: EnumToString.fromString(
+          BookingStatus.values,
+          doc.getOrElse('status', null) as String,
+        ),
       );
     } catch (e, s) {
       logger.error('BookingUpdateActivity.fromDoc', error: e, stackTrace: s);
