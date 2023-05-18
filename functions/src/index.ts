@@ -46,6 +46,7 @@ const feedsRef = db.collection("feeds");
 // const badgesSentRef = db.collection("badgesSent");
 const tokensRef = db.collection("device_tokens")
 const servicesRef = db.collection("services");
+const mailRef = db.collection("mail");
 
 // const loopLikesSubcollection = "loopLikes";
 // const loopCommentsSubcollection = "loopComments";
@@ -502,6 +503,33 @@ const _getAccountById = async (data: { accountId: string }) => {
   return account;
 }
 
+const _sendWelcomeEmail = async (toEmail: string) => {
+  await mailRef.add({
+    to: [ toEmail ],
+    template: {
+      name: "welcome",
+    },
+  })
+}
+
+const _sendBookingRequestReceivedEmail = async (toEmail: string) => {
+  await mailRef.add({
+    to: [ toEmail ],
+    template: {
+      name: "bookingRequestReceived",
+    },
+  })
+}
+
+const _sendBookingRequestSentEmail = async (toEmail: string) => {
+  await mailRef.add({
+    to: [ toEmail ],
+    template: {
+      name: "bookingRequestSent",
+    },
+  })
+}
+
 // --------------------------------------------------------
 export const sendToDevice = functions.firestore
   .document("activities/{activityId}")
@@ -661,7 +689,21 @@ export const autoFollowUsersOnUserCreated = functions
         .set({});
     }
   })
+export const sendWelcomeEmailOnUserCreated = functions
+  .firestore 
+  .document("users/{usersId}")
+  .onCreate(async (snapshot) => {
+    const user = snapshot.data();
+    const email = user.email;
 
+    if (email === undefined || email === null || email === "") {
+      throw new Error("user email is undefined, null or empty: " + JSON.stringify(user));
+    }
+
+    functions.logger.debug(`sending welcome email to ${email}`);
+
+    await _sendWelcomeEmail(email);
+  });
 
 export const updateStreamUserOnUserUpdate = functions
   .runWith({ secrets: [ streamKey, streamSecret ] })
@@ -1100,4 +1142,34 @@ export const notifyFoundersOnBookings = functions
       functions.logger.error(`ERROR : ${e}`);
       throw new Error(`cannot send notification to device ${e.message}`);
     }
+  });
+export const sendBookingRequestReceivedEmailOnBooking = functions
+  .firestore
+  .document("bookings/{bookingId}")
+  .onCreate(async (data) => {
+    const booking = data.data() as Booking;
+    const requesteeSnapshot = await usersRef.doc(booking.requesteeId).get();
+    const requestee = requesteeSnapshot.data();
+    const email = requestee?.email;
+
+    if (email === undefined || email === null || email === "") {
+      throw new Error(`requestee ${requestee?.id} does not have an email`);
+    }
+
+    await _sendBookingRequestReceivedEmail(email);
+  });
+export const sendBookingRequestSentEmailOnBooking = functions
+  .firestore
+  .document("bookings/{bookingId}")
+  .onCreate(async (data) => {
+    const booking = data.data() as Booking;
+    const requesterSnapshot = await usersRef.doc(booking.requesterId).get();
+    const requester = requesterSnapshot.data();
+    const email = requester?.email;
+
+    if (email === undefined || email === null || email === "") {
+      throw new Error(`requester ${requester?.id} does not have an email`);
+    }
+
+    await _sendBookingRequestSentEmail(email);
   });
