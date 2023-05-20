@@ -98,6 +98,18 @@ abstract class DatabaseRepository {
   Future<void> addComment(
     Comment comment,
   );
+  Future<void> likeComment(
+    String currentUserId,
+    Comment comment,
+  );
+  Future<void> unlikeComment(
+    String currentUserId,
+    Comment comment,
+  );
+  Future<bool> isCommentLiked(
+    String currentUserId,
+    Comment comment,
+  );
   // Future<void> deleteComment(Comment comment);
 
   // Future<List<Tag>> getTagSuggestions(String query);

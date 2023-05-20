@@ -889,6 +889,25 @@ export const decrementLoopLikeCountOnUnlike = functions.firestore
       .update({ likeCount: FieldValue.increment(-1) });
   })
 
+export const incrementLikeCountOnCommentLike = functions.firestore
+  .document("comments/{loopId}/loopComments/{commentId}/commentLikes/{userId}")
+  .onCreate(async (snapshot, context) => {
+    await commentsRef
+      .doc(context.params.loopId)
+      .collection("loopComments")
+      .doc(context.params.commentId)
+      .update({ likeCount: FieldValue.increment(1) });
+  });
+export const decrementLoopLikeCountOnCommentUnlike = functions.firestore
+  .document("comments/{loopId}/loopComments/{commentId}/commentLikes/{userId}")
+  .onDelete(async (snapshot, context) => {
+    await commentsRef
+      .doc(context.params.loopId)
+      .collection("loopComments")
+      .doc(context.params.commentId)
+      .update({ likeCount: FieldValue.increment(-1) });
+  });
+
 export const addActivityOnBooking = functions.firestore
   .document("bookings/{bookingId}")
   .onCreate(async (snapshot, context) => {

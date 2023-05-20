@@ -234,6 +234,22 @@ class LocalDatabaseImpl extends DatabaseRepository {
     return;
   }
 
+  @override
+  Future<void> likeComment(
+    String currentUserId,
+    String commentId,
+  ) async {
+    return;
+  }
+
+  @override
+  Future<bool> isCommentLiked(
+    String currentUserId,
+    String commentId,
+  ) async {
+    return false;
+  }
+
   // Future<List<Tag>> getTagSuggestions(String query) async {
   //   await Future<void>.delayed(Duration(seconds: 2));
   //   return [];
