@@ -15,13 +15,14 @@ class FirebaseStorageImpl extends StorageRepository {
     String userId,
     File imageFile,
   ) async {
+    final extension = p.extension(imageFile.path);
     final prefix = userId.isEmpty ? 'images/users' : 'images/users/$userId';
 
     final uniquePhotoId = const Uuid().v4();
     final image = await compressImage(uniquePhotoId, imageFile);
 
     final uploadTask = storageRef
-        .child('$prefix/userProfile_$uniquePhotoId.jpg')
+        .child('$prefix/userProfile_$uniquePhotoId$extension')
         .putFile(image);
     final taskSnapshot = await uploadTask.whenComplete(() => null);
     final downloadUrl = await taskSnapshot.ref.getDownloadURL();
@@ -33,9 +34,10 @@ class FirebaseStorageImpl extends StorageRepository {
   Future<File> compressImage(String photoId, File image) async {
     final tempDirection = await getTemporaryDirectory();
     final path = tempDirection.path;
+    final extension = p.extension(image.path);
     final compressedImage = await FlutterImageCompress.compressAndGetFile(
       image.absolute.path,
-      '$path/img_$photoId.jpg',
+      '$path/img_$photoId$extension',
       quality: 70,
     );
 
@@ -67,7 +69,7 @@ class FirebaseStorageImpl extends StorageRepository {
     final uniqueImageId = const Uuid().v4();
 
     final uploadTask = storageRef
-        .child('$prefix/loop_$uniqueImageId.$extension')
+        .child('$prefix/loop_$uniqueImageId$extension')
         .putFile(imageFile);
 
     final taskSnapshot = await uploadTask.whenComplete(() => null);
@@ -78,6 +80,7 @@ class FirebaseStorageImpl extends StorageRepository {
 
   @override
   Future<String> uploadBadgeImage(String receiverId, File imageFile) async {
+    final extension = p.extension(imageFile.path);
     final prefix =
         receiverId.isEmpty ? 'images/badges' : 'images/badges/$receiverId';
 
@@ -85,7 +88,7 @@ class FirebaseStorageImpl extends StorageRepository {
 
     final compressedImage = await compressImage(uniqueImageId, imageFile);
     final uploadTask = storageRef
-        .child('$prefix/badge_$uniqueImageId.jpg')
+        .child('$prefix/badge_$uniqueImageId$extension')
         .putFile(compressedImage);
 
     final taskSnapshot = await uploadTask.whenComplete(() => null);

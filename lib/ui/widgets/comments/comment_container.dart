@@ -22,6 +22,14 @@ class CommentContainer extends StatefulWidget {
 
 class _CommentContainerState extends State<CommentContainer> {
   bool _isLiked = false;
+  int _likeCount = 0;
+
+  @override 
+  void initState() {
+    super.initState();
+
+    _likeCount = widget.comment.likeCount;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +69,7 @@ class _CommentContainerState extends State<CommentContainer> {
                       imageUrl: user.profilePicture,
                       verified: isVerified,
                     ),
-                    trailing: IconButton(
+                    trailing: TextButton.icon(
                       onPressed: () {
                         if (_isLiked) {
                           databaseRepository.unlikeComment(
@@ -76,9 +84,22 @@ class _CommentContainerState extends State<CommentContainer> {
                         }
 
                         setState(() {
+                          if (_isLiked) {
+                            _likeCount--;
+                          } else {
+                            _likeCount++;
+                          }
+
                           _isLiked = !_isLiked;
                         });
                       },
+                      label: Text(
+                        _likeCount.toString(),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                      ),
                       icon: _isLiked
                           ? const Icon(
                               CupertinoIcons.heart_fill,
