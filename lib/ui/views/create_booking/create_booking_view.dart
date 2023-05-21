@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:formz/formz.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/data/remote_config_repository.dart';
@@ -86,7 +87,12 @@ class CreateBookingView extends StatelessWidget {
                           await context
                               .read<CreateBookingCubit>()
                               .createBooking();
-                        } on StripeException catch (e) {
+                        } on StripeException catch (e, s) {
+                          logger.error(
+                            'error create booking',
+                            error: e,
+                            stackTrace: s,
+                          );
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               backgroundColor: Colors.red,
@@ -94,7 +100,12 @@ class CreateBookingView extends StatelessWidget {
                                   Text('Error: ${e.error.localizedMessage}'),
                             ),
                           );
-                        } catch (e) {
+                        } catch (e, s) {
+                          logger.error(
+                            'error create booking',
+                            error: e,
+                            stackTrace: s,
+                          );
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               backgroundColor: Colors.red,
@@ -116,7 +127,7 @@ class CreateBookingView extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: ListView(
                     children: [
-                       const Row(
+                      const Row(
                         children: [
                           Text(
                             'Performer',
