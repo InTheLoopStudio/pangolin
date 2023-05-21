@@ -24,11 +24,36 @@ class _CommentContainerState extends State<CommentContainer> {
   bool _isLiked = false;
   int _likeCount = 0;
 
-  @override 
+  @override
   void initState() {
     super.initState();
-
     _likeCount = widget.comment.likeCount;
+    initLiked().then((value) => _isLiked = value).whenComplete(() {
+      setState(() {});
+    });
+  }
+
+  Future<bool> initLiked() async {
+    try {
+      final databaseRepository =
+          RepositoryProvider.of<DatabaseRepository>(context);
+      final onboardingBloc = RepositoryProvider.of<OnboardingBloc>(context);
+
+      if (onboardingBloc.state is! Onboarded) {
+        return false;
+      }
+
+      final currentUserId = (onboardingBloc.state as Onboarded).currentUser.id;
+
+      final isLiked = await databaseRepository.isCommentLiked(
+        currentUserId,
+        widget.comment,
+      );
+
+      return isLiked;
+    } catch (e) {
+      return false;
+    }
   }
 
   @override
