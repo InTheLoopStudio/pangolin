@@ -41,6 +41,8 @@ sealed class Activity extends Equatable {
           return LoopMention.fromDoc(doc);
         case ActivityType.commentMention:
           return CommentMention.fromDoc(doc);
+        case ActivityType.commentLike:
+          return CommentLike.fromDoc(doc);
         default:
           throw Exception('Activity.fromDoc: unknown type: $rawType');
       }
