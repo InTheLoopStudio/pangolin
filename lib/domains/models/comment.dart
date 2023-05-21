@@ -56,7 +56,7 @@ class Comment {
       'timestamp': timestamp,
       'content': content,
       'userId': userId,
-      'parentId': parentId,
+      'parentId': parentId.asNullable(),
       'rootId': rootId,
       'children': children,
       'deleted': deleted,

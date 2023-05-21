@@ -1045,15 +1045,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     await _commentsRef
         .doc(comment.rootId)
         .collection(commentsSubcollection)
-        .add({
-      'userId': comment.userId,
-      'timestamp': Timestamp.now(),
-      'content': comment.content,
-      'parentId': comment.parentId,
-      'rootId': comment.rootId,
-      'children': comment.children,
-      'deleted': false,
-    });
+        .doc(comment.id)
+        .set(comment.toMap());
   }
 
   @override
