@@ -379,6 +379,53 @@ class MockDatabaseRepository extends _i1.Mock
         returnValueForMissingStub: _i4.Future<void>.value(),
       ) as _i4.Future<void>);
   @override
+  _i4.Future<void> likeComment(
+    String? currentUserId,
+    _i2.Comment? comment,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #likeComment,
+          [
+            currentUserId,
+            comment,
+          ],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  _i4.Future<void> unlikeComment(
+    String? currentUserId,
+    _i2.Comment? comment,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #unlikeComment,
+          [
+            currentUserId,
+            comment,
+          ],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  _i4.Future<bool> isCommentLiked(
+    String? currentUserId,
+    _i2.Comment? comment,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #isCommentLiked,
+          [
+            currentUserId,
+            comment,
+          ],
+        ),
+        returnValue: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
+  @override
   _i4.Future<void> shareLoop(_i6.Loop? loop) => (super.noSuchMethod(
         Invocation.method(
           #shareLoop,

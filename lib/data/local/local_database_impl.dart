@@ -224,7 +224,12 @@ class LocalDatabaseImpl extends DatabaseRepository {
     String rootId,
     String commentId,
   ) async {
-    return Comment.empty();
+    return Comment(
+      id: '',
+      rootId: '',
+      userId: '',
+      content: '',
+    );
   }
 
   @override
@@ -237,15 +242,23 @@ class LocalDatabaseImpl extends DatabaseRepository {
   @override
   Future<void> likeComment(
     String currentUserId,
-    String commentId,
+    Comment comment,
   ) async {
     return;
   }
 
   @override
+  Future<void> unlikeComment(
+    String currentUserId,
+    Comment comment,
+  ) async {
+    return;
+  }
+
+  @override 
   Future<bool> isCommentLiked(
     String currentUserId,
-    String commentId,
+    Comment comment,
   ) async {
     return false;
   }

@@ -6,8 +6,7 @@ part of 'activity.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-FollowActivity _$FollowActivityFromJson(Map<String, dynamic> json) =>
-    FollowActivity(
+Follow _$FollowFromJson(Map<String, dynamic> json) => Follow(
       id: json['id'] as String,
       fromUserId: json['fromUserId'] as String,
       toUserId: json['toUserId'] as String,
@@ -16,8 +15,7 @@ FollowActivity _$FollowActivityFromJson(Map<String, dynamic> json) =>
       markedRead: json['markedRead'] as bool,
     );
 
-Map<String, dynamic> _$FollowActivityToJson(FollowActivity instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$FollowToJson(Follow instance) => <String, dynamic>{
       'id': instance.id,
       'fromUserId': instance.fromUserId,
       'toUserId': instance.toUserId,
@@ -34,9 +32,10 @@ const _$ActivityTypeEnumMap = {
   ActivityType.bookingUpdate: 'bookingUpdate',
   ActivityType.loopMention: 'loopMention',
   ActivityType.commentMention: 'commentMention',
+  ActivityType.commentLike: 'commentLike',
 };
 
-LikeActivity _$LikeActivityFromJson(Map<String, dynamic> json) => LikeActivity(
+Like _$LikeFromJson(Map<String, dynamic> json) => Like(
       id: json['id'] as String,
       fromUserId: json['fromUserId'] as String,
       toUserId: json['toUserId'] as String,
@@ -46,8 +45,7 @@ LikeActivity _$LikeActivityFromJson(Map<String, dynamic> json) => LikeActivity(
       loopId: json['loopId'] as String?,
     );
 
-Map<String, dynamic> _$LikeActivityToJson(LikeActivity instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$LikeToJson(Like instance) => <String, dynamic>{
       'id': instance.id,
       'fromUserId': instance.fromUserId,
       'toUserId': instance.toUserId,
@@ -81,9 +79,8 @@ Map<String, dynamic> _$CommentActivityToJson(CommentActivity instance) =>
       'commentId': instance.commentId,
     };
 
-BookingRequestActivity _$BookingRequestActivityFromJson(
-        Map<String, dynamic> json) =>
-    BookingRequestActivity(
+BookingRequest _$BookingRequestFromJson(Map<String, dynamic> json) =>
+    BookingRequest(
       id: json['id'] as String,
       fromUserId: json['fromUserId'] as String,
       toUserId: json['toUserId'] as String,
@@ -93,8 +90,7 @@ BookingRequestActivity _$BookingRequestActivityFromJson(
       bookingId: json['bookingId'] as String?,
     );
 
-Map<String, dynamic> _$BookingRequestActivityToJson(
-        BookingRequestActivity instance) =>
+Map<String, dynamic> _$BookingRequestToJson(BookingRequest instance) =>
     <String, dynamic>{
       'id': instance.id,
       'fromUserId': instance.fromUserId,
@@ -105,9 +101,8 @@ Map<String, dynamic> _$BookingRequestActivityToJson(
       'bookingId': instance.bookingId,
     };
 
-BookingUpdateActivity _$BookingUpdateActivityFromJson(
-        Map<String, dynamic> json) =>
-    BookingUpdateActivity(
+BookingUpdate _$BookingUpdateFromJson(Map<String, dynamic> json) =>
+    BookingUpdate(
       id: json['id'] as String,
       fromUserId: json['fromUserId'] as String,
       toUserId: json['toUserId'] as String,
@@ -118,8 +113,7 @@ BookingUpdateActivity _$BookingUpdateActivityFromJson(
       status: $enumDecodeNullable(_$BookingStatusEnumMap, json['status']),
     );
 
-Map<String, dynamic> _$BookingUpdateActivityToJson(
-        BookingUpdateActivity instance) =>
+Map<String, dynamic> _$BookingUpdateToJson(BookingUpdate instance) =>
     <String, dynamic>{
       'id': instance.id,
       'fromUserId': instance.fromUserId,
@@ -137,8 +131,7 @@ const _$BookingStatusEnumMap = {
   BookingStatus.canceled: 'canceled',
 };
 
-LoopMentionActivity _$LoopMentionActivityFromJson(Map<String, dynamic> json) =>
-    LoopMentionActivity(
+LoopMention _$LoopMentionFromJson(Map<String, dynamic> json) => LoopMention(
       id: json['id'] as String,
       fromUserId: json['fromUserId'] as String,
       toUserId: json['toUserId'] as String,
@@ -148,8 +141,7 @@ LoopMentionActivity _$LoopMentionActivityFromJson(Map<String, dynamic> json) =>
       loopId: json['loopId'] as String?,
     );
 
-Map<String, dynamic> _$LoopMentionActivityToJson(
-        LoopMentionActivity instance) =>
+Map<String, dynamic> _$LoopMentionToJson(LoopMention instance) =>
     <String, dynamic>{
       'id': instance.id,
       'fromUserId': instance.fromUserId,
@@ -160,9 +152,8 @@ Map<String, dynamic> _$LoopMentionActivityToJson(
       'loopId': instance.loopId,
     };
 
-CommentMentionActivity _$CommentMentionActivityFromJson(
-        Map<String, dynamic> json) =>
-    CommentMentionActivity(
+CommentMention _$CommentMentionFromJson(Map<String, dynamic> json) =>
+    CommentMention(
       id: json['id'] as String,
       fromUserId: json['fromUserId'] as String,
       toUserId: json['toUserId'] as String,
@@ -173,8 +164,30 @@ CommentMentionActivity _$CommentMentionActivityFromJson(
       commentId: json['commentId'] as String?,
     );
 
-Map<String, dynamic> _$CommentMentionActivityToJson(
-        CommentMentionActivity instance) =>
+Map<String, dynamic> _$CommentMentionToJson(CommentMention instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'fromUserId': instance.fromUserId,
+      'toUserId': instance.toUserId,
+      'timestamp': instance.timestamp.toIso8601String(),
+      'type': _$ActivityTypeEnumMap[instance.type]!,
+      'markedRead': instance.markedRead,
+      'rootId': instance.rootId,
+      'commentId': instance.commentId,
+    };
+
+CommentLike _$CommentLikeFromJson(Map<String, dynamic> json) => CommentLike(
+      id: json['id'] as String,
+      fromUserId: json['fromUserId'] as String,
+      toUserId: json['toUserId'] as String,
+      timestamp: DateTime.parse(json['timestamp'] as String),
+      type: $enumDecode(_$ActivityTypeEnumMap, json['type']),
+      markedRead: json['markedRead'] as bool,
+      rootId: json['rootId'] as String?,
+      commentId: json['commentId'] as String?,
+    );
+
+Map<String, dynamic> _$CommentLikeToJson(CommentLike instance) =>
     <String, dynamic>{
       'id': instance.id,
       'fromUserId': instance.fromUserId,

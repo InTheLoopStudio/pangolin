@@ -28,19 +28,19 @@ sealed class Activity extends Equatable {
 
       switch (type) {
         case ActivityType.follow:
-          return FollowActivity.fromDoc(doc);
+          return Follow.fromDoc(doc);
         case ActivityType.like:
-          return LikeActivity.fromDoc(doc);
+          return Like.fromDoc(doc);
         case ActivityType.comment:
           return CommentActivity.fromDoc(doc);
         case ActivityType.bookingRequest:
-          return BookingRequestActivity.fromDoc(doc);
+          return BookingRequest.fromDoc(doc);
         case ActivityType.bookingUpdate:
-          return BookingUpdateActivity.fromDoc(doc);
+          return BookingUpdate.fromDoc(doc);
         case ActivityType.loopMention:
-          return LoopMentionActivity.fromDoc(doc);
+          return LoopMention.fromDoc(doc);
         case ActivityType.commentMention:
-          return CommentMentionActivity.fromDoc(doc);
+          return CommentMention.fromDoc(doc);
         default:
           throw Exception('Activity.fromDoc: unknown type: $rawType');
       }
@@ -65,9 +65,8 @@ sealed class Activity extends Equatable {
   Activity copyAsRead();
 }
 
-@JsonSerializable()
-final class FollowActivity extends Activity {
-  const FollowActivity({
+final class Follow extends Activity {
+  const Follow({
     required super.id,
     required super.fromUserId,
     required super.toUserId,
@@ -76,11 +75,11 @@ final class FollowActivity extends Activity {
     required super.markedRead,
   });
 
-  factory FollowActivity.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
+  factory Follow.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     try {
       final tmpTimestamp =
           doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
-      return FollowActivity(
+      return Follow(
         id: doc.id,
         fromUserId: doc.getOrElse('fromUserId', '') as String,
         toUserId: doc.getOrElse('toUserId', '') as String,
@@ -98,14 +97,9 @@ final class FollowActivity extends Activity {
     }
   }
 
-  factory FollowActivity.fromJson(Map<String, dynamic> json) =>
-      _$FollowActivityFromJson(json);
-
-  Map<String, dynamic> toJson() => _$FollowActivityToJson(this);
-
   @override
-  FollowActivity copyAsRead() {
-    return FollowActivity(
+  Follow copyAsRead() {
+    return Follow(
       id: id,
       fromUserId: fromUserId,
       toUserId: toUserId,
@@ -116,9 +110,8 @@ final class FollowActivity extends Activity {
   }
 }
 
-@JsonSerializable()
-final class LikeActivity extends Activity {
-  const LikeActivity({
+final class Like extends Activity {
+  const Like({
     required super.id,
     required super.fromUserId,
     required super.toUserId,
@@ -128,11 +121,11 @@ final class LikeActivity extends Activity {
     required this.loopId,
   });
 
-  factory LikeActivity.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
+  factory Like.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     try {
       final tmpTimestamp =
           doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
-      return LikeActivity(
+      return Like(
         id: doc.id,
         fromUserId: doc.getOrElse('fromUserId', '') as String,
         toUserId: doc.getOrElse('toUserId', '') as String,
@@ -154,8 +147,8 @@ final class LikeActivity extends Activity {
   final String? loopId;
 
   @override
-  LikeActivity copyAsRead() {
-    return LikeActivity(
+  Like copyAsRead() {
+    return Like(
       id: id,
       fromUserId: fromUserId,
       toUserId: toUserId,
@@ -167,7 +160,6 @@ final class LikeActivity extends Activity {
   }
 }
 
-@JsonSerializable()
 final class CommentActivity extends Activity {
   const CommentActivity({
     required super.id,
@@ -222,9 +214,8 @@ final class CommentActivity extends Activity {
   }
 }
 
-@JsonSerializable()
-final class BookingRequestActivity extends Activity {
-  const BookingRequestActivity({
+final class BookingRequest extends Activity {
+  const BookingRequest({
     required super.id,
     required super.fromUserId,
     required super.toUserId,
@@ -234,13 +225,13 @@ final class BookingRequestActivity extends Activity {
     required this.bookingId,
   });
 
-  factory BookingRequestActivity.fromDoc(
+  factory BookingRequest.fromDoc(
     DocumentSnapshot<Map<String, dynamic>> doc,
   ) {
     try {
       final tmpTimestamp =
           doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
-      return BookingRequestActivity(
+      return BookingRequest(
         id: doc.id,
         fromUserId: doc.getOrElse('fromUserId', '') as String,
         toUserId: doc.getOrElse('toUserId', '') as String,
@@ -262,8 +253,8 @@ final class BookingRequestActivity extends Activity {
   final String? bookingId;
 
   @override
-  BookingRequestActivity copyAsRead() {
-    return BookingRequestActivity(
+  BookingRequest copyAsRead() {
+    return BookingRequest(
       id: id,
       fromUserId: fromUserId,
       toUserId: toUserId,
@@ -275,9 +266,8 @@ final class BookingRequestActivity extends Activity {
   }
 }
 
-@JsonSerializable()
-final class BookingUpdateActivity extends Activity {
-  const BookingUpdateActivity({
+final class BookingUpdate extends Activity {
+  const BookingUpdate({
     required super.id,
     required super.fromUserId,
     required super.toUserId,
@@ -288,13 +278,13 @@ final class BookingUpdateActivity extends Activity {
     required this.status,
   });
 
-  factory BookingUpdateActivity.fromDoc(
+  factory BookingUpdate.fromDoc(
     DocumentSnapshot<Map<String, dynamic>> doc,
   ) {
     try {
       final tmpTimestamp =
           doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
-      return BookingUpdateActivity(
+      return BookingUpdate(
         id: doc.id,
         fromUserId: doc.getOrElse('fromUserId', '') as String,
         toUserId: doc.getOrElse('toUserId', '') as String,
@@ -321,8 +311,8 @@ final class BookingUpdateActivity extends Activity {
   final BookingStatus? status;
 
   @override
-  BookingUpdateActivity copyAsRead() {
-    return BookingUpdateActivity(
+  BookingUpdate copyAsRead() {
+    return BookingUpdate(
       id: id,
       fromUserId: fromUserId,
       toUserId: toUserId,
@@ -335,9 +325,8 @@ final class BookingUpdateActivity extends Activity {
   }
 }
 
-@JsonSerializable()
-final class LoopMentionActivity extends Activity {
-  const LoopMentionActivity({
+final class LoopMention extends Activity {
+  const LoopMention({
     required super.id,
     required super.fromUserId,
     required super.toUserId,
@@ -347,22 +336,18 @@ final class LoopMentionActivity extends Activity {
     required this.loopId,
   });
 
-  factory LoopMentionActivity.fromDoc(
+  factory LoopMention.fromDoc(
     DocumentSnapshot<Map<String, dynamic>> doc,
   ) {
     try {
       final tmpTimestamp =
           doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
-      return LoopMentionActivity(
+      return LoopMention(
         id: doc.id,
         fromUserId: doc.getOrElse('fromUserId', '') as String,
         toUserId: doc.getOrElse('toUserId', '') as String,
         timestamp: tmpTimestamp.toDate(),
-        type: EnumToString.fromString(
-              ActivityType.values,
-              doc.getOrElse('type', 'free') as String,
-            ) ??
-            ActivityType.like,
+        type: ActivityType.loopMention,
         markedRead: doc.getOrElse('markedRead', false) as bool,
         loopId: doc.getOrElse('rootId', null) as String?,
       );
@@ -375,8 +360,8 @@ final class LoopMentionActivity extends Activity {
   final String? loopId;
 
   @override
-  LoopMentionActivity copyAsRead() {
-    return LoopMentionActivity(
+  LoopMention copyAsRead() {
+    return LoopMention(
       id: id,
       fromUserId: fromUserId,
       toUserId: toUserId,
@@ -388,9 +373,8 @@ final class LoopMentionActivity extends Activity {
   }
 }
 
-@JsonSerializable()
-final class CommentMentionActivity extends Activity {
-  const CommentMentionActivity({
+final class CommentMention extends Activity {
+  const CommentMention({
     required super.id,
     required super.fromUserId,
     required super.toUserId,
@@ -401,22 +385,18 @@ final class CommentMentionActivity extends Activity {
     required this.commentId,
   });
 
-  factory CommentMentionActivity.fromDoc(
+  factory CommentMention.fromDoc(
     DocumentSnapshot<Map<String, dynamic>> doc,
   ) {
     try {
       final tmpTimestamp =
           doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
-      return CommentMentionActivity(
+      return CommentMention(
         id: doc.id,
         fromUserId: doc.getOrElse('fromUserId', '') as String,
         toUserId: doc.getOrElse('toUserId', '') as String,
         timestamp: tmpTimestamp.toDate(),
-        type: EnumToString.fromString(
-              ActivityType.values,
-              doc.getOrElse('type', 'free') as String,
-            ) ??
-            ActivityType.like,
+        type: ActivityType.commentMention,
         markedRead: doc.getOrElse('markedRead', false) as bool,
         rootId: doc.getOrElse('rootId', null) as String?,
         commentId: doc.getOrElse('commentId', null) as String?,
@@ -431,8 +411,60 @@ final class CommentMentionActivity extends Activity {
   final String? commentId;
 
   @override
-  CommentMentionActivity copyAsRead() {
-    return CommentMentionActivity(
+  CommentMention copyAsRead() {
+    return CommentMention(
+      id: id,
+      fromUserId: fromUserId,
+      toUserId: toUserId,
+      timestamp: timestamp,
+      type: type,
+      markedRead: true,
+      rootId: rootId,
+      commentId: commentId,
+    );
+  }
+}
+
+final class CommentLike extends Activity {
+  const CommentLike({
+    required super.id,
+    required super.fromUserId,
+    required super.toUserId,
+    required super.timestamp,
+    required super.type,
+    required super.markedRead,
+    required this.rootId,
+    required this.commentId,
+  });
+
+  factory CommentLike.fromDoc(
+    DocumentSnapshot<Map<String, dynamic>> doc,
+  ) {
+    try {
+      final tmpTimestamp =
+          doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
+      return CommentLike(
+        id: doc.id,
+        fromUserId: doc.getOrElse('fromUserId', '') as String,
+        toUserId: doc.getOrElse('toUserId', '') as String,
+        timestamp: tmpTimestamp.toDate(),
+        type: ActivityType.commentLike,
+        markedRead: doc.getOrElse('markedRead', false) as bool,
+        rootId: doc.getOrElse('rootId', null) as String?,
+        commentId: doc.getOrElse('commentId', null) as String?,
+      );
+    } catch (e, s) {
+      logger.error('CommentActivity.fromDoc', error: e, stackTrace: s);
+      rethrow;
+    }
+  }
+
+  final String? rootId;
+  final String? commentId;
+
+  @override
+  CommentLike copyAsRead() {
+    return CommentLike(
       id: id,
       fromUserId: fromUserId,
       toUserId: toUserId,
@@ -453,4 +485,5 @@ enum ActivityType {
   bookingUpdate,
   loopMention,
   commentMention,
+  commentLike,
 }
