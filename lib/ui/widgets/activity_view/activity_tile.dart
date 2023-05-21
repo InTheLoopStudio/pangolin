@@ -132,6 +132,25 @@ class ActivityTile extends StatelessWidget {
     nav.add(PushLoop(loop));
   }
 
+  Future<void> onCommentLike(
+    BuildContext context,
+    String? loopId,
+    String fromUserId,
+  ) async {
+    final nav = context.read<NavigationBloc>();
+    if (loopId == null) {
+      nav.add(PushProfile(fromUserId));
+      return;
+    }
+
+    final database = context.read<DatabaseRepository>();
+    final loop = await database.getLoopById(loopId);
+    if (loop == null) {
+      return;
+    }
+    nav.add(PushLoop(loop));
+  }
+
   @override
   Widget build(BuildContext context) {
     final databaseRepository = context.read<DatabaseRepository>();
@@ -169,12 +188,11 @@ class ActivityTile extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           final _ = switch (activity) {
-                            FollowActivity(:final fromUserId) => onFollow(
+                            Follow(:final fromUserId) => onFollow(
                                 context,
                                 fromUserId,
                               ),
-                            LikeActivity(:final loopId, :final fromUserId) =>
-                              onLike(
+                            Like(:final loopId, :final fromUserId) => onLike(
                                 context,
                                 loopId,
                                 fromUserId,
@@ -185,7 +203,7 @@ class ActivityTile extends StatelessWidget {
                                 rootId,
                                 fromUserId,
                               ),
-                            BookingRequestActivity(
+                            BookingRequest(
                               :final bookingId,
                               :final fromUserId,
                             ) =>
@@ -194,7 +212,7 @@ class ActivityTile extends StatelessWidget {
                                 bookingId,
                                 fromUserId,
                               ),
-                            BookingUpdateActivity(
+                            BookingUpdate(
                               :final bookingId,
                               :final fromUserId,
                             ) =>
@@ -203,7 +221,7 @@ class ActivityTile extends StatelessWidget {
                                 bookingId,
                                 fromUserId,
                               ),
-                            LoopMentionActivity(
+                            LoopMention(
                               :final loopId,
                               :final fromUserId,
                             ) =>
@@ -212,11 +230,19 @@ class ActivityTile extends StatelessWidget {
                                 loopId,
                                 fromUserId,
                               ),
-                            CommentMentionActivity(:final rootId) =>
-                              onCommentMention(
+                            CommentMention(:final rootId) => onCommentMention(
                                 context,
                                 rootId,
-                              )
+                              ),
+                            CommentLike(
+                              :final rootId,
+                              :final fromUserId,
+                            ) =>
+                              onCommentLike(
+                                context,
+                                rootId,
+                                fromUserId,
+                              ),
                           };
                         },
                         child: ListTile(
@@ -259,6 +285,8 @@ class ActivityTile extends StatelessWidget {
                                   return 'mentioned you in a loop 📣';
                                 case ActivityType.commentMention:
                                   return 'mentioned you in a comment 📣';
+                                case ActivityType.commentLike:
+                                  return 'liked your comment ❤️';
                               }
                             }(),
                             style: TextStyle(

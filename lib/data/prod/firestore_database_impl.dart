@@ -1056,6 +1056,66 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     });
   }
 
+  @override
+  Future<void> likeComment(
+    String currentUserId,
+    Comment comment,
+  ) async {
+    await _analytics.logEvent(
+      name: 'like_comment',
+      parameters: {
+        'comment_id': comment.id,
+        'user_id': currentUserId,
+      },
+    );
+
+    await _commentsRef
+        .doc(comment.rootId)
+        .collection(commentsSubcollection)
+        .doc(comment.id)
+        .collection('commentLikes')
+        .doc(currentUserId)
+        .set({});
+  }
+
+  @override
+  Future<void> unlikeComment(
+    String currentUserId,
+    Comment comment,
+  ) async {
+    await _analytics.logEvent(
+      name: 'unlike_comment',
+      parameters: {
+        'comment_id': comment.id,
+        'user_id': currentUserId,
+      },
+    );
+
+    await _commentsRef
+        .doc(comment.rootId)
+        .collection(commentsSubcollection)
+        .doc(comment.id)
+        .collection('commentLikes')
+        .doc(currentUserId)
+        .delete();
+  }
+
+  @override
+  Future<bool> isCommentLiked(
+    String currentUserId,
+    Comment comment,
+  ) async {
+    final commentLikeSnapshot = await _commentsRef
+        .doc(comment.rootId)
+        .collection(commentsSubcollection)
+        .doc(comment.id)
+        .collection('commentLikes')
+        .doc(currentUserId)
+        .get();
+
+    return commentLikeSnapshot.exists;
+  }
+
   // Future<List<Tag>> getTagSuggestions(String query) async {
   //   await Future.delayed(Duration(milliseconds: 0), null);
 

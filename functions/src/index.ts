@@ -16,7 +16,7 @@ import { defineSecret } from "firebase-functions/params";
 import { HttpsError } from "firebase-functions/v1/auth";
 
 import Stripe from "stripe";
-import { Booking, Loop, Comment, FollowActivity, LikeActivity, CommentActivity, BookingRequestActivity, BookingUpdateActivity, CommentMentionActivity, LoopMentionActivity, BookingStatus, } from "./models";
+import { Booking, Loop, Comment, FollowActivity, LikeActivity, CommentActivity, BookingRequestActivity, BookingUpdateActivity, CommentMentionActivity, LoopMentionActivity, BookingStatus, CommentLikeActivity, } from "./models";
 
 const app = initializeApp();
 
@@ -192,6 +192,7 @@ const _addActivity = async (
     | BookingUpdateActivity
     | LoopMentionActivity
     | CommentMentionActivity
+    | CommentLikeActivity
 ) => {
   // Checking attribute.A
   if (activity.toUserId.length === 0) {
@@ -216,6 +217,7 @@ const _addActivity = async (
     "bookingUpdate",
     "loopMention",
     "commentMention",
+    "commentLike",
   ].includes(activity.type)) {
     // Throwing an HttpsError so that the client gets the error details.
     throw new functions.https.HttpsError(
@@ -888,6 +890,49 @@ export const decrementLoopLikeCountOnUnlike = functions.firestore
       .doc(context.params.loopId)
       .update({ likeCount: FieldValue.increment(-1) });
   })
+
+export const incrementLikeCountOnCommentLike = functions.firestore
+  .document("comments/{loopId}/loopComments/{commentId}/commentLikes/{userId}")
+  .onCreate(async (snapshot, context) => {
+    await commentsRef
+      .doc(context.params.loopId)
+      .collection("loopComments")
+      .doc(context.params.commentId)
+      .update({ likeCount: FieldValue.increment(1) });
+  });
+export const decrementLoopLikeCountOnCommentUnlike = functions.firestore
+  .document("comments/{loopId}/loopComments/{commentId}/commentLikes/{userId}")
+  .onDelete(async (snapshot, context) => {
+    await commentsRef
+      .doc(context.params.loopId)
+      .collection("loopComments")
+      .doc(context.params.commentId)
+      .update({ likeCount: FieldValue.increment(-1) });
+  });
+export const addActivityOnCommentLike = functions.firestore
+  .document("comments/{rootId}/loopComments/{commentId}/commentLikes/{userId}")
+  .onCreate(async (snapshot, context) => {
+    const commentSnapshot = await commentsRef
+      .doc(context.params.rootId)
+      .collection("loopComments")
+      .doc(context.params.commentId)
+      .get();
+
+    const comment = commentSnapshot.data();
+    if (comment === undefined) {
+      return;
+    }
+
+    if (comment.userId !== context.params.userId) {
+      _addActivity({
+        toUserId: comment.userId,
+        fromUserId: context.params.userId,
+        type: "commentLike",
+        commentId: context.params.commentId,
+        rootId: context.params.rootId,
+      });
+    }
+  });
 
 export const addActivityOnBooking = functions.firestore
   .document("bookings/{bookingId}")
