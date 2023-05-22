@@ -377,6 +377,7 @@ const _createPaymentIntent = async (data: {
   destination?: string;
   amount?: number,
   customerId?: string,
+  receiptEmail?: string,
 }) => {
 
 
@@ -433,7 +434,8 @@ const _createPaymentIntent = async (data: {
     },
     transfer_data: {
       destination: data.destination,
-    }
+    },
+    receipt_email: data.receiptEmail,
   });
 
   return {

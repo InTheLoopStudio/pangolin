@@ -44,7 +44,6 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
           json['emailNotificationsAppReleases'] as bool,
       emailNotificationsITLUpdates:
           json['emailNotificationsITLUpdates'] as bool,
-      bookingRate: json['bookingRate'] as int,
       stripeConnectedAccountId: json['stripeConnectedAccountId'] as String?,
       stripeCustomerId: json['stripeCustomerId'] as String?,
     );
@@ -81,7 +80,6 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'pushNotificationsITLUpdates': instance.pushNotificationsITLUpdates,
       'emailNotificationsAppReleases': instance.emailNotificationsAppReleases,
       'emailNotificationsITLUpdates': instance.emailNotificationsITLUpdates,
-      'bookingRate': instance.bookingRate,
       'stripeConnectedAccountId': instance.stripeConnectedAccountId,
       'stripeCustomerId': instance.stripeCustomerId,
     };

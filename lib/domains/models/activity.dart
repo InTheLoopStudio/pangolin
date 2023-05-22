@@ -4,9 +4,6 @@ import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/utils.dart';
-import 'package:json_annotation/json_annotation.dart';
-
-part 'activity.g.dart';
 
 sealed class Activity extends Equatable {
   const Activity({

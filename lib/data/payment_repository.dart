@@ -4,6 +4,7 @@ abstract class PaymentRepository {
   Future<void> initPayments();
   Future<PaymentIntentResponse> initPaymentSheet({
     required String? payerCustomerId,
+    required String customerEmail,
     required String payeeConnectedAccountId,
     required int amount,
   });

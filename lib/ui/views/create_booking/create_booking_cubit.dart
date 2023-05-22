@@ -127,6 +127,7 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
       if (total > 0) {
         final intent = await payments.initPaymentSheet(
           payerCustomerId: currentUser.stripeCustomerId,
+          customerEmail: currentUser.email,
           payeeConnectedAccountId: requesteeStripeConnectedAccountId,
           amount: total,
         );

@@ -1,5 +1,6 @@
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/domains/models/payment_user.dart';
@@ -23,6 +24,7 @@ class StripePaymentImpl implements PaymentRepository {
 
   Future<PaymentIntentResponse> _createPaymentSheet({
     required String? payerCustomerId,
+    required String payerEmail,
     required String payeeConnectedAccountId,
     required int amount,
   }) async {
@@ -32,6 +34,7 @@ class StripePaymentImpl implements PaymentRepository {
       'destination': payeeConnectedAccountId,
       'amount': amount,
       'customerId': payerCustomerId,
+      'receiptEmail': payerEmail,
     });
     final data = results.data;
 
@@ -48,6 +51,7 @@ class StripePaymentImpl implements PaymentRepository {
   @override
   Future<PaymentIntentResponse> initPaymentSheet({
     required String? payerCustomerId,
+    required String customerEmail,
     required String payeeConnectedAccountId,
     required int amount,
   }) async {
@@ -68,6 +72,7 @@ class StripePaymentImpl implements PaymentRepository {
     // 1. create payment intent on the server
     final intent = await _createPaymentSheet(
       payerCustomerId: payerCustomerId,
+      payerEmail: customerEmail,
       payeeConnectedAccountId: payeeConnectedAccountId,
       amount: amount,
     );
