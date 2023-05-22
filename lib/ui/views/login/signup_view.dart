@@ -73,7 +73,9 @@ class SignUpView extends StatelessWidget {
                           GoogleLoginButton(
                             onPressed: () async {
                               try {
-                                await context.read<LoginCubit>().signInWithGoogle();
+                                await context
+                                    .read<LoginCubit>()
+                                    .signInWithGoogle();
                               } catch (e) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
@@ -88,7 +90,9 @@ class SignUpView extends StatelessWidget {
                             AppleLoginButton(
                               onPressed: () async {
                                 try {
-                                  await context.read<LoginCubit>().signInWithApple();
+                                  await context
+                                      .read<LoginCubit>()
+                                      .signInWithApple();
                                 } catch (e) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
