@@ -43,7 +43,6 @@ class UserModel extends Equatable {
     required this.pushNotificationsITLUpdates,
     required this.emailNotificationsAppReleases,
     required this.emailNotificationsITLUpdates,
-    required this.bookingRate,
     required this.stripeConnectedAccountId,
     required this.stripeCustomerId,
   });
@@ -79,7 +78,6 @@ class UserModel extends Equatable {
         pushNotificationsITLUpdates: true,
         emailNotificationsAppReleases: true,
         emailNotificationsITLUpdates: true,
-        bookingRate: 0,
         stripeConnectedAccountId: null,
         stripeCustomerId: null,
       );
@@ -146,7 +144,6 @@ class UserModel extends Equatable {
           doc.getOrElse('emailNotificationsAppReleases', true) as bool,
       emailNotificationsITLUpdates:
           doc.getOrElse('emailNotificationsITLUpdates', true) as bool,
-      bookingRate: doc.getOrElse('bookingRate', 0) as int,
       stripeConnectedAccountId: doc.getOrElse(
         'stripeConnectedAccountId',
         null,
@@ -191,8 +188,6 @@ class UserModel extends Equatable {
   final bool emailNotificationsAppReleases;
   final bool emailNotificationsITLUpdates;
 
-  // booking rate in cents (USD)
-  final int bookingRate;
   final String? stripeConnectedAccountId;
   final String? stripeCustomerId;
 
@@ -228,7 +223,6 @@ class UserModel extends Equatable {
         pushNotificationsITLUpdates,
         emailNotificationsAppReleases,
         emailNotificationsITLUpdates,
-        bookingRate,
         stripeConnectedAccountId,
         stripeCustomerId,
       ];
@@ -274,7 +268,6 @@ class UserModel extends Equatable {
     bool? pushNotificationsITLUpdates,
     bool? emailNotificationsAppReleases,
     bool? emailNotificationsITLUpdates,
-    int? bookingRate,
     String? stripeConnectedAccountId,
     String? stripeCustomerId,
   }) {
@@ -316,7 +309,6 @@ class UserModel extends Equatable {
           emailNotificationsAppReleases ?? this.emailNotificationsAppReleases,
       emailNotificationsITLUpdates:
           emailNotificationsITLUpdates ?? this.emailNotificationsITLUpdates,
-      bookingRate: bookingRate ?? this.bookingRate,
       stripeConnectedAccountId:
           stripeConnectedAccountId ?? this.stripeConnectedAccountId,
       stripeCustomerId: stripeCustomerId ?? this.stripeCustomerId,
@@ -355,7 +347,6 @@ class UserModel extends Equatable {
       'pushNotificationsITLUpdates': pushNotificationsITLUpdates,
       'emailNotificationsAppReleases': emailNotificationsAppReleases,
       'emailNotificationsITLUpdates': emailNotificationsITLUpdates,
-      'bookingRate': bookingRate,
       'stripeConnectedAccountId': stripeConnectedAccountId,
       'stripeCustomerId': stripeCustomerId,
     };

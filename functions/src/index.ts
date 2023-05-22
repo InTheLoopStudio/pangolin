@@ -18,6 +18,8 @@ import { HttpsError } from "firebase-functions/v1/auth";
 import Stripe from "stripe";
 import { Booking, Loop, Comment, FollowActivity, LikeActivity, CommentActivity, BookingRequestActivity, BookingUpdateActivity, CommentMentionActivity, LoopMentionActivity, BookingStatus, CommentLikeActivity, } from "./models";
 
+import { v4 as uuidv4 } from "uuid";
+
 const app = initializeApp();
 
 const streamKey = defineSecret("STREAM_KEY");
@@ -51,6 +53,8 @@ const mailRef = db.collection("mail");
 // const loopLikesSubcollection = "loopLikes";
 // const loopCommentsSubcollection = "loopComments";
 const loopsFeedSubcollection = "userFeed";
+
+const bookingBotUuid = "90dc0775-3a0d-4e92-8573-9c7aa6832d94";
 
 
 const _getFileFromURL = (fileURL: string): string => {
@@ -1188,6 +1192,50 @@ export const notifyFoundersOnBookings = functions
       throw new Error(`cannot send notification to device ${e.message}`);
     }
   });
+export const postFromBookingBotOnBooking = functions
+  .firestore
+  .document("bookings/{bookingId}")
+  .onCreate(async (data) => {
+    const booking = data.data() as Booking;
+    if (booking === undefined) {
+      throw new HttpsError("failed-precondition", `booking ${data.id} does not exist`,);
+    }
+
+    if (booking.serviceId === undefined) {
+      throw new HttpsError("failed-precondition", `booking ${data.id} does not have a serviceId`,);
+    }
+
+    const serviceSnapshot = await servicesRef
+      .doc(booking.requesteeId)
+      .collection("userServices")
+      .doc(booking.serviceId)
+      .get();
+
+    const service = serviceSnapshot.data();
+
+    const requesterSnapshot = await usersRef.doc(booking.requesterId).get();
+    const requester = requesterSnapshot.data();
+
+    const requesteeSnapshot = await usersRef.doc(booking.requesteeId).get();
+    const requestee = requesteeSnapshot.data();
+
+    const uuid = uuidv4();
+    const post = {
+      id: uuid,
+      userId: bookingBotUuid,
+      title: "🎫 NEW BOOKING",
+      description: `@${requester?.username ?? "UNNKOWN"} booked @${requestee?.username ?? "UNKNOWN"} for service '${service?.title ?? "UNKNOWN"}'`,
+      audioPath: "",
+      imagePaths: [],
+      timestamp: Timestamp.now(),
+      likeCount: 0,
+      commentCount: 0,
+      shareCount: 0,
+      deleted: false,
+    }
+    await loopsRef.doc(uuid).set(post);
+  });
+
 export const sendBookingRequestReceivedEmailOnBooking = functions
   .firestore
   .document("bookings/{bookingId}")
