@@ -72,13 +72,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     switch (state.tabIndex) {
       case 0:
         await _searchUsersByUsername(query, emit);
-        break;
       case 1:
         await _searchLocations(query, emit);
-        break;
       case 2:
         await _searchLoops(query, emit);
-        break;
     }
   }
 

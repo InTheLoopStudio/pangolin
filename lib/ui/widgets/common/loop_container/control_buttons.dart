@@ -36,7 +36,7 @@ class ControlButtons extends StatelessWidget {
                 'Check out this loop on Tapped $link',
               );
 
-              Navigator.pop(context);
+              context.read<NavigationBloc>().add(const Pop());
             },
             child: const Text('Share'),
           ),

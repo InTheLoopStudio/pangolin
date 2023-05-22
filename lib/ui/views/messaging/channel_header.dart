@@ -117,13 +117,10 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
           case ConnectionStatus.connected:
             statusString = context.translations.connectedLabel;
             showStatus = false;
-            break;
           case ConnectionStatus.connecting:
             statusString = context.translations.reconnectingLabel;
-            break;
           case ConnectionStatus.disconnected:
             statusString = context.translations.disconnectedLabel;
-            break;
         }
 
         return StreamInfoTile(

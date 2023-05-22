@@ -32,7 +32,7 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
             ? const CircularProgressIndicator(
                 color: Colors.white,
               )
-            : Text(
+            : const Text(
                 'Connect Bank Account',
               ),
         onPressed: () async {

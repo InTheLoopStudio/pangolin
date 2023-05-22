@@ -61,7 +61,7 @@ dependencies:
   json_annotation: ^4.5.0
   just_audio: ^0.9.2
   like_button: ^2.0.5
-  linkify: ^4.1.0
+  linkify: ^5.0.0
   logging: ^1.1.1
   modal_bottom_sheet:
     git:
@@ -99,7 +99,7 @@ dev_dependencies:
   json_serializable: ^6.3.1
   mockito: ^5.0.16
   pubspec_dependency_sorter: ^1.0.3
-  very_good_analysis: ^4.0.0+1
+  very_good_analysis: ^5.0.0+1
 
 flutter_icons: 
   image_path_ios: assets/app_icon_ios.png

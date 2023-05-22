@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/domains/models/service.dart';
-import 'package:intheloopapp/ui/themes.dart';
 
 class ServiceCard extends StatelessWidget {
   const ServiceCard({

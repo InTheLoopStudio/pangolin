@@ -24,7 +24,6 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
           switch (event.type) {
             case DynamicLinkType.createPost:
               navigationBloc.add(const ChangeTab(selectedTab: 2));
-              break;
             case DynamicLinkType.shareLoop:
               if (event.id != null) {
                 final shareLoop = await databaseRepository.getLoopById(
@@ -34,12 +33,10 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
                   navigationBloc.add(PushLoop(shareLoop));
                 }
               }
-              break;
             case DynamicLinkType.shareProfile:
               if (event.id != null) {
                 navigationBloc.add(PushProfile(event.id!));
               }
-              break;
             case DynamicLinkType.connectStripeRedirect:
               if (event.id == null || event.id == '') {
                 break;
@@ -61,12 +58,10 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
               );
 
               navigationBloc.add(const PushSettings());
-              break;
             case DynamicLinkType.connectStripeRefresh:
               if (event.id != null) {
                 // resend the create account request?
               }
-              break;
           }
         } catch (e, s) {
           logger.error('dynamic link error', error: e, stackTrace: s);
