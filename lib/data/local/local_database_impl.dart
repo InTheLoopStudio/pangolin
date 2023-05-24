@@ -273,6 +273,14 @@ class LocalDatabaseImpl extends DatabaseRepository {
     return;
   }
 
+  @override 
+  Future<void> reportLoop({
+    required String reporterId,
+    required Loop loop,
+  }) async {
+    return;
+  }
+
   @override
   Future<bool> checkUsernameAvailability(String username, String userid) async {
     return true;

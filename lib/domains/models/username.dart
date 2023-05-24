@@ -21,8 +21,14 @@ class Username extends Equatable {
   @override
   List<Object> get props => [username];
 
+  Map<String, dynamic> toJson() => _$UsernameToJson(this);
+
   @override
   String toString() {
     return username;
+  }
+
+  static String usernameToString(Username? username) {
+    return username?.username ?? '';
   }
 }

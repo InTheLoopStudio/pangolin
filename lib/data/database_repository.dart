@@ -117,6 +117,12 @@ abstract class DatabaseRepository {
   // Sharing related stuff
   Future<void> shareLoop(Loop loop);
 
+  // Reporting related stuff
+  Future<void> reportLoop({
+    required String reporterId,
+    required Loop loop,
+  });
+
   // Following related stuff
   Future<int> followersNum(String userid);
   Future<int> followingNum(String userid);

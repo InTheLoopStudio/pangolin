@@ -3,10 +3,10 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/utils.dart';
+import 'package:uuid/uuid.dart';
 
 class Booking extends Equatable {
-  const Booking({
-    required this.id,
+  Booking({
     required this.serviceId,
     required this.name,
     required this.note,
@@ -21,7 +21,10 @@ class Booking extends Equatable {
     required this.startTime,
     required this.endTime,
     required this.timestamp,
-  });
+    String? id,
+  }) {
+    this.id = id ?? const Uuid().v4();
+  }
 
   factory Booking.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     final tmpTimestamp =
@@ -62,7 +65,7 @@ class Booking extends Equatable {
     );
   }
 
-  final String id;
+  late final String id;
   final Option<String> serviceId;
   final String name;
   final String note;

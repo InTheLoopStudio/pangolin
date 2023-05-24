@@ -153,7 +153,10 @@ class UserModel extends Equatable {
   }
   final String id;
   final String email;
+
+  @JsonKey(fromJson: Username.fromJson, toJson: Username.usernameToString)
   final Username username;
+
   final String artistName;
   final String bio;
   final List<Genre> genres;

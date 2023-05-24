@@ -40,6 +40,22 @@ class ControlButtons extends StatelessWidget {
             },
             child: const Text('Share'),
           ),
+          CupertinoActionSheetAction(
+            onPressed: () async {
+              await database.reportLoop(
+                loop: loop,
+                reporterId: currentUserId,
+              );
+              context.read<NavigationBloc>().add(const Pop());
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Loop Reported'),
+                ),
+              );
+            },
+            child: const Text('Report Loop'),
+          ),
           if (loop.userId == currentUserId)
             CupertinoActionSheetAction(
               /// This parameter indicates the action would perform

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
@@ -33,6 +34,7 @@ final _badgesRef = _firestore.collection('badges');
 final _badgesSentRef = _firestore.collection('badgesSent');
 final _bookingsRef = _firestore.collection('bookings');
 final _servicesRef = _firestore.collection('services');
+final _mailRef = _firestore.collection('mail');
 
 const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
 
@@ -1128,6 +1130,41 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
     await _loopsRef.doc(loop.id).update({
       'shares': FieldValue.increment(1),
+    });
+  }
+
+  @override
+  Future<void> reportLoop({
+    required String reporterId,
+    required Loop loop,
+  }) async {
+    await _analytics.logEvent(
+      name: 'report_loop',
+      parameters: {
+        'reporter_id': reporterId,
+        'loop_id': loop.id,
+      },
+    );
+
+    final reporterSnapshot = await _usersRef.doc(reporterId).get();
+    final reporter = UserModel.fromDoc(reporterSnapshot);
+
+    final reportHtml = '''
+        <p>Report from:</p> 
+        <p>${reporter.toJson()}<p> 
+        <p>Loop:</p> 
+        <p>${loop.toJson()}</p>
+    ''';
+
+    await _mailRef.add({
+      'to': [
+        'support@tapped.ai',
+        'ilias@tapped.ai',
+      ],
+      'message': {
+        'subject': 'Loop reported',
+        'html': reportHtml,
+      },
     });
   }
 

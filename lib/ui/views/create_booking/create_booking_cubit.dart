@@ -103,7 +103,6 @@ class CreateBookingCubit extends Cubit<CreateBookingState> {
         (lat != null && lng != null) ? geocodeEncode(lat: lat, lng: lng) : null;
 
     final booking = Booking(
-      id: const Uuid().v4(),
       name: state.name.value,
       note: state.note.value,
       serviceId: Some(state.service.id),

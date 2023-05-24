@@ -29,6 +29,63 @@ class LoopView extends StatelessWidget {
 
   final Loop loop;
 
+  void _showActionSheet(
+    BuildContext context,
+    String currentUserId,
+  ) {
+    final dynamic = context.read<DynamicLinkRepository>();
+    final database = context.read<DatabaseRepository>();
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoActionSheet(
+        title: Text(loop.title),
+        message: Text(loop.description),
+        actions: <CupertinoActionSheetAction>[
+          CupertinoActionSheetAction(
+            onPressed: () async {
+              final link = await dynamic.getShareLoopDynamicLink(loop);
+
+              await Share.share(
+                'Check out this loop on Tapped $link',
+              );
+
+              context.read<NavigationBloc>().add(const Pop());
+            },
+            child: const Text('Share'),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () async {
+              await database.reportLoop(
+                loop: loop,
+                reporterId: currentUserId,
+              );
+              context.read<NavigationBloc>().add(const Pop());
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Loop Reported'),
+                ),
+              );
+            },
+            child: const Text('Report Loop'),
+          ),
+          if (loop.userId == currentUserId)
+            CupertinoActionSheetAction(
+              /// This parameter indicates the action would perform
+              /// a destructive action such as delete or exit and turns
+              /// the action's text color to red.
+              isDestructiveAction: true,
+              onPressed: () async {
+                await database.deleteLoop(loop);
+                Navigator.pop(context);
+              },
+              child: const Text('Delete Loop'),
+            ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final navigationBloc = context.read<NavigationBloc>();
@@ -227,23 +284,13 @@ class LoopView extends StatelessWidget {
                                               ],
                                             ),
                                           ),
-                                          GestureDetector(
-                                            onTap: () async {
-                                              await context
-                                                  .read<LoopViewCubit>()
-                                                  .incrementShares();
-
-                                              final link = await dynamic
-                                                  .getShareLoopDynamicLink(
-                                                state.loop,
-                                              );
-
-                                              await Share.share(
-                                                'Check out this loop on Tapped $link',
-                                              );
-                                            },
-                                            child: const Icon(
-                                              CupertinoIcons.share,
+                                          IconButton(
+                                            onPressed: () => _showActionSheet(
+                                              context,
+                                              currentUser.id,
+                                            ),
+                                            icon: const Icon(
+                                              CupertinoIcons.ellipsis,
                                               size: 18,
                                               color: Color(0xFF757575),
                                             ),
