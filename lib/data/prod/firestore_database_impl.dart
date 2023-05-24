@@ -1159,6 +1159,9 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     await _mailRef.add({
       'to': [
         'support@tapped.ai',
+      ],
+      'cc': [
+        'johannes@tapped.ai',
         'ilias@tapped.ai',
       ],
       'message': {
