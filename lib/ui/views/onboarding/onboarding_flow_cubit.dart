@@ -63,44 +63,46 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
   }
 
   Future<void> finishOnboarding() async {
-    if (!state.loading) {
-      emit(state.copyWith(loading: true));
+    if (state.loading) {
+      return;
+    }
 
-      try {
-        final profilePictureUrl = state.pickedPhoto != null
-            ? await storageRepository.uploadProfilePicture(
-                currentAuthUser.uid,
-                state.pickedPhoto!,
-              )
-            : null;
+    emit(state.copyWith(loading: true));
 
-        final lat = state.place?.latLng?.lat;
-        final lng = state.place?.latLng?.lng;
-        final geohash = (lat != null && lng != null)
-            ? geocodeEncode(lat: lat, lng: lng)
-            : null;
+    try {
+      final profilePictureUrl = state.pickedPhoto != null
+          ? await storageRepository.uploadProfilePicture(
+              currentAuthUser.uid,
+              state.pickedPhoto!,
+            )
+          : null;
 
-        final emptyUser = UserModel.empty();
-        final currentUser = emptyUser.copyWith(
-          id: currentAuthUser.uid,
-          email: currentAuthUser.email,
-          username: Username.fromString(state.username),
-          artistName: state.artistName,
-          profilePicture: profilePictureUrl,
-          bio: state.bio,
-          placeId: Option.fromNullable(state.placeId),
-          geohash: Option.fromNullable(geohash),
-          lat: Option.fromNullable(lat),
-          lng: Option.fromNullable(lng),
-        );
+      final lat = state.place?.latLng?.lat;
+      final lng = state.place?.latLng?.lng;
+      final geohash = (lat != null && lng != null)
+          ? geocodeEncode(lat: lat, lng: lng)
+          : null;
 
-        await databaseRepository.createUser(currentUser);
+      final emptyUser = UserModel.empty();
+      final currentUser = emptyUser.copyWith(
+        id: currentAuthUser.uid,
+        email: currentAuthUser.email,
+        username: Username.fromString(state.username),
+        artistName: state.artistName,
+        profilePicture: profilePictureUrl,
+        bio: state.bio,
+        placeId: Option.fromNullable(state.placeId),
+        geohash: Option.fromNullable(geohash),
+        lat: Option.fromNullable(lat),
+        lng: Option.fromNullable(lng),
+      );
 
-        onboardingBloc.add(FinishOnboarding(user: currentUser));
-      } catch (e, s) {
-        logger.error('error finishing onboarding', error: e, stackTrace: s);
-        emit(state.copyWith(loading: false));
-      }
+      await databaseRepository.createUser(currentUser);
+
+      onboardingBloc.add(FinishOnboarding(user: currentUser));
+    } catch (e, s) {
+      logger.error('error finishing onboarding', error: e, stackTrace: s);
+      emit(state.copyWith(loading: false));
     }
   }
 }

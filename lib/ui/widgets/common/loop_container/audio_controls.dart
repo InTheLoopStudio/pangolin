@@ -26,7 +26,7 @@ class AudioControls extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return FutureBuilder<AudioController>(
+    return FutureBuilder<AudioController?>(
       future: AudioController.fromUrl(
         audioRepo: RepositoryProvider.of<AudioRepository>(context),
         url: audioPath,

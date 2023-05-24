@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -51,17 +52,30 @@ class AudioController {
     String? image,
     String? artist,
   }) async {
-    final File file = await myCacheManager.getSingleFile(url);
-    final duration = await AudioPlayer().setFilePath(file.path);
+    try {
+      final File file = await myCacheManager.getSingleFile(url);
 
-    return AudioController._(
-      audioRepo: audioRepo,
-      source: file.path,
-      duration: duration,
-      title: title,
-      image: image,
-      artist: artist,
-    );
+      final duration = await AudioPlayer().setUrl(url);
+
+      // IDK why this doesn't work but it doesn't
+      // final duration = await AudioPlayer().setFilePath(file.path);
+
+      return AudioController._(
+        audioRepo: audioRepo,
+        source: file.path,
+        duration: duration,
+        title: title,
+        image: image,
+        artist: artist,
+      );
+    } catch (e, s) {
+      logger.error(
+        'cannot build AudiusController from URL $url',
+        error: e,
+        stackTrace: s,
+      );
+      throw Exception('could not build AudiusController from URL $url');
+    }
   }
 
   final AudioRepository audioRepo;
