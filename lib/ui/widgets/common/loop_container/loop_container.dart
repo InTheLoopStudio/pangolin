@@ -101,56 +101,61 @@ class _LoopContainerState extends State<LoopContainer>
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25),
-              image: DecorationImage(
-                image: CachedNetworkImageProvider(
-                  loopUser.profilePicture!,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25),
+                  image: DecorationImage(
+                    image: CachedNetworkImageProvider(
+                      loopUser.profilePicture!,
+                    ),
+                    fit: BoxFit.cover,
+                  ),
                 ),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 8,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  UserInfo(
-                    loopUser: loopUser,
-                    timestamp: widget.loop.timestamp,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
                   ),
-                  TitleText(title: widget.loop.title),
-                  const SizedBox(height: 14),
-                  if (widget.loop.description.isNotEmpty)
-                    Column(
-                      children: [
-                        Linkify(
-                          text: widget.loop.description,
-                          style: const TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                        const SizedBox(height: 14),
-                      ],
-                    )
-                  else
-                    const SizedBox.shrink(),
-                  Attachments(
-                    loop: widget.loop,
-                    loopUser: loopUser,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      UserInfo(
+                        loopUser: loopUser,
+                        timestamp: widget.loop.timestamp,
+                      ),
+                      TitleText(title: widget.loop.title),
+                      const SizedBox(height: 14),
+                      if (widget.loop.description.isNotEmpty)
+                        Column(
+                          children: [
+                            Linkify(
+                              text: widget.loop.description,
+                              style: const TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(height: 14),
+                          ],
+                        )
+                      else
+                        const SizedBox.shrink(),
+                      Attachments(
+                        loop: widget.loop,
+                        loopUser: loopUser,
+                      ),
+                    ],
                   ),
-                  ControlButtons(
-                    loop: widget.loop,
-                    currentUserId: currentUserId,
-                  ),
-                  const SizedBox(height: 8),
-                ],
+                ),
               ),
-            ),
+              ControlButtons(
+                loop: widget.loop,
+                currentUserId: currentUserId,
+              ),
+              const SizedBox(height: 8),
+            ],
           ),
         ),
       );
@@ -192,10 +197,13 @@ class _LoopContainerState extends State<LoopContainer>
               return const LoadingContainer();
             }
 
-            logger.logAnalyticsEvent(name: 'loop_view', parameters: {
-              'loop_id': widget.loop.id,
-              'user_id': widget.loop.userId,
-            },);
+            logger.logAnalyticsEvent(
+              name: 'loop_view',
+              parameters: {
+                'loop_id': widget.loop.id,
+                'user_id': widget.loop.userId,
+              },
+            );
 
             return BlocProvider<LoopContainerCubit>(
               create: (context) => LoopContainerCubit(
