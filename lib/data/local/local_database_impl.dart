@@ -429,7 +429,8 @@ class LocalDatabaseImpl extends DatabaseRepository {
     required String loopId,
   }) async {
     return;
-  } 
+  }
+
   @override
   Future<void> cancelInterest({
     required String userId,
@@ -438,10 +439,18 @@ class LocalDatabaseImpl extends DatabaseRepository {
     return;
   }
 
-  @override 
+  @override
   Future<List<UserModel>> getInterestedUsers(
     String loopId,
   ) async {
     return [];
+  }
+
+  @override
+  Future<bool> isInterested({
+    required String userId,
+    required String loopId,
+  }) async {
+    return false;
   }
 }

@@ -227,4 +227,8 @@ abstract class DatabaseRepository {
     required String loopId,
   });
   Future<List<UserModel>> getInterestedUsers(String loopId);
+  Future<bool> isInterested({
+    required String userId,
+    required String loopId,
+  });
 }

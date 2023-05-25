@@ -15,6 +15,7 @@ import 'package:intheloopapp/ui/views/common/loading/loading_container.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/attachments.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/control_buttons.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container_cubit.dart';
+import 'package:intheloopapp/ui/widgets/common/loop_container/show_interest_button.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/title_text.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/user_info.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
@@ -80,6 +81,10 @@ class _LoopContainerState extends State<LoopContainer>
                   loop: widget.loop,
                   loopUser: loopUser,
                 ),
+                ShowInterestButton(
+                  loop: widget.loop,
+                ),
+                const SizedBox(height: 8),
                 ControlButtons(
                   loop: widget.loop,
                   currentUserId: currentUserId,
@@ -151,6 +156,10 @@ class _LoopContainerState extends State<LoopContainer>
                   ),
                 ),
               ),
+              ShowInterestButton(
+                loop: widget.loop,
+              ),
+              const SizedBox(height: 8),
               ControlButtons(
                 loop: widget.loop,
                 currentUserId: currentUserId,

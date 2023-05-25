@@ -1699,6 +1699,20 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
     return users;
   }
+
+  @override 
+  Future<bool> isInterested({
+    required String userId,
+    required String loopId,
+  }) async {
+    final userSnapshot = await _opportunitiesRef
+        .doc(loopId)
+        .collection('interestedUsers')
+        .doc(userId)
+        .get();
+
+    return userSnapshot.exists;
+  }
 }
 
 class HandleAlreadyExistsException implements Exception {
