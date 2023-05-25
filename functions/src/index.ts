@@ -744,6 +744,24 @@ export const addFollowersEntryOnFollow = functions.firestore
       .doc(context.params.followerId)
       .set({});
   });
+export const incrementFollowersCountOnFollow = functions.firestore
+  .document("following/{followerId}/Following/{followeeId}")
+  .onCreate(async (snapshot, context) => {
+    await usersRef
+      .doc(context.params.followeeId)
+      .update({
+        followersCount: FieldValue.increment(1),
+      });
+  });
+export const incrementFollowingCountOnFollow = functions.firestore
+  .document("followers/{followeeId}/Followers/{followerId}")
+  .onCreate(async (snapshot, context) => {
+    await usersRef
+      .doc(context.params.followerId)
+      .update({
+        followingCount: FieldValue.increment(1),
+      });
+  });
 export const copyLoopFeedOnFollow = functions.firestore
   .document("following/{followerId}/Following/{followeeId}")
   .onCreate(async (snapshot, context) => {

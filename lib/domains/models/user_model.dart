@@ -28,6 +28,8 @@ class UserModel extends Equatable {
     required this.lng,
     required this.loopsCount,
     required this.badgesCount,
+    required this.followerCount,
+    required this.followingCount,
     required this.deleted,
     required this.shadowBanned,
     required this.accountType,
@@ -63,6 +65,8 @@ class UserModel extends Equatable {
         lng: null,
         loopsCount: 0,
         badgesCount: 0,
+        followerCount: 0,
+        followingCount: 0,
         deleted: false,
         shadowBanned: false,
         accountType: AccountType.free,
@@ -122,6 +126,8 @@ class UserModel extends Equatable {
       lng: doc.getOrElse('lng', null) as double?,
       loopsCount: doc.getOrElse('loopsCount', 0) as int,
       badgesCount: doc.getOrElse('badgesCount', 0) as int,
+      followerCount: doc.getOrElse('followerCount', 0) as int,
+      followingCount: doc.getOrElse('followingCount', 0) as int,
       deleted: doc.getOrElse('deleted', false) as bool,
       shadowBanned: doc.getOrElse('shadowBanned', false) as bool,
       accountType: accountType,
@@ -172,6 +178,9 @@ class UserModel extends Equatable {
 
   final int loopsCount;
   final int badgesCount;
+  final int followerCount;
+  final int followingCount;
+
   final bool deleted;
   final bool shadowBanned;
   final AccountType accountType;
@@ -211,6 +220,8 @@ class UserModel extends Equatable {
         lng,
         loopsCount,
         badgesCount,
+        followerCount,
+        followingCount,
         deleted,
         shadowBanned,
         accountType,
@@ -256,6 +267,8 @@ class UserModel extends Equatable {
     Option<double>? lng,
     int? loopsCount,
     int? badgesCount,
+    int? followerCount,
+    int? followingCount,
     bool? deleted,
     bool? shadowBanned,
     AccountType? accountType,
@@ -290,6 +303,8 @@ class UserModel extends Equatable {
       lng: lng != null ? lng.asNullable() : this.lng,
       loopsCount: loopsCount ?? this.loopsCount,
       badgesCount: badgesCount ?? this.badgesCount,
+      followerCount: followerCount ?? this.followerCount,
+      followingCount: followingCount ?? this.followingCount,
       deleted: deleted ?? this.deleted,
       shadowBanned: shadowBanned ?? this.shadowBanned,
       accountType: accountType ?? this.accountType,
@@ -335,6 +350,8 @@ class UserModel extends Equatable {
       'lng': lng,
       'loopsCount': loopsCount,
       'badgesCount': badgesCount,
+      'followerCount': followerCount,
+      'followingCount': followingCount,
       'deleted': deleted,
       'shadowBanned': shadowBanned,
       'accountType': _$AccountTypeEnumMap[accountType],
