@@ -40,6 +40,8 @@ sealed class Activity extends Equatable {
           return CommentMention.fromDoc(doc);
         case ActivityType.commentLike:
           return CommentLike.fromDoc(doc);
+        case ActivityType.opportunityInterest:
+          return OpportunityInterest.fromDoc(doc);
         default:
           throw Exception('Activity.fromDoc: unknown type: $rawType');
       }
@@ -476,6 +478,58 @@ final class CommentLike extends Activity {
   }
 }
 
+final class OpportunityInterest extends Activity {
+  const OpportunityInterest({
+    required super.id,
+    required super.fromUserId,
+    required super.toUserId,
+    required super.timestamp,
+    required super.type,
+    required super.markedRead,
+    required this.loopId,
+  });
+
+  factory OpportunityInterest.fromDoc(
+    DocumentSnapshot<Map<String, dynamic>> doc,
+  ) {
+    try {
+      final tmpTimestamp =
+          doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
+      return OpportunityInterest(
+        id: doc.id,
+        fromUserId: doc.getOrElse('fromUserId', '') as String,
+        toUserId: doc.getOrElse('toUserId', '') as String,
+        timestamp: tmpTimestamp.toDate(),
+        type: ActivityType.opportunityInterest,
+        markedRead: doc.getOrElse('markedRead', false) as bool,
+        loopId: doc.getOrElse('loopId', null) as String?,
+      );
+    } catch (e, s) {
+      logger.error(
+        'OpportunityInterestActivity.fromDoc',
+        error: e,
+        stackTrace: s,
+      );
+      rethrow;
+    }
+  }
+
+  final String? loopId;
+
+  @override
+  OpportunityInterest copyAsRead() {
+    return OpportunityInterest(
+      id: id,
+      fromUserId: fromUserId,
+      toUserId: toUserId,
+      timestamp: timestamp,
+      type: type,
+      markedRead: true,
+      loopId: loopId,
+    );
+  }
+}
+
 enum ActivityType {
   follow,
   like,
@@ -485,4 +539,5 @@ enum ActivityType {
   loopMention,
   commentMention,
   commentLike,
+  opportunityInterest,
 }
