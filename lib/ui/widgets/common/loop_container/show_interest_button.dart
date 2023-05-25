@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 
 class ShowInterestButton extends StatefulWidget {
@@ -64,6 +65,24 @@ class _ShowInterestButtonState extends State<ShowInterestButton> {
       builder: (context, currentUser) {
         if (currentUser == null) {
           return const SizedBox.shrink();
+        }
+
+        if (widget.loop.userId == currentUser.id) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              FilledButton(
+                onPressed: () {
+                  context.read<NavigationBloc>().add(
+                        PushInterestedView(
+                          loop: widget.loop,
+                        ),
+                      );
+                },
+                child: const Text("See who's interested"),
+              ),
+            ],
+          );
         }
 
         return Row(

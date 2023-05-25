@@ -20,6 +20,7 @@ import 'package:intheloopapp/ui/views/login/forgot_password_view.dart';
 import 'package:intheloopapp/ui/views/login/signup_view.dart';
 import 'package:intheloopapp/ui/views/messaging/channel_view.dart';
 import 'package:intheloopapp/ui/views/onboarding/onboarding_view.dart';
+import 'package:intheloopapp/ui/views/opportunities/interested_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
 import 'package:intheloopapp/ui/views/settings/settings_view.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/location_form/location_form_view.dart';
@@ -245,6 +246,18 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
           builder: (context) => LocationFormView(
             initialPlace: event.initialPlace,
             onSelected: event.onSelected,
+          ),
+        ),
+      );
+
+      emit(state);
+    });
+    on<PushInterestedView>((event, emit) {
+      navigationKey.currentState?.push(
+        MaterialPageRoute<InterestedView>(
+          settings: RouteSettings(name: '/interested/${event.loop.id}'),
+          builder: (context) => InterestedView(
+            loop: event.loop,
           ),
         ),
       );

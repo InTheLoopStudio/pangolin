@@ -266,3 +266,19 @@ class PushCreateService extends NavigationEvent {
         onCreated,
       ];
 }
+
+class PushInterestedView extends NavigationEvent {
+  const PushInterestedView({
+    required this.loop,
+  });
+
+  final Loop loop;
+
+  @override
+  String toString() => 'PushInterestedView { loop: $loop }';
+
+  @override
+  List<Object> get props => [
+        loop,
+      ];
+}
