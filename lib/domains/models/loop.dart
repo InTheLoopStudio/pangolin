@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/app_logger.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/utils.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
@@ -26,27 +27,33 @@ class Loop extends Equatable {
     required this.likeCount,
     required this.commentCount,
     required this.shareCount,
+    required this.isOpportunity,
     // required this.tags,
     required this.deleted,
   });
 
   /// Creates a [Loop] with default values
-  factory Loop.empty() => Loop(
+  factory Loop.empty({
+    required String userId,
+    required String description,
+  }) =>
+      Loop(
         id: const Uuid().v4(),
-        userId: '',
-        title: '',
-        description: '',
-        audioPath: '',
+        userId: userId,
+        title: const Option.none(),
+        description: description,
+        audioPath: const Option.none(),
         imagePaths: const [],
         timestamp: DateTime.now(),
         likeCount: 0,
         commentCount: 0,
         shareCount: 0,
+        isOpportunity: false,
         // tags: const [],
         deleted: false,
       );
 
-  /// Builds a [Loop] from a firebase `DocumentSnapshot`
+  /// Builds a [Loop] from a firebase [DocumentSnapshot]
   ///
   /// And attempts to provide sensible defaults
   /// if values are missing
@@ -60,9 +67,10 @@ class Loop extends Equatable {
       return Loop(
         id: doc.id,
         userId: doc.getOrElse('userId', '') as String,
-        title: doc.getOrElse('title', '') as String,
+        title: Option.fromNullable(doc.getOrElse('title', null) as String?),
         description: doc.getOrElse('description', '') as String,
-        audioPath: doc.getOrElse('audioPath', '') as String,
+        audioPath:
+            Option.fromNullable(doc.getOrElse('audioPath', null) as String?),
         imagePaths: List.from(
           doc.getOrElse('imagePaths', <dynamic>[]) as Iterable<dynamic>,
         ),
@@ -70,6 +78,7 @@ class Loop extends Equatable {
         likeCount: doc.getOrElse('likeCount', 0) as int,
         commentCount: doc.getOrElse('commentCount', 0) as int,
         shareCount: doc.getOrElse('shareCount', 0) as int,
+        isOpportunity: doc.getOrElse('opportunityId', false) as bool,
         // tags: List.from(
         //   doc.getOrElse('tags', <dynamic>[]) as Iterable<dynamic>,
         // ),
@@ -96,14 +105,15 @@ class Loop extends Equatable {
   Map<String, dynamic> toMap() => <String, dynamic>{
         'id': id,
         'userId': userId,
-        'title': title,
+        'title': title.asNullable(),
         'description': description,
-        'audioPath': audioPath,
+        'audioPath': audioPath.asNullable(),
         'imagePaths': imagePaths,
         'timestamp': timestamp,
         'likeCount': likeCount,
         'commentCount': commentCount,
         'shareCount': shareCount,
+        'isOpportunity': isOpportunity,
         // 'tags': tags,
         'deleted': deleted,
       };
@@ -115,13 +125,15 @@ class Loop extends Equatable {
   final String userId;
 
   /// The title for this [Loop]
-  final String title;
+  @OptionalStringConverter()
+  final Option<String> title;
 
   /// The description/caption/body for this [Loop]
   final String description;
 
   /// The url for the audio associated with this [Loop]
-  final String audioPath;
+  @OptionalStringConverter()
+  final Option<String> audioPath;
 
   /// The urls for the images associated with this [Loop]
   final List<String> imagePaths;
@@ -137,6 +149,11 @@ class Loop extends Equatable {
 
   /// The number of shares this [Loop] has
   final int shareCount;
+
+  /// If the [Loop] was marked as an opportunity
+  /// this would mean it collects userIds from interested
+  /// users
+  final bool isOpportunity;
 
   /// The tags associated with this [Loop]
   // final List<String> tags;
@@ -155,15 +172,10 @@ class Loop extends Equatable {
         likeCount,
         commentCount,
         shareCount,
+        isOpportunity,
         // tags,
         deleted,
       ];
-
-  /// Whether a [Loop] is empty
-  bool get isEmpty => this == Loop.empty();
-
-  /// Whether a [Loop] isn't empty
-  bool get isNotEmpty => this != Loop.empty();
 
   /// Creates a new [Loop] with select attributes changed
   ///
@@ -173,14 +185,15 @@ class Loop extends Equatable {
   Loop copyWith({
     String? id,
     String? userId,
-    String? title,
+    Option<String>? title,
     String? description,
-    String? audioPath,
+    Option<String>? audioPath,
     List<String>? imagePaths,
     DateTime? timestamp,
     int? likeCount,
     int? commentCount,
     int? shareCount,
+    bool? isOpportunity,
     // List<String>? tags,
     bool? deleted,
   }) {
@@ -195,6 +208,7 @@ class Loop extends Equatable {
       likeCount: likeCount ?? this.likeCount,
       commentCount: commentCount ?? this.commentCount,
       shareCount: shareCount ?? this.shareCount,
+      isOpportunity: isOpportunity ?? this.isOpportunity,
       // tags: tags ?? this.tags,
       deleted: deleted ?? this.deleted,
     );

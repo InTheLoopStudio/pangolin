@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/dynamic_link_repository.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/like_button.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container_cubit.dart';
@@ -25,7 +26,7 @@ class ControlButtons extends StatelessWidget {
     showCupertinoModalPopup<void>(
       context: context,
       builder: (BuildContext context) => CupertinoActionSheet(
-        title: Text(loop.title),
+        title: Text(loop.title.unwrapOr('Untitled Loop')),
         message: Text(loop.description),
         actions: <CupertinoActionSheetAction>[
           CupertinoActionSheetAction(

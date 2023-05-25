@@ -13,6 +13,7 @@ import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/utils.dart';
@@ -36,6 +37,7 @@ final _bookingsRef = _firestore.collection('bookings');
 final _servicesRef = _firestore.collection('services');
 final _mailRef = _firestore.collection('mail');
 final _leadersRef = _firestore.collection('leaderboard');
+final _opportunitiesRef = _firestore.collection('opportunities');
 
 const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
 
@@ -308,8 +310,8 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   Future<List<UserModel>> getBookingLeaders() async {
     final leadersSnapshot = await _leadersRef.doc('leaders').get();
 
-    final leadingUsernames =
-        leadersSnapshot.getOrElse('bookingLeaders', <dynamic>[]) as List<dynamic>;
+    final leadingUsernames = leadersSnapshot
+        .getOrElse('bookingLeaders', <dynamic>[]) as List<dynamic>;
 
     final leaders = await Future.wait(
       leadingUsernames.map(
@@ -536,9 +538,9 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       'loopsCount': FieldValue.increment(-1),
     });
 
-    if (loop.audioPath.isNotEmpty) {
+    if (loop.audioPath.isSome) {
       // *delete loops keyed at refFromURL(loop.audioPath)*
-      await _storage.child(_getFileFromURL(loop.audioPath)).delete();
+      await _storage.child(_getFileFromURL(loop.audioPath.unwrap)).delete();
     }
 
     for (final imagePath in loop.imagePaths) {
@@ -1644,6 +1646,58 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     } catch (e, s) {
       logger.error('updateService', error: e, stackTrace: s);
     }
+  }
+
+  @override
+  Future<void> cancelInterest({
+    required String userId,
+    required String loopId,
+  }) async {
+    await _analytics.logEvent(
+      name: 'cancel_interest',
+      parameters: {
+        'user_id': userId,
+        'loop_id': loopId,
+      },
+    );
+
+    await _opportunitiesRef
+        .doc(loopId)
+        .collection('interestedUsers')
+        .doc(userId)
+        .delete();
+  }
+
+  @override
+  Future<void> showInterest({
+    required String userId,
+    required String loopId,
+  }) async {
+    await _analytics.logEvent(
+      name: 'show_interest',
+      parameters: {
+        'user_id': userId,
+        'loop_id': loopId,
+      },
+    );
+
+    await _opportunitiesRef
+        .doc(loopId)
+        .collection('interestedUsers')
+        .doc(userId)
+        .set({
+      'timestamp': Timestamp.now(),
+    });
+  }
+
+  @override
+  Future<List<UserModel>> getInterestedUsers(String loopId) async {
+    final usersSnapshot =
+        await _opportunitiesRef.doc(loopId).collection('interestedUsers').get();
+
+    final users = usersSnapshot.docs.map(UserModel.fromDoc).toList();
+
+    return users;
   }
 }
 

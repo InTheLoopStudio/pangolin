@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
@@ -23,10 +24,10 @@ class Attachments extends StatelessWidget {
     final randomId = const Uuid().v4();
     final heroTag = 'loop-${loop.id}-$randomId';
 
-    if (loop.audioPath.isNotEmpty) {
+    if (loop.audioPath.isSome) {
       return AudioControls(
-        audioPath: loop.audioPath,
-        title: loop.title,
+        audioPath: loop.audioPath.unwrap,
+        title: loop.title.unwrapOr('Untitled Loop'),
         artist: loopUser.displayName,
         profilePicture: loopUser.profilePicture,
       );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container_cubit.dart';
 
 class LoopTitle extends StatelessWidget {
@@ -10,7 +11,7 @@ class LoopTitle extends StatelessWidget {
     return BlocBuilder<LoopContainerCubit, LoopContainerState>(
       builder: (context, state) {
         return Text(
-          state.loop.title,
+          state.loop.title.unwrapOr('Untitled Loop'),
           style: const TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.bold,

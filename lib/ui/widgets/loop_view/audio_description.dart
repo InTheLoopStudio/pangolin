@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
@@ -63,7 +64,7 @@ class AudioDescription extends StatelessWidget {
                     color: Colors.white,
                   ),
                   Text(
-                    loop.title,
+                    loop.title.unwrapOr('Untitled Loop'),
                     style: const TextStyle(
                       fontSize: 24,
                       color: Colors.white,

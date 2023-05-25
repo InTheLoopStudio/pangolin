@@ -10,6 +10,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/controllers/audio_controller.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
@@ -56,6 +57,17 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
         pickedAudio: state.pickedAudio,
         pickedImage: state.pickedImage,
         description: description,
+      ),
+    );
+  }
+
+  void toggleOpportunity() {
+    final opportunity = !state.isOpportunity;
+    emit(
+      state.copyWith(
+        pickedAudio: state.pickedAudio,
+        pickedImage: state.pickedImage,
+        isOpportunity: opportunity,
       ),
     );
   }
@@ -204,12 +216,14 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
       // Just settings the audio to get the duration
       final imagePath = state.pickedImage != null ? await getImagePath() : null;
 
-      final loop = Loop.empty().copyWith(
-        title: state.title.value,
-        description: state.description.value,
-        audioPath: audioPath,
-        imagePaths: imagePath != null ? [imagePath] : [],
+      final loop = Loop.empty(
         userId: currentUser.id,
+        description: state.description.value,
+      ).copyWith(
+        title: Option.some(state.title.value),
+        audioPath: Option.fromNullable(audioPath),
+        imagePaths: imagePath != null ? [imagePath] : [],
+        isOpportunity: state.isOpportunity,
         // tags: state.selectedTags.map((tag) => tag.value).toList(),
       );
 

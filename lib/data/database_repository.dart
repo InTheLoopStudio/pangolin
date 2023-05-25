@@ -216,4 +216,15 @@ abstract class DatabaseRepository {
   Future<Service?> getServiceById(String userId, String serviceId);
   Future<List<Service>> getUserServices(String userId);
   Future<void> deleteService(String userId, String serviceId);
+
+  // Opporunity related stuff
+  Future<void> showInterest({
+    required String userId,
+    required String loopId,
+  });
+  Future<void> cancelInterest({
+    required String userId,
+    required String loopId,
+  });
+  Future<List<UserModel>> getInterestedUsers(String loopId);
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 /// Represents an optional value of type [T].
 ///
@@ -22,6 +23,9 @@ sealed class Option<T> {
   factory Option.fromNullable(T? value) {
     return value == null ? const Option.none() : Option.some(value);
   }
+
+  static Object? toJson(Option<dynamic> option) => option.asNullable();
+  static Option<dynamic> fromJson(dynamic value) => Option.fromNullable(value);
 }
 
 /// An [Option] that has a [value].
@@ -61,7 +65,6 @@ final class None<T> extends Option<T> {
 
 /// Convenience methods for handling [Option]s.
 extension OptionConvenience<T> on Option<T> {
-
   bool get isSome => this is Some<T>;
 
   bool get isNone => this is None<T>;
@@ -124,4 +127,15 @@ extension OptionConvenience<T> on Option<T> {
       None() => null,
     };
   }
+}
+
+class OptionalStringConverter
+    implements JsonConverter<Option<String>, String?> {
+  const OptionalStringConverter();
+
+  @override
+  Option<String> fromJson(String? value) => Option.fromNullable(value);
+
+  @override
+  String? toJson(Option<String> option) => option.asNullable();
 }

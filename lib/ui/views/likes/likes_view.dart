@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/views/likes/likes_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/user_tile.dart';
 
@@ -25,7 +26,7 @@ class LikesView extends StatelessWidget {
       child: Scaffold(
         backgroundColor: theme.colorScheme.background,
         appBar: AppBar(
-          title: Text(loop.title),
+          title: Text(loop.title.unwrapOr('Untitled Loop')),
         ),
         body: BlocBuilder<LikesCubit, LikesState>(
           builder: (context, state) {

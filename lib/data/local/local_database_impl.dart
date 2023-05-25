@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
@@ -36,17 +37,17 @@ class LocalDatabaseImpl extends DatabaseRepository {
     return [];
   }
 
-    @override
+  @override
   Future<List<UserModel>> getBookingLeaders() async {
     return [];
   }
 
   @override
-  Future<Loop> getLoopById(
+  Future<Loop?> getLoopById(
     String loopId, {
     bool ignoreCache = false,
   }) async {
-    return Loop.empty();
+    return null;
   }
 
   @override
@@ -420,5 +421,27 @@ class LocalDatabaseImpl extends DatabaseRepository {
   @override
   Future<void> updateService(Service service) async {
     return;
+  }
+
+  @override
+  Future<void> showInterest({
+    required String userId,
+    required String loopId,
+  }) async {
+    return;
+  } 
+  @override
+  Future<void> cancelInterest({
+    required String userId,
+    required String loopId,
+  }) async {
+    return;
+  }
+
+  @override 
+  Future<List<UserModel>> getInterestedUsers(
+    String loopId,
+  ) async {
+    return [];
   }
 }

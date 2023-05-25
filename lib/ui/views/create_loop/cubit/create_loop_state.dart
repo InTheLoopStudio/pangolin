@@ -5,6 +5,7 @@ class CreateLoopState extends Equatable with FormzMixin {
     this.title = const LoopTitle.pure(),
     this.description = const LoopDescription.pure(),
     this.status = FormzSubmissionStatus.initial,
+    this.isOpportunity = false,
     this.pickedAudio,
     this.pickedImage,
     this.audioController,
@@ -13,6 +14,7 @@ class CreateLoopState extends Equatable with FormzMixin {
   final LoopTitle title;
   final LoopDescription description;
   final FormzSubmissionStatus status;
+  final bool isOpportunity;
 
   final File? pickedAudio;
   final File? pickedImage;
@@ -23,6 +25,7 @@ class CreateLoopState extends Equatable with FormzMixin {
         title,
         description,
         status,
+        isOpportunity,
         pickedAudio,
         pickedImage,
         audioController,
@@ -37,6 +40,7 @@ class CreateLoopState extends Equatable with FormzMixin {
   CreateLoopState copyWith({
     required File? pickedAudio,
     required File? pickedImage,
+    bool? isOpportunity,
     LoopTitle? title,
     LoopDescription? description,
     FormzSubmissionStatus? status,
@@ -45,6 +49,7 @@ class CreateLoopState extends Equatable with FormzMixin {
     return CreateLoopState(
       pickedAudio: pickedAudio,
       pickedImage: pickedImage,
+      isOpportunity: isOpportunity ?? this.isOpportunity,
       title: title ?? this.title,
       description: description ?? this.description,
       status: status ?? this.status,
