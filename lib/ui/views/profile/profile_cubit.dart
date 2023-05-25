@@ -12,7 +12,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 
 part 'profile_state.dart';
 
-class ProfileCubit extends HydratedCubit<ProfileState> {
+class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit({
     required this.databaseRepository,
     required this.places,
@@ -31,38 +31,6 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
   StreamSubscription<Loop>? loopListener;
   StreamSubscription<Badge>? badgeListener;
   StreamSubscription<Badge>? userCreatedBadgeListener;
-
-  @override
-  ProfileState fromJson(Map<String, dynamic> json) {
-    try {
-      return ProfileState(
-        followerCount: json['followerCount'] as int,
-        followingCount: json['followingCount'] as int,
-        isFollowing: json['isFollowing'] as bool,
-        // userLoops: json['userLoops'],
-        visitedUser: visitedUser,
-        currentUser: currentUser,
-        // visitedUser: UserModel.fromJson(json['visitedUser']),
-        // currentUser: UserModel.fromJson(json['currentUser']),
-      );
-    } catch (e, s) {
-      logger.error('fromJson error', error: e, stackTrace: s);
-      return ProfileState(
-        visitedUser: visitedUser,
-        currentUser: currentUser,
-      );
-    }
-  }
-
-  @override
-  Map<String, dynamic> toJson(ProfileState state) => {
-        'followerCount': state.followerCount,
-        'followingCount': state.followingCount,
-        'isFollowing': state.isFollowing,
-        // 'userLoops': state.userLoops,
-        // 'visitedUser': state.visitedUser.toJson(),
-        // 'currentUser': state.currentUser.toJson(),
-      };
 
   Future<void> refetchVisitedUser({UserModel? newUserData}) async {
     try {
@@ -179,51 +147,6 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
     }
   }
 
-  // Future<void> initUserCreatedBadges({bool clearBadges = true}) async {
-  //   try {
-  //     logger.debug(
-  //       'initUserCreatedBadges ${state.visitedUser}',
-  //     );
-  //     await userCreatedBadgeListener?.cancel();
-
-  //     if (clearBadges) {
-  //       emit(
-  //         state.copyWith(
-  //           userCreatedBadgeStatus: UserCreatedBadgesStatus.initial,
-  //           userCreatedBadges: [],
-  //           hasReachedMaxUserCreatedBadges: false,
-  //         ),
-  //       );
-  //     }
-
-  //     final badgesAvailable = (await databaseRepository
-  //             .getUserCreatedBadges(visitedUser.id, limit: 1))
-  //         .isNotEmpty;
-  //     if (!badgesAvailable) {
-  //       emit(
-  //         state.copyWith(
-  //           userCreatedBadgeStatus: UserCreatedBadgesStatus.success,
-  //         ),
-  //       );
-  //     }
-
-  //     badgeListener = databaseRepository
-  //         .userCreatedBadgesObserver(visitedUser.id)
-  //         .listen((Badge event) {
-  //       // print('loop { ${event.id} : ${event.title} }');
-  //       emit(
-  //         state.copyWith(
-  //           userCreatedBadgeStatus: UserCreatedBadgesStatus.success,
-  //           userCreatedBadges: List.of(state.userCreatedBadges)..add(event),
-  //           hasReachedMaxUserCreatedBadges: state.userCreatedBadges.length < 10,
-  //         ),
-  //       );
-  //     });
-  //   } catch (e, s) {
-  //     logger.error('initUserCreatedBadges error', error: e, stackTrace: s);
-  //   }
-  // }
-
   Future<void> initPlace() async {
     final trace = logger.createTrace('initPlace');
     await trace.start();
@@ -312,39 +235,6 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
     }
   }
 
-  // Future<void> fetchMoreUserCreatedBadges() async {
-  //   if (state.hasReachedMaxUserCreatedBadges) return;
-
-  //   try {
-  //     if (state.userCreatedBadgeStatus == UserCreatedBadgesStatus.initial) {
-  //       await initUserCreatedBadges();
-  //     }
-
-  //     final badges = await databaseRepository.getUserCreatedBadges(
-  //       visitedUser.id,
-  //       limit: 10,
-  //       lastBadgeId: state.userBadges.last.id,
-  //     );
-  //     badges.isEmpty
-  //         ? emit(state.copyWith(hasReachedMaxUserCreatedBadges: true))
-  //         : emit(
-  //             state.copyWith(
-  //               userCreatedBadgeStatus: UserCreatedBadgesStatus.success,
-  //               userCreatedBadges: List.of(state.userCreatedBadges)
-  //                 ..addAll(badges),
-  //               hasReachedMaxUserCreatedBadges: false,
-  //             ),
-  //           );
-  //   } catch (e, s) {
-  //     logger.error('fetchMoreUserCreatedBadges error', error: e, stackTrace: s);
-  //     // emit(
-  //     //   state.copyWith(
-  //     //     userCreatedBadgeStatus: UserCreatedBadgesStatus.failure,
-  //     //   ),
-  //     // );
-  //   }
-  // }
-
   void toggleFollow(String currentUserId, String visitedUserId) {
     if (state.isFollowing) {
       unfollow(currentUserId, visitedUserId);
@@ -380,36 +270,6 @@ class ProfileCubit extends HydratedCubit<ProfileState> {
       await databaseRepository.unfollowUser(currentUserId, visitedUserId);
     } catch (e, s) {
       logger.error('unfollow error', error: e, stackTrace: s);
-    }
-  }
-
-  Future<void> loadFollowing(String visitedUserId) async {
-    try {
-      final followingCount =
-          await databaseRepository.followingNum(visitedUserId);
-
-      emit(
-        state.copyWith(
-          followingCount: followingCount,
-        ),
-      );
-    } catch (e, s) {
-      logger.error('loadFollowing error', error: e, stackTrace: s);
-    }
-  }
-
-  Future<void> loadFollower(String visitedUserId) async {
-    try {
-      final followerCount =
-          await databaseRepository.followersNum(visitedUserId);
-
-      emit(
-        state.copyWith(
-          followerCount: followerCount,
-        ),
-      );
-    } catch (e, s) {
-      logger.error('loadFollower error', error: e, stackTrace: s);
     }
   }
 

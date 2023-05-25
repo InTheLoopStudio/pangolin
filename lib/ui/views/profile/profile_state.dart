@@ -22,8 +22,6 @@ class ProfileState extends Equatable {
   ProfileState({
     required this.currentUser,
     required this.visitedUser,
-    this.followerCount = 0,
-    this.followingCount = 0,
     this.isFollowing = false,
     this.isVerified = false,
     this.userLoops = const [],
@@ -36,14 +34,17 @@ class ProfileState extends Equatable {
     this.loopStatus = LoopsStatus.initial,
     this.badgeStatus = BadgesStatus.initial,
     this.userCreatedBadgeStatus = UserCreatedBadgesStatus.initial,
+    int? followerCount,
+    int? followingCount,
     Place? place,
   }) {
-
+    this.followerCount = followerCount ?? visitedUser.followerCount;
+    this.followingCount = followingCount ?? visitedUser.followingCount;
     this.place = place ?? const Place();
   }
 
-  final int followerCount;
-  final int followingCount;
+  late final int followerCount;
+  late final int followingCount;
   final bool isFollowing;
   final bool isVerified;
   final List<Loop> userLoops;

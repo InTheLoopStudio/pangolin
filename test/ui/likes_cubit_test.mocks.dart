@@ -131,6 +131,22 @@ class MockDatabaseRepository extends _i1.Mock
         returnValue: _i4.Future<bool>.value(false),
       ) as _i4.Future<bool>);
   @override
+  _i4.Future<List<_i5.UserModel>> getViewLeaders() => (super.noSuchMethod(
+        Invocation.method(
+          #getViewLeaders,
+          [],
+        ),
+        returnValue: _i4.Future<List<_i5.UserModel>>.value(<_i5.UserModel>[]),
+      ) as _i4.Future<List<_i5.UserModel>>);
+  @override
+  _i4.Future<List<_i5.UserModel>> getBookingLeaders() => (super.noSuchMethod(
+        Invocation.method(
+          #getBookingLeaders,
+          [],
+        ),
+        returnValue: _i4.Future<List<_i5.UserModel>>.value(<_i5.UserModel>[]),
+      ) as _i4.Future<List<_i5.UserModel>>);
+  @override
   _i4.Future<_i6.Loop?> getLoopById(
     String? loopId, {
     bool? ignoreCache = false,
@@ -430,6 +446,23 @@ class MockDatabaseRepository extends _i1.Mock
         Invocation.method(
           #shareLoop,
           [loop],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  _i4.Future<void> reportLoop({
+    required String? reporterId,
+    required _i6.Loop? loop,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #reportLoop,
+          [],
+          {
+            #reporterId: reporterId,
+            #loop: loop,
+          },
         ),
         returnValue: _i4.Future<void>.value(),
         returnValueForMissingStub: _i4.Future<void>.value(),

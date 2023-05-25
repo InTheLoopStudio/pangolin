@@ -97,9 +97,7 @@ class _UserTileState extends State<UserTile> {
               title: Text(widget.user.displayName),
               subtitle: widget.subtitle ??
                   Text(
-                    widget.user.bio,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                    '${widget.user.followerCount} followers',
                   ),
               trailing: widget.trailing ?? _followButton(
                 currentUser,
