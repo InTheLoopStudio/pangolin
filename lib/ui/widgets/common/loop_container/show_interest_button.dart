@@ -104,8 +104,8 @@ class _ShowInterestButtonState extends State<ShowInterestButton> {
                 });
               },
               child: _isInterested
-                  ? const Text('👍 Interested')
-                  : const Text('👀 Show Interest'),
+                  ? const Text('Interested')
+                  : const Text('Show Interest'),
             ),
           ],
         );
