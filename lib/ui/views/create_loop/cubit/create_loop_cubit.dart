@@ -43,8 +43,6 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
     final title = LoopTitle.dirty(input);
     emit(
       state.copyWith(
-        pickedAudio: state.pickedAudio,
-        pickedImage: state.pickedImage,
         title: title,
       ),
     );
@@ -54,8 +52,6 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
     final description = LoopDescription.dirty(input);
     emit(
       state.copyWith(
-        pickedAudio: state.pickedAudio,
-        pickedImage: state.pickedImage,
         description: description,
       ),
     );
@@ -65,19 +61,14 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
     final opportunity = !state.isOpportunity;
     emit(
       state.copyWith(
-        pickedAudio: state.pickedAudio,
-        pickedImage: state.pickedImage,
         isOpportunity: opportunity,
       ),
     );
   }
 
-  Future<String?> getAudioPath() async {
-    if (state.pickedAudio == null) {
-      return null;
-    }
+  Future<String?> getAudioPath(File pickedAudio) async {
 
-    final audioDuration = await AudioController.getDuration(state.pickedAudio);
+    final audioDuration = await AudioController.getDuration(pickedAudio);
 
     final tooLarge = audioDuration.compareTo(_maxDuration) >= 0;
     if (tooLarge) {
@@ -85,19 +76,16 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
     }
 
     final audioPath = await storageRepository.uploadAudioAttachment(
-      state.pickedAudio!,
+      pickedAudio,
     );
 
     return audioPath;
   }
 
-  Future<String?> getImagePath() async {
-    if (state.pickedImage == null) {
-      return null;
-    }
+  Future<String?> getImagePath(File pickedImage) async {
 
     final imagePath = await storageRepository.uploadImageAttachment(
-      state.pickedImage!,
+      pickedImage,
     );
 
     return imagePath;
@@ -114,8 +102,7 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
 
         emit(
           state.copyWith(
-            pickedImage: state.pickedImage,
-            pickedAudio: pickedAudio,
+            pickedAudio: Some(pickedAudio),
             title: LoopTitle.dirty(pickedAudioName),
           ),
         );
@@ -158,8 +145,7 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
 
         emit(
           state.copyWith(
-            pickedAudio: state.pickedAudio,
-            pickedImage: pickedImage,
+            pickedImage: Some(pickedImage),
           ),
         );
       }
@@ -179,8 +165,7 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
   void removeImage() {
     emit(
       state.copyWith(
-        pickedAudio: state.pickedAudio,
-        pickedImage: null,
+        pickedImage: const None(),
       ),
     );
   }
@@ -188,8 +173,7 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
   void removeAudio() {
     emit(
       state.copyWith(
-        pickedAudio: null,
-        pickedImage: state.pickedImage,
+        pickedAudio: const None(),
       ),
     );
   }
@@ -211,10 +195,16 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
       );
 
       // Just settings the audio to get the duration
-      final audioPath = state.pickedAudio != null ? await getAudioPath() : '';
+      final audioPath = switch (state.pickedAudio) {
+        None() => null,
+        Some(:final value) => await getAudioPath(value),
+      };
 
       // Just settings the audio to get the duration
-      final imagePath = state.pickedImage != null ? await getImagePath() : null;
+      final imagePath = switch (state.pickedImage) {
+        None() => null,
+        Some(:final value) => await getImagePath(value),
+      };
 
       final loop = Loop.empty(
         userId: currentUser.id,
@@ -233,8 +223,8 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
 
       emit(
         state.copyWith(
-          pickedAudio: null,
-          pickedImage: null,
+          pickedAudio: const None(),
+          pickedImage: const None(),
           title: const LoopTitle.pure(),
           description: const LoopDescription.pure(),
           status: FormzSubmissionStatus.success,
