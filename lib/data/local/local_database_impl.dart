@@ -32,6 +32,16 @@ class LocalDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  Future<List<UserModel>> getViewLeaders() async {
+    return [];
+  }
+
+    @override
+  Future<List<UserModel>> getBookingLeaders() async {
+    return [];
+  }
+
+  @override
   Future<Loop> getLoopById(
     String loopId, {
     bool ignoreCache = false,
@@ -255,7 +265,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     return;
   }
 
-  @override 
+  @override
   Future<bool> isCommentLiked(
     String currentUserId,
     Comment comment,
@@ -273,7 +283,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
     return;
   }
 
-  @override 
+  @override
   Future<void> reportLoop({
     required String reporterId,
     required Loop loop,

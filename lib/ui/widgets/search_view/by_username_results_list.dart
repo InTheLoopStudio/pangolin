@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intheloopapp/domains/search_bloc/search_bloc.dart';
 import 'package:intheloopapp/ui/widgets/common/user_tile.dart';
+import 'package:intheloopapp/ui/widgets/search_view/discover_view.dart';
 
 class ByUsernameResultsList extends StatelessWidget {
   const ByUsernameResultsList({super.key});
@@ -26,26 +27,7 @@ class ByUsernameResultsList extends StatelessWidget {
             state.labels.isEmpty &&
             state.place == null &&
             state.placeId == null) {
-          return const Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.search,
-                  size: 200,
-                  color: Color(0xFF757575),
-                ),
-                Text(
-                  'Search Username',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xFF757575),
-                  ),
-                ),
-              ],
-            ),
-          );
+          return const DiscoverView();
         } else if (state.searchResults.isEmpty) {
           return const Center(
             child: Text('No users found'),

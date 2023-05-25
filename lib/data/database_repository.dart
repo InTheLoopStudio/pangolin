@@ -26,6 +26,9 @@ abstract class DatabaseRepository {
   Future<void> updateUserData(UserModel user);
   Future<bool> checkUsernameAvailability(String username, String userid);
 
+  Future<List<UserModel>> getViewLeaders();
+  Future<List<UserModel>> getBookingLeaders();
+
   // Loop related stuff
   Future<Loop?> getLoopById(
     String loopId, {

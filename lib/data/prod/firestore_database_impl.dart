@@ -35,6 +35,7 @@ final _badgesSentRef = _firestore.collection('badgesSent');
 final _bookingsRef = _firestore.collection('bookings');
 final _servicesRef = _firestore.collection('services');
 final _mailRef = _firestore.collection('mail');
+final _leadersRef = _firestore.collection('leaderboard');
 
 const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
 
@@ -282,6 +283,44 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       return users;
     }
+  }
+
+  @override
+  Future<List<UserModel>> getViewLeaders() async {
+    final leadersSnapshot = await _leadersRef.doc('leaders').get();
+
+    final leadingUsernames =
+        leadersSnapshot.getOrElse('viewLeaders', <dynamic>[]) as List<dynamic>;
+
+    final leaders = await Future.wait(
+      leadingUsernames.map(
+        (username) async {
+          final user = await getUserByUsername(username as String);
+          return user;
+        },
+      ),
+    );
+
+    return leaders.where((e) => e != null).whereType<UserModel>().toList();
+  }
+
+  @override
+  Future<List<UserModel>> getBookingLeaders() async {
+    final leadersSnapshot = await _leadersRef.doc('leaders').get();
+
+    final leadingUsernames =
+        leadersSnapshot.getOrElse('bookingLeaders', <dynamic>[]) as List<dynamic>;
+
+    final leaders = await Future.wait(
+      leadingUsernames.map(
+        (username) async {
+          final user = await getUserByUsername(username as String);
+          return user;
+        },
+      ),
+    );
+
+    return leaders.where((e) => e != null).whereType<UserModel>().toList();
   }
 
   @override

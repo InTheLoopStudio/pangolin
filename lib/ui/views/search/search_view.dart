@@ -87,15 +87,9 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
       body: TabBarView(
         controller: _tabController,
         children: const [
-          Center(
-            child: ByUsernameResultsList(),
-          ),
-          Center(
-            child: ByLocationResultsList(),
-          ),
-          Center(
-            child: ByLoopResultsList(),
-          ),
+          ByUsernameResultsList(),
+          ByLocationResultsList(),
+          ByLoopResultsList(),
         ],
       ),
     );
