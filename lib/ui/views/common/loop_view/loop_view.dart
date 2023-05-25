@@ -18,6 +18,7 @@ import 'package:intheloopapp/ui/widgets/comments/comments_list.dart';
 import 'package:intheloopapp/ui/widgets/comments/comments_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/attachments.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/like_button.dart';
+import 'package:intheloopapp/ui/widgets/common/loop_container/show_interest_button.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -237,6 +238,11 @@ class LoopView extends StatelessWidget {
                                         loop: loop,
                                         loopUser: user,
                                       ),
+                                      const SizedBox(height: 8),
+                                      ShowInterestButton(
+                                        loop: loop,
+                                      ),
+                                      const SizedBox(height: 8),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceAround,
