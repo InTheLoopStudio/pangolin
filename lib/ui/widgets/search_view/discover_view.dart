@@ -30,7 +30,7 @@ class DiscoverView extends StatelessWidget {
                   horizontal: 8,
                 ),
                 child: Text(
-                  'Booking Leaderboards',
+                  'Most Booked',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -39,7 +39,7 @@ class DiscoverView extends StatelessWidget {
               ),
               if (bookingLeaders.isEmpty)
                 const Center(
-                  child: Text('No leaders rn'),
+                  child: Text('None rn'),
                 ),
               ...bookingLeaders.map((e) => UserTile(user: e)),
               const Padding(
@@ -48,7 +48,7 @@ class DiscoverView extends StatelessWidget {
                   horizontal: 8,
                 ),
                 child: Text(
-                  'Views Leaderboards',
+                  'Most Viewed',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -57,7 +57,7 @@ class DiscoverView extends StatelessWidget {
               ),
               if (viewLeaders.isEmpty)
                 const Center(
-                  child: Text('No leaders rn'),
+                  child: Text('None rn'),
                 ),
               ...viewLeaders.map((e) => UserTile(user: e)),
             ],
