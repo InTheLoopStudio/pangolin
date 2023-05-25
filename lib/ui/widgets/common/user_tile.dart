@@ -11,11 +11,15 @@ class UserTile extends StatefulWidget {
   const UserTile({
     required this.user,
     this.showFollowButton = true,
+    this.subtitle,
+    this.trailing,
     super.key,
   });
 
   final UserModel user;
   final bool showFollowButton;
+  final Widget? subtitle;
+  final Widget? trailing;
 
   @override
   State<UserTile> createState() => _UserTileState();
@@ -23,6 +27,41 @@ class UserTile extends StatefulWidget {
 
 class _UserTileState extends State<UserTile> {
   bool followingOverride = false;
+
+  Widget _followButton(
+    UserModel currentUser,
+    DatabaseRepository database,
+  ) =>
+      (currentUser.id != widget.user.id) && widget.showFollowButton
+          ? FutureBuilder<bool>(
+              future: database.isFollowingUser(
+                currentUser.id,
+                widget.user.id,
+              ),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) return const SizedBox.shrink();
+
+                final isFollowing = snapshot.data ?? false;
+
+                return CupertinoButton(
+                  onPressed: (!isFollowing && !followingOverride)
+                      ? () async {
+                          await database.followUser(
+                            currentUser.id,
+                            widget.user.id,
+                          );
+                          setState(() {
+                            followingOverride = true;
+                          });
+                        }
+                      : null,
+                  child: (!isFollowing && !followingOverride)
+                      ? const Text('Follow')
+                      : const Text('Following'),
+                );
+              },
+            )
+          : const SizedBox.shrink();
 
   @override
   Widget build(BuildContext context) {
@@ -56,42 +95,16 @@ class _UserTileState extends State<UserTile> {
                 verified: verified,
               ),
               title: Text(widget.user.displayName),
-              subtitle: Text(
-                widget.user.bio,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+              subtitle: widget.subtitle ??
+                  Text(
+                    widget.user.bio,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+              trailing: widget.trailing ?? _followButton(
+                currentUser,
+                database,
               ),
-              trailing: (currentUser.id != widget.user.id) &&
-                      widget.showFollowButton
-                  ? FutureBuilder<bool>(
-                      future: database.isFollowingUser(
-                        currentUser.id,
-                        widget.user.id,
-                      ),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) return const SizedBox.shrink();
-
-                        final isFollowing = snapshot.data ?? false;
-
-                        return CupertinoButton(
-                          onPressed: (!isFollowing && !followingOverride)
-                              ? () async {
-                                  await database.followUser(
-                                    currentUser.id,
-                                    widget.user.id,
-                                  );
-                                  setState(() {
-                                    followingOverride = true;
-                                  });
-                                }
-                              : null,
-                          child: (!isFollowing && !followingOverride)
-                              ? const Text('Follow')
-                              : const Text('Following'),
-                        );
-                      },
-                    )
-                  : const SizedBox.shrink(),
               onTap: () => navigationBloc.add(PushProfile(widget.user.id)),
             );
           },
