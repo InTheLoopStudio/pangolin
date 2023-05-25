@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
@@ -36,14 +37,15 @@ void main() {
       Loop(
         id: '',
         userId: '',
-        title: '',
+        title: const None(),
         description: '',
-        audioPath: '',
+        audioPath: const None(),
         imagePaths: const [],
         timestamp: DateTime.now(),
         likeCount: 0,
         commentCount: 0,
         shareCount: 0,
+        isOpportunity: false,
         // tags: const [],
         deleted: false,
       ),

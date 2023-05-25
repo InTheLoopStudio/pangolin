@@ -78,7 +78,7 @@ class Loop extends Equatable {
         likeCount: doc.getOrElse('likeCount', 0) as int,
         commentCount: doc.getOrElse('commentCount', 0) as int,
         shareCount: doc.getOrElse('shareCount', 0) as int,
-        isOpportunity: doc.getOrElse('opportunityId', false) as bool,
+        isOpportunity: doc.getOrElse('isOpportunity', false) as bool,
         // tags: List.from(
         //   doc.getOrElse('tags', <dynamic>[]) as Iterable<dynamic>,
         // ),

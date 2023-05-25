@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/views/create_loop/cubit/create_loop_cubit.dart';
 import 'package:intheloopapp/ui/widgets/create_loop_view/audio_container.dart';
 import 'package:intheloopapp/ui/widgets/create_loop_view/opportunity_toggle.dart';
@@ -14,11 +15,11 @@ class Attachments extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CreateLoopCubit, CreateLoopState>(
       builder: (context, state) {
-        if (state.pickedAudio != null) {
+        if (state.pickedAudio.isSome) {
           return const AudioContainer();
         }
 
-        if (state.pickedImage != null) {
+        if (state.pickedImage.isSome) {
           return badges.Badge(
             onTap: context.read<CreateLoopCubit>().removeImage,
             badgeStyle: const badges.BadgeStyle(
@@ -32,7 +33,7 @@ class Attachments extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15),
               child: Image.file(
-                state.pickedImage!,
+                state.pickedImage.unwrap,
                 height: 200,
               ),
             ),

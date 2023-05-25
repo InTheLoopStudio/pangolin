@@ -95,6 +95,8 @@ class LoopView extends StatelessWidget {
         RepositoryProvider.of<DatabaseRepository>(context);
     final dynamic = RepositoryProvider.of<DynamicLinkRepository>(context);
 
+    print('OPPORTUNITY ${loop.isOpportunity}');
+
     return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
       selector: (state) => (state is Onboarded) ? state.currentUser : null,
       builder: (context, currentUser) {

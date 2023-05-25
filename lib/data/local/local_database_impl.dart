@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
-import 'package:intheloopapp/domains/models/badge.dart';
+import 'package:intheloopapp/domains/models/badge.dart' as badge;
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
@@ -303,7 +303,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<void> createBadge(Badge badge) async {
+  Future<void> createBadge(badge.Badge badge) async {
     return;
   }
 
@@ -313,16 +313,16 @@ class LocalDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Stream<Badge> userBadgesObserver(String userId, {int limit = 20}) async* {}
+  Stream<badge.Badge> userBadgesObserver(String userId, {int limit = 20}) async* {}
 
   @override
-  Stream<Badge> userCreatedBadgesObserver(
+  Stream<badge.Badge> userCreatedBadgesObserver(
     String userId, {
     int limit = 20,
   }) async* {}
 
   @override
-  Future<List<Badge>> getUserBadges(
+  Future<List<badge.Badge>> getUserBadges(
     String userId, {
     String? lastBadgeId,
     int limit = 20,
@@ -331,7 +331,7 @@ class LocalDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<List<Badge>> getUserCreatedBadges(
+  Future<List<badge.Badge>> getUserCreatedBadges(
     String userId, {
     String? lastBadgeId,
     int limit = 20,

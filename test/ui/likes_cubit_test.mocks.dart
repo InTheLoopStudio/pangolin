@@ -842,4 +842,63 @@ class MockDatabaseRepository extends _i1.Mock
         returnValue: _i4.Future<void>.value(),
         returnValueForMissingStub: _i4.Future<void>.value(),
       ) as _i4.Future<void>);
+  @override
+  _i4.Future<void> showInterest({
+    required String? userId,
+    required String? loopId,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #showInterest,
+          [],
+          {
+            #userId: userId,
+            #loopId: loopId,
+          },
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  _i4.Future<void> cancelInterest({
+    required String? userId,
+    required String? loopId,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #cancelInterest,
+          [],
+          {
+            #userId: userId,
+            #loopId: loopId,
+          },
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  _i4.Future<List<_i5.UserModel>> getInterestedUsers(String? loopId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getInterestedUsers,
+          [loopId],
+        ),
+        returnValue: _i4.Future<List<_i5.UserModel>>.value(<_i5.UserModel>[]),
+      ) as _i4.Future<List<_i5.UserModel>>);
+  @override
+  _i4.Future<bool> isInterested({
+    required String? userId,
+    required String? loopId,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #isInterested,
+          [],
+          {
+            #userId: userId,
+            #loopId: loopId,
+          },
+        ),
+        returnValue: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
 }
