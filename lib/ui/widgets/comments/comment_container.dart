@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
@@ -69,102 +70,102 @@ class _CommentContainerState extends State<CommentContainer> {
           return const ErrorView();
         }
 
-        return FutureBuilder<UserModel?>(
+        return FutureBuilder<Option<UserModel>>(
           future: databaseRepository.getUserById(widget.comment.userId),
           builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return SkeletonListTile();
-            }
+            final user = snapshot.data;
 
-            final user = snapshot.data!;
+            return switch (user) {
+              null => SkeletonListTile(),
+              None() => SkeletonListTile(),
+              Some(:final value) => FutureBuilder<bool>(
+                  future: databaseRepository.isVerified(widget.comment.userId),
+                  builder: (context, snapshot) {
+                    final isVerified = snapshot.data ?? false;
 
-            return FutureBuilder<bool>(
-              future: databaseRepository.isVerified(widget.comment.userId),
-              builder: (context, snapshot) {
-                final isVerified = snapshot.data ?? false;
-
-                return Container(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                  ),
-                  child: ListTile(
-                    onTap: () => navigationBloc.add(PushProfile(user.id)),
-                    leading: UserAvatar(
-                      radius: 20,
-                      imageUrl: user.profilePicture,
-                      verified: isVerified,
-                    ),
-                    trailing: TextButton.icon(
-                      onPressed: () {
-                        if (_isLiked) {
-                          databaseRepository.unlikeComment(
-                            currentUser.id,
-                            widget.comment,
-                          );
-                        } else {
-                          databaseRepository.likeComment(
-                            currentUser.id,
-                            widget.comment,
-                          );
-                        }
-
-                        setState(() {
-                          if (_isLiked) {
-                            _likeCount--;
-                          } else {
-                            _likeCount++;
-                          }
-
-                          _isLiked = !_isLiked;
-                        });
-                      },
-                      label: Text(
-                        _likeCount.toString(),
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
+                    return Container(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 10,
                       ),
-                      icon: _isLiked
-                          ? const Icon(
-                              CupertinoIcons.heart_fill,
-                              size: 14,
-                              color: Colors.red,
-                            )
-                          : const Icon(
-                              CupertinoIcons.heart,
-                              size: 14,
-                              color: Colors.grey,
-                            ),
-                    ),
-                    title: RichText(
-                      text: TextSpan(
-                        style: const TextStyle(
-                          overflow: TextOverflow.ellipsis,
+                      child: ListTile(
+                        onTap: () => navigationBloc.add(PushProfile(value.id)),
+                        leading: UserAvatar(
+                          radius: 20,
+                          imageUrl: value.profilePicture,
+                          verified: isVerified,
                         ),
-                        children: [
-                          TextSpan(
-                            text: user.displayName,
-                          ),
-                          TextSpan(
-                            text: timeago.format(
-                              widget.comment.timestamp.toDate(),
-                              locale: 'en_short',
-                            ),
+                        trailing: TextButton.icon(
+                          onPressed: () {
+                            if (_isLiked) {
+                              databaseRepository.unlikeComment(
+                                currentUser.id,
+                                widget.comment,
+                              );
+                            } else {
+                              databaseRepository.likeComment(
+                                currentUser.id,
+                                widget.comment,
+                              );
+                            }
+
+                            setState(() {
+                              if (_isLiked) {
+                                _likeCount--;
+                              } else {
+                                _likeCount++;
+                              }
+
+                              _isLiked = !_isLiked;
+                            });
+                          },
+                          label: Text(
+                            _likeCount.toString(),
                             style: const TextStyle(
+                              fontSize: 14,
                               color: Colors.grey,
                             ),
                           ),
-                        ],
+                          icon: _isLiked
+                              ? const Icon(
+                                  CupertinoIcons.heart_fill,
+                                  size: 14,
+                                  color: Colors.red,
+                                )
+                              : const Icon(
+                                  CupertinoIcons.heart,
+                                  size: 14,
+                                  color: Colors.grey,
+                                ),
+                        ),
+                        title: RichText(
+                          text: TextSpan(
+                            style: const TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: value.displayName,
+                              ),
+                              TextSpan(
+                                text: timeago.format(
+                                  widget.comment.timestamp.toDate(),
+                                  locale: 'en_short',
+                                ),
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        subtitle: Linkify(
+                          text: widget.comment.content,
+                        ),
                       ),
-                    ),
-                    subtitle: Linkify(
-                      text: widget.comment.content,
-                    ),
-                  ),
-                );
-              },
-            );
+                    );
+                  },
+                ),
+            };
           },
         );
       },

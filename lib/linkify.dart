@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:linkify/linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -136,11 +137,11 @@ class Linkify extends StatelessWidget {
                   final user = await database.getUserByUsername(
                     username,
                   );
-                  if (user == null) {
+                  if (user.isNone) {
                     throw Exception('User not found');
                   }
 
-                  nav.add(PushProfile(user.id));
+                  nav.add(PushProfile(user.unwrap.id));
                 }
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(

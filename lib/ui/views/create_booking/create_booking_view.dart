@@ -7,6 +7,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
 import 'package:intheloopapp/data/remote_config_repository.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -138,7 +139,7 @@ class CreateBookingView extends StatelessWidget {
                           ),
                         ],
                       ),
-                      FutureBuilder<UserModel?>(
+                      FutureBuilder<Option<UserModel>>(
                         future: database.getUserById(service.userId),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
@@ -146,11 +147,12 @@ class CreateBookingView extends StatelessWidget {
                           }
 
                           final requestee = snapshot.data;
-                          if (requestee == null) {
-                            return SkeletonListTile();
-                          }
 
-                          return UserTile(user: requestee);
+                          return switch (requestee) {
+                            null => SkeletonListTile(),
+                            None() => SkeletonListTile(),
+                            Some(:final value) => UserTile(user: value),
+                          };
                         },
                       ),
                       const CreateBookingForm(),

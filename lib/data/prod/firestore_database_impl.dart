@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
@@ -143,21 +142,21 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<UserModel?> getUserByUsername(String? username) async {
-    if (username == null) return null;
+  Future<Option<UserModel>> getUserByUsername(String? username) async {
+    if (username == null) return const None();
 
     final userSnapshots =
         await _usersRef.where('username', isEqualTo: username).get();
 
     if (userSnapshots.docs.isNotEmpty) {
-      return UserModel.fromDoc(userSnapshots.docs.first);
+      return Some(UserModel.fromDoc(userSnapshots.docs.first));
     }
 
-    return null;
+    return const None();
   }
 
   @override
-  Future<UserModel?> getUserById(
+  Future<Option<UserModel>> getUserById(
     String userId, {
     bool ignoreCache = true,
   }) async {
@@ -181,12 +180,12 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     userSnapshot ??= await _usersRef.doc(userId).get();
 
     if (!userSnapshot.exists) {
-      return null;
+      return const None();
     }
 
     final user = UserModel.fromDoc(userSnapshot);
 
-    return user;
+    return Some(user);
   }
 
   @override
@@ -326,7 +325,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<Loop?> getLoopById(
+  Future<Option<Loop>> getLoopById(
     String loopId, {
     bool ignoreCache = true,
   }) async {
@@ -346,10 +345,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       final loop = Loop.fromDoc(loopSnapshot);
 
-      return loop;
+      return Some(loop);
     } catch (e, s) {
       logger.error('getLoopById', error: e, stackTrace: s);
-      return null;
+      return const None();
     }
   }
 
@@ -657,15 +656,19 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
         final followingLoops = await Future.wait(
           userFeedLoops.docs.map((doc) async {
-            final loop = await getLoopById(doc.id, ignoreCache: ignoreCache);
+            final loop = await getLoopById(
+              doc.id,
+              ignoreCache: ignoreCache,
+            );
 
             return loop;
           }),
         );
 
         return followingLoops
-            .where((loop) => loop != null && !loop.deleted)
-            .whereType<Loop>()
+            .whereType<Some<Loop>>()
+            .map((loop) => loop.unwrap)
+            .where((loop) => !loop.deleted)
             .toList();
       } else {
         final userFeedLoops = await _feedRefs
@@ -684,8 +687,9 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         );
 
         return followingLoops
-            .where((loop) => loop != null && !loop.deleted)
-            .whereType<Loop>()
+            .whereType<Some<Loop>>()
+            .map((loop) => loop.unwrap)
+            .where((loop) => !loop.deleted)
             .toList();
       }
     } catch (e, s) {
@@ -707,37 +711,36 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         .limit(limit)
         .snapshots();
 
-    final userFeedLoopsObserver = userFeedLoopsSnapshotObserver
-        .map((event) {
-          return event.docChanges
-              .where(
-            (DocumentChange<Map<String, dynamic>> element) =>
-                element.type == DocumentChangeType.added,
-          )
-              .map((DocumentChange<Map<String, dynamic>> element) async {
-            try {
-              final loop = await getLoopById(
-                element.doc.id,
-                ignoreCache: ignoreCache,
-              );
-              return loop;
-            } catch (e, s) {
-              logger.error(
-                'followingLoopsObserver',
-                error: e,
-                stackTrace: s,
-              );
-              return null;
-            }
-            // if (element.type == DocumentChangeType.modified) {}
-            // if (element.type == DocumentChangeType.removed) {}
-          });
-        })
-        .flatMap(
-          (value) => Stream.fromFutures(value)
-              .where((loop) => loop != null && !loop.deleted),
-        )
-        .whereType<Loop>();
+    final userFeedLoopsObserver = userFeedLoopsSnapshotObserver.map((event) {
+      return event.docChanges
+          .where(
+        (DocumentChange<Map<String, dynamic>> element) =>
+            element.type == DocumentChangeType.added,
+      )
+          .map((DocumentChange<Map<String, dynamic>> element) async {
+        try {
+          final loop = await getLoopById(
+            element.doc.id,
+            ignoreCache: ignoreCache,
+          );
+          return loop;
+        } catch (e, s) {
+          logger.error(
+            'followingLoopsObserver',
+            error: e,
+            stackTrace: s,
+          );
+          return null;
+        }
+        // if (element.type == DocumentChangeType.modified) {}
+        // if (element.type == DocumentChangeType.removed) {}
+      });
+    }).flatMap(
+      (value) => Stream.fromFutures(value)
+          .whereType<Some<Loop>>()
+          .map((e) => e.unwrap)
+          .where((loop) => !loop.deleted),
+    );
 
     yield* userFeedLoopsObserver;
   }
@@ -1442,13 +1445,22 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<Booking?> getBookingById(
+  Future<Option<Booking>> getBookingById(
     String bookRequestId,
   ) async {
-    final bookingSnapshot = await _bookingsRef.doc(bookRequestId).get();
-    final bookingRequest = Booking.fromDoc(bookingSnapshot);
+    try {
+      final bookingSnapshot = await _bookingsRef.doc(bookRequestId).get();
+      final bookingRequest = Booking.fromDoc(bookingSnapshot);
 
-    return bookingRequest;
+      return Some(bookingRequest);
+    } catch (e, s) {
+      logger.error(
+        'Error getting booking by id',
+        error: e,
+        stackTrace: s,
+      );
+      return const None();
+    }
   }
 
   @override
@@ -1593,7 +1605,10 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<Service?> getServiceById(String userId, String serviceId) async {
+  Future<Option<Service>> getServiceById(
+    String userId,
+    String serviceId,
+  ) async {
     try {
       final serviceSnapshot = await _servicesRef
           .doc(userId)
@@ -1603,14 +1618,14 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
 
       final service = Service.fromDoc(serviceSnapshot);
 
-      return service;
+      return Some(service);
     } catch (e, s) {
       logger.error(
         'getServiceById',
         error: e,
         stackTrace: s,
       );
-      return null;
+      return const None();
     }
   }
 
@@ -1700,7 +1715,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     return users;
   }
 
-  @override 
+  @override
   Future<bool> isInterested({
     required String userId,
     required String loopId,

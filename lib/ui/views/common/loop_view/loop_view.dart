@@ -102,7 +102,7 @@ class LoopView extends StatelessWidget {
           return const ErrorView();
         }
 
-        return FutureBuilder<UserModel?>(
+        return FutureBuilder<Option<UserModel>>(
           future: databaseRepository.getUserById(loop.userId),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
@@ -110,40 +110,27 @@ class LoopView extends StatelessWidget {
             }
 
             final user = snapshot.data;
-            if (user == null) {
-              return const LoopLoadingView();
-            }
-
-            return BlocProvider<LoopViewCubit>(
-              create: (context) => LoopViewCubit(
-                databaseRepository: databaseRepository,
-                loop: loop,
-                currentUser: currentUser,
-                user: user,
-              )
-                ..initLoopLikes()
-                ..checkVerified(),
-              child: BlocBuilder<LoopViewCubit, LoopViewState>(
-                builder: (context, state) {
-                  return FutureBuilder<UserModel?>(
-                    future: databaseRepository.getUserById(loop.userId),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const SizedBox.shrink();
-                      }
-
-                      final user = snapshot.data;
-                      if (user == null) {
-                        return const SizedBox.shrink();
-                      }
-
+            return switch (user) {
+              null => const LoopLoadingView(),
+              None() => const LoopLoadingView(),
+              Some(:final value) => BlocProvider<LoopViewCubit>(
+                  create: (context) => LoopViewCubit(
+                    databaseRepository: databaseRepository,
+                    loop: loop,
+                    currentUser: currentUser,
+                    user: value,
+                  )
+                    ..initLoopLikes()
+                    ..checkVerified(),
+                  child: BlocBuilder<LoopViewCubit, LoopViewState>(
+                    builder: (context, state) {
                       return Scaffold(
                         backgroundColor:
                             Theme.of(context).colorScheme.background,
                         appBar: AppBar(
                           title: GestureDetector(
                             onTap: () =>
-                                navigationBloc.add(PushProfile(user.id)),
+                                navigationBloc.add(PushProfile(value.id)),
                             child: CardBanner(
                               text: 'tapped',
                               position: CardBannerPosition.TOPRIGHT,
@@ -154,7 +141,7 @@ class LoopView extends StatelessWidget {
                                       // + User Avatar
                                       UserAvatar(
                                         radius: 24,
-                                        imageUrl: user.profilePicture,
+                                        imageUrl: value.profilePicture,
                                         verified: state.isVerified,
                                       ),
                                     ],
@@ -167,14 +154,14 @@ class LoopView extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        user.artistName,
+                                        value.artistName,
                                         style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                       Text(
-                                        '@${user.username}',
+                                        '@${value.username}',
                                         style: const TextStyle(
                                           color: Colors.grey,
                                           fontSize: 12,
@@ -236,7 +223,7 @@ class LoopView extends StatelessWidget {
                                       const SizedBox(height: 14),
                                       Attachments(
                                         loop: loop,
-                                        loopUser: user,
+                                        loopUser: value,
                                       ),
                                       const SizedBox(height: 8),
                                       ShowInterestButton(
@@ -323,10 +310,9 @@ class LoopView extends StatelessWidget {
                         ),
                       );
                     },
-                  );
-                },
-              ),
-            );
+                  ),
+                ),
+            };
           },
         );
       },

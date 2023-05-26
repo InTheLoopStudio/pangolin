@@ -8,6 +8,7 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
 part 'profile_state.dart';
@@ -40,7 +41,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       if (newUserData == null) {
         final refreshedVisitedUser =
             await databaseRepository.getUserById(state.visitedUser.id);
-        emit(state.copyWith(visitedUser: refreshedVisitedUser));
+        emit(state.copyWith(visitedUser: refreshedVisitedUser.asNullable()));
       } else {
         emit(state.copyWith(visitedUser: newUserData));
       }

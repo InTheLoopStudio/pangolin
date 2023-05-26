@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
 part 'onboarding_event.dart';
@@ -17,12 +18,15 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
         final userId = event.userId;
 
         final user = await databaseRepository.getUserById(userId);
-        if (user == null) {
-          emit(Onboarding());
-        } else {
-          logger.setUserIdentifier(user.id);
-          emit(Onboarded(user));
-        }
+
+        final _ = switch (user) {
+          None() => () {
+              emit(Onboarding());
+            }(),
+          Some(:final value) => () {
+              emit(Onboarded(value));
+            }(),
+        };
         await logger.reportPreviousSessionErrors();
       } catch (e, s) {
         logger.error(

@@ -95,5 +95,6 @@ export type BookingUpdateActivity = Activity & { type: "bookingUpdate", bookingI
 export type LoopMentionActivity = Activity & { type: "loopMention", loopId: string }
 export type CommentMentionActivity = Activity & { type: "commentMention", rootId: string, commentId: string; }
 export type CommentLikeActivity = Activity & { type: "commentLike", rootId: string, commentId: string; }
+export type OpportunityInterest = Activity & { type: "opportunityInterest", loopId: string; }
 
 export type BookingStatus = "pending" | "confirmed" | "canceled"

@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/dynamic_link_repository.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 
@@ -29,8 +30,8 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
                 final shareLoop = await databaseRepository.getLoopById(
                   event.id ?? '',
                 );
-                if (shareLoop != null) {
-                  navigationBloc.add(PushLoop(shareLoop));
+                if (shareLoop.isSome) {
+                  navigationBloc.add(PushLoop(shareLoop.unwrap));
                 }
               }
             case DynamicLinkType.shareProfile:

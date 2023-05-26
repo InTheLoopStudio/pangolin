@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/linkify.dart';
@@ -396,24 +397,21 @@ class _ProfileViewState extends State<ProfileView> {
           }
 
           return currentUser.id != visitedUserId
-              ? FutureBuilder(
+              ? FutureBuilder<Option<UserModel>>(
                   future: databaseRepository.getUserById(visitedUserId),
-                  builder: (
-                    BuildContext context,
-                    AsyncSnapshot<UserModel?> snapshot,
-                  ) {
-                    if (!snapshot.hasData) {
-                      return const LoadingView();
-                    }
+                  builder: (context, snapshot) {
+                    final user = snapshot.data;
 
-                    final visitedUser = snapshot.data!;
-
-                    return _profilePage(
-                      currentUser,
-                      visitedUser,
-                      databaseRepository,
-                      places,
-                    );
+                    return switch (user) {
+                      null => const LoadingView(),
+                      None() => const LoadingView(),
+                      Some(:final value) => _profilePage(
+                          currentUser,
+                          value,
+                          databaseRepository,
+                          places,
+                        ),
+                    };
                   },
                 )
               : _profilePage(

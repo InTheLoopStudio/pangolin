@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/models/badge.dart' as badge_model;
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:uuid/uuid.dart';
@@ -68,13 +69,13 @@ class SendBadgeCubit extends Cubit<SendBadgeState> {
         final badgeReceiver =
             await databaseRepository.getUserByUsername(state.receiverUsername);
 
-        if (badgeReceiver == null) {
+        if (badgeReceiver.isNone) {
           emit(state.copyWith(status: FormzSubmissionStatus.failure));
           return;
         }
 
         final badgeImageUrl = await storageRepository.uploadBadgeImage(
-          badgeReceiver.id,
+          badgeReceiver.unwrap.id,
           state.badgeImage!,
         );
 
@@ -91,7 +92,7 @@ class SendBadgeCubit extends Cubit<SendBadgeState> {
 
         // Send badge to DB
         await databaseRepository.createBadge(badge);
-        await databaseRepository.sendBadge(badgeId, badgeReceiver.id);
+        await databaseRepository.sendBadge(badgeId, badgeReceiver.unwrap.id);
         emit(state.copyWith(status: FormzSubmissionStatus.success));
       } catch (e) {
         emit(state.copyWith(status: FormzSubmissionStatus.success));

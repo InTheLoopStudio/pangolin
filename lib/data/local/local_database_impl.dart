@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/activity.dart';
 import 'package:intheloopapp/domains/models/badge.dart' as badge;
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 
@@ -15,8 +15,8 @@ class LocalDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<UserModel> getUserByUsername(String? username) async {
-    return UserModel.empty();
+  Future<Option<UserModel>> getUserByUsername(String? username) async {
+    return const None();
   }
 
   @override
@@ -25,11 +25,11 @@ class LocalDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<UserModel> getUserById(
+  Future<Option<UserModel>> getUserById(
     String userId, {
     bool ignoreCache = false,
   }) async {
-    return UserModel.empty();
+    return const None();
   }
 
   @override
@@ -43,11 +43,11 @@ class LocalDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<Loop?> getLoopById(
+  Future<Option<Loop>> getLoopById(
     String loopId, {
     bool ignoreCache = false,
   }) async {
-    return null;
+    return const None();
   }
 
   @override
@@ -313,7 +313,8 @@ class LocalDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Stream<badge.Badge> userBadgesObserver(String userId, {int limit = 20}) async* {}
+  Stream<badge.Badge> userBadgesObserver(String userId,
+      {int limit = 20}) async* {}
 
   @override
   Stream<badge.Badge> userCreatedBadgesObserver(
@@ -348,10 +349,10 @@ class LocalDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<Booking?> getBookingById(
+  Future<Option<Booking>> getBookingById(
     String bookRequestId,
   ) {
-    return Future(() => null);
+    return Future(() => const None());
   }
 
   @override
@@ -409,8 +410,11 @@ class LocalDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Future<Service?> getServiceById(String userId, String serviceId) async {
-    return null;
+  Future<Option<Service>> getServiceById(
+    String userId,
+    String serviceId,
+  ) async {
+    return const None();
   }
 
   @override

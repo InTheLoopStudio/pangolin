@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -52,7 +53,7 @@ class ChannelName extends StatelessWidget {
           members.map((member) async {
             final user =
                 await databaseRepository.getUserById(member.userId ?? '');
-            return user ?? UserModel.empty();
+            return user.asNullable() ?? UserModel.empty();
           }),
         ),
         builder: (context, snapshot) {
@@ -72,7 +73,7 @@ class ChannelName extends StatelessWidget {
                     .where((member) => member.id != client.currentUser!.id);
                 if (otherMembers.length == 1) {
                   title = otherMembers.first.displayName;
-                } else if (otherMembers.isNotEmpty == true) {
+                } else if (otherMembers.isNotEmpty) {
                   final maxWidth = constraints.maxWidth;
                   final maxChars = maxWidth / (textStyle?.fontSize ?? 1);
                   var currentChars = 0;

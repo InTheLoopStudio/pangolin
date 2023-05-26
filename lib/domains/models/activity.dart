@@ -42,7 +42,7 @@ sealed class Activity extends Equatable {
           return CommentLike.fromDoc(doc);
         case ActivityType.opportunityInterest:
           return OpportunityInterest.fromDoc(doc);
-        default:
+        case null:
           throw Exception('Activity.fromDoc: unknown type: $rawType');
       }
     } catch (e, s) {

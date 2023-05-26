@@ -16,7 +16,7 @@ import { defineSecret } from "firebase-functions/params";
 import { HttpsError } from "firebase-functions/v1/auth";
 
 import Stripe from "stripe";
-import { Booking, Loop, Comment, FollowActivity, LikeActivity, CommentActivity, BookingRequestActivity, BookingUpdateActivity, CommentMentionActivity, LoopMentionActivity, BookingStatus, CommentLikeActivity, } from "./models";
+import { Booking, Loop, Comment, FollowActivity, LikeActivity, CommentActivity, BookingRequestActivity, BookingUpdateActivity, CommentMentionActivity, LoopMentionActivity, BookingStatus, CommentLikeActivity, OpportunityInterest, } from "./models";
 
 import { v4 as uuidv4 } from "uuid";
 
@@ -197,6 +197,7 @@ const _addActivity = async (
     | LoopMentionActivity
     | CommentMentionActivity
     | CommentLikeActivity
+    | OpportunityInterest
 ) => {
   // Checking attribute.A
   if (activity.toUserId.length === 0) {
@@ -222,6 +223,7 @@ const _addActivity = async (
     "loopMention",
     "commentMention",
     "commentLike",
+    "opportunityInterest"
   ].includes(activity.type)) {
     // Throwing an HttpsError so that the client gets the error details.
     throw new functions.https.HttpsError(
@@ -698,7 +700,7 @@ export const autoFollowUsersOnUserCreated = functions
     }
   })
 export const sendWelcomeEmailOnUserCreated = functions
-  .firestore 
+  .firestore
   .document("users/{usersId}")
   .onCreate(async (snapshot) => {
     const user = snapshot.data();
@@ -1285,4 +1287,19 @@ export const sendBookingRequestSentEmailOnBooking = functions
     }
 
     await _sendBookingRequestSentEmail(email);
+  });
+
+export const addActivityOnOpportunityInterest = functions
+  .firestore
+  .document("opportunities/{loopId}/interestedUsers/{userId}")
+  .onCreate(async (data, context) => {
+    const loopSnapshot = await loopsRef.doc(context.params.loopId).get();
+    const loop = loopSnapshot.data() as Loop;
+
+    _addActivity({
+      toUserId: loop.userId,
+      fromUserId: context.params.userId,
+      type: "opportunityInterest",
+      loopId: context.params.loopId,
+    });
   });

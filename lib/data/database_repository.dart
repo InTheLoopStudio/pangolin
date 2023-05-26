@@ -3,6 +3,7 @@ import 'package:intheloopapp/domains/models/badge.dart';
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/comment.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/service.dart';
 // import 'package:intheloopapp/domains/models/tag.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
@@ -11,8 +12,8 @@ abstract class DatabaseRepository {
   // User related stuff
   Future<bool> userEmailExists(String email);
   Future<void> createUser(UserModel user);
-  Future<UserModel?> getUserByUsername(String? username);
-  Future<UserModel?> getUserById(
+  Future<Option<UserModel>> getUserByUsername(String? username);
+  Future<Option<UserModel>> getUserById(
     String userId, {
     bool ignoreCache = false,
   });
@@ -30,7 +31,7 @@ abstract class DatabaseRepository {
   Future<List<UserModel>> getBookingLeaders();
 
   // Loop related stuff
-  Future<Loop?> getLoopById(
+  Future<Option<Loop>> getLoopById(
     String loopId, {
     bool ignoreCache = false,
   });
@@ -189,7 +190,7 @@ abstract class DatabaseRepository {
   Future<void> createBooking(
     Booking booking,
   );
-  Future<Booking?> getBookingById(
+  Future<Option<Booking>> getBookingById(
     String bookRequestId,
   );
   Future<List<Booking>> getBookingsByRequesterRequestee(
@@ -213,7 +214,7 @@ abstract class DatabaseRepository {
   // Service related stuff
   Future<void> createService(Service service);
   Future<void> updateService(Service service);
-  Future<Service?> getServiceById(String userId, String serviceId);
+  Future<Option<Service>> getServiceById(String userId, String serviceId);
   Future<List<Service>> getUserServices(String userId);
   Future<void> deleteService(String userId, String serviceId);
 

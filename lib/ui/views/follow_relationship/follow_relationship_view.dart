@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_view.dart';
@@ -25,62 +26,66 @@ class FollowRelationshipView extends StatelessWidget {
 
     final theme = Theme.of(context);
 
-    return FutureBuilder<UserModel?>(
+    return FutureBuilder<Option<UserModel>>(
       future: databaseRepository.getUserById(visitedUserId),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const LoadingView();
         }
 
-        final user = snapshot.data!;
+        final user = snapshot.data;
 
-        return BlocProvider(
-          create: (context) => FollowRelationshipCubit(
-            databaseRepository: databaseRepository,
-            visitedUserId: visitedUserId,
-          )
-            ..initFollowers()
-            ..initFollowing(),
-          child: DefaultTabController(
-            initialIndex: initialIndex ?? 0,
-            length: 2,
-            child: Scaffold(
-              backgroundColor: theme.colorScheme.background,
-              appBar: AppBar(
-                backgroundColor: theme.colorScheme.background,
-                bottom: const TabBar(
-                  indicatorColor: tappedAccent,
-                  labelColor: tappedAccent,
-                  tabs: [
-                    Tab(
-                      child: Text('Followers'),
+        return switch (user) {
+          null => const LoadingView(),
+          None() => const LoadingView(),
+          Some(:final value) => BlocProvider(
+              create: (context) => FollowRelationshipCubit(
+                databaseRepository: databaseRepository,
+                visitedUserId: visitedUserId,
+              )
+                ..initFollowers()
+                ..initFollowing(),
+              child: DefaultTabController(
+                initialIndex: initialIndex ?? 0,
+                length: 2,
+                child: Scaffold(
+                  backgroundColor: theme.colorScheme.background,
+                  appBar: AppBar(
+                    backgroundColor: theme.colorScheme.background,
+                    bottom: const TabBar(
+                      indicatorColor: tappedAccent,
+                      labelColor: tappedAccent,
+                      tabs: [
+                        Tab(
+                          child: Text('Followers'),
+                        ),
+                        Tab(
+                          child: Text('Following'),
+                        ),
+                      ],
                     ),
-                    Tab(
-                      child: Text('Following'),
+                    title: Row(
+                      children: [
+                        Text(
+                          value.displayName,
+                          style: const TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
+                  body: const TabBarView(
+                    children: [
+                      FollowerTab(),
+                      FollowingTab(),
+                    ],
+                  ),
                 ),
-                title: Row(
-                  children: [
-                    Text(
-                      user.displayName,
-                      style: const TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              body: const TabBarView(
-                children: [
-                  FollowerTab(),
-                  FollowingTab(),
-                ],
               ),
             ),
-          ),
-        );
+        };
       },
     );
   }

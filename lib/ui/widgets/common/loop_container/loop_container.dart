@@ -191,22 +191,10 @@ class _LoopContainerState extends State<LoopContainer>
           );
         }
 
-        return FutureBuilder<UserModel?>(
+        return FutureBuilder<Option<UserModel>>(
           future: databaseRepository.getUserById(widget.loop.userId),
           builder: (context, userSnapshot) {
-            if (!userSnapshot.hasData) {
-              return const LoadingContainer();
-            }
-
             final loopUser = userSnapshot.data;
-            if (loopUser == null) {
-              logger.error(
-                'loopUser is null',
-                stackTrace: StackTrace.current,
-              );
-              return const LoadingContainer();
-            }
-
             logger.logAnalyticsEvent(
               name: 'loop_view',
               parameters: {
@@ -215,32 +203,36 @@ class _LoopContainerState extends State<LoopContainer>
               },
             );
 
-            return BlocProvider<LoopContainerCubit>(
-              create: (context) => LoopContainerCubit(
-                databaseRepository: databaseRepository,
-                loop: widget.loop,
-                currentUser: currentUser,
-                audioRepo: context.read<AudioRepository>(),
-              ),
-              child: BlocBuilder<LoopContainerCubit, LoopContainerState>(
-                builder: (context, state) {
-                  if (widget.loop.audioPath.isSome &&
-                      loopUser.profilePicture != null) {
-                    return _audioLoopContainer(
-                      navigationBloc: navigationBloc,
-                      loopUser: loopUser,
-                      currentUserId: currentUser.id,
-                    );
-                  }
+            return switch (loopUser) {
+              null => const LoadingContainer(),
+              None() => const LoadingContainer(),
+              Some(:final value) => BlocProvider<LoopContainerCubit>(
+                  create: (context) => LoopContainerCubit(
+                    databaseRepository: databaseRepository,
+                    loop: widget.loop,
+                    currentUser: currentUser,
+                    audioRepo: context.read<AudioRepository>(),
+                  ),
+                  child: BlocBuilder<LoopContainerCubit, LoopContainerState>(
+                    builder: (context, state) {
+                      if (widget.loop.audioPath.isSome &&
+                          value.profilePicture != null) {
+                        return _audioLoopContainer(
+                          navigationBloc: navigationBloc,
+                          loopUser: value,
+                          currentUserId: currentUser.id,
+                        );
+                      }
 
-                  return _loopContainer(
-                    navigationBloc: navigationBloc,
-                    loopUser: loopUser,
-                    currentUserId: currentUser.id,
-                  );
-                },
-              ),
-            );
+                      return _loopContainer(
+                        navigationBloc: navigationBloc,
+                        loopUser: value,
+                        currentUserId: currentUser.id,
+                      );
+                    },
+                  ),
+                ),
+            };
           },
         );
       },

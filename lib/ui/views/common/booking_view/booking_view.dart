@@ -85,21 +85,18 @@ class BookingView extends StatelessWidget {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: FutureBuilder<UserModel?>(
+                  child: FutureBuilder<Option<UserModel>>(
                     future: database.getUserById(booking.requesterId),
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return SkeletonListTile();
-                      }
-
                       final requester = snapshot.data;
-                      if (requester == null) {
-                        return SkeletonListTile();
-                      }
-                      return UserTile(
-                        user: requester,
-                        showFollowButton: false,
-                      );
+                      return switch (requester) {
+                        null => SkeletonListTile(),
+                        None() => SkeletonListTile(),
+                        Some(:final value) => UserTile(
+                            user: value,
+                            showFollowButton: false,
+                          ),
+                      };
                     },
                   ),
                 ),
@@ -116,21 +113,18 @@ class BookingView extends StatelessWidget {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: FutureBuilder<UserModel?>(
+                  child: FutureBuilder<Option<UserModel>>(
                     future: database.getUserById(booking.requesteeId),
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return SkeletonListTile();
-                      }
-
                       final requestee = snapshot.data;
-                      if (requestee == null) {
-                        return SkeletonListTile();
-                      }
-                      return UserTile(
-                        user: requestee,
-                        showFollowButton: false,
-                      );
+                      return switch (requestee) {
+                        null => SkeletonListTile(),
+                        None() => SkeletonListTile(),
+                        Some(:final value) => UserTile(
+                            user: value,
+                            showFollowButton: false,
+                          ),
+                      };
                     },
                   ),
                 ),
@@ -147,7 +141,7 @@ class BookingView extends StatelessWidget {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: FutureBuilder<Service?>(
+                  child: FutureBuilder<Option<Service>>(
                     future: booking.serviceId.isSome
                         ? database.getServiceById(
                             booking.requesteeId,
@@ -156,21 +150,21 @@ class BookingView extends StatelessWidget {
                         : null,
                     builder: (context, snapshot) {
                       final service = snapshot.data;
-                      if (service == null) {
-                        return const Text('Unknown Service');
-                      }
-
-                      return ListTile(
-                        leading: const Icon(Icons.work),
-                        title: Text(service.title),
-                        subtitle: Text(service.description),
-                        trailing: Text(
-                          '\$${(service.rate / 100).toStringAsFixed(2)}${service.rateType == RateType.hourly ? '/hr' : ''}',
-                          style: const TextStyle(
-                            color: Colors.green,
+                      return switch (service) {
+                        null => SkeletonListTile(),
+                        None() => SkeletonListTile(),
+                        Some(:final value) => ListTile(
+                            leading: const Icon(Icons.work),
+                            title: Text(value.title),
+                            subtitle: Text(value.description),
+                            trailing: Text(
+                              '\$${(value.rate / 100).toStringAsFixed(2)}${value.rateType == RateType.hourly ? '/hr' : ''}',
+                              style: const TextStyle(
+                                color: Colors.green,
+                              ),
+                            ),
                           ),
-                        ),
-                      );
+                      };
                     },
                   ),
                 ),

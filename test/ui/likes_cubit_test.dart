@@ -11,7 +11,10 @@ import 'likes_cubit_test.mocks.dart';
 
 @GenerateMocks([DatabaseRepository])
 void main() {
-  final loop = Loop.empty();
+  final loop = Loop.empty(
+    userId: '',
+    description: '',
+  );
 
   group('there are no likers', () {
     final databaseRepository = MockDatabaseRepository();
