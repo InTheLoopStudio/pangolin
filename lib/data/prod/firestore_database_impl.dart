@@ -302,7 +302,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       ),
     );
 
-    return leaders.where((e) => e != null).whereType<UserModel>().toList();
+    return leaders.whereType<Some<UserModel>>().map((e) => e.unwrap).toList();
   }
 
   @override
@@ -321,7 +321,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       ),
     );
 
-    return leaders.where((e) => e != null).whereType<UserModel>().toList();
+    return leaders.whereType<Some<UserModel>>().map((e) => e.unwrap).toList();
   }
 
   @override
