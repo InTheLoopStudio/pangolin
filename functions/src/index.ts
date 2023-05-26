@@ -1247,7 +1247,6 @@ export const postFromBookingBotOnBooking = functions
       userId: bookingBotUuid,
       title: "🎫 NEW BOOKING",
       description: `@${requester?.username ?? "UNNKOWN"} booked @${requestee?.username ?? "UNKNOWN"} for service '${service?.title ?? "UNKNOWN"}'`,
-      audioPath: "",
       imagePaths: [],
       timestamp: Timestamp.now(),
       likeCount: 0,

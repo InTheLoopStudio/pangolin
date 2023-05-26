@@ -390,7 +390,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         );
       }
 
-      await _usersRef.doc(user.id).set(user.toMap());
+      await _usersRef.doc(user.id).update(user.toMap());
     } catch (e, s) {
       logger.error('updateUserData', error: e, stackTrace: s);
     }
