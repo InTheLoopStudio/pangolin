@@ -51,7 +51,11 @@ void main() {
       ),
       act: (LikesCubit bloc) => bloc.initLikes(),
       expect: () => [
-        LikesState(likes: [UserModel.empty()])
+        LikesState(
+          likes: [
+            UserModel.empty(),
+          ],
+        ),
       ],
     );
   });

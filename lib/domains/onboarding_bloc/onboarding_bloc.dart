@@ -24,6 +24,7 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
               emit(Onboarding());
             }(),
           Some(:final value) => () {
+              logger.setUserIdentifier(value.id);
               emit(Onboarded(value));
             }(),
         };

@@ -11,6 +11,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/linkify.dart';
+import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_container.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/attachments.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/control_buttons.dart';
@@ -221,6 +222,23 @@ class _LoopContainerState extends State<LoopContainer>
                           navigationBloc: navigationBloc,
                           loopUser: value,
                           currentUserId: currentUser.id,
+                        );
+                      }
+
+                      if (widget.loop.isOpportunity) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(24),
+                            border: Border.all(
+                              width: 3,
+                              color: tappedAccent,
+                            ),
+                          ),
+                          child: _loopContainer(
+                            navigationBloc: navigationBloc,
+                            loopUser: value,
+                            currentUserId: currentUser.id,
+                          ),
                         );
                       }
 

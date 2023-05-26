@@ -102,7 +102,8 @@ class Linkify extends StatelessWidget {
   /// Defines how to measure the width of the rendered text.
   final TextWidthBasis textWidthBasis;
 
-  /// Defines how the paragraph will apply TextStyle.height to the ascent of the first line and descent of the last line.
+  /// Defines how the paragraph will apply TextStyle.height to the 
+  /// ascent of the first line and descent of the last line.
   final TextHeightBehavior? textHeightBehavior;
 
   @override
@@ -262,7 +263,8 @@ class SelectableLinkify extends StatelessWidget {
   /// Whether to show cursor
   final bool showCursor;
 
-  /// Whether this text field should focus itself if nothing else is already focused.
+  /// Whether this text field should focus 
+  /// itself if nothing else is already focused.
   final bool autofocus;
 
   /// How thick the cursor will be
@@ -286,7 +288,8 @@ class SelectableLinkify extends StatelessWidget {
 
   final ScrollPhysics? scrollPhysics;
 
-  /// Defines how the paragraph will apply TextStyle.height to the ascent of the first line and descent of the last line.
+  /// Defines how the paragraph will apply TextStyle.height to the 
+  /// ascent of the first line and descent of the last line.
   final TextHeightBehavior? textHeightBehavior;
 
   /// How tall the cursor will be.
@@ -295,7 +298,8 @@ class SelectableLinkify extends StatelessWidget {
   /// Optional delegate for building the text selection handles and toolbar.
   final TextSelectionControls? selectionControls;
 
-  /// Called when the user changes the selection of text (including the cursor location).
+  /// Called when the user changes the selection of text (
+  /// including the cursor location).
   final SelectionChangedCallback? onSelectionChanged;
 
   @override

@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_performance/firebase_performance.dart';
+import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 
 final logger = AppLogger();
@@ -11,9 +12,12 @@ class AppLogger {
     Logger.root.level = Level.ALL;
     Logger.root.onRecord.listen((record) {
       FirebaseCrashlytics.instance.log(record.message);
-      print(
+      if (kDebugMode) {
+        print(
+        // ignore: lines_longer_than_80_chars
         '${record.level.name}: ${record.time}: ${userId ?? "<NO UID>"}: ${record.message}',
       );
+      }
     });
   }
 

@@ -78,7 +78,8 @@ Future<void> main() async {
       };
 
       if (kDebugMode) {
-        // Force disable Crashlytics collection while doing every day development.
+        // Force disable Crashlytics collection 
+        // while doing every day development.
         await FirebaseCrashlytics.instance
             .setCrashlyticsCollectionEnabled(false);
       }
@@ -192,8 +193,6 @@ class TappedApp extends StatelessWidget {
                             ),
                           Unauthenticated() => const LoginView(),
                         };
-
-                        if (authState is Authenticated) {}
                       } catch (e, s) {
                         FirebaseCrashlytics.instance.recordError(
                           e,

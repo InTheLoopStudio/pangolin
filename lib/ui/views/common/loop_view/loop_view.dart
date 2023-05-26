@@ -37,6 +37,7 @@ class LoopView extends StatelessWidget {
   ) {
     final dynamic = context.read<DynamicLinkRepository>();
     final database = context.read<DatabaseRepository>();
+    final nav = context.read<NavigationBloc>();
     showCupertinoModalPopup<void>(
       context: context,
       builder: (BuildContext context) => CupertinoActionSheet(
@@ -51,22 +52,22 @@ class LoopView extends StatelessWidget {
                 'Check out this loop on Tapped $link',
               );
 
-              context.read<NavigationBloc>().add(const Pop());
+              nav.add(const Pop());
             },
             child: const Text('Share'),
           ),
           CupertinoActionSheetAction(
             onPressed: () async {
-              await database.reportLoop(
-                loop: loop,
-                reporterId: currentUserId,
-              );
-              context.read<NavigationBloc>().add(const Pop());
+              nav.add(const Pop());
 
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Loop Reported'),
                 ),
+              );
+              await database.reportLoop(
+                loop: loop,
+                reporterId: currentUserId,
               );
             },
             child: const Text('Report Loop'),
@@ -79,7 +80,7 @@ class LoopView extends StatelessWidget {
               isDestructiveAction: true,
               onPressed: () async {
                 await database.deleteLoop(loop);
-                Navigator.pop(context);
+                nav.add(const Pop());
               },
               child: const Text('Delete Loop'),
             ),
@@ -93,8 +94,6 @@ class LoopView extends StatelessWidget {
     final navigationBloc = context.read<NavigationBloc>();
     final databaseRepository =
         RepositoryProvider.of<DatabaseRepository>(context);
-    final dynamic = RepositoryProvider.of<DynamicLinkRepository>(context);
-
     return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
       selector: (state) => (state is Onboarded) ? state.currentUser : null,
       builder: (context, currentUser) {

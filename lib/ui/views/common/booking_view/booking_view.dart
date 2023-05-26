@@ -158,6 +158,7 @@ class BookingView extends StatelessWidget {
                             title: Text(value.title),
                             subtitle: Text(value.description),
                             trailing: Text(
+                              // ignore: lines_longer_than_80_chars
                               '\$${(value.rate / 100).toStringAsFixed(2)}${value.rateType == RateType.hourly ? '/hr' : ''}',
                               style: const TextStyle(
                                 color: Colors.green,

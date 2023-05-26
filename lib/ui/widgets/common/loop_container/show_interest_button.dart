@@ -79,7 +79,12 @@ class _ShowInterestButtonState extends State<ShowInterestButton> {
                         ),
                       );
                 },
-                child: const Text("See who's interested"),
+                child: const Text(
+                  "See who's interested",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ],
           );
@@ -105,7 +110,7 @@ class _ShowInterestButtonState extends State<ShowInterestButton> {
               },
               child: _isInterested
                   ? const Text('Interested')
-                  : const Text('Show Interest'),
+                  : const Text('Sign Up'),
             ),
           ],
         );

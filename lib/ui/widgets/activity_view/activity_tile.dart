@@ -7,7 +7,6 @@ import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
-import 'package:path/path.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class ActivityTile extends StatelessWidget {
@@ -325,6 +324,7 @@ class ActivityTile extends StatelessWidget {
                                     case ActivityType.commentLike:
                                       return 'liked your comment ❤️';
                                     case ActivityType.opportunityInterest:
+                                      // ignore: lines_longer_than_80_chars
                                       return 'is interested in your opportunity 📩';
                                   }
                                 }(),
@@ -335,13 +335,6 @@ class ActivityTile extends StatelessWidget {
                               ),
                             ),
                           ),
-                          // Padding(
-                          //   padding: const EdgeInsets.symmetric(horizontal: 15),
-                          //   child: Divider(
-                          //     color: Colors.deepPurple,
-                          //     thickness: 1,
-                          //   ),
-                          // ),
                         ],
                       );
                     },

@@ -242,6 +242,7 @@ class PushServiceSelection extends NavigationEvent {
 
   @override
   String toString() =>
+      // ignore: lines_longer_than_80_chars
       'PushServiceSelection { userId: $userId, requesteeStripeConnectedAccountId: $requesteeStripeConnectedAccountId }';
 
   @override

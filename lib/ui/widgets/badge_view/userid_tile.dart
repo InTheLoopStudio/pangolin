@@ -4,7 +4,6 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/widgets/common/user_tile.dart';
-import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 class UseridTile extends StatelessWidget {
   const UseridTile({

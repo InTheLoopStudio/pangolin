@@ -52,6 +52,7 @@ class ServiceSelectionView extends StatelessWidget {
                 title: Text(service.title),
                 subtitle: Text(service.description),
                 trailing: Text(
+                  // ignore: lines_longer_than_80_chars
                   '\$${(service.rate / 100).toStringAsFixed(2)}${service.rateType == RateType.hourly ? '/hr' : ''}',
                   style: const TextStyle(
                     color: Colors.green,

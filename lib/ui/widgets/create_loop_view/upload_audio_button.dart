@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/create_loop/cubit/create_loop_cubit.dart';
 import 'package:intheloopapp/ui/widgets/create_loop_view/audio_container.dart';
@@ -11,7 +12,7 @@ class UploadAudioButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CreateLoopCubit, CreateLoopState>(
       builder: (context, state) {
-        return state.pickedAudio == null
+        return state.pickedAudio.isNone
             ? Ink(
                 decoration: const ShapeDecoration(
                   color: tappedAccent,

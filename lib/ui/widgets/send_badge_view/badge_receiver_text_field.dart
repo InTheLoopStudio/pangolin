@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 
@@ -69,7 +70,7 @@ class _BadgeReceiverTextFieldState extends State<BadgeReceiverTextField> {
                 RepositoryProvider.of<DatabaseRepository>(context);
             final receiver = await databaseRepo.getUserByUsername(input);
             setState(() {
-              _usernameExists = !(receiver == null);
+              _usernameExists = receiver.isSome;
             });
 
             widget.onSaved?.call(input);
@@ -83,7 +84,7 @@ class _BadgeReceiverTextFieldState extends State<BadgeReceiverTextField> {
                 RepositoryProvider.of<DatabaseRepository>(context);
             final receiver = await databaseRepo.getUserByUsername(input);
             setState(() {
-              _usernameExists = !(receiver == null);
+              _usernameExists = receiver.isSome;
             });
 
             widget.onChanged?.call(input);

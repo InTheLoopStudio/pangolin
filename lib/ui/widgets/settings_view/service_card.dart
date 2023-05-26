@@ -54,6 +54,7 @@ class ServiceCard extends StatelessWidget {
                 ),
               ),
               Text(
+                // ignore: lines_longer_than_80_chars
                 '\$${(service.rate / 100).toStringAsFixed(2)}${service.rateType == RateType.hourly ? '/hr' : ''}',
                 style: const TextStyle(
                   color: Colors.blue,
