@@ -13,6 +13,7 @@ import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/linkify.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/common/loading/loading_container.dart';
+import 'package:intheloopapp/ui/widgets/common/conditional_parent_widget.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/attachments.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/control_buttons.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container_cubit.dart';
@@ -37,6 +38,20 @@ class _LoopContainerState extends State<LoopContainer>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+
+  Widget _opportunity({
+    required Widget child,
+  }) =>
+      Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            width: 3,
+            color: tappedAccent,
+          ),
+        ),
+        child: child,
+      );
 
   Widget _loopContainer({
     required NavigationBloc navigationBloc,
@@ -216,36 +231,25 @@ class _LoopContainerState extends State<LoopContainer>
                   ),
                   child: BlocBuilder<LoopContainerCubit, LoopContainerState>(
                     builder: (context, state) {
-                      if (widget.loop.audioPath.isSome &&
-                          value.profilePicture != null) {
-                        return _audioLoopContainer(
-                          navigationBloc: navigationBloc,
-                          loopUser: value,
-                          currentUserId: currentUser.id,
-                        );
-                      }
+                      return ConditionalParentWidget(
+                        condition: widget.loop.isOpportunity,
+                        conditionalBuilder: _opportunity,
+                        child: () {
+                          if (widget.loop.audioPath.isSome &&
+                              value.profilePicture != null) {
+                            return _audioLoopContainer(
+                              navigationBloc: navigationBloc,
+                              loopUser: value,
+                              currentUserId: currentUser.id,
+                            );
+                          }
 
-                      if (widget.loop.isOpportunity) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(24),
-                            border: Border.all(
-                              width: 3,
-                              color: tappedAccent,
-                            ),
-                          ),
-                          child: _loopContainer(
+                          return _loopContainer(
                             navigationBloc: navigationBloc,
                             loopUser: value,
                             currentUserId: currentUser.id,
-                          ),
-                        );
-                      }
-
-                      return _loopContainer(
-                        navigationBloc: navigationBloc,
-                        loopUser: value,
-                        currentUserId: currentUser.id,
+                          );
+                        }(),
                       );
                     },
                   ),
