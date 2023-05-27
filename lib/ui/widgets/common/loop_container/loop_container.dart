@@ -42,15 +42,18 @@ class _LoopContainerState extends State<LoopContainer>
   Widget _opportunity({
     required Widget child,
   }) =>
-      Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-            width: 3,
-            color: tappedAccent,
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(
+              width: 3,
+              color: tappedAccent,
+            ),
           ),
+          child: child,
         ),
-        child: child,
       );
 
   Widget _loopContainer({
