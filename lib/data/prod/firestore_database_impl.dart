@@ -1710,7 +1710,12 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     final usersSnapshot =
         await _opportunitiesRef.doc(loopId).collection('interestedUsers').get();
 
-    final users = usersSnapshot.docs.map(UserModel.fromDoc).toList();
+    final users = await Future.wait(
+      usersSnapshot.docs.map((doc) async {
+        final userSnapshot = await _usersRef.doc(doc.id).get();
+        return UserModel.fromDoc(userSnapshot);
+      }),
+    );
 
     return users;
   }
