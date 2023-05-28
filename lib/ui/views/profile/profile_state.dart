@@ -1,23 +1,5 @@
 part of 'profile_cubit.dart';
 
-enum LoopsStatus {
-  initial,
-  success,
-  failure,
-}
-
-enum BadgesStatus {
-  initial,
-  success,
-  failure,
-}
-
-enum UserCreatedBadgesStatus {
-  initial,
-  success,
-  failure,
-}
-
 class ProfileState extends Equatable {
   ProfileState({
     required this.currentUser,
@@ -26,14 +8,14 @@ class ProfileState extends Equatable {
     this.isVerified = false,
     this.userLoops = const [],
     this.userBadges = const [],
-    this.userCreatedBadges = const [],
+    this.userBookings = const [],
     this.hasReachedMaxLoops = false,
     this.hasReachedMaxBadges = false,
-    this.hasReachedMaxPosts = false,
+    this.hasReachedMaxBookings = false,
     this.hasReachedMaxUserCreatedBadges = false,
     this.loopStatus = LoopsStatus.initial,
     this.badgeStatus = BadgesStatus.initial,
-    this.userCreatedBadgeStatus = UserCreatedBadgesStatus.initial,
+    this.bookingsStatus = BookingsStatus.initial,
     int? followerCount,
     int? followingCount,
     Place? place,
@@ -49,14 +31,14 @@ class ProfileState extends Equatable {
   final bool isVerified;
   final List<Loop> userLoops;
   final List<Badge> userBadges;
-  final List<Badge> userCreatedBadges;
+  final List<Booking> userBookings;
   final bool hasReachedMaxLoops;
   final bool hasReachedMaxBadges;
-  final bool hasReachedMaxPosts;
+  final bool hasReachedMaxBookings;
   final bool hasReachedMaxUserCreatedBadges;
   final LoopsStatus loopStatus;
   final BadgesStatus badgeStatus;
-  final UserCreatedBadgesStatus userCreatedBadgeStatus;
+  final BookingsStatus bookingsStatus;
   final UserModel visitedUser;
   final UserModel currentUser;
   late final Place place;
@@ -69,14 +51,14 @@ class ProfileState extends Equatable {
         isVerified,
         userLoops,
         userBadges,
-        userCreatedBadges,
+        userBookings,
         hasReachedMaxLoops,
         hasReachedMaxBadges,
-        hasReachedMaxPosts,
+        hasReachedMaxBookings,
         hasReachedMaxUserCreatedBadges,
         loopStatus,
         badgeStatus,
-        userCreatedBadgeStatus,
+        bookingsStatus,
         visitedUser,
         currentUser,
         place,
@@ -89,14 +71,14 @@ class ProfileState extends Equatable {
     bool? isVerified,
     List<Loop>? userLoops,
     List<Badge>? userBadges,
-    List<Badge>? userCreatedBadges,
+    List<Booking>? userBookings,
     bool? hasReachedMaxLoops,
     bool? hasReachedMaxBadges,
-    bool? hasReachedMaxPosts,
+    bool? hasReachedMaxBookings,
     bool? hasReachedMaxUserCreatedBadges,
     LoopsStatus? loopStatus,
     BadgesStatus? badgeStatus,
-    UserCreatedBadgesStatus? userCreatedBadgeStatus,
+    BookingsStatus? bookingsStatus,
     UserModel? currentUser,
     UserModel? visitedUser,
     Place? place,
@@ -108,19 +90,37 @@ class ProfileState extends Equatable {
       isVerified: isVerified ?? this.isVerified,
       userLoops: userLoops ?? this.userLoops,
       userBadges: userBadges ?? this.userBadges,
-      userCreatedBadges: userCreatedBadges ?? this.userCreatedBadges,
+      userBookings: userBookings ?? this.userBookings,
       hasReachedMaxLoops: hasReachedMaxLoops ?? this.hasReachedMaxLoops,
       hasReachedMaxBadges: hasReachedMaxBadges ?? this.hasReachedMaxBadges,
-      hasReachedMaxPosts: hasReachedMaxPosts ?? this.hasReachedMaxPosts,
+      hasReachedMaxBookings:
+          hasReachedMaxBookings ?? this.hasReachedMaxBookings,
       hasReachedMaxUserCreatedBadges:
           hasReachedMaxUserCreatedBadges ?? this.hasReachedMaxUserCreatedBadges,
       loopStatus: loopStatus ?? this.loopStatus,
       badgeStatus: badgeStatus ?? this.badgeStatus,
-      userCreatedBadgeStatus:
-          userCreatedBadgeStatus ?? this.userCreatedBadgeStatus,
+      bookingsStatus: bookingsStatus ?? this.bookingsStatus,
       currentUser: currentUser ?? this.currentUser,
       visitedUser: visitedUser ?? this.visitedUser,
       place: place ?? this.place,
     );
   }
+}
+
+enum LoopsStatus {
+  initial,
+  success,
+  failure,
+}
+
+enum BadgesStatus {
+  initial,
+  success,
+  failure,
+}
+
+enum BookingsStatus {
+  initial,
+  success,
+  failure,
 }

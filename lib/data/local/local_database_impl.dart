@@ -313,8 +313,10 @@ class LocalDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Stream<badge.Badge> userBadgesObserver(String userId,
-      {int limit = 20,}) async* {}
+  Stream<badge.Badge> userBadgesObserver(
+    String userId, {
+    int limit = 20,
+  }) async* {}
 
   @override
   Stream<badge.Badge> userCreatedBadgesObserver(
@@ -375,6 +377,12 @@ class LocalDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  Stream<Booking> getBookingsByRequesterObserver(
+    String userId, {
+    int limit = 20,
+  }) async* {}
+
+  @override
   Future<List<Booking>> getBookingsByRequestee(
     String userId, {
     int limit = 20,
@@ -382,6 +390,12 @@ class LocalDatabaseImpl extends DatabaseRepository {
   }) {
     return Future(() => []);
   }
+
+  @override
+  Stream<Booking> getBookingsByRequesteeObserver(
+    String userId, {
+    int limit = 20,
+  }) async* {}
 
   @override
   Future<void> updateBooking(Booking booking) {

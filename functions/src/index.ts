@@ -462,6 +462,11 @@ const _createStripeAccount = async () => {
         },
       },
     },
+    // cross border payments only work with
+    // recipient accounts
+    // tos_acceptance: {
+    //   service_agreement: "recipient",
+    // },
   });
 
   return account.id;

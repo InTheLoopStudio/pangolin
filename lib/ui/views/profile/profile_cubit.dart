@@ -7,9 +7,11 @@ import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
 import 'package:intheloopapp/domains/models/badge.dart';
+import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
+import 'package:rxdart/rxdart.dart';
 
 part 'profile_state.dart';
 
@@ -31,7 +33,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   final UserModel visitedUser;
   StreamSubscription<Loop>? loopListener;
   StreamSubscription<Badge>? badgeListener;
-  StreamSubscription<Badge>? userCreatedBadgeListener;
+  StreamSubscription<Booking>? bookingListener;
 
   Future<void> refetchVisitedUser({UserModel? newUserData}) async {
     try {
@@ -148,6 +150,64 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
+  Future<void> initBookings({bool clearBookings = true}) async {
+    final trace = logger.createTrace('initBookings');
+    await trace.start();
+    try {
+      logger.debug(
+        'initBookings ${state.visitedUser}',
+      );
+      await bookingListener?.cancel();
+      if (clearBookings) {
+        emit(
+          state.copyWith(
+            bookingsStatus: BookingsStatus.initial,
+            userBookings: [],
+            hasReachedMaxBookings: false,
+          ),
+        );
+      }
+
+      final bookingsByRequesteeAvailable =
+          (await databaseRepository.getBookingsByRequestee(
+        visitedUser.id,
+        limit: 1,
+      ))
+              .isNotEmpty;
+
+      final bookingsByRequesterAvailable =
+          (await databaseRepository.getBookingsByRequester(
+        visitedUser.id,
+        limit: 1,
+      ))
+              .isNotEmpty;
+
+      emit(state.copyWith(bookingsStatus: BookingsStatus.success));
+
+      bookingListener = Rx.merge([
+        databaseRepository.getBookingsByRequesteeObserver(visitedUser.id),
+        databaseRepository.getBookingsByRequesterObserver(visitedUser.id),
+      ]).listen((Booking event) {
+        logger.debug('booking { ${event.id} : ${event.name} }');
+        try {
+          emit(
+            state.copyWith(
+              bookingsStatus: BookingsStatus.success,
+              userBookings: List.of(state.userBookings)..add(event),
+              hasReachedMaxBookings: state.userBookings.length < 10,
+            ),
+          );
+        } catch (e, s) {
+          logger.error('initBookings error', error: e, stackTrace: s);
+        }
+      });
+    } catch (e, s) {
+      logger.error('initBookings error', error: e, stackTrace: s);
+    } finally {
+      await trace.stop();
+    }
+  }
+
   Future<void> initPlace() async {
     final trace = logger.createTrace('initPlace');
     await trace.start();
@@ -236,6 +296,55 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
+  Future<void> fetchMoreBookings() async {
+    if (state.hasReachedMaxBookings) return;
+
+    final trace = logger.createTrace('fetchMoreBookings');
+    await trace.start();
+    try {
+      if (state.bookingsStatus == BookingsStatus.initial) {
+        await initBookings();
+      }
+
+      final bookingsRequestee = await databaseRepository.getBookingsByRequestee(
+        visitedUser.id,
+        limit: 10,
+        lastBookingRequestId: state.userBookings
+            .where((e) => e.requesteeId == state.visitedUser.id)
+            .last
+            .id,
+      );
+      final bookingsRequester = await databaseRepository.getBookingsByRequester(
+        visitedUser.id,
+        limit: 10,
+        lastBookingRequestId: state.userBookings
+            .where((e) => e.requesterId == state.visitedUser.id)
+            .last
+            .id,
+      );
+      (bookingsRequestee.isEmpty && bookingsRequester.isEmpty)
+          ? emit(state.copyWith(hasReachedMaxBookings: true))
+          : emit(
+              state.copyWith(
+                bookingsStatus: BookingsStatus.success,
+                userBookings: List.of(state.userBookings)
+                  ..addAll(bookingsRequestee)
+                  ..addAll(bookingsRequester),
+                hasReachedMaxBookings: false,
+              ),
+            );
+    } catch (e, s) {
+      logger.error(
+        'fetchMoreBookings error',
+        error: e,
+        stackTrace: s,
+      );
+      // emit(state.copyWith(bookingsStatus: BookingsStatus.failure));
+    } finally {
+      await trace.stop();
+    }
+  }
+
   void toggleFollow(String currentUserId, String visitedUserId) {
     if (state.isFollowing) {
       unfollow(currentUserId, visitedUserId);
@@ -319,7 +428,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> close() async {
     await loopListener?.cancel();
     await badgeListener?.cancel();
-    await userCreatedBadgeListener?.cancel();
+    await bookingListener?.cancel();
     await super.close();
   }
 }

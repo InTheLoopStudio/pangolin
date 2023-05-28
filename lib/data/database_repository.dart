@@ -204,10 +204,18 @@ abstract class DatabaseRepository {
     int limit = 20,
     String? lastBookingRequestId,
   });
+  Stream<Booking> getBookingsByRequesterObserver(
+    String userId, {
+    int limit = 20,
+  });
   Future<List<Booking>> getBookingsByRequestee(
     String userId, {
     int limit = 20,
     String? lastBookingRequestId,
+  });
+  Stream<Booking> getBookingsByRequesteeObserver(
+    String userId, {
+    int limit = 20,
   });
   Future<void> updateBooking(Booking booking);
 

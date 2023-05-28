@@ -16,6 +16,7 @@ import 'package:intheloopapp/ui/views/error/error_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/all_loops_list.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/badges_list.dart';
+import 'package:intheloopapp/ui/widgets/profile_view/bookings_list.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/follow_button.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/follower_count.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/following_count.dart';
@@ -95,9 +96,7 @@ class _ProfileViewState extends State<ProfileView> {
 
   Widget _badgesTab() => BadgesList(scrollController: _scrollController);
   Widget _loopsTab() => AllLoopsList(scrollController: _scrollController);
-  Widget _bookingsTab() => const Center(
-        child: Text('Coming Soon'),
-      );
+  Widget _bookingsTab() => BookingsList(scrollController: _scrollController);
 
   List<Widget> _profileTabs() {
     final tabs = [
@@ -124,6 +123,7 @@ class _ProfileViewState extends State<ProfileView> {
         )
           ..initLoops()
           ..initBadges()
+          ..initBookings()
           // ..initUserCreatedBadges()
           ..loadIsFollowing(currentUser.id, visitedUser.id)
           ..loadIsVerified(visitedUser.id)
@@ -160,15 +160,13 @@ class _ProfileViewState extends State<ProfileView> {
                     // ignore: unawaited_futures
                     ..initBadges()
                     // ignore: unawaited_futures
-                    // ..initUserCreatedBadges()
+                    ..initBookings()
                     // ignore: unawaited_futures
                     ..refetchVisitedUser()
                     // ignore: unawaited_futures
                     ..loadIsFollowing(currentUser.id, visitedUser.id)
                     // ignore: unawaited_futures
                     ..loadIsVerified(visitedUser.id);
-                  // ignore: unawaited_futures
-                  // ..initPlace();
                 },
                 child: DefaultTabController(
                   length: tabs.length,

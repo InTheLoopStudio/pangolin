@@ -1515,6 +1515,42 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  Stream<Booking> getBookingsByRequesterObserver(
+    String userId, {
+    int limit = 20,
+  }) async* {
+    final bookingsSnapshotObserver = _badgesSentRef
+        .doc(userId)
+        .collection('bookings')
+        .where('requesterId', isEqualTo: userId)
+        .orderBy('timestamp', descending: true)
+        .limit(limit)
+        .snapshots();
+
+    final bookingsObserver = bookingsSnapshotObserver.map((event) {
+      return event.docChanges
+          .where(
+        (DocumentChange<Map<String, dynamic>> element) =>
+            element.type == DocumentChangeType.added,
+      )
+          .map((DocumentChange<Map<String, dynamic>> element) async {
+        final bookingId = element.doc.id;
+        // print('BOOKING ID { $bookingId }');
+        final bookingSnapshot = await _bookingsRef.doc(bookingId).get();
+        return Booking.fromDoc(bookingSnapshot);
+      });
+    }).flatMap(Stream.fromIterable);
+
+    await for (final booking in bookingsObserver) {
+      try {
+        yield await booking;
+      } catch (error, stack) {
+        yield* Stream.error(error, stack);
+      }
+    }
+  }
+
+  @override
   Future<List<Booking>> getBookingsByRequestee(
     String userId, {
     int limit = 20,
@@ -1539,6 +1575,42 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         stackTrace: s,
       );
       return [];
+    }
+  }
+
+  @override
+  Stream<Booking> getBookingsByRequesteeObserver(
+    String userId, {
+    int limit = 20,
+  }) async* {
+    final bookingsSnapshotObserver = _badgesSentRef
+        .doc(userId)
+        .collection('bookings')
+        .where('requesteeId', isEqualTo: userId)
+        .orderBy('timestamp', descending: true)
+        .limit(limit)
+        .snapshots();
+
+    final bookingsObserver = bookingsSnapshotObserver.map((event) {
+      return event.docChanges
+          .where(
+        (DocumentChange<Map<String, dynamic>> element) =>
+            element.type == DocumentChangeType.added,
+      )
+          .map((DocumentChange<Map<String, dynamic>> element) async {
+        final bookingId = element.doc.id;
+        // print('BOOKING ID { $bookingId }');
+        final bookingSnapshot = await _bookingsRef.doc(bookingId).get();
+        return Booking.fromDoc(bookingSnapshot);
+      });
+    }).flatMap(Stream.fromIterable);
+
+    await for (final booking in bookingsObserver) {
+      try {
+        yield await booking;
+      } catch (error, stack) {
+        yield* Stream.error(error, stack);
+      }
     }
   }
 
