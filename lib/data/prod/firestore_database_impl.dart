@@ -1519,9 +1519,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String userId, {
     int limit = 20,
   }) async* {
-    final bookingsSnapshotObserver = _badgesSentRef
-        .doc(userId)
-        .collection('bookings')
+    final bookingsSnapshotObserver = _bookingsRef
         .where('requesterId', isEqualTo: userId)
         .orderBy('timestamp', descending: true)
         .limit(limit)
@@ -1583,9 +1581,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
     String userId, {
     int limit = 20,
   }) async* {
-    final bookingsSnapshotObserver = _badgesSentRef
-        .doc(userId)
-        .collection('bookings')
+    final bookingsSnapshotObserver = _bookingsRef
         .where('requesteeId', isEqualTo: userId)
         .orderBy('timestamp', descending: true)
         .limit(limit)
@@ -1693,7 +1689,7 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
       return Some(service);
     } catch (e, s) {
       logger.error(
-        'getServiceById',
+        'getServiceById - $userId - $serviceId',
         error: e,
         stackTrace: s,
       );

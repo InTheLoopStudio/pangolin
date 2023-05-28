@@ -168,25 +168,15 @@ class ProfileCubit extends Cubit<ProfileState> {
         );
       }
 
-      final bookingsByRequesteeAvailable =
-          (await databaseRepository.getBookingsByRequestee(
-        visitedUser.id,
-        limit: 1,
-      ))
-              .isNotEmpty;
-
-      final bookingsByRequesterAvailable =
-          (await databaseRepository.getBookingsByRequester(
-        visitedUser.id,
-        limit: 1,
-      ))
-              .isNotEmpty;
-
       emit(state.copyWith(bookingsStatus: BookingsStatus.success));
 
       bookingListener = Rx.merge([
-        databaseRepository.getBookingsByRequesteeObserver(visitedUser.id),
-        databaseRepository.getBookingsByRequesterObserver(visitedUser.id),
+        databaseRepository.getBookingsByRequesteeObserver(
+          visitedUser.id,
+        ),
+        databaseRepository.getBookingsByRequesterObserver(
+          visitedUser.id,
+        ),
       ]).listen((Booking event) {
         logger.debug('booking { ${event.id} : ${event.name} }');
         try {
@@ -194,7 +184,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             state.copyWith(
               bookingsStatus: BookingsStatus.success,
               userBookings: List.of(state.userBookings)..add(event),
-              hasReachedMaxBookings: state.userBookings.length < 10,
+              hasReachedMaxBookings: state.userBookings.length < 20,
             ),
           );
         } catch (e, s) {
