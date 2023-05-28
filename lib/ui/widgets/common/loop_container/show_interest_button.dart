@@ -93,25 +93,42 @@ class _ShowInterestButtonState extends State<ShowInterestButton> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            FilledButton(
-              onPressed: () {
-                _isInterested
-                    ? database.cancelInterest(
-                        userId: currentUser.id,
-                        loopId: widget.loop.id,
-                      )
-                    : database.showInterest(
-                        userId: currentUser.id,
-                        loopId: widget.loop.id,
-                      );
-                setState(() {
-                  _isInterested = !_isInterested;
-                });
-              },
-              child: _isInterested
-                  ? const Text('Interested')
-                  : const Text('Sign Up'),
-            ),
+            if (_isInterested)
+              OutlinedButton.icon(
+                onPressed: null,
+                icon: const Icon(
+                  Icons.check_box_outlined,
+                  color: Colors.grey,
+                  size: 16,
+                ),
+                label: const Text(
+                  'interested',
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+              )
+            else
+              FilledButton.icon(
+                onPressed: () {
+                  database.showInterest(
+                    userId: currentUser.id,
+                    loopId: widget.loop.id,
+                  );
+                  setState(() {
+                    _isInterested = true;
+                  });
+                },
+                icon: const Icon(
+                  Icons.check_box_outline_blank,
+                  color: Colors.white,
+                  size: 16,
+                ),
+                label: const Text(
+                  'Sign Up',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
           ],
         );
       },
