@@ -1,8 +1,10 @@
 import 'package:flutter/widgets.dart';
 
-/// Conditionally wrap a subtree with a parent widget without breaking the code tree.
+/// Conditionally wrap a subtree with a parent widget without 
+/// breaking the code tree.
 ///
-/// [condition]: the condition depending on which the subtree [child] is wrapped with the parent.
+/// [condition]: the condition depending on which the subtree [child] 
+/// is wrapped with the parent.
 /// [child]: The subtree that should always be build.
 /// [conditionalBuilder]: builds the parent with the subtree [child].
 ///

@@ -115,7 +115,7 @@ class BookingsListState extends State<BookingsList> {
                                   database.getUserById(booking.requesteeId),
                                   () async {
                                     return switch (booking.serviceId) {
-                                      None() => None(),
+                                      None() => const None<Service>(),
                                       Some(:final value) =>
                                         database.getServiceById(
                                           booking.requesteeId,
@@ -175,6 +175,7 @@ class BookingsListState extends State<BookingsList> {
                                           ),
                                 subtitle: Linkify(
                                   text:
+                                    // ignore: lines_longer_than_80_chars
                                       '$requesterUsername booked $requesteeUsername for service "$serviceTitle"',
                                 ),
                                 trailing: Text(
