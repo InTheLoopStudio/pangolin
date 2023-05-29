@@ -751,13 +751,31 @@ export const addFollowersEntryOnFollow = functions.firestore
       .doc(context.params.followerId)
       .set({});
   });
+export const decrementFollowersCountOnFollow = functions.firestore
+  .document("following/{followerId}/Following/{followeeId}")
+  .onDelete(async (snapshot, context) => {
+    await usersRef
+      .doc(context.params.followeeId)
+      .update({
+        followerCount: FieldValue.increment(-1),
+      });
+  });
+export const decrementFollowingCountOnFollow = functions.firestore
+  .document("followers/{followeeId}/Followers/{followerId}")
+  .onDelete(async (snapshot, context) => {
+    await usersRef
+      .doc(context.params.followerId)
+      .update({
+        followingCount: FieldValue.increment(-1),
+      });
+  });
 export const incrementFollowersCountOnFollow = functions.firestore
   .document("following/{followerId}/Following/{followeeId}")
   .onCreate(async (snapshot, context) => {
     await usersRef
       .doc(context.params.followeeId)
       .update({
-        followersCount: FieldValue.increment(1),
+        followerCount: FieldValue.increment(1),
       });
   });
 export const incrementFollowingCountOnFollow = functions.firestore
