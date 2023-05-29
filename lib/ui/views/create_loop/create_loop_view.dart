@@ -12,6 +12,7 @@ import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 import 'package:intheloopapp/ui/widgets/create_loop_view/attachments.dart';
 import 'package:intheloopapp/ui/widgets/create_loop_view/loop_description_text_field.dart';
 import 'package:intheloopapp/ui/widgets/create_loop_view/loop_title_text_field.dart';
+import 'package:intheloopapp/ui/widgets/create_loop_view/opportunity_toggle.dart';
 import 'package:intheloopapp/ui/widgets/create_loop_view/submit_loop_button.dart';
 
 class CreateLoopView extends StatelessWidget {
@@ -81,6 +82,15 @@ class CreateLoopView extends StatelessWidget {
                     LoopDescriptionTextField(),
                     SizedBox(
                       height: 24,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        OpportunityToggle(),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 8,
                     ),
                     Attachments(),
                   ],

@@ -43,10 +43,6 @@ class Attachments extends StatelessWidget {
         return const Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            OpportunityToggle(),
-            SizedBox(
-              width: 12,
-            ),
             UploadAudioButton(),
             SizedBox(
               width: 12,
