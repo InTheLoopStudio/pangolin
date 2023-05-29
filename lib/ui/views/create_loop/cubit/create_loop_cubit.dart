@@ -94,7 +94,10 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
   /// opens a user's gallery to upload audio
   Future<void> handleAudioFromFiles() async {
     try {
-      final audioFileResult = await FilePicker.platform.pickFiles();
+      final audioFileResult = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['mp3'],
+      );
       if (audioFileResult != null) {
         final pickedAudioName =
             audioFileResult.files.single.path!.split('/').last;
