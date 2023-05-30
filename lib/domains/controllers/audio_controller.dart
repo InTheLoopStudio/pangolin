@@ -54,11 +54,7 @@ class AudioController {
   }) async {
     try {
       final File file = await myCacheManager.getSingleFile(url);
-
-      final duration = await AudioPlayer().setUrl(url);
-
-      // IDK why this doesn't work but it doesn't
-      // final duration = await AudioPlayer().setFilePath(file.path);
+      final duration = await AudioPlayer().setFilePath(file.path);
 
       return AudioController._(
         audioRepo: audioRepo,

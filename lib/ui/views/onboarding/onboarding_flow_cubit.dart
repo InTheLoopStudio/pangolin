@@ -59,6 +59,13 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
     );
   }
 
+  // ignore: avoid_positional_boolean_parameters
+  void eulaChange(bool input) => emit(
+        state.copyWith(
+          eula: input,
+        ),
+      );
+
   void bioChange(String input) => emit(
         state.copyWith(
           bio: BioInput.dirty(value: input),
@@ -92,6 +99,10 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
 
     if (state.isNotValid) {
       return;
+    }
+
+    if (!state.eula) {
+      throw Exception('You must agree to the EULA');
     }
 
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));

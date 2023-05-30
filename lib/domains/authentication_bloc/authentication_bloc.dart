@@ -23,7 +23,8 @@ class AuthenticationBloc
         final isSignedIn = await _authRepository.isSignedIn();
         if (isSignedIn) {
           final user = await _authRepository.getAuthUser();
-          emit(Authenticated(user!));
+          logger.setUserIdentifier(user!.uid);
+          emit(Authenticated(user));
         } else {
           emit(Unauthenticated());
         }
