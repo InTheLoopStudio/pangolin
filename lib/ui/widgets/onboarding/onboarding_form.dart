@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/views/onboarding/onboarding_flow_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/artist_name_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/bio_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/location_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/username_text_field.dart';
-import 'package:intheloopapp/ui/widgets/onboarding/stage1/profile_picture_uploader.dart';
+import 'package:intheloopapp/ui/widgets/onboarding/profile_picture_uploader.dart';
 
 
 class OnboardingForm extends StatelessWidget {
@@ -27,26 +28,26 @@ class OnboardingForm extends StatelessWidget {
                     onChanged: (input) => context
                         .read<OnboardingFlowCubit>()
                         .usernameChange(input ?? ''),
-                    initialValue: state.username,
+                    initialValue: state.username.value,
                   ),
                   const SizedBox(height: 20),
                   ArtistNameTextField(
                     onChanged: (input) => context
                         .read<OnboardingFlowCubit>()
                         .aristNameChange(input ?? ''),
-                    initialValue: state.artistName,
+                    initialValue: state.artistName.value,
                   ),
                   const SizedBox(height: 20),
                   LocationTextField(
-                    initialPlaceId: state.placeId,
-                    initialPlace: state.place,
+                    initialPlaceId: state.placeId.asNullable(),
+                    initialPlace: state.place.asNullable(),
                     onChanged: (place, placeId) => context
                         .read<OnboardingFlowCubit>()
                         .locationChange(place, placeId),
                   ),
                   const SizedBox(height: 20),
                   BioTextField(
-                    initialValue: state.bio,
+                    initialValue: state.bio.value,
                     onChanged: (input) => context
                         .read<OnboardingFlowCubit>()
                         .bioChange(input ?? ''),

@@ -4,23 +4,26 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/views/onboarding/onboarding_flow_cubit.dart';
 
 class ProfilePictureUploader extends StatelessWidget {
   const ProfilePictureUploader({super.key});
 
   ImageProvider displayProfileImage(
-    File? newProfileImage,
-    String currentProfileImage,
+    Option<File> newProfileImage,
+    Option<String> currentProfileImage,
   ) {
-    if (newProfileImage != null) {
-      return FileImage(newProfileImage);
-    }
-    return currentProfileImage.isEmpty
-        ? const AssetImage(
-            'assets/default_avatar.png',
-          ) as ImageProvider
-        : CachedNetworkImageProvider(currentProfileImage);
+
+    return switch (newProfileImage) {
+      Some(:final value) => FileImage(value),
+      None() => switch (currentProfileImage) {
+          Some(:final value) => CachedNetworkImageProvider(value),
+          None() => const AssetImage(
+              'assets/default_avatar.png',
+            ) as ImageProvider,
+        },
+    };
   }
 
   @override
@@ -43,7 +46,7 @@ class ProfilePictureUploader extends StatelessWidget {
                         radius: 45,
                         backgroundImage: displayProfileImage(
                           state.pickedPhoto,
-                          '',
+                          const None(),
                         ),
                       ),
                       const CircleAvatar(

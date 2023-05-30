@@ -49,6 +49,7 @@ const feedsRef = db.collection("feeds");
 const tokensRef = db.collection("device_tokens")
 const servicesRef = db.collection("services");
 const mailRef = db.collection("mail");
+const queuedWritesRef = db.collection("queued_writes");
 
 // const loopLikesSubcollection = "loopLikes";
 // const loopCommentsSubcollection = "loopComments";
@@ -1320,6 +1321,7 @@ export const sendBookingNotificationsOnBookingConfirmed = functions
     const bookingBefore = data.before.data() as Booking;
 
     if (booking.status !== "confirmed" || bookingBefore.status === "confirmed") {
+      functions.logger.info(`booking ${booking.id} is not confirmed or was already confirmed`);
       return;
     }
 
@@ -1339,8 +1341,85 @@ export const sendBookingNotificationsOnBookingConfirmed = functions
       throw new Error(`requester ${requester?.id} does not have an email`);
     }
 
-    // Create schedule write for
+
+    const ONE_HOUR_MS = 60 * 60 * 1000;
+    const ONE_DAY_MS = 24 * ONE_HOUR_MS;
+    const ONE_WEEK_MS = 7 * ONE_DAY_MS;
+    const reminders = [
+      {
+        userId: booking.requesteeId,
+        email: requesteeEmail,
+        offset: ONE_HOUR_MS,
+        type: "hourBookingReminderRequestee",
+      },
+      {
+        userId: booking.requesteeId,
+        email: requesteeEmail,
+        offset: ONE_DAY_MS,
+        type: "dayBookingReminderRequestee",
+      },
+      {
+        userId: booking.requesteeId,
+        email: requesteeEmail,
+        offset: ONE_WEEK_MS,
+        activityType: "",
+        type: "weekBookingReminderRequestee",
+      },
+      {
+        userId: booking.requesterId,
+        email: requesterEmail,
+        offset: ONE_HOUR_MS,
+        type: "hourBookingReminderRequester",
+      },
+      {
+        userId: booking.requesterId,
+        email: requesterEmail,
+        offset: ONE_DAY_MS,
+        type: "dayBookingReminderRequester",
+      },
+      {
+        userId: booking.requesterId,
+        email: requesterEmail,
+        offset: ONE_WEEK_MS,
+        type: "weekBookingReminderRequester",
+      },
+    ]
+
+    const startTime = booking.startTime.toDate().getTime();
+
+    // Create schedule write for push notification
     // 1 week, 1 day, and 1 hour before booking start time
+    for (const reminder of reminders) {
+      await Promise.all([
+        queuedWritesRef.add({
+          state: "PENDING",
+          data: {
+            toUserId: reminder.userId,
+            fromUserId: "8yYVxpQ7cURSzNfBsaBGF7A7kkv2", // Johannes
+            type: reminder.type,
+            timestamp: Timestamp.now(),
+            markedRead: false,
+          },
+          collection: "activities",
+          deliverTime: Timestamp.fromMillis(
+            startTime - reminder.offset,
+          ),
+        }),
+        queuedWritesRef.add({
+          state: "PENDING",
+          data: {
+            to: [ reminder.email ],
+            template: {
+              name: reminder.type,
+            },
+          },
+          collection: "mail",
+          deliverTime: Timestamp.fromMillis(
+            startTime - reminder.offset,
+          ),
+        }),
+      ]);
+    }
 
   });
 
