@@ -1350,38 +1350,37 @@ export const sendBookingNotificationsOnBookingConfirmed = functions
         userId: booking.requesteeId,
         email: requesteeEmail,
         offset: ONE_HOUR_MS,
-        type: "hourBookingReminderRequestee",
+        type: "bookingReminderRequestee",
       },
       {
         userId: booking.requesteeId,
         email: requesteeEmail,
         offset: ONE_DAY_MS,
-        type: "dayBookingReminderRequestee",
+        type: "bookingReminderRequestee",
       },
       {
         userId: booking.requesteeId,
         email: requesteeEmail,
         offset: ONE_WEEK_MS,
-        activityType: "",
-        type: "weekBookingReminderRequestee",
+        type: "bookingReminderRequestee",
       },
       {
         userId: booking.requesterId,
         email: requesterEmail,
         offset: ONE_HOUR_MS,
-        type: "hourBookingReminderRequester",
+        type: "bookingReminderRequester",
       },
       {
         userId: booking.requesterId,
         email: requesterEmail,
         offset: ONE_DAY_MS,
-        type: "dayBookingReminderRequester",
+        type: "bookingReminderRequester",
       },
       {
         userId: booking.requesterId,
         email: requesterEmail,
         offset: ONE_WEEK_MS,
-        type: "weekBookingReminderRequester",
+        type: "bookingReminderRequester",
       },
     ]
 
@@ -1396,7 +1395,8 @@ export const sendBookingNotificationsOnBookingConfirmed = functions
           data: {
             toUserId: reminder.userId,
             fromUserId: "8yYVxpQ7cURSzNfBsaBGF7A7kkv2", // Johannes
-            type: reminder.type,
+            type: "bookingReminder",
+            bookingId: booking.id,
             timestamp: Timestamp.now(),
             markedRead: false,
           },
@@ -1410,7 +1410,8 @@ export const sendBookingNotificationsOnBookingConfirmed = functions
           data: {
             to: [ reminder.email ],
             template: {
-              name: reminder.type,
+              // e.g. bookingReminderRequestee-3600000
+              name: `${reminder.type}-${reminder.offset}`,
             },
           },
           collection: "mail",
@@ -1420,7 +1421,6 @@ export const sendBookingNotificationsOnBookingConfirmed = functions
         }),
       ]);
     }
-
   });
 
 export const addActivityOnOpportunityInterest = functions
