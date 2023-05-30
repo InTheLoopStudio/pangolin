@@ -1008,22 +1008,24 @@ export const addActivityOnBookingUpdate = functions.firestore
 
     const status = booking.status as BookingStatus;
 
-    await Promise.all([
-      _addActivity({
-        fromUserId: booking.requesterId,
+    const uid = context.auth?.uid;
+
+    if (uid === undefined || uid === null) {
+      throw new HttpsError("unauthenticated", "user is not authenticated");
+    }
+
+    for (const userId of [ booking.requesterId, booking.requesteeId ]) {
+      if (userId === uid) {
+        continue;
+      }
+      await _addActivity({
+        fromUserId: uid,
         type: "bookingUpdate",
-        toUserId: booking.requesteeId,
+        toUserId: userId,
         bookingId: context.params.bookingId,
         status: status,
-      }),
-      _addActivity({
-        fromUserId: booking.requesteeId,
-        type: "bookingUpdate",
-        toUserId: booking.requesterId,
-        bookingId: context.params.bookingId,
-        status: status,
-      }),
-    ]);
+      });
+    }
   });
 
 export const incrementLoopCommentCountOnComment = functions.firestore
@@ -1309,6 +1311,37 @@ export const sendBookingRequestSentEmailOnBooking = functions
     }
 
     await _sendBookingRequestSentEmail(email);
+  });
+export const sendBookingNotificationsOnBookingConfirmed = functions
+  .firestore
+  .document("bookings/{bookingId}")
+  .onUpdate(async (data) => {
+    const booking = data.after.data() as Booking;
+    const bookingBefore = data.before.data() as Booking;
+
+    if (booking.status !== "confirmed" || bookingBefore.status === "confirmed") {
+      return;
+    }
+
+    const requesteeSnapshot = await usersRef.doc(booking.requesteeId).get();
+    const requestee = requesteeSnapshot.data();
+    const requesteeEmail = requestee?.email;
+
+    if (requesteeEmail === undefined || requesteeEmail === null || requesteeEmail === "") {
+      throw new Error(`requestee ${requestee?.id} does not have an email`);
+    }
+
+    const requesterSnapshot = await usersRef.doc(booking.requesterId).get();
+    const requester = requesterSnapshot.data();
+    const requesterEmail = requester?.email;
+
+    if (requesterEmail === undefined || requesterEmail === null || requesterEmail === "") {
+      throw new Error(`requester ${requester?.id} does not have an email`);
+    }
+
+    // Create schedule write for
+    // 1 week, 1 day, and 1 hour before booking start time
+
   });
 
 export const addActivityOnOpportunityInterest = functions

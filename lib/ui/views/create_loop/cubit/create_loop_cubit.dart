@@ -67,7 +67,6 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
   }
 
   Future<String?> getAudioPath(File pickedAudio) async {
-
     final audioDuration = await AudioController.getDuration(pickedAudio);
 
     final tooLarge = audioDuration.compareTo(_maxDuration) >= 0;
@@ -83,7 +82,6 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
   }
 
   Future<String?> getImagePath(File pickedImage) async {
-
     final imagePath = await storageRepository.uploadImageAttachment(
       pickedImage,
     );
@@ -99,9 +97,9 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
         allowedExtensions: ['mp3'],
       );
       if (audioFileResult != null) {
-        final pickedAudioName =
-            audioFileResult.files.single.path!.split('/').last;
-        final pickedAudio = File(audioFileResult.files.single.path!);
+        final path = audioFileResult.files.single.path!;
+        final pickedAudioName = path.split('/').last;
+        final pickedAudio = File(path);
 
         emit(
           state.copyWith(
