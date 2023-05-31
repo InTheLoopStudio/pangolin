@@ -14,9 +14,24 @@ import { getRemoteConfig } from "firebase-admin/remote-config";
 import { StreamChat } from "stream-chat";
 import { defineSecret } from "firebase-functions/params";
 import { HttpsError } from "firebase-functions/v1/auth";
+import { onSchedule } from "firebase-functions/v2/scheduler";
 
 import Stripe from "stripe";
-import { Booking, Loop, Comment, FollowActivity, LikeActivity, CommentActivity, BookingRequestActivity, BookingUpdateActivity, CommentMentionActivity, LoopMentionActivity, BookingStatus, CommentLikeActivity, OpportunityInterest, } from "./models";
+import { 
+  Booking, 
+  Loop, 
+  Comment, 
+  FollowActivity, 
+  LikeActivity, 
+  CommentActivity, 
+  BookingRequestActivity, 
+  BookingUpdateActivity, 
+  CommentMentionActivity, 
+  LoopMentionActivity, 
+  BookingStatus, 
+  CommentLikeActivity, 
+  OpportunityInterest, 
+} from "./models";
 
 import { v4 as uuidv4 } from "uuid";
 
@@ -46,6 +61,7 @@ const loopCommentsGroupRef = db.collectionGroup("loopComments");
 const feedsRef = db.collection("feeds");
 // const badgesRef = db.collection("badges");
 // const badgesSentRef = db.collection("badgesSent");
+const bookingsRef = db.collection("bookings");
 const tokensRef = db.collection("device_tokens")
 const servicesRef = db.collection("services");
 const mailRef = db.collection("mail");
@@ -1463,6 +1479,23 @@ export const sendBookingNotificationsOnBookingConfirmed = functions
       ]);
     }
   });
+export const cancelBookingAfter24Hours = onSchedule("0 * * * *", async (event) => {
+  const pendingBookings = await bookingsRef.where("status", "==", "pending").get();
+
+  for (const booking of pendingBookings.docs) {
+    const bookingData = booking.data() as Booking;
+    const timestamp = bookingData.timestamp.toMillis();
+    const now = Date.now();
+
+    const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+    if (now > (timestamp + ONE_DAY_MS)) {
+      await booking.ref.update({
+        status: "canceled",
+      });
+    }
+  }
+});
+
 
 export const addActivityOnOpportunityInterest = functions
   .firestore
