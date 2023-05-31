@@ -180,6 +180,10 @@ class ProfileCubit extends Cubit<ProfileState> {
       ]).listen((Booking event) {
         logger.debug('booking { ${event.id} : ${event.name} }');
         try {
+          if (event.status != BookingStatus.confirmed) {
+            return;
+          }
+
           emit(
             state.copyWith(
               bookingsStatus: BookingsStatus.success,
