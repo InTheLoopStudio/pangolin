@@ -826,6 +826,15 @@ export const addFollowersEntryOnFollow = functions.firestore
       .doc(context.params.followerId)
       .set({});
   });
+export const removeFollowersEntryOnUnfollow = functions.firestore
+  .document("following/{followerId}/Following/{followeeId}")
+  .onDelete(async (snapshot, context) => {
+    await followersRef
+      .doc(context.params.followeeId)
+      .collection("Followers")
+      .doc(context.params.followerId)
+      .delete();
+  });
 export const decrementFollowersCountOnFollow = functions.firestore
   .document("following/{followerId}/Following/{followeeId}")
   .onDelete(async (snapshot, context) => {
