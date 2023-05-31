@@ -1479,7 +1479,7 @@ export const sendBookingNotificationsOnBookingConfirmed = functions
       ]);
     }
   });
-export const cancelBookingAfter24Hours = onSchedule("0 * * * *", async (event) => {
+export const cancelBookingIfExpired = onSchedule("0 * * * *", async (event) => {
   const pendingBookings = await bookingsRef.where("status", "==", "pending").get();
 
   for (const booking of pendingBookings.docs) {
