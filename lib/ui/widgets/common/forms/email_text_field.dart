@@ -18,6 +18,7 @@ class EmailTextField extends StatelessWidget {
         prefixIcon: const Icon(Icons.lock),
         labelText: labelText,
       ),
+      keyboardType: TextInputType.emailAddress,
       validator: (value) => EmailValidator.validate(value ?? '')
           ? null
           : 'Please enter a valid email',

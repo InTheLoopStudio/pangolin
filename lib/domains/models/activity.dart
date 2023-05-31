@@ -42,6 +42,8 @@ sealed class Activity extends Equatable {
           return CommentLike.fromDoc(doc);
         case ActivityType.opportunityInterest:
           return OpportunityInterest.fromDoc(doc);
+        case ActivityType.bookingReminder:
+          return BookingReminder.fromDoc(doc);
         case null:
           throw Exception('Activity.fromDoc: unknown type: $rawType');
       }
@@ -530,6 +532,58 @@ final class OpportunityInterest extends Activity {
   }
 }
 
+final class BookingReminder extends Activity {
+  const BookingReminder({
+    required super.id,
+    required super.fromUserId,
+    required super.toUserId,
+    required super.timestamp,
+    required super.type,
+    required super.markedRead,
+    required this.bookingId,
+  });
+
+  factory BookingReminder.fromDoc(
+    DocumentSnapshot<Map<String, dynamic>> doc,
+  ) {
+    try {
+      final tmpTimestamp =
+          doc.getOrElse('timestamp', Timestamp.now()) as Timestamp;
+      return BookingReminder(
+        id: doc.id,
+        fromUserId: doc.getOrElse('fromUserId', '') as String,
+        toUserId: doc.getOrElse('toUserId', '') as String,
+        timestamp: tmpTimestamp.toDate(),
+        type: ActivityType.bookingReminder,
+        markedRead: doc.getOrElse('markedRead', false) as bool,
+        bookingId: doc.getOrElse('bookingId', null) as String?,
+      );
+    } catch (e, s) {
+      logger.error(
+        'BookingReminder.fromDoc',
+        error: e,
+        stackTrace: s,
+      );
+      rethrow;
+    }
+  }
+
+  final String? bookingId;
+
+  @override
+  BookingReminder copyAsRead() {
+    return BookingReminder(
+      id: id,
+      fromUserId: fromUserId,
+      toUserId: toUserId,
+      timestamp: timestamp,
+      type: type,
+      markedRead: true,
+      bookingId: bookingId,
+    );
+  }
+}
+
 enum ActivityType {
   follow,
   like,
@@ -540,4 +594,5 @@ enum ActivityType {
   commentMention,
   commentLike,
   opportunityInterest,
+  bookingReminder,
 }

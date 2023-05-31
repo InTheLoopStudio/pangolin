@@ -277,6 +277,15 @@ class ActivityTile extends StatelessWidget {
                                     loopId,
                                     fromUserId,
                                   ),
+                                BookingReminder(
+                                  :final bookingId,
+                                  :final fromUserId,
+                                ) =>
+                                  onBookingRequest(
+                                    context,
+                                    bookingId,
+                                    fromUserId,
+                                  ),
                               };
                             },
                             child: ListTile(
@@ -326,6 +335,8 @@ class ActivityTile extends StatelessWidget {
                                     case ActivityType.opportunityInterest:
                                       // ignore: lines_longer_than_80_chars
                                       return 'is interested in your opportunity 📩';
+                                    case ActivityType.bookingReminder:
+                                      return 'sent you a booking reminder 📩';
                                   }
                                 }(),
                                 style: TextStyle(

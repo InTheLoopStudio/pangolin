@@ -49,6 +49,7 @@ const feedsRef = db.collection("feeds");
 const tokensRef = db.collection("device_tokens")
 const servicesRef = db.collection("services");
 const mailRef = db.collection("mail");
+const queuedWritesRef = db.collection("queued_writes");
 
 // const loopLikesSubcollection = "loopLikes";
 // const loopCommentsSubcollection = "loopComments";
@@ -1008,22 +1009,24 @@ export const addActivityOnBookingUpdate = functions.firestore
 
     const status = booking.status as BookingStatus;
 
-    await Promise.all([
-      _addActivity({
-        fromUserId: booking.requesterId,
+    const uid = context.auth?.uid;
+
+    if (uid === undefined || uid === null) {
+      throw new HttpsError("unauthenticated", "user is not authenticated");
+    }
+
+    for (const userId of [ booking.requesterId, booking.requesteeId ]) {
+      if (userId === uid) {
+        continue;
+      }
+      await _addActivity({
+        fromUserId: uid,
         type: "bookingUpdate",
-        toUserId: booking.requesteeId,
+        toUserId: userId,
         bookingId: context.params.bookingId,
         status: status,
-      }),
-      _addActivity({
-        fromUserId: booking.requesteeId,
-        type: "bookingUpdate",
-        toUserId: booking.requesterId,
-        bookingId: context.params.bookingId,
-        status: status,
-      }),
-    ]);
+      });
+    }
   });
 
 export const incrementLoopCommentCountOnComment = functions.firestore
@@ -1309,6 +1312,115 @@ export const sendBookingRequestSentEmailOnBooking = functions
     }
 
     await _sendBookingRequestSentEmail(email);
+  });
+export const sendBookingNotificationsOnBookingConfirmed = functions
+  .firestore
+  .document("bookings/{bookingId}")
+  .onUpdate(async (data) => {
+    const booking = data.after.data() as Booking;
+    const bookingBefore = data.before.data() as Booking;
+
+    if (booking.status !== "confirmed" || bookingBefore.status === "confirmed") {
+      functions.logger.info(`booking ${booking.id} is not confirmed or was already confirmed`);
+      return;
+    }
+
+    const requesteeSnapshot = await usersRef.doc(booking.requesteeId).get();
+    const requestee = requesteeSnapshot.data();
+    const requesteeEmail = requestee?.email;
+
+    if (requesteeEmail === undefined || requesteeEmail === null || requesteeEmail === "") {
+      throw new Error(`requestee ${requestee?.id} does not have an email`);
+    }
+
+    const requesterSnapshot = await usersRef.doc(booking.requesterId).get();
+    const requester = requesterSnapshot.data();
+    const requesterEmail = requester?.email;
+
+    if (requesterEmail === undefined || requesterEmail === null || requesterEmail === "") {
+      throw new Error(`requester ${requester?.id} does not have an email`);
+    }
+
+
+    const ONE_HOUR_MS = 60 * 60 * 1000;
+    const ONE_DAY_MS = 24 * ONE_HOUR_MS;
+    const ONE_WEEK_MS = 7 * ONE_DAY_MS;
+    const reminders = [
+      {
+        userId: booking.requesteeId,
+        email: requesteeEmail,
+        offset: ONE_HOUR_MS,
+        type: "bookingReminderRequestee",
+      },
+      {
+        userId: booking.requesteeId,
+        email: requesteeEmail,
+        offset: ONE_DAY_MS,
+        type: "bookingReminderRequestee",
+      },
+      {
+        userId: booking.requesteeId,
+        email: requesteeEmail,
+        offset: ONE_WEEK_MS,
+        type: "bookingReminderRequestee",
+      },
+      {
+        userId: booking.requesterId,
+        email: requesterEmail,
+        offset: ONE_HOUR_MS,
+        type: "bookingReminderRequester",
+      },
+      {
+        userId: booking.requesterId,
+        email: requesterEmail,
+        offset: ONE_DAY_MS,
+        type: "bookingReminderRequester",
+      },
+      {
+        userId: booking.requesterId,
+        email: requesterEmail,
+        offset: ONE_WEEK_MS,
+        type: "bookingReminderRequester",
+      },
+    ]
+
+    const startTime = booking.startTime.toDate().getTime();
+
+    // Create schedule write for push notification
+    // 1 week, 1 day, and 1 hour before booking start time
+    for (const reminder of reminders) {
+      await Promise.all([
+        queuedWritesRef.add({
+          state: "PENDING",
+          data: {
+            toUserId: reminder.userId,
+            fromUserId: "8yYVxpQ7cURSzNfBsaBGF7A7kkv2", // Johannes
+            type: "bookingReminder",
+            bookingId: booking.id,
+            timestamp: Timestamp.now(),
+            markedRead: false,
+          },
+          collection: "activities",
+          deliverTime: Timestamp.fromMillis(
+            startTime - reminder.offset,
+          ),
+        }),
+        queuedWritesRef.add({
+          state: "PENDING",
+          data: {
+            to: [ reminder.email ],
+            template: {
+              // e.g. bookingReminderRequestee-3600000
+              name: `${reminder.type}-${reminder.offset}`,
+            },
+          },
+          collection: "mail",
+          deliverTime: Timestamp.fromMillis(
+            startTime - reminder.offset,
+          ),
+        }),
+      ]);
+    }
   });
 
 export const addActivityOnOpportunityInterest = functions

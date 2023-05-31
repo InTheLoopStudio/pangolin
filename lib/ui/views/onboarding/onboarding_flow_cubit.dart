@@ -16,6 +16,9 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/models/username.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
+import 'package:intheloopapp/ui/views/onboarding/artist_name_input.dart';
+import 'package:intheloopapp/ui/views/onboarding/bio_input.dart';
+import 'package:intheloopapp/ui/views/onboarding/username_input.dart';
 import 'package:intheloopapp/utils.dart';
 
 part 'onboarding_flow_state.dart';
@@ -37,25 +40,48 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
   final DatabaseRepository databaseRepository;
   final User currentAuthUser;
 
-  void usernameChange(String input) => emit(state.copyWith(username: input));
-  void aristNameChange(String input) => emit(state.copyWith(artistName: input));
+  void usernameChange(String input) => emit(
+        state.copyWith(
+          username: UsernameInput.dirty(value: input),
+        ),
+      );
+  void aristNameChange(String input) => emit(
+        state.copyWith(
+          artistName: ArtistNameInput.dirty(value: input),
+        ),
+      );
   void locationChange(Place? place, String placeId) {
     emit(
       state.copyWith(
-        place: place,
-        placeId: placeId,
+        place: Option.fromNullable(place),
+        placeId: Some(placeId),
       ),
     );
   }
 
-  void bioChange(String input) => emit(state.copyWith(bio: input));
+  // ignore: avoid_positional_boolean_parameters
+  void eulaChange(bool input) => emit(
+        state.copyWith(
+          eula: input,
+        ),
+      );
+
+  void bioChange(String input) => emit(
+        state.copyWith(
+          bio: BioInput.dirty(value: input),
+        ),
+      );
 
   Future<void> handleImageFromGallery() async {
     try {
       final imageFile =
           await state.picker.pickImage(source: ImageSource.gallery);
       if (imageFile != null) {
-        emit(state.copyWith(pickedPhoto: File(imageFile.path)));
+        emit(
+          state.copyWith(
+            pickedPhoto: Some(File(imageFile.path)),
+          ),
+        );
       }
     } catch (e) {
       // print(error);
@@ -63,22 +89,38 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
   }
 
   Future<void> finishOnboarding() async {
-    if (state.loading) {
+    if (state.status.isInProgress) {
       return;
     }
 
-    emit(state.copyWith(loading: true));
+    if (!state.formKey.currentState!.validate()) {
+      return;
+    }
+
+    if (state.isNotValid) {
+      return;
+    }
+
+    if (!state.eula) {
+      throw Exception('You must agree to the EULA');
+    }
+
+    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
 
     try {
-      final profilePictureUrl = state.pickedPhoto != null
-          ? await storageRepository.uploadProfilePicture(
+      final profilePictureUrl = await switch (state.pickedPhoto) {
+        Some(:final value) => () async {
+            final url = await storageRepository.uploadProfilePicture(
               currentAuthUser.uid,
-              state.pickedPhoto!,
-            )
-          : null;
+              value,
+            );
+            return Some(url);
+          }(),
+        None() => Future.value(const None<String>()),
+      };
 
-      final lat = state.place?.latLng?.lat;
-      final lng = state.place?.latLng?.lng;
+      final lat = state.place.asNullable()?.latLng?.lat;
+      final lng = state.place.asNullable()?.latLng?.lng;
       final geohash = (lat != null && lng != null)
           ? geocodeEncode(lat: lat, lng: lng)
           : null;
@@ -87,11 +129,11 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
       final currentUser = emptyUser.copyWith(
         id: currentAuthUser.uid,
         email: currentAuthUser.email,
-        username: Username.fromString(state.username),
-        artistName: state.artistName,
-        profilePicture: profilePictureUrl,
-        bio: state.bio,
-        placeId: Option.fromNullable(state.placeId),
+        username: Username.fromString(state.username.value),
+        artistName: state.artistName.value,
+        profilePicture: profilePictureUrl.asNullable(),
+        bio: state.bio.value,
+        placeId: state.placeId,
         geohash: Option.fromNullable(geohash),
         lat: Option.fromNullable(lat),
         lng: Option.fromNullable(lng),
@@ -100,9 +142,10 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
       await databaseRepository.createUser(currentUser);
 
       onboardingBloc.add(FinishOnboarding(user: currentUser));
+      emit(state.copyWith(status: FormzSubmissionStatus.success));
     } catch (e, s) {
       logger.error('error finishing onboarding', error: e, stackTrace: s);
-      emit(state.copyWith(loading: false));
+      emit(state.copyWith(status: FormzSubmissionStatus.failure));
     }
   }
 }
