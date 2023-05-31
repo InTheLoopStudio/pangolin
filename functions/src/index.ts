@@ -30,7 +30,7 @@ import {
   LoopMentionActivity, 
   BookingStatus, 
   CommentLikeActivity, 
-  OpportunityInterest, 
+  OpportunityInterest,
 } from "./models";
 
 import { v4 as uuidv4 } from "uuid";
@@ -72,6 +72,8 @@ const queuedWritesRef = db.collection("queued_writes");
 const loopsFeedSubcollection = "userFeed";
 
 const bookingBotUuid = "90dc0775-3a0d-4e92-8573-9c7aa6832d94";
+const verifiedBotUuid = "1c0d9380-873c-493a-a3f8-1283d5408673";
+const verifyUserBadgeId = "0aa46576-1fbe-4312-8b69-e2fef3269083";
 
 const founderIds = [
   "8yYVxpQ7cURSzNfBsaBGF7A7kkv2", // Johannes
@@ -1324,6 +1326,28 @@ export const postFromBookingBotOnBooking = functions
       userId: bookingBotUuid,
       title: "🎫 NEW BOOKING",
       description: `@${requester?.username ?? "UNNKOWN"} booked @${requestee?.username ?? "UNKNOWN"} for service '${service?.title ?? "UNKNOWN"}'`,
+      imagePaths: [],
+      timestamp: Timestamp.now(),
+      likeCount: 0,
+      commentCount: 0,
+      shareCount: 0,
+      deleted: false,
+    }
+    await loopsRef.doc(uuid).set(post);
+  });
+export const postFromVerifiedBotOnVerification = functions
+  .firestore
+  .document(`badgesSent/{userId}/badges/${verifyUserBadgeId}`)
+  .onCreate(async (data, context) => {
+    const userSnapshot = await usersRef.doc(context.params.userId).get();
+    const user = userSnapshot.data();
+
+    const uuid = uuidv4();
+    const post = {
+      id: uuid,
+      userId: verifiedBotUuid,
+      title: "✔️ NEW VERIFICATION",
+      description: `@${user?.username ?? "UNKNOWN"} is now verified!`,
       imagePaths: [],
       timestamp: Timestamp.now(),
       likeCount: 0,
