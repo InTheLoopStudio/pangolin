@@ -57,6 +57,11 @@ const loopsFeedSubcollection = "userFeed";
 
 const bookingBotUuid = "90dc0775-3a0d-4e92-8573-9c7aa6832d94";
 
+const founderIds = [
+  "8yYVxpQ7cURSzNfBsaBGF7A7kkv2", // Johannes
+  "n4zIL6bOuPTqRC3dtsl6gyEBPQl1", // Ilias
+];
+
 
 const _getFileFromURL = (fileURL: string): string => {
   const fSlashes = fileURL.split("/");
@@ -66,6 +71,27 @@ const _getFileFromURL = (fileURL: string): string => {
 
   return fileName;
 };
+
+const _getFoundersDeviceTokens = async () => {
+  const deviceTokens = (
+    await Promise.all(
+      founderIds.map(
+        async (founderId) => {
+
+          const querySnapshot = await tokensRef
+            .doc(founderId)
+            .collection("tokens")
+            .get();
+
+          const tokens: string[] = querySnapshot.docs.map((snap) => snap.id);
+
+          return tokens;
+        })
+    )
+  ).flat();
+
+  return deviceTokens;
+}
 
 const _authenticated = (context: functions.https.CallableContext) => {
   // Checking that the user is authenticated.
@@ -366,12 +392,12 @@ const _deleteUserLoopsFromFeed = (data: {
   return data.feedOwnerId;
 };
 
-const _createStripeCustomer = async () => {
+const _createStripeCustomer = async (email?: string) => {
   const stripe = new Stripe(stripeKey.value(), {
     apiVersion: "2022-11-15",
   });
 
-  const customer = await stripe.customers.create();
+  const customer = await stripe.customers.create({ email: email });
 
   return customer.id;
 }
@@ -404,7 +430,7 @@ const _createPaymentIntent = async (data: {
 
 
   const customerId = (data.customerId === undefined || data.customerId === null || data.customerId === "")
-    ? (await _createStripeCustomer())
+    ? (await _createStripeCustomer(data.receiptEmail))
     : data.customerId
 
   // Use an existing Customer ID if this is a returning customer.
@@ -719,6 +745,36 @@ export const sendWelcomeEmailOnUserCreated = functions
     functions.logger.debug(`sending welcome email to ${email}`);
 
     await _sendWelcomeEmail(email);
+  });
+export const notifyFoundersOnFirstOpen = functions
+  .analytics
+  .event("first_open")
+  .onLog(async (event) => {
+    const devices = await _getFoundersDeviceTokens();
+    const user = event.user;
+    const payload = {
+      notification: {
+        title: "You have a new user \uD83D\uDE43",
+        body: `${user?.deviceInfo.mobileModelName} from ${user?.geoInfo.city}, ${user?.geoInfo.country}`,
+      }
+    };
+
+    fcm.sendToDevice(devices, payload);
+  });
+export const notifyFoundersOnAppRemoved = functions
+  .analytics
+  .event("app_remove")
+  .onLog(async (event) => {
+    const devices = await _getFoundersDeviceTokens();
+    const user = event.user;
+    const payload = {
+      notification: {
+        title: "You lost a user \uD83D\uDE1E",
+        body: `${user?.deviceInfo.mobileModelName} from ${user?.geoInfo.city}, ${user?.geoInfo.country}`,
+      }
+    };
+
+    fcm.sendToDevice(devices, payload);
   });
 
 export const updateStreamUserOnUserUpdate = functions
@@ -1176,12 +1232,6 @@ export const notifyFoundersOnBookings = functions
   .firestore
   .document("bookings/{bookingId}")
   .onCreate(async (data) => {
-
-    const founderIds = [
-      "8yYVxpQ7cURSzNfBsaBGF7A7kkv2", // Johannes
-      "n4zIL6bOuPTqRC3dtsl6gyEBPQl1", // Ilias
-    ];
-
     const booking = data.data() as Booking;
     if (booking === undefined) {
       throw new HttpsError("failed-precondition", `booking ${data.id} does not exist`,);
@@ -1213,22 +1263,7 @@ export const notifyFoundersOnBookings = functions
       },
     };
 
-    const deviceTokens = (
-      await Promise.all(
-        founderIds.map(
-          async (founderId) => {
-
-            const querySnapshot = await tokensRef
-              .doc(founderId)
-              .collection("tokens")
-              .get();
-
-            const tokens: string[] = querySnapshot.docs.map((snap) => snap.id);
-
-            return tokens;
-          })
-      )
-    ).flat();
+    const deviceTokens = await _getFoundersDeviceTokens();
 
     try {
       const resp = await fcm.sendToDevice(deviceTokens, payload);
@@ -1389,6 +1424,12 @@ export const sendBookingNotificationsOnBookingConfirmed = functions
     // Create schedule write for push notification
     // 1 week, 1 day, and 1 hour before booking start time
     for (const reminder of reminders) {
+
+      if ((startTime - reminder.offset) < Date.now()) {
+        functions.logger.info("too late to send reminder, skipping reminder");
+        continue;
+      }
+
       await Promise.all([
         queuedWritesRef.add({
           state: "PENDING",
@@ -1405,20 +1446,20 @@ export const sendBookingNotificationsOnBookingConfirmed = functions
             startTime - reminder.offset,
           ),
         }),
-        queuedWritesRef.add({
-          state: "PENDING",
-          data: {
-            to: [ reminder.email ],
-            template: {
-              // e.g. bookingReminderRequestee-3600000
-              name: `${reminder.type}-${reminder.offset}`,
-            },
-          },
-          collection: "mail",
-          deliverTime: Timestamp.fromMillis(
-            startTime - reminder.offset,
-          ),
-        }),
+        // queuedWritesRef.add({
+        //   state: "PENDING",
+        //   data: {
+        //     to: [ reminder.email ],
+        //     template: {
+        //       // e.g. bookingReminderRequestee-3600000
+        //       name: `${reminder.type}-${reminder.offset}`,
+        //     },
+        //   },
+        //   collection: "mail",
+        //   deliverTime: Timestamp.fromMillis(
+        //     startTime - reminder.offset,
+        //   ),
+        // }),
       ]);
     }
   });

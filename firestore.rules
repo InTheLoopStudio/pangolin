@@ -1,0 +1,109 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+  	function isLoopOwner() {
+      return request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+    
+    function isCommentOwner() {
+    	return request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+    
+    function isBookingRequester() {
+    	return request.auth != null && request.resource.data.requesterId == request.auth.uid;
+    }
+    
+    function isBookingRequestee() {
+    	return request.auth != null && request.resource.data.requesteeId == request.auth.uid;
+    }
+    
+    function isActivitySender() {
+    	return request.auth != null && request.resource.data.fromUserId == request.auth.uid;
+    }
+    
+    function isActivityReceiver() {
+    	return request.auth != null && request.resource.data.toUserId == request.auth.uid;
+    }
+    
+    function isServiceOwner() {
+    	return request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+    
+    function loopDescriptionIsSmall() {
+    	return request.resource.data.description.size() <= 512;
+    }
+    
+    function commentContentIsSmall() {
+    	return request.resource.data.content.size() <= 512;
+    }
+    
+    function titleIsSmall() {
+    	return request.resource.data.title.size() <= 56;
+    }
+  
+    match /users/{userId} {
+      allow create, update: if request.auth != null && request.auth.uid == userId;
+      allow read: if request.auth != null;
+    }
+    match /loops/{loopId} {
+      allow create, update: if isLoopOwner() && loopDescriptionIsSmall() && titleIsSmall();
+      allow read: if request.auth != null;
+    }
+    match /feeds/{userId}/{document=**} {
+      allow read: if request.auth != null;
+    }
+    match /likes/{loopId}/loopLikes/{userId} {
+      allow create, update, delete: if request.auth != null && userId == request.auth.uid;
+      allow read: if request.auth != null;
+    }
+    match /following/{followerId}/Following/{followeeId} {
+      allow create, update, delete: if request.auth != null && followerId == request.auth.uid;
+      allow read: if request.auth != null;
+    }
+    match /followers/{followeeId}/Followers/{followerId} {
+      allow create, update, delete: if request.auth != null && followerId == request.auth.uid;
+      allow read: if request.auth != null;
+    }
+    match /device_tokens/{userId}/tokens/{tokenId} {
+      allow create, update, delete: if request.auth != null && userId == request.auth.uid;
+      allow read: if request.auth != null;
+    }
+    match /comments/{loopId}/loopComments/{commentId} {
+      allow create, update, delete: if isCommentOwner() && commentContentIsSmall();
+      allow read: if request.auth != null;
+    }
+    match /comments/{loopId}/loopComments/{commentId}/commentLikes/{likerId} {
+      allow create, delete: if request.auth != null && request.auth.uid == likerId;
+      allow read: if request.auth != null;
+    }
+    match /bookings/{bookingId} {
+      allow create: if isBookingRequester();
+      allow update: if isBookingRequester() || isBookingRequestee();
+      allow read: if request.auth != null;
+    }
+    match /badges/{badgesId} {
+      allow read: if request.auth != null;
+    }
+    match /badgesSent/{userId}/{document=**} {
+      allow read: if request.auth != null;
+    }
+    match /activities/{activityId} {
+      allow create, delete: if isActivitySender();
+      allow update: if isActivityReceiver() || isActivitySender();
+      allow read: if request.auth != null;
+    }
+    match /services/{userId}/userServices/{serviceId} {
+    	allow create, update: if isServiceOwner();
+      allow read: if request.auth != null;
+    }
+    match /mail/{mailId} {
+    	allow create, read: if request.auth != null;
+    }
+    match /leaderboard/leaders {
+    	allow read: if request.auth != null;
+    }
+    match /opportunities/{loopId}/interestedUsers/{userId} {
+    	allow create, read, delete: if request.auth != null;
+    }
+  }
+}
