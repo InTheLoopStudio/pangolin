@@ -81,7 +81,6 @@ class _LoopContainerState extends State<LoopContainer>
                   timestamp: widget.loop.timestamp,
                 ),
                 TitleText(title: widget.loop.title),
-                const SizedBox(height: 14),
                 if (widget.loop.description.isNotEmpty)
                   Column(
                     children: [
@@ -103,12 +102,10 @@ class _LoopContainerState extends State<LoopContainer>
                 ShowInterestButton(
                   loop: widget.loop,
                 ),
-                const SizedBox(height: 8),
                 ControlButtons(
                   loop: widget.loop,
                   currentUserId: currentUserId,
                 ),
-                const SizedBox(height: 8),
               ],
             ),
           ),

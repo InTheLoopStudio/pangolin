@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
@@ -25,7 +24,6 @@ import 'package:intheloopapp/ui/views/profile/profile_view.dart';
 import 'package:intheloopapp/ui/views/settings/settings_view.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/location_form/location_form_view.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/service_selection_view.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 part 'navigation_event.dart';
@@ -49,32 +47,6 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
           ),
         ),
       );
-      emit(state);
-    });
-    on<PushPhotoView>((event, emit) {
-      navigationKey.currentState?.push(
-        MaterialPageRoute<PhotoView>(
-          settings: RouteSettings(name: '/image/${event.imageUrl}'),
-          builder: (context) => Material(
-            child: Scaffold(
-              appBar: AppBar(
-                backgroundColor: Colors.black,
-                leading: IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ),
-              body: PhotoView(
-                imageProvider: CachedNetworkImageProvider(event.imageUrl),
-                heroAttributes: PhotoViewHeroAttributes(
-                  tag: event.heroTag,
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-
       emit(state);
     });
     on<PushBadge>((event, emit) {
