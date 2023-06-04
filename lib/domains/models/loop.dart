@@ -105,21 +105,21 @@ class Loop extends Equatable {
   /// methods from jsonserialize
   Map<String, dynamic> toJson() => _$LoopToJson(this);
 
-  Map<String, dynamic> toMap() => <String, dynamic>{
-        'id': id,
-        'userId': userId,
-        'title': title.asNullable(),
-        'description': description,
-        'audioPath': audioPath.asNullable(),
-        'imagePaths': imagePaths,
-        'timestamp': timestamp,
-        'likeCount': likeCount,
-        'commentCount': commentCount,
-        'shareCount': shareCount,
-        'isOpportunity': isOpportunity,
-        // 'tags': tags,
-        'deleted': deleted,
-      };
+  // Map<String, dynamic> toMap() => <String, dynamic>{
+  //       'id': id,
+  //       'userId': userId,
+  //       'title': title.asNullable(),
+  //       'description': description,
+  //       'audioPath': audioPath.asNullable(),
+  //       'imagePaths': imagePaths,
+  //       'timestamp': timestamp,
+  //       'likeCount': likeCount,
+  //       'commentCount': commentCount,
+  //       'shareCount': shareCount,
+  //       'isOpportunity': isOpportunity,
+  //       // 'tags': tags,
+  //       'deleted': deleted,
+  //     };
 
   /// The uuid of this [Loop]
   final String id;
