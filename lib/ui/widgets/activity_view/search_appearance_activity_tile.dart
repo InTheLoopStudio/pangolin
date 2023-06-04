@@ -50,7 +50,7 @@ class SearchAppearanceActivityTile extends StatelessWidget {
                 ),
               ),
               subtitle: Text(
-                "you've been found ${activity.count} times",
+                "you've appeared in ${activity.count} searches",
                 style: TextStyle(
                   fontWeight: markedRead ? null : FontWeight.bold,
                 ),
