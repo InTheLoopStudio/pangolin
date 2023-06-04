@@ -70,44 +70,40 @@ class _LoopContainerState extends State<LoopContainer>
             horizontal: 12,
             vertical: 8,
           ),
-          child: CardBanner(
-            text: 'tapped',
-            position: CardBannerPosition.TOPRIGHT,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                UserInfo(
-                  loopUser: loopUser,
-                  timestamp: widget.loop.timestamp,
-                ),
-                TitleText(title: widget.loop.title),
-                if (widget.loop.description.isNotEmpty)
-                  Column(
-                    children: [
-                      Linkify(
-                        text: widget.loop.description,
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              UserInfo(
+                loopUser: loopUser,
+                timestamp: widget.loop.timestamp,
+              ),
+              TitleText(title: widget.loop.title),
+              if (widget.loop.description.isNotEmpty)
+                Column(
+                  children: [
+                    Linkify(
+                      text: widget.loop.description,
+                      style: const TextStyle(
+                        fontSize: 14,
                       ),
-                      const SizedBox(height: 14),
-                    ],
-                  )
-                else
-                  const SizedBox.shrink(),
-                Attachments(
-                  loop: widget.loop,
-                  loopUser: loopUser,
-                ),
-                ShowInterestButton(
-                  loop: widget.loop,
-                ),
-                ControlButtons(
-                  loop: widget.loop,
-                  currentUserId: currentUserId,
-                ),
-              ],
-            ),
+                    ),
+                    const SizedBox(height: 14),
+                  ],
+                )
+              else
+                const SizedBox.shrink(),
+              Attachments(
+                loop: widget.loop,
+                loopUser: loopUser,
+              ),
+              ShowInterestButton(
+                loop: widget.loop,
+              ),
+              ControlButtons(
+                loop: widget.loop,
+                currentUserId: currentUserId,
+              ),
+            ],
           ),
         ),
       );
