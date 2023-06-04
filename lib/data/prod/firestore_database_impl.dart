@@ -917,7 +917,18 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .startAfterDocument(documentSnapshot)
           .get();
 
-      final activities = activitiesSnapshot.docs.map(Activity.fromDoc).toList();
+      final activities = activitiesSnapshot.docs
+          .map((activity) {
+            try {
+              return Activity.fromDoc(activity);
+            } catch (e, s) {
+              logger.error('getActivities', error: e, stackTrace: s);
+              return null;
+            }
+          })
+          .where((element) => element != null)
+          .whereType<Activity>()
+          .toList();
 
       return activities;
     } else {
@@ -927,7 +938,18 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .limit(limit)
           .get();
 
-      final activities = activitiesSnapshot.docs.map(Activity.fromDoc).toList();
+      final activities = activitiesSnapshot.docs
+          .map((activity) {
+            try {
+              return Activity.fromDoc(activity);
+            } catch (e, s) {
+              logger.error('getActivities', error: e, stackTrace: s);
+              return null;
+            }
+          })
+          .where((element) => element != null)
+          .whereType<Activity>()
+          .toList();
 
       return activities;
     }
