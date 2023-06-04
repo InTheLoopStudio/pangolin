@@ -81,20 +81,21 @@ export type Booking = {
 
 export type Activity = {
   // id: string;
-  fromUserId: string;
   toUserId: string;
   // timestamp: firestore.Timestamp;
   // markedRead: boolean;
 }
-
-export type FollowActivity = Activity & { type: "follow" }
-export type LikeActivity = Activity & { type: "like"; loopId: string }
-export type CommentActivity = Activity & { type: "comment", rootId: string, commentId: string }
-export type BookingRequestActivity = Activity & { type: "bookingRequest", bookingId: string }
-export type BookingUpdateActivity = Activity & { type: "bookingUpdate", bookingId: string, status: BookingStatus }
-export type LoopMentionActivity = Activity & { type: "loopMention", loopId: string }
-export type CommentMentionActivity = Activity & { type: "commentMention", rootId: string, commentId: string; }
-export type CommentLikeActivity = Activity & { type: "commentLike", rootId: string, commentId: string; }
-export type OpportunityInterest = Activity & { type: "opportunityInterest", loopId: string; }
+export type UserToUserActivity = Activity & { fromUserId: string }
+export type FollowActivity = UserToUserActivity & { type: "follow", }
+export type LikeActivity = UserToUserActivity & { type: "like"; loopId: string }
+export type CommentActivity = UserToUserActivity & { type: "comment", rootId: string, commentId: string }
+export type BookingRequestActivity = UserToUserActivity & { type: "bookingRequest", bookingId: string }
+export type BookingUpdateActivity = UserToUserActivity & { type: "bookingUpdate", bookingId: string, status: BookingStatus }
+export type LoopMentionActivity = UserToUserActivity & { type: "loopMention", loopId: string }
+export type CommentMentionActivity = UserToUserActivity & { type: "commentMention", rootId: string, commentId: string; }
+export type CommentLikeActivity = UserToUserActivity & { type: "commentLike", rootId: string, commentId: string; }
+export type OpportunityInterest = UserToUserActivity & { type: "opportunityInterest", loopId: string; }
+export type BookingReminderActivity = UserToUserActivity & { type: "bookingReminder", bookingId: string; }
+export type SearchAppearanceActivity = Activity & { type: "searchAppearance", count: number; }
 
 export type BookingStatus = "pending" | "confirmed" | "canceled"

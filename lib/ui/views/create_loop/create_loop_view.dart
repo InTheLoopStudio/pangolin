@@ -62,6 +62,7 @@ class CreateLoopView extends StatelessWidget {
                       ),
                       child: UserAvatar(
                         radius: 45,
+                        pushId: currentUser.id,
                         imageUrl: currentUser.profilePicture,
                       ),
                     ),

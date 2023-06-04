@@ -17,6 +17,7 @@ class UserTile extends StatelessWidget {
 
     return ListTile(
       leading: UserAvatar(
+        pushId: user.id,
         imageUrl: user.profilePicture,
         radius: 20,
       ),

@@ -39,6 +39,7 @@ class UserInfo extends StatelessWidget {
                   // + User Avatar
                   UserAvatar(
                     radius: 24,
+                    pushId: loopUser.id,
                     imageUrl: loopUser.profilePicture,
                     verified: verified,
                   ),

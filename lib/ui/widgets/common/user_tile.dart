@@ -91,6 +91,7 @@ class _UserTileState extends State<UserTile> {
             return ListTile(
               leading: UserAvatar(
                 radius: 25,
+                pushId: widget.user.id,
                 imageUrl: widget.user.profilePicture,
                 verified: verified,
               ),

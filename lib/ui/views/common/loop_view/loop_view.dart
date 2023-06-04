@@ -140,6 +140,7 @@ class LoopView extends StatelessWidget {
                                       // + User Avatar
                                       UserAvatar(
                                         radius: 24,
+                                        pushId: state.user.id,
                                         imageUrl: value.profilePicture,
                                         verified: state.isVerified,
                                       ),

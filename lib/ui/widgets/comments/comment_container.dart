@@ -91,6 +91,7 @@ class _CommentContainerState extends State<CommentContainer> {
                         onTap: () => navigationBloc.add(PushProfile(value.id)),
                         leading: UserAvatar(
                           radius: 20,
+                          pushId: value.id,
                           imageUrl: value.profilePicture,
                           verified: isVerified,
                         ),

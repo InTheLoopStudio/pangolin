@@ -129,6 +129,7 @@ class ProfileHeader extends StatelessWidget {
                       children: [
                         UserAvatar(
                           radius: 48,
+                          pushId: state.visitedUser.id,
                           imageUrl: state.visitedUser.profilePicture,
                         ),
                       ],

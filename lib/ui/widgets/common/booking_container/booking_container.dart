@@ -49,6 +49,7 @@ class BookingContainer extends StatelessWidget {
                     enabled: booking.status != BookingStatus.canceled,
                     leading: UserAvatar(
                       radius: 20,
+                      pushId: value.id,
                       imageUrl: value.profilePicture,
                       verified: isVerified,
                     ),
@@ -104,6 +105,7 @@ class BookingContainer extends StatelessWidget {
                     },
                     leading: UserAvatar(
                       radius: 20,
+                      pushId: value.id,
                       imageUrl: value.profilePicture,
                       verified: isVerified,
                     ),

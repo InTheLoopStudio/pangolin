@@ -31,6 +31,8 @@ import {
   BookingStatus, 
   CommentLikeActivity, 
   OpportunityInterest,
+  SearchAppearanceActivity,
+  BookingReminderActivity,
 } from "./models";
 
 import { v4 as uuidv4 } from "uuid";
@@ -243,6 +245,8 @@ const _addActivity = async (
     | CommentMentionActivity
     | CommentLikeActivity
     | OpportunityInterest
+    | BookingReminderActivity
+    | SearchAppearanceActivity
 ) => {
   // Checking attribute.A
   if (activity.toUserId.length === 0) {
@@ -252,14 +256,8 @@ const _addActivity = async (
       "The function argument 'toUserId' cannot be empty"
     );
   }
-  if (activity.fromUserId.length === 0) {
-    // Throwing an HttpsError so that the client gets the error details.
-    throw new functions.https.HttpsError(
-      "invalid-argument",
-      "The function argument 'fromUserId' cannot be empty"
-    );
-  }
-  if (![
+
+  const allowedActivityTypes = [
     "follow",
     "like",
     "comment",
@@ -268,13 +266,17 @@ const _addActivity = async (
     "loopMention",
     "commentMention",
     "commentLike",
-    "opportunityInterest"
-  ].includes(activity.type)) {
+    "opportunityInterest",
+    "bookingReminder",
+    "searchAppearance",
+  ];
+
+  if (!allowedActivityTypes.includes(activity.type)) {
     // Throwing an HttpsError so that the client gets the error details.
     throw new functions.https.HttpsError(
       "invalid-argument",
       "The function argument 'type' must be either " +
-      "'follow', 'like', 'comment', 'bookingRequest', 'bookingUpdate', 'loopMention', or 'commentMention'"
+      allowedActivityTypes.join(", ")
     );
   }
 
@@ -676,6 +678,24 @@ export const sendToDevice = functions.firestore
         notification: {
           title: "Mention",
           body: "Someone mentioned you in a comment",
+          clickAction: "FLUTTER_NOTIFICATION_CLICK",
+        },
+      };
+      break;
+    case "bookingReminder":
+      payload = {
+        notification: {
+          title: "Booking Reminder",
+          body: "You have a booking coming up soon!!!",
+          clickAction: "FLUTTER_NOTIFICATION_CLICK",
+        },
+      };
+      break;
+    case "searchAppearance":
+      payload = {
+        notification: {
+          title: "You're on the map!",
+          body: "you've showed up in new searches this week 👀",
           clickAction: "FLUTTER_NOTIFICATION_CLICK",
         },
       };
@@ -1484,7 +1504,6 @@ export const sendBookingNotificationsOnBookingConfirmed = functions
           state: "PENDING",
           data: {
             toUserId: reminder.userId,
-            fromUserId: "8yYVxpQ7cURSzNfBsaBGF7A7kkv2", // Johannes
             type: "bookingReminder",
             bookingId: booking.id,
             timestamp: Timestamp.now(),
@@ -1528,7 +1547,6 @@ export const cancelBookingIfExpired = onSchedule("0 * * * *", async (event) => {
     }
   }
 });
-
 
 export const addActivityOnOpportunityInterest = functions
   .firestore

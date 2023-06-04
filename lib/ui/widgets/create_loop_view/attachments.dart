@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/views/create_loop/cubit/create_loop_cubit.dart';
 import 'package:intheloopapp/ui/widgets/create_loop_view/audio_container.dart';
-import 'package:intheloopapp/ui/widgets/create_loop_view/opportunity_toggle.dart';
 import 'package:intheloopapp/ui/widgets/create_loop_view/upload_audio_button.dart';
 import 'package:intheloopapp/ui/widgets/create_loop_view/upload_image_button.dart';
 
