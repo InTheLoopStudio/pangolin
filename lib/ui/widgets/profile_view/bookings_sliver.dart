@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/themes.dart';
 import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
@@ -13,59 +14,60 @@ class BookingsSliver extends StatelessWidget {
     final nav = context.read<NavigationBloc>();
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        if (state.userBookings.isEmpty) {
-          return const SizedBox.shrink();
-        }
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 8,
-                horizontal: 16,
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  nav.add(
-                    PushBookings(userId: state.visitedUser.id),
-                  );
-                },
-                child: const Row(
-                  children: [
-                    Text(
-                      'Latest Booking',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+        return switch (state.latestBooking) {
+          None() => const SizedBox.shrink(),
+          Some(:final value) => () {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                      horizontal: 16,
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        nav.add(
+                          PushBookings(userId: state.visitedUser.id),
+                        );
+                      },
+                      child: const Row(
+                        children: [
+                          Text(
+                            'Latest Booking',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          Text(
+                            'see all',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w300,
+                              color: tappedAccent,
+                            ),
+                          ),
+                          Icon(
+                            Icons.arrow_outward_rounded,
+                            size: 16,
+                            color: tappedAccent,
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    Text(
-                      'see all',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w300,
-                        color: tappedAccent,
-                      ),
-                    ),
-                    Icon(
-                      Icons.arrow_outward_rounded,
-                      size: 16,
-                      color: tappedAccent,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            BookingTile(
-              visitedUser: state.visitedUser,
-              booking: state.userBookings.first,
-            ),
-          ],
-        );
+                  ),
+                  BookingTile(
+                    visitedUser: state.visitedUser,
+                    booking: value,
+                  ),
+                ],
+              );
+            }(),
+        };
       },
     );
   }

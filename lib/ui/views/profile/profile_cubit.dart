@@ -56,6 +56,101 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
+  Future<void> getLatestLoop() async {
+    try {
+      final loops = await databaseRepository.getUserLoops(
+        visitedUser.id,
+        limit: 1,
+      );
+
+      final latestLoop =
+          loops.isNotEmpty ? Some(loops.first) : const None<Loop>();
+
+      emit(state.copyWith(latestLoop: latestLoop));
+    } catch (e, s) {
+      logger.error(
+        'getLatestLoop error',
+        error: e,
+        stackTrace: s,
+      );
+    }
+  }
+
+  Future<void> getLatestOpportunity() async {
+    try {
+      final opportunities = await databaseRepository.getUserOpportunities(
+        visitedUser.id,
+        limit: 1,
+      );
+
+      final latestOpportunity = opportunities.isNotEmpty
+          ? Some(opportunities.first)
+          : const None<Loop>();
+
+      emit(state.copyWith(latestOpportunity: latestOpportunity));
+    } catch (e, s) {
+      logger.error(
+        'getLatestLoop error',
+        error: e,
+        stackTrace: s,
+      );
+    }
+  }
+
+  Future<void> getLatestBooking() async {
+    final trace = logger.createTrace('getLatestBooking');
+    await trace.start();
+    try {
+      final bookingsRequestee = await databaseRepository.getBookingsByRequestee(
+        visitedUser.id,
+        limit: 1,
+      );
+      final bookingsRequester = await databaseRepository.getBookingsByRequester(
+        visitedUser.id,
+        limit: 1,
+      );
+
+      final latestRequesteeBooking = bookingsRequestee.isNotEmpty
+          ? Some(bookingsRequestee.first)
+          : const None<Booking>();
+
+      final latestRequesterBooking = bookingsRequester.isNotEmpty
+          ? Some(bookingsRequester.first)
+          : const None<Booking>();
+
+      final _ = switch ((latestRequesteeBooking, latestRequesterBooking)) {
+        (None(), None()) => emit(state.copyWith(latestBooking: const None())),
+        (Some(:final value), None()) =>
+          emit(state.copyWith(latestBooking: Some(value))),
+        (None(), Some(:final value)) => emit(
+            state.copyWith(
+              latestBooking: Some(value),
+            ),
+          ),
+        (Some(), Some()) => () {
+            final latest = _getLatestBooking(
+              latestRequesteeBooking.unwrap,
+              latestRequesterBooking.unwrap,
+            );
+            emit(state.copyWith(latestBooking: Some(latest)));
+          }(),
+      };
+    } catch (e, s) {
+      logger.error(
+        'fetchMoreBookings error',
+        error: e,
+        stackTrace: s,
+      );
+      // emit(state.copyWith(bookingsStatus: BookingsStatus.failure));
+    } finally {
+      await trace.stop();
+    }
+  }
+
+  Booking _getLatestBooking(Booking b1, Booking b2) {
+    return b1.startTime.isAfter(b2.startTime) ? b1 : b2;
+  }
+
   Future<void> initLoops({bool clearLoops = true}) async {
     final trace = logger.createTrace('initLoops');
     await trace.start();

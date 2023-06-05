@@ -39,7 +39,12 @@ abstract class DatabaseRepository {
   Future<void> deleteLoop(Loop loop);
   Future<List<Loop>> getUserLoops(
     String userId, {
-    int limit = 100,
+    int limit = 20,
+    String? lastLoopId,
+  });
+  Future<List<Loop>> getUserOpportunities(
+    String userId, {
+    int limit = 20,
     String? lastLoopId,
   });
   Stream<Loop> userLoopsObserver(

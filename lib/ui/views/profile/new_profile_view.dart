@@ -45,9 +45,10 @@ class NewProfileView extends StatelessWidget {
           currentUser: currentUser,
           visitedUser: visitedUser,
         )
-          ..initLoops()
+          ..getLatestLoop()
+          ..getLatestOpportunity()
+          ..getLatestBooking()
           ..initBadges()
-          ..initBookings()
           ..loadIsFollowing(currentUser.id, visitedUser.id)
           ..loadIsVerified(visitedUser.id)
           ..initPlace(),
@@ -73,9 +74,10 @@ class NewProfileView extends StatelessWidget {
                     onStretchTrigger: () async {
                       final cubit = context.read<ProfileCubit>();
                       await Future.wait([
-                        cubit.initLoops(),
+                        cubit.getLatestLoop(),
+                        cubit.getLatestOpportunity(),
+                        cubit.getLatestBooking(),
                         cubit.initBadges(),
-                        cubit.initBookings(),
                         cubit.refetchVisitedUser(),
                         cubit.loadIsFollowing(currentUser.id, visitedUser.id),
                         cubit.loadIsVerified(visitedUser.id),

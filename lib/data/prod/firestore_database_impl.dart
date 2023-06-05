@@ -598,6 +598,55 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  Future<List<Loop>> getUserOpportunities(
+    String userId, {
+    int limit = 30,
+    String? lastLoopId,
+  }) async {
+    try {
+      if (lastLoopId != null) {
+        final documentSnapshot = await _loopsRef.doc(lastLoopId).get();
+
+        final userLoopsSnapshot = await _loopsRef
+            .where('isOpportunity', isEqualTo: true)
+            .where('deleted', isNotEqualTo: true)
+            .orderBy('deleted', descending: true)
+            .orderBy('timestamp', descending: true)
+            .where('userId', isEqualTo: userId)
+            .limit(limit)
+            .startAfterDocument(documentSnapshot)
+            .get();
+
+        final userLoops = userLoopsSnapshot.docs
+            .map(Loop.fromDoc)
+            .where((loop) => !loop.deleted)
+            .toList();
+
+        return userLoops;
+      } else {
+        final userLoopsSnapshot = await _loopsRef
+            .where('isOpportunity', isEqualTo: true)
+            .where('deleted', isNotEqualTo: true)
+            .orderBy('deleted', descending: true)
+            .orderBy('timestamp', descending: true)
+            .where('userId', isEqualTo: userId)
+            .limit(limit)
+            .get();
+
+        final userLoops = userLoopsSnapshot.docs
+            .map(Loop.fromDoc)
+            .where((loop) => !loop.deleted)
+            .toList();
+
+        return userLoops;
+      }
+    } catch (e, s) {
+      logger.error('getUserOpportunities', error: e, stackTrace: s);
+      return [];
+    }
+  }
+
+  @override
   Stream<Loop> userLoopsObserver(
     String userId, {
     int limit = 30,

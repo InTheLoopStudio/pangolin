@@ -7,6 +7,9 @@ class ProfileState extends Equatable {
     this.isFollowing = false,
     this.isVerified = false,
     this.userLoops = const [],
+    this.latestLoop = const None(),
+    this.latestOpportunity = const None(),
+    this.latestBooking = const None(),
     this.userBadges = const [],
     this.userBookings = const [],
     this.hasReachedMaxLoops = false,
@@ -32,6 +35,11 @@ class ProfileState extends Equatable {
   final List<Loop> userLoops;
   final List<Badge> userBadges;
   final List<Booking> userBookings;
+
+  final Option<Loop> latestLoop;
+  final Option<Loop> latestOpportunity;
+  final Option<Booking> latestBooking;
+
   final bool hasReachedMaxLoops;
   final bool hasReachedMaxBadges;
   final bool hasReachedMaxBookings;
@@ -53,6 +61,11 @@ class ProfileState extends Equatable {
         isFollowing,
         isVerified,
         userLoops,
+
+        latestLoop,
+        latestOpportunity,
+        latestBooking,
+
         userBadges,
         userBookings,
         hasReachedMaxLoops,
@@ -72,6 +85,9 @@ class ProfileState extends Equatable {
     int? followingCount,
     bool? isFollowing,
     bool? isVerified,
+    Option<Loop>? latestLoop,
+    Option<Loop>? latestOpportunity,
+    Option<Booking>? latestBooking,
     List<Loop>? userLoops,
     List<Badge>? userBadges,
     List<Booking>? userBookings,
@@ -91,6 +107,9 @@ class ProfileState extends Equatable {
       followerCount: followerCount ?? this.followerCount,
       isFollowing: isFollowing ?? this.isFollowing,
       isVerified: isVerified ?? this.isVerified,
+      latestLoop: latestLoop ?? this.latestLoop,
+      latestOpportunity: latestOpportunity ?? this.latestOpportunity,
+      latestBooking: latestBooking ?? this.latestBooking,
       userLoops: userLoops ?? this.userLoops,
       userBadges: userBadges ?? this.userBadges,
       userBookings: userBookings ?? this.userBookings,
