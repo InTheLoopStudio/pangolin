@@ -43,6 +43,9 @@ class ProfileState extends Equatable {
   final UserModel currentUser;
   late final Place place;
 
+  List<Loop> get userOpportunities =>
+      userLoops.where((loop) => loop.isOpportunity).toList();
+
   @override
   List<Object> get props => [
         followingCount,

@@ -6,6 +6,7 @@ import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/bookings/bookings_view.dart';
 import 'package:intheloopapp/ui/views/error/error_view.dart';
 import 'package:intheloopapp/ui/views/loops_feeds_list/loop_feeds_list_view.dart';
+import 'package:intheloopapp/ui/views/profile/new_profile_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
 import 'package:intheloopapp/ui/views/search/search_view.dart';
 import 'package:intheloopapp/ui/widgets/shell_view/bottom_toolbar.dart';
@@ -58,7 +59,8 @@ class _ShellViewState extends State<ShellView> {
                     searchFocusNode: searchFocusNode,
                   ),
                   const BookingsView(),
-                  ProfileView(visitedUserId: currentUser.id),
+                  NewProfileView(visitedUserId: currentUser.id),
+                  // ProfileView(visitedUserId: currentUser.id),
                 ],
               ),
               bottomNavigationBar: BottomToolbar(

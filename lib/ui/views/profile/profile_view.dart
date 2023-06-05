@@ -142,235 +142,229 @@ class _ProfileViewState extends State<ProfileView> {
                   }
                 }
               },
-              child: RefreshIndicator(
-                displacement: 20,
-                notificationPredicate: (notification) {
-                  // with NestedScrollView local(depth == 2)
-                  // OverscrollNotification are not sent
-                  if (notification is OverscrollNotification ||
-                      Platform.isIOS) {
-                    return notification.depth == 2;
-                  }
-                  return notification.depth == 0;
-                },
-                onRefresh: () async {
-                  context.read<ProfileCubit>()
-                    // ignore: unawaited_futures
-                    ..initLoops()
-                    // ignore: unawaited_futures
-                    ..initBadges()
-                    // ignore: unawaited_futures
-                    ..initBookings()
-                    // ignore: unawaited_futures
-                    ..refetchVisitedUser()
-                    // ignore: unawaited_futures
-                    ..loadIsFollowing(currentUser.id, visitedUser.id)
-                    // ignore: unawaited_futures
-                    ..loadIsVerified(visitedUser.id);
-                },
-                child: DefaultTabController(
-                  length: tabs.length,
-                  child: NestedScrollView(
-                    controller: _scrollController,
-                    headerSliverBuilder: (context, innerBoxIsScrolled) {
-                      return <Widget>[
-                        SliverAppBar(
-                          expandedHeight: 300,
-                          pinned: true,
-                          flexibleSpace: FlexibleSpaceBar(
-                            titlePadding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 12,
-                            ),
-                            centerTitle: false,
-                            title: Text.rich(
-                              TextSpan(
-                                text: visitedUser.artistName,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32,
-                                ),
-                                children: [
-                                  if (state.isVerified)
-                                    const WidgetSpan(
-                                      child: Icon(
-                                        Icons.verified,
-                                        size: 18,
-                                        color: tappedAccent,
-                                      ),
-                                      alignment: PlaceholderAlignment.middle,
-                                    )
-                                  else
-                                    const WidgetSpan(
-                                      child: SizedBox.shrink(),
-                                    ),
-                                ],
+              child: DefaultTabController(
+                length: tabs.length,
+                child: NestedScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  controller: _scrollController,
+                  headerSliverBuilder: (context, innerBoxIsScrolled) {
+                    return <Widget>[
+                      SliverAppBar(
+                        expandedHeight: 300,
+                        pinned: true,
+                        stretch: true,
+                        onStretchTrigger: () async {
+                          context.read<ProfileCubit>()
+                            // ignore: unawaited_futures
+                            ..initLoops()
+                            // ignore: unawaited_futures
+                            ..initBadges()
+                            // ignore: unawaited_futures
+                            ..initBookings()
+                            // ignore: unawaited_futures
+                            ..refetchVisitedUser()
+                            // ignore: unawaited_futures
+                            ..loadIsFollowing(currentUser.id, visitedUser.id)
+                            // ignore: unawaited_futures
+                            ..loadIsVerified(visitedUser.id);
+                        },
+                        flexibleSpace: FlexibleSpaceBar(
+                          stretchModes: const [
+                            StretchMode.zoomBackground,
+                            StretchMode.blurBackground,
+                            StretchMode.fadeTitle,
+                          ],
+                          titlePadding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          centerTitle: false,
+                          title: Text.rich(
+                            TextSpan(
+                              text: visitedUser.artistName,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 32,
                               ),
-                              overflow: TextOverflow.fade,
-                              maxLines: 2,
+                              children: [
+                                if (state.isVerified)
+                                  const WidgetSpan(
+                                    child: Icon(
+                                      Icons.verified,
+                                      size: 18,
+                                      color: tappedAccent,
+                                    ),
+                                    alignment: PlaceholderAlignment.middle,
+                                  )
+                                else
+                                  const WidgetSpan(
+                                    child: SizedBox.shrink(),
+                                  ),
+                              ],
                             ),
-                            background: Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: (visitedUser.profilePicture == null)
-                                      ? const AssetImage(
-                                          'assets/default_avatar.png',
-                                        ) as ImageProvider
-                                      : CachedNetworkImageProvider(
-                                          visitedUser.profilePicture!,
-                                        ),
-                                ),
+                            overflow: TextOverflow.fade,
+                            maxLines: 2,
+                          ),
+                          background: Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: (visitedUser.profilePicture == null)
+                                    ? const AssetImage(
+                                        'assets/default_avatar.png',
+                                      ) as ImageProvider
+                                    : CachedNetworkImageProvider(
+                                        visitedUser.profilePicture!,
+                                      ),
                               ),
                             ),
                           ),
                         ),
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                              top: 8,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
+                      ),
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            top: 8,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '@${visitedUser.username}',
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.normal,
+                                      color: Color(0xFF757575),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  if (visitedUser.label != 'None')
                                     Text(
-                                      '@${visitedUser.username}',
+                                      visitedUser.label,
                                       style: const TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.normal,
                                         color: Color(0xFF757575),
                                       ),
                                     ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    if (visitedUser.label != 'None')
-                                      Text(
-                                        visitedUser.label,
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.normal,
-                                          color: Color(0xFF757575),
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                                const ShareProfileButton(),
-                                const FollowButton(),
-                              ],
-                            ),
+                                ],
+                              ),
+                              const ShareProfileButton(),
+                              const FollowButton(),
+                            ],
                           ),
                         ),
-                        if (visitedUser.occupations.isNotEmpty)
-                          SliverToBoxAdapter(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 8,
-                                horizontal: 16,
-                              ),
-                              child: Text(
-                                visitedUser.occupations.join(', '),
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.normal,
-                                  color: tappedAccent,
-                                ),
-                              ),
-                            ),
-                          ),
-                        if (visitedUser.bio.isNotEmpty)
-                          SliverToBoxAdapter(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 8,
-                                horizontal: 16,
-                              ),
-                              child: Linkify(
-                                text: visitedUser.bio,
-                                maxLines: 6,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.normal,
-                                  // color: Color(0xFF757575),
-                                ),
-                              ),
-                            ),
-                          ),
+                      ),
+                      if (visitedUser.occupations.isNotEmpty)
                         SliverToBoxAdapter(
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                const FollowerCount(),
-                                const FollowingCount(),
-                                Row(
-                                  children: [
-                                    const Icon(
-                                      CupertinoIcons.location,
-                                      color: tappedAccent,
-                                      size: 16,
-                                    ),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      formattedAddress(
-                                        state.place.addressComponents,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        color: tappedAccent,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 16,
                             ),
-                          ),
-                        ),
-                        const SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.only(bottom: 8),
-                            child: SocialMediaIcons(),
-                          ),
-                        ),
-                        const SliverToBoxAdapter(
-                          child: RequestToBookButton(),
-                        ),
-                        SliverOverlapAbsorber(
-                          // This widget takes the overlapping behavior of the
-                          // SliverAppBar,
-                          // and redirects it to the SliverOverlapInjector below
-                          // If it is
-                          // missing, then it is possible for the nested "inner"
-                          // scroll view
-                          // below to end up under the SliverAppBar even when
-                          // the inner
-                          // scroll view thinks it has not been scrolled.
-                          // This is not necessary if the "headerSliverBuilder"
-                          // only builds
-                          // widgets that do not overlap the next sliver.
-                          handle:
-                              NestedScrollView.sliverOverlapAbsorberHandleFor(
-                            context,
-                          ),
-                          sliver: SliverPersistentHeader(
-                            pinned: true,
-                            delegate: _SliverAppBarDelegate(
-                              TabBar(
-                                tabs: tabs,
+                            child: Text(
+                              visitedUser.occupations.join(', '),
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.normal,
+                                color: tappedAccent,
                               ),
                             ),
                           ),
                         ),
-                      ];
-                    },
-                    body: TabBarView(
-                      children: _profileTabs(),
-                    ),
+                      if (visitedUser.bio.isNotEmpty)
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 16,
+                            ),
+                            child: Linkify(
+                              text: visitedUser.bio,
+                              maxLines: 6,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.normal,
+                                // color: Color(0xFF757575),
+                              ),
+                            ),
+                          ),
+                        ),
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              const FollowerCount(),
+                              const FollowingCount(),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    CupertinoIcons.location,
+                                    color: tappedAccent,
+                                    size: 16,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    formattedAddress(
+                                      state.place.addressComponents,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      color: tappedAccent,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SliverToBoxAdapter(
+                        child: Padding(
+                          padding: EdgeInsets.only(bottom: 8),
+                          child: SocialMediaIcons(),
+                        ),
+                      ),
+                      const SliverToBoxAdapter(
+                        child: RequestToBookButton(),
+                      ),
+                      SliverOverlapAbsorber(
+                        // This widget takes the overlapping behavior of the
+                        // SliverAppBar,
+                        // and redirects it to the SliverOverlapInjector below
+                        // If it is
+                        // missing, then it is possible for the nested "inner"
+                        // scroll view
+                        // below to end up under the SliverAppBar even when
+                        // the inner
+                        // scroll view thinks it has not been scrolled.
+                        // This is not necessary if the "headerSliverBuilder"
+                        // only builds
+                        // widgets that do not overlap the next sliver.
+                        handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                          context,
+                        ),
+                        sliver: SliverPersistentHeader(
+                          pinned: true,
+                          delegate: _SliverAppBarDelegate(
+                            TabBar(
+                              tabs: tabs,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ];
+                  },
+                  body: TabBarView(
+                    children: _profileTabs(),
                   ),
                 ),
               ),

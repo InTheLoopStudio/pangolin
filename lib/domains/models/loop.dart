@@ -105,6 +105,7 @@ class Loop extends Equatable {
   /// methods from jsonserialize
   Map<String, dynamic> toJson() => _$LoopToJson(this);
 
+  // toMap keeps the Timestamp object and toJson doesn't
   Map<String, dynamic> toMap() => <String, dynamic>{
         'id': id,
         'userId': userId,

@@ -115,7 +115,7 @@ class BottomToolbar extends StatelessWidget {
                 },
               ),
             ),
-            // BottomNavigationBarItem(icon: Icon(Icons.person)),
+            // const BottomNavigationBarItem(icon: Icon(Icons.person)),
             BottomNavigationBarItem(
               activeIcon: Container(
                 height: 35,

@@ -9,6 +9,7 @@ import 'package:intheloopapp/domains/models/service.dart';
 import 'package:intheloopapp/ui/views/activity/activity_view.dart';
 import 'package:intheloopapp/ui/views/advanced_search/advanced_search_view.dart';
 import 'package:intheloopapp/ui/views/badge/badge_view.dart';
+import 'package:intheloopapp/ui/views/bookings/user_bookings_feed.dart';
 import 'package:intheloopapp/ui/views/common/booking_view/booking_view.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view.dart';
 import 'package:intheloopapp/ui/views/create_booking/create_booking_view.dart';
@@ -17,9 +18,11 @@ import 'package:intheloopapp/ui/views/create_service/create_service_view.dart';
 import 'package:intheloopapp/ui/views/likes/likes_view.dart';
 import 'package:intheloopapp/ui/views/login/forgot_password_view.dart';
 import 'package:intheloopapp/ui/views/login/signup_view.dart';
+import 'package:intheloopapp/ui/views/loop_feed/user_loop_feed.dart';
 import 'package:intheloopapp/ui/views/messaging/channel_view.dart';
 import 'package:intheloopapp/ui/views/onboarding/onboarding_view.dart';
 import 'package:intheloopapp/ui/views/opportunities/interested_view.dart';
+import 'package:intheloopapp/ui/views/profile/new_profile_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
 import 'package:intheloopapp/ui/views/settings/settings_view.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/location_form/location_form_view.dart';
@@ -66,7 +69,25 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
       navigationKey.currentState?.push(
         MaterialPageRoute<ProfileView>(
           settings: const RouteSettings(name: '/profile'),
-          builder: (context) => ProfileView(visitedUserId: event.userId),
+          builder: (context) => NewProfileView(visitedUserId: event.userId),
+        ),
+      );
+      emit(state);
+    });
+    on<PushLoops>((event, emit) {
+      navigationKey.currentState?.push(
+        MaterialPageRoute<UserLoopFeed>(
+          settings: RouteSettings(name: '/loops/${event.userId}'),
+          builder: (context) => UserLoopFeed(userId: event.userId),
+        ),
+      );
+      emit(state);
+    });
+    on<PushBookings>((event, emit) {
+      navigationKey.currentState?.push(
+        MaterialPageRoute<UserBookingsFeed>(
+          settings: RouteSettings(name: '/bookings/${event.userId}'),
+          builder: (context) => UserBookingsFeed(userId: event.userId),
         ),
       );
       emit(state);

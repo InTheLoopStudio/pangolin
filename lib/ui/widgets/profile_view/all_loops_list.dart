@@ -67,6 +67,7 @@ class AllLoopsListState extends State<AllLoopsList>
         }
 
         return CustomScrollView(
+          physics: const ClampingScrollPhysics(),
           // The "controller" and "primary" members should be left
           // unset, so that the NestedScrollView can control this
           // inner scroll view.

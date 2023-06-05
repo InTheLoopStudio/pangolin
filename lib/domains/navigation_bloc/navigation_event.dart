@@ -26,6 +26,34 @@ class PushProfile extends NavigationEvent {
   List<Object> get props => [userId];
 }
 
+class PushLoops extends NavigationEvent {
+  const PushLoops({
+    required this.userId,
+  });
+
+  final String userId;
+
+  @override
+  String toString() => 'PushLoops { userId : $userId }';
+
+  @override
+  List<Object> get props => [userId];
+}
+
+class PushBookings extends NavigationEvent {
+  const PushBookings({
+    required this.userId,
+  });
+
+  final String userId;
+
+  @override
+  String toString() => 'PushBookings { userId : $userId }';
+
+  @override
+  List<Object> get props => [userId];
+}
+
 class PushSettings extends NavigationEvent {
   const PushSettings();
 
