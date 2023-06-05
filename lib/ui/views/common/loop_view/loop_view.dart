@@ -10,6 +10,7 @@ import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/linkify.dart';
+import 'package:intheloopapp/ui/app_theme_cubit.dart';
 import 'package:intheloopapp/ui/views/common/comments/comments_cubit.dart';
 import 'package:intheloopapp/ui/views/common/loading/loop_loading_view.dart';
 import 'package:intheloopapp/ui/views/common/loop_view/loop_view_cubit.dart';
@@ -130,57 +131,78 @@ class LoopView extends StatelessWidget {
                           title: GestureDetector(
                             onTap: () =>
                                 navigationBloc.add(PushProfile(value.id)),
-                            child: CardBanner(
-                              text: 'tapped',
-                              position: CardBannerPosition.TOPRIGHT,
-                              child: Row(
-                                children: [
-                                  Column(
-                                    children: [
-                                      // + User Avatar
-                                      UserAvatar(
-                                        radius: 24,
-                                        pushId: state.user.id,
-                                        imageUrl: value.profilePicture,
-                                        verified: state.isVerified,
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    width: 28,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        value.artistName,
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        // + User Avatar
+                                        UserAvatar(
+                                          radius: 24,
+                                          pushId: state.user.id,
+                                          imageUrl: value.profilePicture,
+                                          verified: state.isVerified,
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      width: 28,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          value.artistName,
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          '@${value.username}',
+                                          style: const TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        Text(
+                                          timeago.format(
+                                            loop.timestamp,
+                                            locale: 'en_short',
+                                          ),
+                                          style: const TextStyle(
+                                            fontSize: 10,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                BlocBuilder<AppThemeCubit, bool>(
+                                  builder: (context, isDark) {
+                                    return Container(
+                                      height: 25,
+                                      width: 100,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          fit: BoxFit.fitHeight,
+                                          image: isDark
+                                              ? AssetImage(
+                                                  'assets/tapped_logo_reversed.png',
+                                                ) as ImageProvider
+                                              : AssetImage(
+                                                  'assets/tapped_logo.png',
+                                                ) as ImageProvider,
                                         ),
                                       ),
-                                      Text(
-                                        '@${value.username}',
-                                        style: const TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                      Text(
-                                        timeago.format(
-                                          loop.timestamp,
-                                          locale: 'en_short',
-                                        ),
-                                        style: const TextStyle(
-                                          fontSize: 10,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                    );
+                                  },
+                                ),
+                              ],
                             ),
                           ),
                         ),
