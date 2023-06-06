@@ -74,7 +74,7 @@ class _LoopFeedViewState extends State<LoopFeedView>
                   )
                 : null,
             body: LoopList(
-              nested: false,
+              nested: widget.nested,
               feedKey: widget.feedKey,
               scrollController: widget.scrollController,
             ),
