@@ -471,4 +471,13 @@ class LocalDatabaseImpl extends DatabaseRepository {
   }) async {
     return false;
   }
+
+  @override
+  Future<List<Loop>> getUserOpportunities(
+    String userId, {
+    int limit = 20,
+    String? lastLoopId,
+  }) async {
+    return [];
+  }
 }
