@@ -75,6 +75,8 @@ class CommentsCubit extends Cubit<CommentsState> {
   }
 
   Future<void> addComment() async {
+    if (state.loading) return;
+
     emit(state.copyWith(loading: true));
 
     if (state.comment.isNotEmpty) {
