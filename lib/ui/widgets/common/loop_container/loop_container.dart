@@ -230,22 +230,11 @@ class _LoopContainerState extends State<LoopContainer>
                       return ConditionalParentWidget(
                         condition: widget.loop.isOpportunity,
                         conditionalBuilder: _opportunity,
-                        child: () {
-                          if (widget.loop.audioPath.isSome &&
-                              value.profilePicture != null) {
-                            return _audioLoopContainer(
-                              navigationBloc: navigationBloc,
-                              loopUser: value,
-                              currentUserId: currentUser.id,
-                            );
-                          }
-
-                          return _loopContainer(
-                            navigationBloc: navigationBloc,
-                            loopUser: value,
-                            currentUserId: currentUser.id,
-                          );
-                        }(),
+                        child: _loopContainer(
+                          navigationBloc: navigationBloc,
+                          loopUser: value,
+                          currentUserId: currentUser.id,
+                        ),
                       );
                     },
                   ),
