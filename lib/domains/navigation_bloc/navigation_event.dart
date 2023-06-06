@@ -40,6 +40,20 @@ class PushLoops extends NavigationEvent {
   List<Object> get props => [userId];
 }
 
+class PushOpportunities extends NavigationEvent {
+  const PushOpportunities({
+    required this.userId,
+  });
+
+  final String userId;
+
+  @override
+  String toString() => 'PushOpportunities { userId : $userId }';
+
+  @override
+  List<Object> get props => [userId];
+}
+
 class PushBookings extends NavigationEvent {
   const PushBookings({
     required this.userId,

@@ -101,7 +101,10 @@ List<BlocProvider> buildBlocs({
       ),
     ),
     BlocProvider<NavigationBloc>(
-      create: (_) => NavigationBloc(navigationKey: navigatorKey),
+      create: (context) => NavigationBloc(
+        database: context.read<DatabaseRepository>(),
+        navigationKey: navigatorKey,
+      ),
     ),
     BlocProvider<OnboardingBloc>(
       create: (context) => OnboardingBloc(

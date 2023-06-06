@@ -42,12 +42,16 @@ abstract class DatabaseRepository {
     int limit = 20,
     String? lastLoopId,
   });
+  Stream<Loop> userLoopsObserver(
+    String userId, {
+    int limit = 100,
+  });
   Future<List<Loop>> getUserOpportunities(
     String userId, {
     int limit = 20,
     String? lastLoopId,
   });
-  Stream<Loop> userLoopsObserver(
+  Stream<Loop> userOpportunitiesObserver(
     String userId, {
     int limit = 100,
   });

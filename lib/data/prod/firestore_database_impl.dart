@@ -598,6 +598,44 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
+  Stream<Loop> userLoopsObserver(
+    String userId, {
+    int limit = 30,
+  }) async* {
+    final userLoopsSnapshotObserver = _loopsRef
+        .where('deleted', isNotEqualTo: true)
+        .orderBy('deleted', descending: true)
+        .where('userId', isEqualTo: userId)
+        .orderBy('timestamp', descending: true)
+        .limit(limit)
+        .snapshots();
+
+    final userLoopsObserver = userLoopsSnapshotObserver.map((event) {
+      return event.docChanges
+          .where(
+        (DocumentChange<Map<String, dynamic>> element) =>
+            element.type == DocumentChangeType.added,
+      )
+          .map((DocumentChange<Map<String, dynamic>> element) {
+        try {
+          return Loop.fromDoc(element.doc);
+        } catch (e, s) {
+          logger.error('userLoopsObserver', error: e, stackTrace: s);
+          return null;
+        }
+        // if (element.type == DocumentChangeType.modified) {}
+        // if (element.type == DocumentChangeType.removed) {}
+      });
+    }).flatMap(
+      (value) => Stream.fromIterable(value).whereType<Loop>().where(
+            (loop) => !loop.deleted,
+          ),
+    );
+
+    yield* userLoopsObserver;
+  }
+
+  @override
   Future<List<Loop>> getUserOpportunities(
     String userId, {
     int limit = 30,
@@ -647,11 +685,12 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
   }
 
   @override
-  Stream<Loop> userLoopsObserver(
+  Stream<Loop> userOpportunitiesObserver(
     String userId, {
-    int limit = 30,
+    int limit = 20,
   }) async* {
     final userLoopsSnapshotObserver = _loopsRef
+        .where('isOpportunity', isEqualTo: true)
         .where('deleted', isNotEqualTo: true)
         .orderBy('deleted', descending: true)
         .where('userId', isEqualTo: userId)

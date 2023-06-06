@@ -480,4 +480,10 @@ class LocalDatabaseImpl extends DatabaseRepository {
   }) async {
     return [];
   }
+
+  @override
+  Stream<Loop> userOpportunitiesObserver(
+    String userId, {
+    int limit = 100,
+  }) async* {}
 }

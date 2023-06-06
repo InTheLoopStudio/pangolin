@@ -5,17 +5,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
 import 'package:intheloopapp/ui/views/common/loading/list_loading_view.dart';
 import 'package:intheloopapp/ui/views/loop_feed/loop_feed_cubit.dart';
+import 'package:intheloopapp/ui/widgets/common/conditional_parent_widget.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container.dart';
 
 class LoopList extends StatefulWidget {
   const LoopList({
     required this.feedKey,
     required this.scrollController,
+    this.nested = true,
     super.key,
   });
 
   final String feedKey;
   final ScrollController scrollController;
+  final bool nested;
 
   @override
   State<LoopList> createState() => _LoopListState();
@@ -82,13 +85,14 @@ class _LoopListState extends State<LoopList> {
                 physics: const ClampingScrollPhysics(),
                 key: PageStorageKey<String>(widget.feedKey),
                 slivers: [
-                  SliverOverlapInjector(
-                    // This is the flip side of the
-                    // SliverOverlapAbsorber
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                      context,
+                  if (widget.nested)
+                    SliverOverlapInjector(
+                      // This is the flip side of the
+                      // SliverOverlapAbsorber
+                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        context,
+                      ),
                     ),
-                  ),
                   SliverPadding(
                     padding: const EdgeInsets.all(8),
                     sliver: SliverList(

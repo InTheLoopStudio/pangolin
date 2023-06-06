@@ -117,6 +117,8 @@ class _LoopFeedsListViewState extends State<LoopFeedsListView>
               children: state.feedParamsList
                   .map(
                     (feedParam) => LoopFeedView(
+                      nested: true,
+                      header: false,
                       sourceFunction: feedParam.sourceFunction,
                       sourceStream: feedParam.sourceStream,
                       feedKey: feedParam.feedKey,
