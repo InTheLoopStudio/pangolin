@@ -1,3 +1,4 @@
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/payment_user.dart';
 
 abstract class PaymentRepository {
@@ -14,7 +15,7 @@ abstract class PaymentRepository {
     String accountId,
   });
 
-  Future<PaymentUser?> getAccountById(String id);
+  Future<Option<PaymentUser>> getAccountById(String id);
 }
 
 class ConnectedAccountResponse {

@@ -86,7 +86,6 @@ class NewProfileView extends StatelessWidget {
                     flexibleSpace: FlexibleSpaceBar(
                       stretchModes: const [
                         StretchMode.zoomBackground,
-                        StretchMode.blurBackground,
                         StretchMode.fadeTitle,
                       ],
                       titlePadding: const EdgeInsets.symmetric(

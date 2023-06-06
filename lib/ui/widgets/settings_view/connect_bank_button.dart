@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/payment_user.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
@@ -72,7 +73,6 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
             loading = false;
           });
         },
-
       );
 
   @override
@@ -98,7 +98,7 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
           );
         }
 
-        return FutureBuilder<PaymentUser?>(
+        return FutureBuilder<Option<PaymentUser>>(
           future: payments.getAccountById(
             currentUser.stripeConnectedAccountId!,
           ),
@@ -108,29 +108,30 @@ class _ConnectBankButtonState extends State<ConnectBankButton> {
             }
 
             final paymentUser = snapshot.data;
+            return switch (paymentUser) {
+              null => const CircularProgressIndicator(),
+              None() => _connectBankAccountButton(
+                  payments: payments,
+                  currentUser: currentUser,
+                  onboardingBloc: context.read<OnboardingBloc>(),
+                  navigationBloc: context.read<NavigationBloc>(),
+                ),
+              Some(:final value) => () {
+                  if (!value.payoutsEnabled) {
+                    return _connectBankAccountButton(
+                      payments: payments,
+                      currentUser: currentUser,
+                      onboardingBloc: context.read<OnboardingBloc>(),
+                      navigationBloc: context.read<NavigationBloc>(),
+                    );
+                  }
 
-            if (paymentUser == null) {
-              return _connectBankAccountButton(
-                payments: payments,
-                currentUser: currentUser,
-                onboardingBloc: context.read<OnboardingBloc>(),
-                navigationBloc: context.read<NavigationBloc>(),
-              );
-            }
-
-            if (!paymentUser.payoutsEnabled) {
-              return _connectBankAccountButton(
-                payments: payments,
-                currentUser: currentUser,
-                onboardingBloc: context.read<OnboardingBloc>(),
-                navigationBloc: context.read<NavigationBloc>(),
-              );
-            }
-
-            return const CupertinoButton(
-              onPressed: null,
-              child: Text('✅ Bank Account Connected'),
-            );
+                  return const CupertinoButton(
+                    onPressed: null,
+                    child: Text('✅ Bank Account Connected'),
+                  );
+                }(),
+            };
           },
         );
       },

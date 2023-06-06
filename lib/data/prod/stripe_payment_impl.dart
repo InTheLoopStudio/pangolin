@@ -2,6 +2,7 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:intheloopapp/data/payment_repository.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/payment_user.dart';
 
 final _functions = FirebaseFunctions.instance;
@@ -127,7 +128,7 @@ class StripePaymentImpl implements PaymentRepository {
   }
 
   @override
-  Future<PaymentUser?> getAccountById(String id) async {
+  Future<Option<PaymentUser>> getAccountById(String id) async {
     final callable = _functions.httpsCallable('getAccountById');
     final results = await callable<Map<String, dynamic>>({
       'accountId': id,
@@ -136,6 +137,6 @@ class StripePaymentImpl implements PaymentRepository {
 
     final paymentUser = PaymentUser.fromJson(data);
 
-    return paymentUser;
+    return Option.fromNullable(paymentUser);
   }
 }
