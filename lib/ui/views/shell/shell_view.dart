@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
@@ -10,6 +11,7 @@ import 'package:intheloopapp/ui/views/profile/new_profile_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
 import 'package:intheloopapp/ui/views/search/search_view.dart';
 import 'package:intheloopapp/ui/widgets/shell_view/bottom_toolbar.dart';
+import 'package:path/path.dart';
 
 class ShellView extends StatefulWidget {
   const ShellView({
@@ -28,7 +30,6 @@ class _ShellViewState extends State<ShellView> {
 
   @override
   void initState() {
-    
     searchFocusNode = FocusNode();
     super.initState();
   }
@@ -41,35 +42,38 @@ class _ShellViewState extends State<ShellView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<OnboardingBloc, OnboardingState, UserModel?>(
-      selector: (state) => (state is Onboarded) ? state.currentUser : null,
+    return BlocSelector<OnboardingBloc, OnboardingState, Option<UserModel>>(
+      selector: (state) =>
+          (state is Onboarded) ? Some(state.currentUser) : const None(),
       builder: (context, currentUser) {
-        if (currentUser == null) {
-          return const ErrorView();
-        }
-
-        return BlocBuilder<NavigationBloc, NavigationState>(
-          builder: (context, state) {
-            return Scaffold(
-              body: IndexedStack(
-                index: state.selectedTab,
-                children: [
-                  const LoopFeedsListView(), // getstream.io activity feed?
-                  SearchView(
+        return switch (currentUser) {
+          None() => const ErrorView(),
+          Some(:final value) => BlocBuilder<NavigationBloc, NavigationState>(
+              builder: (context, state) {
+                return Scaffold(
+                  body: IndexedStack(
+                    index: state.selectedTab,
+                    children: [
+                      const LoopFeedsListView(), // getstream.io activity feed?
+                      SearchView(
+                        searchFocusNode: searchFocusNode,
+                      ),
+                      const BookingsView(),
+                      NewProfileView(
+                        visitedUserId: value.id,
+                        visitedUser: currentUser,
+                      ),
+                      // ProfileView(visitedUserId: currentUser.id),
+                    ],
+                  ),
+                  bottomNavigationBar: BottomToolbar(
+                    user: value,
                     searchFocusNode: searchFocusNode,
                   ),
-                  const BookingsView(),
-                  NewProfileView(visitedUserId: currentUser.id),
-                  // ProfileView(visitedUserId: currentUser.id),
-                ],
-              ),
-              bottomNavigationBar: BottomToolbar(
-                user: currentUser,
-                searchFocusNode: searchFocusNode,
-              ),
-            );
-          },
-        );
+                );
+              },
+            ),
+        };
       },
     );
   }

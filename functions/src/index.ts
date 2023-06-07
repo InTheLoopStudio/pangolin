@@ -751,9 +751,9 @@ export const autoFollowUsersOnUserCreated = functions
     const userIdsToAutoFollow = [
       "8yYVxpQ7cURSzNfBsaBGF7A7kkv2", // Johannes
       "n4zIL6bOuPTqRC3dtsl6gyEBPQl1", // Ilias
-      "ToPGEF6jP1e7R6XJDsOHYSyBpf22", // Amberay
-      "aDsHZs9v2BcUWJZYIRAPbX6KSMs2", // Phil
-      "7wEC1jNzsShn3wd8BWXC0w89aIF3" // Xypper
+      // "ToPGEF6jP1e7R6XJDsOHYSyBpf22", // Amberay
+      // "aDsHZs9v2BcUWJZYIRAPbX6KSMs2", // Phil
+      // "7wEC1jNzsShn3wd8BWXC0w89aIF3" // Xypper
       // "kNVsCCnDkFdYAxebMspLpnEudwq1", // Jayduhhhh
       // "xfxTCUerCyZCUB85likg7THcUGD2", // Yung Smilez
       // "EczWgsPTL1ROJ6EU93Q5vs0Osfx2", // Akimi

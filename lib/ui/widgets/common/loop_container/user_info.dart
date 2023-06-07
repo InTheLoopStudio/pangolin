@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/app_theme_cubit.dart';
@@ -32,7 +33,12 @@ class UserInfo extends StatelessWidget {
         final verified = snapshot.data!;
 
         return GestureDetector(
-          onTap: () => navigationBloc.add(PushProfile(loopUser.id)),
+          onTap: () => navigationBloc.add(
+            PushProfile(
+              loopUser.id,
+              Some(loopUser),
+            ),
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -43,7 +49,7 @@ class UserInfo extends StatelessWidget {
                       // + User Avatar
                       UserAvatar(
                         radius: 24,
-                        pushId: loopUser.id,
+                        pushUser: Some(loopUser),
                         imageUrl: loopUser.profilePicture,
                         verified: verified,
                       ),

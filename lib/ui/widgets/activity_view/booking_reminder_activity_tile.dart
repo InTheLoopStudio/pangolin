@@ -73,7 +73,7 @@ class BookingReminderActivityTile extends StatelessWidget {
                               tileColor: markedRead ? null : Colors.grey[900],
                               leading: UserAvatar(
                                 radius: 20,
-                                pushId: activity.fromUserId,
+                                pushUser: user,
                                 imageUrl: value.profilePicture,
                                 verified: isVerified,
                               ),

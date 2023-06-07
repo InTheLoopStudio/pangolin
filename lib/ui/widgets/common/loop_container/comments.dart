@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container_cubit.dart';
 
@@ -15,6 +16,7 @@ class Comments extends StatelessWidget {
           onTap: () => navigationBloc.add(
             PushLoop(
               state.loop,
+              const None(),
             ),
           ),
           child: Row(

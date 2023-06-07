@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:card_banner/card_banner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/app_logger.dart';
@@ -63,7 +62,7 @@ class _LoopContainerState extends State<LoopContainer>
   }) =>
       GestureDetector(
         onTap: () => navigationBloc.add(
-          PushLoop(widget.loop),
+          PushLoop(widget.loop, Some(loopUser)),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -115,7 +114,7 @@ class _LoopContainerState extends State<LoopContainer>
   }) =>
       GestureDetector(
         onTap: () => navigationBloc.add(
-          PushLoop(widget.loop),
+          PushLoop(widget.loop, Some(loopUser)),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),

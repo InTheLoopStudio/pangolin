@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intheloopapp/domains/controllers/audio_controller.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:uuid/uuid.dart';
 
 class PlayPauseButton extends StatelessWidget {
   const PlayPauseButton({
@@ -37,7 +38,8 @@ class PlayPauseButton extends StatelessWidget {
           );
         } else if (!playing) {
           return FloatingActionButton(
-            heroTag: 'playPauseButton-${audioController.title}',
+            heroTag:
+                'playPauseButton-${audioController.title}-${const Uuid().v4()}',
             onPressed: audioController.play,
             shape: const CircleBorder(),
             child: const Icon(

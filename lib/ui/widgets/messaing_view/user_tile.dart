@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/stream_repository.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
@@ -17,7 +18,7 @@ class UserTile extends StatelessWidget {
 
     return ListTile(
       leading: UserAvatar(
-        pushId: user.id,
+        pushUser: Some(user),
         imageUrl: user.profilePicture,
         radius: 20,
       ),

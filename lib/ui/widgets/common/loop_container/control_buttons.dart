@@ -101,28 +101,21 @@ class ControlButtons extends StatelessWidget {
                   likeCount: state.likeCount,
                   onLike: context.read<LoopContainerCubit>().toggleLoopLike,
                 ),
-                GestureDetector(
-                  onTap: () => context.read<NavigationBloc>().add(
-                        PushLoop(
-                          state.loop,
-                        ),
-                      ),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        CupertinoIcons.bubble_middle_bottom,
-                        size: 18,
+                Row(
+                  children: [
+                    const Icon(
+                      CupertinoIcons.bubble_middle_bottom,
+                      size: 18,
+                      color: Color(0xFF757575),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      '${state.commentCount}',
+                      style: const TextStyle(
                         color: Color(0xFF757575),
                       ),
-                      const SizedBox(width: 6),
-                      Text(
-                        '${state.commentCount}',
-                        style: const TextStyle(
-                          color: Color(0xFF757575),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 GestureDetector(
                   // onTap: null,

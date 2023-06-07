@@ -6,7 +6,9 @@ import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/domains/models/badge.dart' as badge_model;
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/service.dart';
+import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/ui/views/activity/activity_view.dart';
 import 'package:intheloopapp/ui/views/advanced_search/advanced_search_view.dart';
 import 'package:intheloopapp/ui/views/badge/badge_view.dart';
@@ -50,6 +52,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
           builder: (context) => Material(
             child: LoopView(
               loop: event.loop,
+              loopUser: event.loopUser,
             ),
           ),
         ),
@@ -73,7 +76,10 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
       navigationKey.currentState?.push(
         MaterialPageRoute<ProfileView>(
           settings: const RouteSettings(name: '/profile'),
-          builder: (context) => NewProfileView(visitedUserId: event.userId),
+          builder: (context) => NewProfileView(
+            visitedUserId: event.userId,
+            visitedUser: event.user,
+          ),
         ),
       );
       emit(state);

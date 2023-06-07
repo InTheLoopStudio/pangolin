@@ -32,7 +32,7 @@ class AudioDescription extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                  navigationBloc.add(PushProfile(user.id));
+                  navigationBloc.add(PushProfile(user.id, Some(user)));
                 },
                 child: Row(
                   children: [

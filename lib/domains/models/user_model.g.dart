@@ -31,6 +31,8 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       deleted: json['deleted'] as bool,
       shadowBanned: json['shadowBanned'] as bool,
       accountType: $enumDecode(_$AccountTypeEnumMap, json['accountType']),
+      epkUrl:
+          const OptionalStringConverter().fromJson(json['epkUrl'] as String?),
       youtubeChannelId: json['youtubeChannelId'] as String?,
       tiktokHandle: json['tiktokHandle'] as String?,
       instagramHandle: json['instagramHandle'] as String?,
@@ -71,6 +73,7 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'deleted': instance.deleted,
       'shadowBanned': instance.shadowBanned,
       'accountType': _$AccountTypeEnumMap[instance.accountType]!,
+      'epkUrl': const OptionalStringConverter().toJson(instance.epkUrl),
       'youtubeChannelId': instance.youtubeChannelId,
       'tiktokHandle': instance.tiktokHandle,
       'instagramHandle': instance.instagramHandle,

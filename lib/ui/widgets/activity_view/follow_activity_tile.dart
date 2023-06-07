@@ -17,10 +17,11 @@ class FollowActivityTile extends StatelessWidget {
 
   final Follow activity;
 
-  void onClick(BuildContext context) {
+  void onClick(BuildContext context, Option<UserModel> fromUser) {
     context.read<NavigationBloc>().add(
           PushProfile(
             activity.fromUserId,
+            fromUser,
           ),
         );
   }
@@ -64,12 +65,13 @@ class FollowActivityTile extends StatelessWidget {
                           GestureDetector(
                             onTap: () => onClick(
                               context,
+                              user,
                             ),
                             child: ListTile(
                               tileColor: markedRead ? null : Colors.grey[900],
                               leading: UserAvatar(
                                 radius: 20,
-                                pushId: value.id,
+                                pushUser: user,
                                 imageUrl: value.profilePicture,
                                 verified: isVerified,
                               ),

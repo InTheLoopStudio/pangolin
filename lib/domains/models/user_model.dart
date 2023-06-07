@@ -33,6 +33,7 @@ class UserModel extends Equatable {
     required this.deleted,
     required this.shadowBanned,
     required this.accountType,
+    required this.epkUrl,
     required this.youtubeChannelId,
     required this.tiktokHandle,
     required this.instagramHandle,
@@ -70,6 +71,7 @@ class UserModel extends Equatable {
         deleted: false,
         shadowBanned: false,
         accountType: AccountType.free,
+        epkUrl: const None<String>(),
         youtubeChannelId: null,
         tiktokHandle: null,
         instagramHandle: null,
@@ -131,6 +133,9 @@ class UserModel extends Equatable {
       deleted: doc.getOrElse('deleted', false) as bool,
       shadowBanned: doc.getOrElse('shadowBanned', false) as bool,
       accountType: accountType,
+      epkUrl: Option.fromNullable(
+        doc.getOrElse('epkUrl', null) as String?,
+      ),
       youtubeChannelId: doc.getOrElse('youtubeChannelId', null) as String?,
       tiktokHandle: doc.getOrElse('tiktokHandle', null) as String?,
       instagramHandle: doc.getOrElse('instagramHandle', null) as String?,
@@ -185,6 +190,9 @@ class UserModel extends Equatable {
   final bool shadowBanned;
   final AccountType accountType;
 
+  @OptionalStringConverter()
+  final Option<String> epkUrl;
+
   final String? youtubeChannelId;
   final String? tiktokHandle;
   final String? instagramHandle;
@@ -225,6 +233,7 @@ class UserModel extends Equatable {
         deleted,
         shadowBanned,
         accountType,
+        epkUrl,
         youtubeChannelId,
         tiktokHandle,
         instagramHandle,
@@ -272,6 +281,7 @@ class UserModel extends Equatable {
     bool? deleted,
     bool? shadowBanned,
     AccountType? accountType,
+    Option<String>? epkUrl,
     String? youtubeChannelId,
     String? tiktokHandle,
     String? instagramHandle,
@@ -308,6 +318,7 @@ class UserModel extends Equatable {
       deleted: deleted ?? this.deleted,
       shadowBanned: shadowBanned ?? this.shadowBanned,
       accountType: accountType ?? this.accountType,
+      epkUrl: epkUrl ?? this.epkUrl,
       youtubeChannelId: youtubeChannelId ?? this.youtubeChannelId,
       tiktokHandle: tiktokHandle ?? this.tiktokHandle,
       instagramHandle: instagramHandle ?? this.instagramHandle,
@@ -355,6 +366,7 @@ class UserModel extends Equatable {
       'deleted': deleted,
       'shadowBanned': shadowBanned,
       'accountType': _$AccountTypeEnumMap[accountType],
+      'epkUrl': epkUrl.asNullable(),
       'youtubeChannelId': youtubeChannelId,
       'tiktokHandle': tiktokHandle,
       'instagramHandle': instagramHandle,

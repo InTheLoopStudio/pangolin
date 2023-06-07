@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/audio_repository.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
@@ -62,7 +63,7 @@ class CreateLoopView extends StatelessWidget {
                       ),
                       child: UserAvatar(
                         radius: 45,
-                        pushId: currentUser.id,
+                        pushUser: Some(currentUser),
                         imageUrl: currentUser.profilePicture,
                       ),
                     ),

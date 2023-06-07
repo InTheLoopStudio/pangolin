@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
@@ -91,7 +92,7 @@ class _UserTileState extends State<UserTile> {
             return ListTile(
               leading: UserAvatar(
                 radius: 25,
-                pushId: widget.user.id,
+                pushUser: Some(widget.user),
                 imageUrl: widget.user.profilePicture,
                 verified: verified,
               ),
@@ -100,11 +101,19 @@ class _UserTileState extends State<UserTile> {
                   Text(
                     '${widget.user.followerCount} followers',
                   ),
-              trailing: widget.trailing ?? _followButton(
-                currentUser,
-                database,
+              trailing: widget.trailing ??
+                  _followButton(
+                    currentUser,
+                    database,
+                  ),
+              onTap: () => navigationBloc.add(
+                PushProfile(
+                  widget.user.id,
+                  Some(
+                    widget.user,
+                  ),
+                ),
               ),
-              onTap: () => navigationBloc.add(PushProfile(widget.user.id)),
             );
           },
         );

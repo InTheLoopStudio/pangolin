@@ -142,7 +142,7 @@ class Linkify extends StatelessWidget {
                     throw Exception('User not found');
                   }
 
-                  nav.add(PushProfile(user.unwrap.id));
+                  nav.add(PushProfile(user.unwrap.id, user));
                 }
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(

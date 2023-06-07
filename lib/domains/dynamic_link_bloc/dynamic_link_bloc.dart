@@ -31,12 +31,17 @@ class DynamicLinkBloc extends Bloc<DynamicLinkEvent, DynamicLinkState> {
                   event.id ?? '',
                 );
                 if (shareLoop.isSome) {
-                  navigationBloc.add(PushLoop(shareLoop.unwrap));
+                  navigationBloc.add(
+                    PushLoop(
+                      shareLoop.unwrap,
+                      const None(),
+                    ),
+                  );
                 }
               }
             case DynamicLinkType.shareProfile:
               if (event.id != null) {
-                navigationBloc.add(PushProfile(event.id!));
+                navigationBloc.add(PushProfile(event.id!, const None()));
               }
             case DynamicLinkType.connectStripeRedirect:
               if (event.id == null || event.id == '') {

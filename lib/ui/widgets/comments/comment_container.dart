@@ -88,10 +88,15 @@ class _CommentContainerState extends State<CommentContainer> {
                         horizontal: 10,
                       ),
                       child: ListTile(
-                        onTap: () => navigationBloc.add(PushProfile(value.id)),
+                        onTap: () => navigationBloc.add(
+                          PushProfile(
+                            value.id,
+                            user,
+                          ),
+                        ),
                         leading: UserAvatar(
                           radius: 20,
-                          pushId: value.id,
+                          pushUser: user,
                           imageUrl: value.profilePicture,
                           verified: isVerified,
                         ),

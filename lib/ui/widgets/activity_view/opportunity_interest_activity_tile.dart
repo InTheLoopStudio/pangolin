@@ -25,7 +25,7 @@ class OpportunityInterestActivityTile extends StatelessWidget {
     if (loop.isNone) {
       return;
     }
-    nav.add(PushLoop(loop.unwrap));
+    nav.add(PushLoop(loop.unwrap, const None()));
   }
 
   @override
@@ -72,7 +72,7 @@ class OpportunityInterestActivityTile extends StatelessWidget {
                               tileColor: markedRead ? null : Colors.grey[900],
                               leading: UserAvatar(
                                 radius: 20,
-                                pushId: activity.fromUserId,
+                                pushUser: user,
                                 imageUrl: value.profilePicture,
                                 verified: isVerified,
                               ),

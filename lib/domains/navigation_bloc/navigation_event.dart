@@ -15,15 +15,19 @@ class Pop extends NavigationEvent {
 }
 
 class PushProfile extends NavigationEvent {
-  const PushProfile(this.userId);
+  const PushProfile(
+    this.userId,
+    this.user,
+  );
 
   final String userId;
+  final Option<UserModel> user;
 
   @override
-  String toString() => 'PushProfile { userId : $userId }';
+  String toString() => 'PushProfile { userId : $userId, user: $user }';
 
   @override
-  List<Object> get props => [userId];
+  List<Object> get props => [userId, user];
 }
 
 class PushLoops extends NavigationEvent {
@@ -130,15 +134,17 @@ class PushSignUp extends NavigationEvent {
 class PushLoop extends NavigationEvent {
   const PushLoop(
     this.loop,
+    this.loopUser,
   );
 
   final Loop loop;
+  final Option<UserModel> loopUser;
 
   @override
-  String toString() => '''PushLoop { loop: $loop }''';
+  String toString() => '''PushLoop { loop: $loop, loopUser: $loopUser }''';
 
   @override
-  List<Object> get props => [loop];
+  List<Object> get props => [loop, loopUser];
 }
 
 class PushBadge extends NavigationEvent {

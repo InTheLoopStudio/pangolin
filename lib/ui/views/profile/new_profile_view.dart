@@ -14,6 +14,7 @@ import 'package:intheloopapp/ui/views/error/error_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_cubit.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/badges_sliver.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/bookings_sliver.dart';
+import 'package:intheloopapp/ui/widgets/profile_view/epk_button.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/follow_button.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/follower_count.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/following_count.dart';
@@ -27,10 +28,14 @@ import 'package:intheloopapp/utils.dart';
 class NewProfileView extends StatelessWidget {
   const NewProfileView({
     required this.visitedUserId,
+    required this.visitedUser,
     super.key,
   });
 
   final String visitedUserId;
+
+  // callers can provide a user to avoid a database call
+  final Option<UserModel> visitedUser;
 
   Widget _profilePage(
     UserModel currentUser,
@@ -247,8 +252,14 @@ class NewProfileView extends StatelessWidget {
                       child: SocialMediaIcons(),
                     ),
                   ),
-                  const SliverToBoxAdapter(
-                    child: RequestToBookButton(),
+                  SliverToBoxAdapter(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        const RequestToBookButton(),
+                        if (visitedUser.epkUrl.isSome) const EPKButton(),
+                      ],
+                    ),
                   ),
                   const SliverToBoxAdapter(
                     child: SizedBox(height: 12),
@@ -271,6 +282,7 @@ class NewProfileView extends StatelessWidget {
                   const SliverToBoxAdapter(
                     child: BadgesSliver(),
                   ),
+                  const SliverFillRemaining(),
                 ],
               ),
             );
@@ -293,30 +305,37 @@ class NewProfileView extends StatelessWidget {
             return const ErrorView();
           }
 
-          return currentUser.id != visitedUserId
-              ? FutureBuilder<Option<UserModel>>(
-                  future: databaseRepository.getUserById(visitedUserId),
-                  builder: (context, snapshot) {
-                    final user = snapshot.data;
+          return switch ((visitedUser, currentUser.id == visitedUserId)) {
+            (_, true) => _profilePage(
+                currentUser,
+                currentUser,
+                databaseRepository,
+                places,
+              ),
+            (None(), false) => FutureBuilder<Option<UserModel>>(
+                future: databaseRepository.getUserById(visitedUserId),
+                builder: (context, snapshot) {
+                  final user = snapshot.data;
 
-                    return switch (user) {
-                      null => const LoadingView(),
-                      None() => const LoadingView(),
-                      Some(:final value) => _profilePage(
-                          currentUser,
-                          value,
-                          databaseRepository,
-                          places,
-                        ),
-                    };
-                  },
-                )
-              : _profilePage(
-                  currentUser,
-                  currentUser,
-                  databaseRepository,
-                  places,
-                );
+                  return switch (user) {
+                    null => const LoadingView(),
+                    None() => const LoadingView(),
+                    Some(:final value) => _profilePage(
+                        currentUser,
+                        value,
+                        databaseRepository,
+                        places,
+                      ),
+                  };
+                },
+              ),
+            (Some(:final value), false) => _profilePage(
+                currentUser,
+                value,
+                databaseRepository,
+                places,
+              ),
+          };
         },
       ),
     );
