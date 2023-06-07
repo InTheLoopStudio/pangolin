@@ -31,7 +31,14 @@ class OnboardingFlowCubit extends Cubit<OnboardingFlowState> {
     required this.authenticationBloc,
     required this.storageRepository,
     required this.databaseRepository,
-  }) : super(OnboardingFlowState(currentUserId: currentAuthUser.uid));
+  }) : super(
+          OnboardingFlowState(
+            currentUserId: currentAuthUser.uid,
+            artistName: ArtistNameInput.dirty(
+              value: currentAuthUser.displayName ?? '',
+            ),
+          ),
+        );
 
   final OnboardingBloc onboardingBloc;
   final NavigationBloc navigationBloc;

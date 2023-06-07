@@ -23,9 +23,7 @@ class LoginView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            LoginForm(
-              authenticationBloc: context.read<AuthenticationBloc>(),
-            ),
+            const LoginForm(),
             const SizedBox(height: 15),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

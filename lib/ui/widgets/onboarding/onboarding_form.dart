@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:intheloopapp/app_logger.dart';
+import 'package:intheloopapp/data/auth_repository.dart';
+import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/ui/views/onboarding/onboarding_flow_cubit.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/artist_name_text_field.dart';
@@ -89,6 +91,17 @@ class OnboardingForm extends StatelessWidget {
                       }
                     },
                     child: const Text('Complete Onboarding'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      context.read<AuthenticationBloc>().add(LoggedOut());
+                    },
+                    child: const Text(
+                      'logout',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
                   ),
                 ],
               ),

@@ -282,7 +282,11 @@ class NewProfileView extends StatelessWidget {
                   const SliverToBoxAdapter(
                     child: BadgesSliver(),
                   ),
-                  const SliverFillRemaining(),
+                  const SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 50,
+                    ),
+                  ),
                 ],
               ),
             );

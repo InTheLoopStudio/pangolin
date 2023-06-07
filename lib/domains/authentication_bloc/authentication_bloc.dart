@@ -55,6 +55,8 @@ class AuthenticationBloc
   late final StreamSubscription<User?> _userSubscription;
 
   void _onUserChanged(User? user) {
+    print(user);
+    
     if (user != null && state is! Authenticated) {
       add(LoggedIn(user: user));
     }

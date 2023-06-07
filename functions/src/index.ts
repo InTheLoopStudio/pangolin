@@ -195,6 +195,11 @@ const _deleteUser = async (data: { id: string }) => {
     );
   }
 
+  const user = await usersRef.doc(data.id).get();
+  if (!user.exists) {
+    return;
+  }
+
   usersRef.doc(data.id).set({
     username: "*deleted*",
     deleted: true,

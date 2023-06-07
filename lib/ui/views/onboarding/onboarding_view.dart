@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/storage_repository.dart';
 import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/common/tapped_app_bar.dart';
@@ -14,21 +16,20 @@ class OnboardingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<AuthenticationBloc, AuthenticationState, Authenticated>(
-      selector: (state) => state as Authenticated,
-      builder: (context, state) {
-        final user = state.currentAuthUser;
-
+    return BlocSelector<AuthenticationBloc, AuthenticationState, Option<User>>(
+      selector: (state) =>
+          state is Authenticated ? Some(state.currentAuthUser) : const None(),
+      builder: (context, user) {
         return BlocProvider(
           create: (context) => OnboardingFlowCubit(
-            currentAuthUser: user,
+            currentAuthUser: user.unwrap,
             onboardingBloc: context.read<OnboardingBloc>(),
             navigationBloc: context.read<NavigationBloc>(),
             authenticationBloc: context.read<AuthenticationBloc>(),
             storageRepository: context.read<StorageRepository>(),
             databaseRepository: context.read<DatabaseRepository>(),
           ),
-            // ..initFollowRecommendations(),
+          // ..initFollowRecommendations(),
           child: Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,
             appBar: const TappedAppBar(

@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
+import 'package:intheloopapp/domains/authentication_bloc/authentication_bloc.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 
 part 'login_state.dart';
@@ -97,7 +98,7 @@ class LoginCubit extends Cubit<LoginState> {
       state.copyWith(status: FormzSubmissionStatus.inProgress),
     );
     try {
-      await authRepository.signInWithApple();
+      final _ = await authRepository.signInWithApple();
       emit(
         state.copyWith(status: FormzSubmissionStatus.success),
       );

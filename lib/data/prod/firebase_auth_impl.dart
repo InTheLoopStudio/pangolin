@@ -9,6 +9,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
+import 'package:intheloopapp/domains/models/option.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 final _auth = FirebaseAuth.instance;
@@ -39,7 +41,7 @@ class FirebaseAuthImpl extends AuthRepository {
       );
 
   @override
-  Stream<User?> get user => _auth.authStateChanges();
+  Stream<User?> get user => _auth.userChanges();
 
   @override
   Future<bool> isSignedIn() async {
@@ -218,7 +220,7 @@ class FirebaseAuthImpl extends AuthRepository {
   }
 
   @override
-  Future<String> signInWithApple() async {
+  Future<Option<SignInPayload>> signInWithApple() async {
     // To prevent replay attacks with the credential returned from Apple, we
     // include a nonce in the credential request. When signing in in with
     // Firebase, the nonce in the id token returned by Apple, is expected to
@@ -230,6 +232,7 @@ class FirebaseAuthImpl extends AuthRepository {
     final appleCredential = await SignInWithApple.getAppleIDCredential(
       scopes: [
         AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
       ],
       webAuthenticationOptions: WebAuthenticationOptions(
         clientId: 'com.intheloopstudio.intheloopapp',
@@ -253,17 +256,32 @@ class FirebaseAuthImpl extends AuthRepository {
 
     final signedInUser = authResult.user;
 
-    if (signedInUser != null) {
-      await _analytics.setUserId(id: signedInUser.uid);
-      await _analytics.logEvent(
-        name: 'sign_in',
-        parameters: {'provider': 'Apple'},
-      );
-
-      return signedInUser.uid;
+    if (signedInUser == null) {
+      return const None();
     }
 
-    return '';
+    await _analytics.setUserId(id: signedInUser.uid);
+    await _analytics.logEvent(
+      name: 'sign_in',
+      parameters: {'provider': 'Apple'},
+    );
+
+    final fixDisplayNameFromApple = [
+      appleCredential.givenName ?? '',
+      appleCredential.familyName ?? '',
+    ].join(' ').trim();
+
+    if (fixDisplayNameFromApple.isNotEmpty) {
+      await _auth.currentUser?.updateDisplayName(fixDisplayNameFromApple);
+      await _auth.currentUser?.reload();
+    }
+    final payload = SignInPayload(
+      uid: signedInUser.uid,
+      email: signedInUser.email ?? '',
+      displayName: fixDisplayNameFromApple,
+    );
+
+    return Some(payload);
   }
 
   @override

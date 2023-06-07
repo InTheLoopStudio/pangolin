@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 
 class LocalAuthImpl extends AuthRepository {
   Stream<String> get userId => const Stream.empty();
@@ -35,8 +36,8 @@ class LocalAuthImpl extends AuthRepository {
   }
 
   @override
-  Future<String> signInWithApple() async {
-    return '';
+  Future<Option<SignInPayload>> signInWithApple() async {
+    return const None();
   }
 
   @override

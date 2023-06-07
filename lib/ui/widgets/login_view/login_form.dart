@@ -9,15 +9,11 @@ import 'package:intheloopapp/ui/widgets/common/forms/apple_login_button.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/google_login_button.dart';
 import 'package:intheloopapp/ui/widgets/login_view/traditional_login.dart';
 
-class LoginForm extends StatefulWidget {
-  const LoginForm({super.key, this.authenticationBloc});
-  final AuthenticationBloc? authenticationBloc;
+class LoginForm extends StatelessWidget {
+  const LoginForm({
+    super.key,
+  });
 
-  @override
-  LoginFormState createState() => LoginFormState();
-}
-
-class LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginCubit, LoginState>(
