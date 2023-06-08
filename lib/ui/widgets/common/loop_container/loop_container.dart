@@ -202,10 +202,27 @@ class _LoopContainerState extends State<LoopContainer>
           );
         }
 
-        return FutureBuilder<Option<UserModel>>(
-          future: databaseRepository.getUserById(widget.loop.userId),
+        return FutureBuilder<(Option<UserModel>, bool)>(
+          future: () async {
+            final userId = widget.loop.userId;
+            final futures = await Future.wait([
+              databaseRepository.getUserById(widget.loop.userId),
+              if (userId != currentUser.id)
+                databaseRepository.isBlocked(
+                  blockedUserId: userId,
+                  currentUserId: currentUser.id,
+                )
+              else
+                Future.value(false),
+            ]);
+
+            return (
+              futures[0] as Option<UserModel>,
+              futures[1] as bool,
+            );
+          }(),
           builder: (context, userSnapshot) {
-            final loopUser = userSnapshot.data;
+            final data = userSnapshot.data;
             logger.logAnalyticsEvent(
               name: 'loop_view',
               parameters: {
@@ -213,11 +230,12 @@ class _LoopContainerState extends State<LoopContainer>
                 'user_id': widget.loop.userId,
               },
             );
-
-            return switch (loopUser) {
+            
+            return switch (data) {
               null => const LoadingContainer(),
-              None() => const LoadingContainer(),
-              Some(:final value) => BlocProvider<LoopContainerCubit>(
+              (_, true) => const SizedBox.shrink(),
+              (None(), false) => const LoadingContainer(),
+              (Some(:final value), false) => BlocProvider<LoopContainerCubit>(
                   create: (context) => LoopContainerCubit(
                     databaseRepository: databaseRepository,
                     loop: widget.loop,

@@ -19,7 +19,7 @@ import 'package:intheloopapp/ui/widgets/profile_view/follow_button.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/follower_count.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/following_count.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/request_to_book.dart';
-import 'package:intheloopapp/ui/widgets/profile_view/share_profile_button.dart';
+import 'package:intheloopapp/ui/widgets/profile_view/more_options_button.dart';
 import 'package:intheloopapp/ui/widgets/profile_view/social_media_icons.dart';
 import 'package:intheloopapp/utils.dart';
 
@@ -252,7 +252,7 @@ class _ProfileViewState extends State<ProfileView> {
                                     ),
                                 ],
                               ),
-                              const ShareProfileButton(),
+                              const MoreOptionsButton(),
                               const FollowButton(),
                             ],
                           ),
