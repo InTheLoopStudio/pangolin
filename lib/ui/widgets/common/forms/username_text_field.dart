@@ -19,12 +19,12 @@ class UsernameTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(r'[a-z0-9_\.]')),
+        FilteringTextInputFormatter.allow(RegExp(r'[A-Za-z0-9_\.]')),
       ],
       initialValue: initialValue,
       decoration: const InputDecoration(
         prefixIcon: Icon(Icons.person),
-        labelText: 'Username',
+        labelText: 'handle (no capitals)',
         hintText: 'tapped_network',
       ),
       validator: (input) {

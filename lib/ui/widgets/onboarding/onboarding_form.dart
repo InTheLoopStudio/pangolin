@@ -32,18 +32,18 @@ class OnboardingForm extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  UsernameTextField(
-                    onChanged: (input) => context
-                        .read<OnboardingFlowCubit>()
-                        .usernameChange(input ?? ''),
-                    initialValue: state.username.value,
-                  ),
-                  const SizedBox(height: 20),
                   ArtistNameTextField(
                     onChanged: (input) => context
                         .read<OnboardingFlowCubit>()
                         .aristNameChange(input ?? ''),
                     initialValue: state.artistName.value,
+                  ),
+                  const SizedBox(height: 20),
+                  UsernameTextField(
+                    onChanged: (input) => context
+                        .read<OnboardingFlowCubit>()
+                        .usernameChange(input ?? ''),
+                    initialValue: state.username.value,
                   ),
                   const SizedBox(height: 20),
                   LocationTextField(
