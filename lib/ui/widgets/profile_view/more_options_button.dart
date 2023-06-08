@@ -35,17 +35,20 @@ class MoreOptionsButton extends StatelessWidget {
           ),
           if (user.id != currentUser.id)
             CupertinoActionSheetAction(
-              onPressed: () async {
+              onPressed: () {
                 nav.add(const Pop());
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('User Reported'),
-                  ),
-                );
-                await database.reportUser(
+                database
+                    .reportUser(
                   reported: user,
                   reporter: currentUser,
-                );
+                )
+                    .then((value) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('User Reported'),
+                    ),
+                  );
+                });
               },
               child: const Text('Report User'),
             ),
@@ -55,14 +58,20 @@ class MoreOptionsButton extends StatelessWidget {
               /// a destructive action such as delete or exit and turns
               /// the action's text color to red.
               isDestructiveAction: true,
-              onPressed: () async {
-                await database.blockUser(
+              onPressed: () {
+                nav.add(const Pop());
+                database
+                    .blockUser(
                   currentUserId: currentUser.id,
                   blockedUserId: user.id,
-                );
-                nav
-                  ..add(const Pop())
-                  ..add(const Pop());
+                )
+                    .then((value) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('User Blocked'),
+                    ),
+                  );
+                });
               },
               child: const Text('Block User'),
             ),
