@@ -8,6 +8,7 @@ import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/navigation_bloc/navigation_bloc.dart';
 import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/common/tapped_app_bar.dart';
+import 'package:intheloopapp/ui/views/error/error_view.dart';
 import 'package:intheloopapp/ui/views/onboarding/onboarding_flow_cubit.dart';
 import 'package:intheloopapp/ui/widgets/onboarding/onboarding_form.dart';
 
@@ -20,31 +21,34 @@ class OnboardingView extends StatelessWidget {
       selector: (state) =>
           state is Authenticated ? Some(state.currentAuthUser) : const None(),
       builder: (context, user) {
-        return BlocProvider(
-          create: (context) => OnboardingFlowCubit(
-            currentAuthUser: user.unwrap,
-            onboardingBloc: context.read<OnboardingBloc>(),
-            navigationBloc: context.read<NavigationBloc>(),
-            authenticationBloc: context.read<AuthenticationBloc>(),
-            storageRepository: context.read<StorageRepository>(),
-            databaseRepository: context.read<DatabaseRepository>(),
-          ),
-          // ..initFollowRecommendations(),
-          child: Scaffold(
-            backgroundColor: Theme.of(context).colorScheme.background,
-            appBar: const TappedAppBar(
-              title: 'Onboarding',
-            ),
-            // floatingActionButton: const ControlButtons(),
-            body: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: OnboardingForm(),
+        return switch (user) {
+          None() => const ErrorView(),
+          Some(:final value) => BlocProvider(
+              create: (context) => OnboardingFlowCubit(
+                currentAuthUser: value,
+                onboardingBloc: context.read<OnboardingBloc>(),
+                navigationBloc: context.read<NavigationBloc>(),
+                authenticationBloc: context.read<AuthenticationBloc>(),
+                storageRepository: context.read<StorageRepository>(),
+                databaseRepository: context.read<DatabaseRepository>(),
+              ),
+              // ..initFollowRecommendations(),
+              child: Scaffold(
+                backgroundColor: Theme.of(context).colorScheme.background,
+                appBar: const TappedAppBar(
+                  title: 'Onboarding',
+                ),
+                // floatingActionButton: const ControlButtons(),
+                body: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    child: OnboardingForm(),
+                  ),
+                ),
               ),
             ),
-          ),
-        );
+        };
       },
     );
   }

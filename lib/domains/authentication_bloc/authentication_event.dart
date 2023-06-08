@@ -14,11 +14,13 @@ class AppStarted extends AuthenticationEvent {
 }
 
 class LoggedIn extends AuthenticationEvent {
-  const LoggedIn({this.user});
-  final User? user;
+  const LoggedIn({
+    required this.user,
+  });
+  final Option<User> user;
 
   @override
-  String toString() => 'LoggedIn { user: ${user ?? ''} }';
+  String toString() => 'LoggedIn { user: $user }';
 
   @override
   List<Object?> get props => [user];

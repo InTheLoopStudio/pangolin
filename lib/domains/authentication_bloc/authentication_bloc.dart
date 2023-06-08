@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/auth_repository.dart';
+import 'package:intheloopapp/domains/models/option.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
@@ -34,8 +35,10 @@ class AuthenticationBloc
     });
     on<LoggedIn>((event, emit) async {
       try {
-        final user = await _authRepository.getAuthUser();
-        emit(Authenticated(user!));
+        return switch (event.user) {
+          None() => emit(Unauthenticated()),
+          Some(:final value) => emit(Authenticated(value)),
+        };
       } catch (e, s) {
         logger.error(
           'error logging in',
@@ -56,9 +59,9 @@ class AuthenticationBloc
 
   void _onUserChanged(User? user) {
     print(user);
-    
+
     if (user != null && state is! Authenticated) {
-      add(LoggedIn(user: user));
+      add(LoggedIn(user: Option.fromNullable(user)));
     }
   }
 
