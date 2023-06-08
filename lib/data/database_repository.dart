@@ -249,4 +249,21 @@ abstract class DatabaseRepository {
     required String userId,
     required String loopId,
   });
+
+  Future<void> blockUser({
+    required String currentUserId,
+    required String blockedUserId,
+  });
+  Future<void> unblockUser({
+    required String currentUserId,
+    required String blockedUserId,
+  });
+  Future<bool> isBlocked({
+    required String currentUserId,
+    required String blockedUserId,
+  });
+  Future<void> reportUser({
+    required UserModel reported,
+    required UserModel reporter,
+  });
 }

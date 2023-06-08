@@ -37,12 +37,17 @@ final _servicesRef = _firestore.collection('services');
 final _mailRef = _firestore.collection('mail');
 final _leadersRef = _firestore.collection('leaderboard');
 final _opportunitiesRef = _firestore.collection('opportunities');
+final _blockerRef = _firestore.collection('blockers');
+// final _blockeeRef = _firestore.collection('blockees');
 
 const verifiedBadgeId = '0aa46576-1fbe-4312-8b69-e2fef3269083';
 
 const commentsSubcollection = 'loopComments';
 const likesSubcollection = 'loopLikes';
 const feedSubcollection = 'userFeed';
+
+const blockerSubcollection = 'blockedUsers';
+const blockeeSubcollection = 'blockedByUsers';
 
 /// Database implementation using Firebase's FirestoreDB
 class FirestoreDatabaseImpl extends DatabaseRepository {
@@ -437,10 +442,6 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
           .collection('Following')
           .doc(visitedUserId)
           .get();
-
-      if (!doc.exists) {
-        return;
-      }
 
       await doc.reference.delete();
     } catch (e, s) {
@@ -1910,6 +1911,96 @@ class FirestoreDatabaseImpl extends DatabaseRepository {
         .get();
 
     return userSnapshot.exists;
+  }
+
+  @override
+  Future<void> blockUser({
+    required String currentUserId,
+    required String blockedUserId,
+  }) async {
+    await _analytics.logEvent(
+      name: 'block_user',
+      parameters: {
+        'user_id': currentUserId,
+        'blocked_user_id': blockedUserId,
+      },
+    );
+
+    await _blockerRef
+        .doc(currentUserId)
+        .collection(blockerSubcollection)
+        .doc(blockedUserId)
+        .set({
+      'timestamp': Timestamp.now(),
+    });
+  }
+
+  @override
+  Future<void> unblockUser({
+    required String currentUserId,
+    required String blockedUserId,
+  }) async {
+    await _analytics.logEvent(
+      name: 'unblock_user',
+      parameters: {
+        'user_id': currentUserId,
+        'blocked_user_id': blockedUserId,
+      },
+    );
+
+    await _blockerRef
+        .doc(currentUserId)
+        .collection(blockerSubcollection)
+        .doc(blockedUserId)
+        .delete();
+  }
+
+  @override 
+  Future<bool> isBlocked({
+    required String blockedUserId,
+    required String currentUserId,
+  }) async {
+    final blockedUserSnapshot = await _blockerRef
+        .doc(currentUserId)
+        .collection(blockerSubcollection)
+        .doc(blockedUserId)
+        .get();
+
+    return blockedUserSnapshot.exists;
+  }
+
+  @override
+  Future<void> reportUser({
+    required UserModel reported,
+    required UserModel reporter,
+  }) async {
+    await _analytics.logEvent(
+      name: 'report_user',
+      parameters: {
+        'reporter_id': reporter.id,
+        'reported_id': reported.id,
+      },
+    );
+    final reportHtml = '''
+        <p>Report from:</p> 
+        <p>${reporter.toJson()}<p> 
+        <p>User:</p> 
+        <p>${reported.toJson()}</p>
+    ''';
+
+    await _mailRef.add({
+      'to': [
+        'support@tapped.ai',
+      ],
+      'cc': [
+        'johannes@tapped.ai',
+        'ilias@tapped.ai',
+      ],
+      'message': {
+        'subject': 'User Reported',
+        'html': reportHtml,
+      },
+    });
   }
 }
 

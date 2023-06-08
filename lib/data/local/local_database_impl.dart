@@ -486,4 +486,30 @@ class LocalDatabaseImpl extends DatabaseRepository {
     String userId, {
     int limit = 100,
   }) async* {}
+
+  @override
+  Future<void> blockUser({
+    required String currentUserId,
+    required String blockedUserId,
+  }) async {}
+
+  @override
+  Future<void> unblockUser({
+    required String currentUserId,
+    required String blockedUserId,
+  }) async {}
+
+  @override
+  Future<void> reportUser({
+    required UserModel reported,
+    required UserModel reporter,
+  }) async {}
+
+  @override
+  Future<bool> isBlocked({
+    required String currentUserId,
+    required String blockedUserId,
+  }) async {
+    return false;
+  }
 }

@@ -1567,3 +1567,19 @@ export const addActivityOnOpportunityInterest = functions
       loopId: context.params.loopId,
     });
   });
+
+export const unfollowUserOnBlock = functions
+  .firestore
+  .document("blocked/{userId}/blockedUsers/{blockedUserId}")
+  .onCreate(async (data, context) => {
+    const blockedUserId = context.params.blockedUserId;
+    const userId = context.params.userId;
+
+    const doc = await followingRef
+      .doc(userId)
+      .collection("Following")
+      .doc(blockedUserId)
+      .get();
+
+    await doc.ref.delete();
+  });
