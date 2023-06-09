@@ -89,6 +89,10 @@ class CreateBookingView extends StatelessWidget {
                               .read<CreateBookingCubit>()
                               .createBooking();
                         } on StripeException catch (e, s) {
+                          if (e.error.code == FailureCode.Canceled) {
+                            return;
+                          }
+
                           logger.error(
                             'error create booking',
                             error: e,
