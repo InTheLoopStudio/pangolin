@@ -5,6 +5,7 @@ class ProfileState extends Equatable {
     required this.currentUser,
     required this.visitedUser,
     this.isFollowing = false,
+    this.isBlocked = false,
     this.isVerified = false,
     this.userLoops = const [],
     this.latestLoop = const None(),
@@ -31,6 +32,7 @@ class ProfileState extends Equatable {
   late final int followerCount;
   late final int followingCount;
   final bool isFollowing;
+  final bool isBlocked;
   final bool isVerified;
   final List<Loop> userLoops;
   final List<Badge> userBadges;
@@ -59,13 +61,12 @@ class ProfileState extends Equatable {
         followingCount,
         followerCount,
         isFollowing,
+        isBlocked,
         isVerified,
         userLoops,
-
         latestLoop,
         latestOpportunity,
         latestBooking,
-
         userBadges,
         userBookings,
         hasReachedMaxLoops,
@@ -84,6 +85,7 @@ class ProfileState extends Equatable {
     int? followerCount,
     int? followingCount,
     bool? isFollowing,
+    bool? isBlocked,
     bool? isVerified,
     Option<Loop>? latestLoop,
     Option<Loop>? latestOpportunity,
@@ -106,6 +108,7 @@ class ProfileState extends Equatable {
       followingCount: followingCount ?? this.followingCount,
       followerCount: followerCount ?? this.followerCount,
       isFollowing: isFollowing ?? this.isFollowing,
+      isBlocked: isBlocked ?? this.isBlocked,
       isVerified: isVerified ?? this.isVerified,
       latestLoop: latestLoop ?? this.latestLoop,
       latestOpportunity: latestOpportunity ?? this.latestOpportunity,

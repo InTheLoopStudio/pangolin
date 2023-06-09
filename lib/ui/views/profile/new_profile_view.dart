@@ -55,6 +55,7 @@ class NewProfileView extends StatelessWidget {
           ..getLatestBooking()
           ..initBadges()
           ..loadIsFollowing(currentUser.id, visitedUser.id)
+          ..loadIsBlocked()
           ..loadIsVerified(visitedUser.id)
           ..initPlace(),
         child: BlocBuilder<ProfileCubit, ProfileState>(
@@ -71,228 +72,347 @@ class NewProfileView extends StatelessWidget {
               },
               child: CustomScrollView(
                 physics: const BouncingScrollPhysics(),
-                slivers: [
-                  SliverAppBar(
-                    expandedHeight: 300,
-                    pinned: true,
-                    stretch: true,
-                    onStretchTrigger: () async {
-                      final cubit = context.read<ProfileCubit>();
-                      await Future.wait([
-                        cubit.getLatestLoop(),
-                        cubit.getLatestOpportunity(),
-                        cubit.getLatestBooking(),
-                        cubit.initBadges(),
-                        cubit.refetchVisitedUser(),
-                        cubit.loadIsFollowing(currentUser.id, visitedUser.id),
-                        cubit.loadIsVerified(visitedUser.id),
-                      ]);
-                    },
-                    flexibleSpace: FlexibleSpaceBar(
-                      stretchModes: const [
-                        StretchMode.zoomBackground,
-                        StretchMode.fadeTitle,
-                      ],
-                      titlePadding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
+                slivers: state.isBlocked
+                    ? _blockedSlivers(
+                        context,
+                        state,
+                        currentUser,
+                        visitedUser,
+                      )
+                    : _unblockedSlivers(
+                        context,
+                        state,
+                        currentUser,
+                        visitedUser,
                       ),
-                      centerTitle: false,
-                      title: Text.rich(
-                        TextSpan(
-                          text: visitedUser.artistName,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 32,
-                          ),
-                          children: [
-                            if (state.isVerified)
-                              const WidgetSpan(
-                                child: Icon(
-                                  Icons.verified,
-                                  size: 18,
-                                  color: tappedAccent,
-                                ),
-                                alignment: PlaceholderAlignment.middle,
-                              )
-                            else
-                              const WidgetSpan(
-                                child: SizedBox.shrink(),
-                              ),
-                          ],
-                        ),
-                        overflow: TextOverflow.fade,
-                        maxLines: 2,
-                      ),
-                      background: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: (visitedUser.profilePicture == null)
-                                ? const AssetImage(
-                                    'assets/default_avatar.png',
-                                  ) as ImageProvider
-                                : CachedNetworkImageProvider(
-                                    visitedUser.profilePicture!,
-                                  ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        top: 8,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '@${visitedUser.username}',
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.normal,
-                                  color: Color(0xFF757575),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              if (visitedUser.label != 'None')
-                                Text(
-                                  visitedUser.label,
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.normal,
-                                    color: Color(0xFF757575),
-                                  ),
-                                ),
-                            ],
-                          ),
-                          const MoreOptionsButton(),
-                          const FollowButton(),
-                        ],
-                      ),
-                    ),
-                  ),
-                  if (visitedUser.occupations.isNotEmpty)
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                          horizontal: 16,
-                        ),
-                        child: Text(
-                          visitedUser.occupations.join(', '),
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.normal,
-                            color: tappedAccent,
-                          ),
-                        ),
-                      ),
-                    ),
-                  if (visitedUser.bio.isNotEmpty)
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                          horizontal: 16,
-                        ),
-                        child: Linkify(
-                          text: visitedUser.bio,
-                          maxLines: 6,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.normal,
-                            // color: Color(0xFF757575),
-                          ),
-                        ),
-                      ),
-                    ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          const FollowerCount(),
-                          const FollowingCount(),
-                          Row(
-                            children: [
-                              const Icon(
-                                CupertinoIcons.location,
-                                color: tappedAccent,
-                                size: 16,
-                              ),
-                              const SizedBox(width: 6),
-                              Text(
-                                formattedAddress(
-                                  state.place.addressComponents,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  color: tappedAccent,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 8),
-                      child: SocialMediaIcons(),
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        const RequestToBookButton(),
-                        if (visitedUser.epkUrl.isSome) const EPKButton(),
-                      ],
-                    ),
-                  ),
-                  const SliverToBoxAdapter(
-                    child: SizedBox(height: 12),
-                  ),
-                  const SliverToBoxAdapter(
-                    child: BookingsSliver(),
-                  ),
-                  const SliverToBoxAdapter(
-                    child: SizedBox(height: 18),
-                  ),
-                  const SliverToBoxAdapter(
-                    child: OpportunitySliver(),
-                  ),
-                  const SliverToBoxAdapter(
-                    child: LoopsSliver(),
-                  ),
-                  const SliverToBoxAdapter(
-                    child: SizedBox(height: 18),
-                  ),
-                  const SliverToBoxAdapter(
-                    child: BadgesSliver(),
-                  ),
-                  const SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: 50,
-                    ),
-                  ),
-                ],
               ),
             );
           },
         ),
       );
+
+  List<Widget> _unblockedSlivers(
+    BuildContext context,
+    ProfileState state,
+    UserModel currentUser,
+    UserModel visitedUser,
+  ) =>
+      [
+        SliverAppBar(
+          expandedHeight: 300,
+          pinned: true,
+          stretch: true,
+          onStretchTrigger: () async {
+            final cubit = context.read<ProfileCubit>();
+            await Future.wait([
+              cubit.getLatestLoop(),
+              cubit.getLatestOpportunity(),
+              cubit.getLatestBooking(),
+              cubit.initBadges(),
+              cubit.refetchVisitedUser(),
+              cubit.loadIsFollowing(currentUser.id, visitedUser.id),
+              cubit.loadIsVerified(visitedUser.id),
+            ]);
+          },
+          flexibleSpace: FlexibleSpaceBar(
+            stretchModes: const [
+              StretchMode.zoomBackground,
+              StretchMode.fadeTitle,
+            ],
+            titlePadding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 6,
+            ),
+            centerTitle: false,
+            title: Text.rich(
+              TextSpan(
+                text: visitedUser.artistName,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 32,
+                ),
+                children: [
+                  if (state.isVerified)
+                    const WidgetSpan(
+                      child: Icon(
+                        Icons.verified,
+                        size: 18,
+                        color: tappedAccent,
+                      ),
+                      alignment: PlaceholderAlignment.middle,
+                    )
+                  else
+                    const WidgetSpan(
+                      child: SizedBox.shrink(),
+                    ),
+                ],
+              ),
+              overflow: TextOverflow.fade,
+              maxLines: 2,
+            ),
+            background: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: (visitedUser.profilePicture == null)
+                      ? const AssetImage(
+                          'assets/default_avatar.png',
+                        ) as ImageProvider
+                      : CachedNetworkImageProvider(
+                          visitedUser.profilePicture!,
+                        ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.only(
+              top: 8,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '@${visitedUser.username}',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.normal,
+                        color: Color(0xFF757575),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    if (visitedUser.label != 'None')
+                      Text(
+                        visitedUser.label,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.normal,
+                          color: Color(0xFF757575),
+                        ),
+                      ),
+                  ],
+                ),
+                const MoreOptionsButton(),
+                const FollowButton(),
+              ],
+            ),
+          ),
+        ),
+        if (visitedUser.occupations.isNotEmpty)
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 8,
+                horizontal: 16,
+              ),
+              child: Text(
+                visitedUser.occupations.join(', '),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.normal,
+                  color: tappedAccent,
+                ),
+              ),
+            ),
+          ),
+        if (visitedUser.bio.isNotEmpty)
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 8,
+                horizontal: 16,
+              ),
+              child: Linkify(
+                text: visitedUser.bio,
+                maxLines: 6,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.normal,
+                  // color: Color(0xFF757575),
+                ),
+              ),
+            ),
+          ),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                const FollowerCount(),
+                const FollowingCount(),
+                Row(
+                  children: [
+                    const Icon(
+                      CupertinoIcons.location,
+                      color: tappedAccent,
+                      size: 16,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      formattedAddress(
+                        state.place.addressComponents,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: tappedAccent,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SliverToBoxAdapter(
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 8),
+            child: SocialMediaIcons(),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const RequestToBookButton(),
+              if (visitedUser.epkUrl.isSome) const EPKButton(),
+            ],
+          ),
+        ),
+        const SliverToBoxAdapter(
+          child: SizedBox(height: 12),
+        ),
+        const SliverToBoxAdapter(
+          child: BookingsSliver(),
+        ),
+        const SliverToBoxAdapter(
+          child: SizedBox(height: 18),
+        ),
+        const SliverToBoxAdapter(
+          child: OpportunitySliver(),
+        ),
+        const SliverToBoxAdapter(
+          child: LoopsSliver(),
+        ),
+        const SliverToBoxAdapter(
+          child: SizedBox(height: 18),
+        ),
+        const SliverToBoxAdapter(
+          child: BadgesSliver(),
+        ),
+        const SliverToBoxAdapter(
+          child: SizedBox(
+            height: 50,
+          ),
+        ),
+      ];
+
+  List<Widget> _blockedSlivers(
+    BuildContext context,
+    ProfileState state,
+    UserModel currentUser,
+    UserModel visitedUser,
+  ) =>
+      [
+        SliverAppBar(
+          expandedHeight: 300,
+          pinned: true,
+          stretch: true,
+          onStretchTrigger: () async {
+            final cubit = context.read<ProfileCubit>();
+            await Future.wait([
+              cubit.getLatestLoop(),
+              cubit.getLatestOpportunity(),
+              cubit.getLatestBooking(),
+              cubit.initBadges(),
+              cubit.refetchVisitedUser(),
+              cubit.loadIsFollowing(currentUser.id, visitedUser.id),
+              cubit.loadIsVerified(visitedUser.id),
+            ]);
+          },
+          flexibleSpace: FlexibleSpaceBar(
+            stretchModes: const [
+              StretchMode.zoomBackground,
+              StretchMode.fadeTitle,
+            ],
+            titlePadding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 6,
+            ),
+            centerTitle: false,
+            title: Text.rich(
+              TextSpan(
+                text: visitedUser.artistName,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 32,
+                ),
+                children: [
+                  if (state.isVerified)
+                    const WidgetSpan(
+                      child: Icon(
+                        Icons.verified,
+                        size: 18,
+                        color: tappedAccent,
+                      ),
+                      alignment: PlaceholderAlignment.middle,
+                    )
+                  else
+                    const WidgetSpan(
+                      child: SizedBox.shrink(),
+                    ),
+                ],
+              ),
+              overflow: TextOverflow.fade,
+              maxLines: 2,
+            ),
+            background: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: (visitedUser.profilePicture == null)
+                      ? const AssetImage(
+                          'assets/default_avatar.png',
+                        ) as ImageProvider
+                      : CachedNetworkImageProvider(
+                          visitedUser.profilePicture!,
+                        ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Column(
+            children: [
+              const SizedBox(height: 50),
+              const Text(
+                'Blocked',
+                style: TextStyle(
+                  fontSize: 48,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Text(
+                'You have blocked this user, and they cannot see your profile.',
+                textAlign: TextAlign.center,
+              ),
+              FilledButton(
+                onPressed: () => context.read<ProfileCubit>().unblock(),
+                child: const Text('Unblock'),
+              ),
+            ],
+          ),
+        ),
+      ];
 
   @override
   Widget build(BuildContext context) {

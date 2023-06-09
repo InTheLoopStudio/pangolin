@@ -60,12 +60,7 @@ class MoreOptionsButton extends StatelessWidget {
               isDestructiveAction: true,
               onPressed: () {
                 nav.add(const Pop());
-                database
-                    .blockUser(
-                  currentUserId: currentUser.id,
-                  blockedUserId: user.id,
-                )
-                    .then((value) {
+                context.read<ProfileCubit>().block().then((value) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('User Blocked'),

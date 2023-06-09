@@ -472,6 +472,49 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
+  Future<void> block() async {
+    try {
+      logger.debug('block ${state.visitedUser.id}');
+      emit(state.copyWith(isBlocked: true));
+      await databaseRepository.blockUser(
+        currentUserId: state.currentUser.id,
+        blockedUserId: state.visitedUser.id,
+      );
+    } catch (e, s) {
+      logger.error('block error', error: e, stackTrace: s);
+    }
+  }
+
+  Future<void> unblock() async {
+    try {
+      logger.debug('unblock ${state.visitedUser.id}');
+      emit(state.copyWith(isBlocked: false));
+      await databaseRepository.unblockUser(
+        currentUserId: state.currentUser.id,
+        blockedUserId: state.visitedUser.id,
+      );
+    } catch (e, s) {
+      logger.error('unblock error', error: e, stackTrace: s);
+    }
+  }
+
+  Future<void> loadIsBlocked() async {
+    try {
+      final isBlocked = await databaseRepository.isBlocked(
+        currentUserId: state.currentUser.id,
+        blockedUserId: state.visitedUser.id,
+      );
+
+      emit(
+        state.copyWith(
+          isBlocked: isBlocked,
+        ),
+      );
+    } catch (e, s) {
+      logger.error('loadIsBlocked error', error: e, stackTrace: s);
+    }
+  }
+
   Future<void> loadIsFollowing(
     String currentUserId,
     String visitedUserId,
