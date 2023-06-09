@@ -790,15 +790,14 @@ export const sendWelcomeEmailOnUserCreated = functions
     await _sendWelcomeEmail(email);
   });
 export const notifyFoundersOnFirstOpen = functions
-  .analytics
-  .event("first_open")
-  .onLog(async (event) => {
+  .auth
+  .user()
+  .onCreate(async (user) => {
     const devices = await _getFoundersDeviceTokens();
-    const user = event.user;
     const payload = {
       notification: {
         title: "You have a new user \uD83D\uDE43",
-        body: `${user?.deviceInfo.mobileModelName} from ${user?.geoInfo.city}, ${user?.geoInfo.country}`,
+        body: `${user.displayName}, ${user.email} just signed up`,
       }
     };
 
