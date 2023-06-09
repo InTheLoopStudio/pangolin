@@ -789,7 +789,7 @@ export const sendWelcomeEmailOnUserCreated = functions
 
     await _sendWelcomeEmail(email);
   });
-export const notifyFoundersOnFirstOpen = functions
+export const notifyFoundersOnSignUp = functions
   .auth
   .user()
   .onCreate(async (user) => {
