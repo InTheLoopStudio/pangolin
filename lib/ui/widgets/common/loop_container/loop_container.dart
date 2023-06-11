@@ -24,10 +24,12 @@ import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 class LoopContainer extends StatefulWidget {
   const LoopContainer({
     required this.loop,
+    this.commentStream,
     super.key,
   });
 
   final Loop loop;
+  final Stream<int>? commentStream;
 
   @override
   State<LoopContainer> createState() => _LoopContainerState();
@@ -230,7 +232,7 @@ class _LoopContainerState extends State<LoopContainer>
                 'user_id': widget.loop.userId,
               },
             );
-            
+
             return switch (data) {
               null => const LoadingContainer(),
               (_, true) => const SizedBox.shrink(),
@@ -241,7 +243,8 @@ class _LoopContainerState extends State<LoopContainer>
                     loop: widget.loop,
                     currentUser: currentUser,
                     audioRepo: context.read<AudioRepository>(),
-                  ),
+                    commentStream: widget.commentStream,
+                  )..initCommentStream(),
                   child: BlocBuilder<LoopContainerCubit, LoopContainerState>(
                     builder: (context, state) {
                       return ConditionalParentWidget(

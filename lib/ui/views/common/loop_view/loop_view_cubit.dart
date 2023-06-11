@@ -21,7 +21,8 @@ class LoopViewCubit extends Cubit<LoopViewState> {
     this.autoPlay = true,
     this.pageController,
     this.feedId = 'unknown',
-  }) : super(
+  })  : commentController = StreamController(),
+        super(
           LoopViewState(
             loop: loop,
             feedId: feedId,
@@ -42,6 +43,9 @@ class LoopViewCubit extends Cubit<LoopViewState> {
   final PageController? pageController;
 
   final AudioController? audioController;
+
+  // emits 1 if commented add and -1 if deleted
+  late final StreamController<int> commentController;
 
   @override
   Future<void> close() async {
@@ -79,6 +83,7 @@ class LoopViewCubit extends Cubit<LoopViewState> {
 
   void addComment() {
     emit(state.copyWith(commentsCount: state.commentsCount + 1));
+    commentController.add(1);
   }
 
   void toggleFollow() {

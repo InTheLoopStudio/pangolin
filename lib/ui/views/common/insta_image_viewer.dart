@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -9,13 +8,13 @@ const _kRouteDuration = Duration(milliseconds: 300);
 
 class InstaImageViewer extends StatelessWidget {
   const InstaImageViewer({
-    Key? key,
     required this.child,
+    super.key,
     this.backgroundColor = Colors.black,
     this.backgroundIsTransparent = true,
     this.disposeLevel,
     this.disableSwipeToDismiss = false,
-  }) : super(key: key);
+  });
 
   /// Image widget
   /// For example Image(image:Image.network("https://picsum.photos/id/507/1000").image,)
@@ -43,22 +42,24 @@ class InstaImageViewer extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           Navigator.push(
-              context,
-              PageRouteBuilder(
-                  opaque: false,
-                  barrierColor: backgroundIsTransparent
-                      ? Colors.white.withOpacity(0)
-                      : backgroundColor,
-                  pageBuilder: (BuildContext context, _, __) {
-                    return FullScreenViewer(
-                      tag: tag,
-                      child: child,
-                      backgroundColor: backgroundColor,
-                      backgroundIsTransparent: backgroundIsTransparent,
-                      disposeLevel: disposeLevel,
-                      disableSwipeToDismiss: disableSwipeToDismiss,
-                    );
-                  }));
+            context,
+            PageRouteBuilder(
+              opaque: false,
+              barrierColor: backgroundIsTransparent
+                  ? Colors.white.withOpacity(0)
+                  : backgroundColor,
+              pageBuilder: (BuildContext context, _, __) {
+                return FullScreenViewer(
+                  tag: tag,
+                  backgroundColor: backgroundColor,
+                  backgroundIsTransparent: backgroundIsTransparent,
+                  disposeLevel: disposeLevel,
+                  disableSwipeToDismiss: disableSwipeToDismiss,
+                  child: child,
+                );
+              },
+            ),
+          );
         },
         child: child,
       ),
@@ -70,14 +71,14 @@ enum DisposeLevel { high, medium, low }
 
 class FullScreenViewer extends StatefulWidget {
   const FullScreenViewer({
-    Key? key,
     required this.child,
     required this.tag,
     required this.disableSwipeToDismiss,
+    super.key,
     this.backgroundColor = Colors.black,
     this.backgroundIsTransparent = true,
     this.disposeLevel = DisposeLevel.medium,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final Color backgroundColor;
@@ -204,9 +205,9 @@ class _FullScreenViewerState extends State<FullScreenViewer> {
                           child: widget.child,
                         )
                       : KeymotionGestureDetector(
-                          onStart: (details) => _dragStart(details),
-                          onUpdate: (details) => _dragUpdate(details),
-                          onEnd: (details) => _dragEnd(details),
+                          onStart: _dragStart,
+                          onUpdate: _dragUpdate,
+                          onEnd: _dragEnd,
                           child: ClipRRect(
                             borderRadius: const BorderRadius.all(
                               Radius.circular(40),
@@ -253,12 +254,12 @@ class _FullScreenViewerState extends State<FullScreenViewer> {
 class KeymotionGestureDetector extends StatelessWidget {
   /// @macro
   const KeymotionGestureDetector({
-    Key? key,
     required this.child,
+    super.key,
     this.onUpdate,
     this.onEnd,
     this.onStart,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final GestureDragUpdateCallback? onUpdate;
@@ -267,20 +268,22 @@ class KeymotionGestureDetector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RawGestureDetector(child: child, gestures: <Type,
-        GestureRecognizerFactory>{
-      VerticalDragGestureRecognizer:
-          GestureRecognizerFactoryWithHandlers<VerticalDragGestureRecognizer>(
-        () => VerticalDragGestureRecognizer()
-          ..onStart = onStart
-          ..onUpdate = onUpdate
-          ..onEnd = onEnd,
-        (instance) {},
-      ),
-      // DoubleTapGestureRecognizer: GestureRecognizerFactoryWithHandlers<DoubleTapGestureRecognizer>(
-      //   () => DoubleTapGestureRecognizer()..onDoubleTap = onDoubleTap,
-      //   (instance) {},
-      // )
-    });
+    return RawGestureDetector(
+      gestures: <Type, GestureRecognizerFactory>{
+        VerticalDragGestureRecognizer:
+            GestureRecognizerFactoryWithHandlers<VerticalDragGestureRecognizer>(
+          () => VerticalDragGestureRecognizer()
+            ..onStart = onStart
+            ..onUpdate = onUpdate
+            ..onEnd = onEnd,
+          (instance) {},
+        ),
+        // DoubleTapGestureRecognizer: GestureRecognizerFactoryWithHandlers<DoubleTapGestureRecognizer>(
+        //   () => DoubleTapGestureRecognizer()..onDoubleTap = onDoubleTap,
+        //   (instance) {},
+        // )
+      },
+      child: child,
+    );
   }
 }

@@ -19,7 +19,6 @@ class Attachments extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     if (loop.audioPath.isSome) {
       return AudioControls(
         audioPath: loop.audioPath.unwrap,
@@ -39,7 +38,7 @@ class Attachments extends StatelessWidget {
       return ClipRRect(
         borderRadius: BorderRadius.circular(15),
         child: SizedBox(
-          height: 200,
+          height: 300,
           width: double.infinity,
           child: FittedBox(
             fit: BoxFit.fitWidth,

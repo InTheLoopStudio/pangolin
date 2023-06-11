@@ -19,6 +19,7 @@ import 'package:intheloopapp/ui/widgets/comments/comments_text_field.dart';
 import 'package:intheloopapp/ui/widgets/common/conditional_parent_widget.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/attachments.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/like_button.dart';
+import 'package:intheloopapp/ui/widgets/common/loop_container/loop_container.dart';
 import 'package:intheloopapp/ui/widgets/common/loop_container/show_interest_button.dart';
 import 'package:intheloopapp/ui/widgets/common/user_avatar.dart';
 import 'package:share_plus/share_plus.dart';
@@ -112,81 +113,7 @@ class LoopView extends StatelessWidget {
             return Scaffold(
               backgroundColor: Theme.of(context).colorScheme.background,
               appBar: AppBar(
-                title: GestureDetector(
-                  onTap: () => nav.add(PushProfile(user.id, Some(user))),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Column(
-                            children: [
-                              // + User Avatar
-                              UserAvatar(
-                                radius: 24,
-                                pushUser: Some(state.user),
-                                imageUrl: user.profilePicture,
-                                verified: state.isVerified,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            width: 28,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                user.artistName,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                '@${user.username}',
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 12,
-                                ),
-                              ),
-                              Text(
-                                timeago.format(
-                                  loop.timestamp,
-                                  locale: 'en_short',
-                                ),
-                                style: const TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      BlocBuilder<AppThemeCubit, bool>(
-                        builder: (context, isDark) {
-                          return Container(
-                            height: 25,
-                            width: 100,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                fit: BoxFit.fitHeight,
-                                image: isDark
-                                    ? AssetImage(
-                                        'assets/tapped_logo_reversed.png',
-                                      ) as ImageProvider
-                                    : AssetImage(
-                                        'assets/tapped_logo.png',
-                                      ) as ImageProvider,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
+                title: const Text('Loop'),
               ),
               body: BlocProvider(
                 create: (context) => CommentsCubit(
@@ -198,100 +125,12 @@ class LoopView extends StatelessWidget {
                 child: CustomScrollView(
                   slivers: [
                     SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 8,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (loop.title.isSome) const SizedBox(height: 14),
-                            if (loop.title.isSome)
-                              Text(
-                                loop.title.unwrapOr('Untitled Loop'),
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            const SizedBox(height: 14),
-                            Linkify(
-                              text: loop.description,
-                              style: const TextStyle(
-                                fontSize: 14,
-                              ),
-                            ),
-                            const SizedBox(height: 14),
-                            Attachments(
-                              loop: loop,
-                              loopUser: user,
-                            ),
-                            const SizedBox(height: 8),
-                            ShowInterestButton(
-                              loop: loop,
-                            ),
-                            const SizedBox(height: 8),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                LikeButton(
-                                  onLike: () => context
-                                      .read<LoopViewCubit>()
-                                      .toggleLikeLoop,
-                                  likeCount: state.likeCount,
-                                  isLiked: state.isLiked,
-                                ),
-                                Row(
-                                  children: [
-                                    const Icon(
-                                      CupertinoIcons.bubble_middle_bottom,
-                                      size: 18,
-                                      color: Color(0xFF757575),
-                                    ),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      '${state.commentsCount}',
-                                      style: const TextStyle(
-                                        color: Color(0xFF757575),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                GestureDetector(
-                                  // onTap: null,
-                                  child: const Row(
-                                    children: [
-                                      Icon(
-                                        CupertinoIcons.arrow_2_squarepath,
-                                        color: Color(0xFF444444),
-                                        size: 18,
-                                      ),
-                                      SizedBox(width: 6),
-                                      Text(
-                                        'soon',
-                                        style: TextStyle(
-                                          color: Color(0xFF444444),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                IconButton(
-                                  onPressed: () => _showActionSheet(
-                                    context,
-                                    currentUser.id,
-                                  ),
-                                  icon: const Icon(
-                                    CupertinoIcons.ellipsis,
-                                    size: 18,
-                                    color: Color(0xFF757575),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                      child: LoopContainer(
+                        loop: loop,
+                        commentStream: context
+                            .read<LoopViewCubit>()
+                            .commentController
+                            .stream,
                       ),
                     ),
                     const SliverToBoxAdapter(

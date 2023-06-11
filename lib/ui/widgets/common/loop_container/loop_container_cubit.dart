@@ -15,6 +15,7 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
     required this.audioRepo,
     required this.loop,
     required this.currentUser,
+    this.commentStream,
   }) : super(
           LoopContainerState(
             loop: loop,
@@ -27,6 +28,17 @@ class LoopContainerCubit extends Cubit<LoopContainerState> {
   final AudioRepository audioRepo;
   final DatabaseRepository databaseRepository;
   final UserModel currentUser;
+  final Stream<int>? commentStream;
+
+  void initCommentStream() {
+    commentStream?.listen((event) {
+      emit(
+        state.copyWith(
+          commentCount: state.commentCount + event,
+        ),
+      );
+    });
+  }
 
   void deleteLoop() {
     databaseRepository.deleteLoop(loop);
