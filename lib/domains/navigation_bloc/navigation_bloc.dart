@@ -26,7 +26,7 @@ import 'package:intheloopapp/ui/views/loop_feed/user_loop_feed.dart';
 import 'package:intheloopapp/ui/views/messaging/channel_view.dart';
 import 'package:intheloopapp/ui/views/onboarding/onboarding_view.dart';
 import 'package:intheloopapp/ui/views/opportunities/interested_view.dart';
-import 'package:intheloopapp/ui/views/profile/new_profile_view.dart';
+import 'package:intheloopapp/ui/views/profile/profile_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
 import 'package:intheloopapp/ui/views/settings/settings_view.dart';
 import 'package:intheloopapp/ui/widgets/common/forms/location_form/location_form_view.dart';
@@ -75,8 +75,8 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     on<PushProfile>((event, emit) {
       navigationKey.currentState?.push(
         MaterialPageRoute<ProfileView>(
-          settings: const RouteSettings(name: '/profile'),
-          builder: (context) => NewProfileView(
+          settings: RouteSettings(name: '/profile/${event.userId}'),
+          builder: (context) => ProfileView(
             visitedUserId: event.userId,
             visitedUser: event.user,
           ),

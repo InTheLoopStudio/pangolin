@@ -7,19 +7,14 @@ class ProfileState extends Equatable {
     this.isFollowing = false,
     this.isBlocked = false,
     this.isVerified = false,
-    this.userLoops = const [],
     this.latestLoop = const None(),
     this.latestOpportunity = const None(),
     this.latestBooking = const None(),
     this.userBadges = const [],
-    this.userBookings = const [],
-    this.hasReachedMaxLoops = false,
     this.hasReachedMaxBadges = false,
-    this.hasReachedMaxBookings = false,
-    this.hasReachedMaxUserCreatedBadges = false,
-    this.loopStatus = LoopsStatus.initial,
     this.badgeStatus = BadgesStatus.initial,
-    this.bookingsStatus = BookingsStatus.initial,
+    this.isCollapsed = false,
+    this.didAddFeedback = false,
     int? followerCount,
     int? followingCount,
     Place? place,
@@ -34,27 +29,20 @@ class ProfileState extends Equatable {
   final bool isFollowing;
   final bool isBlocked;
   final bool isVerified;
-  final List<Loop> userLoops;
-  final List<Badge> userBadges;
-  final List<Booking> userBookings;
+  final List<badge.Badge> userBadges;
 
   final Option<Loop> latestLoop;
   final Option<Loop> latestOpportunity;
   final Option<Booking> latestBooking;
 
-  final bool hasReachedMaxLoops;
   final bool hasReachedMaxBadges;
-  final bool hasReachedMaxBookings;
-  final bool hasReachedMaxUserCreatedBadges;
-  final LoopsStatus loopStatus;
   final BadgesStatus badgeStatus;
-  final BookingsStatus bookingsStatus;
   final UserModel visitedUser;
   final UserModel currentUser;
   late final Place place;
 
-  List<Loop> get userOpportunities =>
-      userLoops.where((loop) => loop.isOpportunity).toList();
+  final bool isCollapsed;
+  final bool didAddFeedback;
 
   @override
   List<Object> get props => [
@@ -63,19 +51,12 @@ class ProfileState extends Equatable {
         isFollowing,
         isBlocked,
         isVerified,
-        userLoops,
         latestLoop,
         latestOpportunity,
         latestBooking,
         userBadges,
-        userBookings,
-        hasReachedMaxLoops,
         hasReachedMaxBadges,
-        hasReachedMaxBookings,
-        hasReachedMaxUserCreatedBadges,
-        loopStatus,
         badgeStatus,
-        bookingsStatus,
         visitedUser,
         currentUser,
         place,
@@ -90,19 +71,14 @@ class ProfileState extends Equatable {
     Option<Loop>? latestLoop,
     Option<Loop>? latestOpportunity,
     Option<Booking>? latestBooking,
-    List<Loop>? userLoops,
-    List<Badge>? userBadges,
-    List<Booking>? userBookings,
-    bool? hasReachedMaxLoops,
+    List<badge.Badge>? userBadges,
     bool? hasReachedMaxBadges,
-    bool? hasReachedMaxBookings,
-    bool? hasReachedMaxUserCreatedBadges,
-    LoopsStatus? loopStatus,
     BadgesStatus? badgeStatus,
-    BookingsStatus? bookingsStatus,
     UserModel? currentUser,
     UserModel? visitedUser,
     Place? place,
+    bool? isCollapsed,
+    bool? didAddFeedback,
   }) {
     return ProfileState(
       followingCount: followingCount ?? this.followingCount,
@@ -113,38 +89,19 @@ class ProfileState extends Equatable {
       latestLoop: latestLoop ?? this.latestLoop,
       latestOpportunity: latestOpportunity ?? this.latestOpportunity,
       latestBooking: latestBooking ?? this.latestBooking,
-      userLoops: userLoops ?? this.userLoops,
       userBadges: userBadges ?? this.userBadges,
-      userBookings: userBookings ?? this.userBookings,
-      hasReachedMaxLoops: hasReachedMaxLoops ?? this.hasReachedMaxLoops,
       hasReachedMaxBadges: hasReachedMaxBadges ?? this.hasReachedMaxBadges,
-      hasReachedMaxBookings:
-          hasReachedMaxBookings ?? this.hasReachedMaxBookings,
-      hasReachedMaxUserCreatedBadges:
-          hasReachedMaxUserCreatedBadges ?? this.hasReachedMaxUserCreatedBadges,
-      loopStatus: loopStatus ?? this.loopStatus,
       badgeStatus: badgeStatus ?? this.badgeStatus,
-      bookingsStatus: bookingsStatus ?? this.bookingsStatus,
       currentUser: currentUser ?? this.currentUser,
       visitedUser: visitedUser ?? this.visitedUser,
       place: place ?? this.place,
+      isCollapsed: isCollapsed ?? this.isCollapsed,
+      didAddFeedback: didAddFeedback ?? this.didAddFeedback,
     );
   }
 }
 
-enum LoopsStatus {
-  initial,
-  success,
-  failure,
-}
-
 enum BadgesStatus {
-  initial,
-  success,
-  failure,
-}
-
-enum BookingsStatus {
   initial,
   success,
   failure,

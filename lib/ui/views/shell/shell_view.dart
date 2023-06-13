@@ -7,11 +7,9 @@ import 'package:intheloopapp/domains/onboarding_bloc/onboarding_bloc.dart';
 import 'package:intheloopapp/ui/views/bookings/bookings_view.dart';
 import 'package:intheloopapp/ui/views/error/error_view.dart';
 import 'package:intheloopapp/ui/views/loops_feeds_list/loop_feeds_list_view.dart';
-import 'package:intheloopapp/ui/views/profile/new_profile_view.dart';
 import 'package:intheloopapp/ui/views/profile/profile_view.dart';
 import 'package:intheloopapp/ui/views/search/search_view.dart';
 import 'package:intheloopapp/ui/widgets/shell_view/bottom_toolbar.dart';
-import 'package:path/path.dart';
 
 class ShellView extends StatefulWidget {
   const ShellView({
@@ -59,7 +57,7 @@ class _ShellViewState extends State<ShellView> {
                         searchFocusNode: searchFocusNode,
                       ),
                       const BookingsView(),
-                      NewProfileView(
+                      ProfileView(
                         visitedUserId: value.id,
                         visitedUser: currentUser,
                       ),

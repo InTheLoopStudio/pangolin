@@ -181,11 +181,11 @@ class CreateLoopCubit extends Cubit<CreateLoopState> {
 
   Future<void> createLoop() async {
     try {
-      if (state.status.isInProgress) return;
-
       if (!state.isValid) {
         throw Exception('Invalid form');
       }
+
+      if (state.status.isInProgress) return;
 
       emit(
         state.copyWith(

@@ -1,17 +1,18 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:intheloopapp/app_logger.dart';
 import 'package:intheloopapp/data/database_repository.dart';
 import 'package:intheloopapp/data/places_repository.dart';
-import 'package:intheloopapp/domains/models/badge.dart';
+import 'package:intheloopapp/domains/models/badge.dart' as badge;
 import 'package:intheloopapp/domains/models/booking.dart';
 import 'package:intheloopapp/domains/models/loop.dart';
 import 'package:intheloopapp/domains/models/option.dart';
 import 'package:intheloopapp/domains/models/user_model.dart';
-import 'package:rxdart/rxdart.dart';
 
 part 'profile_state.dart';
 
@@ -31,9 +32,33 @@ class ProfileCubit extends Cubit<ProfileState> {
   final PlacesRepository places;
   final UserModel currentUser;
   final UserModel visitedUser;
-  StreamSubscription<Loop>? loopListener;
-  StreamSubscription<Badge>? badgeListener;
-  StreamSubscription<Booking>? bookingListener;
+  StreamSubscription<badge.Badge>? badgeListener;
+
+  bool onNotification(
+    ScrollController scrollController,
+    double expandedBarHeight,
+    double collapsedBarHeight,
+  ) {
+    emit(
+      state.copyWith(
+        isCollapsed: scrollController.hasClients &&
+            scrollController.offset > (expandedBarHeight - collapsedBarHeight),
+      ),
+    );
+
+    /// When the app bar is collapsed and the feedback
+    /// hasn't been added previously will invoke
+    /// the `mediumImpact()` method, otherwise will
+    /// reset the didAddFeedback value.
+    ///
+    if (state.isCollapsed && !state.didAddFeedback) {
+      HapticFeedback.mediumImpact();
+      emit(state.copyWith(didAddFeedback: true));
+    } else if (!state.isCollapsed) {
+      emit(state.copyWith(didAddFeedback: false));
+    }
+    return false;
+  }
 
   Future<void> refetchVisitedUser({UserModel? newUserData}) async {
     try {
@@ -151,52 +176,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     return b1.startTime.isAfter(b2.startTime) ? b1 : b2;
   }
 
-  Future<void> initLoops({bool clearLoops = true}) async {
-    final trace = logger.createTrace('initLoops');
-    await trace.start();
-    try {
-      logger.debug(
-        'initLoops ${state.visitedUser}',
-      );
-      await loopListener?.cancel();
-      if (clearLoops) {
-        emit(
-          state.copyWith(
-            loopStatus: LoopsStatus.initial,
-            userLoops: [],
-            hasReachedMaxLoops: false,
-          ),
-        );
-      }
-
-      final userLoops =
-          await databaseRepository.getUserLoops(visitedUser.id, limit: 1);
-      if (userLoops.isEmpty) {
-        emit(state.copyWith(loopStatus: LoopsStatus.success));
-      }
-
-      loopListener = databaseRepository
-          .userLoopsObserver(visitedUser.id)
-          .listen((Loop event) {
-        try {
-          logger.debug('loop { ${event.id} : ${event.title} }');
-          emit(
-            state.copyWith(
-              loopStatus: LoopsStatus.success,
-              userLoops: List.of(state.userLoops)..add(event),
-            ),
-          );
-        } catch (e, s) {
-          logger.error('initLoops error', error: e, stackTrace: s);
-        }
-      });
-    } catch (e, s) {
-      logger.error('initLoops error', error: e, stackTrace: s);
-    } finally {
-      await trace.stop();
-    }
-  }
-
   Future<void> initBadges({bool clearBadges = true}) async {
     final trace = logger.createTrace('initBadges');
     await trace.start();
@@ -224,7 +203,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       badgeListener = databaseRepository
           .userBadgesObserver(visitedUser.id)
-          .listen((Badge event) {
+          .listen((badge.Badge event) {
         logger.debug('badge { ${event.id} : ${event.name} }');
         try {
           emit(
@@ -245,58 +224,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  Future<void> initBookings({bool clearBookings = true}) async {
-    final trace = logger.createTrace('initBookings');
-    await trace.start();
-    try {
-      logger.debug(
-        'initBookings ${state.visitedUser}',
-      );
-      await bookingListener?.cancel();
-      if (clearBookings) {
-        emit(
-          state.copyWith(
-            bookingsStatus: BookingsStatus.initial,
-            userBookings: [],
-            hasReachedMaxBookings: false,
-          ),
-        );
-      }
-
-      emit(state.copyWith(bookingsStatus: BookingsStatus.success));
-
-      bookingListener = Rx.merge([
-        databaseRepository.getBookingsByRequesteeObserver(
-          visitedUser.id,
-        ),
-        databaseRepository.getBookingsByRequesterObserver(
-          visitedUser.id,
-        ),
-      ]).listen((Booking event) {
-        logger.debug('booking { ${event.id} : ${event.name} }');
-        try {
-          if (event.status != BookingStatus.confirmed) {
-            return;
-          }
-
-          emit(
-            state.copyWith(
-              bookingsStatus: BookingsStatus.success,
-              userBookings: List.of(state.userBookings)..add(event),
-              hasReachedMaxBookings: state.userBookings.length < 20,
-            ),
-          );
-        } catch (e, s) {
-          logger.error('initBookings error', error: e, stackTrace: s);
-        }
-      });
-    } catch (e, s) {
-      logger.error('initBookings error', error: e, stackTrace: s);
-    } finally {
-      await trace.stop();
-    }
-  }
-
   Future<void> initPlace() async {
     final trace = logger.createTrace('initPlace');
     await trace.start();
@@ -308,42 +235,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(state.copyWith(place: place));
     } catch (e, s) {
       logger.error('initPlace error', error: e, stackTrace: s);
-    } finally {
-      await trace.stop();
-    }
-  }
-
-  Future<void> fetchMoreLoops() async {
-    if (state.hasReachedMaxLoops) return;
-
-    final trace = logger.createTrace('fetchMoreLoops');
-    await trace.start();
-    try {
-      if (state.loopStatus == LoopsStatus.initial) {
-        await initLoops();
-      }
-
-      final loops = await databaseRepository.getUserLoops(
-        visitedUser.id,
-        // limit: 10,
-        lastLoopId: state.userLoops.last.id,
-      );
-      loops.isEmpty
-          ? emit(state.copyWith(hasReachedMaxLoops: true))
-          : emit(
-              state.copyWith(
-                loopStatus: LoopsStatus.success,
-                userLoops: List.of(state.userLoops)..addAll(loops),
-                hasReachedMaxLoops: false,
-              ),
-            );
-    } catch (e, s) {
-      logger.error(
-        'fetchMoreLoops error',
-        error: e,
-        stackTrace: s,
-      );
-      // emit(state.copyWith(loopStatus: LoopsStatus.failure));
     } finally {
       await trace.stop();
     }
@@ -380,55 +271,6 @@ class ProfileCubit extends Cubit<ProfileState> {
         stackTrace: s,
       );
       // emit(state.copyWith(badgeStatus: BadgesStatus.failure));
-    } finally {
-      await trace.stop();
-    }
-  }
-
-  Future<void> fetchMoreBookings() async {
-    if (state.hasReachedMaxBookings) return;
-
-    final trace = logger.createTrace('fetchMoreBookings');
-    await trace.start();
-    try {
-      if (state.bookingsStatus == BookingsStatus.initial) {
-        await initBookings();
-      }
-
-      final bookingsRequestee = await databaseRepository.getBookingsByRequestee(
-        visitedUser.id,
-        limit: 10,
-        lastBookingRequestId: state.userBookings
-            .where((e) => e.requesteeId == state.visitedUser.id)
-            .last
-            .id,
-      );
-      final bookingsRequester = await databaseRepository.getBookingsByRequester(
-        visitedUser.id,
-        limit: 10,
-        lastBookingRequestId: state.userBookings
-            .where((e) => e.requesterId == state.visitedUser.id)
-            .last
-            .id,
-      );
-      (bookingsRequestee.isEmpty && bookingsRequester.isEmpty)
-          ? emit(state.copyWith(hasReachedMaxBookings: true))
-          : emit(
-              state.copyWith(
-                bookingsStatus: BookingsStatus.success,
-                userBookings: List.of(state.userBookings)
-                  ..addAll(bookingsRequestee)
-                  ..addAll(bookingsRequester),
-                hasReachedMaxBookings: false,
-              ),
-            );
-    } catch (e, s) {
-      logger.error(
-        'fetchMoreBookings error',
-        error: e,
-        stackTrace: s,
-      );
-      // emit(state.copyWith(bookingsStatus: BookingsStatus.failure));
     } finally {
       await trace.stop();
     }
@@ -549,18 +391,9 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  void deleteLoop(Loop loop) {
-    logger.debug('deleteLoop ${loop.id}');
-    final newLoops = List<Loop>.of(state.userLoops)
-      ..removeWhere((element) => element.id == loop.id);
-    emit(state.copyWith(userLoops: newLoops));
-  }
-
   @override
   Future<void> close() async {
-    await loopListener?.cancel();
     await badgeListener?.cancel();
-    await bookingListener?.cancel();
     await super.close();
   }
 }
