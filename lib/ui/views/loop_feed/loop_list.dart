@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intheloopapp/ui/views/common/easter_egg_placeholder.dart';
 import 'package:intheloopapp/ui/views/common/loading/list_loading_view.dart';
@@ -78,7 +79,10 @@ class _LoopListState extends State<LoopList> {
             return RefreshIndicator(
               displacement: 20,
               onRefresh: () async {
-                await context.read<LoopFeedCubit>().initLoops();
+                await Future.wait([
+                  context.read<LoopFeedCubit>().initLoops(),
+                  HapticFeedback.mediumImpact(),
+                ]);
               },
               child: CustomScrollView(
                 controller: widget.scrollController,
