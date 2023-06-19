@@ -12,6 +12,7 @@ final List<String> occupations = [
   'Tour Manager',
   'Booking Agent',
   'Concert Promoter',
+  'Lawyer',
   'Public Relations Specialist',
   'Music Publicist',
   'Social Media Manager',
